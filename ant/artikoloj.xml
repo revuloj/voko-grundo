@@ -1,0 +1,156 @@
+<project name="Revo" default="test" basedir=".">
+    <description>
+       Reta Vortaro, reguloj por artikoloj.
+    </description>
+
+  <!-- legu agorditajn variablojn el dosiero -->
+  <property file="${user.dir}/cfg/agordo" prefix="v."/>
+
+  <!-- donu valorojn al la variabloj, se ili ne jam aperis en la agordo-dosiero -->
+  <property environment="ENV"/>
+  <property name="v.voko" location="${ENV.VOKO}"/>
+  <property name="v.voko.ant" location="${v.voko}/ant"/>
+  <property name="v.bazo" location="${user.dir}"/>
+  <property name="v.bazo.inx" location="${v.bazo}/inx"/>
+  <property name="v.bazo.xml" location="${v.bazo}/xml"/>
+  <property name="v.bazo.art" location="${v.bazo}/art"/>
+  <property name="v.voko.bin" location="${v.voko}/bin"/>
+  <property name="v.voko.xsl" location="${v.voko}/xsl"/>
+  <!-- property name="tmp" location="/home/revo/tmp/inx_tmp"/ -->
+  <property name="v.tmp" location="${v.bazo}/.tmp"/>
+  <property name="v.outputformat" value="html"/>
+
+  <property name="saxon" location="${ENV.SAXONJAR}"/>
+
+  <!-- ial Formiko foje ne trovas Saxon per klaspado donita en la tasko mem,
+      tial difinu mediovariablon CLASSPATH aldonante la Saxon-arkivon antau voki Formikon -->
+  <path id="saxon.classpath">
+     <pathelement location="${saxon}"/>
+<!--     <pathelement location="${v.voko.ant}/respiro.jar"/> -->
+     <pathelement path="${java.class.path}"/>
+  </path>
+
+
+
+  <target name="art-preparo">
+    <!-- Create the time stamp -->
+    <tstamp/>
+    <tstamp>
+      <format property="v.antau_jaro" pattern="MM/dd/yyyy hh:mm aa" offset="-1" unit="year"/>
+    </tstamp>
+    <!-- Create the build directory structure used by compile -->
+    <mkdir dir="${v.bazo.art}" />
+    <mkdir dir="${v.tmp}" />
+    <mkdir dir="${v.tmp}/art" />
+
+    <!-- chu necesas refari la dosieron indekso.xml? -->
+    <!-- uptodate property="indekso.aktuala">
+      <srcfiles dir="${v.bazo.xml}" includes="*.xml"/>
+      <mapper type="merge" to="${v.tmp}/indekso.xml"/>
+    </uptodate -->
+
+    <!-- evitu rekreadon de chiuj artikoloj pro shanghoj en la XSL-dosieroj -->
+    <touch file="${v.voko.xsl}/revo_tez.xsl" datetime="01/01/2000 0:00 pm"/>
+    <touch file="${v.voko.xsl}/revohtml2.xsl" datetime="01/01/2000 0:00 pm"/>
+    <touch file="${v.voko.xsl}/revohtml.xsl" datetime="01/01/2000 0:00 pm"/>
+
+  </target>
+
+
+  <target name="art-agordo" description="eligas la agordeblajn variablojn por kontrolo">
+    <echoproperties prefix="v."/>
+  </target>
+
+
+  <target name="art-unuopa" depends="art-preparo" 
+       description="rekreas unuopan artikolon, donu $dosiero (sen '.xml') sur komandlinio"
+       if="dosiero">
+
+    <xslt in="${v.bazo.xml}/${dosiero}.xml" out="${v.tmp}/art/${dosiero}.xml"
+       force="true" style="${v.voko.xsl}/revo_tez.xsl" classpathref="saxon.classpath">
+       <factory name="net.sf.saxon.TransformerFactoryImpl"/>
+    </xslt>
+
+    <xslt in="${v.tmp}/art/${dosiero}.xml" out="${v.tmp}/art/${dosiero}.html" 
+       style="${v.voko.xsl}/revohtml2.xsl" classpathref="saxon.classpath">
+         <param name="xml-ref-pado" expression="${v.bazo.xml}"/>
+       <factory name="net.sf.saxon.TransformerFactoryImpl"/>
+    </xslt>
+
+    <copy file="${v.tmp}/art/${dosiero}.html" tofile="${v.bazo.art}/${dosiero}.html"/>
+
+  </target>
+
+
+
+  <target name="art-html" depends="art-preparo" 
+       description="kreas artikolojn el shanghitaj xml-dosieroj">
+
+    <echo message="### enmetu tezauro-ligojn en chiujn aktualigitajn artikolojn"/>
+    <xslt basedir="${v.bazo.xml}" includes="*.xml" destdir="${v.tmp}/art" extension=".xml"
+       style="${v.voko.xsl}/revo_tez.xsl" classpathref="saxon.classpath">
+        <factory name="net.sf.saxon.TransformerFactoryImpl"/>
+    </xslt>
+
+
+    <!-- aktualigu kelkajn malnovajn dosierojn por certigi, ke shanghoj
+         en la XSLT-dosieroj iom post iom trafos chiujn artikolojn -->
+    <echo message="### aktualigu 50 malnovajn artikolojn"/>
+    <xslt basedir="${v.bazo.xml}" includes="*.xml" destdir="${v.tmp}/art" extension=".xml"
+       style="${v.voko.xsl}/revo_tez.xsl" force="true" classpathref="saxon.classpath">
+        <custom classname="de.steloj.respiro.DateMaxFilesSelector" classpath="${v.voko.ant}/respiro.jar">
+          <param name="datetime" value="${v.antau_jaro}"/>
+          <param name="when" value="before"/>
+          <param name="maxFiles" value="50"/> <!-- aktualigu maksimume 50 malnovajn dosierojn -->
+        </custom>
+        <factory name="net.sf.saxon.TransformerFactoryImpl"/>
+    </xslt>
+
+    <echo message="### kreu la HTML-dosierojn por la artikoloj"/>
+    <xslt basedir="${v.tmp}/art" includes="*.xml" destdir="${v.tmp}/art/" extension=".html"
+       style="${v.voko.xsl}/revohtml2.xsl" classpathref="saxon.classpath">
+       <param name="xml-ref-pado" expression="${v.bazo.xml}"/>
+       <factory name="net.sf.saxon.TransformerFactoryImpl"/>
+    </xslt>
+
+  </target>
+
+
+
+  <target name="art-tuto" depends="art-html"
+       description="kopias shanghitajn artikolojn al la destin-dosierujo">
+    <copy todir="${v.bazo.art}">
+      <fileset dir="${v.tmp}/art" includes="*.html">
+        <different targetdir="${v.bazo.art}" ignoreFileTimes="true"/>
+      </fileset>
+    </copy>
+  </target>
+
+
+   
+  <target name="art-kvincent" depends="art-html"
+       description="kopias nur maksimume 500 shanghitajn artikolojn al la destin-dosierujo">
+  
+    <!-- chiuokaze kopiu novajn artikolojn -->
+   <copy todir="${v.bazo.art}">
+      <fileset dir="${v.tmp}/art" includes="*.html">
+         <present present="srconly" targetdir="${v.bazo.art}"/>
+      </fileset>
+    </copy>
+
+    <!-- kopiu plurajn el la shanghitaj -->
+    <copy todir="${v.bazo.art}">
+      <fileset dir="${v.tmp}/art" includes="*.html">
+        <custom classname="de.steloj.respiro.DiffMaxFilesSelector" classpath="${v.voko.ant}/respiro.jar">
+          <param name="targetDir" value="${v.bazo.art}"/>
+          <param name="ignoreFileTimes" value="true"/>
+          <param name="maxFiles" value="500"/> <!-- aktualigu maksimume 500 artikolojn -->
+        </custom>
+      </fileset>
+    </copy>
+
+  </target>
+
+
+
+</project>

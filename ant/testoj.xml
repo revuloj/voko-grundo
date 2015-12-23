@@ -1,0 +1,923 @@
+<project name="Revo-testoj" basedir=".">
+    <description>
+       Reta Vortaro, testoj.
+    </description>
+
+
+  <!-- legu agorditajn variablojn el dosiero -->
+  <!-- property file="${user.dir}/cfg/agordo" prefix="v."/ -->
+
+  <!-- donu valorojn al la variabloj -->
+  <property name="v.voko" location="/home/revo/voko"/>
+  <property name="v.voko.ant" location="${v.voko}/ant"/>
+  <property name="v.bazo" location="${user.dir}/vokotesto"/>
+  <property name="v.bazo.inx" location="${v.bazo}/inx"/>
+  <property name="v.bazo.tez" location="${v.bazo}/tez"/>
+  <property name="v.bazo.xml" location="${v.bazo}/xml"/>
+  <property name="v.voko.xsl" location="${v.voko}/xsl"/>
+  <property name="v.tmp" location="${v.bazo}/.tmp"/>
+
+  <property name="v.testoj" location="${v.bazo}/testoj"/>
+
+  <target name="agordo" description="eligas la agordon pro kontrolo">
+    <echoproperties prefix="v."/>
+  </target>
+
+  <target name="init">
+    <mkdir dir="${v.bazo}" />
+    <mkdir dir="${v.bazo.xml}" />
+    <mkdir dir="${v.bazo}/cfg" />
+
+    <!-- kreu agordo-dosieron por la testo-vortareto -->
+    <echo file="${user.dir}/cfg/agordo"><![CDATA[bazo=${v.bazo}
+tmp=${v.tmp}
+outputformat=xhtml
+]]>
+    </echo>
+
+    <!-- kontrolu agordon -->
+    <ant antfile="${v.voko.ant}/indeksoj.xml"
+       dir="${v.bazo}" target="inx-agordo" inheritAll="false"/>
+
+    <!-- kreu vortareton por testo -->
+    <!-- ant antfile="${v.voko.ant}/indeksoj.xml"
+       dir="${v.bazo}" target="inx-preparo" inheritAll="false"/ -->
+    <ant antfile="${v.voko.ant}/indeksoj.xml"
+       dir="${v.bazo}" target="inx-forigo" inheritAll="false"/>
+    <!-- ant antfile="${v.voko.ant}/tezauro.xml"
+       dir="${v.bazo}" target="tez-preparo" inheritAll="false"/ -->
+    <ant antfile="${v.voko.ant}/tezauro.xml"
+       dir="${v.bazo}" target="tez-forigo" inheritAll="false"/>
+
+    <echo 
+file="${v.bazo.xml}/test.xml"><![CDATA[<?xml version="1.0"?>
+<vortaro>
+<art mrk="\$$Id: test.xml asdfosdf">
+  <kap><rad>test</rad>/o <var><kap><tld/>oo</kap></var></kap>
+  <drv mrk="test.0o">
+    <kap><tld/>o</kap>
+    <mlg>T</mlg>
+    <snc mrk="test.0o.GEOL">
+      <tezrad fak="GEOL"/>
+      <tezrad/>
+      <uzo tip="fak">GEOL</uzo>
+      <dif>fusx (<trd lng="de"><ind>Test</ind> in Definition</trd>) fusx fusx:
+        <ekz><ind>testo malbona chio malbona</ind> 
+             <trd lng="de">Test schlecht alles schlecht</trd></ekz>;
+        <ekz><ind>unu <mll tip="mez">malbona testo</mll> chion
+      malbonigas</ind>
+            <trd lng="de">ein <mll tip="mez">schlechter <ind>Test</ind></mll>
+      verdirbt alles</trd></ekz>.
+      </dif>
+      <ref tip="super" cel="test.0o.XXX">testo <sncref/></ref>
+      <trd lng="de">Test <klr>(GEO)</klr></trd>
+    </snc>
+    <snc mrk="test.0o.XXX">
+      <uzo tip="fak">SCI</uzo>
+      <dif>balbut balbut balbut</dif>
+    </snc>
+    <bld lok="test.jpg"><ind>bildigita <tld/>o</ind> :-)<trd lng="de"><ind>Test</ind>bild</trd></bld>
+    <bld lok="test2.jpg">dua bildigita <tld/>o</bld>
+    <trd lng="de">Test</trd>
+    <trd lng="en">test</trd>
+  </drv>
+  <drv mrk="test.0i">
+    <kap><tld/>i <var><kap><tld/>oi</kap></var></kap>
+    <dif>strang strang strang</dif>
+    <refgrp tip="sin">
+       <ref cel="prov.0i">provi</ref>
+    </refgrp>
+    <trdgrp lng="de">
+      <trd>testen</trd>,
+      <trd><ofc>*</ofc> probieren</trd>
+      <trd>aus<ind>probieren</ind></trd>
+      <trd>klrtest1 <klr>(ne en la indekso)</klr></trd>
+      <trd>klrtest2 <klr tip="ind">(en la indekso)</klr></trd>
+      <trd>klrtest3 <klr tip="amb">(en la indekso kaj la artikolo)</klr></trd>
+    </trdgrp>
+    <trd lng="en">to test</trd>
+  </drv>
+  <drv mrk="test.bona0o">
+     <kap>bona <tld/>o</kap>
+     <snc>
+     </snc>
+     <snc> <!-- testu sencon sen mrk -->
+       <ref cel="test.0o.GEOL"/>
+       <subsnc>
+          <ref cel="test.0o.XXX"/>
+       </subsnc>
+       <subsnc></subsnc>
+     </snc>
+  </drv>
+</art>
+</vortaro>
+]]>
+    </echo>
+
+    <echo 
+file="${v.bazo.xml}/prov.xml"><![CDATA[<?xml version="1.0"?>
+<vortaro>
+<art mrk="\$$Id: prov.xml asdfosdf">
+  <kap><rad>prov</rad>/i</kap>
+  <drv mrk="prov.0i">
+    <ref tip="sin" cel="test.0i">testi</ref>
+  </drv>
+  <drv mrk="prov.P0o">
+    <kap><tld lit="P"/>o</kap>
+  </drv>
+</art>
+</vortaro>
+]]>
+    </echo>
+
+    <echo 
+file="${v.bazo.xml}/de.xml"><![CDATA[<?xml version="1.0"?>
+<vortaro>
+<art mrk="\$Id: de.xml asdfosdf">
+  <kap><rad>de</rad></kap>
+  <drv mrk="de.0">
+    <kap><tld/></kap>
+    <trdgrp lng="de">
+      <trd>de-T&#x00f6;ne</trd>
+      <trd>de-Tod</trd>
+      <trd>de-Tofu</trd>
+      <trd>de-Ton</trd>
+      <trd>de-Topas</trd>
+      <trd>de-Muse</trd>
+      <trd>de-Mu&#x00df;e</trd>
+      <trd>de-Mut</trd>
+    </trdgrp>
+    <trdgrp lng="br">
+      <trd>br-cz</trd>
+      <trd>br-ch</trd>
+      <trd>br-c'h</trd>
+    </trdgrp>
+    <trdgrp lng="cy">
+      <trd>cy-ca</trd>
+      <trd>cy-cz</trd>
+      <trd>cy-ch</trd>
+      <trd>cy-la</trd>
+      <trd>cy-lm</trd>
+      <trd>cy-ll</trd>
+    </trdgrp>
+    <trdgrp lng="es">
+      <trd>es-cat</trd>
+      <trd>es-czar</trd>
+      <trd>es-churo</trd>
+      <trd>es-darn</trd>
+    </trdgrp>
+    <trdgrp lng="hu">
+      <trd>hu-dza</trd>
+      <trd>hu-dzt</trd>
+      <trd>hu-dzs</trd>
+    </trdgrp>
+    <trd lng="la">de</trd>
+  </drv>
+</art>
+</vortaro>
+]]>
+    </echo>
+
+
+  <echo 
+file="${v.bazo.xml}/eraroj.xml"><![CDATA[<?xml version="1.0"?>
+<vortaro>
+<art mrk="\$$Id: erar%oj.xml asdfosdf">
+  <kap><rad>erar</rad>/oj</kap>
+  <drv mrk="erarotesto">
+    <kap><tld/>o</kap>
+    <snc mrk="erarotest.o.YYY">
+      <uzo tip="fak">ABC</uzo>
+      <uzo tip="stl">DEF</uzo>
+      <ref tip="super">referenco sen celo</ref>
+      <ref tip="vid" cel="erarx.o">referenco kun malghusta celo</ref>
+      <ref tip="vid" cel="prov.0ico">referenco kun malghusta celo</ref>
+      <trd lng="nekonata">traduko sen valida lingvo-etikedo</trd>
+    </snc>
+  </drv>
+</art>
+</vortaro>
+]]>
+    </echo>
+
+</target>
+
+
+<target name="test-init" depends="init"
+  description="preparas la testilojn">
+
+    <mkdir dir="${v.testoj}" />
+
+    <echo 
+file="${v.testoj}/testshablono.tmp"><![CDATA[<?xml version="1.0"?>
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                 version="1.0">
+
+   <xsl:output method="text" encoding="utf-8"/>
+
+   <xsl:template match="/">
+   @tests@
+   </xsl:template>
+
+   <xsl:template name="testo">
+         <xsl:param name="priskribo"/>
+         <xsl:param name="testo"/>
+    
+         <xsl:value-of select="normalize-space($priskribo)"/><xsl:text>: </xsl:text>
+         <xsl:choose>
+           <xsl:when test="$testo!='' and $testo!='false'"><xsl:text>bone
+</xsl:text></xsl:when>
+           <xsl:otherwise><xsl:text>ERARO!
+</xsl:text></xsl:otherwise>
+         </xsl:choose>
+
+   </xsl:template>
+
+</xsl:stylesheet>
+]]>
+   </echo>
+
+   <echo 
+file="${v.testoj}/preparu-teston.xsl"><![CDATA[<?xml version="1.0"?>
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                 version="1.0">
+
+   <xsl:output method="text" encoding="utf-8"/>
+
+   <xsl:template match="//t">
+     &lt;xsl:call-template name="testo"&gt;
+       &lt;xsl:with-param name="priskribo"&gt;
+        &lt;xsl:text&gt;<xsl:value-of select="."/>&lt;/xsl:text&gt;
+      &lt;/xsl:with-param&gt;
+      &lt;xsl:with-param name="testo"&gt;
+        &lt;xsl:value-of select="<xsl:value-of select="@test"/>"/&gt;
+      &lt;/xsl:with-param&gt;
+    &lt;/xsl:call-template&gt;
+  </xsl:template> 
+
+   <xsl:template match="//v">
+     &lt;xsl:call-template name="testo"&gt;
+       &lt;xsl:with-param name="priskribo"&gt;
+        &lt;xsl:text&gt;<xsl:value-of select="."/>&lt;/xsl:text&gt;
+      &lt;/xsl:with-param&gt;
+      &lt;xsl:with-param name="testo"&gt;
+        &lt;xsl:value-of select="<xsl:value-of select="concat(@pado,'/',@el1,'/following-sibling::',@el2)"/>"/&gt;
+      &lt;/xsl:with-param&gt;
+    &lt;/xsl:call-template&gt;
+  </xsl:template> 
+
+</xsl:stylesheet>
+]]>
+    </echo>
+</target>
+
+  <target name="faru-teston">
+    <xslt style="${v.testoj}/preparu-teston.xsl"
+        in="${v.testoj}/${testnomo}.xml" out="${v.testoj}/${testnomo}.tst"/>
+
+    <loadfile srcFile="${v.testoj}/${testnomo}.tst" property="tests"/>
+    <filter token="tests" value="${tests}"/>
+    <copy file="${v.testoj}/testshablono.tmp" tofile="${v.testoj}/${testnomo}.xsl" 
+       filtering="true"/>
+
+    <xslt style="${v.testoj}/${testnomo}.xsl"
+        in="${testajho}" out="${v.testoj}/${testnomo}.rez"/>
+  </target>
+
+
+
+  <target name="indeks-testo" depends="init,test-init"
+    description="testas la regulojn en indekso.xml">
+
+    <!-- testu eltiradon de la indeksinformoj -->
+
+    <ant antfile="${v.voko.ant}/indeksoj.xml"
+       dir="${v.bazo}" target="inx-eltiro" inheritAll="false"/>
+
+
+
+    <!-- testu kategoriadon de la indeksinformoj -->
+
+    <ant antfile="${v.voko.ant}/indeksoj.xml"
+       dir="${v.bazo}" target="inx-kategorioj" inheritAll="false"/>   
+
+    <echo 
+file="${v.testoj}/indeks-testo-kat.xml"><![CDATA[<?xml version="1.0"?>
+<testoj>
+     <t test="count(//kap-oj/v[@mrk='test' and k='testo' and
+     k1='test/o' and r='tset'])=1">
+   1) Chu kapvorto "test/o", inversigita radiko "tset", mrk "test" enestas</t>
+
+     <t test="count(//kap-oj/v[@mrk='test.0o'])=0">
+   2) Chu kapvorto kun mrk "test.0o" ne enestas</t>
+
+     <t test="count(//kap-oj/v[@mrk='test.0i' and k='testi'])=1">
+   3) Chu kapvorto "testi" mrk "test.0i" enestas</t>
+
+     <t test="count(//trd-oj[@lng='de']/v[@mrk='test.0o' and
+     k='testo' and t='Test'])=1">
+   4) Chu germana traduko "Test" enestas</t>
+
+     <t test="count(//trd-oj[@lng='de']/v[@mrk='test.0i' and
+     k='testi' and t='testen'])=1">
+   5) Chu germana traduko "testen" enestas</t>
+
+     <t test="count(//trd-oj[@lng='de']/v[@mrk='test.0i' and
+     k='testi' and t='probieren'])=2">
+   6) Chu germanaj tradukoj "probieren" kaj "ausprobieren" enestas</t>
+
+     <t test="count(//trd-oj[@lng='en']/v[@mrk='test.0i' and
+     k='testi' and t='to test'])=1">
+   7) Chu angla traduko "to test" enestas</t>
+
+     <t test="count(//fako[@fak='GEOL']/v[@mrk='test.0o.GEOL' and
+     .='testo'])=1">   
+   8) Chu fakindiko GEOL che kapvorto "testo" enestas</t>
+ 
+     <t test="count(//mlg-oj/v[@mrk='test.0o' and
+     t='T' and k='testo'])=1">   
+   9) Chu mallongigo T che kapvorto "testo" enestas</t>
+ 
+     <t test="count(//bld-oj/v[@mrk='test.0o' and
+     t='bildigita testo :-)' and k='testo'])=1">   
+   10) Chu bildo pri kapvorto "testo" enestas</t>
+ 
+     <t test="count(//trd-oj[@lng='ja'])=0">   
+   11) Chu japanaj tradukoj ne enestas</t>
+
+      <t test="count(//fako[@fak='MAT'])=0">   
+   12) Chu fako MAT ne enestas</t>
+
+     <t test="count(//trd-oj[@lng='de']/v[@mrk='test.0i' and
+     k='testi' and t='probieren' and t1/u='probieren' and t1/text()='aus'])=1">
+   13) Chu germana traduko "aus_probieren_" enestas</t>
+
+     <t test="count(//trd-oj[@lng='de']/v[@mrk='test.0o.GEOL' and
+     k='testo malbona chio malbona' and t='Test schlecht alles schlecht'])=1">
+   14) Chu germana traduko "Test schlecht alles schlecht" enestas</t>
+
+     <t test="count(//trd-oj[@lng='de']/v[@mrk='test.0o.GEOL' and
+     k='...malbona testo...' and t='Test' and t1/u='Test' and
+   contains(t1,'...schlechter ')])=1">
+   15) Chu germana traduko "...schlechter Test..." enestas</t>
+
+     <t test="count(//trd-oj[@lng='de']/v[@mrk='test.0i' and
+     k='testi' and t='klrtest1'])=1">
+   16) Chu germana traduko "klrtest1" enestas</t>
+
+     <t test="count(//trd-oj[@lng='de']/v[@mrk='test.0i' and
+     k='testi' and t='klrtest2' and t1='klrtest2 (en la indekso)'])=1">
+   17) Chu germana traduko "klrtest2 (en la indekso)" enestas</t>
+
+     <t test="count(//trd-oj[@lng='de']/v[@mrk='test.0i' and
+     k='testi' and t='klrtest3' and t1='klrtest3 (en la indekso kaj la artikolo)'])=1">
+   18) Chu germana traduko "klrtest3 (en la indekso kaj la artikolo)" enestas</t>
+
+   <t test="count(//kap-oj/v[@mrk='test' and k='testoo'])=1">
+   19) Chu variajho "testoo" mrk "test" enestas</t>
+
+   <t test="count(//kap-oj/v[@mrk='test.0i' and k='testoi'])=1">
+   20) Chu variajho "testoi" mrk "test.0i" enestas</t>
+
+     <t test="count(//trd-oj[@lng='de']/v[@mrk='test.0o.GEOL' and
+     k='testo' and t='Test' and t1/u='Test' and t1/text()=' in Definition'])=1">
+   21) Chu endifina germana traduko "_Test_ in Definition" enestas</t>
+
+     <t test="count(//trd-oj[@lng='de']/v[@mrk='test.0o' and
+     k='bildigita testo' and t='Test' and t1/u='Test' and
+   contains(t1,'bild')])=1">
+   22) Chu germana traduko "Testbild" enestas</t>
+
+    <t test="count(//kap-oj/v[@mrk='test.bona0o' and k='bona testo'])=1">
+   23) Chu kapvorto "bona testo" mrk "test.bona0o" enestas kaj kun spacsigno</t>
+
+</testoj>
+]]>
+    </echo>
+
+    <antcall target="faru-teston">
+       <param name="testnomo" value="indeks-testo-kat"/>
+       <param name="testajho" value="${v.tmp}/inx_kat.xml"/>
+    </antcall>
+
+    <loadfile property="rezulto_1" srcFile="${v.testoj}/indeks-testo-kat.rez"/>
+    <echo>test-rezultoj pri dosiero inx_kat.xml:
+${rezulto_1}   
+    </echo>
+
+
+
+   <!-- testu ordigadon de la indeksinformoj -->
+
+
+    <ant antfile="${v.voko.ant}/indeksoj.xml"
+       dir="${v.bazo}" target="inx-ordigo" inheritAll="false"/>
+
+    <echo 
+file="${v.testoj}/indeks-testo-ord.xml"><![CDATA[<?xml version="1.0"?>
+<testoj>
+     <t test="count(//kap-oj/litero[@name='t']/v[@mrk='test' and k='testo'])=1">
+   1) Chu kapvorto "testo" estas sub litero "t"</t>
+
+     <t test="count(//inv/litero[@name='t']/v[@mrk='test' and k='test/o'])=1">
+   2) Chu kapvorto "testo" estas sub inv/litero "t"</t>
+
+     <t test="count(//kap-oj/litero[@name='t']/v[@mrk='test.0i' and k='testi'])=1">
+   3) Chu kapvorto "testi" estas sub litero "t"</t>
+
+     <t test="count(//trd-oj[@lng='de']/litero[@name='t']/v[@mrk='test.0o' and
+     k='testo' and t='Test'])=1">
+   4) Chu germana traduko "Test" estas sub litero "t"</t>
+
+     <t test="count(//trd-oj[@lng='de']/litero[@name='t']/v[@mrk='test.0i' and
+     k='testi' and t='testen'])=1">
+   5) Chu germana traduko "testen" estas sub litero "t"</t>
+
+     <t test="count(//trd-oj[@lng='de']/litero[@name='p']/v[@mrk='test.0i' and
+     k='testi' and t='probieren'])=2">
+   6) Chu germanaj tradukoj "ausprobieren" kaj "probieren" estas sub litero "p"</t>
+
+     <t test="count(//trd-oj[@lng='en']/litero[@name='t']/v[@mrk='test.0i' and
+     k='testi' and t='to test'])=1">
+   7) Chu angla traduko "to test" estas sub litero "t"</t>
+
+     <t test="count(//fako[@fak='GEOL']/v[@mrk='test.0o.GEOL' and
+     .='testo'])=1">   
+   8) Chu fakindiko GEOL che kapvorto "testo" enestas</t>
+ 
+     <t test="count(//mlg-oj/v[@mrk='test.0o' and
+     t='T' and k='testo'])=1">   
+   9) Chu mallongigo T che kapvorto "testo" enestas</t>
+ 
+     <t test="count(//bld-oj/v[@mrk='test.0o' and
+     t='bildigita testo :-)' and k='testo'])=1">   
+   10) Chu bildo pri kapvorto "testo" enestas</t>
+
+     <t test="count(//kap-oj/litero[@name='t']/v[@mrk='test' and k='testoo'])=1">
+   11) Chu variajho "testoo" estas sub litero "t"</t>
+
+     <t test="count(//kap-oj/litero[@name='t']/v[@mrk='test.0i' and k='testoi'])=1">
+   12) Chu variajho "testoi" estas sub litero "t"</t>
+
+     <t test="count(//trd-oj[@lng='de']/litero[@name='t']/v[@mrk='test.0o.GEOL' and
+     k='testo' and t='Test' and t1/u='Test' and t1/text()=' in Definition'])=1">
+   13) Chu endifina germana traduko "_Test_ in Definition" estas sub
+   litero "t"</t>
+
+     <t test="count(//trd-oj[@lng='de']/litero[@name='t']/v[@mrk='test.0o' and
+     k='bildigita testo' and t='Test' and t1/u='Test' and
+   contains(t1,'bild')])=1">
+   14) Chu germana traduko "Testbild" estas sub litero "t"</t>
+
+     <t test="//trd-oj[@lng='de']/litero[@name='d']/v[t='de-Ton']/following-sibling::v[t='de-T&#x00f6;ne']">
+   15) Chu "de-Ton" antau "de-T&#x00f6;ne"</t>
+
+     <v pado="//trd-oj[@lng='de']/litero[@name='d']" el1="v[t='de-T&#x00f6;ne']" el2="v[t='de-Topas']">
+   16) Chu "de-T&#x00f6;ne" antau "de-Topas"</v>
+
+     <v pado="//trd-oj[@lng='hu']/litero[@name='h']" el1="v[t='hu-dza']" el2="v[t='hu-dzt']">
+   17) Chu "hu-dza" antau "hu-dzt"</v>
+
+     <v pado="//trd-oj[@lng='hu']/litero[@name='h']" el1="v[t='hu-dzt']" el2="v[t='hu-dzs']">
+   18) Chu "hu-dzt" antau "hu-dzs"</v>
+
+     <v pado="//trd-oj[@lng='es']/litero[@name='e']" el1="v[t='es-czar']" el2="v[t='es-churo']">
+   19) Chu "es-czar" antau "es-churo"</v>
+
+     <v pado="//trd-oj[@lng='cy']/litero[@name='c']" el1="v[t='cy-lm']" el2="v[t='cy-ll']">
+   20) Chu "cy-lm" antau "cy-ll"</v>
+
+     <v pado="//trd-oj[@lng='cy']/litero[@name='c']" el1="v[t='cy-cz']" el2="v[t='cy-ch']">
+   21) Chu "cy-cz" antau "cy-ch"</v>
+
+     <v pado="//trd-oj[@lng='br']/litero[@name='b']" el1="v[t='br-cz']" el2="v[t='br-ch']">
+   22) Chu "br-cz" antau "br-ch"</v>
+
+<!--     <v pado="//trd-oj[@lng='br']/litero[@name='b']" el1="v[t='br-ch']" el2="v[t='br-c&amp;#39;h']">
+   23) Chu "br-ch" antau "br-c&amp;#39;h"</v> -->
+
+    <t test="count(//kap-oj/litero[@name='p']/v[@mrk='prov.P0o' and k='Provo'])=1">
+   23) Chu kapvorto "Provo" estas sub litero "p"</t>
+
+  
+
+</testoj>
+]]>
+    </echo>
+
+    <antcall target="faru-teston">
+       <param name="testnomo" value="indeks-testo-ord"/>
+       <param name="testajho" value="${v.tmp}/inx_ord.xml"/>
+    </antcall>
+
+    <loadfile property="rezulto_2" srcFile="${v.testoj}/indeks-testo-ord.rez"/>
+    <echo>test-rezultoj pri dosiero inx_ord.xml:
+${rezulto_2}   
+    </echo>
+
+    <!-- testu kreadon de la HTML-indeksdosieroj -->
+
+    <ant antfile="${v.voko.ant}/indeksoj.xml"
+       dir="${v.bazo}" target="inx-tuto" inheritAll="false"/>
+
+    <echo 
+file="${v.testoj}/indeks-testo-kap-t.xml"><![CDATA[<?xml version="1.0"?>
+<testoj>
+     <t test="count(//head/title[.='esperanta indekso'])=1">
+   1) Chu titolo en kapo estas "esperanta indekso"</t>
+     <t test="count(//head/link[@rel='stylesheet' and @href='../stl/indeksoj.css'])=1">
+   2) Chu stilfolio estas referencita</t>
+     <t test="count(//td[@class='aktiva']/a[@href='../inx/_eo.html'])=1">
+   3) Chu aktiva menuero estas Esperanto</t>
+     <t test="count(//b[@class='elektita' and .='t'])=1">
+   4) Chu aktiva litero estas "t"</t>
+     <t test="count(//h1[.='esperanta t...'])=1">
+   5) Chu videbla titolo estas "esperanta t..."</t>
+     <t test="count(//a[@href='../art/test.html' and @target='precipa'
+     and .='testo'])=1">
+   6) Chu referenco al test.html enestas</t>
+     <t test="count(//a[@href='../art/test.html#test.0i' and @target='precipa'
+     and .='testi'])=1">
+   7) Chu referenco al test.html#test.0i enestas</t>
+     <t test="count(//a[@href='../art/test.html' and @target='precipa'
+     and .='testoo'])=1">
+   8) Chu referenco al test.html variajho "testoo" enestas</t>
+     <t test="count(//a[@href='../art/test.html#test.0i' and @target='precipa'
+     and .='testoi'])=1">
+   9) Chu referenco al test.html#test.0i variajho "testoi" enestas</t>
+
+</testoj>
+]]>
+    </echo>
+
+    <antcall target="faru-teston">
+       <param name="testnomo" value="indeks-testo-kap-t"/>
+       <param name="testajho" value="${v.bazo.inx}/kap_t.html"/>
+    </antcall>
+
+    <loadfile property="rezulto_3" srcFile="${v.testoj}/indeks-testo-kap-t.rez"/>
+    <echo>test-rezultoj pri dosiero kap_t.html:
+${rezulto_3}   
+    </echo>
+
+   <echo 
+file="${v.testoj}/indeks-testo-trd-de.xml"><![CDATA[<?xml version="1.0"?>
+<testoj>
+     <t test="count(//head/title[.='germana indekso'])=1">
+   1) Chu titolo en kapo estas "germana indekso"</t>
+     <t test="count(//head/link[@rel='stylesheet' and @href='../stl/indeksoj.css'])=1">
+   2) Chu stilfolio estas referencita</t>
+     <t test="count(//td[@class='aktiva']/a[@href='../inx/_lng.html'])=1">
+   3) Chu aktiva menuero estas Lingvoj</t>
+     <t test="count(//b[@class='elektita' and .='t'])=1">
+   4) Chu aktiva litero estas "t"</t>
+     <t test="count(//h1[.='germana t...'])=1">
+   5) Chu videbla titolo estas "germana t..."</t>
+     <t test="count(//a[(@href='../art/test.html#test.0o.GEOL' or
+     @href='../art/test.html#test.0o' or @href='../art/test.html') and @target='precipa'
+     and .='testo'])=2">
+   6) Chu referenco al test.html au test.html#test.0o au test.html#test.0o.GEOL enestas</t>
+     <t test="count(//a[@href='../art/test.html#test.0i' and @target='precipa'
+     and .='testi'])=1">
+   7) Chu referenco al test.html#test.0i enestas</t>
+     <t test="count(//a[@href='../art/test.html#test.0o.GEOL' 
+     and .='testo malbona chio malbona'])=1">
+   8) Chu ekzemplo traduko "testo malbona chio malbona" enestas</t>
+    <t test="count(//a[@href='../art/test.html#test.0o.GEOL' and
+   .='...malbona testo...'])=1  and count(//u[.='Test'])=3">
+   9) Chu "...schlechter Test...: ...malbona testo..." enestas</t>
+     <t test="count(//td[contains(.,'in Definition:')])=1">
+   10) Chu "in Definition" enestas</t>
+   <t test="count(//a[@href='../art/test.html#test.0o' and
+   .='bildigita testo'])=1  and count(//u[.='Test'])=3">
+   11) Chu "Testbild" enestas</t>
+
+</testoj>
+]]>
+    </echo>
+
+    <antcall target="faru-teston">
+       <param name="testnomo" value="indeks-testo-trd-de"/>
+       <param name="testajho" value="${v.bazo.inx}/lx_de_t.html"/>
+    </antcall>
+
+    <loadfile property="rezulto_4" srcFile="${v.testoj}/indeks-testo-trd-de.rez"/>
+    <echo>test-rezultoj pri dosiero lx_de_t.html:
+${rezulto_4}   
+    </echo>
+
+   <echo 
+file="${v.testoj}/indeks-testo-trd-de2.xml"><![CDATA[<?xml version="1.0"?>
+<testoj>
+
+     <t test="count(//b[@class='elektita' and .='k'])=1">
+   1) Chu aktiva litero estas "k"</t>
+     <t test="count(//h1[.='germana k...'])=1">
+   2) Chu videbla titolo estas "germana k..."</t>
+     <t test="count(//a[@href='../art/test.html#test.0i'])=3">
+   3) Chu 3 referencoj al test.0i enestas</t>
+
+    <t test="count(//td[contains(.,'klrtest1:')])=1">
+   4) Chu "klrtest1:" sen indeksa klarigo enestas</t>
+     <t test="count(//td[contains(.,'klrtest2 (en la indekso):')])=1">
+   5) Chu klrtest2 kun indeksa klarigo enestas</t>
+     <t test="count(//td[contains(.,'klrtest3 (en la indekso kaj la artikolo):')])=1">
+   6) Chu klrtest3 kun indeksa klarigo enestas</t>
+
+</testoj>
+]]>
+    </echo>
+    <antcall target="faru-teston">
+       <param name="testnomo" value="indeks-testo-trd-de2"/>
+       <param name="testajho" value="${v.bazo.inx}/lx_de_k.html"/>
+    </antcall>
+
+    <loadfile property="rezulto_5" srcFile="${v.testoj}/indeks-testo-trd-de2.rez"/>
+    <echo>test-rezultoj pri dosiero lx_de_k.html:
+${rezulto_5}   
+    </echo>
+
+   <echo 
+file="${v.testoj}/indeks-testo-trd-de3.xml"><![CDATA[<?xml version="1.0"?>
+<testoj>
+
+     <t test="count(//b[@class='elektita' and .='p'])=1">
+   1) Chu aktiva litero estas "p"</t>
+     <t test="count(//h1[.='germana p...'])=1">
+   2) Chu videbla titolo estas "germana p..."</t>
+     <t test="count(//a[@href='../art/test.html#test.0i'])=2">
+   3) Chu 2 referencoj al test.0i enestas</t>
+      <t test="count(//td[contains(.,'aus')])=1 and count(//td/u[.='probieren'])=1">
+   4) Chu 'aus' kaj '_probieren_' enestas</t>
+      <t test="count(//td[contains(.,'probieren:')])=1">
+   5) Chu 'probieren:' enestas</t>
+
+</testoj>
+]]>
+    </echo>
+    <antcall target="faru-teston">
+       <param name="testnomo" value="indeks-testo-trd-de3"/>
+       <param name="testajho" value="${v.bazo.inx}/lx_de_p.html"/>
+    </antcall>
+
+    <loadfile property="rezulto_6" srcFile="${v.testoj}/indeks-testo-trd-de3.rez"/>
+    <echo>test-rezultoj pri dosiero lx_de_p.html:
+${rezulto_6}   
+    </echo>
+
+
+    <echo>---------------------------------------------------------------
+      *** REZULTOJ DE LA INDEKS-TESTOJ ***</echo>
+    <echo>dosiero inx_kat.xml:
+${rezulto_1}   
+    </echo>
+    <echo>dosiero inx_ord.xml:
+
+${rezulto_2}   
+    </echo>
+    <echo>dosiero kap_t.html:
+${rezulto_3}   
+    </echo>
+    <echo>dosiero lx_de_t.html:
+${rezulto_4}   
+    </echo>
+    <echo>dosiero lx_de_k.html:
+${rezulto_5}   
+    </echo>
+    <echo>dosiero lx_de_p.html:
+${rezulto_6}   
+    </echo>
+  </target>
+
+
+
+
+<target name="tezauro-testo" depends="init,test-init"
+    description="testas la regulojn en tezauro.xml">
+
+    <!-- testu eltiradon de la referencoj -->
+
+    <ant antfile="${v.voko.ant}/tezauro.xml"
+       dir="${v.bazo}" target="tez-eltiro" inheritAll="false"/>
+
+    <!-- testu ordigon/kompletigon de la referencoj -->
+
+    <ant antfile="${v.voko.ant}/tezauro.xml"
+       dir="${v.bazo}" target="tez-retigo" inheritAll="false"/>   
+
+    <echo 
+file="${v.testoj}/tezauro-testo-ret.xml"><![CDATA[<?xml version="1.0"?>
+<testoj>
+     <t test="count(//tez/nod[@mrk='test.0o.GEOL' and k[@n='1'] and k='testo' and
+     super/r[@c='test.0o.XXX']])=1">
+   1) Chu nodo "test.0o.GEOL", kun kapvorto testo(1) kaj referenco al test.0o.XXX enestas</t>
+
+     <t test="count(//tez/nod[@mrk='test.0o.GEOL' and tezrad[not(@fak)] and tezrad[@fak='GEOL']])=1">
+   2) Chu nodo "test.0o.GEOL" enhavas tezrad kaj tezrad(GEOL)</t>
+
+     <t test="count(//tez/nod[@mrk='test.0o.GEOL' and uzo='GEOL'])=1">
+   3) Chu nodo "test.0o.GEOL" enhavas uzo(GEOL)</t>
+
+     <t test="count(//tez/nod[@mrk='test.0o.XXX' and k[@n='2'] and k='testo' and
+       sub/r[@c='test.0o.GEOL']])=1">
+   4) Chu nodo "test.0o.XXX" kun kapvorto testo(2) kaj referenco al test.0o.GEOL enestas</t>
+
+     <t test="count(//tez/nod[not(@mrk) or @mrk=''])=0">
+   5) Chu chiu nodo havas @mrk</t>
+
+
+     <t test="count(//tez/nod[@mrk='test.bona0o.2'])=1">
+   6) Chu ekzistas nodo de senco sen @mrk: test.bona0o.2</t>
+
+     <t test="count(//tez/nod[@mrk='test.bona0o.2.a'])=1">
+   7) Chu ekzistas nodo de subsenco sen @mrk: test.bona0o.2.a</t>
+
+</testoj>
+]]>
+    </echo>
+
+    <antcall target="faru-teston">
+       <param name="testnomo" value="tezauro-testo-ret"/>
+       <param name="testajho" value="${v.tmp}/tez_ret.xml"/>
+    </antcall>
+
+    <loadfile property="rezulto_1" srcFile="${v.testoj}/tezauro-testo-ret.rez"/>
+    <echo>test-rezultoj pri dosiero tez_ret.xml:
+${rezulto_1}   
+    </echo>
+
+
+
+    <!-- testu HTML-dosierojn de la tezauro -->
+
+    <ant antfile="${v.voko.ant}/tezauro.xml"
+       dir="${v.bazo}" target="tez-tuto" inheritAll="false"/>   
+
+
+   <echo 
+file="${v.testoj}/tezauro-testo-testo_GEOL.xml"><![CDATA[<?xml version="1.0"?>
+<testoj>
+
+     <t test="count(//a[@href='../inx/fx_GEOL.html'])=1">
+   1) Chu enestas ligo al fako GEOL</t>
+     <t test="count(//img[@src='../smb/GEOL.gif' and @alt='GEOL'])=1">
+   2) Chu enestas bildeto de GEOL</t>
+     <t test="count(//h1[a[@href='../art/test.html#test.0o.GEOL' and @target='precipa' 
+        and contains(.,'testo')]])=1">
+   3) Chu titolo estas testo kaj referencas al la artikolo</t>
+      <t test="count(//i[@class='griza' and .='speco de'])=1">
+   4) Chu enestas subtitolo 'speco de'</t>
+      <t test="count(//a[@href='tz_test_0o_XXX.html' and img/@src='../smb/super.gif'])=1">
+   5) Chu enestas referenco al supernocio test.0o.XXX</t>
+      <t test="count(//a[@href='../art/test.html#test.0o.XXX' and @target='precipa' 
+        and contains(.,'testo')])=1">
+   6) Chu enestas referenco al la senco test.0o.XXX en la artikolo test.html</t>
+
+</testoj>
+]]>
+    </echo>
+    <antcall target="faru-teston">
+       <param name="testnomo" value="tezauro-testo-testo_GEOL"/>
+       <param name="testajho" value="${v.bazo.tez}/tz_test_0o_GEOL.html"/>
+    </antcall>
+
+    <loadfile property="rezulto_2" srcFile="${v.testoj}/tezauro-testo-testo_GEOL.rez"/>
+    <echo>test-rezultoj pri dosiero tz_test_0o_GEOL.html:
+${rezulto_2}   
+    </echo>
+
+
+   <echo 
+file="${v.testoj}/tezauro-testo-testo_XXX.xml"><![CDATA[<?xml version="1.0"?>
+<testoj>
+
+     <t test="count(//a[@href='../inx/fx_SCI.html'])=1">
+   1) Chu enestas ligo al fako SCI</t>
+     <t test="count(//img[@src='../smb/SCI.gif' and @alt='SCI'])=1">
+   2) Chu enestas bildeto de SCI</t>
+     <t test="count(//h1[a[@href='../art/test.html#test.0o.XXX' and @target='precipa' 
+        and contains(.,'testo')]])=1">
+   3) Chu titolo estas testo kaj referencas al la artikolo</t>
+      <t test="count(//i[@class='griza' and .='specoj'])=1">
+   4) Chu enestas subtitolo 'specoj'</t>
+      <t test="count(//a[@href='tz_test_0o_GEOL.html' and img/@src='../smb/sub.gif'])=1">
+   5) Chu enestas referenco al subnocio test.0o.GEOL</t>
+      <t test="count(//a[@href='../art/test.html#test.0o.GEOL' and @target='precipa' 
+         and contains(.,'testo')])=1">
+   6) Chu enestas referenco al la senco test.0o.GEOL en la artikolo test.html</t>
+
+</testoj>
+]]>
+    </echo>
+    <antcall target="faru-teston">
+       <param name="testnomo" value="tezauro-testo-testo_XXX"/>
+       <param name="testajho" value="${v.bazo.tez}/tz_test_0o_XXX.html"/>
+    </antcall>
+
+    <loadfile property="rezulto_3" srcFile="${v.testoj}/tezauro-testo-testo_XXX.rez"/>
+    <echo>test-rezultoj pri dosiero tz_test_0o_XXX.html:
+${rezulto_3}   
+    </echo>
+
+
+   <echo 
+file="${v.testoj}/tezauro-testo-tz_testi.xml"><![CDATA[<?xml version="1.0"?>
+<testoj>
+
+     <t test="count(//a[@href='tz_prov_0i.html'])=1">
+   1) Chu enestas referenco al provi nur unufoje</t>
+
+
+</testoj>
+]]>
+    </echo>
+    <antcall target="faru-teston">
+       <param name="testnomo" value="tezauro-testo-tz_testi"/>
+       <param name="testajho" value="${v.bazo.tez}/tz_test_0i.html"/>
+    </antcall>
+
+    <loadfile property="rezulto_4" srcFile="${v.testoj}/tezauro-testo-tz_testi.rez"/>
+    <echo>test-rezultoj pri dosiero fxs_SCI.html:
+${rezulto_4}   
+    </echo>
+
+
+
+   <echo>---------------------------------------------------------------
+      *** REZULTOJ DE LA TEZAURO-TESTOJ ***</echo>
+    <echo>dosiero tez_ret.xml:
+${rezulto_1}   
+    </echo>
+    <echo>dosiero tz_test_0o_GEOL.xml:
+${rezulto_2}   
+    </echo>
+    <echo>dosiero tz_test_0o_XXX.xml:
+${rezulto_3}   
+    </echo>
+    <echo>dosiero tz_test_0i.xml:
+${rezulto_4}   
+    </echo>
+  </target>
+
+
+<target name="eraro-testo" depends="init,test-init"
+    description="testas la eraro-raporton">
+
+
+    <ant antfile="${v.voko.ant}/indeksoj.xml"
+       dir="${v.bazo}" target="inx-eraroj" inheritAll="false"/>   
+
+
+   <echo 
+file="${v.testoj}/eraro-testo.xml"><![CDATA[<?xml version="1.0"?>
+<testoj>
+
+     <t test="count(//art[@dos='eraroj'])=1">
+   1) Chu enestas eraroj pri artikolo "eraroj"</t>
+     <t test="count(//ero[@mrk='erar%oj' and @tip='mrk-ne-dos'])=1">
+   2) Chu enestas eraro pri malghusta artikol-marko</t>
+     <t test="count(//ero[@mrk='erarotesto' and @tip='mrk-prt'])=1">
+   3) Chu enestas eraro pri nur unuparta marko "erarotesto"</t>
+     <t test="count(//ero[@mrk='erarotest.o.YYY' and @tip='mrk-nul'])=1">
+   4) Chu enestas eraro pri mankanta nulo en marko "erarotest.o.YYY"</t>
+     <t test="count(//ero[@mrk='erarotest.o.YYY' and @tip='uzo-fak' and @arg='ABC'])=1">
+   5) Chu enestas eraro pri malghusta fako "ABC"</t>
+     <t test="count(//ero[@mrk='erarotest.o.YYY' and @tip='uzo-stl' and @arg='DEF'])=1">
+   6) Chu enestas eraro pri malghusta stilo "DEF"</t>
+     <t test="count(//ero[@mrk='erarotest.o.YYY' and @tip='ref-sen-cel'])=1">
+   7) Chu enestas eraro pri referenco sen celo</t>
+     <t test="count(//ero[@mrk='erarotest.o.YYY' and @tip='ref-cel-dos'])=1">
+   8) Chu enestas eraro pri referenco kun malghusta dosiero-celo</t>
+     <t test="count(//ero[@mrk='erarotest.o.YYY' and @tip='ref-cel-mrk'])=1">
+   9) Chu enestas eraro pri referenco kun malghusta mrk en celo</t>
+     <t test="count(//ero[@mrk='erarotest.o.YYY' and @tip='trd-lng'])=1">
+   10) Chu enestas eraro pri malghusta lingvo en traduko</t>
+
+
+</testoj>
+]]>
+    </echo>
+    <antcall target="faru-teston">
+       <param name="testnomo" value="eraro-testo"/>
+       <param name="testajho" value="${v.tmp}/eraroj.xml"/>
+    </antcall>
+
+    <loadfile property="rezulto_1" srcFile="${v.testoj}/eraro-testo.rez"/>
+    <echo>test-rezultoj pri dosiero eraroj.xml:
+${rezulto_1}   
+    </echo>
+</target>
+
+
+</project>
+
+
+
+
+
+
+
+
+
+
+

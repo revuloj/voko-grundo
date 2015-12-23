@@ -1,0 +1,226 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Regulaj sercxesprimoj</title>
+<link titel="artikolo-stilo" type="text/css" rel=stylesheet 
+href="../stl/artikolo.css">
+<style type="text/css">
+<!--
+KBD {background: lightblue}
+-->
+</style>
+</head>
+<body>
+<h1>
+Regulaj serĉesprimoj
+</h1>
+
+Per <em>regulaj serĉesprimoj</em> vi trovas signovicojn,
+pri kiuj vi antaŭe ne ekzakte scias, el kiuj
+signoj ili konsistas. Se vi ekzemple serĉas ĉiujn datojn
+en teksto, vi normale ne scias, el kiuj ciferoj ili
+konsistas, sed ke temas pri indiko de tago, monato kaj jaro
+disigitaj per punktoj. Per regula serĉesprimo vi povus formuli tiel: 
+<kbd>\d\d\.\d\d\.(19)?\d\d</kbd>. Por kompreni la 
+signifon de la unuopaj signoj en tiuj esprimoj, legu plu!
+
+<h2>literoj kaj specialaj signoj</h2>
+
+En regula serĉesprimo la literoj de la latina
+alfabeto majusklaj kaj minusklaj, la ciferoj kaj
+ĉiuj signoj, kiuj <em>ne</em> estas donitaj en la sekva alineo staras por 
+si mem. Do la serĉesprimo <kbd><nobr>12 arboj</nobr></kbd> trovas ĝuste la 
+signaron <em><nobr>12 arboj</nobr></em> en la teksto.
+<p>
+La specialaj signoj: <kbd>. + ? * - [ ] ^ $ { } | ( ) \</kbd>
+estas uzataj por ĝeneraligo de la serĉo ili havas
+apartajn signifojn, kiuj estas klarigataj en la sekvaj alineoj.
+Tamen vi foje volas serĉi punkton au plus-signon
+en teksto. Jen la tasko de la signo <kbd>\</kbd>. Per <kbd>\.</kbd> vi trovas
+punkton kaj per <kbd>\+</kbd> vi trovas pluson, same funkcias kun ĉiuj aliaj
+specialaj signoj. Ekzemple <kbd>3\+4=8</kbd> trovas la signaron 
+<em>3+4=8</em> en la teksto. <kbd>\\</kbd> staras por la signo <em>\</em>.
+<p>
+La signo <kbd>\</kbd> estas ankau uzata por indiki signojn, kiuj ne estas
+facile doneblaj per klavaro:
+<p>
+<dl compact>
+<dt><kbd>\t</kbd>
+<dd>staras por tabelsigno
+<dt><kbd>\n</kbd>   
+<dd>staras por la signo <em>nova linio</em>
+<dt><kbd>\033</kbd>
+<dd>staras por la signo kun la okuma kodo 033    (= 27, ESC)
+<dt><kbd>\x1B</kbd>
+<dd>staras por la signo kun la deksesuma kodo 1B (= 27, ESC)
+</dl>
+La punkto <kbd>.</kbd> signifas <em>iu ajn signo</em>. 
+Ekzemple <kbd>a.b</kbd> trovas
+tekstlokojn kiel <em>aab</em>, <em>abb</em>, <em>arb</em>, 
+<em>a%b</em>, <em>a1b</em> ktp.
+
+<h2>litergrupoj</h2>
+
+Foje oni serĉas vorton, ĉe kiu oni ne
+estas certa pri kelkaj literoj. Tiam oni povas uzi litergrupon por trovi
+tiajn vortojn. Ekzemple <kbd>ir[iaoeu]</kbd> trovas ĉiujn tekstlokojn,
+en kiuj troviĝas unu el la litervicoj <em>iro</em>, <em>ira</em>, 
+<em>iri</em>, <em>ire</em>, <em>iru</em>. Do <kbd>[aeiou]</kbd>
+staras por iu ajn vokalo.
+<p>
+Litergrupon oni formas per la angulaj krampoj <kbd>[</kbd> kaj <kbd>]</kbd>.
+Ene oni povas indiki la unuopajn signojn aŭ ankaŭ plurajn
+sinsekvajn signojn per uzo de la speciala signo <kbd>-</kbd>.
+Ekzemple <kbd>[0-9]</kbd> signifas <em>iun ciferon</em>. 
+<kbd>[A-Z]</kbd> signifas <em>iun majusklon</em> el la latina
+alfabeto. 
+Se oni serĉas jarnombrojn
+inter 1950 kaj 1999 en teksto oni povas tion fari per
+la esprimo <kbd>19[5-9][0-9]</kbd>.
+<p>
+Oni povas ankaŭ difini iun litergrupon <em>ĉiuj signoj krom kelkaj</em>
+per tio, ke oni metas la specialan signon <kbd>^</kbd> tuj post 
+la maldekstran
+krampon. Ekzemple <kbd>[^0-9%\.\+\-]</kbd> trovas ĉiujn signojn 
+krom ciferoj,
+punkto, pluso, minuso kaj la procentsigno, <kbd>[^A-Za-z]</kbd> trovas 
+ĉiujn signojn krom literoj.
+<p>
+Antaŭdifinitaj litergrupoj helpas pli facile kaj mallongige formuli la serĉesprimon:
+<dl compact>
+<dt><kbd>\w</kbd>
+<dd>vortsigno; egala al <kbd>[A-Za-z0-9_]</kbd>
+<dt><kbd>\W</kbd>
+<dd>nevortsigno; egala al <kbd>[^A-Za-z0-9_]</kbd>
+<dt><kbd>\s</kbd>
+<dd>spacsigno; egala al <kbd>[ \t\n\r]</kbd>
+<dt><kbd>\S</kbd>
+<dd>nespacsigno; egala al <kbd>[^ \t\n\r]</kbd>
+<dt><kbd>\d</kbd>
+<dd>cifero; egala al <kbd>[0-9]</kbd>
+<dt><kbd>\D</kbd>
+<dd>necifero; egala al <kbd>[^0-9]</kbd>
+</dl>
+
+<h2>grupigo kaj ripeto</h2>
+
+Se oni ne scias la ripetnombron de iu signo ene de la serĉaĵo aŭ la
+nombro estas tre granda, oni povas difini tiun ripetnombron
+per specialaj signoj tiel:
+<dl compact>
+<dt><kbd>*</kbd>
+<dd>okazas 0-foje aŭ pli
+<dt><kbd>+</kbd>
+<dd>okazas 1-foje aŭ pli
+<dt><kbd>?</kbd>
+<dd>okazas 0-foje aŭ 1-foje
+<dt><kbd>{n}</kbd>
+<dd>okazas n-foje
+<dt><kbd>{n,}</kbd>
+<dd>okazas n-foje aŭ pli
+<dt><kbd>{n,m}</kbd>
+<dd>okazas almenaŭ n-foje, sed ne pli ol m-foje
+</dl>
+
+ekzemple <kbd>ar*b</kbd> trovas <em>ab</em>, <em>arb</em>, <em>arrb</em>, <em>arrrb</em>, ...
+<kbd>ar+b</kbd> trovas <em>arb</em>, <em>arrb</em>, <em>arrrb</em>, ..., sed ne <em>ab</em>.
+<kbd>ar?b</kbd> trovas <em>ab</em> kaj <em>arb</em>. 
+<kbd>ar{3}b</kbd> trovas <em>arrrb</em>.
+<kbd>ar{3,}b</kbd> trovas <em>arrrb</em>, <em>arrrrb</em>, ... kaj
+<kbd>ar{1,2}b</kbd> trovas <em>arb</em> kaj <em>arrb</em>.
+<p>
+Se la ripetnombro ne celas al unuopa signo, sed al vico
+da ili, oni devas grupigi ilin per la krampoj <kbd>(</kbd> kaj <kbd>)</kbd>.
+<kbd>pom(uj)?o</kbd> do trovas <em>pomo</em> kaj <em>pomujo</em>.
+<p>
+La signo <kbd>|</kbd> estas uzata por alternativo:
+<p>
+<kbd>piro|pomo</kbd> trovas la vortojn <em>piro</em> kaj <em>pomo</em>
+ en teksto. Sed
+ankaŭ <kbd>p(ir|om)o</kbd> trovas ĝuste tiujn du vortojn.
+<p>
+Normale la apliko de la serĉesprimoj okazas tiel,
+ke la trovaĵo estas tiom granda kiom eblas.
+Se mi do serĉas kun la esprimo <kbd>ju.*pli</kbd> en
+la teksto <em>ju pli granda des pli laŭta</em>, la trovaĵo
+estos <em>ju pli granda des pli</em>. Se mi tamen volas, ke la
+trovitaĵo estu nur <em>ju pli</em> mi devas uzi la demandsignon
+post la oftecindiko: <kbd>ju.*?pli</kbd>
+
+<h2>specialaĵoj</h2>
+
+Kelkaj specialaj signoj estas uzataj por indiki
+limojn.
+<dl compact>
+<dt><kbd>^</kbd>
+<dd>signifas komencon de linio aŭ teksto 
+<dt><kbd>$</kbd>
+<dd>signifas finon de linio aŭ teksto
+<dt><kbd>\b</kbd>
+<dd>signifas vortkomencon aŭ vortfinon
+<dt><kbd>\B</kbd>
+<dd>signifas <em>ne</em> vortkomencon aŭ vortfinon
+</dl>
+Ekzemple <kbd>^pl[ui]</kbd> trovas en la teksto <em>pli kaj plu</em> nur
+la vorton <em>pli</em>, ĉar ĝi troviĝas komence de la teksto,
+analoge <kbd>pl[ui]$</kbd> trovas nur la vorton <em>plu</em> 
+fine de la teksto.
+<p>
+En la teksto <em>19, 119, 1987, 4197</em> la serĉesprimo
+<kbd>\b19\b</kbd> trovas la unuan nombron, <kbd>\b19</kbd> trovas 
+la unuan kaj trian nombron,
+<kbd>19\b</kbd> trovas la unuan kaj duan nombron kaj <kbd>\B19\B</kbd>
+ trovas nur la
+kvaran nombron, <kbd>\B19</kbd> trovas la duan kaj kvaran nombron kaj
+<kbd>19\B</kbd> trovas la trian kaj kvaran.
+
+<h2>ekzemploj</h2>
+
+Por pli facile eltrovi, kiel praktike uzi serĉesprimojn, sekvas
+kelkaj ekzemploj.
+
+<dl compact>
+<dt><kbd>[aeiou]</kbd>
+<dd>trovas ĉiujn vokalojn
+<dt><kbd>[b-df-hj-np-tv-z]</kbd>
+<dd> trovas ĉiujn konsonantojn
+
+<dt><kbd>\bpli\sda\b</kbd>
+<dd> trovas ĉiujn okazojn de <em>pli da</em>, se ne ekz. <em>pli dankema</em>
+
+<dt><kbd>\w+oj?n?</kbd>
+<dd> trovas ĉiujn substantivojn, sed ankaŭ <em>io</em>, <em>kion</em> ktp.
+<dt><kbd>\w+ujoj?n?\b</kbd>
+<dd> trovas ĉiujn vortojn finiĝantajn je <em>ujo</em>, <em>ujoj</em>, <em>ujon</em>, <em>ujojn</em>.
+
+<dt><kbd>\w+(is|as|os|us|i|u)\b</kbd>
+<dd> trovas ĉiujn verbojn, sed ekz. ankaŭ la 
+vortojn <em>pli</em> kaj <em>plu</em> 
+<dt><kbd>\w+([iu]|[aiou]s)\b</kbd>
+<dd> ankaŭ trovas ĉiujn verbojn kaj samfinajn vortojn
+<dt><kbd>\w*[aeiou]\w*(is|as|os|us|i|u)\b</kbd>
+<dd> trovas ĉiujn verbfinajn vortojn,
+en kies radiko estas almenaŭ unu vokalo. Do ne troviĝas <em>pli</em> kaj <em>plu</em>,
+sed ekzemple <em>iu</em> kaj <em>tiu</em>.
+
+<dt><kbd>\d\d\.\d\d\.\d{4}</kbd>
+<dd> trovas ĉiujn datojn laŭ la formo <em>30.01.1999</em>,
+sed ankaŭ nevalidajn datojn kiel 99.33.9877
+<dt><kbd>([0-2]?\d|3[0-1])\.(0?\d|1[0-2])\.(19)?\d\d</kbd>
+<dd> trovas nur validajn
+datojn el la 20a jarcento, ankaŭ se la tago aŭ monato estas
+indikitaj per nur unu cifero.
+</dl>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+

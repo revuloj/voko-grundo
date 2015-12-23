@@ -1,0 +1,89 @@
+
+VOKO = ${HOME}/voko
+REVO = ${HOME}/revo
+
+CHECKXML = /usr/bin/rxp -Vs
+
+vortaro:
+	${VOKO}/bin/vokofaru.pl -v ${REVO}/cfg/vortaro.cfg
+
+
+
+indekso:
+	${VOKO}/bin/indeks.pl -v ${REVO}/cfg/vortaro.cfg
+
+
+
+dok: dok/manlibro.html dok/lingva_manlibro.html dok/dtd.html dok/fakoj.html dok/lingvoj.html \
+     dok/bibliogr.html dok/bibltit.html dok/biblaut.html dok/mallongigoj.html dok/stiloj.html
+
+dok/manlibro.html: ${VOKO}/dok/manlibro.xml
+	${VOKO}/bin/xslt.sh $< ${VOKO}/xsl/manlibro.xsl > $@
+
+dok/lingva_manlibro.html: ${VOKO}/dok/lingva_manlibro.xml
+	${VOKO}/bin/xslt.sh $< ${VOKO}/xsl/manlibro.xsl > $@
+
+dok/dtd.html: ${REVO}/dtd/vokoxml.dtd
+	${VOKO}/bin/dtd2html.pl $<
+	mv dtd.html $@
+
+dok/fakoj.html: cfg/fakoj.xml
+	${VOKO}/bin/xslt.sh $< ${VOKO}/xsl/dok_fakoj.xsl > $@
+
+cfg/fakoj.xml: ${VOKO}/cfg/fakoj.xml
+	cp $< $@
+
+dok/lingvoj.html: cfg/lingvoj.xml
+	${VOKO}/bin/xslt.sh $< ${VOKO}/xsl/dok_lingvoj.xsl > $@
+
+cfg/lingvoj.xml: ${VOKO}/cfg/lingvoj.xml
+	cp $< $@
+
+dok/stiloj.html: cfg/stiloj.xml
+	${VOKO}/bin/xslt.sh $< ${VOKO}/xsl/dok_stiloj.xsl > $@
+
+cfg/stiloj.xml: ${VOKO}/cfg/stiloj.xml
+	cp $< $@
+
+dok/mallongigoj.html: cfg/mallongigoj.cfg
+	${VOKO}/bin/cfg2html.pl $< > $@
+
+cfg/mallongigoj.cfg: ${VOKO}/cfg/mallongigoj.cfg
+	cp $< $@
+
+dok/bibliogr.html: dok/bibliogr.xml
+	${VOKO}/bin/xslt.sh $< ${VOKO}/xsl/bibhtml.xsl > $@
+
+dok/biblaut.html: dok/bibliogr.xml
+	${VOKO}/bin/xslt.sh $< ${VOKO}/xsl/bibauthtml.xsl > $@
+
+dok/bibltit.html: dok/bibliogr.xml
+	${VOKO}/bin/xslt.sh $< ${VOKO}/xsl/bibtithtml.xsl > $@
+
+dok/bibliogr.xml: ${VOKO}/dok/bibliogr.xml
+	${CHECKXML} $< && cp $< $@
+
+dok/lng/lingvoj.html: ${VOKO}/cfg/nls.cfg ${VOKO}/dtd/vokosgn.dtd ${VOKO}/cfg/lingvoj.cfg
+	${VOKO}/bin/doklingv.pl
+
+# shangho - faru la liston el la xml-dosiero
+cfg/bibliogr.cfg: ${VOKO}/cfg/bibliogr.cfg
+	cp $< $@
+
+
+
+dtd: dtd/vokoxml.dtd dtd/vokosgn.dtd dtd/vokourl.dtd
+
+dtd/vokoxml.dtd: ${VOKO}/dtd/vokoxml.dtd
+	cp $< $@
+
+dtd/vokosgn.dtd: ${VOKO}/dtd/vokosgn.dtd
+	cp $< $@
+
+dtd/vokourl.dtd: ${VOKO}/dtd/vokourl.dtd
+	cp $< $@
+
+art/%.html: xml/%.xml
+	${VOKO}/bin/xslt.sh $< ${VOKO}/xsl/revohtml.xsl > $@
+	${VOKO}/bin/htmlposte.pl $@
+

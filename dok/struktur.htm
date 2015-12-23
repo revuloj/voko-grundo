@@ -1,0 +1,750 @@
+<HTML>
+<HEAD>
+<TITLE>DTD vokosgml</TITLE>
+<link titel="artikolo-stilo" type="text/css" rel=stylesheet 
+href="../stl/artikolo.css">
+</HEAD>
+<BODY>
+<H1>DTD vokosgml</H1>
+<HR>
+<ADDRESS>
+Dokumento kreita de <CODE>dtd2html.pl</CODE> 1.0
+</ADDRESS>
+<HR>
+Ple(j) supra(j) elemento(j):
+<A HREF="#vortaro"><STRONG>vortaro</STRONG></A>. <p>Æiuj elementoj: <A HREF="#adm"><STRONG>adm</STRONG></A>, <A HREF="#art"><STRONG>art</STRONG></A>, <A HREF="#autoro"><STRONG>autoro</STRONG></A>, <A HREF="#bld"><STRONG>bld</STRONG></A>, <A HREF="#dif"><STRONG>dif</STRONG></A>, <A HREF="#drv"><STRONG>drv</STRONG></A>, <A HREF="#ekz"><STRONG>ekz</STRONG></A>, <A HREF="#em"><STRONG>em</STRONG></A>, <A HREF="#epilogo"><STRONG>epilogo</STRONG></A>, <A HREF="#fnt"><STRONG>fnt</STRONG></A>, <A HREF="#gra"><STRONG>gra</STRONG></A>, <A HREF="#kap"><STRONG>kap</STRONG></A>, <A HREF="#klr"><STRONG>klr</STRONG></A>, <A HREF="#lok"><STRONG>lok</STRONG></A>, <A HREF="#parto"><STRONG>parto</STRONG></A>, <A HREF="#precipa-parto"><STRONG>precipa-parto</STRONG></A>, <A HREF="#prologo"><STRONG>prologo</STRONG></A>, <A HREF="#rad"><STRONG>rad</STRONG></A>, <A HREF="#ref"><STRONG>ref</STRONG></A>, <A HREF="#refgrp"><STRONG>refgrp</STRONG></A>, <A HREF="#rim"><STRONG>rim</STRONG></A>, <A HREF="#sekcio"><STRONG>sekcio</STRONG></A>, <A HREF="#snc"><STRONG>snc</STRONG></A>, <A HREF="#sncgrp"><STRONG>sncgrp</STRONG></A>, <A HREF="#sub"><STRONG>sub</STRONG></A>, <A HREF="#subsnc"><STRONG>subsnc</STRONG></A>, <A HREF="#subsncgrp"><STRONG>subsncgrp</STRONG></A>, <A HREF="#sup"><STRONG>sup</STRONG></A>, <A HREF="#titolo"><STRONG>titolo</STRONG></A>, <A HREF="#tld"><STRONG>tld</STRONG></A>, <A HREF="#trd"><STRONG>trd</STRONG></A>, <A HREF="#uzo"><STRONG>uzo</STRONG></A>, <A HREF="#vortaro"><STRONG>vortaro</STRONG></A>, <A HREF="#vrk"><STRONG>vrk</STRONG></A>, <A HREF="#vspec"><STRONG>vspec</STRONG></A>. <p><hr><h2>Strukturarbo</h2><PRE STYLE="line-height: 0.6em ">
+<A NAME="vortaro" HREF="#vortaro"><STRONG>VORTARO</STRONG></A>
+ |
+ +-<A NAME="art" HREF="#art"><STRONG>art</STRONG></A>
+ |  |
+ |  +-<A NAME="adm" HREF="#adm"><STRONG>adm</STRONG></A>
+ |  |  |
+ |  |  +-#PCDATA
+ |  | 
+ |  +-<A NAME="bld" HREF="#bld"><STRONG>bld</STRONG></A>
+ |  |  |
+ |  |  +-EMPTY
+ |  | 
+ |  +-<A NAME="dif" HREF="#dif"><STRONG>dif</STRONG></A>
+ |  |  |
+ |  |  +-#PCDATA
+ |  |  +-<A HREF="#ekz">ekz</A> ...
+ |  |  +-<A NAME="em" HREF="#em"><STRONG>em</STRONG></A>
+ |  |  |  |
+ |  |  |  +-#PCDATA
+ |  |  |  +-<A HREF="#tld">tld</A> ...
+ |  |  | 
+ |  |  +-<A NAME="klr" HREF="#klr"><STRONG>klr</STRONG></A>
+ |  |  |  |
+ |  |  |  +-#PCDATA
+ |  |  |  +-<A HREF="#ekz">ekz</A> ...
+ |  |  |  +-<A HREF="#em">em</A> ...
+ |  |  |  +-<A HREF="#sub">sub</A> ...
+ |  |  |  +-<A HREF="#sup">sup</A> ...
+ |  |  |  +-<A HREF="#tld">tld</A> ...
+ |  |  |  +-<A HREF="#trd">trd</A> ...
+ |  |  | 
+ |  |  +-<A HREF="#ref">ref</A> ...
+ |  |  +-<A NAME="sub" HREF="#sub"><STRONG>sub</STRONG></A>
+ |  |  |  |
+ |  |  |  +-#PCDATA
+ |  |  | 
+ |  |  +-<A NAME="sup" HREF="#sup"><STRONG>sup</STRONG></A>
+ |  |  |  |
+ |  |  |  +-#PCDATA
+ |  |  | 
+ |  |  +-<A NAME="tld" HREF="#tld"><STRONG>tld</STRONG></A>
+ |  |  |  |
+ |  |  |  +-EMPTY
+ |  |  | 
+ |  |  +-<A HREF="#trd">trd</A> ...
+ |  | 
+ |  +-<A NAME="drv" HREF="#drv"><STRONG>drv</STRONG></A>
+ |  |  |
+ |  |  +-<A HREF="#adm">adm</A> ...
+ |  |  +-<A HREF="#bld">bld</A> ...
+ |  |  +-<A HREF="#dif">dif</A> ...
+ |  |  +-<A HREF="#ekz">ekz</A> ...
+ |  |  +-<A HREF="#fnt">fnt</A> ...
+ |  |  +-<A HREF="#gra">gra</A> ...
+ |  |  +-<A HREF="#kap">kap</A> ...
+ |  |  +-<A HREF="#ref">ref</A> ...
+ |  |  +-<A HREF="#refgrp">refgrp</A> ...
+ |  |  +-<A HREF="#rim">rim</A> ...
+ |  |  +-<A HREF="#snc">snc</A> ...
+ |  |  +-<A NAME="sncgrp" HREF="#sncgrp"><STRONG>sncgrp</STRONG></A>
+ |  |  |  |
+ |  |  |  +-<A HREF="#adm">adm</A> ...
+ |  |  |  +-<A HREF="#bld">bld</A> ...
+ |  |  |  +-<A HREF="#dif">dif</A> ...
+ |  |  |  +-<A HREF="#ekz">ekz</A> ...
+ |  |  |  +-<A HREF="#fnt">fnt</A> ...
+ |  |  |  +-<A HREF="#gra">gra</A> ...
+ |  |  |  +-<A HREF="#ref">ref</A> ...
+ |  |  |  +-<A HREF="#refgrp">refgrp</A> ...
+ |  |  |  +-<A HREF="#rim">rim</A> ...
+ |  |  |  +-<A HREF="#snc">snc</A> ...
+ |  |  |  +-<A NAME="subsncgrp" HREF="#subsncgrp"><STRONG>subsncgrp</STRONG></A>
+ |  |  |  |  |
+ |  |  |  |  +-<A HREF="#adm">adm</A> ...
+ |  |  |  |  +-<A HREF="#bld">bld</A> ...
+ |  |  |  |  +-<A HREF="#dif">dif</A> ...
+ |  |  |  |  +-<A HREF="#ekz">ekz</A> ...
+ |  |  |  |  +-<A HREF="#fnt">fnt</A> ...
+ |  |  |  |  +-<A HREF="#gra">gra</A> ...
+ |  |  |  |  +-<A HREF="#ref">ref</A> ...
+ |  |  |  |  +-<A HREF="#refgrp">refgrp</A> ...
+ |  |  |  |  +-<A HREF="#rim">rim</A> ...
+ |  |  |  |  +-<A HREF="#snc">snc</A> ...
+ |  |  |  |  +-<A HREF="#trd">trd</A> ...
+ |  |  |  |  +-<A HREF="#uzo">uzo</A> ...
+ |  |  |  | 
+ |  |  |  +-<A HREF="#trd">trd</A> ...
+ |  |  |  +-<A HREF="#uzo">uzo</A> ...
+ |  |  | 
+ |  |  +-<A HREF="#trd">trd</A> ...
+ |  |  +-<A HREF="#uzo">uzo</A> ...
+ |  | 
+ |  +-<A NAME="ekz" HREF="#ekz"><STRONG>ekz</STRONG></A>
+ |  |  |
+ |  |  +-#PCDATA
+ |  |  +-<A HREF="#fnt">fnt</A> ...
+ |  |  +-<A HREF="#klr">klr</A> ...
+ |  |  +-<A HREF="#sub">sub</A> ...
+ |  |  +-<A HREF="#sup">sup</A> ...
+ |  |  +-<A HREF="#tld">tld</A> ...
+ |  | 
+ |  +-<A NAME="fnt" HREF="#fnt"><STRONG>fnt</STRONG></A>
+ |  |  |
+ |  |  +-#PCDATA
+ |  |  +-<A NAME="aut" HREF="#aut"><STRONG>aut</STRONG></A>
+ |  |  |  |
+ |  |  | 
+ |  |  +-<A NAME="lok" HREF="#lok"><STRONG>lok</STRONG></A>
+ |  |  |  |
+ |  |  |  +-#PCDATA
+ |  |  | 
+ |  |  +-<A NAME="vrk" HREF="#vrk"><STRONG>vrk</STRONG></A>
+ |  |     |
+ |  |     +-#PCDATA
+ |  |    
+ |  | 
+ |  +-<A NAME="gra" HREF="#gra"><STRONG>gra</STRONG></A>
+ |  |  |
+ |  |  +-<A NAME="vspec" HREF="#vspec"><STRONG>vspec</STRONG></A>
+ |  |     |
+ |  |     +-#PCDATA
+ |  |    
+ |  | 
+ |  +-<A NAME="kap" HREF="#kap"><STRONG>kap</STRONG></A>
+ |  |  |
+ |  |  +-#PCDATA
+ |  |  +-<A HREF="#fnt">fnt</A> ...
+ |  |  +-<A NAME="rad" HREF="#rad"><STRONG>rad</STRONG></A>
+ |  |  |  |
+ |  |  |  +-#PCDATA
+ |  |  | 
+ |  |  +-<A HREF="#tld">tld</A> ...
+ |  | 
+ |  +-<A NAME="ref" HREF="#ref"><STRONG>ref</STRONG></A>
+ |  |  |
+ |  |  +-#PCDATA
+ |  | 
+ |  +-<A NAME="refgrp" HREF="#refgrp"><STRONG>refgrp</STRONG></A>
+ |  |  |
+ |  |  +-#PCDATA
+ |  |  +-<A HREF="#ref">ref</A> ...
+ |  | 
+ |  +-<A NAME="rim" HREF="#rim"><STRONG>rim</STRONG></A>
+ |  |  |
+ |  |  +-#PCDATA
+ |  |  +-<A HREF="#ekz">ekz</A> ...
+ |  |  +-<A HREF="#em">em</A> ...
+ |  |  +-<A HREF="#ref">ref</A> ...
+ |  |  +-<A HREF="#sub">sub</A> ...
+ |  |  +-<A HREF="#sup">sup</A> ...
+ |  |  +-<A HREF="#tld">tld</A> ...
+ |  | 
+ |  +-<A NAME="snc" HREF="#snc"><STRONG>snc</STRONG></A>
+ |  |  |
+ |  |  +-<A HREF="#adm">adm</A> ...
+ |  |  +-<A HREF="#bld">bld</A> ...
+ |  |  +-<A HREF="#dif">dif</A> ...
+ |  |  +-<A HREF="#ekz">ekz</A> ...
+ |  |  +-<A HREF="#fnt">fnt</A> ...
+ |  |  +-<A HREF="#gra">gra</A> ...
+ |  |  +-<A HREF="#ref">ref</A> ...
+ |  |  +-<A HREF="#refgrp">refgrp</A> ...
+ |  |  +-<A HREF="#rim">rim</A> ...
+ |  |  +-<A NAME="subsnc" HREF="#subsnc"><STRONG>subsnc</STRONG></A>
+ |  |  |  |
+ |  |  |  +-<A HREF="#adm">adm</A> ...
+ |  |  |  +-<A HREF="#bld">bld</A> ...
+ |  |  |  +-<A HREF="#dif">dif</A> ...
+ |  |  |  +-<A HREF="#ekz">ekz</A> ...
+ |  |  |  +-<A HREF="#fnt">fnt</A> ...
+ |  |  |  +-<A HREF="#gra">gra</A> ...
+ |  |  |  +-<A HREF="#ref">ref</A> ...
+ |  |  |  +-<A HREF="#refgrp">refgrp</A> ...
+ |  |  |  +-<A HREF="#rim">rim</A> ...
+ |  |  |  +-<A HREF="#trd">trd</A> ...
+ |  |  |  +-<A HREF="#uzo">uzo</A> ...
+ |  |  | 
+ |  |  +-<A HREF="#trd">trd</A> ...
+ |  |  +-<A HREF="#uzo">uzo</A> ...
+ |  | 
+ |  +-<A NAME="trd" HREF="#trd"><STRONG>trd</STRONG></A>
+ |  |  |
+ |  |  +-#PCDATA
+ |  |  +-<A HREF="#klr">klr</A> ...
+ |  | 
+ |  +-<A NAME="uzo" HREF="#uzo"><STRONG>uzo</STRONG></A>
+ |     |
+ |     +-#PCDATA
+ |     +-<A HREF="#tld">tld</A> ...
+ |    
+ | 
+ +-<A NAME="epilogo" HREF="#epilogo"><STRONG>epilogo</STRONG></A>
+ |  |
+ |  +-#PCDATA
+ | 
+ +-<A NAME="precipa-parto" HREF="#precipa-parto"><STRONG>precipa-parto</STRONG></A>
+ |  |
+ |  +-<A HREF="#art">art</A> ...
+ |  +-<A NAME="parto" HREF="#parto"><STRONG>parto</STRONG></A>
+ |  |  |
+ |  |  +-<A HREF="#art">art</A> ...
+ |  |  +-<A HREF="#sekcio">sekcio</A> ...
+ |  | 
+ |  +-<A NAME="sekcio" HREF="#sekcio"><STRONG>sekcio</STRONG></A>
+ |     |
+ |     +-<A HREF="#art">art</A> ...
+ |    
+ | 
+ +-<A NAME="prologo" HREF="#prologo"><STRONG>prologo</STRONG></A>
+    |
+    +-#PCDATA
+    +-<A NAME="autoro" HREF="#autoro"><STRONG>autoro</STRONG></A>
+    |  |
+    |  +-#PCDATA
+    | 
+    +-<A NAME="titolo" HREF="#titolo"><STRONG>titolo</STRONG></A>
+       |
+       +-#PCDATA
+      
+   
+
+</PRE>
+<HR><a name="adm"></a>
+<h1>adm</h1>La elemento <em>adm</em> povas okazi en
+<A HREF="#art">art</A>, <A HREF="#drv">drv</A>, <A HREF="#snc">snc</A>, <A HREF="#sncgrp">sncgrp</A>, <A HREF="#subsnc">subsnc</A>, <A HREF="#subsncgrp">subsncgrp</A>. Øia enhavo estas deklarita kiel
+<code>
+(#PCDATA)</code>.
+
+
+Øi ne havas atributojn.<BR>
+</P>
+<h4>komentoj</h4>
+Administraj informoj estu por redaktado. Ili povus
+enhavi informojn pri kreodato, þanødato, aýtoro, eraroj kaj
+plibonigproponoj pri artikolo. Øia strukturo ankoraý estas
+diskutatebla.
+<HR><a name="art"></a>
+<h1>art</h1>La elemento <em>art</em> povas okazi en
+<A HREF="#parto">parto</A>, <A HREF="#precipa-parto">precipa-parto</A>, <A HREF="#sekcio">sekcio</A>, <A HREF="#vortaro">vortaro</A>. Øia enhavo estas deklarita kiel
+<code>
+(<A HREF="#kap">kap</A>,
+ (<A HREF="#drv">drv</A>+|<A HREF="#snc">snc</A>+|
+  (<A HREF="#fnt">fnt</A>|<A HREF="#gra">gra</A>|<A HREF="#uzo">uzo</A>|<A HREF="#dif">dif</A>|<A HREF="#ekz">ekz</A>|<A HREF="#rim">rim</A>|<A HREF="#ref">ref</A>|<A HREF="#refgrp">refgrp</A>|<A HREF="#trd">trd</A>|<A HREF="#bld">bld</A>|<A HREF="#adm">adm</A>)*))</code>.
+
+
+
+La atributo <strong>mrk</strong>
+ estas <CODE>ID</CODE>
+(antaýdifino: 
+<code>#IMPLIED</code>)
+<BR>
+</P>
+<h4>komentoj</h4>
+Unuopa artikolo de la vortaro. Øi povas okazi en
+<dfn>vortaro</dfn> (se ne ekzistas precipa-parto),
+<dfn>precipa-parto</dfn>, <dfn>parto</dfn> aý <dfn>sekcio</dfn>. Tio
+dependas de la konkreta strukturo de la vortaro. Æiu artikolo
+entenas unue kapvorton kaj poste aý priskribajn elementojn aý plurajn
+deriva¼ojn aý plurajn sencojn de la kapvorto.<HR><a name="autoro"></a>
+<h1>autoro</h1>La elemento <em>autoro</em> povas okazi en
+<A HREF="#prologo">prologo</A>. Øia enhavo estas deklarita kiel
+<code>
+(#PCDATA)</code>.
+
+
+Øi ne havas atributojn.<BR>
+</P>
+<h4>komentoj</h4>
+Indiko de aýtoro(j) de la vortaro. Øi estas enhavata en la prologo kaj
+povas okazi tie plurfoje.<HR><a name="bld"></a>
+<h1>bld</h1>La elemento <em>bld</em> povas okazi en
+<A HREF="#art">art</A>, <A HREF="#drv">drv</A>, <A HREF="#snc">snc</A>, <A HREF="#sncgrp">sncgrp</A>, <A HREF="#subsnc">subsnc</A>, <A HREF="#subsncgrp">subsncgrp</A>. Øia enhavo estas deklarita kiel
+<em>malplena</em>.
+
+
+La atributo <strong>lok</strong>
+ estas <CODE>CDATA</CODE>
+(antaýdifino: 
+<code>#REQUIRED</code>)
+<BR>
+</P>
+<h4>komentoj</h4>
+Bildo povas ilustri iun vorton aý sencon. Per la
+atributo <dfn>lok</dfn> øi
+referencas al ekstera dosiero, kiu entenas la bildon.
+<HR><a name="dif"></a>
+<h1>dif</h1>La elemento <em>dif</em> povas okazi en
+<A HREF="#art">art</A>, <A HREF="#drv">drv</A>, <A HREF="#snc">snc</A>, <A HREF="#sncgrp">sncgrp</A>, <A HREF="#subsnc">subsnc</A>, <A HREF="#subsncgrp">subsncgrp</A>. Øia enhavo estas deklarita kiel
+<code>
+(#PCDATA|<A HREF="#klr">klr</A>|<A HREF="#trd">trd</A>|<A HREF="#ref">ref</A>|<A HREF="#ekz">ekz</A>|<A HREF="#tld">tld</A>|<A HREF="#em">em</A>|<A HREF="#sup">sup</A>|<A HREF="#sub">sub</A>)*</code>.
+
+
+
+La atributo <strong>lng</strong>
+ estas <CODE>CDATA</CODE>
+(antaýdifino: 
+<code>#IMPLIED</code>)
+<BR>
+</P>
+<h4>komentoj</h4>
+Difino estas la frazo difinanta la vorton, sencon aý
+subsencon. Øi povas esti ankaý en alia(j) lingvo(j) ol la vorto
+mem. La lingvon indikas la atributo <dfn>lng</dfn>.
+<HR><a name="drv"></a>
+<h1>drv</h1>La elemento <em>drv</em> povas okazi en
+<A HREF="#art">art</A>. Øia enhavo estas deklarita kiel
+<code>
+(<A HREF="#kap">kap</A>,
+ (<A HREF="#snc">snc</A>|<A HREF="#sncgrp">sncgrp</A>|<A HREF="#fnt">fnt</A>|<A HREF="#gra">gra</A>|<A HREF="#uzo">uzo</A>|<A HREF="#dif">dif</A>|<A HREF="#ekz">ekz</A>|<A HREF="#rim">rim</A>|<A HREF="#ref">ref</A>|<A HREF="#refgrp">refgrp</A>|<A HREF="#trd">trd</A>|<A HREF="#bld">bld</A>|<A HREF="#adm">adm</A>)*)</code>.
+
+
+
+La atributo <strong>mrk</strong>
+ estas <CODE>ID</CODE>
+(antaýdifino: 
+<code>#IMPLIED</code>)
+<BR>
+</P>
+<h4>komentoj</h4>
+Deriva¼o ene de artikolo. Unu artikolo povas priskribi plurajn
+deriva¼ojn de la kapvorto. Deriva¼o komenciøas ja kapvorto kaj
+priskribaj elementoj pri øi aý el unu aý pluraj sencoj aý el unu aý
+pluraj sencgrupoj.<HR><a name="ekz"></a>
+<h1>ekz</h1>La elemento <em>ekz</em> povas okazi en
+<A HREF="#art">art</A>, <A HREF="#dif">dif</A>, <A HREF="#drv">drv</A>, <A HREF="#klr">klr</A>, <A HREF="#rim">rim</A>, <A HREF="#snc">snc</A>, <A HREF="#sncgrp">sncgrp</A>, <A HREF="#subsnc">subsnc</A>, <A HREF="#subsncgrp">subsncgrp</A>. Øia enhavo estas deklarita kiel
+<code>
+(#PCDATA|<A HREF="#klr">klr</A>|<A HREF="#tld">tld</A>|<A HREF="#fnt">fnt</A>|<A HREF="#sup">sup</A>|<A HREF="#sub">sub</A>)*</code>.
+
+
+Øi ne havas atributojn.<BR>
+</P>
+<h4>komentoj</h4>
+Ekzemplo konsistas el ekzemplofrazo,
+klarigoj kaj fonto.
+<HR><a name="em"></a>
+<h1>em</h1>La elemento <em>em</em> povas okazi en
+<A HREF="#dif">dif</A>, <A HREF="#klr">klr</A>, <A HREF="#rim">rim</A>. Øia enhavo estas deklarita kiel
+<code>
+(#PCDATA|<A HREF="#tld">tld</A>)*</code>.
+
+
+Øi ne havas atributojn.<BR>
+</P>
+<h4>komentoj</h4>
+Emfazo. Normale grase skribata vortoj.<HR><a name="epilogo"></a>
+<h1>epilogo</h1>La elemento <em>epilogo</em> povas okazi en
+<A HREF="#vortaro">vortaro</A>. Øia enhavo estas deklarita kiel
+<code>
+(#PCDATA)</code>.
+
+
+Øi ne havas atributojn.<BR>
+</P>
+<h4>komentoj</h4>
+Epilogo de la vortaro. Øia strukturo momente ne estas
+specifita. Øi povas enhavi iun tekston.<HR><a name="fnt"></a>
+<h1>fnt</h1>La elemento <em>fnt</em> povas okazi en
+<A HREF="#art">art</A>, <A HREF="#drv">drv</A>, <A HREF="#ekz">ekz</A>, <A HREF="#kap">kap</A>, <A HREF="#snc">snc</A>, <A HREF="#sncgrp">sncgrp</A>, <A HREF="#subsnc">subsnc</A>, <A HREF="#subsncgrp">subsncgrp</A>. Øia enhavo estas deklarita kiel
+<code>
+(#PCDATA|AUT|<A HREF="#vrk">vrk</A>|<A HREF="#lok">lok</A>)*</code>.
+
+
+Øi ne havas atributojn.<BR>
+</P>
+<h4>komentoj</h4>
+Fonto enhavas informojn pri autoro, verko, trovloko
+au aliajn informojn.<HR><a name="gra"></a>
+<h1>gra</h1>La elemento <em>gra</em> povas okazi en
+<A HREF="#art">art</A>, <A HREF="#drv">drv</A>, <A HREF="#snc">snc</A>, <A HREF="#sncgrp">sncgrp</A>, <A HREF="#subsnc">subsnc</A>, <A HREF="#subsncgrp">subsncgrp</A>. Øia enhavo estas deklarita kiel
+<code>
+(<A HREF="#vspec">vspec</A>)+</code>.
+
+
+Øi ne havas atributojn.<BR>
+</P>
+<h4>komentoj</h4>
+kiel grammatikaj informoj momente estas permesataj
+nur indiko de la vortspeco.<HR><a name="kap"></a>
+<h1>kap</h1>La elemento <em>kap</em> povas okazi en
+<A HREF="#art">art</A>, <A HREF="#drv">drv</A>. Øia enhavo estas deklarita kiel
+<code>
+(#PCDATA|<A HREF="#rad">rad</A>|<A HREF="#fnt">fnt</A>|<A HREF="#tld">tld</A>)*</code>.
+
+
+Øi ne havas atributojn.<BR>
+</P>
+<h4>komentoj</h4>
+kapvorto okazas en du kuntekstoj - komence de artikolo
+kaj komence de derivajho, en la unua kazo øi signas radikon
+en la dua kazo øi kosistas el iuj literoj kaj eble tildo
+refencanta al la kapvorto, krome en la kapvorto povas okazi
+fontindiko.
+<HR><a name="klr"></a>
+<h1>klr</h1>La elemento <em>klr</em> povas okazi en
+<A HREF="#dif">dif</A>, <A HREF="#ekz">ekz</A>, <A HREF="#trd">trd</A>. Øia enhavo estas deklarita kiel
+<code>
+(#PCDATA|<A HREF="#tld">tld</A>|<A HREF="#trd">trd</A>|<A HREF="#ekz">ekz</A>|<A HREF="#em">em</A>|<A HREF="#sup">sup</A>|<A HREF="#sub">sub</A>)*</code>.
+
+
+Øi ne havas atributojn.<BR>
+</P>
+<h4>komentoj</h4>
+Klarigo pri vorto, difino, ekzemplo ktp.<HR><a name="lok"></a>
+<h1>lok</h1>La elemento <em>lok</em> povas okazi en
+<A HREF="#fnt">fnt</A>. Øia enhavo estas deklarita kiel
+<code>
+(#PCDATA)</code>.
+
+
+Øi ne havas atributojn.<BR>
+</P>
+<h4>komentoj</h4>
+Loko, kie troviøas citita frazo en verko <HR><a name="parto"></a>
+<h1>parto</h1>La elemento <em>parto</em> povas okazi en
+<A HREF="#precipa-parto">precipa-parto</A>. Øia enhavo estas deklarita kiel
+<code>
+(<A HREF="#sekcio">sekcio</A>+|<A HREF="#art">art</A>+)</code>.
+
+
+
+La atributo <strong>lingvo</strong>
+ estas <CODE>CDATA</CODE>
+(antaýdifino: 
+<code>#IMPLIED</code>)
+<BR>
+</P>
+<h4>komentoj</h4>
+Vortaroparto. Øi estas entenata en la precipa parto. Parto normale
+prezentas unu lingvon en plurlingva vortaro aý lingvodirekton en
+dulingva vortaro. Øia atributo <dfn>lingvo</dfn> indikas la lingvon de
+la kapvortoj en la parto.<HR><a name="precipa-parto"></a>
+<h1>precipa-parto</h1>La elemento <em>precipa-parto</em> povas okazi en
+<A HREF="#vortaro">vortaro</A>. Øia enhavo estas deklarita kiel
+<code>
+(<A HREF="#parto">parto</A>+|<A HREF="#sekcio">sekcio</A>+|<A HREF="#art">art</A>+)</code>.
+
+
+Øi ne havas atributojn.<BR>
+</P>
+<h4>komentoj</h4>
+Precipa parto de la vortaro. Øi enhavas rekte æiujn
+artikolojn aý sekciojn aý partojn. 
+Diversaj partoj povas dividi diversajn lingvojn de la kapvortoj.
+Sekcioj grupigas vortojn komencighantajn je sama litero.
+<HR><a name="prologo"></a>
+<h1>prologo</h1>La elemento <em>prologo</em> povas okazi en
+<A HREF="#vortaro">vortaro</A>. Øia enhavo estas deklarita kiel
+<code>
+(#PCDATA|<A HREF="#titolo">titolo</A>|<A HREF="#autoro">autoro</A>)*</code>.
+
+
+Øi ne havas atributojn.<BR>
+</P>
+<h4>komentoj</h4>
+Prologo de la vortaro. Øi povas enteni la titolo(j)n 
+kaj aýtoro(j)n de la vortaro kaj aliajn tekstojn.<HR><a name="rad"></a>
+<h1>rad</h1>La elemento <em>rad</em> povas okazi en
+<A HREF="#kap">kap</A>. Øia enhavo estas deklarita kiel
+<code>
+(#PCDATA)</code>.
+
+
+Øi ne havas atributojn.<BR>
+</P>
+<h4>komentoj</h4>
+Radiko de kapvorto. Øi estas bezonata por anstaýigo
+de tildoj. Sekve la "radiko" de afiksoj kaj fina¼oj estu
+ili mem, sen la streketoj antaýe aý malantaýe.<HR><a name="ref"></a>
+<h1>ref</h1>La elemento <em>ref</em> povas okazi en
+<A HREF="#art">art</A>, <A HREF="#dif">dif</A>, <A HREF="#drv">drv</A>, <A HREF="#refgrp">refgrp</A>, <A HREF="#rim">rim</A>, <A HREF="#snc">snc</A>, <A HREF="#sncgrp">sncgrp</A>, <A HREF="#subsnc">subsnc</A>, <A HREF="#subsncgrp">subsncgrp</A>. Øia enhavo estas deklarita kiel
+<code>
+(#PCDATA)</code>.
+
+
+
+La atributo <strong>cel</strong>
+ estas <CODE>IDREF</CODE>
+(antaýdifino: 
+<code>#IMPLIED</code>)
+La atributo <strong>tip</strong>
+povas havi la valoro(j)n "vid" "dif" "sin" "ant" "super" "sub" "prt" "malprt" (antaýdifino: 
+<code>#IMPLIED</code>)
+<BR>
+</P>
+<h4>komentoj</h4>
+Referenco montras al alia, simil- aý alisignifa vorto,
+oni povas distingi diversajn rilattipon al la
+referencita vorto. La enhavo de la referenco estas tio, kio
+aperas en la legebla teksto. La referencitan vorton mem
+oni difinas per la atributo "celo". La celon oni plej
+bone difinas per: radiko.deriva¼o.difino, oni povas uzi
+la numeron de la difino au deriva¼o. Plej bone oni
+generas la markojn (t.e. la eblaj celoj de referenco)
+aýtomate por minimumigi erarojn.
+<HR><a name="refgrp"></a>
+<h1>refgrp</h1>La elemento <em>refgrp</em> povas okazi en
+<A HREF="#art">art</A>, <A HREF="#drv">drv</A>, <A HREF="#snc">snc</A>, <A HREF="#sncgrp">sncgrp</A>, <A HREF="#subsnc">subsnc</A>, <A HREF="#subsncgrp">subsncgrp</A>. Øia enhavo estas deklarita kiel
+<code>
+(#PCDATA|<A HREF="#ref">ref</A>)*</code>.
+
+
+
+La atributo <strong>cel</strong>
+ estas <CODE>IDREF</CODE>
+(antaýdifino: 
+<code>#IMPLIED</code>)
+La atributo <strong>tip</strong>
+povas havi la valoro(j)n "vid" "dif" "sin" "ant" "super" "sub" "prt" "malprt" (antaýdifino: 
+<code>vid</code>)
+<BR>
+</P>
+<h4>komentoj</h4>
+Referencgrupo grupigas plurajn samtipajn
+referencojn. La tipon indikas la atributo <dfn>tip</dfn>.
+Tiukaze ne uzu la atributon <dfn>tip</dfn> en la subelementoj
+<dfn>ref</dfn>!
+<HR><a name="rim"></a>
+<h1>rim</h1>La elemento <em>rim</em> povas okazi en
+<A HREF="#art">art</A>, <A HREF="#drv">drv</A>, <A HREF="#snc">snc</A>, <A HREF="#sncgrp">sncgrp</A>, <A HREF="#subsnc">subsnc</A>, <A HREF="#subsncgrp">subsncgrp</A>. Øia enhavo estas deklarita kiel
+<code>
+(#PCDATA|<A HREF="#ref">ref</A>|<A HREF="#ekz">ekz</A>|<A HREF="#tld">tld</A>|<A HREF="#em">em</A>|<A HREF="#sup">sup</A>|<A HREF="#sub">sub</A>)*</code>.
+
+
+
+La atributo <strong>num</strong>
+ estas <CODE>CDATA</CODE>
+(antaýdifino: 
+<code>#IMPLIED</code>)
+<BR>
+</P>
+<h4>komentoj</h4>
+Rimarko povas enhavi iujn indikojn pri la vorto aý
+senco, krome referencojn, ekzemplojn, emfazitajn partojn.
+<HR><a name="sekcio"></a>
+<h1>sekcio</h1>La elemento <em>sekcio</em> povas okazi en
+<A HREF="#parto">parto</A>, <A HREF="#precipa-parto">precipa-parto</A>. Øia enhavo estas deklarita kiel
+<code>
+(<A HREF="#art">art</A>+)</code>.
+
+
+
+La atributo <strong>litero</strong>
+ estas <CODE>CDATA</CODE>
+(antaýdifino: 
+<code>#IMPLIED</code>)
+<BR>
+</P>
+<h4>komentoj</h4>
+Sekcio en vortaro. Øi estas entenata en la precipa parto aý en
+parto de øi kaj normala entenas æiujn artikolojn, kies kapvorto
+komenciøas je sama litero. La atributo <dfn>litero</dfn> indikas tiun
+komencliteron.<HR><a name="snc"></a>
+<h1>snc</h1>La elemento <em>snc</em> povas okazi en
+<A HREF="#art">art</A>, <A HREF="#drv">drv</A>, <A HREF="#sncgrp">sncgrp</A>, <A HREF="#subsncgrp">subsncgrp</A>. Øia enhavo estas deklarita kiel
+<code>
+(<A HREF="#subsnc">subsnc</A>|<A HREF="#fnt">fnt</A>|<A HREF="#gra">gra</A>|<A HREF="#uzo">uzo</A>|<A HREF="#dif">dif</A>|<A HREF="#ekz">ekz</A>|<A HREF="#rim">rim</A>|<A HREF="#ref">ref</A>|<A HREF="#refgrp">refgrp</A>|<A HREF="#trd">trd</A>|<A HREF="#bld">bld</A>|<A HREF="#adm">adm</A>)*</code>.
+
+
+
+La atributo <strong>mrk</strong>
+ estas <CODE>ID</CODE>
+(antaýdifino: 
+<code>#IMPLIED</code>)
+La atributo <strong>num</strong>
+ estas <CODE>CDATA</CODE>
+(antaýdifino: 
+<code>#IMPLIED</code>)
+<BR>
+</P>
+<h4>komentoj</h4>
+Senco de unuopa vorto en artikolo. Komparu la latinajn ciferojn en
+la artikoloj de PIV.<HR><a name="sncgrp"></a>
+<h1>sncgrp</h1>La elemento <em>sncgrp</em> povas okazi en
+<A HREF="#drv">drv</A>. Øia enhavo estas deklarita kiel
+<code>
+(<A HREF="#snc">snc</A>|<A HREF="#subsncgrp">subsncgrp</A>|<A HREF="#fnt">fnt</A>|<A HREF="#gra">gra</A>|<A HREF="#uzo">uzo</A>|<A HREF="#dif">dif</A>|<A HREF="#ekz">ekz</A>|<A HREF="#rim">rim</A>|<A HREF="#ref">ref</A>|<A HREF="#refgrp">refgrp</A>|<A HREF="#trd">trd</A>|<A HREF="#bld">bld</A>|<A HREF="#adm">adm</A>)*</code>.
+
+
+Øi ne havas atributojn.<BR>
+</P>
+<h4>komentoj</h4>
+Sencogrupo. Øi grupigas plurajn proksimajn sencojn, se la
+priskribita vorto havas tre multajn sencojn. Tio povas
+rezulti en pli klara strukturo de la artikolo. Komparu la
+romiajn numerojn en PIV, art. <em>de</em>, <emfari</em> k.a.<HR><a name="sub"></a>
+<h1>sub</h1>La elemento <em>sub</em> povas okazi en
+<A HREF="#dif">dif</A>, <A HREF="#ekz">ekz</A>, <A HREF="#klr">klr</A>, <A HREF="#rim">rim</A>. Øia enhavo estas deklarita kiel
+<code>
+(#PCDATA)</code>.
+
+
+Øi ne havas atributojn.<BR>
+</P>
+<h4>komentoj</h4>
+malaltigita teksto, ekz. en ¶emiaj formuloj <HR><a name="subsnc"></a>
+<h1>subsnc</h1>La elemento <em>subsnc</em> povas okazi en
+<A HREF="#snc">snc</A>. Øia enhavo estas deklarita kiel
+<code>
+(<A HREF="#fnt">fnt</A>|<A HREF="#gra">gra</A>|<A HREF="#uzo">uzo</A>|<A HREF="#dif">dif</A>|<A HREF="#ekz">ekz</A>|<A HREF="#rim">rim</A>|<A HREF="#ref">ref</A>|<A HREF="#refgrp">refgrp</A>|<A HREF="#trd">trd</A>|<A HREF="#bld">bld</A>|<A HREF="#adm">adm</A>)*</code>.
+
+
+
+La atributo <strong>mrk</strong>
+ estas <CODE>ID</CODE>
+(antaýdifino: 
+<code>#IMPLIED</code>)
+<BR>
+</P>
+<h4>komentoj</h4>
+Subsenco ene de senco. Øi redonas subtila¼ojn ene de unu senco.
+Komparu la uzon de a), b), ... en kelkaj artikoloj de PIV.<HR><a name="subsncgrp"></a>
+<h1>subsncgrp</h1>La elemento <em>subsncgrp</em> povas okazi en
+<A HREF="#sncgrp">sncgrp</A>. Øia enhavo estas deklarita kiel
+<code>
+(<A HREF="#snc">snc</A>|<A HREF="#fnt">fnt</A>|<A HREF="#gra">gra</A>|<A HREF="#uzo">uzo</A>|<A HREF="#dif">dif</A>|<A HREF="#ekz">ekz</A>|<A HREF="#rim">rim</A>|<A HREF="#ref">ref</A>|<A HREF="#refgrp">refgrp</A>|<A HREF="#trd">trd</A>|<A HREF="#bld">bld</A>|<A HREF="#adm">adm</A>)*</code>.
+
+
+Øi ne havas atributojn.<BR>
+</P>
+<h4>komentoj</h4>
+Subsencogrupo. Æe tre multsencaj vortoj povas esti avantaøe,
+divid la sencogrupojn denove en subsencogrupojn por ricevi
+klaran artikolostrukturon. Komparu la majusklajn A), B) ...
+en PIV, art. <em>de</em> k.a.<HR><a name="sup"></a>
+<h1>sup</h1>La elemento <em>sup</em> povas okazi en
+<A HREF="#dif">dif</A>, <A HREF="#ekz">ekz</A>, <A HREF="#klr">klr</A>, <A HREF="#rim">rim</A>. Øia enhavo estas deklarita kiel
+<code>
+(#PCDATA)</code>.
+
+
+Øi ne havas atributojn.<BR>
+</P>
+<h4>komentoj</h4>
+altigita teksto, ekz. en ¶emiaj formuloj <HR><a name="titolo"></a>
+<h1>titolo</h1>La elemento <em>titolo</em> povas okazi en
+<A HREF="#prologo">prologo</A>. Øia enhavo estas deklarita kiel
+<code>
+(#PCDATA)</code>.
+
+
+Øi ne havas atributojn.<BR>
+</P>
+<h4>komentoj</h4>
+Titolo de la vortaro. Øi estas entenata en la 
+prologo. Pluraj titoloj estas permesitaj.<HR><a name="tld"></a>
+<h1>tld</h1>La elemento <em>tld</em> povas okazi en
+<A HREF="#dif">dif</A>, <A HREF="#ekz">ekz</A>, <A HREF="#em">em</A>, <A HREF="#kap">kap</A>, <A HREF="#klr">klr</A>, <A HREF="#rim">rim</A>, <A HREF="#uzo">uzo</A>. Øia enhavo estas deklarita kiel
+<em>malplena</em>.
+
+
+La atributo <strong>lit</strong>
+ estas <CODE>CDATA</CODE>
+(antaýdifino: 
+<code>#IMPLIED</code>)
+<BR>
+</P>
+<h4>komentoj</h4>
+Tildo rilatas al la radiko, donita en la kapvorto
+øi ne bezonas enhavon. La atributo <dfn>lit</dfn> indikas alian
+komencliteron ol havas la radiko. Grava por majuskligo kaj
+minuskligo.
+<HR><a name="trd"></a>
+<h1>trd</h1>La elemento <em>trd</em> povas okazi en
+<A HREF="#art">art</A>, <A HREF="#dif">dif</A>, <A HREF="#drv">drv</A>, <A HREF="#klr">klr</A>, <A HREF="#snc">snc</A>, <A HREF="#sncgrp">sncgrp</A>, <A HREF="#subsnc">subsnc</A>, <A HREF="#subsncgrp">subsncgrp</A>. Øia enhavo estas deklarita kiel
+<code>
+(#PCDATA|<A HREF="#klr">klr</A>)*</code>.
+
+
+
+La atributo <strong>lng</strong>
+ estas <CODE>CDATA</CODE>
+(antaýdifino: 
+<code>#IMPLIED</code>)
+<BR>
+</P>
+<h4>komentoj</h4>
+Traduko kosistas el traduka vorto aý frazo
+kaj klarigoj, poste povos sekvi aliaj elementoj.
+<HR><a name="uzo"></a>
+<h1>uzo</h1>La elemento <em>uzo</em> povas okazi en
+<A HREF="#art">art</A>, <A HREF="#drv">drv</A>, <A HREF="#snc">snc</A>, <A HREF="#sncgrp">sncgrp</A>, <A HREF="#subsnc">subsnc</A>, <A HREF="#subsncgrp">subsncgrp</A>. Øia enhavo estas deklarita kiel
+<code>
+(#PCDATA|<A HREF="#tld">tld</A>)*</code>.
+
+
+
+La atributo <strong>tip</strong>
+povas havi la valoro(j)n "fak" "reg" "klr" (antaýdifino: 
+<code>#IMPLIED</code>)
+<BR>
+</P>
+<h4>komentoj</h4>
+La uzo povas esti fako aý regiono, en kiu estas uzata
+la vorto au termino. Øi povas ankaý enhavi klarigon, kiam kaj kiel
+uzi iun vorton.
+<HR><a name="vortaro"></a>
+<h1>vortaro</h1>La elemento <em>vortaro</em> povas okazi en
+neniu alia elemento.
+Øia enhavo estas deklarita kiel
+<code>
+((<A HREF="#prologo">prologo</A>?,<A HREF="#precipa-parto">precipa-parto</A>,<A HREF="#epilogo">epilogo</A>?)|<A HREF="#art">art</A>+)</code>.
+
+
+Øi ne havas atributojn.<BR>
+</P>
+<h4>komentoj</h4>
+Radiko de la strukturarbo de vortaro. La elemento ampleksas
+la tutan vortaron.<p>
+Øi entenas aý prologon, precipan parton kaj epilogon aý plurajn
+artikolojn. Prologo kaj epilogo estas nedevigaj. La ebleco de rekta
+enteno de artikolo ne estas destinita por kompletaj vortaroj, sed por
+eltiroj aý simpla listo de unuopaj artikoloj.<HR><a name="vrk"></a>
+<h1>vrk</h1>La elemento <em>vrk</em> povas okazi en
+<A HREF="#fnt">fnt</A>. Øia enhavo estas deklarita kiel
+<code>
+(#PCDATA)</code>.
+
+
+Øi ne havas atributojn.<BR>
+</P>
+<h4>komentoj</h4>
+Verko, en kiu troviøas citita frazo <HR><a name="vspec"></a>
+<h1>vspec</h1>La elemento <em>vspec</em> povas okazi en
+<A HREF="#gra">gra</A>. Øia enhavo estas deklarita kiel
+<code>
+(#PCDATA)</code>.
+
+
+Øi ne havas atributojn.<BR>
+</P>
+<h4>komentoj</h4>
+Vortspeco. Ekz. subst. por substantivo; tr./ntr.
+por transitivaj kaj netransitivaj verboj ktp.<HR>
+</BODY>
+</HTML>

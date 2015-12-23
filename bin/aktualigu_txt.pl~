@@ -1,0 +1,8 @@
+#!/usr/bin/perl
+
+$shablono = shift @ARGV;
+
+$REVO = $ENV{REVO};
+$revo_xml = "$REVO/xml";
+
+`scp revo@digesto2:revo/xml/$shablono* $revo_xml/`;

@@ -1,0 +1,236 @@
+<project name="Revo-Dict" default="test" basedir=".">
+    <description>
+       Reta Vortaro, reguloj por krei dict-version. 
+    </description>
+
+  <property environment="ENV"/>
+  <property file="${user.dir}/cfg/agordo" prefix="v."/>
+
+  <property name="v.voko" location="${ENV.VOKO}"/>
+  <property name="v.revo" location="${ENV.REVO}"/>
+
+<!--
+  <property name="v.bazo" location="${user.dir}"/>
+  <property name="v.tmp" location="${v.bazo}/.tmp"/>
+-->
+
+  <property name="v.revo.xml" location="${v.revo}/xml"/>
+  <property name="v.voko.bin" location="${v.voko}/bin"/>
+  <property name="v.voko.ant" location="${v.voko}/ant"/>
+  <property name="v.voko.xsl" location="${v.voko}/xsl"/>
+  <property name="v.tgz" location="${v.revo}/../tgz"/>
+  <!-- property name="v.dict" location="${v.voko}/../dict"/ -->
+
+  <property name="dictd" location="/usr/sbin/dictd"/>
+  <property name="dictzip" location="/usr/bin/dictzip"/>
+  <property name="rxp" location="/usr/bin/rxp"/>
+  <property name="xmllint" location="/usr/bin/xmllint"/>
+
+  <target name="dict-preparo">
+  <!-- Create the time stamp -->
+    <tstamp>
+      <format pattern="yyyy-MM-dd" property="dato"/>
+    </tstamp>
+  </target>
+
+
+  <target name="dict-agordo" description="eligas la agordeblajn variablojn por kontrolo">
+    <echoproperties prefix="v."/>
+  </target>
+
+
+  <target name="dict-kompilo" depends="dict-preparo" description="kreas la vortaron">
+
+    <exec executable="${v.voko.bin}/dictfaru.pl">   
+       <arg value="${v.revo.xml}"/>
+    </exec>
+
+  </target>
+
+  <target name="dict-conf" depends="dict-preparo" description="kreas agordodosieron por dictd">
+    <echo file="${v.bazo}/dictd.conf">
+       database revo_eo {
+          data ${v.bazo}/revo.dat.dz
+          index ${v.bazo}/revo.eo.inx
+          name "Reta Vortaro, esperanta indekso"
+       }
+
+       database revo_be {
+          data ${v.bazo}/revo.dat.dz
+          index ${v.bazo}/revo.be.inx
+          name "Reta Vortaro, belorusa indekso"
+       }
+
+       database revo_cs {
+          data ${v.bazo}/revo.dat.dz
+          index ${v.bazo}/revo.cs.inx
+          name "Reta Vortaro, ĉeĥa indekso"
+       }
+
+       database revo_de {
+          data ${v.bazo}/revo.dat.dz
+          index ${v.bazo}/revo.de.inx
+          name "Reta Vortaro, germana indekso"
+       }
+
+       database revo_en {
+          data ${v.bazo}/revo.dat.dz
+          index ${v.bazo}/revo.en.inx
+          name "Reta Vortaro, angla indekso"
+       }
+
+       database revo_es {
+          data ${v.bazo}/revo.dat.dz
+          index ${v.bazo}/revo.es.inx
+          name "Reta Vortaro, hispana indekso"
+       }
+
+       database revo_fr {
+          data ${v.bazo}/revo.dat.dz
+          index ${v.bazo}/revo.fr.inx
+          name "Reta Vortaro, franca indekso"
+       }
+
+       database revo_hu {
+          data ${v.bazo}/revo.dat.dz
+          index ${v.bazo}/revo.hu.inx
+          name "Reta Vortaro, hungara indekso"
+       }
+
+       database revo_la {
+          data ${v.bazo}/revo.dat.dz
+          index ${v.bazo}/revo.la.inx
+          name "Reta Vortaro, latinscienca indekso"
+       }
+
+       database revo_nl {
+          data ${v.bazo}/revo.dat.dz
+          index ${v.bazo}/revo.nl.inx
+          name "Reta Vortaro, nederlanda indekso"
+       }
+
+       database revo_pl {
+          data ${v.bazo}/revo.dat.dz
+          index ${v.bazo}/revo.pl.inx
+          name "Reta Vortaro, pola indekso"
+       }
+
+       database revo_pt {
+          data ${v.bazo}/revo.dat.dz
+          index ${v.bazo}/revo.pt.inx
+          name "Reta Vortaro, portugala indekso"
+       }
+
+    </echo>
+  </target>
+
+
+  <target name="dict-test" depends="dict-preparo" 
+       description="testas la vortaron">
+  
+    <exec executable="${dictd}">   
+      <arg value="--config"/>
+      <arg value="dictd.conf"/>
+      <arg value="--test"/>
+      <arg value="abelo"/>
+      <arg value="--test-db"/>
+      <arg value="revo_eo"/>
+
+    </exec>
+
+  </target>
+
+  <target name="dict-zip" depends="dict-preparo"
+        description="kunpakas la vortaron">
+    <!--exec executable="${dictzip}">
+      <arg value="revo.dat"/>
+    </exec-->
+
+    <zip destfile="${v.tgz}/revodict_${dato}.zip" basedir="${v.bazo}" includes="revo.dat.dz revo.*.inx dictd.conf">
+    </zip>
+  </target>
+
+  <target name="dict-xdxf-preparo" depends="dict-preparo, dict-agordo">
+    <!-- chu necesas refari la dosieron revo.xdxf? -->
+    <uptodate property="xdxf.aktuala">
+      <srcfiles dir="${v.revo.xml}/../xml" includes="*.xml"/>
+      <mapper type="merge" to="${v.tmp}/revo.xdxf"/>
+    </uptodate>
+  </target>
+
+
+  <target name="dict-xdxf" depends="dict-xdxf-preparo" description="kreas xdxf-dosieron de la vortaro"
+    unless="xdxf.aktuala">
+
+    <java classname="de.steloj.respiro.DirectoryTransformer"
+     logError="true">
+         <!-- arg value="-v"/-->
+         <arg path="${v.revo.xml}/../xml"/>
+         <arg file="${v.voko.xsl}/revo_xdxf.xsl"/>
+         <arg file="${v.tmp}/revo-tmp.xdxf"/>
+         <classpath>
+           <pathelement location="${v.voko.ant}/respiro.jar"/>
+           <pathelement path="${java.class.path}"/>
+           <pathelement location="${v.xalan-ser}"/>
+       </classpath>
+    </java>
+
+    <xslt in="${v.tmp}/revo-tmp.xdxf" out="${v.tmp}/revo-tmp-2.xdxf"
+      style="${v.voko.xsl}/revo_xdxf_kadro.xsl"/>
+
+    <exec executable="${v.voko.bin}/xdxf_belformat.pl">   
+      <arg value="${v.tmp}/revo-tmp-2.xdxf"/>
+      <arg file="${v.tmp}/revo.xdxf"/>
+    </exec>
+
+    <!-- indent - could be removed later 
+    <exec executable="${xmllint}">   
+      <arg value="- -format"/>
+      <arg value="- -output"/>
+      <arg file="${v.tmp}/revo-tmp-3.xdxf"/>
+      <arg file="${v.tmp}/revo-tmp-2.xdxf"/>
+    </exec>
+-->
+
+    <!-- input spaces before line breaks - GoldenDict need them 
+    <copy file="${v.tmp}/revo-tmp-3.xdxf" tofile="${v.tmp}/revo.xdxf">
+       <filterchain>
+         <tokenfilter>
+           <replaceregex pattern="$" replace=" "/>
+         </tokenfilter>
+       </filterchain>
+    </copy>
+-->
+
+   <!-- check -->
+   <exec executable="${rxp}">   
+      <arg value="-s"/>
+      <arg value="-V"/>
+      <arg value="-D"/>
+      <arg value="xdxf"/>
+      <arg value="file:/home/revo/revo/dtd/xdxf_lousy.dtd"/>
+      <arg file="${v.tmp}/revo.xdxf"/>
+   </exec>
+
+  </target>
+
+  <target name="dict-xdxf-zip" depends="dict-preparo, dict-xdxf" 
+	  description="Pakas revo.xdxf en zip-dosieron">
+
+     <copy file="${v.voko}/smb/revo_ico.png" tofile="${v.tmp}/icon32.png"/>
+
+     <zip destfile="${v.tgz}/revoxdxf_${dato}.zip">
+       <zipfileset file="${v.tmp}/revo.xdxf" prefix="reta-vortaro-xdxf"/>
+       <zipfileset file="${v.tmp}/icon32.png" prefix="reta-vortaro-xdxf"/>
+     </zip>  
+   </target>
+
+</project>
+
+
+
+
+
+
+
+

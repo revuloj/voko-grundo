@@ -1,0 +1,27 @@
+Instali vokon
+-------------
+
+Por agordi vokon en via sistemo vi devas difini
+la mediovariablon VOKO celante al la dosierujo kun Voko-iloj, ekz.:
+
+  export $VOKO = /pado/al/voko
+
+Se vi ne uzas Uniksan sistemon, eble bezonighas adapto
+de iuj programoj en bin/, aparte tie, kie sistemkomandoj
+estas vokataj, kaj padnomoj kun '/' estas uzataj.
+
+
+Konciza pasharo por krei vortaron
+---------------------------------
+
+Vidu en ant/LEGUMIN
+
+         13a de Marto 2008, Wolfram Diestel
+         <wolfram@steloj.de>
+
+
+
+
+
+
+

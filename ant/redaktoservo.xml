@@ -1,0 +1,374 @@
+<project name="Revo-redaktoservo" default="" basedir=".">
+    <description>
+       Reta Vortaro, reguloj por redaktoservo, kiu kunigas chion de retposhttrakto tra refaro de la vortaro 
+       ghis shovo de la rezultoj al la servilo.
+    </description>
+
+ 
+   <!-- property file="etc -->
+   <!-- legu agorditajn variablojn el dosiero -->
+   <property file="${user.dir}/cfg/agordo" prefix="v."/>
+   <property environment="ENV"/>
+
+   <!-- donu valorojn al la variabloj, se ili ne jam aperis en la agordo-dosiero -->
+   <property name="v.voko" location="${ENV.VOKO}"/>
+   <property name="v.voko.ant" location="${v.voko}/ant"/>
+   <property name="v.voko.bin" location="${v.voko}/bin"/>
+   <property name="v.bazo" location="${user.dir}"/>
+   <property name="poshtprotokolo" location="${v.log}/processmail.log"/>
+
+   <!-- speciala agordo por la redaktoservo -->
+   <property file="${v.etc}/redaktoservo-agordo" prefix="srv."/>
+
+   <!-- vi povas doni alian dosieron en la readktoserv-agordo -->
+   <property name="srv.seruro" location="${v.tmp}/redaktoservo-laboranta-do-shlosita"/>
+   <property name="bash" location="/bin/bash"/>
+   <property name="grep" location="/usr/bin/grep"/>
+   <property name="resumo-filtro" value="1 message|messages|no mail|copy|tar-file-size|length|ftp|get|failed|total|dauxro"/>
+
+   <target name="srv-agordo" description="eligas la agordeblajn variablojn por kontrolo">
+      <echoproperties prefix="v."/>
+      <echoproperties prefix="srv."/>
+   </target>
+
+
+   <target name="srv-shlosu" description="shlosas la servon dum ghi laboras por eviti konkurencajn procedojn">
+     <fail message="La redaktoservo estas shlosita. Atendu ghis ghi finighis. Esceptokaze vi povas forigi ${srv.seruro}.">
+       <condition>
+           <available file="${srv.seruro}"/>
+       </condition>
+     </fail>
+     <fail>
+       <condition>
+         <not>
+           <http url="${srv.revo-tempo.url}" errorsBeginAt="500"/>
+         </not>
+       </condition>
+     </fail>
+
+     <touch file="${srv.seruro}"/>
+   </target>
+
+   <target name="srv-malshlosu" description="malshlosas la servon post la laboro kaj permesas rekomencadon">
+     <delete file="${srv.seruro}" verbose="true"/>
+   </target>
+
+   <target name="srv-malshlosu-postnokte" description="malshlosas la servon post kiam ghi ne malshlosighis post noktomezo. Tio okazas neregule pro eraroj ekz. nefunkcianta retkonekto." depends="srv-preparo">
+     <delete verbose="true">
+	<fileset file="${srv.seruro}">
+	    <date datetime="${v.dato}" pattern="yyyyMMdd" when="before"/>
+	</fileset>
+     </delete>
+   </target>
+
+   <target name="srv-preparo">
+    <tstamp>
+       <format property="v.dato" pattern="yyyyMMdd"/>
+     </tstamp>
+     <tstamp>
+       <format property="v.tempo" pattern="HHmmss"/>
+     </tstamp>
+     <tstamp>
+       <format property="v.hierau" pattern="yyyyMMdd" offset="-1" unit="day"/>
+     </tstamp>
+   </target>
+
+   <target name="srv-preni-poshton" description="Prenas la retposhton de la redaktantoj ">
+
+     <!-- prenu liston de redaktantoj -->
+     <ant antfile="${v.voko.ant}/spegulo.xml" inheritAll="false">
+       <property name="v.bazo" location="${v.bazo}"/>
+       <target name="revo-redaktantoj"/>
+     </ant>
+
+     <!-- tushu poshtservilon -->
+     <exec dir="${v.bazo}" executable="${srv.ping}">
+       <arg value="-qc5"/>
+       <arg value="-i1"/>
+       <arg value="${srv.poshtoservilo}"/>
+     </exec>
+
+     <!-- prenu retposhton kaj shovu al loka poshtfako -->
+     <exec dir="${v.bazo}" executable="${srv.fetchmail}"/>
+     <exec dir="${v.bazo}" executable="${srv.sudo}">
+       <arg value="${srv.sendmail}"/>
+       <arg value="-q"/>
+     </exec> 
+<!--     <exec dir="${v.bazo}" command="sudo /usr/sbin/sendmail -q"/> -->
+
+
+     <available property="user-mail-file-exists" file="${srv.loka-poshto-dosiero}"/>
+
+   </target>
+ 
+   <target name="srv-trakti-poshton" depends="srv-preni-poshton"
+        if="user-mail-file-exists"
+        description="Traktas retposhton de la redaktantoj post preno">
+      
+      <exec dir="${v.bazo}" executable="${v.voko.bin}/processmail.pl"
+         output="${poshtprotokolo}" append="true"/>
+<!-- 
+      <loadfile srcFile="${srv.poshtprotokolo}" property="poshtprotokolo"/>
+      <echo>
+         ${poshtprotokolo}
+      </echo>
+-->
+   </target>
+
+   <target name="srv-refari-vortaron" depends="srv-preparo,srv-trakti-poshton"
+      if="user-mail-file-exists"
+      description = "refaras la vortaron post poshtotrakto">
+
+     <ant antfile="${v.voko.ant}/spegulo.xml" inheritAll="false">
+        <property name="v.bazo" location="${v.bazo}"/>
+        <property name="cvs.dato" value="${v.dato}"/>
+        <property name="cvs.tempo" value="${v.tempo}"/>
+        <target name="cvs-tar"/>
+     </ant>
+
+     <ant antfile="${v.voko.ant}/vortaro.xml" inheritAll="false">
+        <property name="v.bazo" location="${v.bazo}"/>
+        <target name="limigita"/>
+        <target name="pakajhoj"/>
+        <target name="tezauro"/>
+     </ant>
+
+     <ant antfile="${v.voko.ant}/spegulo.xml" inheritAll="false">
+        <property name="v.bazo" location="${v.bazo}"/>
+        <property name="revo.dato" value="${v.dato}"/>
+        <property name="revo.tempo" value="${v.tempo}"/> <!-- uzata en la dosiernomo de la arkivo, do devas koincidi en revo-tar kaj revo-upload -->
+        <target name="revo-tar"/>
+        <target name="revo-viki-ligoj"/>
+     </ant>
+     
+   </target>
+
+   <target name="srv-refari-nur-artikolojn" depends="srv-preparo,srv-trakti-poshton"
+      if="user-mail-file-exists"
+      description = "refaras nur la redaktitajn artikolojn, ne la indeksojn post poshtotrakto">
+
+     <ant antfile="${v.voko.ant}/spegulo.xml" inheritAll="false">
+        <property name="v.bazo" location="${v.bazo}"/>
+        <property name="cvs.dato" value="${v.dato}"/>
+        <property name="cvs.tempo" value="${v.tempo}"/>
+        <target name="cvs-tar"/>
+     </ant>
+
+     <ant antfile="${v.voko.ant}/vortaro.xml" inheritAll="false">
+        <property name="v.bazo" location="${v.bazo}"/>
+        <target name="artikoloj"/>
+     </ant>
+
+     <ant antfile="${v.voko.ant}/spegulo.xml" inheritAll="false">
+        <property name="v.bazo" location="${v.bazo}"/>
+        <property name="revo.dato" value="${v.dato}"/>
+        <property name="revo.tempo" value="${v.tempo}"/> <!-- uzata en la dosiernomo de la arkivo, do devas koincidi en revo-tar kaj revo-upload -->
+
+        <target name="revo-tar"/>
+     </ant>
+   </target>
+
+   <target name="srv-upload"
+      description="alshutas kaj malpakas la antauefaritajn tar-dosierojn che reta-vortaro.de">
+
+     <!-- forsendi respondojn al redaktantoj, necesas poshtkontrolo antau forsendo pro legitimigo! -->
+      <!-- <exec dir="${v.bazo}" executable="${srv.fetchmail}">
+        <arg value="-c"/>
+        <arg value="post.strato.de"/>
+      </exec> -->
+      <exec dir="${v.bazo}" executable="${srv.sudo}">
+        <arg value="${srv.sendmail}"/>
+        <arg value="-q"/>
+      </exec>
+
+      <!-- sendi shanghojn de arhhivo al servilo -->
+      <ant antfile="${v.voko.ant}/spegulo.xml" inheritAll="false">
+        <property name="v.bazo" location="${v.bazo}"/>
+        <property name="revo.dato" value="${v.dato}"/>
+        <property name="revo.tempo" value="${v.tempo}"/>
+        <property name="cvs.dato" value="${v.dato}"/>
+        <property name="cvs.tempo" value="${v.tempo}"/>
+        <target name="cvs-upload"/>
+        <target name="revo-upload"/>
+      </ant>
+   </target>
+
+
+   <target name="srv-servo" depends="srv-agordo,srv-malshlosu-postnokte,srv-shlosu,srv-preparo,srv-refari-vortaron,srv-upload,srv-malshlosu"
+      if="user-mail-file-exists"
+      description="Kuro de la tuta servo: preni kaj trakti poshton, refari vortaron, sendi dosierojn kaj respondojn">
+
+   </target> 
+
+   <target name="srv-servo-art" depends="srv-agordo,srv-shlosu,srv-preparo,srv-refari-nur-artikolojn,srv-upload,srv-malshlosu"
+      if="user-mail-file-exists"
+      description="Interkuro (nur artikoloj, ne indeksoj) de la servo: preni kaj trakti poshton, refari artikolojn, sendi dosierojn kaj respondojn">
+
+   </target> 
+
+   <target name="srv-resumo" depends="srv-preparo">
+
+     <path id="logfiles-hodiau">
+       <fileset dir="${v.log}"> 
+         <include name="redsrv-${v.dato}*.log" />
+       </fileset>
+     </path>
+
+     <path id="logfiles-hierau">
+       <fileset dir="${v.log}"> 
+         <include name="redsrv-${v.hierau}*.log" />
+       </fileset>
+     </path>
+
+     <pathconvert property="logfiles-hodiau" refid="logfiles-hodiau" pathsep=" ">
+       <map from="${v.log}/" to=""/>
+     </pathconvert>
+
+     <pathconvert property="logfiles-hierau" refid="logfiles-hierau" pathsep=" ">
+       <map from="${v.log}/" to=""/>
+     </pathconvert>
+
+     <!-- echo message="files: ${logfiles-hodiau}"/ -->
+
+     <echo>
+PROBLEMOJ ESTIS:
+----------------
+</echo>
+
+     <exec dir="${v.log}" executable="${grep}" osfamily="Unix">
+       <arg line='-i -E -H -n10 "failed" ${logfiles-hodiau} ${logfiles-hierau}'/>
+     </exec>
+ 
+     <echo>
+
+KUROJ DE LA SERVO:
+-------------------
+(hodiau)
+     </echo>
+     <exec dir="${v.log}" osfamily="Unix" executable="${grep}"
+           outputproperty="grep.output">
+       <arg line='-i -E -H "${resumo-filtro}" ${logfiles-hodiau}'/>
+     </exec>
+
+     <loadresource property="echo.output">
+       <propertyresource name="grep.output"/>
+       <filterchain>
+            <replacestring from="redsrv-" to=".."/>
+            <replacestring from="Total time:" to=" &gt;&gt;"/>
+            <replacestring from="minutes" to="min"/>
+            <replacestring from="minute" to="min"/>
+            <replacestring from="seconds" to="s &lt;&lt;"/>
+            <replacestring from="second" to="s &lt;&lt;"/>
+            <replacestring from="[exec]" to=" [exc]"/>
+            <replacestring from="[copy]" to=" [cpy]"/>
+            <replacestring from="[length]" to="   [len]"/>
+            <replacestring from="[echoproperties]" to="      [len]"/>
+            <replacestring from="/home/revo/" to=""/>
+       </filterchain>
+     </loadresource>
+
+     <echo message="${echo.output}"/>
+
+     <echo>
+
+(hierau)
+     </echo>
+     <exec dir="${v.log}" osfamily="Unix" executable="${grep}" 
+           outputproperty="grep.output">
+       <arg line='-i -E -H "${resumo-filtro}" ${logfiles-hierau}'/>
+     </exec>
+
+     <loadresource property="echo.output">
+       <propertyresource name="grep.output"/>
+       <filterchain>
+            <replacestring from="redsrv-" to=".."/>
+            <replacestring from="Total time:" to=" &gt;&gt;"/>
+            <replacestring from="minutes" to="min"/>
+            <replacestring from="minute" to="min"/>
+            <replacestring from="seconds" to="s &lt;&lt;"/>
+            <replacestring from="second" to="s &lt;&lt;"/>
+            <replacestring from="[exec]" to=" [exc]"/>
+            <replacestring from="[copy]" to=" [cpy]"/>
+            <replacestring from="[length]" to="   [len]"/>
+            <replacestring from="[echoproperties]" to="      [len]"/>
+            <replacestring from="/home/revo/" to=""/>
+       </filterchain>
+     </loadresource>
+   <echo message="${echo.output}"/>
+
+   <echo>
+
+VERSIO-KONTROLO:
+----------------
+</echo>
+
+      <ant antfile="${v.voko.ant}/spegulo.xml" inheritAll="false">
+        <property name="v.bazo" location="${v.bazo}"/>
+        <property name="revo.dato" value="${v.dato}"/>
+        <property name="revo.tempo" value="${v.tempo}"/> 
+        <target name="revo-kontrolu-versiojn"/>
+      </ant>
+
+   </target>
+
+
+   <target name="srv-purigu" description="forigas malnovajn arhhivojn kaj protokolojn"
+       depends="srv-preparo">
+
+     <tstamp>
+       <format property="srv.antauamonato" pattern="yyyyMM" offset="-1" unit="month"/>
+     </tstamp>
+     <tstamp>
+       <format property="srv.nunamonato" pattern="yyyyMM"/>
+     </tstamp>
+     <tstamp>
+       <format property="srv.antaujaro" pattern="yyyyMM" offset="-12" unit="month"/>
+     </tstamp>
+
+     <tarfileset id="srv.oldlog" dir="${v.log}" includes="**/*.* **/*" excludes="**/*.tgz">
+        <date when="before" datetime="${srv.nunamonato}" pattern="yyyyMM"/>
+     </tarfileset> 
+
+
+     <!-- paku kaj forigu dosierojn en log de antau la nuna monato -->
+     <property name="srv.oldlogtar" value="log-${srv.antauamonato}.tgz"/>
+     <tar destfile="${v.log}/${srv.oldlogtar}" 
+        compression="gzip">
+        <tarfileset refid="srv.oldlog"/>
+     </tar>
+
+     <delete verbose="true">
+        <tarfileset refid="srv.oldlog"/>
+     </delete>
+
+
+     <!-- forigu arhhivojn en log de antau 12 monatoj -->
+     <delete verbose="true">
+       <fileset dir="${v.log}" includes="*.tgz">
+         <date when="before" datetime="${srv.antaujaro}" pattern="yyyyMM"/>
+       </fileset> 
+     </delete>
+
+
+     <!-- forigu dosierojn en tmp de antau 2 monatoj -->
+     <delete verbose="true"> 
+       <fileset dir="${v.tmp}/.." includes="mirror/*/*.* mailatt/*">
+         <date when="before" datetime="${srv.antauamonato}" pattern="yyyyMM"/>
+       </fileset> 
+     </delete>
+
+   </target>
+
+</project>
+   
+
+
+
+
+
+
+
+
+
+
+

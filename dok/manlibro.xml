@@ -1,0 +1,572 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<manlibro>
+<h1>Teĥnika manlibro (pri la Voko-DTD)</h1>
+
+<h2 id="vortaro">vortaro</h2>
+
+<p>
+Ekzistas du eblecoj por realigi vortaron laŭ la Voko-DTD.
+</p>
+<ol>
+<li>La tuta vortaro estas en unu dosiero</li>
+<li>Ĉiu unuopa artikolo estas en propra dosiero</li>
+</ol>
+<p>
+En la unua okazo, kiu konvenas por malgrandaj vortaroj aŭ por
+aŭtomataj traktoj de la tuta vortaro, ĝi konsistas el la tri grandaj partoj
+prologo, precipa parto kaj epilogo. La precipa parto enhavas la
+unuopajn <a href="#art">artikolojn</a>.
+</p>
+
+<code>
+<![CDATA[<?xml version="1.0"?>
+<!DOCTYPE vortaro SYSTEM "../dtd/vokoxml.dtd">  
+]]>
+<vortaro>
+  <prologo>
+    ...
+  </prologo>
+  <precipa-parto>
+    <art>
+      ...
+    </art>
+    <art>
+      ...
+    </art>
+    <art>
+      ...
+    </art>
+  </precipa-parto>
+  <epilogo>
+    ...
+  </epilogo>
+</vortaro>
+</code>
+
+<p>
+En la dua okazo, kiu konvenas por redaktado de grandaj vortaroj,
+ĉiu dosiero enhavas krom la devigaj kadraj elementoj nur unu
+artikolon. 
+</p>
+
+<code>
+<![CDATA[<?xml version="1.0"?>
+<!DOCTYPE vortaro SYSTEM "../dtd/vokoxml.dtd"> 
+]]>
+<vortaro>
+  <art>
+    ...
+  </art>
+</vortaro>
+</code>
+
+
+<h2 id="art">artikolo</h2>
+<p>
+Artikolo enhavas la informojn pri unu kapvorto. Ĝi
+konsistas do el la <a href="#kap">kapvorto</a> kaj la priskribo. La priskribo 
+estas normale dividita en plurajn <a href="#drv">derivaĵojn</a>. Krome 
+la artikolo ricevas markon, kiu permesas referenci al la
+artikolo de aliaj lokoj. La marko principe egalas al la dosiernomo.
+</p>
+
+<code>
+<art mrk="vort">
+  <kap><rad>vort</rad>/o</kap>
+  <drv mrk="vort.0o">
+    ...
+  </drv>
+  <drv mrk="vort.0igi">
+    ...
+  </drv>
+  <drv mrk="vort.sen0a">
+    ...
+  </drv>
+</art>
+</code>
+
+<p>
+Se la artikoloj estas administrataj per la arĥivosistemo
+CVS, la marko estas aŭtomate donita de tiu sistemo en loko
+markita per &#36;Id&#36; kaj tiukaze enhavas krome indikojn pri
+versio kaj ŝanĝtempo de la artikolo. Tiujn informojn uzas
+ankaŭ la retpoŝta redaktoservo por certigi, ke ne du
+redaktantoj redaktas samtempe la saman artikolon.
+Ampleksaj artikoloj cetere povas esti dividitaj en
+subartikoloj. 
+</p>
+
+<code>
+<art mrk="&#36;Id: vort.xml,v 1.6 2000/03/31 20:09:48 revo Exp &#36;">
+  <kap><rad>vort</rad>/o</kap>
+  <subart>
+    ...
+  </subart>
+  <subart>
+    ...
+  </subart>
+</art>
+</code>
+
+<p>
+Noto: Artikoloj de terminaroj normale ne bezonas la derivaĵojn kaj 
+povas rekte enhavi la sencojn aŭ eĉ la difinojn kaj
+ekzemplojn.
+</p>
+
+<h2 id="kap">kapvorto</h2>
+
+<p>
+Kapvorto okazas en du lokoj, kiel kapvorto de <a href="#art">artikolo</a> 
+kaj kiel kapvorto de <a href="#drv">derivaĵo</a>. En la kapvorto de la artikolo 
+oni normale signas la radikon, per kiu oni povas anstataŭi la 
+tildojn en la cetera artikolo. Krome la kapvorto povas enhavi 
+indikon pri la <a href="#fnt">fonto</a> kaj oficialeco de la kapvorto.
+</p>
+
+<code>
+<kap>
+  <rad>vort</rad>/o
+  <ofc>*</ofc>
+</kap>
+</code>
+
+<p>
+La kapvortoj de la derivaĵoj referencas per tildo al
+la radiko kaj nur aldonas prefiksojn, finaĵojn ktp.
+</p>
+
+<code>
+<kap>
+  sen<tld/>a
+</kap>
+</code>
+
+
+<h2 id="drv">derivaĵoj</h2>
+<p>
+Derivaĵoj entenas la priskribon pri iu vorto derivita
+el la kapvorto de la artikolo. Ili konsistas el propra
+kapvorto kaj ĝia priskribo, kiu ofte estas dividita
+en plurajn sencojn. Se temas pri nur unu senco, la divido
+principe ne estas necesa. Sed por faciligi la taskon de
+la konvertiloj mi rekomendas eĉ ĉe nur unu senco krampi
+ĝin per &lt;snc&gt;...&lt;/snc&gt;. Por ke derivaĵoj 
+estu rekte referenceblaj el aliaj artikoloj ili ricevas 
+same kiel la artikolo markon, kiu konsistas el la 
+dosiernomo, punkto kaj la kapvorto de la derivaĵo, en kiu
+la tildo estas anstataŭigita per nulo.
+</p>
+<code>
+<drv mrk="vort.sen0a">
+  <kap>sen<tld/>a</kap>
+  <snc>
+  </snc>  
+</drv>
+</code>
+<p>
+Multsignifajn derivaĵojn oni povas dividi per "subdrv".
+</p>
+
+
+<h2 id="snc">sencoj</h2>
+<p>
+Sencoj entenas la priskribon pri unu senco de vorto.
+La priskribo povas uzi iujn el la sekvaj partoj:
+uzo, difino, <a href="#ekz">ekzemplo</a>, <a
+href="#ref">referenco</a>, 
+<a href="#trd">traduko</a>
+kaj kelkaj aliaj.
+</p>
+
+<code>
+<snc>
+  <dif>
+    ...:
+    <ekz>...</ekz>;
+    <ekz>...</ekz>.
+  </dif>
+  <refgrp tip="sin">
+    <ref cel="...">...</ref>,
+    <ref cel="...">...</ref>
+  </refgrp>
+  <trd lng="cs">...</trd>
+  <trd lng="de">...</trd>
+  <trd lng="en">...</trd>
+</snc>
+<snc>
+  <uzo tip="fak">ZOO</uzo>
+  <dif>
+    ...
+  </dif>
+  <bld lok="...">...</bld>
+  <trd lng="en">...</trd>
+</snc>     
+</code>
+
+<p>
+Sencon, kiu ampleksas plurajn subtilajn subsencojn oni
+povas dividi per "subsnc".
+</p><p>
+Se vi volas referenci al iu senco, vi enmetu markon,
+kies unua parto estu la marko de la enhavanta derivaĵo
+kaj la dua parto identigu la sencon mem:
+</p>
+
+<code>
+<drv mrk="dorm.0i">
+  <snc mrk="dorm.0i.ripozi">
+    ...
+  </snc>
+  <snc mrk="dorm.0i.malvivi">
+    ...
+  </snc>
+</drv>
+</code>
+
+<p>
+Ĉar la sencnumeroj estas elkalkulataj aŭtomate, ekzistas
+specialaj rimedoj por enŝovi tian numeron en la tekston:
+</p>
+
+<code>
+<rim> 
+  La senco dormi <sncref ref="dorm.0i.malvivi"/> estas
+  uzata nur...
+</rim>
+</code>
+
+<p>
+en la prezento fariĝas "Rim: La senco dormi <i>2</i>
+estas uzata nur..."
+</p><p>
+Se malsupre en artikolo vi volas doni ekzemplojn rilate
+al senco pli frue aperanta, vi povas fari tion per:
+</p>
+
+<code>
+<snc ref="dorm.0i.malvivi">
+  <ekz>
+    ...
+  </ekz>
+</snc>
+</code>
+
+<p>
+Tio poste fariĝos "2: ..." (Komparu la artikolon pri "al").
+</p>
+
+<h2 id="ekz">ekzemploj</h2>
+
+<p>
+Ekzemploj ilustras la uzon de vorto kaj povas enhavi 
+krom la citita aŭ ekzempla teksto klarigojn kaj 
+<a href="#fnt">fontindikon</a>.
+</p>
+
+<code>
+<ekz>
+  ili sin <tld/>is je kvar okuloj
+  <klr>(intervidi&amp;gcirc;is kaj parolis duope, sen atestantoj)</klr>
+  <fnt><bib>Ne&amp;gcirc;aBlovado</bib></fnt>
+</ekz>
+</code>
+
+<p>
+Ellason ene de citaĵo oni povas montri per klariga tripunkto:
+</p>
+
+<code>
+<ekz>
+  iun matenon <klr>[...]</klr> mi observis en la aero <tld/>forman objekton
+  <fnt><bib>M&amp;uuml;nchhausen</bib>, <lok>&amp;ccirc;apitro 9a</lok></fnt>
+</ekz>
+</code>
+
+
+<h2 id="fnt">fontindikoj</h2>
+
+<p>
+Fontoj indikas la devenon de citaĵo aŭ kapvorto.
+Ili indikas normale la verkon kaj la lokon ene de 
+la verko. La verkon plej konvene oni indikas per 
+referenco al la bibliografio.
+</p>
+
+<code>
+<ekz>
+  ili <tld/>igas mian vivon en kavo
+  <fnt><bib>MT</bib>, <lok>&amp;Jer; 3:53</lok></fnt>
+</ekz>
+</code>
+
+<p>Jen kiel oni citas el artikolo de revuo:</p>
+
+<code>
+<ekz>
+  la fama <tld/>o de Hammurabi
+  <fnt>
+  <aut>Andrzej Grz&amp;eogonek;bowski</aut>,
+  <vrk>Irano: la 131a lando de MT</vrk>,
+  <bib>LOdE</bib>,
+  <lok>2001-07, numero 81a</lok>
+  </fnt>
+</ekz>
+</code>
+
+
+<p>
+La bibliografio enhavas la mallongigojn de la referencverkoj, 
+ekzemple <b>MT</b> povas stari por la Malnova Testamento, <b>LOdE</b> por La Ondo de Esperanto, <b>Viki</b> por Vikipedio kaj tiel plu.
+</p>
+
+<p>
+Se la fonto estas vortaro aŭ leksikono tiel, ke oni trovas la citaĵon
+laŭ la alfabeta indekso, sufiĉas sole la mallongigo de referencverko
+kiel fontindiko. Ordinare tio aperas ĉe la fontindikoj de kapvortoj:
+</p>
+
+<code>
+  <kap><rad>levier</rad>/o <fnt><bib>PIV1</bib></fnt></kap>
+</code>
+
+<p>
+Se iom grava verko mankas en la bibliografio, vi povas peti, 
+ke la administranto aldonu ĝin.
+</p>
+
+<p>
+Verkoj ne tre ofte citataj, ekzemple mallongaj interretaj paĝoj, 
+restos ekster la bibliografio.  En tiaj okazoj, vi povas uzi ankaŭ 
+fontindikon similan al la sekva:
+
+</p>
+
+<code>
+  <fnt>
+  <aut>Pavel Stan&amp;ccirc;ev, trad. Vedi</aut>,
+  <vrk>
+    <url ref="http://donh.best.vwh.net/.../kolora_knabino.html">La
+    kolora knabino</url>
+  </vrk>,
+  <lok>Paco, 1989-2, p. 8a-9a</lok>
+  </fnt>
+</code>
+
+<p>
+  Rektaj krampoj ĉirkaŭas informon ne trovitan en la verko mem, 
+  kiel sube la daton:
+</p>
+
+<code>
+  <fnt>
+  <aut>Amri Wandel</aut>,
+  <vrk>La moderna astrofiziko</vrk>,
+  <lok><url ref="http://esperanto.org/AEK/biblioteko.html">Virtuala
+  Biblioteko de AEKo</url>, [vidita je 2006-01-24]</lok>
+  </fnt>
+</code>
+
+<h2 id="trd">tradukoj</h2>
+
+<p>
+Simplajn tradukojn vi donas ene de strukturo senco, derivaĵo
+aŭ simila per indiko de la ISO-kodo de la lingvo kaj la
+traduka vorto.
+</p>
+<code>
+<trd lng="de">am&amp;uuml;sieren</trd>
+</code>
+<p>
+La diversaj tradukoj aperu en la artikolo ordigitaj laŭ
+la lingvokodo, aliokaze ĉe multaj lingvoj oni iam perdas 
+la superrigardon.
+</p><p>
+Ofte la tradukoj konsistas el pluraj vortoj kaj oni devas
+marki la vorton, sub kiu la traduko aperu en la indekso de la koncerna
+lingvo.
+</p>
+<code>
+<trd lng="de">sich <ind>am&amp;uuml;sieren</ind></trd>
+</code>
+<p>
+Se estas pluraj eblaj tradukoj oni grupigu ilin. Klarigojn,
+kiuj helpas trovi la ĝustan tradukon oni ankaŭ  povas aldoni.
+</p>
+<code>
+<trdgrp lng="de">
+  <trd>Maulesel <klr>(de azenino)</klr></trd>,
+  <trd>Maultier <klr>(de &amp;ccirc;evalino)</klr></trd>
+</trdgrp>
+</code>
+<p>
+Klarigojn, kiuj aperu en la lingvoindekso, sed ne
+en la artikolo mem, oni donas tiel.
+</p>
+<code>
+<trd>geben <klr tip="ind">(es gibt)</klr></trd>
+</code>
+<p>
+Se ili aperu kaj en la lingvoindekso kaj en la
+artikolo mem, oni povas skribi:
+</p>
+<code>
+<klr tip="amb">...</klr>
+</code>
+<p>
+Vi ankaŭ povas traduki ekzemplon aŭ parton de ekzemplo, 
+se ĝi redonas tipan parolmanieron. La tradukatan parton de
+la ekzemplo vi devas signi per la strukturilo &lt;ind&gt;.
+</p>
+<code>
+<ekz>
+  <ind>ne gravas</ind>
+  <trd lng="de">macht nichts</trd>
+</ekz>
+</code>
+<p>
+Se la ekzemplo aŭ la traduko estas tro longaj por aperi tute 
+en la indekso, vi povas provizi mallongigon, kiu laŭ sia tipo
+aldonos tripunkton antaŭe kaj/aŭ malantaŭe.
+</p>
+<code>
+<ekz>
+  <ind>
+    sed tio 
+    <mll tip="fin">ne gravas</mll>
+  </ind>!
+  <trd lng="de">
+    aber das 
+    <mll tip="fin">macht nichts</mll>
+  </trd>
+</ekz>
+</code>
+<p>
+Tio fariĝas "...macht nichts = ...ne gravas" en la indekso.
+</p>
+<h2 id="ref">referencoj</h2>
+<p>
+Referencoj servas por montri rilatojn de vorto 
+al aliaj vortoj. Ekzistas diversaj eblaj rilatoj.
+</p>
+<dl>
+<dt>supernocio/subnocio</dt>
+<dd>Tiu rilato estas uzata por montri pli ĝeneralan vorton
+ aŭ ekzemplon. (Hundo estas besto. Ekzemplo de besto estas hundo)
+</dd>
+<dt>parto/malparto</dt>
+<dd>Tiu rilato estas uzata por montri, ke io estas parto de io
+ alia. (Monato estas parto de jaro. Semajno konsistas el la semajnotagoj
+ lundo, mardo, ...). Foje estas malfacile distingi tiun rilatotipon de
+ la antaŭa. Provu tiukaze formuli frazon kun "ekzemplo" aŭ "konsistas
+ el" aŭ "parto de", ofte tio helpas trovi la ĝustan rilaton.
+</dd>
+<dt>sinonimo/antonimo</dt>
+<dd>Tiu rilato estas uzata por montri samsencajn aŭ malsamsencajn
+ vortojn. (Monataĵo estas samsenca vorto kiel menstruo. Malo de
+ konstrui estas detrui.)
+</dd>
+<dt>difina</dt>
+<dd>Tiu rilato estas uzata, se vorto sinonima al alia, sed
+pli malofta aŭ evitinda estas difinita per referenco al la 
+pli uzinda vorto, sub kiu troviĝas la tuta difino. (En la tezaŭro
+difina kaj sinonima referencoj estas traktitaj kiel ekvivalentaj)
+</dd>
+<dt>homonima</dt>
+<dd>Tiu rilato estas uzata por atentigi pri samforma sed
+alisignifa vorto. (ekz. ero (parteto) kaj ero (tempodaŭro)). 
+</dd>
+<dt>nespecifita</dt>
+<dd>Ofte oni volas referenci al simila aŭ komparinda vorto, sed
+  la rilato ne estas tre strikta (Fari, komparu al krei, konstrui.)
+</dd>
+</dl>
+
+<code>
+<!-- en la artikolo pri hundo -->
+<ref tip="super" cel="best.o">besto</ref>
+
+<!-- en la artikolo pri besto -->
+<ref tip="sub" cel="hund.o">hundo</ref>
+
+<!-- en la artikolo pri monato -->
+<ref tip="malprt" cel="jar.0o">jaro</ref>
+
+<!-- en la artikolo pri semajno -->
+<ref tip="prt" cel="lund.0o">lundo</ref>
+
+<!-- en la artikolo pri monataĵo -->
+<ref tip="sin" cel="menstru.0o">menstruo</ref>
+
+<!-- en la artikolo pri konstrui -->
+<ref tip="ant" cel="detru.0i">detrui</ref>
+
+<!-- en la artikolo pri Germanio -->
+<ref tip="dif" cel="german1.0ujo">Germanujo</ref>
+
+<!-- en la artikolo pri "er" -->
+<ref tip="hom" cel="er1.0o">ero <klr>(tempolkalkulo)</klr></ref>
+
+<!-- en la artikolo pri fari -->
+<ref tip="vid" cel="kre.0i">krei</ref>
+<!-- au -->
+<ref cel="konstru.0i">konstrui</ref>
+</code>
+<p>
+Ĉe la nespecifita tipo oni povas forlasi la tipon aŭ
+uzi "vid". En la unua okazo ne aperos referencsigno en
+la artikolo en la dua okazo aperos sageto.
+</p><p>
+Se oni volas referenci al pluraj vortoj kun sama rilato
+al la kapvorto oni povas grupigi tiujn referencojn.
+</p>
+<code>
+<!-- en la artikolo pri semajno -->
+<refgrp tip="prt">
+  <ref cel="lund.0o">lundo</ref>,
+  <ref cel="mard.0o">mardo</ref>,
+  ktp.
+</refgrp>
+
+<!-- en la artikolo pri fari -->
+<refgrp>
+  <ref cel="kre.0i">krei</ref>,
+  <ref cel="konstru.0i">konstrui</ref>
+</refgrp>
+</code>
+<p>
+Forlaso de la tipo ĉe referencgrupo signifas la implicitan
+tipon "vid" kaj do antaŭ la referencoj aperos sageto.
+</p><p>
+Noto: Ene de difinoj la tipoj de referencoj ne estas indikitaj
+per signo, ĉar tio ĝenas la fluan legadon. Tamen vi indiku la
+tipon, ĉar ĝi povas esti uzata de programoj, kiuj analizas la
+rilatojn inter vortoj.
+</p>
+
+
+<h2 id="uzo">uzindikoj</h2>
+<p>
+Uzo indikas en kiu medio vorto estas uzata. Tio povas
+rilati al fako, stilo, regiono, tempo ktp.:
+</p>
+<code>
+<!-- arkaisma vorto el fako biologio -->
+<drv mrk="krkspl.0o">
+  <kap><tld/>o</kap>
+  <uzo tip="fak">BIO</uzo>
+  <uzo tip="stl">ARK</uzo>
+  <uzo tip="klr">p.p. vertebruloj</uzo>
+  ...
+</drv>
+</code>
+
+</manlibro>
+
+
+
+
+
+
+

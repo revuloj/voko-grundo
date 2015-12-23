@@ -1,0 +1,143 @@
+<html>
+<head>
+<title>Instalado de la vortaro</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> 
+<link titel="artikolo-stilo" type="text/css" rel=stylesheet 
+href="../stl/artikolo.css">
+</head>
+<body>
+
+<h1>Instalado de la vortaro</h1>
+
+La vortaro estas alirebla per la dosiero index.html.
+Por tio vi povas utiligi iun ajn TTT-legilon, kiel
+ekzemple <em>Netscape Navigator</em>, <em>Microsoft Internet
+Explorer</em>, <em>Lynx</em> ktp. Tamen, por plej komforte
+uzi la vortaron kaj por povi utiligi la serĉfunkcion bonvolu
+konsideri la sekvajn alineojn.
+
+<h2>TTT-legilo</h2>
+
+<h3>kadroj</h3>
+Por komforta uzado la vortaro uzas dukadran aranĝon. La
+maldekstra kadro montras la menuojn kaj indeksojn dum
+la dekstra montras la artikolojn de la vortaro kaj
+aliajn dokumentojn. Ni do rekomendas al vi la uzadon
+de TTT-legilo, kiu subtenas kadrojn. Vi povas legi la
+vortaron ankaŭ per alia TTT-legilo, tamen tiam la ofta
+ŝanĝo inter indeksoj kaj artikoloj povus esti iom konfuza.
+
+<h3>dokumentstiloj</h3>
+Por pli klara strukturo la elementoj de la artikoloj (ekz. difinoj,
+ekzemploj, rimarkoj) estas kolorigitaj. Tion vi vidas nur
+uzante TTT-legilon, kiu subtenas dokumentstilojn. Ankaŭ 
+fonkoloroj kaj skribgrandecoj estas indikitaj per stildifino.
+TTT-legiloj, kiuj subtenas stildifinojn estas ekz.
+<em>Microsoft Internet Explorer</em> ekde versio 4.0 
+kaj <em>Netscape Navigator</em> ekde versio 4.0. Ambaŭ
+estas haveblaj senpage en Interreto kaj aliaj medioj
+kaj unu el ambaŭ devus esti uzebla sur via mastrumsistemo.
+<p>
+La versio 3 de <em>Microsoft Internet Explorer</em> ja rudimente
+subtenas stilojn, sed donas malagrablan bildon pro misprezento
+de la fonkoloro. Se vi tamen volas uzi ĝin, ni rekomendas 
+malfunkciigi la stilojn.
+
+<h3>tiparoj kaj Esperantosignoj</h3>
+La Esperanto-signoj estas kodigitaj laŭ la internacia
+normo <em>ISO Latin 3</em> (= <em>ISO 8859-3</em>).
+Por vidi ilin ĝuste sur la ekrano vi devas fari la sekvan:
+<ol>
+<li>Akiru kaj instalu Esperanto-skribon laŭ la normo <em>Latin 3</em>.
+Tiaj skriboj estas akireblaj en Interreto en la
+<a href="http://www.esperanto.net/veb/">Virtuala
+Esperanto-Biblioteko</a>
+sub la punkto <em>Komputadaj fakoj</em>. Prefere legu tie
+ankaŭ <em>Frequently Asked Questions 14.</em> Ili enhavas
+pli detalajn informojn pri unuopaj sistemoj.
+<br>Por <em>Windows</em> rekomendiĝas ekz. la skribo SudEuro.
+<em>Macintosh</em>-uzantoj ne uzu la literojn de Everson, ĉar
+ilia instalo kaŭzas gravajn problemojn en la sistemo.
+<li>Informu vian TTT-legilon, ke ĝi uzu tiun skribon. Bedaŭrinde
+la kutimaj TTT-legiloj ne rekte subtenas la normon <em>Latin-3</em>.
+Sed ĉe <em>Netscape Navigator</em> oni ekzemple povas anstataŭe
+utiligi la kodon "Uzanto-difinita". Ĉe <em>Internet Explorer</em>
+oni alordigu la skribon al la kodo <em>Western</em>, alikaze
+ne funkcias ĝuste. La skribon oni alordigas al kodo en la
+tiucelaj opcioj-dialogoj de la TTT-legiloj. Poste oni povas per
+menuo elekti tiun kodon por vidi la paĝojn kun la ĝusta skribo.
+</ol>
+
+<h2>Perl kaj TTT-servilo</h2>
+Por uzi la serĉfunkcion vi bezonas du aferojn: TTT-servilon, kiu
+transdonas serĉordonojn de la TTT-legilo al la serĉprogrametoj
+kaj redonas la serĉrezulton al la TTT-legilo kaj la interpretilon <em>Perl</em>
+por funkciigi la serĉprogrametojn.
+
+<h3>Pado al voko</h3>
+
+Por ke la serĉfunkcio trovu la vortarojn vi devas difini
+mediovariablon por voko. Se via vortaro nomiĝas pev kaj
+troviĝas en <kbd>[DL:]/pado/al/voko/pev</kbd> (DL: estas litero
+de disklegilo sub Vindozo), vi devas difini
+la mediovariablon <kbd>VOKO=[DL:]/pado/al/voko</kbd>.
+<p>
+Tion vi atingas tiel:
+<dl>
+<dt>sub Vindozo 95/98
+<dd>En AUTOEXEC.BAT aldonu ekz.: SET VOKO=C:\pado\al\voko
+<dt>sub Vindozo NT
+<dd>en la uzanto- aŭ sistemmedio aldonu ŝlosilon: VOKO kun valoro:
+C:\pado\al\voko 
+<dt>sub Unikso
+<dd>por sh difinu en .profile: VOKO=/pado/al/voko; export VOKO
+<br>por csh difinu en .cshrc: setenv VOKO /pado/al/voko
+<dt>sub Makintoŝo
+<dd>mi ne scias kiel, sed iel oni ankaŭ ĉe la Makintoŝo povas
+difini mediovariablon.
+</dl>
+
+<h3>instalo kun la TTT-servileto vokosrv.pl</h3>
+
+La kripla TTT-servileto <em>vokosrv.pl</em> sufiĉas por la bezonoj 
+de la vortaro. Ĝi troviĝas en la dosierujo <kbd>bin/</kbd>. 
+Por funkciigi ĝin vi same bezonas <em>Perl</em>.
+<p>
+<em>Perl</em> estas tre efika interpretilo, kiu haveblas por ĉiuj kutimaj
+mastrumsistemoj kaj ebligas skribi programojn, kiuj funkcias sub
+ĉiuj tiuj mastrumsistemoj. Vi bezonas version ekde versio 5. En
+Uniksaj sistemoj ĝi plej ofte jam estas instalita. Sub
+<em>Windows</em> kaj <em>Macintosh</em> vi verŝajne ankoraŭ
+devos instali ĝin. Ĝi estas akirebla senpage en Interreto sub
+<a href="http://www.perl.com">http://www.perl.com</a>.
+<p>
+Post kiam vi sukcese instalis <em>Perl</em> vi (espereble) povas
+lanĉi <kbd>bin/vokosrv.pl</kbd>. Poste devus funkcii la serĉo
+en la vortaro sen iu kroma farendaĵo.
+<p>
+Por ke vi estonte ne devos lanĉi du aferojn: Unue la TTT-servileton
+vokosrv.pl kaj poste la TTT-legilon kun la indekspaĝo, ni rekomendas
+krei malgrandan komanddosiereton, kiu transprenas ambaŭ taskojn.
+Ĉar ĝi dependas kaj de la sistemo kaj de la nomo kaj installoko
+de la TTT-legilo, vi devas mem krei ĝin sur via malmola disko.
+Por tamen faciligi tiun taskon vi trovas en la dosierujo bat/
+kelkajn ekzemplojn, el kiuj vi povas kopii konvenan sur la malmolan
+diskon kaj modifi ĝin laŭ viaj donitaĵoj.
+
+<h3>instalado kun TTT-servilo</h3>
+Se sur via komputilo jam funkcias TTT-servilo vi eble volas
+uzi tiun anstataŭ la TTT-servileto vokosrv.pl. Por atingi tion
+agu laŭ la instrukcioj en serchcgi.pl.
+<p>
+<strong>Atentu</strong>, ke via TTT-servilo estas atingebla 
+supozeble ankaŭ de
+aliaj komputiloj en la loka reto aŭ eĉ en Interreto. Tion eble
+malpermesas la licenco de la specifa vortaro uzita de vi. Legu
+la licencinformojn kaj eble traktu kun la vendanto de la vortaro
+por ricevi apartajn informojn kaj permesojn. Ekzemple por
+utiligo de la vortaro en la komputilreto de via organizaĵo
+povus konveni speciala retlicenco.
+
+
+</body>
+</html>@

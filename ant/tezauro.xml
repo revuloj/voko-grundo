@@ -1,0 +1,212 @@
+<project name="Revo-tezauro" default="tuto" basedir=".">
+    <description>
+       Reta Vortaro, reguloj por (re)krei tezauron. 
+    </description>
+
+  <!-- necesas xhtml por povi uzi doc-available en revo_tez.xsl -->
+  <property name="v.outputformat" value="xhtml"/>
+
+  <!-- legu agorditajn variablojn el dosiero -->
+  <property file="${user.dir}/cfg/agordo" prefix="v."/>
+  <property file="${v.etc}/rezono-agordo" prefix="rez."/>
+
+
+  <!-- donu valorojn al la variabloj, se ili ne jam aperis en la agordo-dosiero -->
+  <property environment="ENV"/>
+  <property name="v.voko" location="${ENV.VOKO}"/>
+  <property name="v.voko.ant" location="${v.voko}/ant"/>
+  <property name="v.bazo" location="${user.dir}"/>
+  <!-- property name="v.bazo.inx" location="${v.bazo}/inx"/ -->
+  <!-- property name="v.bazo.xml" location="${v.bazo}/xml"/ -->
+  <property name="v.bazo.tez" location="${v.bazo}/tez"/>
+  <property name="v.voko.bin" location="${v.voko}/bin"/>
+  <property name="v.voko.xsl" location="${v.voko}/xsl"/>
+  <!-- property name="tmp" location="/home/revo/tmp/inx_tmp"/ -->
+  <property name="v.tmp" location="${v.bazo}/.tmp"/>
+  <property name="v.outputformat" value="html"/>
+  <!-- property name="v.rezono-servo-data" location="/usr/share/fuseki/Data"/ -->
+
+  <property name="saxon" location="${ENV.SAXONJAR}"/>
+
+  <!-- ial Formiko foje ne trovas Saxon per klaspado donita en la tasko mem,
+      tial difinu mediovariablon CLASSPATH aldonante la Saxon-arkivon antau voki Formikon -->
+  <path id="saxon.classpath">
+     <pathelement location="${saxon}"/>
+     <pathelement location="${v.voko.ant}/respiro.jar"/>
+     <pathelement path="${java.class.path}"/>
+  </path>
+
+
+  <target name="tez-preparo">
+    <tstamp/>
+    <mkdir dir="${v.bazo.tez}" />
+    <mkdir dir="${v.tmp}/tez" />
+  </target>
+
+
+  <target name="tez-agordo" description="eligas la agordeblajn variablojn por kontrolo">
+    <echoproperties prefix="v."/>
+  </target>
+
+
+  <target name="tez-eltiro" 
+    description="faras la dosieron indekso.xml el chiuj artikoloj kiel bazo por la tezauro (vokas indekso.xml)" 
+    depends="tez-preparo">
+    <ant antfile="${v.voko.ant}/indeksoj.xml"
+       dir="${v.bazo}" target="inx-eltiro" inheritAll="true"/>
+  </target>
+
+
+  <target name="tez-forigo" 
+      description="forigas chiujn dosierojn en ${v.tmp}/tez"
+      depends="tez-preparo">
+ 
+     <delete>
+        <fileset dir="${v.tmp}/tez" includes="*"/>
+     </delete>
+  </target>
+
+
+  <target name="tez-retigo" depends="tez-preparo,tez-eltiro"
+     description="retigi la tezauronodojn">
+     <xslt in="${v.tmp}/indekso.xml" out="${v.tmp}/tez_ret.xml"
+       style="${v.voko.xsl}/tez_retigo.xsl">
+     </xslt>
+  </target>
+
+
+  <target name="tez-html" depends="tez-preparo,tez-retigo"
+     description="kreas la HTML-dosierojn de la tezauro">
+
+    <filter token="format" value="${v.outputformat}"/>
+    <copy file="${v.voko.xsl}/tez_html.xsl" tofile="${v.voko.xsl}/tez_html_${v.outputformat}.xsl~" 
+       filtering="true"/>
+
+     <xslt in="${v.tmp}/tez_ret.xml" out="${v.tmp}/tez/.tempo"
+       style="${v.voko.xsl}/tez_html_${v.outputformat}.xsl~"
+       classpathref="saxon.classpath">
+       <factory name="net.sf.saxon.TransformerFactoryImpl"/>
+       <!-- param name="verbose" expression="'true'"/-->
+     </xslt>
+  </target>
+
+
+  <target name="tez-mil" depends="tez-preparo,tez-html,lst-html"
+     description="kopias fine maksimume mil shanghitajn dosierojn al la
+     tezaurodosierujo kaj tie forigas forfalintajn">
+
+
+    <copy todir="${v.bazo.tez}">
+      <fileset dir="${v.tmp}/tez" includes="vx_*">
+        <different targetdir="${v.tez}" ignoreFileTimes="true"/>
+      </fileset>
+    </copy>
+
+
+    <copy todir="${v.bazo.tez}">
+      <fileset dir="${v.tmp}/tez" includes="tz_*">
+        <!-- different targetdir="${v.tez}" ignoreFileTimes="true"/ -->
+        <custom classname="de.steloj.respiro.DiffMaxFilesSelector" classpath="${v.voko.ant}/respiro.jar">
+          <param name="targetDir" value="${v.bazo.tez}"/>
+          <param name="ignoreFileTimes" value="true"/>
+          <param name="maxFiles" value="1000"/> <!-- aktualigu maksimume 1000 dosierojn de la tezauro -->
+        </custom>
+      </fileset>
+    </copy>
+
+    <delete>
+      <fileset dir="${v.bazo.tez}" includes="*">
+         <present present="srconly" targetdir="${v.tmp}/tez"/>
+      </fileset>
+    </delete>
+
+  </target>
+
+
+
+  <target name="lst-html" depends="tez-preparo,tez-retigo"
+     description="kreas la HTML-dosierojn de la vortlistoj (klasoj)">
+
+    <filter token="format" value="${v.outputformat}"/>
+    <copy file="${v.voko.xsl}/lst_html.xsl" tofile="${v.voko.xsl}/lst_html_${v.outputformat}.xsl~" 
+       filtering="true"/>
+
+     <xslt in="${v.tmp}/tez_ret.xml" out="${v.tmp}/tez/.tempo2"
+       style="${v.voko.xsl}/lst_html_${v.outputformat}.xsl~"
+       classpathref="saxon.classpath">
+       <factory name="net.sf.saxon.TransformerFactoryImpl"/>
+       <!-- param name="verbose" expression="'true'"/-->
+     </xslt>
+  </target>
+
+
+  <target name="tez-tuto" depends="tez-preparo,tez-html,lst-html"
+     description="kopias fine chiujn enhave shanghitajn dosierojn al la
+     tezaurodosierujo kaj tie forigas forfalintajn">
+
+    <copy todir="${v.bazo.tez}">
+      <fileset dir="${v.tmp}/tez" includes="*">
+        <different targetdir="${v.tez}" ignoreFileTimes="true"/>
+      </fileset>
+    </copy>
+
+    <delete>
+      <fileset dir="${v.bazo.tez}" includes="*">
+         <present present="srconly" targetdir="${v.tmp}/tez"/>
+      </fileset>
+    </delete>
+
+  </target>
+
+
+<!-- SKOS estas tro simpla, char ghi ne povas ekz. distingi inter "X estas Y"
+     kaj "X apartenas al Y".
+  
+  <target name="tez-skos-turtle" depends="tez-preparo,tez-eltiro"
+     description="kreas tezauron kiel unu dosiero en normita formato
+		  SKOS-turtle">
+
+      <xslt in="${v.tmp}/indekso.xml" out="${v.tmp}/tez/revo-tezauro.ttl"  
+	    style="${v.voko.xsl}/revo_skos.xsl"/>
+  </target>
+-->
+
+  <target name="tez-onto-turtle" depends="tez-preparo,tez-eltiro"
+     description="kreas tezauron kiel unu dosiero en formato de Voko-tezauro
+		  (baza formato 'turtle')">
+
+      <xslt in="${v.tmp}/indekso.xml" out="${v.tmp}/revo-tezauro.ttl"  
+	    style="${v.voko.xsl}/revo_onto.xsl"/>
+<!--       classpathref="saxon.classpath">
+        <factory name="net.sf.saxon.TransformerFactoryImpl"/>
+      </xslt> -->
+      <xslt in="${v.tmp}/indekso.xml" out="${v.tmp}/revo-listoj.ttl"  
+	    style="${v.voko.xsl}/onto_lst.xsl"/>
+  </target>
+
+  <target name="tez-servo-tuto" depends="tez-preparo,tez-onto-turtle"
+     description="kopias fine la ttl-dosieron al la rezono-servo">
+
+    <!-- poste, kiam la rezono-servo estas en alia komputilo necesos "scp" -->
+    <!-- copy file="${v.tmp}/tez/revo-tezauro.ttl"
+	 todir="${v.rezono-servo-data}"/ -->
+    <exec executable="/usr/bin/scp" logError="true">
+      <arg file="${v.tmp}/revo-tezauro.ttl"/>
+      <arg
+	  value="${rez.rezonilo.user}@${rez.rezonilo.host}:${rez.rezonilo.dir}"/>
+    </exec>
+
+  </target>
+
+</project>
+
+
+
+
+
+
+
+
+
+
+

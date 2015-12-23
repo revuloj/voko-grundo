@@ -1,0 +1,1706 @@
+<?xml version="1.0"?>
+
+
+<!DOCTYPE rdf:RDF [
+    <!ENTITY voko "http://purl.org/net/voko#" >
+    <!ENTITY owl "http://www.w3.org/2002/07/owl#" >
+    <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#" >
+    <!ENTITY skos "http://www.w3.org/2004/02/skos/core#" >
+    <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
+    <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
+]>
+
+
+<rdf:RDF xmlns="http://www.w3.org/2002/07/owl#"
+     xml:base="http://www.w3.org/2002/07/owl"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:voko="http://purl.org/net/voko#"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:skos="http://www.w3.org/2004/02/skos/core#">
+    <Ontology rdf:about="http://purl.org/net/voko">
+        <versionIRI rdf:resource="http://purl.org/net/voko/1.1.0"/>
+        <imports rdf:resource="http://www.w3.org/2004/02/skos/core"/>
+    </Ontology>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Annotation properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://purl.org/net/voko#prezento -->
+
+    <AnnotationProperty rdf:about="&voko;prezento"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Datatypes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://purl.org/net/voko#stiloj -->
+
+    <rdfs:Datatype rdf:about="&voko;stiloj">
+        <equivalentClass>
+            <rdfs:Datatype>
+                <oneOf>
+                    <rdf:Description>
+                        <rdf:type rdf:resource="&rdf;List"/>
+                        <rdf:first>ARK</rdf:first>
+                        <rdf:rest>
+                            <rdf:Description>
+                                <rdf:type rdf:resource="&rdf;List"/>
+                                <rdf:first>EVI</rdf:first>
+                                <rdf:rest>
+                                    <rdf:Description>
+                                        <rdf:type rdf:resource="&rdf;List"/>
+                                        <rdf:first>FIG</rdf:first>
+                                        <rdf:rest>
+                                            <rdf:Description>
+                                                <rdf:type rdf:resource="&rdf;List"/>
+                                                <rdf:first>FRAZ</rdf:first>
+                                                <rdf:rest>
+                                                    <rdf:Description>
+                                                        <rdf:type rdf:resource="&rdf;List"/>
+                                                        <rdf:first>KOMUNE</rdf:first>
+                                                        <rdf:rest>
+                                                            <rdf:Description>
+                                                                <rdf:type rdf:resource="&rdf;List"/>
+                                                                <rdf:first>NEO</rdf:first>
+                                                                <rdf:rest>
+                                                                    <rdf:Description>
+                                                                        <rdf:type rdf:resource="&rdf;List"/>
+                                                                        <rdf:first>POE</rdf:first>
+                                                                        <rdf:rest>
+                                                                            <rdf:Description>
+                                                                                <rdf:type rdf:resource="&rdf;List"/>
+                                                                                <rdf:first>RAR</rdf:first>
+                                                                                <rdf:rest>
+                                                                                    <rdf:Description>
+                                                                                        <rdf:type rdf:resource="&rdf;List"/>
+                                                                                        <rdf:first>VULG</rdf:first>
+                                                                                        <rdf:rest rdf:resource="&rdf;nil"/>
+                                                                                    </rdf:Description>
+                                                                                </rdf:rest>
+                                                                            </rdf:Description>
+                                                                        </rdf:rest>
+                                                                    </rdf:Description>
+                                                                </rdf:rest>
+                                                            </rdf:Description>
+                                                        </rdf:rest>
+                                                    </rdf:Description>
+                                                </rdf:rest>
+                                            </rdf:Description>
+                                        </rdf:rest>
+                                    </rdf:Description>
+                                </rdf:rest>
+                            </rdf:Description>
+                        </rdf:rest>
+                    </rdf:Description>
+                </oneOf>
+            </rdfs:Datatype>
+        </equivalentClass>
+    </rdfs:Datatype>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://purl.org/net/voko#ant -->
+
+    <ObjectProperty rdf:about="&voko;ant">
+        <rdf:type rdf:resource="&owl;SymmetricProperty"/>
+        <skos:definition xml:lang="eo">antonimo</skos:definition>
+        <rdfs:range rdf:resource="&voko;senco"/>
+        <rdfs:domain rdf:resource="&voko;senco"/>
+        <rdfs:subPropertyOf rdf:resource="&voko;vid"/>
+    </ObjectProperty>
+    
+
+
+    <!-- http://purl.org/net/voko#dif -->
+
+    <ObjectProperty rdf:about="&voko;dif">
+        <rdfs:label xml:lang="eo">estas difinita per</rdfs:label>
+        <rdfs:domain rdf:resource="&voko;senco"/>
+        <rdfs:range rdf:resource="&voko;senco"/>
+        <rdfs:subPropertyOf rdf:resource="&voko;sin"/>
+    </ObjectProperty>
+    
+
+
+    <!-- http://purl.org/net/voko#drv -->
+
+    <ObjectProperty rdf:about="&voko;drv">
+        <rdfs:label xml:lang="eo">derivaĵo</rdfs:label>
+        <skos:definition xml:lang="eo">derivaĵo, al kiu apartenas tiu senco</skos:definition>
+        <rdfs:range rdf:resource="&voko;derivaĵo"/>
+        <rdfs:domain rdf:resource="&voko;senco"/>
+        <rdfs:subPropertyOf rdf:resource="&voko;super"/>
+    </ObjectProperty>
+    
+
+
+    <!-- http://purl.org/net/voko#ekz -->
+
+    <ObjectProperty rdf:about="&voko;ekz">
+        <rdfs:label xml:lang="eo">ekzemplo</rdfs:label>
+        <rdfs:range rdf:resource="&voko;senco"/>
+        <rdfs:domain rdf:resource="&voko;senco"/>
+        <rdfs:subPropertyOf rdf:resource="&voko;sub"/>
+    </ObjectProperty>
+    
+
+
+    <!-- http://purl.org/net/voko#hom -->
+
+    <ObjectProperty rdf:about="&voko;hom">
+        <rdf:type rdf:resource="&owl;TransitiveProperty"/>
+        <rdfs:label xml:lang="eo">homonimo</rdfs:label>
+        <rdfs:range rdf:resource="&voko;derivaĵo"/>
+        <rdfs:domain rdf:resource="&voko;derivaĵo"/>
+        <rdfs:subPropertyOf rdf:resource="&voko;vid"/>
+    </ObjectProperty>
+    
+
+
+    <!-- http://purl.org/net/voko#lst -->
+
+    <ObjectProperty rdf:about="&voko;lst">
+        <rdfs:label xml:lang="eo">listo</rdfs:label>
+        <rdfs:range rdf:resource="&voko;senco"/>
+        <rdfs:domain rdf:resource="&voko;senco"/>
+        <rdfs:subPropertyOf rdf:resource="&voko;super"/>
+    </ObjectProperty>
+    
+
+
+    <!-- http://purl.org/net/voko#malprt -->
+
+    <ObjectProperty rdf:about="&voko;malprt">
+        <rdfs:label xml:lang="eo">apartenas al</rdfs:label>
+        <rdfs:range rdf:resource="&voko;senco"/>
+        <rdfs:domain rdf:resource="&voko;senco"/>
+        <rdfs:subPropertyOf rdf:resource="&skos;broader"/>
+    </ObjectProperty>
+    
+
+
+    <!-- http://purl.org/net/voko#prt -->
+
+    <ObjectProperty rdf:about="&voko;prt">
+        <rdfs:label xml:lang="eo">havas parton</rdfs:label>
+        <inverseOf rdf:resource="&voko;malprt"/>
+        <rdfs:range rdf:resource="&voko;senco"/>
+        <rdfs:domain rdf:resource="&voko;senco"/>
+        <rdfs:subPropertyOf rdf:resource="&skos;narrower"/>
+    </ObjectProperty>
+    
+
+
+    <!-- http://purl.org/net/voko#sin -->
+
+    <ObjectProperty rdf:about="&voko;sin">
+        <rdf:type rdf:resource="&owl;SymmetricProperty"/>
+        <rdfs:label xml:lang="eo">sinonimo</rdfs:label>
+        <skos:definition xml:lang="eo">havas saman signifon kiel</skos:definition>
+        <rdfs:range rdf:resource="&voko;senco"/>
+        <rdfs:domain rdf:resource="&voko;senco"/>
+        <rdfs:subPropertyOf rdf:resource="&voko;vid"/>
+    </ObjectProperty>
+    
+
+
+    <!-- http://purl.org/net/voko#snc -->
+
+    <ObjectProperty rdf:about="&voko;snc">
+        <rdfs:range rdf:resource="&voko;derivaĵo"/>
+        <inverseOf rdf:resource="&voko;drv"/>
+        <rdfs:domain rdf:resource="&voko;senco"/>
+        <rdfs:subPropertyOf rdf:resource="&voko;sub"/>
+    </ObjectProperty>
+    
+
+
+    <!-- http://purl.org/net/voko#sub -->
+
+    <ObjectProperty rdf:about="&voko;sub">
+        <rdf:type rdf:resource="&owl;TransitiveProperty"/>
+        <rdfs:label xml:lang="eo">havas specon</rdfs:label>
+        <rdfs:range rdf:resource="&voko;senco"/>
+        <rdfs:domain rdf:resource="&voko;senco"/>
+        <rdfs:subPropertyOf rdf:resource="&skos;narrower"/>
+    </ObjectProperty>
+    
+
+
+    <!-- http://purl.org/net/voko#super -->
+
+    <ObjectProperty rdf:about="&voko;super">
+        <rdf:type rdf:resource="&owl;TransitiveProperty"/>
+        <rdfs:label xml:lang="eo">estas speco de</rdfs:label>
+        <rdfs:domain rdf:resource="&voko;senco"/>
+        <rdfs:range rdf:resource="&voko;senco"/>
+        <inverseOf rdf:resource="&voko;sub"/>
+        <rdfs:subPropertyOf rdf:resource="&skos;broader"/>
+    </ObjectProperty>
+    
+
+
+    <!-- http://purl.org/net/voko#vid -->
+
+    <ObjectProperty rdf:about="&voko;vid">
+        <rdf:type rdf:resource="&owl;SymmetricProperty"/>
+        <rdfs:label xml:lang="eo">vidu</rdfs:label>
+        <rdfs:range rdf:resource="&voko;senco"/>
+        <rdfs:domain rdf:resource="&voko;senco"/>
+        <rdfs:subPropertyOf rdf:resource="&skos;related"/>
+    </ObjectProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Data properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://purl.org/net/voko#fak -->
+
+    <DatatypeProperty rdf:about="&voko;fak">
+        <rdfs:label xml:lang="eo">fako</rdfs:label>
+        <rdfs:domain rdf:resource="&voko;senco"/>
+        <rdfs:subPropertyOf rdf:resource="&voko;uzo"/>
+    </DatatypeProperty>
+    
+
+
+    <!-- http://purl.org/net/voko#kap -->
+
+    <DatatypeProperty rdf:about="&voko;kap">
+        <rdfs:label xml:lang="eo">kapvorto</rdfs:label>
+        <rdfs:domain rdf:resource="&voko;derivaĵo"/>
+        <rdfs:range rdf:resource="&rdfs;Literal"/>
+    </DatatypeProperty>
+    
+
+
+    <!-- http://purl.org/net/voko#snc-n-ro -->
+
+    <DatatypeProperty rdf:about="&voko;snc-n-ro">
+        <rdfs:label xml:lang="eo">senconumero</rdfs:label>
+        <rdfs:domain rdf:resource="&voko;senco"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </DatatypeProperty>
+    
+
+
+    <!-- http://purl.org/net/voko#stl -->
+
+    <DatatypeProperty rdf:about="&voko;stl">
+        <rdfs:label xml:lang="eo">stilo</rdfs:label>
+        <rdfs:domain rdf:resource="&voko;senco"/>
+        <rdfs:range rdf:resource="&voko;stiloj"/>
+        <rdfs:subPropertyOf rdf:resource="&voko;uzo"/>
+    </DatatypeProperty>
+    
+
+
+    <!-- http://purl.org/net/voko#trd -->
+
+    <DatatypeProperty rdf:about="&voko;trd">
+        <rdfs:label xml:lang="eo">traduko</rdfs:label>
+        <rdfs:domain rdf:resource="&voko;senco"/>
+        <rdfs:range rdf:resource="&rdfs;Literal"/>
+        <rdfs:subPropertyOf rdf:resource="&owl;topDataProperty"/>
+    </DatatypeProperty>
+    
+
+
+    <!-- http://purl.org/net/voko#uzo -->
+
+    <DatatypeProperty rdf:about="&voko;uzo">
+        <rdfs:label xml:lang="eo">uzo</rdfs:label>
+        <rdfs:domain rdf:resource="&voko;senco"/>
+    </DatatypeProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://purl.org/net/voko#akvifolioparencoj -->
+
+    <Class rdf:about="&voko;akvifolioparencoj">
+        <rdfs:subClassOf rdf:resource="&voko;floroplantoj"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#amfibioj -->
+
+    <Class rdf:about="&voko;amfibioj">
+        <rdfs:subClassOf rdf:resource="&voko;bestoj"/>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#apioparencoj -->
+
+    <Class rdf:about="&voko;apioparencoj">
+        <rdfs:subClassOf rdf:resource="&voko;floroplantoj"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#areoj -->
+
+    <Class rdf:about="&voko;areoj">
+        <rdfs:subClassOf rdf:resource="&voko;mezurunuoj"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#artoj -->
+
+    <Class rdf:about="&voko;artoj">
+        <rdfs:subClassOf rdf:resource="&voko;kulturaĵoj"/>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#asocioj -->
+
+    <Class rdf:about="&voko;asocioj">
+        <rdfs:subClassOf rdf:resource="&voko;organizaĵoj"/>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#asparagoparencoj -->
+
+    <Class rdf:about="&voko;asparagoparencoj">
+        <rdfs:subClassOf rdf:resource="&voko;floroplantoj"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#asteroparencoj -->
+
+    <Class rdf:about="&voko;asteroparencoj">
+        <rdfs:subClassOf rdf:resource="&voko;floroplantoj"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#bataliloj -->
+
+    <Class rdf:about="&voko;bataliloj">
+        <rdfs:subClassOf rdf:resource="&voko;iloj"/>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#bestoj -->
+
+    <Class rdf:about="&voko;bestoj">
+        <rdfs:subClassOf rdf:resource="&voko;naturaĵoj"/>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#biologiaj_grupoj -->
+
+    <Class rdf:about="&voko;biologiaj_grupoj">
+        <rdfs:subClassOf rdf:resource="&skos;Collection"/>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#biologiaj_regnoj -->
+
+    <Class rdf:about="&voko;biologiaj_regnoj">
+        <rdfs:subClassOf rdf:resource="&voko;biologiaj_grupoj"/>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#birdoj -->
+
+    <Class rdf:about="&voko;birdoj">
+        <rdfs:subClassOf rdf:resource="&voko;reptilioj"/>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#blekoj -->
+
+    <Class rdf:about="&voko;blekoj">
+        <rdfs:subClassOf rdf:resource="&voko;sonoj"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#blovinstrumentoj -->
+
+    <Class rdf:about="&voko;blovinstrumentoj">
+        <rdfs:subClassOf rdf:resource="&voko;muzikiloj"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#boragoparencoj -->
+
+    <Class rdf:about="&voko;boragoparencoj">
+        <rdfs:subClassOf rdf:resource="&voko;floroplantoj"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#botanikaj_familioj -->
+
+    <Class rdf:about="&voko;botanikaj_familioj">
+        <rdfs:subClassOf rdf:resource="&voko;botanikaj_grupoj"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#botanikaj_genroj -->
+
+    <Class rdf:about="&voko;botanikaj_genroj">
+        <rdfs:subClassOf rdf:resource="&voko;botanikaj_grupoj"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#botanikaj_grupoj -->
+
+    <Class rdf:about="&voko;botanikaj_grupoj">
+        <rdfs:subClassOf rdf:resource="&voko;biologiaj_grupoj"/>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#botanikaj_klasoj -->
+
+    <Class rdf:about="&voko;botanikaj_klasoj">
+        <rdfs:subClassOf rdf:resource="&voko;botanikaj_grupoj"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#botanikaj_ordoj -->
+
+    <Class rdf:about="&voko;botanikaj_ordoj">
+        <rdfs:subClassOf rdf:resource="&voko;botanikaj_grupoj"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#botanikaj_specioj -->
+
+    <Class rdf:about="&voko;botanikaj_specioj">
+        <rdfs:subClassOf rdf:resource="&voko;botanikaj_grupoj"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#brasikoparencoj -->
+
+    <Class rdf:about="&voko;brasikoparencoj">
+        <rdfs:subClassOf rdf:resource="&voko;floroplantoj"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#cefalopodoj -->
+
+    <Class rdf:about="&voko;cefalopodoj">
+        <rdfs:subClassOf rdf:resource="&voko;moluskoj"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#cetacoj -->
+
+    <Class rdf:about="&voko;cetacoj">
+        <rdfs:subClassOf rdf:resource="&voko;mamuloj"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#dancoj -->
+
+    <Class rdf:about="&voko;dancoj">
+        <rdfs:subClassOf rdf:resource="&voko;kulturaĵoj"/>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#daŭroj -->
+
+    <Class rdf:about="&voko;daŭroj">
+        <rdfs:subClassOf rdf:resource="&voko;mezurunuoj"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#derivaĵo -->
+
+    <Class rdf:about="&voko;derivaĵo">
+        <rdfs:subClassOf rdf:resource="&voko;senco"/>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#dinosaŭroj -->
+
+    <Class rdf:about="&voko;dinosaŭroj">
+        <rdfs:subClassOf rdf:resource="&voko;reptilioj"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#dipsakoparencoj -->
+
+    <Class rdf:about="&voko;dipsakoparencoj">
+        <rdfs:subClassOf rdf:resource="&voko;floroplantoj"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#duvalvuloj -->
+
+    <Class rdf:about="&voko;duvalvuloj">
+        <rdfs:subClassOf rdf:resource="&voko;moluskoj"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#entreprenoj -->
+
+    <Class rdf:about="&voko;entreprenoj">
+        <rdfs:subClassOf rdf:resource="&voko;organizaĵoj"/>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#erikoparencoj -->
+
+    <Class rdf:about="&voko;erikoparencoj">
+        <rdfs:subClassOf rdf:resource="&voko;floroplantoj"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#eventoj -->
+
+    <Class rdf:about="&voko;eventoj">
+        <rdfs:subClassOf rdf:resource="&voko;tempoj"/>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#faboparencoj -->
+
+    <Class rdf:about="&voko;faboparencoj">
+        <rdfs:subClassOf rdf:resource="&voko;floroplantoj"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#fagoparencoj -->
+
+    <Class rdf:about="&voko;fagoparencoj">
+        <rdfs:subClassOf rdf:resource="&voko;floroplantoj"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#festoj -->
+
+    <Class rdf:about="&voko;festoj">
+        <rdfs:subClassOf rdf:resource="&voko;eventoj"/>
+        <rdfs:subClassOf rdf:resource="&voko;kulturaĵoj"/>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#fiŝoj -->
+
+    <Class rdf:about="&voko;fiŝoj">
+        <rdfs:subClassOf rdf:resource="&voko;bestoj"/>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#floroplantoj -->
+
+    <Class rdf:about="&voko;floroplantoj">
+        <rdfs:subClassOf rdf:resource="&voko;vegetaĵoj"/>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#formoj -->
+
+    <Class rdf:about="&voko;formoj">
+        <rdfs:subClassOf rdf:resource="&voko;perceptoj"/>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#frapinstrumentoj -->
+
+    <Class rdf:about="&voko;frapinstrumentoj">
+        <rdfs:subClassOf rdf:resource="&voko;muzikiloj"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#fungoj -->
+
+    <Class rdf:about="&voko;fungoj">
+        <rdfs:subClassOf rdf:resource="&voko;vegetaĵoj"/>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#gastropodoj -->
+
+    <Class rdf:about="&voko;gastropodoj">
+        <rdfs:subClassOf rdf:resource="&voko;moluskoj"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#gentianoparencoj -->
+
+    <Class rdf:about="&voko;gentianoparencoj">
+        <rdfs:subClassOf rdf:resource="&voko;floroplantoj"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#geologiaj_epokoj -->
+
+    <Class rdf:about="&voko;geologiaj_epokoj">
+        <rdfs:subClassOf rdf:resource="&voko;geologiaj_tempoj"/>
+        <rdfs:subClassOf rdf:resource="&skos;OrderedCollection"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#geologiaj_eraoj -->
+
+    <Class rdf:about="&voko;geologiaj_eraoj">
+        <rdfs:subClassOf rdf:resource="&voko;geologiaj_tempoj"/>
+        <rdfs:subClassOf rdf:resource="&skos;OrderedCollection"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#geologiaj_periodoj -->
+
+    <Class rdf:about="&voko;geologiaj_periodoj">
+        <rdfs:subClassOf rdf:resource="&voko;geologiaj_tempoj"/>
+        <rdfs:subClassOf rdf:resource="&skos;OrderedCollection"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#geologiaj_tempoj -->
+
+    <Class rdf:about="&voko;geologiaj_tempoj">
+        <rdfs:subClassOf rdf:resource="&voko;tempoj"/>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#geranioparencoj -->
+
+    <Class rdf:about="&voko;geranioparencoj">
+        <rdfs:subClassOf rdf:resource="&voko;floroplantoj"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#gustoj -->
+
+    <Class rdf:about="&voko;gustoj">
+        <rdfs:subClassOf rdf:resource="&voko;sensaĵoj"/>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#historiaj_epokoj -->
+
+    <Class rdf:about="&voko;historiaj_epokoj">
+        <rdfs:subClassOf rdf:resource="&voko;tempoj"/>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#historiaj_personoj -->
+
+    <Class rdf:about="&voko;historiaj_personoj">
+        <rdfs:subClassOf rdf:resource="&voko;personoj"/>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#iloj -->
+
+    <Class rdf:about="&voko;iloj">
+        <rdfs:subClassOf rdf:resource="&voko;kulturaĵoj"/>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#insektoj -->
+
+    <Class rdf:about="&voko;insektoj">
+        <rdfs:subClassOf rdf:resource="&voko;bestoj"/>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#insektomanĝuloj -->
+
+    <Class rdf:about="&voko;insektomanĝuloj">
+        <rdfs:subClassOf rdf:resource="&voko;mamuloj"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#insuloj -->
+
+    <Class rdf:about="&voko;insuloj">
+        <rdfs:subClassOf rdf:resource="&voko;teritorioj"/>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#kalendaraj_tempoj -->
+
+    <Class rdf:about="&voko;kalendaraj_tempoj">
+        <rdfs:subClassOf rdf:resource="&voko;tempoj"/>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#kaneloparencoj -->
+
+    <Class rdf:about="&voko;kaneloparencoj">
+        <rdfs:subClassOf rdf:resource="&voko;floroplantoj"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#kariofiloparencoj -->
+
+    <Class rdf:about="&voko;kariofiloparencoj">
+        <rdfs:subClassOf rdf:resource="&voko;floroplantoj"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#koloroj -->
+
+    <Class rdf:about="&voko;koloroj">
+        <rdfs:subClassOf rdf:resource="&voko;sensaĵoj"/>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#koniferoj -->
+
+    <Class rdf:about="&voko;koniferoj">
+        <rdfs:subClassOf rdf:resource="&voko;vegetaĵoj"/>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#kontinentoj -->
+
+    <Class rdf:about="&voko;kontinentoj">
+        <rdfs:subClassOf rdf:resource="&voko;teritorioj"/>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#kordinstrumentoj -->
+
+    <Class rdf:about="&voko;kordinstrumentoj">
+        <rdfs:subClassOf rdf:resource="&voko;muzikiloj"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#kosmaĵoj -->
+
+    <Class rdf:about="&voko;kosmaĵoj">
+        <rdfs:subClassOf rdf:resource="&skos;Collection"/>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#krokodiluloj -->
+
+    <Class rdf:about="&voko;krokodiluloj">
+        <rdfs:subClassOf rdf:resource="&voko;reptilioj"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#kromartikuloj -->
+
+    <Class rdf:about="&voko;kromartikuloj">
+        <rdfs:subClassOf rdf:resource="&voko;mamuloj"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#krustuloj -->
+
+    <Class rdf:about="&voko;krustuloj">
+        <rdfs:subClassOf rdf:resource="&voko;bestoj"/>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#kukurboparencoj -->
+
+    <Class rdf:about="&voko;kukurboparencoj">
+        <rdfs:subClassOf rdf:resource="&voko;floroplantoj"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#kulturaĵoj -->
+
+    <Class rdf:about="&voko;kulturaĵoj">
+        <rdfs:subClassOf rdf:resource="&skos;Collection"/>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#kvantoj -->
+
+    <Class rdf:about="&voko;kvantoj">
+        <rdfs:subClassOf rdf:resource="&voko;mezurunuoj"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#lamioparencoj -->
+
+    <Class rdf:about="&voko;lamioparencoj">
+        <rdfs:subClassOf rdf:resource="&voko;floroplantoj"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#laŭroparencoj -->
+
+    <Class rdf:about="&voko;laŭroparencoj">
+        <rdfs:subClassOf rdf:resource="&voko;floroplantoj"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#leporuloj -->
+
+    <Class rdf:about="&voko;leporuloj">
+        <rdfs:subClassOf rdf:resource="&voko;mamuloj"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#lilioparencoj -->
+
+    <Class rdf:about="&voko;lilioparencoj">
+        <rdfs:subClassOf rdf:resource="&voko;floroplantoj"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#lingvoj -->
+
+    <Class rdf:about="&voko;lingvoj">
+        <rdfs:subClassOf rdf:resource="&voko;kulturaĵoj"/>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#longoj -->
+
+    <Class rdf:about="&voko;longoj">
+        <rdfs:subClassOf rdf:resource="&voko;mezurunuoj"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#ludiloj -->
+
+    <Class rdf:about="&voko;ludiloj">
+        <rdfs:subClassOf rdf:resource="&voko;iloj"/>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#magnolioparencoj -->
+
+    <Class rdf:about="&voko;magnolioparencoj">
+        <rdfs:subClassOf rdf:resource="&voko;floroplantoj"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#malpigioparencoj -->
+
+    <Class rdf:about="&voko;malpigioparencoj">
+        <rdfs:subClassOf rdf:resource="&voko;floroplantoj"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#malsanoj -->
+
+    <Class rdf:about="&voko;malsanoj">
+        <rdfs:subClassOf rdf:resource="&voko;naturaĵoj"/>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#malvoparencoj -->
+
+    <Class rdf:about="&voko;malvoparencoj">
+        <rdfs:subClassOf rdf:resource="&voko;floroplantoj"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#mamuloj -->
+
+    <Class rdf:about="&voko;mamuloj">
+        <rdfs:subClassOf rdf:resource="&voko;bestoj"/>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#maroj -->
+
+    <Class rdf:about="&voko;maroj">
+        <rdfs:subClassOf rdf:resource="&voko;teritorioj"/>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#marsupiuloj -->
+
+    <Class rdf:about="&voko;marsupiuloj">
+        <rdfs:subClassOf rdf:resource="&voko;mamuloj"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#mebloj -->
+
+    <Class rdf:about="&voko;mebloj">
+        <rdfs:subClassOf rdf:resource="&voko;iloj"/>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#mezurunuoj -->
+
+    <Class rdf:about="&voko;mezurunuoj">
+        <rdfs:subClassOf rdf:resource="&voko;unuoj"/>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#mirtoparencoj -->
+
+    <Class rdf:about="&voko;mirtoparencoj">
+        <rdfs:subClassOf rdf:resource="&voko;floroplantoj"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#moluskoj -->
+
+    <Class rdf:about="&voko;moluskoj">
+        <rdfs:subClassOf rdf:resource="&voko;bestoj"/>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#monatoj -->
+
+    <Class rdf:about="&voko;monatoj">
+        <rdfs:subClassOf rdf:resource="&voko;kalendaraj_tempoj"/>
+        <rdfs:subClassOf rdf:resource="&skos;OrderedCollection"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#mondopartoj -->
+
+    <Class rdf:about="&voko;mondopartoj">
+        <rdfs:subClassOf rdf:resource="&voko;teritorioj"/>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#montaroj -->
+
+    <Class rdf:about="&voko;montaroj">
+        <rdfs:subClassOf rdf:resource="&voko;regionoj"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#montoj -->
+
+    <Class rdf:about="&voko;montoj">
+        <rdfs:subClassOf rdf:resource="&voko;regionoj"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#monunuoj -->
+
+    <Class rdf:about="&voko;monunuoj">
+        <rdfs:subClassOf rdf:resource="&voko;unuoj"/>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#muzikiloj -->
+
+    <Class rdf:about="&voko;muzikiloj">
+        <rdfs:subClassOf rdf:resource="&voko;iloj"/>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#muŝoj -->
+
+    <Class rdf:about="&voko;muŝoj">
+        <rdfs:subClassOf rdf:resource="&voko;insektoj"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#naturaĵoj -->
+
+    <Class rdf:about="&voko;naturaĵoj">
+        <rdfs:subClassOf rdf:resource="&skos;Collection"/>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#neparhufuloj -->
+
+    <Class rdf:about="&voko;neparhufuloj">
+        <rdfs:subClassOf rdf:resource="&voko;mamuloj"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#nombroj -->
+
+    <Class rdf:about="&voko;nombroj">
+        <rdfs:subClassOf rdf:resource="&voko;kulturaĵoj"/>
+        <rdfs:subClassOf rdf:resource="&skos;OrderedCollection"/>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#oksalidoparencoj -->
+
+    <Class rdf:about="&voko;oksalidoparencoj">
+        <rdfs:subClassOf rdf:resource="&voko;floroplantoj"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#organizaĵoj -->
+
+    <Class rdf:about="&voko;organizaĵoj">
+        <rdfs:subClassOf rdf:resource="&voko;kulturaĵoj"/>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#papilioj -->
+
+    <Class rdf:about="&voko;papilioj">
+        <rdfs:subClassOf rdf:resource="&voko;insektoj"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#parencoj -->
+
+    <Class rdf:about="&voko;parencoj">
+        <rdfs:subClassOf rdf:resource="&voko;personoj"/>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#parhufuloj -->
+
+    <Class rdf:about="&voko;parhufuloj">
+        <rdfs:subClassOf rdf:resource="&voko;mamuloj"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#perceptoj -->
+
+    <Class rdf:about="&voko;perceptoj">
+        <rdfs:subClassOf rdf:resource="&skos;Collection"/>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#personaj_nomoj -->
+
+    <Class rdf:about="&voko;personaj_nomoj">
+        <rdfs:subClassOf rdf:resource="&voko;personoj"/>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#personoj -->
+
+    <Class rdf:about="&voko;personoj">
+        <rdfs:subClassOf rdf:resource="&skos;Collection"/>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#piproparencoj -->
+
+    <Class rdf:about="&voko;piproparencoj">
+        <rdfs:subClassOf rdf:resource="&voko;floroplantoj"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#planedoj -->
+
+    <Class rdf:about="&voko;planedoj">
+        <rdfs:subClassOf rdf:resource="&voko;kosmaĵoj"/>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#pooparencoj -->
+
+    <Class rdf:about="&voko;pooparencoj">
+        <rdfs:subClassOf rdf:resource="&voko;floroplantoj"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#popolanoj -->
+
+    <Class rdf:about="&voko;popolanoj">
+        <rdfs:subClassOf rdf:resource="&voko;personoj"/>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#pramamuloj -->
+
+    <Class rdf:about="&voko;pramamuloj">
+        <rdfs:subClassOf rdf:resource="&voko;mamuloj"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#rabobestoj -->
+
+    <Class rdf:about="&voko;rabobestoj">
+        <rdfs:subClassOf rdf:resource="&voko;mamuloj"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#ranunkoloparencoj -->
+
+    <Class rdf:about="&voko;ranunkoloparencoj">
+        <rdfs:subClassOf rdf:resource="&voko;floroplantoj"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#regionoj -->
+
+    <Class rdf:about="&voko;regionoj">
+        <rdfs:subClassOf rdf:resource="&voko;teritorioj"/>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#religioj -->
+
+    <Class rdf:about="&voko;religioj">
+        <rdfs:subClassOf rdf:resource="&voko;kulturaĵoj"/>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#reptilioj -->
+
+    <Class rdf:about="&voko;reptilioj">
+        <rdfs:subClassOf rdf:resource="&voko;bestoj"/>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#riveroj -->
+
+    <Class rdf:about="&voko;riveroj">
+        <rdfs:subClassOf rdf:resource="&voko;regionoj"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#ronĝuloj -->
+
+    <Class rdf:about="&voko;ronĝuloj">
+        <rdfs:subClassOf rdf:resource="&voko;mamuloj"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#rostruloj -->
+
+    <Class rdf:about="&voko;rostruloj">
+        <rdfs:subClassOf rdf:resource="&voko;mamuloj"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#rozoparencoj -->
+
+    <Class rdf:about="&voko;rozoparencoj">
+        <rdfs:subClassOf rdf:resource="&voko;floroplantoj"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#saksifragoparencoj -->
+
+    <Class rdf:about="&voko;saksifragoparencoj">
+        <rdfs:subClassOf rdf:resource="&voko;floroplantoj"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#sciencoj -->
+
+    <Class rdf:about="&voko;sciencoj">
+        <rdfs:subClassOf rdf:resource="&voko;kulturaĵoj"/>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#semajntagoj -->
+
+    <Class rdf:about="&voko;semajntagoj">
+        <rdfs:subClassOf rdf:resource="&voko;kalendaraj_tempoj"/>
+        <rdfs:subClassOf rdf:resource="&skos;OrderedCollection"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#senco -->
+
+    <Class rdf:about="&voko;senco">
+        <rdfs:subClassOf rdf:resource="&skos;Concept"/>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#sensaĵoj -->
+
+    <Class rdf:about="&voko;sensaĵoj">
+        <rdfs:subClassOf rdf:resource="&voko;perceptoj"/>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#sentoj -->
+
+    <Class rdf:about="&voko;sentoj">
+        <rdfs:subClassOf rdf:resource="&voko;perceptoj"/>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#serpentoj -->
+
+    <Class rdf:about="&voko;serpentoj">
+        <rdfs:subClassOf rdf:resource="&voko;reptilioj"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#sezonoj -->
+
+    <Class rdf:about="&voko;sezonoj">
+        <rdfs:subClassOf rdf:resource="&voko;kalendaraj_tempoj"/>
+        <rdfs:subClassOf rdf:resource="&skos;OrderedCollection"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#simioj -->
+
+    <Class rdf:about="&voko;simioj">
+        <rdfs:subClassOf rdf:resource="&voko;mamuloj"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#sirenoj -->
+
+    <Class rdf:about="&voko;sirenoj">
+        <rdfs:subClassOf rdf:resource="&voko;mamuloj"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#skaraboj -->
+
+    <Class rdf:about="&voko;skaraboj">
+        <rdfs:subClassOf rdf:resource="&voko;insektoj"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#solanoparencoj -->
+
+    <Class rdf:about="&voko;solanoparencoj">
+        <rdfs:subClassOf rdf:resource="&voko;floroplantoj"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#sonoj -->
+
+    <Class rdf:about="&voko;sonoj">
+        <rdfs:subClassOf rdf:resource="&voko;sensaĵoj"/>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#spicoj -->
+
+    <Class rdf:about="&voko;spicoj">
+        <rdfs:subClassOf rdf:resource="&voko;kulturaĵoj"/>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#sporoplantoj -->
+
+    <Class rdf:about="&voko;sporoplantoj">
+        <rdfs:subClassOf rdf:resource="&voko;vegetaĵoj"/>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#stelfiguroj -->
+
+    <Class rdf:about="&voko;stelfiguroj">
+        <rdfs:subClassOf rdf:resource="&voko;kosmaĵoj"/>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#tempoj -->
+
+    <Class rdf:about="&voko;tempoj">
+        <rdfs:subClassOf rdf:resource="&skos;Collection"/>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#teritorioj -->
+
+    <Class rdf:about="&voko;teritorioj">
+        <rdfs:subClassOf rdf:resource="&skos;Collection"/>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#unuoj -->
+
+    <Class rdf:about="&voko;unuoj">
+        <rdfs:subClassOf rdf:resource="&skos;Collection"/>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#urboj -->
+
+    <Class rdf:about="&voko;urboj">
+        <rdfs:subClassOf rdf:resource="&voko;organizaĵoj"/>
+        <rdfs:subClassOf rdf:resource="&voko;teritorioj"/>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#vegetaĵoj -->
+
+    <Class rdf:about="&voko;vegetaĵoj">
+        <rdfs:subClassOf rdf:resource="&voko;naturaĵoj"/>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#vespertoj -->
+
+    <Class rdf:about="&voko;vespertoj">
+        <rdfs:subClassOf rdf:resource="&voko;mamuloj"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#veturiloj -->
+
+    <Class rdf:about="&voko;veturiloj">
+        <rdfs:subClassOf rdf:resource="&voko;iloj"/>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#vitoparencoj -->
+
+    <Class rdf:about="&voko;vitoparencoj">
+        <rdfs:subClassOf rdf:resource="&voko;floroplantoj"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#zingibroparencoj -->
+
+    <Class rdf:about="&voko;zingibroparencoj">
+        <rdfs:subClassOf rdf:resource="&voko;floroplantoj"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#zodiakaj_signoj -->
+
+    <Class rdf:about="&voko;zodiakaj_signoj">
+        <rdfs:subClassOf rdf:resource="&voko;stelfiguroj"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#zoologiaj_familioj -->
+
+    <Class rdf:about="&voko;zoologiaj_familioj">
+        <rdfs:subClassOf rdf:resource="&voko;zoologiaj_grupoj"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#zoologiaj_genroj -->
+
+    <Class rdf:about="&voko;zoologiaj_genroj">
+        <rdfs:subClassOf rdf:resource="&voko;zoologiaj_grupoj"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#zoologiaj_grupoj -->
+
+    <Class rdf:about="&voko;zoologiaj_grupoj">
+        <rdfs:subClassOf rdf:resource="&voko;biologiaj_grupoj"/>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#zoologiaj_klasoj -->
+
+    <Class rdf:about="&voko;zoologiaj_klasoj">
+        <rdfs:subClassOf rdf:resource="&voko;zoologiaj_grupoj"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#zoologiaj_ordoj -->
+
+    <Class rdf:about="&voko;zoologiaj_ordoj">
+        <rdfs:subClassOf rdf:resource="&voko;zoologiaj_grupoj"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#zoologiaj_specioj -->
+
+    <Class rdf:about="&voko;zoologiaj_specioj">
+        <rdfs:subClassOf rdf:resource="&voko;zoologiaj_grupoj"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#ĉefurboj -->
+
+    <Class rdf:about="&voko;ĉefurboj">
+        <rdfs:subClassOf rdf:resource="&voko;urboj"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#ĥemiaj_elementoj -->
+
+    <Class rdf:about="&voko;ĥemiaj_elementoj">
+        <rdfs:subClassOf rdf:resource="&voko;kosmaĵoj"/>
+        <rdfs:subClassOf rdf:resource="&skos;OrderedCollection"/>
+    </Class>
+    
+
+
+    <!-- http://purl.org/net/voko#ŝtatoj -->
+
+    <Class rdf:about="&voko;ŝtatoj">
+        <rdfs:subClassOf rdf:resource="&voko;organizaĵoj"/>
+        <rdfs:subClassOf rdf:resource="&voko;teritorioj"/>
+    </Class>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 3.4.2) http://owlapi.sourceforge.net -->
+

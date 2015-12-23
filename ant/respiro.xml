@@ -1,0 +1,30 @@
+<project name="Respiro-jar" default="rsp-jar" basedir=".">
+    <description>
+       Reta Vortaro, reguloj por (re)krei Java-klasojn en respiro.jar. 
+    </description>
+
+  <!-- legu agorditajn variablojn el dosiero -->
+  <property file="${user.dir}/cfg/agordo" prefix="v."/>
+
+  <!-- donu valorojn al la variabloj, se ili ne jam aperis en la agordo-dosiero -->
+  <property environment="ENV"/>
+  <property name="v.voko" location="${ENV.VOKO}"/>
+
+  <property name="v.voko.ant" location="${v.voko}/ant"/>
+  <property name="v.voko.jav" location="${v.voko}/jav"/>
+  <property name="v.voko.klasoj" location="${v.voko.jav}/de/steloj/respiro"/>
+
+  <target name="rsp-agordo" description="eligas la agordeblajn variablojn por kontrolo">
+    <echoproperties prefix="v."/> 
+  </target>
+
+  <target name="rsp-klasoj" description="kompilas la Javo-klasojn" depends="rsp-agordo">
+    <javac srcdir="${v.voko.jav}" destdir="${v.voko.jav}"/> 
+  </target>
+
+  <target name="rsp-jar" description="kunigas la Javo-klasojn an Jar-arhhivo"
+	  depends="rsp-agordo, rsp-klasoj">
+    <jar basedir="${v.voko.jav}" destfile="${v.voko.ant}/respiro.jar"/> 
+  </target>
+
+</project>

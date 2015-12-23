@@ -1,0 +1,1793 @@
+@prefix : <http://www.w3.org/2002/07/owl#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix voko: <http://purl.org/net/voko#> .
+@base <http://purl.org/net/voko> .
+
+<http://purl.org/net/voko> rdf:type :Ontology ;
+                           
+                           :versionIRI <http://purl.org/net/voko/1.1.0> ;
+                           
+                           :imports <http://www.w3.org/2004/02/skos/core> .
+
+
+#################################################################
+#
+#    Annotation properties
+#
+#################################################################
+
+
+###  http://purl.org/net/voko#prezento
+
+voko:prezento rdf:type :AnnotationProperty .
+
+
+
+
+
+#################################################################
+#
+#    Datatypes
+#
+#################################################################
+
+
+###  http://purl.org/net/voko#stiloj
+
+voko:stiloj rdf:type rdfs:Datatype ;
+            
+            :equivalentClass [ rdf:type rdfs:Datatype ;
+                               :oneOf [ rdf:type rdf:List ;
+                                        rdf:first "ARK" ;
+                                        rdf:rest [ rdf:type rdf:List ;
+                                                   rdf:first "EVI" ;
+                                                   rdf:rest [ rdf:type rdf:List ;
+                                                              rdf:first "FIG" ;
+                                                              rdf:rest [ rdf:type rdf:List ;
+                                                                         rdf:first "FRAZ" ;
+                                                                         rdf:rest [ rdf:type rdf:List ;
+                                                                                    rdf:first "KOMUNE" ;
+                                                                                    rdf:rest [ rdf:type rdf:List ;
+                                                                                               rdf:first "NEO" ;
+                                                                                               rdf:rest [ rdf:type rdf:List ;
+                                                                                                          rdf:first "POE" ;
+                                                                                                          rdf:rest [ rdf:type rdf:List ;
+                                                                                                                     rdf:first "RAR" ;
+                                                                                                                     rdf:rest [ rdf:type rdf:List ;
+                                                                                                                                rdf:first "VULG" ;
+                                                                                                                                rdf:rest rdf:nil
+                                                                                                                              ]
+                                                                                                                   ]
+                                                                                                        ]
+                                                                                             ]
+                                                                                  ]
+                                                                       ]
+                                                            ]
+                                                 ]
+                                      ]
+                             ] .
+
+
+
+
+
+#################################################################
+#
+#    Object Properties
+#
+#################################################################
+
+
+###  http://purl.org/net/voko#ant
+
+voko:ant rdf:type :ObjectProperty ,
+                  :SymmetricProperty ;
+         
+         skos:definition "antonimo"@eo ;
+         
+         rdfs:range voko:senco ;
+         
+         rdfs:domain voko:senco ;
+         
+         rdfs:subPropertyOf voko:vid .
+
+
+
+###  http://purl.org/net/voko#dif
+
+voko:dif rdf:type :ObjectProperty ;
+         
+         rdfs:label "estas difinita per"@eo ;
+         
+         rdfs:domain voko:senco ;
+         
+         rdfs:range voko:senco ;
+         
+         rdfs:subPropertyOf voko:sin .
+
+
+
+###  http://purl.org/net/voko#drv
+
+voko:drv rdf:type :ObjectProperty ;
+         
+         rdfs:label "derivaĵo"@eo ;
+         
+         skos:definition "derivaĵo, al kiu apartenas tiu senco"@eo ;
+         
+         rdfs:range voko:derivaĵo ;
+         
+         rdfs:domain voko:senco ;
+         
+         rdfs:subPropertyOf voko:super .
+
+
+
+###  http://purl.org/net/voko#ekz
+
+voko:ekz rdf:type :ObjectProperty ;
+         
+         rdfs:label "ekzemplo"@eo ;
+         
+         rdfs:range voko:senco ;
+         
+         rdfs:domain voko:senco ;
+         
+         rdfs:subPropertyOf voko:sub .
+
+
+
+###  http://purl.org/net/voko#hom
+
+voko:hom rdf:type :ObjectProperty ,
+                  :TransitiveProperty ;
+         
+         rdfs:label "homonimo"@eo ;
+         
+         rdfs:range voko:derivaĵo ;
+         
+         rdfs:domain voko:derivaĵo ;
+         
+         rdfs:subPropertyOf voko:vid .
+
+
+
+###  http://purl.org/net/voko#lst
+
+voko:lst rdf:type :ObjectProperty ;
+         
+         rdfs:label "listo"@eo ;
+         
+         rdfs:range voko:senco ;
+         
+         rdfs:domain voko:senco ;
+         
+         rdfs:subPropertyOf voko:super .
+
+
+
+###  http://purl.org/net/voko#malprt
+
+voko:malprt rdf:type :ObjectProperty ;
+            
+            rdfs:label "apartenas al"@eo ;
+            
+            rdfs:range voko:senco ;
+            
+            rdfs:domain voko:senco ;
+            
+            rdfs:subPropertyOf skos:broader .
+
+
+
+###  http://purl.org/net/voko#prt
+
+voko:prt rdf:type :ObjectProperty ;
+         
+         rdfs:label "havas parton"@eo ;
+         
+         :inverseOf voko:malprt ;
+         
+         rdfs:range voko:senco ;
+         
+         rdfs:domain voko:senco ;
+         
+         rdfs:subPropertyOf skos:narrower .
+
+
+
+###  http://purl.org/net/voko#sin
+
+voko:sin rdf:type :ObjectProperty ,
+                  :SymmetricProperty ;
+         
+         rdfs:label "sinonimo"@eo ;
+         
+         skos:definition "havas saman signifon kiel"@eo ;
+         
+         rdfs:range voko:senco ;
+         
+         rdfs:domain voko:senco ;
+         
+         rdfs:subPropertyOf voko:vid .
+
+
+
+###  http://purl.org/net/voko#snc
+
+voko:snc rdf:type :ObjectProperty ;
+         
+         rdfs:range voko:derivaĵo ;
+         
+         :inverseOf voko:drv ;
+         
+         rdfs:domain voko:senco ;
+         
+         rdfs:subPropertyOf voko:sub .
+
+
+
+###  http://purl.org/net/voko#sub
+
+voko:sub rdf:type :ObjectProperty ,
+                  :TransitiveProperty ;
+         
+         rdfs:label "havas specon"@eo ;
+         
+         rdfs:range voko:senco ;
+         
+         rdfs:domain voko:senco ;
+         
+         rdfs:subPropertyOf skos:narrower .
+
+
+
+###  http://purl.org/net/voko#super
+
+voko:super rdf:type :ObjectProperty ,
+                    :TransitiveProperty ;
+           
+           rdfs:label "estas speco de"@eo ;
+           
+           rdfs:domain voko:senco ;
+           
+           rdfs:range voko:senco ;
+           
+           :inverseOf voko:sub ;
+           
+           rdfs:subPropertyOf skos:broader .
+
+
+
+###  http://purl.org/net/voko#vid
+
+voko:vid rdf:type :ObjectProperty ,
+                  :SymmetricProperty ;
+         
+         rdfs:label "vidu"@eo ;
+         
+         rdfs:range voko:senco ;
+         
+         rdfs:domain voko:senco ;
+         
+         rdfs:subPropertyOf skos:related .
+
+
+
+
+
+#################################################################
+#
+#    Data properties
+#
+#################################################################
+
+
+###  http://purl.org/net/voko#fak
+
+voko:fak rdf:type :DatatypeProperty ;
+         
+         rdfs:label "fako"@eo ;
+         
+         rdfs:domain voko:senco ;
+         
+         rdfs:subPropertyOf voko:uzo .
+
+
+
+###  http://purl.org/net/voko#kap
+
+voko:kap rdf:type :DatatypeProperty ;
+         
+         rdfs:label "kapvorto"@eo ;
+         
+         rdfs:domain voko:derivaĵo ;
+         
+         rdfs:range rdfs:Literal .
+
+
+
+###  http://purl.org/net/voko#snc-n-ro
+
+voko:snc-n-ro rdf:type :DatatypeProperty ;
+              
+              rdfs:label "senconumero"@eo ;
+              
+              rdfs:domain voko:senco ;
+              
+              rdfs:range xsd:string .
+
+
+
+###  http://purl.org/net/voko#stl
+
+voko:stl rdf:type :DatatypeProperty ;
+         
+         rdfs:label "stilo"@eo ;
+         
+         rdfs:domain voko:senco ;
+         
+         rdfs:range voko:stiloj ;
+         
+         rdfs:subPropertyOf voko:uzo .
+
+
+
+###  http://purl.org/net/voko#trd
+
+voko:trd rdf:type :DatatypeProperty ;
+         
+         rdfs:label "traduko"@eo ;
+         
+         rdfs:domain voko:senco ;
+         
+         rdfs:range rdfs:Literal ;
+         
+         rdfs:subPropertyOf :topDataProperty .
+
+
+
+###  http://purl.org/net/voko#uzo
+
+voko:uzo rdf:type :DatatypeProperty ;
+         
+         rdfs:label "uzo"@eo ;
+         
+         rdfs:domain voko:senco .
+
+
+
+
+
+#################################################################
+#
+#    Classes
+#
+#################################################################
+
+
+###  http://purl.org/net/voko#akvifolioparencoj
+
+voko:akvifolioparencoj rdf:type :Class ;
+                       
+                       rdfs:subClassOf voko:floroplantoj ;
+                       
+                       voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#amfibioj
+
+voko:amfibioj rdf:type :Class ;
+              
+              rdfs:subClassOf voko:bestoj .
+
+
+
+###  http://purl.org/net/voko#apioparencoj
+
+voko:apioparencoj rdf:type :Class ;
+                  
+                  rdfs:subClassOf voko:floroplantoj ;
+                  
+                  voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#areoj
+
+voko:areoj rdf:type :Class ;
+           
+           rdfs:subClassOf voko:mezurunuoj ;
+           
+           voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#artoj
+
+voko:artoj rdf:type :Class ;
+           
+           rdfs:subClassOf voko:kulturaĵoj .
+
+
+
+###  http://purl.org/net/voko#asocioj
+
+voko:asocioj rdf:type :Class ;
+             
+             rdfs:subClassOf voko:organizaĵoj .
+
+
+
+###  http://purl.org/net/voko#asparagoparencoj
+
+voko:asparagoparencoj rdf:type :Class ;
+                      
+                      rdfs:subClassOf voko:floroplantoj ;
+                      
+                      voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#asteroparencoj
+
+voko:asteroparencoj rdf:type :Class ;
+                    
+                    rdfs:subClassOf voko:floroplantoj ;
+                    
+                    voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#bataliloj
+
+voko:bataliloj rdf:type :Class ;
+               
+               rdfs:subClassOf voko:iloj .
+
+
+
+###  http://purl.org/net/voko#bestoj
+
+voko:bestoj rdf:type :Class ;
+            
+            rdfs:subClassOf voko:naturaĵoj .
+
+
+
+###  http://purl.org/net/voko#biologiaj_grupoj
+
+voko:biologiaj_grupoj rdf:type :Class ;
+                      
+                      rdfs:subClassOf skos:Collection .
+
+
+
+###  http://purl.org/net/voko#biologiaj_regnoj
+
+voko:biologiaj_regnoj rdf:type :Class ;
+                      
+                      rdfs:subClassOf voko:biologiaj_grupoj .
+
+
+
+###  http://purl.org/net/voko#birdoj
+
+voko:birdoj rdf:type :Class ;
+            
+            rdfs:subClassOf voko:reptilioj .
+
+
+
+###  http://purl.org/net/voko#blekoj
+
+voko:blekoj rdf:type :Class ;
+            
+            rdfs:subClassOf voko:sonoj ;
+            
+            voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#blovinstrumentoj
+
+voko:blovinstrumentoj rdf:type :Class ;
+                      
+                      rdfs:subClassOf voko:muzikiloj ;
+                      
+                      voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#boragoparencoj
+
+voko:boragoparencoj rdf:type :Class ;
+                    
+                    rdfs:subClassOf voko:floroplantoj ;
+                    
+                    voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#botanikaj_familioj
+
+voko:botanikaj_familioj rdf:type :Class ;
+                        
+                        rdfs:subClassOf voko:botanikaj_grupoj ;
+                        
+                        voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#botanikaj_genroj
+
+voko:botanikaj_genroj rdf:type :Class ;
+                      
+                      rdfs:subClassOf voko:botanikaj_grupoj ;
+                      
+                      voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#botanikaj_grupoj
+
+voko:botanikaj_grupoj rdf:type :Class ;
+                      
+                      rdfs:subClassOf voko:biologiaj_grupoj .
+
+
+
+###  http://purl.org/net/voko#botanikaj_klasoj
+
+voko:botanikaj_klasoj rdf:type :Class ;
+                      
+                      rdfs:subClassOf voko:botanikaj_grupoj ;
+                      
+                      voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#botanikaj_ordoj
+
+voko:botanikaj_ordoj rdf:type :Class ;
+                     
+                     rdfs:subClassOf voko:botanikaj_grupoj ;
+                     
+                     voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#botanikaj_specioj
+
+voko:botanikaj_specioj rdf:type :Class ;
+                       
+                       rdfs:subClassOf voko:botanikaj_grupoj ;
+                       
+                       voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#brasikoparencoj
+
+voko:brasikoparencoj rdf:type :Class ;
+                     
+                     rdfs:subClassOf voko:floroplantoj ;
+                     
+                     voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#cefalopodoj
+
+voko:cefalopodoj rdf:type :Class ;
+                 
+                 rdfs:subClassOf voko:moluskoj ;
+                 
+                 voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#cetacoj
+
+voko:cetacoj rdf:type :Class ;
+             
+             rdfs:subClassOf voko:mamuloj ;
+             
+             voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#dancoj
+
+voko:dancoj rdf:type :Class ;
+            
+            rdfs:subClassOf voko:kulturaĵoj .
+
+
+
+###  http://purl.org/net/voko#daŭroj
+
+voko:daŭroj rdf:type :Class ;
+            
+            rdfs:subClassOf voko:mezurunuoj ;
+            
+            voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#derivaĵo
+
+voko:derivaĵo rdf:type :Class ;
+              
+              rdfs:subClassOf voko:senco .
+
+
+
+###  http://purl.org/net/voko#dinosaŭroj
+
+voko:dinosaŭroj rdf:type :Class ;
+                
+                rdfs:subClassOf voko:reptilioj ;
+                
+                voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#dipsakoparencoj
+
+voko:dipsakoparencoj rdf:type :Class ;
+                     
+                     rdfs:subClassOf voko:floroplantoj ;
+                     
+                     voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#duvalvuloj
+
+voko:duvalvuloj rdf:type :Class ;
+                
+                rdfs:subClassOf voko:moluskoj ;
+                
+                voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#entreprenoj
+
+voko:entreprenoj rdf:type :Class ;
+                 
+                 rdfs:subClassOf voko:organizaĵoj .
+
+
+
+###  http://purl.org/net/voko#erikoparencoj
+
+voko:erikoparencoj rdf:type :Class ;
+                   
+                   rdfs:subClassOf voko:floroplantoj ;
+                   
+                   voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#eventoj
+
+voko:eventoj rdf:type :Class ;
+             
+             rdfs:subClassOf voko:tempoj .
+
+
+
+###  http://purl.org/net/voko#faboparencoj
+
+voko:faboparencoj rdf:type :Class ;
+                  
+                  rdfs:subClassOf voko:floroplantoj ;
+                  
+                  voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#fagoparencoj
+
+voko:fagoparencoj rdf:type :Class ;
+                  
+                  rdfs:subClassOf voko:floroplantoj ;
+                  
+                  voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#festoj
+
+voko:festoj rdf:type :Class ;
+            
+            rdfs:subClassOf voko:eventoj ,
+                            voko:kulturaĵoj .
+
+
+
+###  http://purl.org/net/voko#fiŝoj
+
+voko:fiŝoj rdf:type :Class ;
+           
+           rdfs:subClassOf voko:bestoj .
+
+
+
+###  http://purl.org/net/voko#floroplantoj
+
+voko:floroplantoj rdf:type :Class ;
+                  
+                  rdfs:subClassOf voko:vegetaĵoj .
+
+
+
+###  http://purl.org/net/voko#formoj
+
+voko:formoj rdf:type :Class ;
+            
+            rdfs:subClassOf voko:perceptoj .
+
+
+
+###  http://purl.org/net/voko#frapinstrumentoj
+
+voko:frapinstrumentoj rdf:type :Class ;
+                      
+                      rdfs:subClassOf voko:muzikiloj ;
+                      
+                      voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#fungoj
+
+voko:fungoj rdf:type :Class ;
+            
+            rdfs:subClassOf voko:vegetaĵoj .
+
+
+
+###  http://purl.org/net/voko#gastropodoj
+
+voko:gastropodoj rdf:type :Class ;
+                 
+                 rdfs:subClassOf voko:moluskoj ;
+                 
+                 voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#gentianoparencoj
+
+voko:gentianoparencoj rdf:type :Class ;
+                      
+                      rdfs:subClassOf voko:floroplantoj ;
+                      
+                      voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#geologiaj_epokoj
+
+voko:geologiaj_epokoj rdf:type :Class ;
+                      
+                      rdfs:subClassOf voko:geologiaj_tempoj ,
+                                      skos:OrderedCollection ;
+                      
+                      voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#geologiaj_eraoj
+
+voko:geologiaj_eraoj rdf:type :Class ;
+                     
+                     rdfs:subClassOf voko:geologiaj_tempoj ,
+                                     skos:OrderedCollection ;
+                     
+                     voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#geologiaj_periodoj
+
+voko:geologiaj_periodoj rdf:type :Class ;
+                        
+                        rdfs:subClassOf voko:geologiaj_tempoj ,
+                                        skos:OrderedCollection ;
+                        
+                        voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#geologiaj_tempoj
+
+voko:geologiaj_tempoj rdf:type :Class ;
+                      
+                      rdfs:subClassOf voko:tempoj .
+
+
+
+###  http://purl.org/net/voko#geranioparencoj
+
+voko:geranioparencoj rdf:type :Class ;
+                     
+                     rdfs:subClassOf voko:floroplantoj ;
+                     
+                     voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#gustoj
+
+voko:gustoj rdf:type :Class ;
+            
+            rdfs:subClassOf voko:sensaĵoj .
+
+
+
+###  http://purl.org/net/voko#historiaj_epokoj
+
+voko:historiaj_epokoj rdf:type :Class ;
+                      
+                      rdfs:subClassOf voko:tempoj .
+
+
+
+###  http://purl.org/net/voko#historiaj_personoj
+
+voko:historiaj_personoj rdf:type :Class ;
+                        
+                        rdfs:subClassOf voko:personoj .
+
+
+
+###  http://purl.org/net/voko#iloj
+
+voko:iloj rdf:type :Class ;
+          
+          rdfs:subClassOf voko:kulturaĵoj .
+
+
+
+###  http://purl.org/net/voko#insektoj
+
+voko:insektoj rdf:type :Class ;
+              
+              rdfs:subClassOf voko:bestoj .
+
+
+
+###  http://purl.org/net/voko#insektomanĝuloj
+
+voko:insektomanĝuloj rdf:type :Class ;
+                     
+                     rdfs:subClassOf voko:mamuloj ;
+                     
+                     voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#insuloj
+
+voko:insuloj rdf:type :Class ;
+             
+             rdfs:subClassOf voko:teritorioj .
+
+
+
+###  http://purl.org/net/voko#kalendaraj_tempoj
+
+voko:kalendaraj_tempoj rdf:type :Class ;
+                       
+                       rdfs:subClassOf voko:tempoj .
+
+
+
+###  http://purl.org/net/voko#kaneloparencoj
+
+voko:kaneloparencoj rdf:type :Class ;
+                    
+                    rdfs:subClassOf voko:floroplantoj ;
+                    
+                    voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#kariofiloparencoj
+
+voko:kariofiloparencoj rdf:type :Class ;
+                       
+                       rdfs:subClassOf voko:floroplantoj ;
+                       
+                       voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#koloroj
+
+voko:koloroj rdf:type :Class ;
+             
+             rdfs:subClassOf voko:sensaĵoj .
+
+
+
+###  http://purl.org/net/voko#koniferoj
+
+voko:koniferoj rdf:type :Class ;
+               
+               rdfs:subClassOf voko:vegetaĵoj .
+
+
+
+###  http://purl.org/net/voko#kontinentoj
+
+voko:kontinentoj rdf:type :Class ;
+                 
+                 rdfs:subClassOf voko:teritorioj .
+
+
+
+###  http://purl.org/net/voko#kordinstrumentoj
+
+voko:kordinstrumentoj rdf:type :Class ;
+                      
+                      rdfs:subClassOf voko:muzikiloj ;
+                      
+                      voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#kosmaĵoj
+
+voko:kosmaĵoj rdf:type :Class ;
+              
+              rdfs:subClassOf skos:Collection .
+
+
+
+###  http://purl.org/net/voko#krokodiluloj
+
+voko:krokodiluloj rdf:type :Class ;
+                  
+                  rdfs:subClassOf voko:reptilioj ;
+                  
+                  voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#kromartikuloj
+
+voko:kromartikuloj rdf:type :Class ;
+                   
+                   rdfs:subClassOf voko:mamuloj ;
+                   
+                   voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#krustuloj
+
+voko:krustuloj rdf:type :Class ;
+               
+               rdfs:subClassOf voko:bestoj .
+
+
+
+###  http://purl.org/net/voko#kukurboparencoj
+
+voko:kukurboparencoj rdf:type :Class ;
+                     
+                     rdfs:subClassOf voko:floroplantoj ;
+                     
+                     voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#kulturaĵoj
+
+voko:kulturaĵoj rdf:type :Class ;
+                
+                rdfs:subClassOf skos:Collection .
+
+
+
+###  http://purl.org/net/voko#kvantoj
+
+voko:kvantoj rdf:type :Class ;
+             
+             rdfs:subClassOf voko:mezurunuoj ;
+             
+             voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#lamioparencoj
+
+voko:lamioparencoj rdf:type :Class ;
+                   
+                   rdfs:subClassOf voko:floroplantoj ;
+                   
+                   voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#laŭroparencoj
+
+voko:laŭroparencoj rdf:type :Class ;
+                   
+                   rdfs:subClassOf voko:floroplantoj ;
+                   
+                   voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#leporuloj
+
+voko:leporuloj rdf:type :Class ;
+               
+               rdfs:subClassOf voko:mamuloj ;
+               
+               voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#lilioparencoj
+
+voko:lilioparencoj rdf:type :Class ;
+                   
+                   rdfs:subClassOf voko:floroplantoj ;
+                   
+                   voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#lingvoj
+
+voko:lingvoj rdf:type :Class ;
+             
+             rdfs:subClassOf voko:kulturaĵoj .
+
+
+
+###  http://purl.org/net/voko#longoj
+
+voko:longoj rdf:type :Class ;
+            
+            rdfs:subClassOf voko:mezurunuoj ;
+            
+            voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#ludiloj
+
+voko:ludiloj rdf:type :Class ;
+             
+             rdfs:subClassOf voko:iloj .
+
+
+
+###  http://purl.org/net/voko#magnolioparencoj
+
+voko:magnolioparencoj rdf:type :Class ;
+                      
+                      rdfs:subClassOf voko:floroplantoj ;
+                      
+                      voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#malpigioparencoj
+
+voko:malpigioparencoj rdf:type :Class ;
+                      
+                      rdfs:subClassOf voko:floroplantoj ;
+                      
+                      voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#malsanoj
+
+voko:malsanoj rdf:type :Class ;
+              
+              rdfs:subClassOf voko:naturaĵoj .
+
+
+
+###  http://purl.org/net/voko#malvoparencoj
+
+voko:malvoparencoj rdf:type :Class ;
+                   
+                   rdfs:subClassOf voko:floroplantoj ;
+                   
+                   voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#mamuloj
+
+voko:mamuloj rdf:type :Class ;
+             
+             rdfs:subClassOf voko:bestoj .
+
+
+
+###  http://purl.org/net/voko#maroj
+
+voko:maroj rdf:type :Class ;
+           
+           rdfs:subClassOf voko:teritorioj .
+
+
+
+###  http://purl.org/net/voko#marsupiuloj
+
+voko:marsupiuloj rdf:type :Class ;
+                 
+                 rdfs:subClassOf voko:mamuloj ;
+                 
+                 voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#mebloj
+
+voko:mebloj rdf:type :Class ;
+            
+            rdfs:subClassOf voko:iloj .
+
+
+
+###  http://purl.org/net/voko#mezurunuoj
+
+voko:mezurunuoj rdf:type :Class ;
+                
+                rdfs:subClassOf voko:unuoj .
+
+
+
+###  http://purl.org/net/voko#mirtoparencoj
+
+voko:mirtoparencoj rdf:type :Class ;
+                   
+                   rdfs:subClassOf voko:floroplantoj ;
+                   
+                   voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#moluskoj
+
+voko:moluskoj rdf:type :Class ;
+              
+              rdfs:subClassOf voko:bestoj .
+
+
+
+###  http://purl.org/net/voko#monatoj
+
+voko:monatoj rdf:type :Class ;
+             
+             rdfs:subClassOf voko:kalendaraj_tempoj ,
+                             skos:OrderedCollection ;
+             
+             voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#mondopartoj
+
+voko:mondopartoj rdf:type :Class ;
+                 
+                 rdfs:subClassOf voko:teritorioj .
+
+
+
+###  http://purl.org/net/voko#montaroj
+
+voko:montaroj rdf:type :Class ;
+              
+              rdfs:subClassOf voko:regionoj ;
+              
+              voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#montoj
+
+voko:montoj rdf:type :Class ;
+            
+            rdfs:subClassOf voko:regionoj ;
+            
+            voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#monunuoj
+
+voko:monunuoj rdf:type :Class ;
+              
+              rdfs:subClassOf voko:unuoj .
+
+
+
+###  http://purl.org/net/voko#muzikiloj
+
+voko:muzikiloj rdf:type :Class ;
+               
+               rdfs:subClassOf voko:iloj .
+
+
+
+###  http://purl.org/net/voko#muŝoj
+
+voko:muŝoj rdf:type :Class ;
+           
+           rdfs:subClassOf voko:insektoj ;
+           
+           voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#naturaĵoj
+
+voko:naturaĵoj rdf:type :Class ;
+               
+               rdfs:subClassOf skos:Collection .
+
+
+
+###  http://purl.org/net/voko#neparhufuloj
+
+voko:neparhufuloj rdf:type :Class ;
+                  
+                  rdfs:subClassOf voko:mamuloj ;
+                  
+                  voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#nombroj
+
+voko:nombroj rdf:type :Class ;
+             
+             rdfs:subClassOf voko:kulturaĵoj ,
+                             skos:OrderedCollection .
+
+
+
+###  http://purl.org/net/voko#oksalidoparencoj
+
+voko:oksalidoparencoj rdf:type :Class ;
+                      
+                      rdfs:subClassOf voko:floroplantoj ;
+                      
+                      voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#organizaĵoj
+
+voko:organizaĵoj rdf:type :Class ;
+                 
+                 rdfs:subClassOf voko:kulturaĵoj .
+
+
+
+###  http://purl.org/net/voko#papilioj
+
+voko:papilioj rdf:type :Class ;
+              
+              rdfs:subClassOf voko:insektoj ;
+              
+              voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#parencoj
+
+voko:parencoj rdf:type :Class ;
+              
+              rdfs:subClassOf voko:personoj .
+
+
+
+###  http://purl.org/net/voko#parhufuloj
+
+voko:parhufuloj rdf:type :Class ;
+                
+                rdfs:subClassOf voko:mamuloj ;
+                
+                voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#perceptoj
+
+voko:perceptoj rdf:type :Class ;
+               
+               rdfs:subClassOf skos:Collection .
+
+
+
+###  http://purl.org/net/voko#personaj_nomoj
+
+voko:personaj_nomoj rdf:type :Class ;
+                    
+                    rdfs:subClassOf voko:personoj .
+
+
+
+###  http://purl.org/net/voko#personoj
+
+voko:personoj rdf:type :Class ;
+              
+              rdfs:subClassOf skos:Collection .
+
+
+
+###  http://purl.org/net/voko#piproparencoj
+
+voko:piproparencoj rdf:type :Class ;
+                   
+                   rdfs:subClassOf voko:floroplantoj ;
+                   
+                   voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#planedoj
+
+voko:planedoj rdf:type :Class ;
+              
+              rdfs:subClassOf voko:kosmaĵoj .
+
+
+
+###  http://purl.org/net/voko#pooparencoj
+
+voko:pooparencoj rdf:type :Class ;
+                 
+                 rdfs:subClassOf voko:floroplantoj ;
+                 
+                 voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#popolanoj
+
+voko:popolanoj rdf:type :Class ;
+               
+               rdfs:subClassOf voko:personoj .
+
+
+
+###  http://purl.org/net/voko#pramamuloj
+
+voko:pramamuloj rdf:type :Class ;
+                
+                rdfs:subClassOf voko:mamuloj ;
+                
+                voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#rabobestoj
+
+voko:rabobestoj rdf:type :Class ;
+                
+                rdfs:subClassOf voko:mamuloj ;
+                
+                voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#ranunkoloparencoj
+
+voko:ranunkoloparencoj rdf:type :Class ;
+                       
+                       rdfs:subClassOf voko:floroplantoj ;
+                       
+                       voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#regionoj
+
+voko:regionoj rdf:type :Class ;
+              
+              rdfs:subClassOf voko:teritorioj .
+
+
+
+###  http://purl.org/net/voko#religioj
+
+voko:religioj rdf:type :Class ;
+              
+              rdfs:subClassOf voko:kulturaĵoj .
+
+
+
+###  http://purl.org/net/voko#reptilioj
+
+voko:reptilioj rdf:type :Class ;
+               
+               rdfs:subClassOf voko:bestoj .
+
+
+
+###  http://purl.org/net/voko#riveroj
+
+voko:riveroj rdf:type :Class ;
+             
+             rdfs:subClassOf voko:regionoj ;
+             
+             voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#ronĝuloj
+
+voko:ronĝuloj rdf:type :Class ;
+              
+              rdfs:subClassOf voko:mamuloj ;
+              
+              voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#rostruloj
+
+voko:rostruloj rdf:type :Class ;
+               
+               rdfs:subClassOf voko:mamuloj ;
+               
+               voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#rozoparencoj
+
+voko:rozoparencoj rdf:type :Class ;
+                  
+                  rdfs:subClassOf voko:floroplantoj ;
+                  
+                  voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#saksifragoparencoj
+
+voko:saksifragoparencoj rdf:type :Class ;
+                        
+                        rdfs:subClassOf voko:floroplantoj ;
+                        
+                        voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#sciencoj
+
+voko:sciencoj rdf:type :Class ;
+              
+              rdfs:subClassOf voko:kulturaĵoj .
+
+
+
+###  http://purl.org/net/voko#semajntagoj
+
+voko:semajntagoj rdf:type :Class ;
+                 
+                 rdfs:subClassOf voko:kalendaraj_tempoj ,
+                                 skos:OrderedCollection ;
+                 
+                 voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#senco
+
+voko:senco rdf:type :Class ;
+           
+           rdfs:subClassOf skos:Concept .
+
+
+
+###  http://purl.org/net/voko#sensaĵoj
+
+voko:sensaĵoj rdf:type :Class ;
+              
+              rdfs:subClassOf voko:perceptoj .
+
+
+
+###  http://purl.org/net/voko#sentoj
+
+voko:sentoj rdf:type :Class ;
+            
+            rdfs:subClassOf voko:perceptoj .
+
+
+
+###  http://purl.org/net/voko#serpentoj
+
+voko:serpentoj rdf:type :Class ;
+               
+               rdfs:subClassOf voko:reptilioj ;
+               
+               voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#sezonoj
+
+voko:sezonoj rdf:type :Class ;
+             
+             rdfs:subClassOf voko:kalendaraj_tempoj ,
+                             skos:OrderedCollection ;
+             
+             voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#simioj
+
+voko:simioj rdf:type :Class ;
+            
+            rdfs:subClassOf voko:mamuloj ;
+            
+            voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#sirenoj
+
+voko:sirenoj rdf:type :Class ;
+             
+             rdfs:subClassOf voko:mamuloj ;
+             
+             voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#skaraboj
+
+voko:skaraboj rdf:type :Class ;
+              
+              rdfs:subClassOf voko:insektoj ;
+              
+              voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#solanoparencoj
+
+voko:solanoparencoj rdf:type :Class ;
+                    
+                    rdfs:subClassOf voko:floroplantoj ;
+                    
+                    voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#sonoj
+
+voko:sonoj rdf:type :Class ;
+           
+           rdfs:subClassOf voko:sensaĵoj .
+
+
+
+###  http://purl.org/net/voko#spicoj
+
+voko:spicoj rdf:type :Class ;
+            
+            rdfs:subClassOf voko:kulturaĵoj .
+
+
+
+###  http://purl.org/net/voko#sporoplantoj
+
+voko:sporoplantoj rdf:type :Class ;
+                  
+                  rdfs:subClassOf voko:vegetaĵoj .
+
+
+
+###  http://purl.org/net/voko#stelfiguroj
+
+voko:stelfiguroj rdf:type :Class ;
+                 
+                 rdfs:subClassOf voko:kosmaĵoj .
+
+
+
+###  http://purl.org/net/voko#tempoj
+
+voko:tempoj rdf:type :Class ;
+            
+            rdfs:subClassOf skos:Collection .
+
+
+
+###  http://purl.org/net/voko#teritorioj
+
+voko:teritorioj rdf:type :Class ;
+                
+                rdfs:subClassOf skos:Collection .
+
+
+
+###  http://purl.org/net/voko#unuoj
+
+voko:unuoj rdf:type :Class ;
+           
+           rdfs:subClassOf skos:Collection .
+
+
+
+###  http://purl.org/net/voko#urboj
+
+voko:urboj rdf:type :Class ;
+           
+           rdfs:subClassOf voko:organizaĵoj ,
+                           voko:teritorioj .
+
+
+
+###  http://purl.org/net/voko#vegetaĵoj
+
+voko:vegetaĵoj rdf:type :Class ;
+               
+               rdfs:subClassOf voko:naturaĵoj .
+
+
+
+###  http://purl.org/net/voko#vespertoj
+
+voko:vespertoj rdf:type :Class ;
+               
+               rdfs:subClassOf voko:mamuloj ;
+               
+               voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#veturiloj
+
+voko:veturiloj rdf:type :Class ;
+               
+               rdfs:subClassOf voko:iloj .
+
+
+
+###  http://purl.org/net/voko#vitoparencoj
+
+voko:vitoparencoj rdf:type :Class ;
+                  
+                  rdfs:subClassOf voko:floroplantoj ;
+                  
+                  voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#zingibroparencoj
+
+voko:zingibroparencoj rdf:type :Class ;
+                      
+                      rdfs:subClassOf voko:floroplantoj ;
+                      
+                      voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#zodiakaj_signoj
+
+voko:zodiakaj_signoj rdf:type :Class ;
+                     
+                     rdfs:subClassOf voko:stelfiguroj ;
+                     
+                     voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#zoologiaj_familioj
+
+voko:zoologiaj_familioj rdf:type :Class ;
+                        
+                        rdfs:subClassOf voko:zoologiaj_grupoj ;
+                        
+                        voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#zoologiaj_genroj
+
+voko:zoologiaj_genroj rdf:type :Class ;
+                      
+                      rdfs:subClassOf voko:zoologiaj_grupoj ;
+                      
+                      voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#zoologiaj_grupoj
+
+voko:zoologiaj_grupoj rdf:type :Class ;
+                      
+                      rdfs:subClassOf voko:biologiaj_grupoj .
+
+
+
+###  http://purl.org/net/voko#zoologiaj_klasoj
+
+voko:zoologiaj_klasoj rdf:type :Class ;
+                      
+                      rdfs:subClassOf voko:zoologiaj_grupoj ;
+                      
+                      voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#zoologiaj_ordoj
+
+voko:zoologiaj_ordoj rdf:type :Class ;
+                     
+                     rdfs:subClassOf voko:zoologiaj_grupoj ;
+                     
+                     voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#zoologiaj_specioj
+
+voko:zoologiaj_specioj rdf:type :Class ;
+                       
+                       rdfs:subClassOf voko:zoologiaj_grupoj ;
+                       
+                       voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#ĉefurboj
+
+voko:ĉefurboj rdf:type :Class ;
+              
+              rdfs:subClassOf voko:urboj ;
+              
+              voko:prezento "integrita" .
+
+
+
+###  http://purl.org/net/voko#ĥemiaj_elementoj
+
+voko:ĥemiaj_elementoj rdf:type :Class ;
+                      
+                      rdfs:subClassOf voko:kosmaĵoj ,
+                                      skos:OrderedCollection .
+
+
+
+###  http://purl.org/net/voko#ŝtatoj
+
+voko:ŝtatoj rdf:type :Class ;
+            
+            rdfs:subClassOf voko:organizaĵoj ,
+                            voko:teritorioj .
+
+
+
+
+###  Generated by the OWL API (version 3.4.2) http://owlapi.sourceforge.net
+

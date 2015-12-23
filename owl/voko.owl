@@ -1,0 +1,1992 @@
+<?xml version="1.0"?>
+
+
+<!DOCTYPE Ontology [
+    <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#" >
+    <!ENTITY xml "http://www.w3.org/XML/1998/namespace" >
+    <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
+    <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
+]>
+
+
+<Ontology xmlns="http://www.w3.org/2002/07/owl#"
+     xml:base="http://purl.org/net/voko"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+     ontologyIRI="http://purl.org/net/voko"
+     versionIRI="http://purl.org/net/voko/1.1.0">
+    <Prefix name="" IRI="http://www.w3.org/2002/07/owl#"/>
+    <Prefix name="owl" IRI="http://www.w3.org/2002/07/owl#"/>
+    <Prefix name="rdf" IRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+    <Prefix name="xsd" IRI="http://www.w3.org/2001/XMLSchema#"/>
+    <Prefix name="rdfs" IRI="http://www.w3.org/2000/01/rdf-schema#"/>
+    <Prefix name="skos" IRI="http://www.w3.org/2004/02/skos/core#"/>
+    <Prefix name="voko" IRI="http://purl.org/net/voko#"/>
+    <Import>http://www.w3.org/2004/02/skos/core</Import>
+    <Declaration>
+        <Class IRI="#akvifolioparencoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#amfibioj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#apioparencoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#areoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#artoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#asocioj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#asparagoparencoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#asteroparencoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#bataliloj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#bestoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#biologiaj_grupoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#biologiaj_regnoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#birdoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#blekoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#blovinstrumentoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#boragoparencoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#botanikaj_familioj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#botanikaj_genroj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#botanikaj_grupoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#botanikaj_klasoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#botanikaj_ordoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#botanikaj_specioj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#brasikoparencoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#cefalopodoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#cetacoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#dancoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#daŭroj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#derivaĵo"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#dinosaŭroj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#dipsakoparencoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#duvalvuloj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#entreprenoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#erikoparencoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#eventoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#faboparencoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#fagoparencoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#festoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#fiŝoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#floroplantoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#formoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#frapinstrumentoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#fungoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#gastropodoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#gentianoparencoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#geologiaj_epokoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#geologiaj_eraoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#geologiaj_periodoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#geologiaj_tempoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#geranioparencoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#gustoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#historiaj_epokoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#historiaj_personoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#iloj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#insektoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#insektomanĝuloj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#insuloj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#kalendaraj_tempoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#kaneloparencoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#kariofiloparencoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#koloroj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#koniferoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#kontinentoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#kordinstrumentoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#kosmaĵoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#krokodiluloj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#kromartikuloj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#krustuloj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#kukurboparencoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#kulturaĵoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#kvantoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#lamioparencoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#laŭroparencoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#leporuloj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#lilioparencoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#lingvoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#longoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#ludiloj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#magnolioparencoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#malpigioparencoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#malsanoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#malvoparencoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#mamuloj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#maroj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#marsupiuloj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#mebloj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#mezurunuoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#mirtoparencoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#moluskoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#monatoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#mondopartoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#montaroj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#montoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#monunuoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#muzikiloj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#muŝoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#naturaĵoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#neparhufuloj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#nombroj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#oksalidoparencoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#organizaĵoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#papilioj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#parencoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#parhufuloj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#perceptoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#personaj_nomoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#personoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#piproparencoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#planedoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#pooparencoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#popolanoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#pramamuloj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#rabobestoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#ranunkoloparencoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#regionoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#religioj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#reptilioj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#riveroj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#ronĝuloj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#rostruloj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#rozoparencoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#saksifragoparencoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#sciencoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#semajntagoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#senco"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#sensaĵoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#sentoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#serpentoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#sezonoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#simioj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#sirenoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#skaraboj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#solanoparencoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#sonoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#spicoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#sporoplantoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#stelfiguroj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#tempoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#teritorioj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#unuoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#urboj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#vegetaĵoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#vespertoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#veturiloj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#vitoparencoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#zingibroparencoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#zodiakaj_signoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#zoologiaj_familioj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#zoologiaj_genroj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#zoologiaj_grupoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#zoologiaj_klasoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#zoologiaj_ordoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#zoologiaj_specioj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#ĉefurboj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#ĥemiaj_elementoj"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#ŝtatoj"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#ant"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#dif"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#drv"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#ekz"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#hom"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#lst"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#malprt"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#prt"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#sin"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#snc"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#sub"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#super"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#vid"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#fak"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#kap"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#snc-n-ro"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#stl"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#trd"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#uzo"/>
+    </Declaration>
+    <Declaration>
+        <AnnotationProperty IRI="#prezento"/>
+    </Declaration>
+    <Declaration>
+        <Datatype IRI="#stiloj"/>
+    </Declaration>
+    <SubClassOf>
+        <Class IRI="#akvifolioparencoj"/>
+        <Class IRI="#floroplantoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#amfibioj"/>
+        <Class IRI="#bestoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#apioparencoj"/>
+        <Class IRI="#floroplantoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#areoj"/>
+        <Class IRI="#mezurunuoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#artoj"/>
+        <Class IRI="#kulturaĵoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#asocioj"/>
+        <Class IRI="#organizaĵoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#asparagoparencoj"/>
+        <Class IRI="#floroplantoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#asteroparencoj"/>
+        <Class IRI="#floroplantoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#bataliloj"/>
+        <Class IRI="#iloj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#bestoj"/>
+        <Class IRI="#naturaĵoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#biologiaj_grupoj"/>
+        <Class abbreviatedIRI="skos:Collection"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#biologiaj_regnoj"/>
+        <Class IRI="#biologiaj_grupoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#birdoj"/>
+        <Class IRI="#reptilioj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#blekoj"/>
+        <Class IRI="#sonoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#blovinstrumentoj"/>
+        <Class IRI="#muzikiloj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#boragoparencoj"/>
+        <Class IRI="#floroplantoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#botanikaj_familioj"/>
+        <Class IRI="#botanikaj_grupoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#botanikaj_genroj"/>
+        <Class IRI="#botanikaj_grupoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#botanikaj_grupoj"/>
+        <Class IRI="#biologiaj_grupoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#botanikaj_klasoj"/>
+        <Class IRI="#botanikaj_grupoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#botanikaj_ordoj"/>
+        <Class IRI="#botanikaj_grupoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#botanikaj_specioj"/>
+        <Class IRI="#botanikaj_grupoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#brasikoparencoj"/>
+        <Class IRI="#floroplantoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#cefalopodoj"/>
+        <Class IRI="#moluskoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#cetacoj"/>
+        <Class IRI="#mamuloj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#dancoj"/>
+        <Class IRI="#kulturaĵoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#daŭroj"/>
+        <Class IRI="#mezurunuoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#derivaĵo"/>
+        <Class IRI="#senco"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#dinosaŭroj"/>
+        <Class IRI="#reptilioj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#dipsakoparencoj"/>
+        <Class IRI="#floroplantoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#duvalvuloj"/>
+        <Class IRI="#moluskoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#entreprenoj"/>
+        <Class IRI="#organizaĵoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#erikoparencoj"/>
+        <Class IRI="#floroplantoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#eventoj"/>
+        <Class IRI="#tempoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#faboparencoj"/>
+        <Class IRI="#floroplantoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#fagoparencoj"/>
+        <Class IRI="#floroplantoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#festoj"/>
+        <Class IRI="#eventoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#festoj"/>
+        <Class IRI="#kulturaĵoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#fiŝoj"/>
+        <Class IRI="#bestoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#floroplantoj"/>
+        <Class IRI="#vegetaĵoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#formoj"/>
+        <Class IRI="#perceptoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#frapinstrumentoj"/>
+        <Class IRI="#muzikiloj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#fungoj"/>
+        <Class IRI="#vegetaĵoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#gastropodoj"/>
+        <Class IRI="#moluskoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#gentianoparencoj"/>
+        <Class IRI="#floroplantoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#geologiaj_epokoj"/>
+        <Class IRI="#geologiaj_tempoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#geologiaj_epokoj"/>
+        <Class abbreviatedIRI="skos:OrderedCollection"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#geologiaj_eraoj"/>
+        <Class IRI="#geologiaj_tempoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#geologiaj_eraoj"/>
+        <Class abbreviatedIRI="skos:OrderedCollection"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#geologiaj_periodoj"/>
+        <Class IRI="#geologiaj_tempoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#geologiaj_periodoj"/>
+        <Class abbreviatedIRI="skos:OrderedCollection"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#geologiaj_tempoj"/>
+        <Class IRI="#tempoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#geranioparencoj"/>
+        <Class IRI="#floroplantoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#gustoj"/>
+        <Class IRI="#sensaĵoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#historiaj_epokoj"/>
+        <Class IRI="#tempoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#historiaj_personoj"/>
+        <Class IRI="#personoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#iloj"/>
+        <Class IRI="#kulturaĵoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#insektoj"/>
+        <Class IRI="#bestoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#insektomanĝuloj"/>
+        <Class IRI="#mamuloj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#insuloj"/>
+        <Class IRI="#teritorioj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#kalendaraj_tempoj"/>
+        <Class IRI="#tempoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#kaneloparencoj"/>
+        <Class IRI="#floroplantoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#kariofiloparencoj"/>
+        <Class IRI="#floroplantoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#koloroj"/>
+        <Class IRI="#sensaĵoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#koniferoj"/>
+        <Class IRI="#vegetaĵoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#kontinentoj"/>
+        <Class IRI="#teritorioj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#kordinstrumentoj"/>
+        <Class IRI="#muzikiloj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#kosmaĵoj"/>
+        <Class abbreviatedIRI="skos:Collection"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#krokodiluloj"/>
+        <Class IRI="#reptilioj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#kromartikuloj"/>
+        <Class IRI="#mamuloj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#krustuloj"/>
+        <Class IRI="#bestoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#kukurboparencoj"/>
+        <Class IRI="#floroplantoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#kulturaĵoj"/>
+        <Class abbreviatedIRI="skos:Collection"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#kvantoj"/>
+        <Class IRI="#mezurunuoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#lamioparencoj"/>
+        <Class IRI="#floroplantoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#laŭroparencoj"/>
+        <Class IRI="#floroplantoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#leporuloj"/>
+        <Class IRI="#mamuloj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#lilioparencoj"/>
+        <Class IRI="#floroplantoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#lingvoj"/>
+        <Class IRI="#kulturaĵoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#longoj"/>
+        <Class IRI="#mezurunuoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#ludiloj"/>
+        <Class IRI="#iloj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#magnolioparencoj"/>
+        <Class IRI="#floroplantoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#malpigioparencoj"/>
+        <Class IRI="#floroplantoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#malsanoj"/>
+        <Class IRI="#naturaĵoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#malvoparencoj"/>
+        <Class IRI="#floroplantoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#mamuloj"/>
+        <Class IRI="#bestoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#maroj"/>
+        <Class IRI="#teritorioj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#marsupiuloj"/>
+        <Class IRI="#mamuloj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#mebloj"/>
+        <Class IRI="#iloj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#mezurunuoj"/>
+        <Class IRI="#unuoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#mirtoparencoj"/>
+        <Class IRI="#floroplantoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#moluskoj"/>
+        <Class IRI="#bestoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#monatoj"/>
+        <Class IRI="#kalendaraj_tempoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#monatoj"/>
+        <Class abbreviatedIRI="skos:OrderedCollection"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#mondopartoj"/>
+        <Class IRI="#teritorioj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#montaroj"/>
+        <Class IRI="#regionoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#montoj"/>
+        <Class IRI="#regionoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#monunuoj"/>
+        <Class IRI="#unuoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#muzikiloj"/>
+        <Class IRI="#iloj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#muŝoj"/>
+        <Class IRI="#insektoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#naturaĵoj"/>
+        <Class abbreviatedIRI="skos:Collection"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#neparhufuloj"/>
+        <Class IRI="#mamuloj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#nombroj"/>
+        <Class IRI="#kulturaĵoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#nombroj"/>
+        <Class abbreviatedIRI="skos:OrderedCollection"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#oksalidoparencoj"/>
+        <Class IRI="#floroplantoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#organizaĵoj"/>
+        <Class IRI="#kulturaĵoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#papilioj"/>
+        <Class IRI="#insektoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#parencoj"/>
+        <Class IRI="#personoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#parhufuloj"/>
+        <Class IRI="#mamuloj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#perceptoj"/>
+        <Class abbreviatedIRI="skos:Collection"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#personaj_nomoj"/>
+        <Class IRI="#personoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#personoj"/>
+        <Class abbreviatedIRI="skos:Collection"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#piproparencoj"/>
+        <Class IRI="#floroplantoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#planedoj"/>
+        <Class IRI="#kosmaĵoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#pooparencoj"/>
+        <Class IRI="#floroplantoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#popolanoj"/>
+        <Class IRI="#personoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#pramamuloj"/>
+        <Class IRI="#mamuloj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#rabobestoj"/>
+        <Class IRI="#mamuloj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#ranunkoloparencoj"/>
+        <Class IRI="#floroplantoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#regionoj"/>
+        <Class IRI="#teritorioj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#religioj"/>
+        <Class IRI="#kulturaĵoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#reptilioj"/>
+        <Class IRI="#bestoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#riveroj"/>
+        <Class IRI="#regionoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#ronĝuloj"/>
+        <Class IRI="#mamuloj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#rostruloj"/>
+        <Class IRI="#mamuloj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#rozoparencoj"/>
+        <Class IRI="#floroplantoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#saksifragoparencoj"/>
+        <Class IRI="#floroplantoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#sciencoj"/>
+        <Class IRI="#kulturaĵoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#semajntagoj"/>
+        <Class IRI="#kalendaraj_tempoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#semajntagoj"/>
+        <Class abbreviatedIRI="skos:OrderedCollection"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#senco"/>
+        <Class abbreviatedIRI="skos:Concept"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#sensaĵoj"/>
+        <Class IRI="#perceptoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#sentoj"/>
+        <Class IRI="#perceptoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#serpentoj"/>
+        <Class IRI="#reptilioj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#sezonoj"/>
+        <Class IRI="#kalendaraj_tempoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#sezonoj"/>
+        <Class abbreviatedIRI="skos:OrderedCollection"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#simioj"/>
+        <Class IRI="#mamuloj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#sirenoj"/>
+        <Class IRI="#mamuloj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#skaraboj"/>
+        <Class IRI="#insektoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#solanoparencoj"/>
+        <Class IRI="#floroplantoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#sonoj"/>
+        <Class IRI="#sensaĵoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#spicoj"/>
+        <Class IRI="#kulturaĵoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#sporoplantoj"/>
+        <Class IRI="#vegetaĵoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#stelfiguroj"/>
+        <Class IRI="#kosmaĵoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#tempoj"/>
+        <Class abbreviatedIRI="skos:Collection"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#teritorioj"/>
+        <Class abbreviatedIRI="skos:Collection"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#unuoj"/>
+        <Class abbreviatedIRI="skos:Collection"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#urboj"/>
+        <Class IRI="#organizaĵoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#urboj"/>
+        <Class IRI="#teritorioj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#vegetaĵoj"/>
+        <Class IRI="#naturaĵoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#vespertoj"/>
+        <Class IRI="#mamuloj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#veturiloj"/>
+        <Class IRI="#iloj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#vitoparencoj"/>
+        <Class IRI="#floroplantoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#zingibroparencoj"/>
+        <Class IRI="#floroplantoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#zodiakaj_signoj"/>
+        <Class IRI="#stelfiguroj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#zoologiaj_familioj"/>
+        <Class IRI="#zoologiaj_grupoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#zoologiaj_genroj"/>
+        <Class IRI="#zoologiaj_grupoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#zoologiaj_grupoj"/>
+        <Class IRI="#biologiaj_grupoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#zoologiaj_klasoj"/>
+        <Class IRI="#zoologiaj_grupoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#zoologiaj_ordoj"/>
+        <Class IRI="#zoologiaj_grupoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#zoologiaj_specioj"/>
+        <Class IRI="#zoologiaj_grupoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#ĉefurboj"/>
+        <Class IRI="#urboj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#ĥemiaj_elementoj"/>
+        <Class IRI="#kosmaĵoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#ĥemiaj_elementoj"/>
+        <Class abbreviatedIRI="skos:OrderedCollection"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#ŝtatoj"/>
+        <Class IRI="#organizaĵoj"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#ŝtatoj"/>
+        <Class IRI="#teritorioj"/>
+    </SubClassOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#ant"/>
+        <ObjectProperty IRI="#vid"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#dif"/>
+        <ObjectProperty IRI="#sin"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#drv"/>
+        <ObjectProperty IRI="#super"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#ekz"/>
+        <ObjectProperty IRI="#sub"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#hom"/>
+        <ObjectProperty IRI="#vid"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#lst"/>
+        <ObjectProperty IRI="#super"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#malprt"/>
+        <ObjectProperty abbreviatedIRI="skos:broader"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#prt"/>
+        <ObjectProperty abbreviatedIRI="skos:narrower"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#sin"/>
+        <ObjectProperty IRI="#vid"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#snc"/>
+        <ObjectProperty IRI="#sub"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#sub"/>
+        <ObjectProperty abbreviatedIRI="skos:narrower"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#super"/>
+        <ObjectProperty abbreviatedIRI="skos:broader"/>
+    </SubObjectPropertyOf>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#vid"/>
+        <ObjectProperty abbreviatedIRI="skos:related"/>
+    </SubObjectPropertyOf>
+    <InverseObjectProperties>
+        <ObjectProperty IRI="#snc"/>
+        <ObjectProperty IRI="#drv"/>
+    </InverseObjectProperties>
+    <InverseObjectProperties>
+        <ObjectProperty IRI="#prt"/>
+        <ObjectProperty IRI="#malprt"/>
+    </InverseObjectProperties>
+    <InverseObjectProperties>
+        <ObjectProperty IRI="#super"/>
+        <ObjectProperty IRI="#sub"/>
+    </InverseObjectProperties>
+    <SymmetricObjectProperty>
+        <ObjectProperty IRI="#ant"/>
+    </SymmetricObjectProperty>
+    <SymmetricObjectProperty>
+        <ObjectProperty IRI="#sin"/>
+    </SymmetricObjectProperty>
+    <SymmetricObjectProperty>
+        <ObjectProperty IRI="#vid"/>
+    </SymmetricObjectProperty>
+    <TransitiveObjectProperty>
+        <ObjectProperty IRI="#hom"/>
+    </TransitiveObjectProperty>
+    <TransitiveObjectProperty>
+        <ObjectProperty IRI="#sub"/>
+    </TransitiveObjectProperty>
+    <TransitiveObjectProperty>
+        <ObjectProperty IRI="#super"/>
+    </TransitiveObjectProperty>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#ant"/>
+        <Class IRI="#senco"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#dif"/>
+        <Class IRI="#senco"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#drv"/>
+        <Class IRI="#senco"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#ekz"/>
+        <Class IRI="#senco"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#hom"/>
+        <Class IRI="#derivaĵo"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#lst"/>
+        <Class IRI="#senco"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#malprt"/>
+        <Class IRI="#senco"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#prt"/>
+        <Class IRI="#senco"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#sin"/>
+        <Class IRI="#senco"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#snc"/>
+        <Class IRI="#senco"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#sub"/>
+        <Class IRI="#senco"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#super"/>
+        <Class IRI="#senco"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#vid"/>
+        <Class IRI="#senco"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#ant"/>
+        <Class IRI="#senco"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#dif"/>
+        <Class IRI="#senco"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#drv"/>
+        <Class IRI="#derivaĵo"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#ekz"/>
+        <Class IRI="#senco"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#hom"/>
+        <Class IRI="#derivaĵo"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#lst"/>
+        <Class IRI="#senco"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#malprt"/>
+        <Class IRI="#senco"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#prt"/>
+        <Class IRI="#senco"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#sin"/>
+        <Class IRI="#senco"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#snc"/>
+        <Class IRI="#derivaĵo"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#sub"/>
+        <Class IRI="#senco"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#super"/>
+        <Class IRI="#senco"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#vid"/>
+        <Class IRI="#senco"/>
+    </ObjectPropertyRange>
+    <SubDataPropertyOf>
+        <DataProperty IRI="#fak"/>
+        <DataProperty IRI="#uzo"/>
+    </SubDataPropertyOf>
+    <SubDataPropertyOf>
+        <DataProperty IRI="#stl"/>
+        <DataProperty IRI="#uzo"/>
+    </SubDataPropertyOf>
+    <SubDataPropertyOf>
+        <DataProperty IRI="#trd"/>
+        <DataProperty abbreviatedIRI="owl:topDataProperty"/>
+    </SubDataPropertyOf>
+    <DataPropertyDomain>
+        <DataProperty IRI="#fak"/>
+        <Class IRI="#senco"/>
+    </DataPropertyDomain>
+    <DataPropertyDomain>
+        <DataProperty IRI="#kap"/>
+        <Class IRI="#derivaĵo"/>
+    </DataPropertyDomain>
+    <DataPropertyDomain>
+        <DataProperty IRI="#snc-n-ro"/>
+        <Class IRI="#senco"/>
+    </DataPropertyDomain>
+    <DataPropertyDomain>
+        <DataProperty IRI="#stl"/>
+        <Class IRI="#senco"/>
+    </DataPropertyDomain>
+    <DataPropertyDomain>
+        <DataProperty IRI="#trd"/>
+        <Class IRI="#senco"/>
+    </DataPropertyDomain>
+    <DataPropertyDomain>
+        <DataProperty IRI="#uzo"/>
+        <Class IRI="#senco"/>
+    </DataPropertyDomain>
+    <DataPropertyRange>
+        <DataProperty IRI="#kap"/>
+        <Datatype abbreviatedIRI="rdfs:Literal"/>
+    </DataPropertyRange>
+    <DataPropertyRange>
+        <DataProperty IRI="#snc-n-ro"/>
+        <Datatype abbreviatedIRI="xsd:string"/>
+    </DataPropertyRange>
+    <DataPropertyRange>
+        <DataProperty IRI="#stl"/>
+        <Datatype IRI="#stiloj"/>
+    </DataPropertyRange>
+    <DataPropertyRange>
+        <DataProperty IRI="#trd"/>
+        <Datatype abbreviatedIRI="rdfs:Literal"/>
+    </DataPropertyRange>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#akvifolioparencoj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="skos:definition"/>
+        <IRI>#ant</IRI>
+        <Literal xml:lang="eo" datatypeIRI="&rdf;PlainLiteral">antonimo</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#apioparencoj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#areoj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#asparagoparencoj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#asteroparencoj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#blekoj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#blovinstrumentoj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#boragoparencoj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#botanikaj_familioj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#botanikaj_genroj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#botanikaj_klasoj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#botanikaj_ordoj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#botanikaj_specioj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#brasikoparencoj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#cefalopodoj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#cetacoj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#daŭroj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:label"/>
+        <IRI>#dif</IRI>
+        <Literal xml:lang="eo" datatypeIRI="&rdf;PlainLiteral">estas difinita per</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#dinosaŭroj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#dipsakoparencoj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:label"/>
+        <IRI>#drv</IRI>
+        <Literal xml:lang="eo" datatypeIRI="&rdf;PlainLiteral">derivaĵo</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="skos:definition"/>
+        <IRI>#drv</IRI>
+        <Literal xml:lang="eo" datatypeIRI="&rdf;PlainLiteral">derivaĵo, al kiu apartenas tiu senco</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#duvalvuloj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:label"/>
+        <IRI>#ekz</IRI>
+        <Literal xml:lang="eo" datatypeIRI="&rdf;PlainLiteral">ekzemplo</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#erikoparencoj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#faboparencoj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#fagoparencoj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:label"/>
+        <IRI>#fak</IRI>
+        <Literal xml:lang="eo" datatypeIRI="&rdf;PlainLiteral">fako</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#frapinstrumentoj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#gastropodoj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#gentianoparencoj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#geologiaj_epokoj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#geologiaj_eraoj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#geologiaj_periodoj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#geranioparencoj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:label"/>
+        <IRI>#hom</IRI>
+        <Literal xml:lang="eo" datatypeIRI="&rdf;PlainLiteral">homonimo</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#insektomanĝuloj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#kaneloparencoj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:label"/>
+        <IRI>#kap</IRI>
+        <Literal xml:lang="eo" datatypeIRI="&rdf;PlainLiteral">kapvorto</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#kariofiloparencoj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#kordinstrumentoj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#krokodiluloj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#kromartikuloj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#kukurboparencoj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#kvantoj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#lamioparencoj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#laŭroparencoj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#leporuloj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#lilioparencoj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#longoj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:label"/>
+        <IRI>#lst</IRI>
+        <Literal xml:lang="eo" datatypeIRI="&rdf;PlainLiteral">listo</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#magnolioparencoj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#malpigioparencoj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:label"/>
+        <IRI>#malprt</IRI>
+        <Literal xml:lang="eo" datatypeIRI="&rdf;PlainLiteral">apartenas al</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#malvoparencoj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#marsupiuloj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#mirtoparencoj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#monatoj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#montaroj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#montoj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#muŝoj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#neparhufuloj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#oksalidoparencoj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#papilioj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#parhufuloj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#piproparencoj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#pooparencoj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#pramamuloj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:label"/>
+        <IRI>#prt</IRI>
+        <Literal xml:lang="eo" datatypeIRI="&rdf;PlainLiteral">havas parton</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#rabobestoj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#ranunkoloparencoj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#riveroj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#ronĝuloj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#rostruloj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#rozoparencoj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#saksifragoparencoj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#semajntagoj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#serpentoj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#sezonoj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#simioj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:label"/>
+        <IRI>#sin</IRI>
+        <Literal xml:lang="eo" datatypeIRI="&rdf;PlainLiteral">sinonimo</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="skos:definition"/>
+        <IRI>#sin</IRI>
+        <Literal xml:lang="eo" datatypeIRI="&rdf;PlainLiteral">havas saman signifon kiel</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#sirenoj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#skaraboj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:label"/>
+        <IRI>#snc-n-ro</IRI>
+        <Literal xml:lang="eo" datatypeIRI="&rdf;PlainLiteral">senconumero</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#solanoparencoj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:label"/>
+        <IRI>#stl</IRI>
+        <Literal xml:lang="eo" datatypeIRI="&rdf;PlainLiteral">stilo</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:label"/>
+        <IRI>#sub</IRI>
+        <Literal xml:lang="eo" datatypeIRI="&rdf;PlainLiteral">havas specon</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:label"/>
+        <IRI>#super</IRI>
+        <Literal xml:lang="eo" datatypeIRI="&rdf;PlainLiteral">estas speco de</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:label"/>
+        <IRI>#trd</IRI>
+        <Literal xml:lang="eo" datatypeIRI="&rdf;PlainLiteral">traduko</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:label"/>
+        <IRI>#uzo</IRI>
+        <Literal xml:lang="eo" datatypeIRI="&rdf;PlainLiteral">uzo</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#vespertoj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:label"/>
+        <IRI>#vid</IRI>
+        <Literal xml:lang="eo" datatypeIRI="&rdf;PlainLiteral">vidu</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#vitoparencoj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#zingibroparencoj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#zodiakaj_signoj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#zoologiaj_familioj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#zoologiaj_genroj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#zoologiaj_klasoj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#zoologiaj_ordoj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#zoologiaj_specioj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty IRI="#prezento"/>
+        <IRI>#ĉefurboj</IRI>
+        <Literal datatypeIRI="&rdf;PlainLiteral">integrita</Literal>
+    </AnnotationAssertion>
+    <DatatypeDefinition>
+        <Datatype IRI="#stiloj"/>
+        <DataOneOf>
+            <Literal datatypeIRI="&rdf;PlainLiteral">ARK</Literal>
+            <Literal datatypeIRI="&rdf;PlainLiteral">EVI</Literal>
+            <Literal datatypeIRI="&rdf;PlainLiteral">FIG</Literal>
+            <Literal datatypeIRI="&rdf;PlainLiteral">FRAZ</Literal>
+            <Literal datatypeIRI="&rdf;PlainLiteral">KOMUNE</Literal>
+            <Literal datatypeIRI="&rdf;PlainLiteral">NEO</Literal>
+            <Literal datatypeIRI="&rdf;PlainLiteral">POE</Literal>
+            <Literal datatypeIRI="&rdf;PlainLiteral">RAR</Literal>
+            <Literal datatypeIRI="&rdf;PlainLiteral">VULG</Literal>
+        </DataOneOf>
+    </DatatypeDefinition>
+</Ontology>
+
+
+
+<!-- Generated by the OWL API (version 3.4.2) http://owlapi.sourceforge.net -->
+

@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE manlibro [
+  <!-- e-aj literoj -->
+  <!ENTITY Ccirc "&#x0108;">
+  <!ENTITY ccirc "&#x0109;">
+  <!ENTITY Gcirc "&#x011c;">
+  <!ENTITY gcirc "&#x011d;">
+  <!ENTITY Hcirc "&#x0124;">
+  <!ENTITY hcirc "&#x0125;">
+  <!ENTITY Jcirc "&#x0134;">
+  <!ENTITY jcirc "&#x0135;">
+  <!ENTITY Scirc "&#x015c;">
+  <!ENTITY scirc "&#x015d;">
+  <!ENTITY Ubreve "&#x016c;">
+  <!ENTITY ubreve "&#x016d;">
+
+  <!ENTITY nbsp "&#160;">
+  <!ENTITY ndash "&#x2013;">
+]>
+
+<manlibro>
+<h1>Kiel uzi Retan Vortaron en la diversaj sistemoj</h1>
+
+
+<h2 id="pc">Personaj komputiloj</h2>
+
+<h3>Rete</h3>
+<p>
+Plej facile vi uzas la vortaron per moderna retumilo kiel Internet Explorer, Firefox, Safari k.a. rekte sur la hejmpa&gcirc;o <a href="http://purl.org/net/voko/revo/">http://purl.org/net/voko/revo</a>.
+</p>
+<p>
+Se vi volas uzi &gcirc;in sen kadroj, ekz. per lynx vi komencu &ccirc;e la adreso
+<a href="http://purl.org/net/voko/revo/inx/_plena.html">http://purl.org/net/voko/revo/inx/_plena.html</a>.
+</p>
+<p>
+Alternativa ebleco estas uzi per DICT-kliento.
+<a href="http://www.dict.org/">DICT</a> estas interreta protokolo speciale kreita por vortaroj. En la reto estas pluraj serviloj, kiuj servas vortarojn per tiu protokolo kaj estas uzeblaj tra la reto per DICT-kliento.
+</p>
+<p>
+  Beda&ubreve;rinde la publikaj DICT-servoj por Revo nuntempe ne funkcias, 
+  sed se estas bezono certe estas ebleco reaktivi tian servon:
+  <ul>
+  <li>dict.antono.info:2628 (Antono Vasiljev)</li>
+  <li>dict.dnp.fmph.uniba.sk:2628 (Radovan Garabik)</li>
+  </ul>
+</p>
+
+<h3>A&ubreve;tonome</h3>
+<p>
+Se vi volas uzi la vortaron sen retkonekto vi povas konsideri la sekvajn eblecojn:
+</p>
+
+<h4>Stardict</h4>
+<p>
+Per la programo <tt>dictd2dic</tt> vi povas krei vortaron por
+<a href="http://stardict.sf.net">StarDict</a> el la datumbazo por DICT-servo. Stardict estas uzebla en Vindozo, Makinto&scirc;o kaj Linuksoj sambone.
+</p>
+<p>
+<img src="stardict.png" style="border: 2px solid gray"/>
+</p>
+<p>
+Por uzado el komandlinio ekzistas ankaŭprogramo sdcv.
+</p>
+
+<h4>GoldenDict</h4>
+<p>
+<a href="http://goldendict.org">GoldenDict</a> estas pluevoluo de ne plu flegata StarDict kaj kapablas legi kaj ties formaton kaj dosierojn en la formato de DICT. Do estas plej oportune uzi la DICT-version de Revo kun ĝi.
+</p>
+<p>
+GoldenDict ankaŭ ofertas version por poŝkomputiloj kun Android-sistemo.
+</p>
+
+<h4>Revo2go</h4>
+
+<p>
+En Vindozo vi povas uzi la paka&jcirc;on "Revo2go" de Wieland Pusch. &Gcirc;i kunigas TTT-servon, datumbazon kaj la enhavon en unu paka&jcirc;o kiun vi povas kopii ekz. sur lumdiskon a&ubreve; memorkarton kaj ruligi a&ubreve;tonome en via komputilo.
+</p>
+
+<p>
+Vi povas preni &gcirc;in de <a href="http://reta-vortaro.de/tgz/server2go_a2.zip">http://reta-vortaro.de/tgz/server2go_a2.zip</a>. 
+Bazita &gcirc;i estas sur  <a href="http://www.server2go-web.de/">http://www.server2go-web.de/</a>. Tie estas anka&ubreve; 
+<a href="http://www.server2go-web.de/forum/">forumo</a>, kiu donas helpon en la germana kaj angla.
+</p>
+<p>
+Post kiam vi instalis la bazan paka&jcirc;on sur ta&ubreve;ga datumingo, vi devas ankora&ubreve; preni aktualan datumbazon de la Revo-enhavo. La servo de Wieland Pusch regule anoncas la plej lastan version en la revulo-forumo:
+http://www.yahoogroups.com/group/revuloj/ sub la temlinio "Revo Upload":
+ekz. vidu <a href="http://tech.groups.yahoo.com/group/revuloj/message/19070">tiun mesa&gcirc;on</a>.
+</p>
+<p>
+Tiun vi instalas tiele:
+<ol>
+<li>Vi prenos de http://www.reta-vortaro.de/alveno/revo-20101227.sql.gz sur vian lokan diskon</li>
+<li>Por aktualigi vian Revo2go vi startu revo2go</li>
+<li>En cmd.exe iru al &lt;pado&gt;\server2go\server\mysql\bin</li>
+<li>Tie lan&ccirc;u: mysql.exe --port=7188 --user=root usr_web277_1</li>
+<li>En mysql vi tajpu: source &lt;pado&gt;\revodb-20071220.sql</li>
+<li>kaj poste: exit</li>
+</ol>
+</p>
+<p>
+La a&ubreve;tomate lan&ccirc;atan retumilon vi povas ekz. &scirc;an&gcirc;i en la agordo-dosiero
+ pms_config.ini:
+
+<pre>
+[Browser]
+;--- The browser that is started after server start (possible values: IEXPLORER,
+FIREFOX, MOZILLA, DEFAULT, EXTERNAL)
+BrowserType=EXTERNAL
+;--- Browser command options like -k (NOT IN USE AT THE MOMENT)
+BrowserCommandOptions=
+;--- Path to an external browser that is used instead the browser above
+BrowserPath=C:\Program Files\Mozilla Firefox\firefox.exe
+</pre>
+</p>
+
+<h4>loka DICT-servo</h4>
+<p>
+Vi povas instali DICT-servon en via komputilo kaj uzi &gcirc;in per DICT-kliento.
+Por Debian kaj Ubuntu Antono Vasiljev preparis tujinstaleblan paka&jcirc;on kun Revo. Vidu &ccirc;e 
+<a href="http://antono.info/epo/2010/05/revo-debian-ubuntu">http://antono.info/epo/2010/05/revo-debian-ubuntu</a> pri detaloj.
+</p>
+
+<h4>bedic</h4>
+<p>Vi povas uzi &gcirc;in en la bedic-formato kun la programo 
+<a href="http://bedic.sourceforge.net/">qbedic</a>. Tiu programo bezonas la fenestrobibliotekon QT kaj estas havebla almena&ubreve; por Uniksaj sistemoj. Sed &scirc;ajnas, ke qbedic mem ne plu estas flegata, sed nur la versio zbedic por OPIE-bazitaj po&scirc;komputiloj. 
+</p>
+
+<h2 id="posxo">Po&scirc;komputiloj</h2>
+
+<h3>Android</h3>
+<p>
+Estas pluraj eblecoj uzi Revon en Androido:
+</p>
+<ul>
+<li>
+<a href="https://play.google.com/store/apps/details?id=uk.co.busydoingnothing.prevo">PRevo &ccirc;e Google play</a> de Neil Roberts.</li>
+<li>
+<a href="http://dodoburgers.com/eo/">Versio kompilita</a> de Cillian de Róiste por <a href="http://aarddict.org/">aarddict</a>, uzebla kun FBReader.
+</li>
+<li>
+La vortaro-programo <a href="http://goldendict.org">GoldenDict</a> por po&scirc;komputiloj kun Android-sistemo uzante la DICT-formaton.
+</li>
+</ul>
+
+<h3>TomeRaider</h3>
+<p>
+Sergio Pokrovskij proponis version por TomeRaider, kiu estas havebla por diversaj sistemoj:
+Pocket PC, PalmOS, EPOC/Symbian_OS kaj MS Windows, intertempe anka&ubreve; por Android.
+
+Jen <a href="http://tech.groups.yahoo.com/group/revuloj/message/5681">diskuto</a>
+pri la temo.
+</p>
+
+<h3>HTML</h3>
+<p>
+En po&scirc;komputiloj, kiuj kapablas legi HTML eble anka&ubreve; <a href="http://purl.org/net/voko/revo/../tgz/">Reveto</a> estus ebleco. Jen iom
+da <a href="http://tech.groups.yahoo.com/group/revuloj/message/5815">pripensoj</a>.
+</p>
+
+<p>
+Se via aparato permesas retkonekton vi anka&ubreve; povas uzi Revon per la 
+<a href="http://purl.org/net/voko/revo/inx/_plena.html">senkadra aliro</a>.
+</p>
+
+<h3>EPUB- kaj MOBI-formato</h3>
+<p>
+Mi iom eksperimentis pri EPUB kaj MOBI-formatoj. Oni povas ekstrakti parton de Revo, ekz. tradukojn de elektita(j) lingvo(j), kaj transformi al elektronika libro en EPUB-formato. De EPUB-formato oni povas transformi al MOBI-formato per <a href="http://calibre-ebook.com/">Calibre</a>.
+</p>
+<p>
+En EPUB ne eblas marki vortojn por indeksoj. Do nur eblas plenteksta ser&ccirc;o en la vortaro. Fine de 2011 formi&gcirc;is <a href="http://idpf.org/dictionaries-wg-charter">laborgrupoj</a> por aldoni necesajn ecojn por krei indeksojn kaj vortarojn.
+</p>
+<p>
+En MOBI-formato, kiu legeblas de pluraj po&scirc;komputiloj kaj Kindle-legiloj oni povas krei vortarojn. Sed la kreiloj haveblas nur por Vindozo. Mi provis uzi la programon <tt>kindlegen</tt> en mia Linukssistemo kaj &gcirc;i rifuzis kaj traduki verkon en la lingvo "eo" kaj akcepti XSL-transformregulojn, kiuj necesas por krei vortaron kun indeksoj.
+</p>
+<p>
+Mi povus provi uzi WINE, kiu estas Vindoz-simulilo por Linukso, a&ubreve; krei la indeksojn plentekste kun ligoj al la unuopaj artikoletoj a&ubreve; atendi progreson de EPUB-rimedoj.
+</p>
+
+<h3>OPIE (Linux/QT embedded)</h3>
+<p>
+Por tiu ekzistas la programo <a href="http://bedic.sourceforge.net/">zbedic</a>, kiu povas uzi la vortaron en la bedic-formato. Komforte estas la funkcio, kiu permesas rekte rigardi en la vortaron klakante vorton ekz. en OpieReader (QTReader) legante tekston.
+</p>
+
+<h3>Palm webOS</h3>
+<p>
+Por Palm Pre ekzistas bele aran&gcirc;ita
+<a href="http://www.busydoingnothing.co.uk/prevo/">versio de Neil Robert</a>.
+</p>
+<p>
+<img src="http://www.busydoingnothing.co.uk/prevo/prevo.png"/>
+</p>
+
+<h3>Kobo</h3>
+<p>
+Por la elektronika librolegilo Kobo ekzistas anta&ubreve;preparita 
+<a href="https://bitbucket.org/marko31/konvertado-de-revo/wiki/Home">versio de
+Marco Aurélio</a>.
+</p>
+<p>
+<img src="https://bitbucket.org/marko31/konvertado-de-revo/wiki/Bildoj/kobo-02.jpg"/>
+</p>
+<p>
+  Kobo disponigas anka&ubreve; lego-aplika&jcirc;ojn por
+   BlackBerry OS, Apple iOS kaj Androido.
+</p>
+
+<h3>iPhone, iPad</h3>
+<p>
+Vi povas uzi la vortaron rete per Safari. &Gcirc;enas, ke la kadro por la indeksoj &scirc;ovi&gcirc;as samtempe kun la artikolokadro.
+Do la <a href="http://purl.org/net/voko/revo/inx/_plena.html">senkadra versio</a> ver&scirc;ajne estas preferinda.
+</p>
+<p>
+Krome vi povas provi la ankora&ubreve; eksperimentan
+ <a href="http://purl.org/net/voko/revo/eta/">Revon por ekranetoj</a>.
+</p>
+<p>
+  &Ccirc;ar Kobo anka&ubreve; havas aplika&jcirc;on por iOS eble vi povas uzi
+  la version por Kobo. Mi ankora&ubreve;e ne elprovis, &ccirc;u funkcias.
+</p>
+<p>
+Vidu sub EPUB/MOBI pri alia ebleco, kiu &gcirc;is nun prezentis al mi tro &gcirc;enajn obstaklojn, kvankam ekzistas legprogramoj por amba&ubreve; formatoj (iBooks App, Kindle App). La programo iBooks cetere estas iom malrapida, do tuta Revo ver&scirc;ajne estus tro peza por &gcirc;i, eltira&jcirc;o certe eblas. 
+</p>
+
+</manlibro>
+
+
+
+
+
+
+

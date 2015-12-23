@@ -1,0 +1,33 @@
+por instali kaj funkciigi la vortaron necesas:
+
+- la VoKo-Ilaro, aparte la enhavo de voko/ant/ kaj voko/xsl/
+- kelkaj artikoloj laŭ­vokoxml.dtd
+- publikaj programaroj: 
+     o el la Apache-projekto: ant
+     o el la Jakarta-projekto por la ftp-tasko: jakarta-oro, commons-net
+     o XSLT-transformilo, kiu komprenas XSLT 1.0 kaj 2.0: saxon8
+
+- Vi kreu dosierujon por via vortaro, ekz. mia_vortaro/ kaj estas konsilinde, 
+  agordeti tie per dosiero mia_vortaro/cfg/agordo kun la sekva enhavo:
+
+  bazo=/pado/al/mia_vortaro
+  tmp=/pado/por/provizoraj/dosieroj/de_mia_vortaro
+
+  La lasta estas por provizoraj dosieroj kreataj dum la kreado kaj
+  kuŝu laŭeble ekster la vortaro-dosierujo.
+
+  Krome vi povas adapti la enhavon de la dosieroj voko/cfg/*.xml,
+  aparte enhavo.xml. Atentu, ke grandaj strukturaj adaptoj en enhavo.xml
+  necesigus ankaŭ ŝanĝojn en la stildosieroj voko/xsl/*.xsl.
+
+  Poste preparu la medion por la vortaro per:
+
+    ant -f /pado/al/voko/ant/vortaro.xml medio
+
+  Metu nun viajn artikolojn en la dosierujon mia_vortaro/xml kaj voku
+
+    ant -f /pado/al/voko/ant/vortaro.xml tuto
+
+  
+
+  
