@@ -1,0 +1,96 @@
+<project name="Revo-sql" default="" basedir=".">
+    <description>
+      Ekstraktu strukturajn (indeks-)informojn el Revo kaj preparu por
+      SQLite datumbazo.
+    </description>
+
+    <property file="${user.dir}/cfg/agordo" prefix="v."/>
+
+    <property environment="ENV"/>
+    <property name="v.voko" location="${ENV.VOKO}"/>
+    <property name="v.voko.ant" location="${v.voko}/ant"/>
+    <property name="v.bazo" location="${user.dir}"/>
+    <property name="v.voko.xsl" location="${v.voko}/xsl"/>
+    <property name="v.voko.sql" location="${v.voko}/sql"/>
+    <property name="v.voko.bin" location="${v.voko}/bin"/>
+
+    <property name="v.bazo.art" location="${v.bazo}/art"/>
+
+    <property name="v.tmp" location="${v.bazo}/.tmp"/> <!-- en cfg/agordo normale alia dosiero -->  
+    <property name="v.sql" location="${v.tmp}/sql"/>
+    <property name="nodoj.sql" location="${v.sql}/nodoj.sql"/>
+    <property name="sqlite.db" location="${v.sql}/revo.db"/>
+    <property name="sqlite.kreo-skripto" value="revo-kreo-sqlite"/>
+    <property name="skemo.sql" value="revo-skemo.sql"/>    
+
+<!--  <property name="v.tmp" location="${v.bazo}/.tmp"/> -->
+
+    <property name="sqlite3" location="/usr/bin/sqlite3"/>   
+    <property name="insert-blobs" location="${v.voko.bin}/insert-art-blobs.pl"/>
+
+    <property name="saxon" location="${ENV.SAXONJAR}"/>
+    <path id="saxon.classpath">
+      <pathelement location="${saxon}"/>
+      <pathelement location="${v.voko.ant}/respiro.jar"/>
+      <pathelement path="${java.class.path}"/>
+    </path>
+
+
+
+   <target name="sql-preparo">
+     <tstamp/>
+     <mkdir dir="${v.tmp}/sql" />
+   </target>
+
+
+   <target name="sql-agordo" description="eligas la agordeblajn variablojn por kontrolo">
+     <echoproperties prefix="v."/>
+   </target>
+
+
+   <target name="sql-nodoj" depends="sql-agordo" description="kreas SQL INSERT-liston el indeksinformoj">
+     
+      <xslt in="${v.tmp}/indekso.xml" out="${nodoj.sql}"
+        style="${v.voko.xsl}/revo_sql.xsl">
+      </xslt>
+
+   </target>
+
+  <target name="sql-db" depends="sql-nodoj" description="kreas SQLite datumbazon el la INSERT-listo">
+    <delete file="${sqlite.db}"/>
+
+    <copy file="${v.voko.sql}/${skemo.sql}" todir="${v.sql}"/>
+    <copy file="${v.voko.sql}/${sqlite.kreo-skripto}" todir="${v.sql}"/>
+
+    <exec executable="${sqlite3}" dir="${v.sql}">
+      <arg value="${sqlite.db}"/>
+      <arg value="-init"/>
+      <arg value="${v.sql}/${sqlite.kreo-skripto}"/>
+    </exec>
+
+  </target>
+
+
+  <target name="sql-art" depends="" description="shovas HTML-artikolojn kiel BLOB en SQLite datumbazon">
+
+    <exec executable="${insert-blobs}">
+      <arg value="${sqlite.db}"/>
+      <arg value="${v.bazo.art}"/>
+    </exec>
+
+  </target>
+
+
+</project>
+   
+
+
+
+
+
+
+
+
+
+
+

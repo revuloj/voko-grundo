@@ -1,0 +1,5 @@
+.echo off
+.log  revo-kreo.log
+.read revo-skemo.sql
+.read nodoj.sql
+.quit
