@@ -8,6 +8,8 @@
     <!ENTITY skos "http://www.w3.org/2004/02/skos/core#" >
     <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
     <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
+    <!ENTITY revo "http://purl.org/net/voko/revo#" > 
+
 ]>
 
 
@@ -18,7 +20,8 @@
      xmlns:owl="http://www.w3.org/2002/07/owl#"
      xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
      xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-     xmlns:skos="http://www.w3.org/2004/02/skos/core#">
+     xmlns:skos="http://www.w3.org/2004/02/skos/core#"
+     xmlns:revo="http://purl.org/net/voko/revo#">
     <Ontology rdf:about="http://purl.org/net/voko">
         <versionIRI rdf:resource="http://purl.org/net/voko/1.1.0"/>
         <imports rdf:resource="http://www.w3.org/2004/02/skos/core"/>
@@ -380,6 +383,8 @@
 
     <Class rdf:about="&voko;amfibioj">
         <rdfs:subClassOf rdf:resource="&voko;bestoj"/>
+        <rdfs:label>amfibio</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;amfibi.0o.ZOO"/>
     </Class>
     
 
@@ -391,6 +396,12 @@
         <voko:prezento>integrita</voko:prezento>
     </Class>
     
+    <!-- http://purl.org/net/voko#arekoparencoj -->
+
+    <Class rdf:about="&voko;arekoparencoj">
+        <rdfs:subClassOf rdf:resource="&voko;floroplantoj"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
 
 
     <!-- http://purl.org/net/voko#areoj -->
@@ -398,22 +409,26 @@
     <Class rdf:about="&voko;areoj">
         <rdfs:subClassOf rdf:resource="&voko;mezurunuoj"/>
         <voko:prezento>integrita</voko:prezento>
-    </Class>
-    
+        <rdfs:label>areo</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;are.0o.FIZ"/>
+    </Class>   
 
 
     <!-- http://purl.org/net/voko#artoj -->
 
     <Class rdf:about="&voko;artoj">
         <rdfs:subClassOf rdf:resource="&voko;kulturaĵoj"/>
+        <rdfs:label>arto</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;art.0o.tehxniko"/>
     </Class>
-    
 
 
     <!-- http://purl.org/net/voko#asocioj -->
 
     <Class rdf:about="&voko;asocioj">
         <rdfs:subClassOf rdf:resource="&voko;organizaĵoj"/>
+        <rdfs:label>asocio</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;asoci.0o.societo"/>
     </Class>
     
 
@@ -440,6 +455,8 @@
 
     <Class rdf:about="&voko;bataliloj">
         <rdfs:subClassOf rdf:resource="&voko;iloj"/>
+        <rdfs:label>batalilo</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;batal.0ilo.ARM"/>
     </Class>
     
 
@@ -448,6 +465,8 @@
 
     <Class rdf:about="&voko;bestoj">
         <rdfs:subClassOf rdf:resource="&voko;naturaĵoj"/>
+        <rdfs:label>besto</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;best.0o.BIO"/>
     </Class>
     
 
@@ -456,6 +475,8 @@
 
     <Class rdf:about="&voko;biologiaj_grupoj">
         <rdfs:subClassOf rdf:resource="&skos;Collection"/>
+        <rdfs:label>grupo</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;grup.0o.BIO"/>
     </Class>
     
 
@@ -464,6 +485,8 @@
 
     <Class rdf:about="&voko;biologiaj_regnoj">
         <rdfs:subClassOf rdf:resource="&voko;biologiaj_grupoj"/>
+        <rdfs:label>regno</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;regn.0o.BIO"/>
     </Class>
     
 
@@ -472,6 +495,8 @@
 
     <Class rdf:about="&voko;birdoj">
         <rdfs:subClassOf rdf:resource="&voko;reptilioj"/>
+        <rdfs:label>birdo</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;bird.0o.ZOO"/>
     </Class>
     
 
@@ -481,6 +506,8 @@
     <Class rdf:about="&voko;blekoj">
         <rdfs:subClassOf rdf:resource="&voko;sonoj"/>
         <voko:prezento>integrita</voko:prezento>
+        <rdfs:label>bleko</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;blek.0o"/>
     </Class>
     
 
@@ -490,6 +517,8 @@
     <Class rdf:about="&voko;blovinstrumentoj">
         <rdfs:subClassOf rdf:resource="&voko;muzikiloj"/>
         <voko:prezento>integrita</voko:prezento>
+        <rdfs:label>blovinstrumento</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;instru2.blov0o.MUZ"/>
     </Class>
     
 
@@ -508,6 +537,8 @@
     <Class rdf:about="&voko;botanikaj_familioj">
         <rdfs:subClassOf rdf:resource="&voko;botanikaj_grupoj"/>
         <voko:prezento>integrita</voko:prezento>
+        <rdfs:label>familio</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;famili.0o.BIO"/>
     </Class>
     
 
@@ -517,6 +548,8 @@
     <Class rdf:about="&voko;botanikaj_genroj">
         <rdfs:subClassOf rdf:resource="&voko;botanikaj_grupoj"/>
         <voko:prezento>integrita</voko:prezento>
+        <rdfs:label>genro</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;genr.0o.BIO"/>
     </Class>
     
 
@@ -525,6 +558,8 @@
 
     <Class rdf:about="&voko;botanikaj_grupoj">
         <rdfs:subClassOf rdf:resource="&voko;biologiaj_grupoj"/>
+        <rdfs:label>grupo</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;grup.0o.BIO"/>
     </Class>
     
 
@@ -534,6 +569,8 @@
     <Class rdf:about="&voko;botanikaj_klasoj">
         <rdfs:subClassOf rdf:resource="&voko;botanikaj_grupoj"/>
         <voko:prezento>integrita</voko:prezento>
+        <rdfs:label>klaso</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;klas.0o.BIO"/>
     </Class>
     
 
@@ -543,6 +580,8 @@
     <Class rdf:about="&voko;botanikaj_ordoj">
         <rdfs:subClassOf rdf:resource="&voko;botanikaj_grupoj"/>
         <voko:prezento>integrita</voko:prezento>
+        <rdfs:label>ordo</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;ord.0o.BIO"/>
     </Class>
     
 
@@ -552,6 +591,8 @@
     <Class rdf:about="&voko;botanikaj_specioj">
         <rdfs:subClassOf rdf:resource="&voko;botanikaj_grupoj"/>
         <voko:prezento>integrita</voko:prezento>
+        <rdfs:label>specio</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;speci.0o.BIO"/>
     </Class>
     
 
@@ -570,6 +611,8 @@
     <Class rdf:about="&voko;cefalopodoj">
         <rdfs:subClassOf rdf:resource="&voko;moluskoj"/>
         <voko:prezento>integrita</voko:prezento>
+        <rdfs:label>cefalopodo</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;cefalo.0oj"/>
     </Class>
     
 
@@ -579,6 +622,8 @@
     <Class rdf:about="&voko;cetacoj">
         <rdfs:subClassOf rdf:resource="&voko;mamuloj"/>
         <voko:prezento>integrita</voko:prezento>
+        <rdfs:label>cetaco</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;cetac.0o"/>
     </Class>
     
 
@@ -587,6 +632,8 @@
 
     <Class rdf:about="&voko;dancoj">
         <rdfs:subClassOf rdf:resource="&voko;kulturaĵoj"/>
+        <rdfs:label>danco</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;danc.0o.MUZ"/>
     </Class>
     
 
@@ -596,6 +643,8 @@
     <Class rdf:about="&voko;daŭroj">
         <rdfs:subClassOf rdf:resource="&voko;mezurunuoj"/>
         <voko:prezento>integrita</voko:prezento>
+        <rdfs:label>daŭro</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;dauxr.0o.KAL"/>
     </Class>
     
 
@@ -613,6 +662,8 @@
     <Class rdf:about="&voko;dinosaŭroj">
         <rdfs:subClassOf rdf:resource="&voko;reptilioj"/>
         <voko:prezento>integrita</voko:prezento>
+        <rdfs:label>dinosaŭro</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;dinosa.0o.PAL"/>
     </Class>
     
 
@@ -631,6 +682,8 @@
     <Class rdf:about="&voko;duvalvuloj">
         <rdfs:subClassOf rdf:resource="&voko;moluskoj"/>
         <voko:prezento>integrita</voko:prezento>
+        <rdfs:label>duvalvulo</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;valv.du0uloj.ZOO"/>
     </Class>
     
 
@@ -639,6 +692,8 @@
 
     <Class rdf:about="&voko;entreprenoj">
         <rdfs:subClassOf rdf:resource="&voko;organizaĵoj"/>
+        <rdfs:label>entrepreno</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;entrep.0o"/>
     </Class>
     
 
@@ -656,6 +711,8 @@
 
     <Class rdf:about="&voko;eventoj">
         <rdfs:subClassOf rdf:resource="&voko;tempoj"/>
+        <rdfs:label>evento</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;event.0o"/>
     </Class>
     
 
@@ -683,6 +740,8 @@
     <Class rdf:about="&voko;festoj">
         <rdfs:subClassOf rdf:resource="&voko;eventoj"/>
         <rdfs:subClassOf rdf:resource="&voko;kulturaĵoj"/>
+        <rdfs:label>festo</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;fest.0o.KAL"/>
     </Class>
     
 
@@ -691,6 +750,8 @@
 
     <Class rdf:about="&voko;fiŝoj">
         <rdfs:subClassOf rdf:resource="&voko;bestoj"/>
+        <rdfs:label>fiŝo</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;fisx.0o.ZOO"/>
     </Class>
     
 
@@ -699,6 +760,8 @@
 
     <Class rdf:about="&voko;floroplantoj">
         <rdfs:subClassOf rdf:resource="&voko;vegetaĵoj"/>
+        <rdfs:label>floroplanto</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;plant.floro0o.BOT"/>
     </Class>
     
 
@@ -707,6 +770,8 @@
 
     <Class rdf:about="&voko;formoj">
         <rdfs:subClassOf rdf:resource="&voko;perceptoj"/>
+        <rdfs:label>formo</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;form.0o.aspekto"/>
     </Class>
     
 
@@ -716,6 +781,8 @@
     <Class rdf:about="&voko;frapinstrumentoj">
         <rdfs:subClassOf rdf:resource="&voko;muzikiloj"/>
         <voko:prezento>integrita</voko:prezento>
+        <rdfs:label>frapinstrumento</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;instru2.frap0o.MUZ"/>
     </Class>
     
 
@@ -724,6 +791,8 @@
 
     <Class rdf:about="&voko;fungoj">
         <rdfs:subClassOf rdf:resource="&voko;vegetaĵoj"/>
+        <rdfs:label>fungo</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;fung.0o.BIO"/>
     </Class>
     
 
@@ -733,6 +802,8 @@
     <Class rdf:about="&voko;gastropodoj">
         <rdfs:subClassOf rdf:resource="&voko;moluskoj"/>
         <voko:prezento>integrita</voko:prezento>
+        <rdfs:label>gastropodo</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;gastro2.0oj"/>
     </Class>
     
 
@@ -752,6 +823,8 @@
         <rdfs:subClassOf rdf:resource="&voko;geologiaj_tempoj"/>
         <rdfs:subClassOf rdf:resource="&skos;OrderedCollection"/>
         <voko:prezento>integrita</voko:prezento>
+        <rdfs:label>epoko</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;epok.0o.periodo"/>
     </Class>
     
 
@@ -762,6 +835,8 @@
         <rdfs:subClassOf rdf:resource="&voko;geologiaj_tempoj"/>
         <rdfs:subClassOf rdf:resource="&skos;OrderedCollection"/>
         <voko:prezento>integrita</voko:prezento>
+        <rdfs:label>erao</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;era.0o.GEOL"/>
     </Class>
     
 
@@ -772,6 +847,8 @@
         <rdfs:subClassOf rdf:resource="&voko;geologiaj_tempoj"/>
         <rdfs:subClassOf rdf:resource="&skos;OrderedCollection"/>
         <voko:prezento>integrita</voko:prezento>
+        <rdfs:label>periodo</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;period.0o.dauxro"/>
     </Class>
     
 
@@ -797,6 +874,8 @@
 
     <Class rdf:about="&voko;gustoj">
         <rdfs:subClassOf rdf:resource="&voko;sensaĵoj"/>
+        <rdfs:label>gusto</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;gust.0o.eco"/>
     </Class>
     
 
@@ -805,6 +884,8 @@
 
     <Class rdf:about="&voko;historiaj_epokoj">
         <rdfs:subClassOf rdf:resource="&voko;tempoj"/>
+        <rdfs:label>epoko</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;epok.0o.periodo"/>
     </Class>
     
 
@@ -821,6 +902,8 @@
 
     <Class rdf:about="&voko;iloj">
         <rdfs:subClassOf rdf:resource="&voko;kulturaĵoj"/>
+        <rdfs:label>ilo</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;il.0o"/>
     </Class>
     
 
@@ -829,6 +912,8 @@
 
     <Class rdf:about="&voko;insektoj">
         <rdfs:subClassOf rdf:resource="&voko;bestoj"/>
+        <rdfs:label>insekto</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;insekt.0o.ZOO"/>
     </Class>
     
 
@@ -838,6 +923,8 @@
     <Class rdf:about="&voko;insektomanĝuloj">
         <rdfs:subClassOf rdf:resource="&voko;mamuloj"/>
         <voko:prezento>integrita</voko:prezento>
+        <rdfs:label>insektmanĝulo</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;mangx.insekto0ulo.ZOO"/>
     </Class>
     
 
@@ -846,6 +933,8 @@
 
     <Class rdf:about="&voko;insuloj">
         <rdfs:subClassOf rdf:resource="&voko;teritorioj"/>
+        <rdfs:label>insulo</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;insul.0o.GEOG"/>
     </Class>
     
 
@@ -880,6 +969,8 @@
 
     <Class rdf:about="&voko;koloroj">
         <rdfs:subClassOf rdf:resource="&voko;sensaĵoj"/>
+        <rdfs:label>koloro</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;kolor.0o.propre"/>
     </Class>
     
 
@@ -888,6 +979,8 @@
 
     <Class rdf:about="&voko;koniferoj">
         <rdfs:subClassOf rdf:resource="&voko;vegetaĵoj"/>
+        <rdfs:label>konifero</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;konifer.0o.BOT"/>
     </Class>
     
 
@@ -896,6 +989,8 @@
 
     <Class rdf:about="&voko;kontinentoj">
         <rdfs:subClassOf rdf:resource="&voko;teritorioj"/>
+        <rdfs:label>kontinento</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;kontin.0o.terkuno"/>
     </Class>
     
 
@@ -905,8 +1000,18 @@
     <Class rdf:about="&voko;kordinstrumentoj">
         <rdfs:subClassOf rdf:resource="&voko;muzikiloj"/>
         <voko:prezento>integrita</voko:prezento>
+        <rdfs:label>kordinstrumento</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;instru2.kord0o.MUZ"/>
     </Class>
     
+
+    <!-- http://purl.org/net/voko#kornusoparencoj -->
+
+    <Class rdf:about="&voko;kornusoparencoj">
+        <rdfs:subClassOf rdf:resource="&voko;floroplantoj"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+
 
 
     <!-- http://purl.org/net/voko#kosmaĵoj -->
@@ -922,6 +1027,8 @@
     <Class rdf:about="&voko;krokodiluloj">
         <rdfs:subClassOf rdf:resource="&voko;reptilioj"/>
         <voko:prezento>integrita</voko:prezento>
+        <rdfs:label>krokodilulo</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;krokod.0uloj.ZOO"/>
     </Class>
     
 
@@ -931,6 +1038,8 @@
     <Class rdf:about="&voko;kromartikuloj">
         <rdfs:subClassOf rdf:resource="&voko;mamuloj"/>
         <voko:prezento>integrita</voko:prezento>
+        <rdfs:label>kromartikulo</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;artik.krom0uloj.ZOO"/>
     </Class>
     
 
@@ -939,6 +1048,8 @@
 
     <Class rdf:about="&voko;krustuloj">
         <rdfs:subClassOf rdf:resource="&voko;bestoj"/>
+        <rdfs:label>krustulo</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;krust.0ulo.ZOO"/>
     </Class>
     
 
@@ -965,6 +1076,8 @@
     <Class rdf:about="&voko;kvantoj">
         <rdfs:subClassOf rdf:resource="&voko;mezurunuoj"/>
         <voko:prezento>integrita</voko:prezento>
+        <rdfs:label>kvanto</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;kvant.0o"/>
     </Class>
     
 
@@ -992,6 +1105,8 @@
     <Class rdf:about="&voko;leporuloj">
         <rdfs:subClassOf rdf:resource="&voko;mamuloj"/>
         <voko:prezento>integrita</voko:prezento>
+        <rdfs:label>leporulo</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;lepor.0uloj"/>
     </Class>
     
 
@@ -1009,6 +1124,8 @@
 
     <Class rdf:about="&voko;lingvoj">
         <rdfs:subClassOf rdf:resource="&voko;kulturaĵoj"/>
+        <rdfs:label>lingvo</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;lingv.0o"/>
     </Class>
     
 
@@ -1018,6 +1135,8 @@
     <Class rdf:about="&voko;longoj">
         <rdfs:subClassOf rdf:resource="&voko;mezurunuoj"/>
         <voko:prezento>integrita</voko:prezento>
+        <rdfs:label>longo</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;long.0o.FIZ"/>
     </Class>
     
 
@@ -1026,6 +1145,16 @@
 
     <Class rdf:about="&voko;ludiloj">
         <rdfs:subClassOf rdf:resource="&voko;iloj"/>
+        <rdfs:label>ludilo</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;lud.0ilo.SPO"/>
+    </Class>
+
+    <!-- http://purl.org/net/voko#metioj -->
+
+    <Class rdf:about="&voko;metioj">
+        <rdfs:subClassOf rdf:resource="&voko;kulturaĵoj"/>
+        <rdfs:label>metio</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;meti.0o"/>
     </Class>
     
 
@@ -1052,6 +1181,8 @@
 
     <Class rdf:about="&voko;malsanoj">
         <rdfs:subClassOf rdf:resource="&voko;naturaĵoj"/>
+        <rdfs:label>malsano</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;san.mal0o.MED"/>
     </Class>
     
 
@@ -1069,6 +1200,8 @@
 
     <Class rdf:about="&voko;mamuloj">
         <rdfs:subClassOf rdf:resource="&voko;bestoj"/>
+        <rdfs:label>mamulo</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;mam.0ulo.ZOO"/>
     </Class>
     
 
@@ -1077,6 +1210,8 @@
 
     <Class rdf:about="&voko;maroj">
         <rdfs:subClassOf rdf:resource="&voko;teritorioj"/>
+        <rdfs:label>maro</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;mar.0o.parto"/>
     </Class>
     
 
@@ -1086,6 +1221,8 @@
     <Class rdf:about="&voko;marsupiuloj">
         <rdfs:subClassOf rdf:resource="&voko;mamuloj"/>
         <voko:prezento>integrita</voko:prezento>
+        <rdfs:label>marsupiulo</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;marsup.0o.ZOO"/>
     </Class>
     
 
@@ -1094,6 +1231,8 @@
 
     <Class rdf:about="&voko;mebloj">
         <rdfs:subClassOf rdf:resource="&voko;iloj"/>
+        <rdfs:label>meblo</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;mebl.0o.MEBL"/>
     </Class>
     
 
@@ -1102,6 +1241,8 @@
 
     <Class rdf:about="&voko;mezurunuoj">
         <rdfs:subClassOf rdf:resource="&voko;unuoj"/>
+        <rdfs:label>mezurunuo</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;unu.mezur0o.SCI"/>
     </Class>
     
 
@@ -1119,6 +1260,8 @@
 
     <Class rdf:about="&voko;moluskoj">
         <rdfs:subClassOf rdf:resource="&voko;bestoj"/>
+        <rdfs:label>molusko</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;molusk.0oj.ZOO"/>
     </Class>
     
 
@@ -1129,6 +1272,8 @@
         <rdfs:subClassOf rdf:resource="&voko;kalendaraj_tempoj"/>
         <rdfs:subClassOf rdf:resource="&skos;OrderedCollection"/>
         <voko:prezento>integrita</voko:prezento>
+        <rdfs:label>monato</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;monat.0o.KAL"/>
     </Class>
     
 
@@ -1137,6 +1282,8 @@
 
     <Class rdf:about="&voko;mondopartoj">
         <rdfs:subClassOf rdf:resource="&voko;teritorioj"/>
+        <rdfs:label>mondoparto</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;mond.0oparto.GEOG"/>
     </Class>
     
 
@@ -1146,6 +1293,8 @@
     <Class rdf:about="&voko;montaroj">
         <rdfs:subClassOf rdf:resource="&voko;regionoj"/>
         <voko:prezento>integrita</voko:prezento>
+        <rdfs:label>montaro</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;mont.0aro"/>
     </Class>
     
 
@@ -1155,6 +1304,8 @@
     <Class rdf:about="&voko;montoj">
         <rdfs:subClassOf rdf:resource="&voko;regionoj"/>
         <voko:prezento>integrita</voko:prezento>
+        <rdfs:label>monto</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;mont.0o.GEOG"/>
     </Class>
     
 
@@ -1163,6 +1314,8 @@
 
     <Class rdf:about="&voko;monunuoj">
         <rdfs:subClassOf rdf:resource="&voko;unuoj"/>
+        <rdfs:label>monunuo</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;unu.mon0o.EKON"/>
     </Class>
     
 
@@ -1171,6 +1324,8 @@
 
     <Class rdf:about="&voko;muzikiloj">
         <rdfs:subClassOf rdf:resource="&voko;iloj"/>
+        <rdfs:label>muzikilo</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;muzik.0ilo.muzikinstrumento"/>
     </Class>
     
 
@@ -1180,6 +1335,8 @@
     <Class rdf:about="&voko;muŝoj">
         <rdfs:subClassOf rdf:resource="&voko;insektoj"/>
         <voko:prezento>integrita</voko:prezento>
+        <rdfs:label>muŝo</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;musx.0o"/>
     </Class>
     
 
@@ -1197,6 +1354,8 @@
     <Class rdf:about="&voko;neparhufuloj">
         <rdfs:subClassOf rdf:resource="&voko;mamuloj"/>
         <voko:prezento>integrita</voko:prezento>
+        <rdfs:label>neparhufulo</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;huf.nepar0ulo"/>
     </Class>
     
 
@@ -1206,6 +1365,8 @@
     <Class rdf:about="&voko;nombroj">
         <rdfs:subClassOf rdf:resource="&voko;kulturaĵoj"/>
         <rdfs:subClassOf rdf:resource="&skos;OrderedCollection"/>
+        <rdfs:label>nombro</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;nombr.0o.MAT"/>
     </Class>
     
 
@@ -1223,6 +1384,8 @@
 
     <Class rdf:about="&voko;organizaĵoj">
         <rdfs:subClassOf rdf:resource="&voko;kulturaĵoj"/>
+        <rdfs:label>organizaĵo</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;organi2.0ajxo.POL"/>
     </Class>
     
 
@@ -1232,6 +1395,8 @@
     <Class rdf:about="&voko;papilioj">
         <rdfs:subClassOf rdf:resource="&voko;insektoj"/>
         <voko:prezento>integrita</voko:prezento>
+        <rdfs:label>papilio</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;papili.0o.ZOO"/>
     </Class>
     
 
@@ -1240,6 +1405,8 @@
 
     <Class rdf:about="&voko;parencoj">
         <rdfs:subClassOf rdf:resource="&voko;personoj"/>
+        <rdfs:label>parenco</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;parenc.0o.individuo"/>
     </Class>
     
 
@@ -1249,6 +1416,8 @@
     <Class rdf:about="&voko;parhufuloj">
         <rdfs:subClassOf rdf:resource="&voko;mamuloj"/>
         <voko:prezento>integrita</voko:prezento>
+        <rdfs:label>parhufulo</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;huf.par0ulo"/>
     </Class>
     
 
@@ -1265,6 +1434,8 @@
 
     <Class rdf:about="&voko;personaj_nomoj">
         <rdfs:subClassOf rdf:resource="&voko;personoj"/>
+        <rdfs:label>persona nomo</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;nom.persona0o.GEN"/>
     </Class>
     
 
@@ -1290,6 +1461,8 @@
 
     <Class rdf:about="&voko;planedoj">
         <rdfs:subClassOf rdf:resource="&voko;kosmaĵoj"/>
+        <rdfs:label>planedo</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;planed.0o.AST"/>
     </Class>
     
 
@@ -1318,6 +1491,13 @@
         <voko:prezento>integrita</voko:prezento>
     </Class>
     
+    <!-- http://purl.org/net/voko#proteoparencoj -->
+
+    <Class rdf:about="&voko;proteoparencoj">
+        <rdfs:subClassOf rdf:resource="&voko;floroplantoj"/>
+        <voko:prezento>integrita</voko:prezento>
+    </Class>
+
 
 
     <!-- http://purl.org/net/voko#rabobestoj -->
@@ -1325,6 +1505,8 @@
     <Class rdf:about="&voko;rabobestoj">
         <rdfs:subClassOf rdf:resource="&voko;mamuloj"/>
         <voko:prezento>integrita</voko:prezento>
+        <rdfs:label>rabobesto</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;best.rabo0o"/>
     </Class>
     
 
@@ -1342,6 +1524,8 @@
 
     <Class rdf:about="&voko;regionoj">
         <rdfs:subClassOf rdf:resource="&voko;teritorioj"/>
+        <rdfs:label>regiono</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;region.0o.land"/>
     </Class>
     
 
@@ -1350,6 +1534,8 @@
 
     <Class rdf:about="&voko;religioj">
         <rdfs:subClassOf rdf:resource="&voko;kulturaĵoj"/>
+        <rdfs:label>religio</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;religi.0o.REL"/>
     </Class>
     
 
@@ -1358,6 +1544,8 @@
 
     <Class rdf:about="&voko;reptilioj">
         <rdfs:subClassOf rdf:resource="&voko;bestoj"/>
+        <rdfs:label>reptilio</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;reptil.0o"/>
     </Class>
     
 
@@ -1367,6 +1555,8 @@
     <Class rdf:about="&voko;riveroj">
         <rdfs:subClassOf rdf:resource="&voko;regionoj"/>
         <voko:prezento>integrita</voko:prezento>
+        <rdfs:label>rivero</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;river.0o.GEOG"/>
     </Class>
     
 
@@ -1376,6 +1566,8 @@
     <Class rdf:about="&voko;ronĝuloj">
         <rdfs:subClassOf rdf:resource="&voko;mamuloj"/>
         <voko:prezento>integrita</voko:prezento>
+        <rdfs:label>ronĝulo</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;rongx.0uloj.ZOO"/>
     </Class>
     
 
@@ -1385,6 +1577,8 @@
     <Class rdf:about="&voko;rostruloj">
         <rdfs:subClassOf rdf:resource="&voko;mamuloj"/>
         <voko:prezento>integrita</voko:prezento>
+        <rdfs:label>rostrulo</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;rostr.0ulo.ZOO"/>
     </Class>
     
 
@@ -1411,6 +1605,8 @@
 
     <Class rdf:about="&voko;sciencoj">
         <rdfs:subClassOf rdf:resource="&voko;kulturaĵoj"/>
+        <rdfs:label>scienco</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;scienc.0o.fako"/>
     </Class>
     
 
@@ -1421,6 +1617,8 @@
         <rdfs:subClassOf rdf:resource="&voko;kalendaraj_tempoj"/>
         <rdfs:subClassOf rdf:resource="&skos;OrderedCollection"/>
         <voko:prezento>integrita</voko:prezento>
+        <rdfs:label>semajntago</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;tag.0o.diurn"/>
     </Class>
     
 
@@ -1445,6 +1643,8 @@
 
     <Class rdf:about="&voko;sentoj">
         <rdfs:subClassOf rdf:resource="&voko;perceptoj"/>
+        <rdfs:label>sento</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;sent.0o"/>
     </Class>
     
 
@@ -1454,6 +1654,8 @@
     <Class rdf:about="&voko;serpentoj">
         <rdfs:subClassOf rdf:resource="&voko;reptilioj"/>
         <voko:prezento>integrita</voko:prezento>
+        <rdfs:label>serpento</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;serpen.0o.ZOO"/>
     </Class>
     
 
@@ -1491,6 +1693,8 @@
     <Class rdf:about="&voko;skaraboj">
         <rdfs:subClassOf rdf:resource="&voko;insektoj"/>
         <voko:prezento>integrita</voko:prezento>
+        <rdfs:label>skarabo</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;skarab.0o.koleoptero"/>
     </Class>
     
 
@@ -1508,6 +1712,8 @@
 
     <Class rdf:about="&voko;sonoj">
         <rdfs:subClassOf rdf:resource="&voko;sensaĵoj"/>
+        <rdfs:label>sono</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;son.0o.SON"/>
     </Class>
     
 
@@ -1515,9 +1721,27 @@
     <!-- http://purl.org/net/voko#spicoj -->
 
     <Class rdf:about="&voko;spicoj">
+        <rdfs:subClassOf rdf:resource="&voko;nutraĵoj"/>
+        <rdfs:label>spico</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;spic.0o.KUI"/>
+    </Class>
+
+    <Class rdf:about="&voko;nutraĵoj">
         <rdfs:subClassOf rdf:resource="&voko;kulturaĵoj"/>
     </Class>
+
+    <Class rdf:about="&voko;manĝaĵoj">
+        <rdfs:subClassOf rdf:resource="&voko;nutraĵoj"/>
+        <rdfs:label>manĝaĵo</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;mangx.0ajxo.homa"/>
+    </Class>
     
+    <Class rdf:about="&voko;trinkaĵoj">
+        <rdfs:subClassOf rdf:resource="&voko;nutraĵoj"/>
+        <rdfs:label>trinkaĵo</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;trink.0ajxo.KUI"/>
+    </Class>
+
 
 
     <!-- http://purl.org/net/voko#sporoplantoj -->
@@ -1532,6 +1756,8 @@
 
     <Class rdf:about="&voko;stelfiguroj">
         <rdfs:subClassOf rdf:resource="&voko;kosmaĵoj"/>
+        <rdfs:label>stelfiguro</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;stel.0figuro.AST"/>
     </Class>
     
 
@@ -1548,6 +1774,8 @@
 
     <Class rdf:about="&voko;teritorioj">
         <rdfs:subClassOf rdf:resource="&skos;Collection"/>
+        <rdfs:label>teritorio</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;terito.0o.GEOG"/>
     </Class>
     
 
@@ -1565,6 +1793,8 @@
     <Class rdf:about="&voko;urboj">
         <rdfs:subClassOf rdf:resource="&voko;organizaĵoj"/>
         <rdfs:subClassOf rdf:resource="&voko;teritorioj"/>
+        <rdfs:label>urbo</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;urb.0o.ARKI"/>
     </Class>
     
 
@@ -1582,14 +1812,25 @@
     <Class rdf:about="&voko;vespertoj">
         <rdfs:subClassOf rdf:resource="&voko;mamuloj"/>
         <voko:prezento>integrita</voko:prezento>
+        <rdfs:label>vesperto</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;vesper1.0o"/>
     </Class>
     
+    <!-- http://purl.org/net/voko#vestaĵoj -->
 
+    <Class rdf:about="&voko;vestaĵoj">
+        <rdfs:subClassOf rdf:resource="&voko;kulturaĵoj"/>
+        <rdfs:label>vestaĵo</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;vest.0o.TEKS"/>
+    </Class>
+    
 
     <!-- http://purl.org/net/voko#veturiloj -->
 
     <Class rdf:about="&voko;veturiloj">
         <rdfs:subClassOf rdf:resource="&voko;iloj"/>
+        <rdfs:label>veturilo</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;vetur.0ilo.TRA"/>
     </Class>
     
 
@@ -1626,6 +1867,8 @@
     <Class rdf:about="&voko;zoologiaj_familioj">
         <rdfs:subClassOf rdf:resource="&voko;zoologiaj_grupoj"/>
         <voko:prezento>integrita</voko:prezento>
+        <rdfs:label>familio</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;famili.0o.BIO"/>
     </Class>
     
 
@@ -1635,6 +1878,8 @@
     <Class rdf:about="&voko;zoologiaj_genroj">
         <rdfs:subClassOf rdf:resource="&voko;zoologiaj_grupoj"/>
         <voko:prezento>integrita</voko:prezento>
+        <rdfs:label>genro</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;genr.0o.BIO"/>
     </Class>
     
 
@@ -1652,6 +1897,8 @@
     <Class rdf:about="&voko;zoologiaj_klasoj">
         <rdfs:subClassOf rdf:resource="&voko;zoologiaj_grupoj"/>
         <voko:prezento>integrita</voko:prezento>
+        <rdfs:label>klaso</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;klas.0o.BIO"/>
     </Class>
     
 
@@ -1661,6 +1908,8 @@
     <Class rdf:about="&voko;zoologiaj_ordoj">
         <rdfs:subClassOf rdf:resource="&voko;zoologiaj_grupoj"/>
         <voko:prezento>integrita</voko:prezento>
+        <rdfs:label>ordo</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;ord.0o.BIO"/>
     </Class>
     
 
@@ -1670,6 +1919,8 @@
     <Class rdf:about="&voko;zoologiaj_specioj">
         <rdfs:subClassOf rdf:resource="&voko;zoologiaj_grupoj"/>
         <voko:prezento>integrita</voko:prezento>
+        <rdfs:label>specio</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;speci.0o.BIO"/>
     </Class>
     
 
@@ -1679,6 +1930,8 @@
     <Class rdf:about="&voko;ĉefurboj">
         <rdfs:subClassOf rdf:resource="&voko;urboj"/>
         <voko:prezento>integrita</voko:prezento>
+        <rdfs:label>ĉefurbo</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;urb.cxef0o.POL"/>
     </Class>
     
 
@@ -1688,6 +1941,8 @@
     <Class rdf:about="&voko;ĥemiaj_elementoj">
         <rdfs:subClassOf rdf:resource="&voko;kosmaĵoj"/>
         <rdfs:subClassOf rdf:resource="&skos;OrderedCollection"/>
+        <rdfs:label>elemento</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;elemen.0o.KEM"/>
     </Class>
     
 
@@ -1697,6 +1952,8 @@
     <Class rdf:about="&voko;ŝtatoj">
         <rdfs:subClassOf rdf:resource="&voko;organizaĵoj"/>
         <rdfs:subClassOf rdf:resource="&voko;teritorioj"/>
+        <rdfs:label>ŝtato</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;sxtat.0o.POL"/>
     </Class>
 </rdf:RDF>
 
