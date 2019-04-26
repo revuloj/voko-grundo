@@ -1,11 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?> 
-
 <!DOCTYPE bibliografio [
 
 <!ELEMENT bibliografio (vrk)*>
 <!ELEMENT vrk (url?,aut*,trd?,tit?,ald?,eld*)>
 <!ATTLIST vrk mll ID #REQUIRED
-              tip (vortaro|leksikono|terminaro|beletro|rimajho|parolo) #IMPLIED> 
+              tip (vortaro|leksikono|terminaro|beletro|rimajho|parolo|revuo) #IMPLIED> 
 <!ELEMENT url (#PCDATA)>
 <!ELEMENT aut (#PCDATA|a|n)*>
 <!ELEMENT n   (#PCDATA)>
@@ -25,6 +23,7 @@
 
 <!ENTITY url_mjb "http://pagesperso-orange.fr/kursoj1/revo">
 <!ENTITY url_wd "http://www.steloj.de/esperanto">
+<!ENTITY url_ade "http://www.akademio-de-esperanto.org">
 
 ]>
  
@@ -50,6 +49,16 @@
     <url>http://www.xs4all.nl/~pilger/breo-al3.htm</url>
     <aut><a>Wouter F.</a> <n>Pilger</n></aut>
     <tit>Bazaj Radikoj Esperanto-Esperanto</tit>
+  </vrk>
+
+  <vrk mll="BdV">
+    <url>http://tekstaro.com/pl/prenitutantekston.pl?nomo=la-batalo-de-l-vivo</url>
+    <aut><a>Charles</a> <n>Dickens</n></aut>
+    <trd><a>L. L.</a> <n>Zamenhof</n></trd>
+    <tit>La Batalo de l' Vivo</tit>
+    <eld>
+      <dat>1891</dat>
+    </eld>
   </vrk>
 
   <vrk mll="BEE" tip="vortaro">
@@ -174,6 +183,12 @@
     </eld>
   </vrk>
 
+  <vrk mll="CRI">
+    <url>http://esperanto.cri.cn/</url>
+    <tit>&Ccirc;ina Radio Internacia enrete</tit>
+    <ald>esperanta paĝaro de China Radio international online</ald>
+  </vrk>
+
   <vrk mll="&Ccirc;A">
     <tit>&Ccirc;ina Antologio (1919-1949)</tit>
     <eld>
@@ -184,7 +199,7 @@
   </vrk>
 
   <vrk mll="&Ccirc;uk&ccirc;oj">
-     <url>http://tekstaro.com/</url>
+     <url>http://tekstaro.com/pl/prenitutantekston.pl?nomo=el-vivo-de-chukchoj</url>
      <aut><a>Vasilij</a> <n>Ero&scirc;enko</n></aut>
      <tit>El vivo de &ccirc;uk&ccirc;oj</tit>
      <eld>
@@ -242,6 +257,16 @@
     </eld>
   </vrk>
 
+  <vrk mll="DL">
+    <url>http://tekstaro.com/pl/prenitutantekston.pl?nomo=dua-libro</url>
+    <aut><a>L. L.</a> <n>Zamenhof</n></aut>
+    <tit>Dua Libro de l’ lingvo Internacia</tit>
+    <eld>
+      <lok>Varsovio</lok>
+      <dat>1888</dat>
+    </eld>
+  </vrk>
+  
   <vrk mll="DonKihxoto">
     <aut><a>Miguel</a> <n>de Cervantes Saavedra</n></aut>
     <trd><a>Fernando</a> <n>de Diego</n></trd>
@@ -288,7 +313,7 @@
   </vrk>
 
   <vrk mll="EE">
-    <url>ftp://ftp.esperanto.org/publika/tekstoj/</url>
+    <url>&url_wd;/esenco/</url>
     <aut><a>L. L.</a> <n>Zamenhof</n></aut>
     <tit>Esenco kaj Estonteco</tit>
   </vrk>
@@ -384,6 +409,17 @@
     </eld>
   </vrk>
 
+  <vrk mll="EPĈ" tip="revuo">
+    <url>http://www.espero.com.cn/</url>
+    <tit>El Popola Ĉinio (revuo)</tit>
+    <eld>
+      <nom>El Popola Ĉinio</nom>
+      <lok>Ĉeinujo</lok>
+      <dat>de 1950</dat>
+    </eld>
+  </vrk>
+
+
   <vrk mll="Esperanto">
     <url>http://www.uea.org/revuo/</url>
     <tit>Esperanto</tit>
@@ -395,7 +431,7 @@
   </vrk>
 
   <vrk mll="F" tip="vortaro">
-    <url>http://www.steloj.de/esperanto/fundamento/index.html</url>
+    <url>&url_wd;/fundamento/index.html</url>
     <aut><a>L. L.</a> <n>Zamenhof</n></aut>
     <tit>Fundamento de Esperanto</tit>
     <eld>
@@ -405,7 +441,7 @@
   </vrk>
 
   <vrk mll="Fab1">
-    <url>http://www.steloj.de/esperanto/fabeloj1/</url>
+    <url>&url_wd;/fabeloj1/</url>
     <aut><a>H. C.</a> <n>Andersen</n></aut>
     <trd><a>L. L.</a> <n>Zamenhof</n></trd>
     <tit>Fabeloj, vol. 1</tit>
@@ -487,15 +523,30 @@
     </eld>
   </vrk>
 
+    <vrk mll="FdO">
+    <url>&url_wd;/fumejo/</url>
+    <aut><a>Władyław</a> <n>Reymont</n></aut>
+    <trd><a>Kazimierz</a> <n>Bein</n></trd>
+    <tit>En fumejo de L'opio</tit>
+    <eld>
+      <nom>Bliński kaj W. Mašlankiewicz</nom>
+      <lok>Varsovio</lok>
+      <dat>1908</dat>
+    </eld>
+  </vrk>
+
   <vrk mll="FIL">
     <tit>
       Pri la solvo de l'problemo de internacia lingvo por komerco kaj
-      trafiko. Zur L&ouml;sung der Frage einer internationalen Handels- und
+      trafiko.
+    </tit>
+    <ald>
+      Zur L&ouml;sung der Frage einer internationalen Handels- und
       Verkehrssprache. Amtlicher Sitzungsbericht der 
       Internationalen Konferenz f&uuml;r eine gemeinsame 
       Hilfssprache des Handels und Verkehrs, Venedig, 2.-4. April
       1923
-    </tit>
+    </ald>
     <eld>
        <nom>Frankfurter Messamt</nom>
        <lok>Frankfurt a.M.</lok>
@@ -504,7 +555,7 @@
   </vrk>
 
   <vrk mll="FK">
-     <url>http://tekstaro.com/</url>
+     <url>http://tekstaro.com/pl/prenitutantekston.pl?nomo=fundamenta-krestomatio</url>
      <aut><a>Ludoviko Lazaro</a> <n>Zamenhof</n></aut>
      <tit>Fundamenta Krestomatio de la lingvo Esperanto</tit>
      <eld>
@@ -535,6 +586,28 @@
        <lok>Chubu, Japanio</lok>
        <dat>1992</dat>
        <isbn>0-939785-03-X</isbn>
+    </eld>
+  </vrk>
+
+  <vrk mll="GDEF" tip="vortaro">
+    <url>http://esperilo.be/publications/sat/waringh.htm</url>
+    <aut><a>Gaston</a> <n>Waringhien</n></aut>
+    <tit>Grand dictionnaire esp&eacute;ranto-français</tit>
+    <eld>
+      <nom>Librairie Centrale Espérantiste</nom>
+      <lok>Parizo</lok>
+      <dat>1957</dat>
+    </eld>
+  </vrk>
+
+  <vrk mll="GDEFS" tip="vortaro">
+    <url>http://esperilo.be/publications/sat/waringh.htm</url>
+    <aut><a>Gaston</a> <n>Waringhien</n></aut>
+    <tit>Grand dictionnaire esp&eacute;ranto-français avec Supplément</tit>
+    <eld>
+      <nom>SAT-Amikaro</nom>
+      <lok>Parizo</lok>
+      <dat>1976</dat>
     </eld>
   </vrk>
 
@@ -570,6 +643,18 @@
     </eld>
   </vrk>
 
+  <vrk mll="Hamlet">
+    <url>http://tekstaro.com/pl/prenitutantekston.pl?nomo=hamleto</url>
+    <aut><a>William</a> <n>Shakespeare</n></aut>
+    <trd><a>L. L.</a> <n>Zamenhof</n></trd>
+    <tit>Hamleto, Reĝido de Danujo</tit>
+    <eld>
+      <nom>eldonejo W. Tümmel</nom>
+      <lok>Nurenbergo</lok>
+      <dat>1894</dat>
+    </eld>
+  </vrk>
+  
   <vrk mll="HejmVort" tip="vortaro">
     <url>http://www.helsinki.fi/~jslindst/hejmvort.html</url>
     <aut><a>Jouko</a> <n>Lindstedt</n></aut>
@@ -583,7 +668,7 @@
   </vrk>
 
   <vrk mll="Homaranismo">
-    <url>ftp://ftp.esperanto.org/publika/tekstoj/</url> 
+    <url>&url_wd;/homaranismo/</url> 
     <aut><a>L. L.</a> <n>Zamenhof</n></aut>
     <tit>Homaranismo</tit>
     <eld>
@@ -603,7 +688,31 @@
        <lok>Jokohamo</lok>
        <dat>2002</dat>
      </eld>
-   </vrk>
+  </vrk>
+
+  <vrk mll="Ifigenio">
+    <url>http://tekstaro.com/pl/prenitutantekston.pl?nomo=ifigenio-en-taurido</url>
+    <aut><a>J. W.</a> <n>Goethe</n></aut>
+    <trd><a>L. L.</a> <n>Zamenhof</n></trd>
+    <tit>Ifigenio en Taŭrido</tit>
+    <eld>
+      <nom>Hachette et Cie</nom>
+      <lok>Parizo</lok>
+      <dat>1908</dat>
+    </eld>
+  </vrk>
+
+   <vrk mll="IK">
+    <url>&url_wd;/interrompita/</url>
+    <aut><a>Eliza</a> <n>Orzeszko</n></aut>
+    <trd><a>Kazimierz</a> <n>Bein</n></trd>
+    <tit>La Interrompita Kanto</tit>
+    <eld>
+      <nom>Esperanta Centra Librejo</nom>
+      <lok>Parizo</lok>
+      <dat>1928</dat>
+    </eld>
+  </vrk>
 
   <vrk mll="IKEV" tip="terminaro">
     <aut><a>F.</a> <n>Munniksma</n> (eld.)</aut>
@@ -617,7 +726,7 @@
   </vrk>
 
   <vrk mll="InfanTorent2">
-     <url>http://tekstaro.com/</url>
+     <url>http://tekstaro.com/pl/prenitutantekston.pl?nomo=infanoj-en-torento</url>
      <aut><a>Stellan</a> <n>Engholm</n></aut>
      <tit>Infanoj en Torento, dua libro en la 
        Torento-trilogio</tit>
@@ -760,7 +869,7 @@
    </vrk>
 
   <vrk mll="Kiso">
-     <url>http://tekstaro.com/</url>
+     <url>http://tekstaro.com/pl/prenitutantekston.pl?nomo=la-kiso</url>
      <aut><a>Hjalmar</a> <n>S&ouml;derberg</n></aut>
      <trd><a>Sten</a> <n>Johansson</n></trd>
      <tit>La Kiso kaj dek tri aliaj noveloj</tit>
@@ -902,7 +1011,7 @@
   </vrk>
 
   <vrk mll="LR">
-    <url>http://ttt.esperanto.org/Ondo/L-lr.htm</url>
+    <url>http://eduinf.waw.pl/esp/lern/librejo/0015/</url>
     <aut><a>L. L.</a> <n>Zamenhof</n></aut>
     <tit>Lingvaj Respondoj</tit>
   </vrk>
@@ -1084,7 +1193,7 @@
   </vrk>
 
   <vrk mll="Mortul&Scirc;ip">
-     <url>http://tekstaro.com/</url>
+     <url>http://tekstaro.com/pl/prenisekciojn.pl?nomo=mortula-shipo</url>
      <aut><a>B.</a> <n>Traven</n></aut>
      <trd><a>Hans Georg</a> <n>Kaiser</n></trd>
      <tit>Mortula &Scirc;ipo, Rakonto de usona maristo</tit>
@@ -1212,6 +1321,7 @@ M&uuml;nchhausen</tit>
   </vrk>
 
   <vrk mll="PatrojFiloj">
+    <url>http://miresperanto.com/biblioteko/patroj_kaj_filoj.htm</url>
     <aut><a>I. S.</a> <n>Turgenjev</n></aut>
     <trd><a>Kazimierz</a> <n>Bein</n></trd>
     <tit>Patroj kaj filoj</tit> 
@@ -1267,7 +1377,7 @@ M&uuml;nchhausen</tit>
   </vrk>
 
   <vrk mll="Plumamikoj">
-     <url>http://tekstaro.com/</url>
+     <url>http://tekstaro.com/pl/prenitutantekston.pl?nomo=ne-nur-leteroj-de-plumamikoj</url>
      <aut><a>Marjorie</a> <n>Boulton</n></aut>
      <tit>Ne nur leteroj de plum-amikoj</tit>
      <eld>
@@ -1306,7 +1416,7 @@ M&uuml;nchhausen</tit>
   </vrk>
 
   <vrk mll="PrV">
-    <url>http://steloj.de/esperanto/proverb/</url>
+    <url>&url_wd;/proverb/</url>
     <aut><a>L. L.</a> <n>Zamenhof</n></aut>
     <aut><a>C.</a> <n>Rogister</n> ed.</aut>
     <tit>Proverbaro esperanta</tit>
@@ -1322,6 +1432,20 @@ M&uuml;nchhausen</tit>
     <url>http://mujweb.atlas.cz/Kultura/malovec/RABISTA1.HTM</url>
     <aut><a>Josef</a> <n>&Ccaron;apek</n></aut>
     <tit>La unua rabista fabelo</tit>
+  </vrk>
+
+  <vrk mll="Rabistoj">
+    <url>&url_wd;/rabistoj/index.html</url>
+    <aut><a>Frederiko</a> <n>Schiller</n></aut>
+    <trd><a>L. L.</a> <n>Zamenhof</n></trd>
+    <tit>La rabistoj</tit>
+    <ald>Dramo en kvin aktoj</ald>    
+    <eld>
+      <nom>Esp. Centra Librejo</nom>
+      <lok>Parizo</lok>
+      <dat>1928</dat>
+      <nro>2a eldono</nro>
+    </eld>
   </vrk>
 
   <vrk mll="Revadoj">
@@ -1340,6 +1464,16 @@ M&uuml;nchhausen</tit>
     <aut><a>N. V.</a> <n>Gogol</n></aut>
     <trd><a>L. L.</a> <n>Zamenhof</n></trd>
     <tit>La Revizoro</tit>
+  </vrk>
+
+  <vrk mll="RLN">
+    <url>&url_ade;/decidoj/landnomoj/listo_de_rekomendataj_landnomoj/</url>
+    <tit>Listo de Rekomendataj Landnomoj</tit>
+    <ald>Oficialaj Informoj, n-ro 12</ald>
+    <eld>
+      <nom>Akademio de Esperanto</nom>
+      <dat>2009</dat>
+    </eld>
   </vrk>
 
   <vrk mll="RokPop" tip="termiaro">
@@ -1367,7 +1501,7 @@ M&uuml;nchhausen</tit>
   </vrk>
 
   <vrk mll="SatirRak">
-     <url>http://tekstaro.com/</url>
+     <url>http://tekstaro.com/pl/prenitutantekston.pl?nomo=satiraj-rakontoj</url>
      <aut><a>S&aacute;ndor</a> <n>Szathm&aacute;ri</n></aut>
      <tit>Satiraj rakontoj</tit>
      <eld>
@@ -1386,8 +1520,18 @@ M&uuml;nchhausen</tit>
     </eld>
   </vrk>
 
+  <vrk mll="Sezonoj">
+    <url>http://www.esperanto.net/literaturo/sez/</url>
+    <tit>almanako Sezonoj</tit>
+    <eld>
+     <nom>Sezonoj</nom>
+     <lok>Jekaterinburg</lok>
+     <dat>1984-1990</dat>
+    </eld>
+  </vrk>
+
   <vrk mll="SkandalJozef">
-     <url>http://tekstaro.com/</url>
+     <url>http://tekstaro.com/pl/prenitutantekston.pl?nomo=la-skandalo-pro-jozefo</url>
      <aut><a>Valdemar</a> <n>Vina&rcaron;</n></aut>
      <tit>La skandalo pro Jozefo</tit>
      <eld>
@@ -1494,6 +1638,7 @@ M&uuml;nchhausen</tit>
   </vrk>
 
   <vrk mll="VdE" tip="vortaro">
+    <url>www.jperegrino.com.br/pdfs/Kabe.pdf</url>
     <aut><a>Kazimierz</a> <n>Bein</n></aut>
     <tit>Vortaro de Esperanto</tit>
     <eld>
@@ -1523,6 +1668,7 @@ M&uuml;nchhausen</tit>
   </vrk>
 
   <vrk mll="VivZam">
+    <url>http://tekstaro.com/pl/prenitutantekston.pl?nomo=vivo-de-zamenhof</url>
     <aut><a>Edmond</a> <n>Privat</n></aut>
     <tit>Vivo de Zamenhof</tit> 
     <eld>
@@ -1545,7 +1691,7 @@ M&uuml;nchhausen</tit>
   </vrk>
 
   <vrk mll="Voja&gcirc;Imp">
-     <url>http://tekstaro.com/</url>
+     <url>http://tekstaro.com/pl/prenitutantekston.pl?nomo=vojaghimpresoj</url>
      <aut><a>Valdemar</a> <n>Langlet</n></aut>
      <tit>Voja&gcirc;impresoj</tit>
      <eld>
