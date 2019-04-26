@@ -1,0 +1,1418 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  RelaxNG-difino de strukturo de Voko-vortaro uzata en Reta Vortaro
+  
+  Aldone al la difinoj de vokoxml.dtd ĝi kapablas ekzameni la datumtipojn,
+  ekz. la enhavon de <ofc>, mrk ktp. 
+  
+  (c) 2016 ĉe Wolfram Diestel
+  uzebla sub kondiĉoj de GPL 2.0 
+-->
+<!--
+  ****************************************************
+            KADRA STRUKTURO DE VORTARO
+  ********************************************************
+-->
+<!-- default namespace = "http://steloj.de/voko" -->
+<grammar xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+  <define name="vortaro">
+    <a:documentation>Radiko de la strukturarbo de vortaro. La elemento ampleksas
+la tutan vortaron.&lt;br/&gt;
+Ĝi entenas aŭ prologon, precipan parton kaj epilogon aŭ plurajn
+artikolojn. Prologo kaj epilogo estas nedevigaj. La ebleco de rekta
+enteno de artikolo ne estas destinita por kompletaj vortaroj, sed por
+eltiroj aŭ unuopa artikolo.</a:documentation>
+    <element name="vortaro">
+      <ref name="attlist-vortaro"/>
+      <choice>
+        <group>
+          <optional>
+            <ref name="prologo"/>
+          </optional>
+          <ref name="precipa-parto"/>
+          <optional>
+            <ref name="epilogo"/>
+          </optional>
+        </group>
+        <oneOrMore>
+          <ref name="art"/>
+        </oneOrMore>
+      </choice>
+    </element>
+  </define>
+  <define name="attlist-vortaro" combine="interleave">
+    <empty/>
+  </define>
+  <define name="prologo">
+    <a:documentation> [prologo] Prologo de la vortaro. Ĝi povas enteni la titolo(j)n 
+kaj aŭtoro(j)n de la vortaro kaj aliajn tekstojn.</a:documentation>
+    <element name="prologo">
+      <ref name="attlist-prologo"/>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="titolo"/>
+          <ref name="autoro"/>
+          <ref name="alineo"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="attlist-prologo" combine="interleave">
+    <empty/>
+  </define>
+  <define name="epilogo">
+    <a:documentation> [epilogo] Epilogo de la vortaro. Ĝia strukturo momente ne estas
+specifita. Ĝi povas enhavi iun tekston.</a:documentation>
+    <element name="epilogo">
+      <ref name="attlist-epilogo"/>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="alineo"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="attlist-epilogo" combine="interleave">
+    <empty/>
+  </define>
+  <define name="titolo">
+    <a:documentation> [titolo] Titolo de la vortaro. Ĝi estas entenata en la 
+prologo. Pluraj titoloj estas permesitaj.</a:documentation>
+    <element name="titolo">
+      <ref name="attlist-titolo"/>
+      <text/>
+    </element>
+  </define>
+  <define name="attlist-titolo" combine="interleave">
+    <empty/>
+  </define>
+  <define name="autoro">
+    <a:documentation> [autoro] Indiko de aŭtoro(j) de la vortaro. 
+Ĝi estas enhavata en la prologo kaj povas okazi tie plurfoje.</a:documentation>
+    <element name="autoro">
+      <ref name="attlist-autoro"/>
+      <text/>
+    </element>
+  </define>
+  <define name="attlist-autoro" combine="interleave">
+    <empty/>
+  </define>
+  <define name="alineo">
+    <a:documentation>[alineo] unuopa alineo en la prologo-teksto</a:documentation>
+    <element name="alineo">
+      <ref name="attlist-alineo"/>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="url"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="attlist-alineo" combine="interleave">
+    <empty/>
+  </define>
+  <define name="precipa-parto">
+    <a:documentation>[precipa-parto] Precipa parto de la vortaro. Ĝi enhavas rekte ĉiujn
+artikolojn aŭ sekciojn aŭ partojn. 
+Diversaj partoj povas dividi diversajn lingvojn de la kapvortoj.
+Sekcioj grupigas vortojn komencighantajn je sama litero.</a:documentation>
+    <element name="precipa-parto">
+      <ref name="attlist-precipa-parto"/>
+      <choice>
+        <oneOrMore>
+          <ref name="parto"/>
+        </oneOrMore>
+        <oneOrMore>
+          <ref name="sekcio"/>
+        </oneOrMore>
+        <oneOrMore>
+          <ref name="art"/>
+        </oneOrMore>
+      </choice>
+    </element>
+  </define>
+  <define name="attlist-precipa-parto" combine="interleave">
+    <empty/>
+  </define>
+  <define name="parto">
+    <a:documentation> [parto] Vortaroparto. Ĝi estas entenata en la precipa parto. Parto normale
+prezentas unu lingvon en plurlingva vortaro aŭ lingvodirekton en
+dulingva vortaro. Ĝia atributo &lt;dfn&gt;lng&lt;/dfn&gt; indikas la lingvon de
+la kapvortoj en la parto.</a:documentation>
+    <element name="parto">
+      <ref name="attlist-parto"/>
+      <choice>
+        <oneOrMore>
+          <ref name="sekcio"/>
+        </oneOrMore>
+        <oneOrMore>
+          <ref name="art"/>
+        </oneOrMore>
+      </choice>
+    </element>
+  </define>
+  <define name="attlist-parto" combine="interleave">
+    <optional>
+      <attribute name="lng"/>
+    </optional>
+  </define>
+  <define name="sekcio">
+    <a:documentation> [sekcio] Sekcio en vortaro. Ĝi estas entenata en la precipa parto aŭ en
+parto de ĝi kaj normale entenas ĉiujn artikolojn, kies kapvorto
+komenciĝas je sama litero. La atributo &lt;dfn&gt;lit&lt;/dfn&gt; indikas tiun
+komencliteron.</a:documentation>
+    <element name="sekcio">
+      <ref name="attlist-sekcio"/>
+      <oneOrMore>
+        <ref name="art"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="attlist-sekcio" combine="interleave">
+    <optional>
+      <attribute name="lit"/>
+    </optional>
+  </define>
+  <!--
+     ******************************************************
+                 STRUKTURO DE ARTIKOLO
+    ***********************************************************
+  -->
+  <define name="indikiloj">
+    <a:documentation> Tuj post la kapvorto venas ordinare unue kelkaj indikiloj pri la gramatiko, uzo k.a.</a:documentation>
+    <choice>
+      <ref name="fnt"/>
+      <ref name="gra"/>
+      <ref name="uzo"/>
+      <ref name="mlg"/>
+      <ref name="tezrad"/>
+    </choice>
+  </define>
+  <define name="difinoj">
+    <a:documentation> La precipaj elementoj de la difino. Krom la difinaj frazoj, tio estas la ekzemploj, eble bildo.
+ Foje la difino anstataŭiĝas per difina referenco.</a:documentation>
+    <choice>
+      <ref name="dif"/>
+      <ref name="bld"/>
+      <ref name="ekz"/>
+      <ref name="rim"/>
+    </choice>
+  </define>
+  <define name="dif-ref">
+    <choice>
+      <!--
+         refgrp 
+         | ref
+        limigita al tipo dif...:
+        FARENDA: difinu ref sen tip (engrupa) kaj ref kun tip (sola)
+      -->
+      <element name="refgrp">
+        <attribute name="tip">
+          <value>dif</value>
+        </attribute>
+        <interleave>
+          <optional>
+            <text/>
+          </optional>
+          <oneOrMore>
+            <ref name="ref"/>
+          </oneOrMore>
+        </interleave>
+      </element>
+      <element name="ref">
+        <attribute name="tip">
+          <value>dif</value>
+        </attribute>
+        <attribute name="cel"/>
+        <text/>
+      </element>
+    </choice>
+  </define>
+  <define name="difiniloj">
+    <a:documentation>Por difini oni povas uzi aŭ kompletan difinon aŭ ĉe sinonimoj referencon al alia vorto aŭ senco, kiu difinas ĝin.</a:documentation>
+    <choice>
+      <ref name="difinoj"/>
+      <ref name="dif-ref"/>
+    </choice>
+  </define>
+  <define name="referenciloj">
+    <a:documentation>     La referenciloj montras al rilataj vortoj kaj sencoj, vortlistoj aŭ al intrereta paĝo.</a:documentation>
+    <choice>
+      <ref name="ref"/>
+      <ref name="refgrp"/>
+      <ref name="lstref"/>
+      <ref name="url"/>
+    </choice>
+  </define>
+  <!--
+    trdj-ab = 
+     element trd { (attribute lng {"ab"} & attribute fnt { text }?), (text | klr | ind | mll | ofc)* }
+     | element trdgrp { attribute lng { "ab" }, (text | trd)* }
+  -->
+  <!--
+    FARENDA: difinu laŭlingvan ordon de tradukoj, se eble...
+    ? (trdgrp { attribute lng {"af"} } | trd { attribute lng {"af"} })? , ...
+  -->
+  <define name="tradukiloj">
+    <a:documentation>La nacilingvaj tradukoj de la senco aŭ derivaĵo.</a:documentation>
+    <choice>
+      <ref name="trdgrp"/>
+      <ref name="trd"/>
+    </choice>
+  </define>
+  <define name="notiloj">
+    <a:documentation>Rimarkoj kaj administraj notoj.</a:documentation>
+    <choice>
+      <ref name="rim"/>
+      <ref name="adm"/>
+    </choice>
+  </define>
+  <define name="unua-parto">
+    <a:documentation>Unua parto de teksto en artikolo, derivaĵo aŭ senco</a:documentation>
+    <zeroOrMore>
+      <ref name="indikiloj"/>
+    </zeroOrMore>
+    <zeroOrMore>
+      <ref name="difiniloj"/>
+    </zeroOrMore>
+  </define>
+  <define name="sekva-parto">
+    <a:documentation>Sekva parto de teksto en artikolo, derivaĵo aŭ senco venante post subdividoj</a:documentation>
+    <zeroOrMore>
+      <ref name="difiniloj"/>
+    </zeroOrMore>
+    <zeroOrMore>
+      <ref name="referenciloj"/>
+    </zeroOrMore>
+    <zeroOrMore>
+      <ref name="notiloj"/>
+    </zeroOrMore>
+    <zeroOrMore>
+      <ref name="referenciloj"/>
+    </zeroOrMore>
+    <zeroOrMore>
+      <ref name="bld"/>
+    </zeroOrMore>
+    <zeroOrMore>
+      <ref name="tradukiloj"/>
+    </zeroOrMore>
+    <zeroOrMore>
+      <ref name="adm"/>
+    </zeroOrMore>
+  </define>
+  <!--
+     [%priskribaj-elementoj] La unuo <dfn>priskribaj-elementoj</dfn> 
+    listigas ĉiujn strukturilojn, kiuj priskribas kapvorton aŭ unuopan 
+    sencon de ĝi. Ĉar ili povas okazi multloke en la strukturo de 
+    artikolo estas avantaĝe difini tiun ĉi unuon.
+  -->
+  <!--
+    priskribaj elementoj
+    priskribaj-elementoj =
+     fnt
+     | gra
+     | uzo
+     | dif
+     | ekz
+     | rim
+     | ref
+     | refgrp
+     | trd
+     | trdgrp
+     | bld
+     | adm
+     | url
+     | mlg
+     | lstref
+     | tezrad
+  -->
+  <define name="tekst-stiloj">
+    <a:documentation>La unuo &lt;dfn&gt;tekst-stiloj&lt;/dfn&gt; 
+listigas ĉiujn strukturilojn, kiuj donas stilon al tekstoparto,
+ekz. emfazita, citilita, altigita aŭ malaltigita teksto.
+Aliaj elementoj klarigo, tildo, sencreferenco, nomo aŭ nacilingva esprimo
+same povas esti multloke, do ankaŭ ili estas listigitaj tie ĉi.</a:documentation>
+    <choice>
+      <ref name="tld"/>
+      <ref name="sncref"/>
+      <ref name="klr"/>
+      <ref name="em"/>
+      <ref name="sup"/>
+      <ref name="sub"/>
+      <ref name="ctl"/>
+      <ref name="frm"/>
+      <ref name="nom"/>
+      <ref name="nac"/>
+    </choice>
+  </define>
+  <define name="art">
+    <a:documentation>Unuopa artikolo de la vortaro. Ĝi povas okazi en
+&lt;dfn&gt;vortaro&lt;/dfn&gt; (se ne ekzistas precipa-parto),
+&lt;dfn&gt;precipa-parto&lt;/dfn&gt;, &lt;dfn&gt;parto&lt;/dfn&gt; aŭ &lt;dfn&gt;sekcio&lt;/dfn&gt;. Tio
+dependas de la konkreta strukturo de la vortaro. Ĉiu artikolo
+entenas unue kapvorton kaj poste aŭ priskribajn elementojn aŭ plurajn
+derivaĵojn aŭ plurajn sencojn de la kapvorto aŭ subartikolojn.</a:documentation>
+    <element name="art">
+      <ref name="attlist-art"/>
+      <ref name="kap"/>
+      <ref name="unua-parto"/>
+      <zeroOrMore>
+        <choice>
+          <ref name="subart"/>
+          <ref name="drv"/>
+          <ref name="snc"/>
+        </choice>
+      </zeroOrMore>
+      <ref name="sekva-parto"/>
+    </element>
+  </define>
+  <define name="attlist-art" combine="interleave">
+    <attribute name="mrk">
+      <ref name="art-marko"/>
+    </attribute>
+  </define>
+  <define name="subart">
+    <a:documentation>Subartikolo. Ĝi povas okazi en &lt;dfn&gt;artikolo&lt;/dfn&gt;,
+se la signifoj de vorto (ofte ĉe prepozicioj kaj afiksoj) estas
+tre diversaj.</a:documentation>
+    <element name="subart">
+      <ref name="attlist-subart"/>
+      <ref name="unua-parto"/>
+      <zeroOrMore>
+        <choice>
+          <ref name="drv"/>
+          <ref name="snc"/>
+        </choice>
+      </zeroOrMore>
+      <ref name="sekva-parto"/>
+    </element>
+  </define>
+  <define name="attlist-subart" combine="interleave">
+    <optional>
+      <attribute name="mrk">
+        <ref name="drv-marko"/>
+      </attribute>
+    </optional>
+  </define>
+  <define name="drv">
+    <a:documentation>Derivaĵo ene de artikolo. Unu artikolo povas priskribi plurajn
+derivaĵojn de la kapvorto. Derivaĵo komenciĝas je kapvorto kaj
+priskribaj elementoj pri ĝi aŭ el unu aŭ pluraj sencoj aŭ el unu aŭ
+pluraj subdividoj &lt;dfn&gt;subdrv&lt;/dfn&gt;.</a:documentation>
+    <element name="drv">
+      <ref name="attlist-drv"/>
+      <ref name="kap"/>
+      <ref name="unua-parto"/>
+      <zeroOrMore>
+        <choice>
+          <ref name="subdrv"/>
+          <ref name="snc"/>
+        </choice>
+      </zeroOrMore>
+      <ref name="sekva-parto"/>
+    </element>
+  </define>
+  <define name="attlist-drv" combine="interleave">
+    <attribute name="mrk">
+      <ref name="drv-marko"/>
+    </attribute>
+  </define>
+  <define name="var">
+    <a:documentation>Variaĵo de la vorto, ekz. meĥaniko - mekaniko, pomarbo -
+pomujo. Ĝi povas enhavi fontindikon k.s., sed ankaŭ rimarkojn 
+kaj ekzemplojn, sed ĝi ne havas propran difinon. Ĝi aperas ene
+de kapvorto, ĉar ĝi ja estas ĝia variaĵo.</a:documentation>
+    <element name="var">
+      <ref name="attlist-var"/>
+      <ref name="kap"/>
+      <zeroOrMore>
+        <choice>
+          <ref name="uzo"/>
+          <ref name="klr"/>
+          <ref name="ekz"/>
+          <ref name="rim"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="attlist-var" combine="interleave">
+    <empty/>
+  </define>
+  <define name="subdrv">
+    <a:documentation>Subderivaĵo. Ĝi grupigas plurajn proksimajn sencojn, se la
+priskribita vorto havas tre multajn sencojn. Tio povas
+rezulti en pli klara strukturo de la artikolo. La subdividaĵoj
+estas nombrataj per A), B), ...</a:documentation>
+    <element name="subdrv">
+      <ref name="attlist-subdrv"/>
+      <ref name="unua-parto"/>
+      <zeroOrMore>
+        <ref name="snc"/>
+      </zeroOrMore>
+      <ref name="sekva-parto"/>
+    </element>
+  </define>
+  <define name="attlist-subdrv" combine="interleave">
+    <optional>
+      <attribute name="mrk">
+        <ref name="snc-marko"/>
+      </attribute>
+    </optional>
+  </define>
+  <define name="snc">
+    <a:documentation>Senco de unuopa vorto en artikolo. Komparu la latinajn ciferojn en
+la artikoloj de PIV. Per mrk oni povas referenci sencon de alie. Per ref oni
+referencas al alia senco samartikola (uzata en malmultaj longaj artikoloj, ekz.
+"al". Per num la senco ricevas numeron. Atentu, ke future simbolaj nomoj por
+la sencoj estos perferataj kaj do numerado okazas automate ignorante la atributon
+num.</a:documentation>
+    <element name="snc">
+      <ref name="attlist-snc"/>
+      <ref name="unua-parto"/>
+      <zeroOrMore>
+        <ref name="subsnc"/>
+      </zeroOrMore>
+      <ref name="sekva-parto"/>
+    </element>
+  </define>
+  <define name="attlist-snc" combine="interleave">
+    <optional>
+      <attribute name="mrk">
+        <ref name="snc-marko"/>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="num"/>
+    </optional>
+    <optional>
+      <attribute name="ref"/>
+    </optional>
+  </define>
+  <define name="subsnc">
+    <a:documentation>Subsenco ene de senco. Ĝi redonas subtilaĵojn ene de unu senco.
+Ili estas nombrataj per a), b), ...</a:documentation>
+    <element name="subsnc">
+      <ref name="attlist-subsnc"/>
+      <ref name="unua-parto"/>
+      <ref name="sekva-parto"/>
+    </element>
+  </define>
+  <define name="attlist-subsnc" combine="interleave">
+    <optional>
+      <attribute name="mrk">
+        <ref name="marko"/>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="ref"/>
+    </optional>
+  </define>
+  <define name="sncref">
+    <a:documentation>Referenco al alia senco. Tiu elemento estas anstatauigata
+per la numero de la referencita senco. Vi povas forlasi la atributon 
+ref, se ekzistas parenca elemento ref, kies atributo cel montras al la
+referencita senco.</a:documentation>
+    <element name="sncref">
+      <ref name="attlist-sncref"/>
+      <empty/>
+    </element>
+  </define>
+  <define name="attlist-sncref" combine="interleave">
+    <optional>
+      <attribute name="ref"/>
+    </optional>
+  </define>
+  <!--
+     ************************************************
+                STRUKTUROJ DE DETALAJ ELEMENTOJ
+    *****************************************************
+  -->
+  <define name="fako">
+    <a:documentation>Fakoj estas tri- aŭ kvarlingvaj majusklaj etikedoj difinitaj en la
+&lt;a href="http://retavortaro.de/dok/fakoj.html"&gt;listo de fakoj&lt;/a&gt;</a:documentation>
+    <data type="string">
+      <param name="pattern">[A-Z]{3,4}</param>
+    </data>
+  </define>
+  <define name="art-marko">
+    <a:documentation> La marko identigas la artikolon unike. Ĝi estu identa kun la dosiernomo sen la '.xml'.
+ Por uzo de versiokontrolo CVS en Revo uziĝas por novaj artikoloj 
+ anstataŭe $Id$ kiun CVS etendas al kompleta versioindiko.</a:documentation>
+    <data type="string">
+      <param name="pattern">$Id$|($Id: )?([a-z0-9_]+)(.xml)?.*</param>
+    </data>
+  </define>
+  <define name="drv-marko">
+    <a:documentation> La marko de derivaĵo konsistas el dosiernomo, punkto kaj aldono, donanta la
+ kapvorton, kie la radikon anstataŭ tildon oni montras per '0', ekz.
+ 'hom.0o', 'berlin.B0o'.</a:documentation>
+    <data type="ID">
+      <param name="pattern">([a-z0-9_]+)\.[A-Za-z_]*0[A-Za-z_0]*(\.[A-Za-z_0]+)?</param>
+    </data>
+  </define>
+  <define name="snc-marko">
+    <a:documentation>La marko de senco konsistas el la marko de la derivaĵo, punkto kaj
+identigilo de la senco, ekz. 'ord.0o.BIO', 'azen.0o.figure'.</a:documentation>
+    <data type="ID">
+      <param name="pattern">([a-z0-9_]+)\.[A-Za-z_]*0[A-Za-z_0]*\.[A-Za-z_0]+</param>
+    </data>
+  </define>
+  <define name="marko">
+    <a:documentation> La marko identigas 'nodon' de la vortaro, ekz. artikolon, derivaĵon, sencon aŭ rimarkon,
+ kiun oni povas referenci de alia loko en la vortaro per la sama marko.</a:documentation>
+    <data type="ID">
+      <param name="pattern">([a-z0-9_]+)\.[A-Za-z0-9\._]+</param>
+    </data>
+  </define>
+  <define name="kap">
+    <a:documentation>Kapvorto okazas en du kuntekstoj -- komence de artikolo
+kaj komence de derivaĵo, en la unua kazo ĝi signas radikon
+en la dua kazo ĝi konsistas el iuj literoj kaj eble tildo
+refencanta al la kapvorto, krome en la kapvorto povas okazi
+fontindiko.</a:documentation>
+    <element name="kap">
+      <ref name="attlist-kap"/>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="rad"/>
+          <ref name="ofc"/>
+          <ref name="fnt"/>
+          <ref name="tld"/>
+          <ref name="var"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="attlist-kap" combine="interleave">
+    <empty/>
+  </define>
+  <!--
+     [rad] Radiko de kapvorto. Ĝi estas bezonata por anstaŭigo
+    de tildoj. Sekve la "radiko" de afiksoj kaj finaĵoj estu
+    ili mem, sen la streketoj antaŭe aŭ malantaŭe.
+  -->
+  <define name="rad">
+    <element name="rad">
+      <ref name="attlist-rad"/>
+      <text/>
+    </element>
+  </define>
+  <define name="attlist-rad" combine="interleave">
+    <empty/>
+  </define>
+  <define name="ofc">
+    <a:documentation>Oficialeco de la kapvorto/derivaĵo, 
+povas esti *, 1, ..., 9 kiel en PV, PIV</a:documentation>
+    <element name="ofc">
+      <ref name="attlist-ofc"/>
+      <data type="string">
+        <param name="pattern">\*|[1-9]</param>
+      </data>
+    </element>
+  </define>
+  <define name="attlist-ofc" combine="interleave">
+    <empty/>
+  </define>
+  <!--
+     [fnt] Fonto enhavas informojn pri autoro, verko, trovloko
+    au aliajn informojn.
+  -->
+  <define name="fnt">
+    <element name="fnt">
+      <ref name="attlist-fnt"/>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="bib"/>
+          <ref name="aut"/>
+          <ref name="vrk"/>
+          <ref name="lok"/>
+          <ref name="url"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="attlist-fnt" combine="interleave">
+    <empty/>
+  </define>
+  <define name="gra">
+    <a:documentation> Kiel grammatikaj informoj momente estas permesataj
+nur indiko de la vortspeco aŭ simpla teksto</a:documentation>
+    <element name="gra">
+      <ref name="attlist-gra"/>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="vspec"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="attlist-gra" combine="interleave">
+    <empty/>
+  </define>
+  <!--
+    Vortspeco. Ekz. subst. por substantivo; tr/ntr
+    por transitivaj kaj netransitivaj verboj ktp.
+  -->
+  <define name="vspec">
+    <element name="vspec">
+      <group>
+        <ref name="attlist-vspec"/>
+        <choice>
+          <choice>
+            <value>tr</value>
+            <value>ntr</value>
+            <value>x</value>
+            <value>abs.</value>
+          </choice>
+          <choice>
+            <value>subst.</value>
+            <value>substantivo</value>
+          </choice>
+          <choice>
+            <value>adj.</value>
+            <value>adjektivo</value>
+          </choice>
+          <choice>
+            <value>adv.</value>
+            <value>adverbo</value>
+          </choice>
+          <choice>
+            <value>artikolo</value>
+            <value>determinilo</value>
+          </choice>
+          <choice>
+            <value>interj.</value>
+            <value>interjekcio</value>
+            <value>ekkrio</value>
+            <value>sonimito</value>
+          </choice>
+          <choice>
+            <value>konj.</value>
+            <value>konjunkcio</value>
+          </choice>
+          <choice>
+            <value>pref.</value>
+            <value>prefikso</value>
+          </choice>
+          <choice>
+            <value>suf.</value>
+            <value>sufikso</value>
+          </choice>
+          <choice>
+            <value>prep.</value>
+            <value>prepozicio</value>
+          </choice>
+          <value>prepoziciaĵo</value>
+          <choice>
+            <value>pron.</value>
+            <value>pronomo</value>
+          </choice>
+        </choice>
+      </group>
+      <!-- ĉu necesas aldoni aliajn: disjunkcio, ...? -->
+    </element>
+  </define>
+  <define name="attlist-vspec" combine="interleave">
+    <empty/>
+  </define>
+  <!--
+    [uzo] La uzo povas esti stilo, fako, regiono aŭ alia klarigo,
+    kiel estas uzata la vorto au termino. Por la fakoj kaj stiloj uzu
+    unu el la aliloke listigitaj mallongigoj.
+  -->
+  <define name="uzo">
+    <element name="uzo">
+      <ref name="attlist-uzo"/>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="tld"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="attlist-uzo" combine="interleave">
+    <optional>
+      <attribute name="tip">
+        <choice>
+          <value>fak</value>
+          <value>reg</value>
+          <value>klr</value>
+          <value>stl</value>
+        </choice>
+      </attribute>
+    </optional>
+  </define>
+  <!--
+    [dif] Difino estas la frazo difinanta la vorton, sencon aŭ
+    subsencon. Ĝi povas esti ankaŭ en alia(j) lingvo(j) ol la vorto
+    mem. La lingvon indikas la atributo <dfn>lng</dfn>.
+  -->
+  <define name="dif">
+    <element name="dif">
+      <ref name="attlist-dif"/>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="trd"/>
+          <ref name="trdgrp"/>
+          <ref name="ref"/>
+          <ref name="refgrp"/>
+          <ref name="ekz"/>
+          <ref name="snc"/>
+          <ref name="tekst-stiloj"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="attlist-dif" combine="interleave">
+    <optional>
+      <attribute name="lng"/>
+    </optional>
+  </define>
+  <!--
+    [ekz] Ekzemplo konsistas el ekzemplofrazo,
+    klarigoj kaj fonto.
+  -->
+  <define name="ekz">
+    <element name="ekz">
+      <ref name="attlist-ekz"/>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="fnt"/>
+          <ref name="uzo"/>
+          <ref name="ref"/>
+          <ref name="refgrp"/>
+          <ref name="ind"/>
+          <ref name="trd"/>
+          <ref name="trdgrp"/>
+          <ref name="esc"/>
+          <ref name="tekst-stiloj"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="attlist-ekz" combine="interleave">
+    <optional>
+      <attribute name="mrk">
+        <ref name="marko"/>
+      </attribute>
+    </optional>
+  </define>
+  <!--
+    [rim] Rimarko povas enhavi iujn indikojn pri la vorto aŭ
+    senco, krome referencojn, ekzemplojn, emfazitajn partojn.
+  -->
+  <define name="rim">
+    <element name="rim">
+      <ref name="attlist-rim"/>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="ref"/>
+          <ref name="refgrp"/>
+          <ref name="ekz"/>
+          <ref name="aut"/>
+          <ref name="fnt"/>
+          <ref name="esc"/>
+          <ref name="tekst-stiloj"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="attlist-rim" combine="interleave">
+    <optional>
+      <attribute name="num"/>
+    </optional>
+    <optional>
+      <attribute name="mrk">
+        <ref name="marko"/>
+      </attribute>
+    </optional>
+  </define>
+  <!--
+    [refgrp] Referencgrupo grupigas plurajn samtipajn
+    referencojn. La tipon indikas la atributo <dfn>tip</dfn>.
+    Tiukaze ne uzu la atributon <dfn>tip</dfn> en la subelementoj
+    <dfn>ref</dfn>!
+  -->
+  <define name="refgrp">
+    <element name="refgrp">
+      <ref name="attlist-refgrp"/>
+      <interleave>
+        <optional>
+          <text/>
+        </optional>
+        <oneOrMore>
+          <ref name="ref"/>
+        </oneOrMore>
+      </interleave>
+    </element>
+  </define>
+  <define name="attlist-refgrp" combine="interleave">
+    <optional>
+      <attribute name="tip" a:defaultValue="vid">
+        <choice>
+          <value>vid</value>
+          <value>hom</value>
+          <value>dif</value>
+          <value>sin</value>
+          <value>ant</value>
+          <value>super</value>
+          <value>sub</value>
+          <value>prt</value>
+          <value>malprt</value>
+          <value>lst</value>
+          <value>ekz</value>
+        </choice>
+      </attribute>
+    </optional>
+  </define>
+  <!--
+    [ref] Referenco montras al alia, simil- aŭ alisignifa vorto,
+    oni povas distingi diversajn rilattipon al la
+    referencita vorto. La enhavo de la referenco estas tio, kio
+    aperas en la legebla teksto. La referencitan vorton mem
+    oni difinas per la atributo "cel". La celon oni plej
+    bone difinas per: radiko.derivaĵo.difino, oni povas uzi
+    la numeron de la difino au derivaĵo. Plej bone oni
+    generas la markojn (t.e. la eblaj celoj de referenco)
+    aŭtomate por minimumigi erarojn.
+    La atributoj "lst" kaj "val" servas por referenci al vortlisto (tip="lst"),
+    ekz. monatoj. Se temas pri ordigita listo, vi povas indiki valoron per "val",
+    ekz. "3" che la monato marto.
+  -->
+  <define name="ref">
+    <element name="ref">
+      <ref name="attlist-ref"/>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="tld"/>
+          <ref name="klr"/>
+          <ref name="sncref"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="attlist-ref" combine="interleave">
+    <optional>
+      <attribute name="tip">
+        <choice>
+          <value>vid</value>
+          <value>hom</value>
+          <value>dif</value>
+          <value>sin</value>
+          <value>ant</value>
+          <value>super</value>
+          <value>sub</value>
+          <value>prt</value>
+          <value>malprt</value>
+          <value>lst</value>
+          <value>ekz</value>
+        </choice>
+      </attribute>
+    </optional>
+    <attribute name="cel"/>
+    <optional>
+      <attribute name="lst"/>
+    </optional>
+    <optional>
+      <attribute name="val"/>
+    </optional>
+  </define>
+  <!-- [lstref] Referenco al vortlisto el artikolo. -->
+  <define name="lstref">
+    <element name="lstref">
+      <ref name="attlist-lstref"/>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="tld"/>
+          <ref name="klr"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="attlist-lstref" combine="interleave">
+    <attribute name="lst"/>
+  </define>
+  <define name="tezrad">
+    <a:documentation>Tezaŭraradiko. La kapvorto aperas en la enirlisto
+de la tezaŭro. Se vi uzas la atributon &lt;dfn&gt;fak&lt;/dfn&gt;, 
+ĝi aperas en la struktura enirlisto de la fako.</a:documentation>
+    <element name="tezrad">
+      <ref name="attlist-tezrad"/>
+      <empty/>
+    </element>
+  </define>
+  <define name="attlist-tezrad" combine="interleave">
+    <optional>
+      <attribute name="fak">
+        <ref name="fako"/>
+      </attribute>
+    </optional>
+  </define>
+  <define name="trdgrp">
+    <a:documentation>Tradukgrupo kunigas diversajn tradukojn de
+sama lingvo.</a:documentation>
+    <element name="trdgrp">
+      <ref name="attlist-trdgrp"/>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="trd"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="attlist-trdgrp" combine="interleave">
+    <attribute name="lng"/>
+  </define>
+  <!-- FARENDA: difinu trd engrupa (sen lng) kaj memstara, sola -->
+  <define name="trd">
+    <a:documentation>Traduko kosistas el traduka vorto aŭ frazo
+kaj klarigoj, poste povos sekvi aliaj elementoj.</a:documentation>
+    <element name="trd">
+      <ref name="attlist-trd"/>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="klr"/>
+          <ref name="ind"/>
+          <ref name="mll"/>
+          <ref name="ofc"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="attlist-trd" combine="interleave">
+    <optional>
+      <attribute name="lng"/>
+    </optional>
+    <optional>
+      <attribute name="fnt"/>
+    </optional>
+  </define>
+  <!--
+    [ind] Parto de traduko, kiu liveras la kapvorton en la
+    indekso, do &lt;trd&gt;sich &lt;ind&gt;bem&uuml;hen&lt;/ind&gt;&lt;/trd&gt;
+    aperas sub bem&uuml;hen. Aŭ parto de ekzemplo aŭ bildpriskribo, al
+    kiu rilatas internaj tradukoj ktp.
+  -->
+  <define name="ind">
+    <element name="ind">
+      <ref name="attlist-ind"/>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="tld"/>
+          <ref name="klr"/>
+          <ref name="mll"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="attlist-ind" combine="interleave">
+    <empty/>
+  </define>
+  <define name="mll">
+    <element name="mll">
+      <ref name="attlist-mll"/>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="tld"/>
+          <ref name="klr"/>
+          <ref name="ind"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="attlist-mll" combine="interleave">
+    <optional>
+      <attribute name="tip">
+        <choice>
+          <value>kom</value>
+          <value>mez</value>
+          <value>fin</value>
+        </choice>
+      </attribute>
+    </optional>
+  </define>
+  <define name="bld">
+    <a:documentation>Bildo povas ilustri iun vorton aŭ sencon. Per la
+atributo &lt;dfn&gt;lok&lt;/dfn&gt; ĝi
+referencas al ekstera dosiero, kiu entenas la bildon.
+Per &lt;dfn&gt;alt&lt;/dfn&gt; aŭ &lt;dfn&gt;lrg&lt;/dfn&gt; vi povas doni fiksan formaton.
+Per &lt;dfn&gt;tip&lt;/dfn&gt; vi donas tipon de la bildo, t.e. &lt;dfn&gt;img&lt;/dfn&gt;
+por JPEG, GIF, PNG-bildo, &lt;dfn&gt;svg&lt;/dfn&gt; por SVG-vektorgrafiko.
+Per &lt;dfn&gt;aut&lt;/dfn&gt; vi donas aŭtoron kaj &lt;dfn&gt;prm&lt;/dfn&gt; la permesilon
+laŭ kiu la bildo rajtas esti uzata (vd ĉe Wikimedia Commons).</a:documentation>
+    <element name="bld">
+      <ref name="attlist-bld"/>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="tld"/>
+          <ref name="klr"/>
+          <ref name="fnt"/>
+          <ref name="ind"/>
+          <ref name="trd"/>
+          <ref name="trdgrp"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="attlist-bld" combine="interleave">
+    <attribute name="lok">
+      <data type="anyURI"/>
+    </attribute>
+    <optional>
+      <attribute name="mrk">
+        <ref name="marko"/>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="tip" a:defaultValue="img">
+        <choice>
+          <value>img</value>
+          <value>svg</value>
+        </choice>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="alt">
+        <data type="int"/>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="lrg">
+        <data type="int"/>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="prm"/>
+    </optional>
+  </define>
+  <!--
+    [adm] Administraj informoj estu por redaktado. Ili povus
+    enhavi informojn pri kreodato, ŝanĝdato, aŭtoro, eraroj kaj
+    plibonigproponoj pri artikolo. Ĝia strukturo ankoraŭ estas
+    diskutatebla.
+  -->
+  <define name="adm">
+    <element name="adm">
+      <ref name="attlist-adm"/>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="aut"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="attlist-adm" combine="interleave">
+    <empty/>
+  </define>
+  <define name="tld">
+    <a:documentation>Tildo rilatas al la radiko, donita en la kapvorto
+ĝi ne bezonas enhavon. La atributo &lt;dfn&gt;lit&lt;/dfn&gt; indikas alian
+komencliteron ol havas la radiko, grava por majuskligo kaj
+minuskligo.</a:documentation>
+    <element name="tld">
+      <ref name="attlist-tld"/>
+      <empty/>
+    </element>
+  </define>
+  <define name="attlist-tld" combine="interleave">
+    <optional>
+      <attribute name="lit"/>
+    </optional>
+  </define>
+  <!--  [klr] Klarigo pri vorto, difino, ekzemplo ktp. -->
+  <define name="klr">
+    <element name="klr">
+      <ref name="attlist-klr"/>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="trd"/>
+          <ref name="trdgrp"/>
+          <ref name="ekz"/>
+          <ref name="ref"/>
+          <ref name="refgrp"/>
+          <ref name="esc"/>
+          <ref name="tekst-stiloj"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="attlist-klr" combine="interleave">
+    <optional>
+      <attribute name="tip">
+        <choice>
+          <value>ind</value>
+          <value>amb</value>
+        </choice>
+      </attribute>
+    </optional>
+  </define>
+  <!--
+    [bib] Bibliografia indiko por fonto, estas mallongigo el
+    listo de difinitaj bibliografieroj kaj anstataŭas verko- kaj aŭtoroindikon
+    en la fontoj.
+  -->
+  <define name="bib">
+    <element name="bib">
+      <ref name="attlist-bib"/>
+      <zeroOrMore>
+        <text/>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="attlist-bib" combine="interleave">
+    <empty/>
+  </define>
+  <!-- [vrk] Verko, en kiu troviĝas citita frazo aŭ vorto -->
+  <define name="vrk">
+    <element name="vrk">
+      <ref name="attlist-vrk"/>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="url"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="attlist-vrk" combine="interleave">
+    <empty/>
+  </define>
+  <!-- [lok] Loko, kie troviĝas citita frazo aŭ vorto en verko -->
+  <define name="lok">
+    <element name="lok">
+      <ref name="attlist-lok"/>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="url"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="attlist-lok" combine="interleave">
+    <empty/>
+  </define>
+  <!-- [aut] Aŭtoro de citita frazo aŭ verko -->
+  <define name="aut">
+    <element name="aut">
+      <ref name="attlist-aut"/>
+      <text/>
+    </element>
+  </define>
+  <define name="attlist-aut" combine="interleave">
+    <empty/>
+  </define>
+  <!-- [frm] Matematika au kemia formulo -->
+  <define name="frm">
+    <element name="frm">
+      <ref name="attlist-frm"/>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="sup"/>
+          <ref name="sub"/>
+          <ref name="g"/>
+          <ref name="k"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="attlist-frm" combine="interleave">
+    <empty/>
+  </define>
+  <!--
+    [g] Grasa parto de formulo, ekz. vektoro, matrico k.s.,
+    bv. uzi nur en frm
+  -->
+  <define name="g">
+    <element name="g">
+      <ref name="attlist-g"/>
+      <zeroOrMore>
+        <text/>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="attlist-g" combine="interleave">
+    <empty/>
+  </define>
+  <!--
+    [k] Kursiva parto de formulo, ekz. variablo k.s.,
+    bv. uzi nur en frm
+  -->
+  <define name="k">
+    <element name="k">
+      <ref name="attlist-k"/>
+      <zeroOrMore>
+        <text/>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="attlist-k" combine="interleave">
+    <empty/>
+  </define>
+  <!--  [em] Emfazo. Normale grase skribata vortoj. -->
+  <define name="em">
+    <element name="em">
+      <ref name="attlist-em"/>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="tld"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="attlist-em" combine="interleave">
+    <empty/>
+  </define>
+  <!-- [sup] altigita teksto, ekz. en ĥemiaj formuloj -->
+  <define name="sup">
+    <element name="sup">
+      <ref name="attlist-sup"/>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="g"/>
+          <ref name="k"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="attlist-sup" combine="interleave">
+    <empty/>
+  </define>
+  <!-- [sub] malaltigita teksto, ekz. en ĥemiaj formuloj -->
+  <define name="sub">
+    <element name="sub">
+      <ref name="attlist-sub"/>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="g"/>
+          <ref name="k"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="attlist-sub" combine="interleave">
+    <empty/>
+  </define>
+  <!-- [ctl] citilita teksto, ekz. memindika uzo de vorto -->
+  <define name="ctl">
+    <element name="ctl">
+      <ref name="attlist-ctl"/>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="tld"/>
+          <ref name="em"/>
+          <ref name="frm"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="attlist-ctl" combine="interleave">
+    <empty/>
+  </define>
+  <!--
+    [nom] nomo ne-esperantigita, ignorata dum vortkontrolo
+    ekz. "Karl Bein"
+  -->
+  <define name="nom">
+    <element name="nom">
+      <ref name="attlist-nom"/>
+      <zeroOrMore>
+        <text/>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="attlist-nom" combine="interleave">
+    <empty/>
+  </define>
+  <!--
+    [nac] nacilingva vorto aŭ esprimo, ignorata dum vortkontrolo
+    ekz. "powerful"
+  -->
+  <define name="nac">
+    <element name="nac">
+      <ref name="attlist-nac"/>
+      <zeroOrMore>
+        <text/>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="attlist-nac" combine="interleave">
+    <empty/>
+  </define>
+  <!--
+    [esc] escepta vorto aŭ esprimo laŭ vortanaliza gramatiko, 
+    ekz. "vivipova" (anst. "pova vivi" aŭ "vivopova"), "ĵusfarita" (anst. "ĵus farita")
+  -->
+  <define name="esc">
+    <element name="esc">
+      <ref name="attlist-esc"/>
+      <zeroOrMore>
+        <text/>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="attlist-esc" combine="interleave">
+    <empty/>
+  </define>
+  <!--
+    [url] Referenco al iu ekstera dosiero. En la HTML-versio de vortaro
+    tio fariĝas &lt;a href=...&gt; Anstataŭ la TTT-ejo prefere uzu
+    la alinomojn difinitajn en la DTD, ĉar alikaze la referencoj tro
+    ofte malvalidiĝus.
+  -->
+  <define name="url">
+    <element name="url">
+      <ref name="attlist-url"/>
+      <text/>
+    </element>
+  </define>
+  <define name="attlist-url" combine="interleave">
+    <optional>
+      <attribute name="ref">
+        <data type="anyURI"/>
+      </attribute>
+    </optional>
+  </define>
+  <!--
+    [mlg] mallongigo de la kapvorto, ekz. che nomoj de organizajhoj. 
+    Per "kod" vi povas indiki devenon de la mallongigo, ekz. ISO-3166 ĉe landokodoj
+  -->
+  <define name="mlg">
+    <element name="mlg">
+      <ref name="attlist-mlg"/>
+      <text/>
+    </element>
+  </define>
+  <define name="attlist-mlg" combine="interleave">
+    <optional>
+      <attribute name="kod"/>
+    </optional>
+  </define>
+  <start>
+    <ref name="vortaro"/>
+  </start>
+</grammar>
