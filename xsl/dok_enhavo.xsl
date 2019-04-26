@@ -8,7 +8,7 @@
   extension-element-prefixes="saxon" 
 >
 
-<!-- faras la chefajn paghojn index.html kaj titolo.html el voko/cfg/enhavo.xml -->
+<!-- faras la ĉefajn paĝojn index.html kaj titolo.html el voko/cfg/enhavo.xml -->
 
 <!-- xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 version="1.0"
@@ -16,7 +16,7 @@
     extension-element-prefixes="redirect" -->
 
 
-<!-- (c) 2006 che Wolfram Diestel
+<!-- (c) 2006-2018 ĉe Wolfram Diestel
      licenco GPL 2.0
 -->
 
@@ -33,6 +33,7 @@ aperas "c _x_" anstata "c_x_" -->
   <html>
     <head>
       <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+      <meta name="viewport" content="width=device-width,initial-scale=1"/>
       <title><xsl:value-of select="@nomo"/></title>
       <xsl:if test="@piktogramo">
          <link rel="SHORTCUT ICON" href="{@piktogramo}"/>
@@ -70,19 +71,20 @@ aperas "c _x_" anstata "c_x_" -->
   <!-- redirect:write select="'titolo.html'" -->
   <html>
     <head>
-      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+      <meta name="viewport" content="width=device-width,initial-scale=1"/>
       <title><xsl:value-of select="@nomo"/></title>
       <link title="artikolo-stilo" type="text/css" 
             rel="stylesheet" href="stl/artikolo.css"/>
-
+      <script type="text/javascript" src="jsc/kuketoj.js"></script>
       <xsl:if test="bonveno/sercho">
         <xsl:call-template name="script-literoj"/>
       </xsl:if>
     </head>
     <body>
       <xsl:if test="bonveno/sercho">
-        <xsl:attribute name="onLoad">
-  	  <xsl:text>document.f.sercxata.focus();</xsl:text>
+        <xsl:attribute name="onload">
+  	      <xsl:text>checkCookieConsent(); document.f.sercxata.focus();</xsl:text>
         </xsl:attribute>
       </xsl:if>
 
@@ -90,6 +92,32 @@ aperas "c _x_" anstata "c_x_" -->
 
       <xsl:apply-templates select="bonveno/(alineo|bildo|sercho)"/>
 
+
+      <p class="piedlinio">
+        <a class="redakto" title="Reta Vortaro, konstanta URL" target="_top"
+	   href="http://purl.org/net/voko/revo/">&#x211B;evo</a> |
+	<a class="redakto" title="Datumprotekta deklaro" 
+           href="dok/datumprotekto.html">datumprotekto</a> |
+	<a class="redakto" title="Permeso de uzado" target="_new"
+           href="dok/copying.txt">permeso</a> |
+	<a class="redakto" title="Bibliografio" target="indekso"
+	   href="dok/bibliogr.html">bibliografio</a> |
+	<a class="redakto" title="Vortaraj mallongigoj" target="indekso"
+           href="dok/mallongigoj.html">mallongigoj</a> |
+	<a class="redakto" title="Superserĉo per ViVo" target="_new"
+           href="http://kono.be/vivo">ViVo</a>
+      </p>
+      
+      <div class="kuketoaverto" id="kuketoaverto">
+        <p>
+	  Ni uzas kuketojn (retumilajn memoretojn).
+	  Uzante nian servon vi konsentas al konservado de informoj en kuketoj.
+	  Eksciu pli pri la uzado de personaj datumoj en la
+	  <a href="dok/datumprotekto.html">datumprotekta deklaro</a>.<br/>
+          <button name="konfirmo" onClick="setCookieConsent(); document.f.sercxata.focus();">Mi konfirmas</button>
+	</p>
+      </div>
+      
     </body>
   </html>
   <!-- /redirect:write -->
@@ -106,7 +134,8 @@ aperas "c _x_" anstata "c_x_" -->
   <!-- redirect:write select="'jsaverto.html'" -->
   <html>
     <head>
-      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+      <meta name="viewport" content="width=device-width,initial-scale=1"/>
       <title>Javoskript-Averto</title>
       <link title="artikolo-stilo" type="text/css" 
             rel="stylesheet" href="stl/artikolo.css"/>
@@ -184,7 +213,7 @@ aperas "c _x_" anstata "c_x_" -->
         <p>
 	Ser&#265;o en ReVo:
 	<input type='text' id='sercxata' name='sercxata' size="31" maxlength="255" 
-	onKeyUp="xAlUtf8(this.value,'sercxata')"/>
+	  onKeyUp="xAlUtf8(this.value,'sercxata')" placeholder="Ĵokeroj: % (pluraj) kaj _ (unu)"/>
 	<input type='submit' value='trovu'/>
 	</p>
         <p>

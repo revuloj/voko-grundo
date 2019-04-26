@@ -5,7 +5,7 @@
      licenco GPL 2.0
 -->
 
-<xsl:include href="inx_menuo.inc"/>
+<xsl:include href="inc/inx_menuo.inc"/>
 
 <xsl:output method="html" encoding="utf-8" indent="no"/>
 
@@ -18,7 +18,8 @@
 
   <html>
     <head>
-      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+      <meta name="viewport" content="width=device-width,initial-scale=1"/>     
       <title><xsl:text>eraroraporto</xsl:text></title>
       <link title="indekso-stilo" type="text/css" 
             rel="stylesheet" href="../stl/indeksoj.css"/>
@@ -29,11 +30,38 @@
         <tr>
           <td colspan="{$inx_paghoj}" class="enhavo">
             <h1><xsl:text>eraroraporto</xsl:text></h1>
-            <dl>
-            <xsl:apply-templates select="//art[ero]">
-              <xsl:sort select="@dos"/>
-            </xsl:apply-templates>
-            </dl>
+	    <p>
+              Jen troviĝas listo de eraroj, kiujn la kontrolo per la dokumenttipdifino (DTD) ne trovas, 
+              sed kiuj tamen estas korektendaj: Precipe neregule formitaj markoj, kaj sencelaj referencoj. 
+              Tio povas esti mistajpoj, sed ankaŭ ekzemple aldonita referenco al vorto, kiu ankoraŭ mankas
+              en la vortaro kaj do estas aldonenda.
+	    </p>
+            <p>
+              Konsideru ankaŭ pliajn trovaĵojn en la listo <a href="relax_eraroj.html">neregulaĵoj 
+              trovitaj per RelaxNG</a> kaj la rezultojn de la 
+              <a target="_new" href="http://h1838790.stratoserver.net/revokontrolo/">vortokontrolo</a>
+              kun <a target="_new" href="http://h1838790.stratoserver.net/revokontrolo/klarigoj.html">klarigoj</a>
+              pri enhava analizo de la vortaro.
+            </p>
+            <xsl:variable name="n-sen-ekz"><xsl:value-of select="count(//art/ero[@tip='dos-sen-ekz'])"/></xsl:variable>
+            <xsl:if test="$n-sen-ekz &gt; 200">
+                <p>
+                    Estas entute <xsl:value-of select="$n-sen-ekz"/> artikoloj sen ekzemplo.
+                    Pro koncizeco nur la lastaj 200 estas listigitaj.
+                </p>
+            </xsl:if>
+            <xsl:choose>
+              <xsl:when test="//art[ero]">
+                <dl>
+                  <xsl:apply-templates select="//art[ero]">
+                    <xsl:sort select="@dat" order="descending"/>
+                  </xsl:apply-templates>
+                </dl>
+              </xsl:when>
+              <xsl:otherwise>
+                 <p>(<em>Ne troviĝis strukturaj eraroj kontrolitaj tie ĉi.</em>)</p>
+              </xsl:otherwise>
+            </xsl:choose>
           </td>
         </tr>
       </table>
@@ -42,12 +70,14 @@
 </xsl:template>
 
 <xsl:template match="art">
-  <dt>
-    <a href="{concat('../art/',@dos,'.html')}" target="precipa"><b><xsl:value-of select="@dos"/></b></a>
-  </dt>
-  <dd>
-    <xsl:apply-templates select="ero"/>
-  </dd>
+    <xsl:if test="ero[not(@tip='dos-sen-ekz')] or position() &lt; 201">
+      <dt>
+        <a href="{concat('../art/',@dos,'.html')}" target="precipa"><b><xsl:value-of select="@dos"/></b></a>
+      </dt>
+      <dd>      
+        <xsl:apply-templates select="ero"/>
+      </dd>
+    </xsl:if>
 </xsl:template>
 
 <xsl:template match="ero">
@@ -73,6 +103,10 @@
       </xsl:when>
       <xsl:when test="@tip='mrk-nul'">
         Dua parto de la atributo "mrk" ne enhavas la signon "0".
+      </xsl:when>
+        
+      <xsl:when test="@tip='dos-sen-ekz'">
+        Mankas ekzemplo en la artikolo. Ĉiu vorto bezonas almenaŭ unu ne-vortaran fonton (citaĵon) por montri ĝian uzon.
       </xsl:when>
 
       <xsl:when test="@tip='uzo-fak'">
@@ -107,7 +141,9 @@
         Referenco donas liston "<xsl:value-of select="@arg"/>", kiu ne
 	ekzistas.
       </xsl:when>
-
+      <xsl:when test="@tip='drv-sen-var'">
+        Variaĵo en art/kap/var ne indeksiĝas, necesas aldoni ĝin kiel drv/kap/var.
+      </xsl:when>
       <xsl:otherwise>
         Nekonata eraro de la tipo "<xsl:value-of select="@tip"/>".
       </xsl:otherwise>

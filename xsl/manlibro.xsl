@@ -1,9 +1,6 @@
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns:xt="http://www.jclark.com/xt"
-		version="1.0"
-                extension-element-prefixes="xt">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
 
-<xsl:output method="html" version="3.2" cdata-section-elements="code"/>
+<xsl:output method="html" cdata-section-elements="code"/>
 <xsl:strip-space elements=""/>
 
 <!--
@@ -17,21 +14,21 @@ kreita de Wolfram Diestel
 <xsl:template match="/manlibro">
   <html>
   <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-  <link title="artikolo-stilo" type="text/css" rel="stylesheet"
-    href="{$cssdir}/artikolo.css" />
-  <title><xsl:value-of select="h1"/></title>
-  <style type="text/css">
-  <xsl:comment>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <link title="artikolo-stilo" type="text/css" rel="stylesheet"
+	  href="{$cssdir}/artikolo.css" />
+    <title><xsl:value-of select="h1"/></title>
+    <style type="text/css">
+      <xsl:comment>
         .code { background-color : #eeeebb; padding: 0.1cm }
         .element { color : blue }
         .attribute { color: #007700 }
         .attribute-value { color: #004400 }
         .content { color: black}
         .comment { color: #777777 }
-  </xsl:comment>
-  </style>
-
+      </xsl:comment>
+    </style>
   </head>
   <body>
   

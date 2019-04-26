@@ -28,22 +28,22 @@
      El ĉiu nodo kreiĝas unu HTML-dosiero 
 -->
 
-<xsl:include href="inx_kodigo.inc"/>
+<xsl:include href="inc/inx_kodigo.inc"/>
 
 <xsl:output method="@format@" encoding="utf-8"/>
 <xsl:strip-space elements="k"/>
 
-<xsl:include href="inx_ordigo2.inc"/>
+<xsl:include href="inc/inx_ordigo2.inc"/>
 <xsl:template name="v"/> <!-- referencita de inx_ordigo2.inc, sed ne bezonata tie ĉi -->
 
 <xsl:param name="verbose" select="'false'"/>
 <xsl:param name="warn-about-dead-refs" select="'false'"/>
 
 
-<!-- xsl:variable name="fakoj">../cfg/fakoj.xml</xsl:variable -->
+<xsl:variable name="fakoj">../cfg/fakoj.xml</xsl:variable>
 <xsl:variable name="klasoj_cfg" select="'../cfg/klasoj.xml'"/>
 <xsl:variable name="enhavo">../cfg/enhavo.xml</xsl:variable>
-  <xsl:variable name="inx_paghoj" select="count(document($enhavo)//pagho[not(@kashita='jes')])"/>
+<xsl:variable name="inx_paghoj" select="count(document($enhavo)//pagho[not(@kashita='jes')])"/>
 
 <xsl:variable name="root" select="/"/>
 
@@ -63,7 +63,16 @@
 
 
 <xsl:template match="nod">
-  <xsl:variable name="dosiero" select="concat('tz_',translate(@mrk,'.','_'),'.html')"/>
+  <xsl:variable name="dosiero">
+    <xsl:choose>
+      <xsl:when test="@mrk != ''">
+        <xsl:value-of select="concat('tz_',translate(@mrk,'.','_'),'.html')"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="concat('tz_',translate(@mrk2,'.','_'),'.html')"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
 
   <xsl:if test="$verbose='true'">
     <xsl:message>skribas al <xsl:value-of select="$dosiero"/></xsl:message>
@@ -73,7 +82,8 @@
   <xsl:result-document href="{$dosiero}" method="@format@" encoding="utf-8" indent="yes">
   <html>
     <head>
-      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+      <meta name="viewport" content="width=device-width,initial-scale=1"/>
       <title><xsl:value-of select="concat('teza&#x016d;ro: ',k)"/></title>
       <link title="indekso-stilo" type="text/css" 
             rel="stylesheet" href="../stl/indeksoj.css"/>
@@ -115,7 +125,8 @@
     <xsl:result-document href="{$dosiero}" method="@format@" encoding="utf-8" indent="yes">
     <html>
       <head>
-         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
+         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+         <meta name="viewport" content="width=device-width,initial-scale=1"/>
          <title><xsl:value-of select="concat('teza&#x016d;ro - fako: ',$fak)"/></title>
          <link title="indekso-stilo" type="text/css" 
             rel="stylesheet" href="../stl/indeksoj.css"/>
@@ -163,21 +174,20 @@
 </xsl:template -->
 
 
-<!-- xsl:template name="fak-ref">
-  <xsl:param name="fak"/>
-
-  <a href="{concat('fxs_',$fak,'.html')}">
-    <img src="{concat('../smb/',$fak,'.gif')}" alt="{$fak}" border="0"/>
-  </a>
-</xsl:template -->
-
-
 <xsl:template name="fak-ref">
   <xsl:param name="fak"/>
 
+  <xsl:for-each select="document($fakoj)/fakoj/fako[@kodo=$fak]">
+    <a href="{concat('../inx/fx_',$fak,'.html')}">
+      <img src="{@vinjeto}" class="fak" alt="{@kodo}" border="0"/>
+    </a>
+  </xsl:for-each>
+
+  <!--
   <a href="{concat('../inx/fx_',$fak,'.html')}">
     <img src="{concat('../smb/',$fak,'.gif')}" alt="{$fak}" border="0"/>
-  </a>
+    </a>
+    -->
 </xsl:template>
 
 

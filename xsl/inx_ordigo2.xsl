@@ -21,7 +21,7 @@
 <!-- saxon:collation name="unicode"
 class="net.sf.saxon.sort.CodepointCollator"/ -->
 
-<xsl:include href="inx_ordigo2.inc"/>
+<xsl:include href="inc/inx_ordigo2.inc"/>
 
 <xsl:variable name="ordigo">../cfg/ordigo2.xml</xsl:variable>
 
@@ -62,8 +62,14 @@ class="net.sf.saxon.sort.CodepointCollator"/ -->
     <xsl:message>DBG: ordigi lau lingvo: "<xsl:value-of select="$ordlng"/>"...</xsl:message>
   </xsl:if>
 
+  <!-- Chu problemo: tio enkludas ankau <i>...</i> kiuj tiel ne aparas sub la ĵokero-litero "?" 
+       aliflanke en taja lingvo tio estas ghuse uzata por ne havi vortojn komencighantajn
+       per vokalo en du indeksoj -->
   <xsl:variable name="chiuj_literoj"
       select="translate(normalize-space(document($ordigo)/ordigo/lingvo[@lng=$ordlng]),' ','')"/>
+
+  <xsl:variable name="ignorendaj" select="concat('-(',document($ordigo)/ordigo/lingvo[@lng=$ordlng]/@ignorendaj)"/>
+
 
   <xsl:if test="$debug='true'">
     <xsl:message>DBG: literoj: "<xsl:value-of select="$chiuj_literoj"/>"...</xsl:message>
@@ -89,7 +95,8 @@ class="net.sf.saxon.sort.CodepointCollator"/ -->
            select="number(substring(concat(../l[@name=current()/@minus]/@n,'1'),1,1))"/>     
 
         <xsl:call-template name="trd-litero">
-           <xsl:with-param name="trdoj" select="$trdoj/v[contains(current(),substring(t,1,$n)) 
+           <xsl:with-param name="trdoj" select="$trdoj/v[contains(current(),
+		substring(translate(t,$ignorendaj,''),1,$n)) 
              and not(contains($minus,substring(t,1,$nminus)))]"/>
            <xsl:with-param name="ordlng" select="$ordlng"/>
            <xsl:with-param name="lit-name" select="@name"/>
@@ -107,7 +114,8 @@ class="net.sf.saxon.sort.CodepointCollator"/ -->
 
         <xsl:call-template name="trd-litero">
            <xsl:with-param name="trdoj"
-              select="$trdoj/v[not(contains($chiuj_literoj,substring(t,1,1)))]"/>
+              select="$trdoj/v[not(contains($chiuj_literoj,
+		substring(translate(t,$ignorendaj,''),1,1)))]"/>
            <xsl:with-param name="ordlng" select="$ordlng"/>
            <xsl:with-param name="lit-name" select="'0'"/>
            <xsl:with-param name="lit-min" select="'?'"/>

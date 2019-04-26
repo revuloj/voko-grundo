@@ -1,13 +1,20 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 		version="1.0">
 
-<!-- (c) 1999-2003 che Wolfram Diestel
+<!-- (c) 1999-2018 ĉe Wolfram Diestel laŭ GPLv2
 
 reguloj por prezentado de referencoj/tezauro-ligo
 
 -->
 
+<!--
+
+tio uzas XSLT 2.0 funkcion "replace". Tio kaŭzas ekz. problemon en revotxt.xsl
+pro krei DICT-version. Eble provu inkludi tion anstataŭe en la plej supra
+transformdosiero, ekz. revohtml.xsl
+
 <xsl:include href="inx_kodigo.inc"/>
+-->
 
 <xsl:template match="sncref">
   <!-- Se ne ekzistas la XML-dosiero, la tuta transformado fiaskas cxe
@@ -60,6 +67,46 @@ reguloj por prezentado de referencoj/tezauro-ligo
   </xsl:choose>
 </xsl:template>
 
+
+<xsl:template name="reftitle">
+  <xsl:choose>
+    <xsl:when test="@tip='vid'">
+      <xsl:text>vidu</xsl:text>
+    </xsl:when>
+    <xsl:when test="@tip='dif'">
+      <xsl:text>difino ĉe</xsl:text>
+    </xsl:when>
+    <xsl:when test="@tip='sin'">
+      <xsl:text>sinonimo</xsl:text>
+    </xsl:when>
+    <xsl:when test="@tip='ant'">
+      <xsl:text>antonimo</xsl:text>
+    </xsl:when>
+    <xsl:when test="@tip='super'">
+      <xsl:text>supernocio</xsl:text>
+    </xsl:when>
+    <xsl:when test="@tip='sub'">
+      <xsl:text>subnocio</xsl:text>
+    </xsl:when>
+    <xsl:when test="@tip='prt'">
+      <xsl:text>parto</xsl:text>
+    </xsl:when>
+    <xsl:when test="@tip='malprt'">
+      <xsl:text>parto de</xsl:text>
+    </xsl:when>
+    <xsl:when test="@tip='hom'">
+      <xsl:text>homonimo</xsl:text>
+    </xsl:when>
+    <xsl:when test="@tip='lst'">
+      <xsl:text>listo</xsl:text>
+    </xsl:when>
+    <xsl:when test="@tip='ekz'">
+      <xsl:text>ekzemplo</xsl:text>
+    </xsl:when>
+  </xsl:choose>
+</xsl:template>
+
+
 <xsl:template match="refgrp">
   <xsl:choose>
 
@@ -68,6 +115,9 @@ reguloj por prezentado de referencoj/tezauro-ligo
         <xsl:attribute name="alt">
           <xsl:call-template name="reftip"/>
         </xsl:attribute>
+        <xsl:attribute name="title">
+	  <xsl:call-template name="reftitle"/>
+	</xsl:attribute>	
       </img>
     </xsl:when>
 
@@ -89,6 +139,9 @@ reguloj por prezentado de referencoj/tezauro-ligo
           <xsl:attribute name="alt">
             <xsl:call-template name="reftip"/>
           </xsl:attribute>
+          <xsl:attribute name="title">
+	    <xsl:call-template name="reftitle"/>
+	  </xsl:attribute>
         </img> 
       </xsl:if>
     </xsl:when>
@@ -118,25 +171,6 @@ reguloj por prezentado de referencoj/tezauro-ligo
 
     </xsl:choose>
   </span>
-</xsl:template>
-
-
-<!-- NE PLU UZENDA, forigu okaze -->
-<xsl:template match="tez">
-  <br/>
- <!-- <a name="{@mrk}"/> -->
-  <xsl:comment>[[
-      ref="<xsl:value-of select="@mrk"/>"
-    ]]</xsl:comment>
-  <span class="tez">
-    <xsl:apply-templates/>
-  </span>
-</xsl:template>
-
-
-<!-- NE PLU UZENDA, forigu okaze -->
-<xsl:template match="tez" mode="ref">
-  <a name="{@mrk}"/>
 </xsl:template>
 
 

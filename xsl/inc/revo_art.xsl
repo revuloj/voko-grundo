@@ -11,28 +11,30 @@ reguloj por la prezentado de la artikolostrukturo
 
 <xsl:template match="/">
   <html>
-  <head>
-  <xsl:if test="$aspekto='ilustrite'">
-    <link title="artikolo-stilo" type="text/css" rel="stylesheet"
-          href="{$cssdir}/artikolo.css" />
-  </xsl:if>
-  <title>
-    <xsl:apply-templates select="//art/kap[1]" mode="titolo"/>
-  </title>
+    <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+      <meta name="viewport" content="width=device-width,initial-scale=1"/>
+      <xsl:if test="$aspekto='ilustrite'">
+	<link title="artikolo-stilo" type="text/css" rel="stylesheet"
+              href="{$cssdir}/artikolo.css" />
+      </xsl:if>
+      <title>
+	<xsl:apply-templates select="//art/kap[1]" mode="titolo"/>
+      </title>
 
-  <script type="text/javascript">
-  <xsl:text>&lt;!--
-top.document.title = 'Reta Vortaro [</xsl:text>
-  <xsl:value-of select="normalize-space(//art/kap[1])"/>
-  <xsl:text>]';
-</xsl:text>
-<xsl:text>//--&gt;</xsl:text>
-  </script>
-
-  </head>
-  <body>
-    <xsl:apply-templates/>
-  </body>
+      <script type="text/javascript">
+	<xsl:text>&lt;!--
+	top.document.title = 'Reta Vortaro [</xsl:text>
+	<xsl:value-of select="normalize-space(//art/kap[1])"/>
+	<xsl:text>]';
+	</xsl:text>
+	<xsl:text>//--&gt;</xsl:text>
+      </script>
+     
+    </head>
+    <body>
+      <xsl:apply-templates/>
+    </body>
   </html>
 </xsl:template>
 
@@ -104,7 +106,7 @@ top.document.title = 'Reta Vortaro [</xsl:text>
 
 <xsl:template match="drv">
   <a name="{@mrk}"/>
-    <xsl:apply-templates select="tez" mode="ref"/>
+    <!-- xsl:apply-templates select="tez" mode="ref"/ -->
     <xsl:apply-templates select="kap|gra|uzo|fnt|dif|ref[@tip='dif']"/>
 
     <dl>
@@ -191,7 +193,7 @@ top.document.title = 'Reta Vortaro [</xsl:text>
   <xsl:if test="@mrk">
     <a name="{@mrk}"></a>
   </xsl:if>
-  <xsl:apply-templates select="tez" mode="ref"/>
+  <!-- xsl:apply-templates select="tez" mode="ref"/ -->
 
   <dt>
     <xsl:choose>
@@ -248,7 +250,7 @@ top.document.title = 'Reta Vortaro [</xsl:text>
   <xsl:if test="@mrk">
     <a name="{@mrk}"/>
   </xsl:if>
-  <xsl:apply-templates select="tez" mode="ref"/>
+  <!-- xsl:apply-templates select="tez" mode="ref"/ -->
 
   <dt>
 

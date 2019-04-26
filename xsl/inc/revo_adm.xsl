@@ -1,7 +1,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 		version="1.0">
 
-<!-- (c) 199-2003 che Wolfram Diestel
+<!-- (c) 1999-2018 ĉe Wolfram Diestel
 
 reguloj por prezentado de la administraj notoj 
 
@@ -13,8 +13,10 @@ reguloj por prezentado de la administraj notoj
   <xsl:if test="//adm">
     <hr />
     <div class="notoj">
-    <h2>administraj notoj</h2>
-    <xsl:apply-templates select="//adm" mode="admin"/>
+      <h2>administraj notoj</h2>
+      <div class="kasxebla">
+        <xsl:apply-templates select="//adm" mode="admin"/>
+      </div>
     </div>
   </xsl:if>
 
@@ -71,24 +73,26 @@ reguloj por prezentado de la administraj notoj
         <xsl:variable name="xml"
           select="substring-before(substring-after(@mrk,'$Id: '),',v')"/>
 
-	  [^<a class="redakto" title="al la enirpaĝo" 
-	       href="../index.html" target="_top">Revo</a>] 
-          [<a class="redakto" target="_new" title="fontoteksto de la artikolo"
-              href="{$xmldir}/{$xml}"><xsl:value-of select="$xml"/></a>]
-          [<a class="redakto" title="al la redaktilo"
-              href="{$redcgi}{substring-before($xml,'.xml')}">redakti...</a>]
-          [<a class="redakto" target="_new" title="ViVo-tradukilo" 
-              href="{$vivocgi}{substring-before($xml,'.xml')}.html">traduki...</a>]
-          [<a class="redakto" target="_new" title="al la artikolohistorio"
+	  <a class="redakto" title="al la enirpaĝo" 
+  	      href="../index.html" target="_top">&#x211B;evo</a> |
+	  <a class="redakto" title="Datumprotekta deklaro" 
+              href="../dok/datumprotekto.html">datumprotekto</a> |	  
+          <a class="redakto" target="_new" title="fontoteksto de la artikolo"
+              href="{$xmldir}/{$xml}"><xsl:value-of select="$xml"/></a> |
+          <a class="redakto" title="al la redaktilo"
+              href="{$redcgi}{substring-before($xml,'.xml')}">redakti...</a> |
+          <a class="redakto" target="_new" title="ViVo-tradukilo" 
+              href="{$vivocgi}{substring-before($xml,'.xml')}.html">traduki...</a> |
+          <a class="redakto" target="_new" title="al la artikolohistorio"
               href="{$arhhivo}{substring-before($xml,'.xml')}">artikolversio</a>:
       </xsl:when>
       <xsl:otherwise>
-        [<a href="../index.html">Revo</a>] [artikolversio:
+        <a href="../index.html">Revo</a> | artikolversio:
       </xsl:otherwise>
     </xsl:choose>
   
     <xsl:value-of 
-      select="substring-before(substring-after(@mrk,',v'),'revo')"/>]
+      select="substring-before(substring-after(@mrk,',v'),'revo')"/>
   </span>
   <br />
 </xsl:template>

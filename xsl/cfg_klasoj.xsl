@@ -45,44 +45,56 @@
     <xsl:value-of select="$indent"/>
     <kls nom="{@rdf:about}">
 
-      <!-- ordigitaj klasanoj? -->
-      <xsl:if test="rdfs:subClassOf[@rdf:resource='&skos;OrderedCollection']">
-	<xsl:attribute name="ordigita">
-	  <xsl:value-of select="'jes'"/>
-	</xsl:attribute>
+    <!-- ordigitaj klasanoj? -->
+    <xsl:if test="rdfs:subClassOf[@rdf:resource='&skos;OrderedCollection']">
+      <xsl:attribute name="ordigita">
+        <xsl:value-of select="'jes'"/>
+      </xsl:attribute>
+    </xsl:if>
+
+    <xsl:if test="rdfs:seeAlso">
+      <xsl:attribute name="mrk">
+        <xsl:value-of select="rdfs:seeAlso/@rdf:resource"/>
+      </xsl:attribute>    
+    </xsl:if>
+
+    <xsl:if test="rdfs:label">
+      <xsl:attribute name="kap">
+        <xsl:value-of select="rdfs:label"/>
+      </xsl:attribute>    
+    </xsl:if>
+
+    <xsl:if test="voko:prezento">
+
+      <!-- integrita prezento de klasoj -->
+      <xsl:if test="voko:prezento='integrita' and
+              count(rdfs:subClassOf[starts-with(@rdf:resource,'&voko;')])>1">
+              <xsl:message>
+                <xsl:text>AVERTO: integrita prezento de klaso &quot;</xsl:text>
+          <xsl:value-of select="@rdf:about"/>
+          <xsl:text>&quot; povas kauzi problemojn, char </xsl:text>
+          <xsl:text>ghi havas pli ol unu superklason!</xsl:text>
+        </xsl:message>
       </xsl:if>
-
-      <xsl:if test="voko:prezento">
-
-	 <!-- integrita prezento de klasoj -->
-	 <xsl:if test="voko:prezento='integrita' and
-		       count(rdfs:subClassOf[starts-with(@rdf:resource,'&voko;')])>1">
-           <xsl:message>
-             <xsl:text>AVERTO: integrita prezento de klaso &quot;</xsl:text>
-	     <xsl:value-of select="@rdf:about"/>
-	     <xsl:text>&quot; povas kauzi problemojn, char </xsl:text>
-	     <xsl:text>ghi havas pli ol unu superklason!</xsl:text>
-	   </xsl:message>
-	 </xsl:if>
 
          <xsl:attribute name="prezento">
            <xsl:value-of select="voko:prezento"/>
          </xsl:attribute>
-       </xsl:if><xsl:text>
+    </xsl:if><xsl:text>
 </xsl:text>
 
-      <!-- traktu subklasojn -->
-      <xsl:call-template name="subklasoj">
-        <xsl:with-param name="bazoklaso">
-          <xsl:value-of select="@rdf:about"/>
-	</xsl:with-param>
-        <xsl:with-param name="indent">
-          <xsl:value-of select="concat($indent,'  ')"/>
-        </xsl:with-param>
-      </xsl:call-template>
-    <xsl:value-of select="$indent"/>
+    <!-- traktu subklasojn -->
+    <xsl:call-template name="subklasoj">
+      <xsl:with-param name="bazoklaso">
+        <xsl:value-of select="@rdf:about"/>
+      </xsl:with-param>
+      <xsl:with-param name="indent">
+        <xsl:value-of select="concat($indent,'  ')"/>
+      </xsl:with-param>
+    </xsl:call-template>
+  <xsl:value-of select="$indent"/>
 
-    </kls><xsl:text>
+  </kls><xsl:text>
 </xsl:text>
 
   </xsl:for-each>

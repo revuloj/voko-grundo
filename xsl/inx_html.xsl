@@ -18,7 +18,7 @@
      licenco GPL 2.0
 -->
 
-<xsl:include href="inx_kodigo.inc"/>
+<xsl:include href="inc/inx_kodigo.inc"/>
 
 <xsl:output method="@format@" encoding="utf-8"/>
 <xsl:strip-space elements="t t1 k"/>
@@ -116,7 +116,8 @@ select="concat($agordo-pado,'/klasoj.xml')"/></xsl:variable>
 		       indent="no">
   <html>
     <head>
-      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+      <meta name="viewport" content="width=device-width,initial-scale=1"/>
       <title><xsl:value-of select="concat(../@nometo,'-indekso: ',@titolo)"/></title>
       <link title="indekso-stilo" type="text/css" 
             rel="stylesheet" href="../stl/indeksoj.css"/>
@@ -311,7 +312,8 @@ select="concat($agordo-pado,'/klasoj.xml')"/></xsl:variable>
 		       encoding="utf-8" indent="no">
   <html>
     <head>
-      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+      <meta name="viewport" content="width=device-width,initial-scale=1"/>   
       <title><xsl:value-of select="concat(../@nometo,'-indekso: ',@titolo)"/></title>
       <link title="indekso-stilo" type="text/css" 
             rel="stylesheet" href="../stl/indeksoj.css"/>
@@ -356,7 +358,7 @@ select="concat($agordo-pado,'/klasoj.xml')"/></xsl:variable>
               <xsl:sort lang="eo"/>
 
               <xsl:if test="$root//fako[@fak=current()/@kodo]">
-                <img src="{@vinjeto}" alt="{@kodo}" border="0" align="middle"/>
+                <img src="{@vinjeto}" class="fak" alt="{@kodo}" border="0"/>
                 <xsl:text>&#xa0;</xsl:text>
                 <a>
                   <xsl:attribute name="href">
@@ -493,7 +495,8 @@ select="concat($agordo-pado,'/klasoj.xml')"/></xsl:variable>
 
   <html>
     <head>
-      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+      <meta name="viewport" content="width=device-width,initial-scale=1"/> 
           <xsl:choose>
              <xsl:when test="parent::node()[self::kap-oj]">
        <title>esperanta indekso</title>
@@ -637,7 +640,17 @@ select="concat($agordo-pado,'/klasoj.xml')"/></xsl:variable>
 
               <h2>kapvortoj k.a.</h2>
               <table>
-                <xsl:for-each select="ero">
+                <xsl:for-each select="ero[@s='kap']">
+                  <tr>
+                    <td><xsl:value-of select="@t"/><xsl:text>: </xsl:text></td>
+                    <td align="right"><xsl:value-of select="@n"/></td>
+                  </tr>
+                </xsl:for-each>
+              </table>
+
+              <h2>oficialaj radikoj</h2>
+              <table>
+                <xsl:for-each select="ero[@s='rad']">
                   <tr>
                     <td><xsl:value-of select="@t"/><xsl:text>: </xsl:text></td>
                     <td align="right"><xsl:value-of select="@n"/></td>
@@ -673,7 +686,7 @@ select="concat($agordo-pado,'/klasoj.xml')"/></xsl:variable>
                   <xsl:sort select="@fak"/>
                   <tr>
                     <xsl:for-each select="document($fakoj)/fakoj/fako[@kodo=current()/@fak]">
-                      <td><img src="{@vinjeto}" alt="{@fak}" border="0" align="middle"/></td>
+                      <td><img src="{@vinjeto}" class="fak" alt="{@fak}" border="0" align="middle"/></td>
                       <td><xsl:value-of select="."/><xsl:text>: </xsl:text></td>
                     </xsl:for-each>
                     <td align="right"><xsl:value-of select="@n"/></td>

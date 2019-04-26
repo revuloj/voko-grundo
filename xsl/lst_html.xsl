@@ -13,22 +13,17 @@
     extension-element-prefixes="redirect" -->
 
 
-<!-- (c) 2006-2012 che Wolfram Diestel
+<!-- (c) 2006-2018 che Wolfram Diestel
      licenco GPL 2.0
 
+     Klasoj estas vortoj de sama kategorio, ekz. muzikiloj, ĥemiaj elementoj, stelfiguroj, festoj ktp.
+     La klasanoj estas trovitaj en la artikoloj per la referenctipoj 'lst' (<ref tip='lst'...)
+     De tie ili venas en inter-dosieron, kiu estas la bazo por la tezaŭro tez_ret.xml
 
-     klarigoj de strukturiloj:
-
-     k = kapvorto
-     r = referenco
-     @c = celo
-
-     La tezaŭro konsistas el nodoj, kiuj respondas al sencoj de la vortoj.
-     El ĉiu nodo iras referencoj al aliaj nodoj. Ĉiu referenco havas tipon kiel sinonimo, supernocio k.s.
-     El ĉiu nodo kreiĝas unu HTML-dosiero 
+     Laŭ la pado lst/r/@l=$klaso ili eltroviĝas tie vd. la ŝablonon (template) "klasoj" malsupre
 -->
 
-<xsl:include href="inx_kodigo.inc"/>
+<xsl:include href="inc/inx_kodigo.inc"/>
 
 
 <xsl:output method="@format@" encoding="utf-8"/>
@@ -87,7 +82,8 @@
       <xsl:result-document href="{$dosiero}" method="@format@" encoding="utf-8" indent="yes">
 	<html>
 	  <head>
-            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	    <meta name="viewport" content="width=device-width,initial-scale=1"/>
             <title><xsl:value-of 
 	    select="concat('vortlisto: ',translate($kls,'_',' '))"/></title>
             <link title="indekso-stilo" type="text/css" 

@@ -38,8 +38,10 @@
 </xsl:template>
 
 <xsl:template match="art">
-  <art dos="{$filename}">
   <xsl:variable name="mrk" select="substring-after(substring-before(@mrk,'.xml'),'Id: ')"/>
+  <xsl:variable name="dat" select="substring(substring-after(substring-after(@mrk,'.xml,v '),' '),1,19)"/>
+
+  <art dos="{$filename}" dat="{$dat}">
 
   <xsl:choose>
     <xsl:when test="$mrk='' or not($mrk)">
@@ -57,6 +59,15 @@
     </xsl:otherwise>
   </xsl:choose>
 
+  <xsl:if test="not(//ekz or (//*[uzo[text()='ARK'] and uzo[text()='RAR']]))">
+      <ero  kie="art" mrk="{$mrk}" tip="dos-sen-ekz"/>
+  </xsl:if>
+
+  <xsl:if test="kap/var and not(//drv/kap/var)  
+    and not(kap/rad[.='patriot']) and not(kap/rad[.='ideal']) and not(kap/rad[.='real'])">
+                      <!-- atentu kelkajn esceptojn x/ism/o ~ xism/o -->
+      <ero  kie="art" mrk="{$mrk}" tip="drv-sen-var"/>
+  </xsl:if>
 
   <xsl:apply-templates/>
   </art>

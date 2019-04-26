@@ -9,7 +9,7 @@
 -->
 
 
-<xsl:include href="inx_menuo.inc"/>
+<xsl:include href="inc/inx_menuo.inc"/>
 
 
 <xsl:output method="html" version="4.0" encoding="utf-8"/>
@@ -17,6 +17,8 @@
 <xsl:template match="fakoj">
   <html>
     <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+      <meta name="viewport" content="width=device-width,initial-scale=1"/>
       <title>mallongigoj de fakoj</title>
       <link title="indekso-stilo" type="text/css" 
             rel="stylesheet" href="../stl/indeksoj.css"/>
@@ -38,7 +40,7 @@
 		  <td><code><xsl:value-of select="@kodo"/></code></td>
 		  <td>
 		    <xsl:if test="@vinjeto">
-		      <img src="{@vinjeto}" alt="" border="0" align="middle"/>
+		      <img src="{@vinjeto}" alt="{@kodo}" class="fak" border="0"/>
 		    </xsl:if>
 		  </td>
 		  <td>

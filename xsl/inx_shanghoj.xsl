@@ -18,7 +18,7 @@
      licenco GPL 2.0
 -->
 
-<xsl:include href="inx_menuo.inc"/>
+<xsl:include href="inc/inx_menuo.inc"/>
 
 <xsl:output method="xhtml" encoding="utf-8"/>
 
@@ -35,6 +35,7 @@
   <html>
     <head>
       <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
+      <meta name="viewport" content="width=device-width,initial-scale=1"/>
       <title>laste &#x015d;an&#x011d;itaj artikoloj</title>
       <link title="indekso-stilo" type="text/css" 
             rel="stylesheet" href="../stl/indeksoj.css"/>
@@ -106,7 +107,8 @@
   <!-- redirect:write select="'novaj.html'" -->
   <html>
     <head>
-      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+      <meta name="viewport" content="width=device-width,initial-scale=1"/>
       <title>novaj artikoloj</title>
       <link title="indekso-stilo" type="text/css" 
             rel="stylesheet" href="../stl/indeksoj.css"/>

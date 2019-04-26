@@ -14,13 +14,13 @@ transform-reguloj
 
 -->
 
-<xsl:import href="revo_trd.xsl"/>
-<xsl:import href="revo_fnt.xsl"/>
-<xsl:import href="revo_adm.xsl"/>
-<xsl:import href="revo_kap.xsl"/>
-<xsl:import href="revo_art.xsl"/>
-<xsl:import href="revo_ref.xsl"/>
-<xsl:import href="revo_dif.xsl"/>
+<xsl:import href="inc/revo_trd.xsl"/>
+<xsl:import href="inc/revo_fnt.xsl"/>
+<xsl:import href="inc/revo_adm.xsl"/>
+<xsl:import href="inc/revo_kap.xsl"/>
+<xsl:import href="inc/revo_art.xsl"/>
+<xsl:import href="inc/revo_ref.xsl"/>
+<xsl:import href="inc/revo_dif.xsl"/>
 
 <xsl:output method="html" version="4.0" encoding="utf-8"/>
 <xsl:strip-space elements="trdgrp refgrp kap"/>
@@ -36,8 +36,9 @@ name="redcgi">/cgi-bin/vokomail.pl?art=</xsl:variable -->
 <xsl:variable name="bibliografio">../cfg/bibliogr.xml</xsl:variable>
 <xsl:variable name="bibliogrhtml">../dok/bibliogr.xml</xsl:variable>
 <xsl:variable name="revo">/home/revo/revo</xsl:variable>
-<xsl:variable name="lingvoj_cfg" select="'../cfg/lingvoj.xml'"/>
-<xsl:variable name="fakoj_cfg" select="'../cfg/fakoj.xml'"/>
+<xsl:variable name="lingvoj_cfg" select="'../../cfg/lingvoj.xml'"/>
+<xsl:variable name="fakoj_cfg" select="'../../cfg/fakoj.xml'"/>
+<xsl:variable name="permesoj_cfg" select="'../../cfg/permesoj.xml'"/>
 
 <!-- ilustrite por HTML kun grafikoj ktp.
      simple por HTML tauga por konverto al simpla teksto -->

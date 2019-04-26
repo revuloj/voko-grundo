@@ -61,10 +61,10 @@
 
     <xsl:variable name="trd-snc" select="count(//drv[
                        (not (child::snc 
-                          or child::uzo[text()='EVI' or text()='ARK']))])
+                          or child::stl[text()='EVI' or text()='ARK']))])
                 + count(//snc[
-                       (not (child::uzo[text()='EVI' or text()='ARK'])) 
-                   and (not (../uzo[text()='EVI' or text()='ARK']))])
+                       (not (child::stl[text()='EVI' or text()='ARK'])) 
+                   and (not (../stl[text()='EVI' or text()='ARK']))])
              "/>  <!-- = sumo de tradukendaj sencoj kaj derivajhoj -->
 
     <trd-snc p="{$trd-snc}"/>
@@ -75,11 +75,11 @@
          <xsl:for-each select="$root">
             <xsl:value-of select="count(//drv[
                        (not (child::snc 
-                          or child::uzo[text()='EVI' or text()='ARK'])) 
+                          or child::stl[text()='EVI' or text()='ARK'])) 
                    and child::trd[@lng=$lng]])
                 + count(//snc[
-                       (not (child::uzo[text()='EVI' or text()='ARK'])) 
-                   and (not (../uzo[text()='EVI' or text()='ARK']))
+                       (not (child::stl[text()='EVI' or text()='ARK'])) 
+                   and (not (../stl[text()='EVI' or text()='ARK']))
                    and (child::trd[@lng=$lng] or ../trd[@lng=$lng])])
              "/>  <!-- = nombro de tradukitaj sencoj kaj derivajhoj --> 
         </xsl:for-each>
@@ -101,11 +101,11 @@
              <mankoj lng="{$lng}">
                 <xsl:for-each select="(//drv[
                        (not (child::snc 
-                          or child::uzo[text()='EVI' or text()='ARK'])) 
+                          or child::stl[text()='EVI' or text()='ARK'])) 
                    and not (child::trd[@lng=$lng])]
                 | //snc[
-                       (not (child::uzo[text()='EVI' or text()='ARK'])) 
-                   and (not (../uzo[text()='EVI' or text()='ARK']))
+                       (not (child::stl[text()='EVI' or text()='ARK'])) 
+                   and (not (../stl[text()='EVI' or text()='ARK']))
                    and not (child::trd[@lng=$lng] or ../trd[@lng=$lng])])[position() &lt;= 777]">
                    <v mrk="{ancestor-or-self::node()[@mrk][1]/@mrk}">
                      <xsl:if test="self::snc and count(../snc)>1">
@@ -141,12 +141,39 @@
 
     <!-- statistiko -->
     <stat>
-      <ero t="artikoloj" n="{count(//art)}"/>
-      <ero t="deriva&#x0135;oj" n="{count(//drv)}"/>
-      <ero t="sencoj" n="{count(//snc)+count(//drv[not(child::snc)])}"/>
-      <ero t="bildoj" n="{count(//bld)}"/>
-      <ero t="mallongigoj" n="{count(//mlg)}"/> 
+      <ero s="kap" t="artikoloj" n="{count(//art)}"/>
+      <ero s="kap" t="deriva&#x0135;oj" n="{count(//drv)}"/>
+      <ero s="kap" t="sencoj" n="{count(//snc)+count(//drv[not(child::snc)])}"/>
+      <ero s="kap" t="bildoj" n="{count(//bld)}"/>
+      <ero s="kap" t="mallongigoj" n="{count(//mlg)}"/> 
 
+      <ero s="rad" t="fundamentaj (1905)" n="{count(//art/kap//ofc[.='*'])}/2768"/>
+      <ero s="rad" t="oficialaj (1a, 1909)" n="{count(//art/kap//ofc[.='1'])}/860"/>
+      <ero s="rad" t="oficialaj (2a, 1919)" n="{count(//art/kap//ofc[.='2'])}/591"/>
+      <ero s="rad" t="oficialaj (3a, 1921)" n="{count(//art/kap//ofc[.='3'])}/204"/>
+      <ero s="rad" t="oficialaj (4a, 1929)" n="{count(//art/kap//ofc[.='4'])}/118"/>
+      <ero s="rad" t="oficialaj (5a, 1934)" n="{count(//art/kap//ofc[.='5'])}/8"/>
+      <ero s="rad" t="oficialaj (6a, 1935)" n="{count(//art/kap//ofc[.='6'])}/21"/>
+      <ero s="rad" t="oficialaj (7a, 1958)" n="{count(//art/kap//ofc[.='7'])}/158"/>
+      <ero s="rad" t="oficialaj (8a, 1974)" n="{count(//art/kap//ofc[.='8'])}/214"/>
+      <ero s="rad" t="oficialaj (9a, 2007)" n="{count(//art/kap//ofc[.='9'])}/209"/>
+
+<!-- lau Michel...    
+    
+U.V = 2629 U.V radikoj + 141 fundamentaj (60+80+1) = 2770 (<>2768 r. !)    + 303 U.V. kunmetajxoj  +  ? fundamentaj kunmetajxoj
+1OA =  805 radikoj  => + 55 fundamentaj  = 860  (+ 2  1OA-kunmetajxoj ) 
+2OA = 587 radikoj  => + 4 fundamentaj  = 591
+3OA = 203 radikoj => +1 fundamentaj  = 204
+4OA = 118 radikoj
+5OA = 8 radikoj 
+6OA = 21 radikoj 
+7OA = 31 radikoj => + 80 fund-7OA + ( 44 fund-1OA + 4 fund-2OA)  =  159
+8OA = 200 radikoj => + 1 fund-8OA + ( 11 fund-1OA + 1 fund-3OA)  =  213
+9OA = 209 radikoj + 66 derivataj kunmetajxoj = 275
+
+-->
+        
+        
       <!-- statistiko de la tradukoj -->
 <!--      <trd-snc p="{$trd-snc}"/> --> <!-- = sumo de tradukendaj sencoj kaj derivajhoj -->
 <!--  count(//drv[
@@ -233,7 +260,7 @@
 </xsl:template> 
  
 
-<xsl:template match="drv/kap|var/kap" mode="kapvortoj">
+<xsl:template match="drv/kap|drv/kap/var/kap" mode="kapvortoj">
   <!-- ellasu la derivajhon kun sama kapvorto kiel la artikolo -->
       <xsl:variable name="art-kap"><xsl:for-each
         select="ancestor::node()[self::art]/kap"
@@ -313,6 +340,8 @@
 
   </v>
 </xsl:template>
+
+<xsl:template match="stl"/> <!-- ignoru stil-indikojn, ne necesos en postaj ŝtupoj -->
 
 <xsl:template match="bld" mode="bildoj">
   <v>

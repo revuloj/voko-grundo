@@ -138,6 +138,9 @@ kreita de Wolfram Diestel
 
 <xsl:template match="dat">
   <xsl:apply-templates/>
+  <xsl:if test="following-sibling::*">
+    <xsl:text>, </xsl:text>
+  </xsl:if>
 </xsl:template>
 
 

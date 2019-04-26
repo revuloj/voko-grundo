@@ -2,27 +2,31 @@
 		version="1.0">
 
 
-<!-- (c) 1999-2018 che Wolfram Diestel 
+<!-- (c) 1999-2018 ĉe Wolfram Diestel 
      licenco GPL 2.0
 
-tie chi trovighas nur variabloj por agordo kaj la
-importkomandoj por la unuopaj dosieroj, kie enestas la
-transform-reguloj
+Tiuj transformreguloj estas uzataj por la nova redaktilo Cetonio. Ĝi ne uzas kelkajn XSLT 2 - regulojn por povi uzi
+la transformilon "xsltproc" anstataŭ Saxon, kiu aldone bezonas instalitan Javo-VM. XSLT 1 sufiĉas por la
+antaŭrigardo.
+
+revohtml1.xsl kaj revohtml.xsl estas preskaŭ identaj, estas iu diferenco ekz. en bibliografio-pado,
+necesus testi, ĉu oni povus anstataŭe uzi revohtml1.xl en ambaŭ redaktiloj nova kaj malnova...
+
+Tie ĉi troviĝas nur variabloj por agordo kaj la importkomandoj por la unuopaj dosieroj, kie enestas la
+transform-reguloj.
 
 -->
 
-<xsl:import href="inc/inx_kodigo.inc"/>
 
 <xsl:import href="inc/revo_trd.xsl"/>
 <xsl:import href="inc/revo_fnt.xsl"/>
 <xsl:import href="inc/revo_adm.xsl"/>
 <xsl:import href="inc/revo_kap.xsl"/>
-<xsl:import href="inc/revo_art2.xsl"/>
+<xsl:import href="inc/revo_art.xsl"/>
 <xsl:import href="inc/revo_ref.xsl"/>
 <xsl:import href="inc/revo_dif.xsl"/>
 
 <xsl:param name="xml-ref-pado"/>
-
 
 <xsl:output method="html" version="4.0" encoding="utf-8"/>
 <xsl:strip-space elements="trdgrp refgrp kap"/>
@@ -35,7 +39,7 @@ transform-reguloj
 <xsl:variable name="cssdir">../stl</xsl:variable>
 <xsl:variable name="redcgi">/cgi-bin/vokomail.pl?art=</xsl:variable>
 <xsl:variable name="vivocgi">http://kono.be/cgi-bin/vivo/ViVo.cgi?tradukiReVon=</xsl:variable>
-<xsl:variable name="bibliografio">../cfg/bibliogr.xml</xsl:variable>
+<xsl:variable name="bibliografio">../../cfg/bibliogr.xml</xsl:variable>
 <xsl:variable name="bibliogrhtml">../dok/bibliogr.html</xsl:variable>
 <xsl:variable name="revo">/home/revo/revo</xsl:variable>
 <xsl:variable name="lingvoj_cfg" select="'../../cfg/lingvoj.xml'"/>
@@ -48,6 +52,11 @@ transform-reguloj
      simple por HTML tauga por konverto al simpla teksto -->
 <xsl:variable name="aspekto" select="'ilustrite'"/>
 
+<xsl:template name="eo-kodigo">
+  <xsl:param name="str"/>
+  <xsl:value-of select="$str"/> 
+</xsl:template>
+
 
 <xsl:template match="sncref">
   <!-- Se ne ekzistas la XML-dosiero, la tuta transformado fiaskas cxe
@@ -56,19 +65,8 @@ transform-reguloj
   <xsl:variable name="doc" select="concat($xml-ref-pado,'/',substring-before($ref,'.'),'.xml')"/>
 
 <!-- <xsl:message>ref: <xsl:value-of select="$ref"/> doc: <xsl:value-of select="$doc"/></xsl:message> --> 
-
-  <xsl:choose>
-    <xsl:when test="doc-available($doc)">
-      <sup><i>
-	<xsl:apply-templates mode="number-of-ref-snc"
-			   select=
-			   "document($doc,/)//node()[@mrk=$ref]"/>
-      </i></sup>
-    </xsl:when>
-    <xsl:otherwise>
-      <sup>&#x21b7;</sup>
-    </xsl:otherwise>
-  </xsl:choose>
+  <sup>&#x21b7;</sup>
+  
 </xsl:template>
 
 

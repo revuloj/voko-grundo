@@ -79,7 +79,7 @@ reguloj por prezentado de kapvorto kun numeroj de sencoj, subsencoj ktp.
 </xsl:template>
 
 <xsl:template match="kap" mode="kapvorto">
-  <xsl:apply-templates select="tld|rad|text()" mode="kapvorto"/>
+  <xsl:apply-templates select="var|tld|rad|text()" mode="kapvorto"/>
 </xsl:template>
 
 <xsl:template match="tld" mode="kapvorto">

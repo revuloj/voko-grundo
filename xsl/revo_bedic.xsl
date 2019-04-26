@@ -14,13 +14,13 @@ transform-reguloj
 
 -->
 
-<xsl:import href="revo_trd.xsl"/>
-<xsl:import href="revo_fnt.xsl"/>
-<xsl:import href="revo_adm.xsl"/>
-<xsl:import href="revo_kap.xsl"/>
-<xsl:import href="revo_art.xsl"/>
-<xsl:import href="revo_ref.xsl"/>
-<xsl:import href="revo_dif.xsl"/>
+<xsl:import href="inc/revo_trd.xsl"/>
+<xsl:import href="inc/revo_fnt.xsl"/>
+<xsl:import href="inc/revo_adm.xsl"/>
+<xsl:import href="inc/revo_kap.xsl"/>
+<xsl:import href="inc/revo_art.xsl"/>
+<xsl:import href="inc/revo_ref.xsl"/>
+<xsl:import href="inc/revo_dif.xsl"/>
 
 <xsl:output method="text" encoding="utf-8"/>
 <xsl:strip-space elements="trdgrp refgrp kap drv art dif snc"/>

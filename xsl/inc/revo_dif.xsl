@@ -10,6 +10,7 @@ kaj stiloj (em,ctl,sup...)
 
 <!-- fak-informojn memoru en variablo por pli facila aliro -->
 <xsl:variable name="fakoj" select="document($fakoj_cfg)/fakoj"/>
+<xsl:variable name="permesoj" select="document($permesoj_cfg)/permesoj"/>
 
 <!-- priskribaj elementoj -->
 
@@ -43,10 +44,13 @@ kaj stiloj (em,ctl,sup...)
 </xsl:template>
 
 <xsl:template match="rim" name="rim">
-  <xsl:if test="@mrk">
-    <a name="{@mrk}"/>
-  </xsl:if>
   <span class="rim">
+    <xsl:if test="@mrk">
+      <xsl:attribute name="id">
+        <xsl:value-of select="@mrk"/>
+      </xsl:attribute>
+    </xsl:if>
+  
     <b>
     <xsl:text>Rim.</xsl:text>
     <xsl:if test="@num"> 
@@ -95,8 +99,8 @@ kaj stiloj (em,ctl,sup...)
     <center>
       <xsl:choose>
          <xsl:when test="@tip='svg'">
-           <embed class="bld" src="{@lok}" type="image/svg+xml"
-                  pluginspace="http://www.adobe.com/svg/viewer/install/">
+         <picture>
+           <source class="svg" srcset="{@lok}" type="image/svg+xml">
              <xsl:if test="@alt">
                <xsl:attribute name="height"> 
                  <xsl:value-of select="@alt"/>
@@ -107,7 +111,22 @@ kaj stiloj (em,ctl,sup...)
                  <xsl:value-of select="@lrg"/>
                </xsl:attribute> 
              </xsl:if> 
-           </embed>
+             </source>
+             <!-- fallback to gif, verŝajne ekzistas... -->
+             <img class="svg" src="{@lok}.gif">
+              <xsl:if test="@alt">
+                <xsl:attribute name="height">
+                  <xsl:value-of select="@alt"/>
+                </xsl:attribute>
+              </xsl:if>
+              <xsl:if test="@lrg">
+                <xsl:attribute name="width"> 
+                  <xsl:value-of select="@lrg"/>
+                </xsl:attribute>
+              </xsl:if> 
+            </img>
+           
+           </picture>
          </xsl:when>
          <xsl:otherwise>
            <img class="bld" src="{@lok}">
@@ -126,8 +145,21 @@ kaj stiloj (em,ctl,sup...)
       </xsl:choose>
       <br/>
       <i>
-        <xsl:apply-templates select="text()|tld|ind|klr|fnt"/>
+        <xsl:apply-templates select="text()|tld|ind|klr"/>
       </i>
+      <xsl:if test="@prm">
+          <xsl:variable name="prm"><xsl:value-of select="@prm"/></xsl:variable>
+          <br/><a rel="license" target="_new" class="bld_atrib">
+            <xsl:attribute name="href"><xsl:value-of select = "$permesoj/prm[(@name=$prm)]/@lok"/></xsl:attribute>
+            <xsl:value-of select="@prm"/>
+          <!-->
+          <xsl:for-each select="$permesoj/permeso[(@prm=$prm)]">
+             <xsl:attribute name="href"><xsl:value-of select = "@url"/></xsl:attribute>
+          </xsl:for-each>
+          -->
+          </a>&#xa0;
+      </xsl:if>
+      <xsl:apply-templates select="fnt"/>
       <br/>
     </center>
   </xsl:if>
@@ -143,8 +175,7 @@ kaj stiloj (em,ctl,sup...)
        <!-- eltrovu la fakon el fakoj.xml, se la fako ne ekzistas,
             ellasu ghin -->
        <xsl:for-each select="$fakoj/fako[(@kodo=$fak)]">
-         <img src="{@vinjeto}" alt="{@kodo}" align="absmiddle" 
-           title="{.}" />
+         <img src="{@vinjeto}" class="fak" alt="{@kodo}" title="{.}" border="0" />
        </xsl:for-each>
     </xsl:when>
 

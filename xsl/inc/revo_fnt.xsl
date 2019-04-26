@@ -18,8 +18,7 @@ reguloj por la prezentado de la fontindikoj
   </xsl:variable>
 
   <!-- la fontindiko kun ligo al la referenco malsupre de la pagxo -->
-  <span class="fntref">
-    <a name="ekz_{$n}"></a>
+  <span class="fntref" id="ekz_{$n}">
     <xsl:text>[</xsl:text>
     <a class="{local-name((
                  ancestor::rim|
@@ -43,7 +42,11 @@ reguloj por la prezentado de la fontindikoj
 -->
 
 <xsl:template match="fnt">
-  <sup class="fntref"><xsl:apply-templates/></sup>
+  <sup class="fntref"><xsl:apply-templates/>
+    <xsl:if test="ancestor::kap or ancestor::drv or ancestor::snc">
+      <xsl:text>&#x0a;</xsl:text>
+    </xsl:if>
+  </sup>
 </xsl:template>
 
 <xsl:template match="bib">
@@ -60,14 +63,16 @@ la fontoreferencoj malsupre de la pagxoj
 <xsl:template name="fontoj">
   <!-- se enestas strukturitaj fontoj, prezentu ilin en propra alineo -->
 <!--  <xsl:if test="//fnt[bib|aut|vrk|lok]"> -->
-    <hr />
-    <div class="fontoj">
+  <hr />
+  <div class="fontoj">
     <h2>fontoj</h2>
-    <xsl:apply-templates select="//fnt[aut|vrk|lok]" mode="fontoj"/>
+    <div class="kasxebla">
+      <xsl:apply-templates select="//fnt[aut|vrk|lok]" mode="fontoj"/>
       <p>
         <xsl:call-template name="mankoj"/>
       </p>
     </div>
+  </div>
 <!--  </xsl:if> -->
 </xsl:template>
 
@@ -81,8 +86,8 @@ la fontoreferencoj malsupre de la pagxoj
 
   <!-- la fontindiko kun ligo al la loko de la fonto en la supra
   teksto -->
-  <span class="fontoj">
-    <a name="fnt_{$n}"></a>
+  <span class="fontoj" id="fnt_{$n}">
+  
     <a class="fnt" href="#ekz_{$n}" title="reiru al la ekzemplo">
       <xsl:value-of select="$n"/>
     </a>.

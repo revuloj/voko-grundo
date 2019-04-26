@@ -18,7 +18,7 @@ reguloj por XDXF universala vortar-intershangha formato
 <xsl:import href="revo_dif.xsl"/>
 -->
 
-<xsl:import href="revo_kap.xsl"/>
+<xsl:import href="inc/revo_kap.xsl"/>
 <!-- xsl:import href="revo_ref.xsl"/ -->
 
 <xsl:output method="xml" encoding="utf-8" indent="yes"/>

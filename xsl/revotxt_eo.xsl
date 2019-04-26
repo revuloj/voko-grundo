@@ -11,9 +11,9 @@ simpla teksto per lynx -dump -nolist
 le rezulto entenas nur la esperantlingvajn partojn: dif, ekz, sed ne fnt, trd;
 ghi estas uzata momente nur por kontrolado de la artikola teksto
 
-tie chi trovighas nur variabloj por agordo kaj la
+tie chi trovighas nur variabloj por agordo, la
 importkomandoj por la unuopaj dosieroj, kie enestas la
-transform-reguloj
+transform-reguloj kaj la esceptaj traktoj de unuopaj elementoj
 
 -->
 
@@ -23,10 +23,10 @@ transform-reguloj
 <xsl:import href="revo_adm.xsl"/>
 -->
 
-<xsl:import href="revo_kap.xsl"/>
-<xsl:import href="revo_art.xsl"/>
-<xsl:import href="revo_ref.xsl"/>
-<xsl:import href="revo_dif.xsl"/>
+<xsl:import href="inc/revo_kap.xsl"/>
+<xsl:import href="inc/revo_art.xsl"/>
+<xsl:import href="inc/revo_ref.xsl"/>
+<xsl:import href="inc/revo_dif.xsl"/>
 
 <xsl:output method="html" version="4.0" encoding="utf-8"/>
 <xsl:strip-space elements="trdgrp refgrp kap"/>
@@ -44,6 +44,7 @@ name="redcgi">/cgi-bin/vokomail.pl?art=</xsl:variable -->
 <xsl:variable name="revo">/home/revo/revo</xsl:variable>
 <xsl:variable name="lingvoj_cfg" select="'../cfg/lingvoj.xml'"/>
 <xsl:variable name="fakoj_cfg" select="'../cfg/fakoj.xml'"/>
+<xsl:variable name="permesoj_cfg" select="'../../cfg/permesoj.xml'"/>
 
 <!-- ilustrite por HTML kun grafikoj ktp.
      simple por HTML tauga por konverto al simpla teksto -->
@@ -115,6 +116,10 @@ name="redcgi">/cgi-bin/vokomail.pl?art=</xsl:variable -->
 
 <xsl:template name="tradukoj"/>
 <xsl:template name="fontoj"/>
+
+<xsl:template match="frm|nom|nac|esc">
+  &#x29fc;<xsl:apply-templates/>&#x29fd;
+</xsl:template>
 
 </xsl:stylesheet>
 

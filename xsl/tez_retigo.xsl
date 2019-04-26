@@ -103,7 +103,7 @@
       <xsl:call-template name="lst"/>
     </nod>
   </xsl:if>
-  <xsl:apply-templates select="snc|subsnc"/>
+  <xsl:apply-templates select="subdrv|snc|subsnc"/>
 </xsl:template>
 
 

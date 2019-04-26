@@ -1,7 +1,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 		version="1.0">
 
-<!-- (c) 1999-2003 che Wolfram Diestel 
+<!-- (c) 1999-2018 ĉe Wolfram Diestel laŭ GPLv2
 
 reguloj por prezentado de la tradukoj
 
@@ -29,7 +29,7 @@ montru tie, cxar ili estas esenca parto de tiuj -->
 
 <xsl:key name="lingvoj" match="//trdgrp[@lng]|//trd[@lng]" use="@lng"/>
 
-<!-- montru flagojn supre de la pagxo pri ekzistantaj lingvoj -->
+<!-- montru ligojn supre de la paĝo pri ekzistantaj traduk-lingvoj -->
 
 <xsl:template name="flagoj">
   <xsl:if test="$aspekto='ilustrite'">
@@ -56,8 +56,7 @@ montru tie, cxar ili estas esenca parto de tiuj -->
 <xsl:template name="flago">
   <xsl:param name="lng"/>
 
-  <!-- eltrovu la flagon de la lingvo, se lingvo au flago ne ekzistas,
-  ellasu ghin -->
+  <!-- eltrovu la kodon de la lingvo, se lingvo ne ekzistas, ellasu ghin -->
   <xsl:for-each select="document($lingvoj_cfg)/lingvoj/lingvo[(@kodo=$lng)]">
 
     <xsl:text> </xsl:text>
@@ -75,8 +74,10 @@ montru tie, cxar ili estas esenca parto de tiuj -->
   <xsl:if test="//trd">
     <hr />
     <div class="tradukoj">
-    <h2>tradukoj</h2>
-    <xsl:apply-templates select="//art" mode="tradukoj"/>
+      <h2>tradukoj</h2>
+      <div class="kasxebla">
+        <xsl:apply-templates select="//art" mode="tradukoj"/>
+      </div>
     </div>
   </xsl:if>
 </xsl:template>
@@ -107,8 +108,7 @@ montru tie, cxar ili estas esenca parto de tiuj -->
 
     <!-- se la lingvo ne estas registrita ignoru ghin -->
     <xsl:for-each select="document($lingvoj_cfg)/lingvoj/lingvo[@kodo=$lng]">
-      <a name="lng_{$lng}"></a>
-      <h3>
+      <h3 id="lng_{$lng}">
 	<xsl:text> </xsl:text>
 	<!-- aldonu j post a -->
 	<xsl:value-of select="concat(.,'j')"/>
@@ -137,35 +137,30 @@ montru tie, cxar ili estas esenca parto de tiuj -->
 </xsl:template>  
 
 
-<!-- xsl:template name="lingvo">
-  <a name="lng_{@kodo}"></a>
-  <h3>
-    <xsl:if test="$aspekto='ilustrite'">
-      <img src="{@flago}" width="21" height="15"
-           alt="[{@kodo}]" class="flago"/>
-    </xsl:if>
-    <xsl:text> </xsl:text>
-    - la nomo de la lingvo, anstatauigu a per e -
-    <xsl:value-of select="concat(substring(.,1,string-length(.)-1),'e')"/>
-  </h3>
-
-  - kolektu chiujn tradukojn de tiu lingvo -
-  <xsl:for-each select="//art">
-  <xsl:apply-templates mode="tradukoj"
-    select="key('lingvoj',@kodo)[not(parent::ekz|parent::bld)]"/>
-  <xsl:apply-templates mode="tradukoj"
-    select="key('lingvoj',@kodo)[parent::ekz|parent::bld]"/>
-  </xsl:for-each>
-</xsl:template-->  
-
 <!-- traktas unuopan tradukon au tradukgrupon -->
 
 <xsl:template match="trd[@lng]|trdgrp" mode="tradukoj">
   <span class="trdeo">
 
     <!-- rigardu, al kiu subarbo apartenas la traduko kaj skribu la
-    tradukitan vorton/sencon -->
-    <a class="trdeo" href="#{ancestor::node()[@mrk][1]/@mrk}">
+	 tradukitan vorton/sencon -->
+
+    <xsl:variable name="mrk">
+      <xsl:value-of select="ancestor::node()[@mrk][1]/@mrk"/>
+    </xsl:variable>
+
+    <xsl:variable name="cel">
+      <xsl:choose>
+	<xsl:when test="starts-with($mrk,'$Id:')">
+	  <xsl:value-of select="''"/> <!-- substring-before(substring-after($mrk,'$Id: '),'.xml')"/ -->
+	</xsl:when>
+	<xsl:otherwise>
+	  <xsl:value-of select="$mrk"/>
+	</xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    
+    <a class="trdeo" href="#{$cel}">
       <xsl:apply-templates 
         select="ancestor::node()[
           self::drv or 
