@@ -2,7 +2,7 @@
 
 La bazaj partoj de la projekto Vortaroj por Komputiloj (Voko), kiuj estas uzataj komune de la diversaj aktivaj partoj kiel la publika servo (voko-araneo k.a.), la transformilo (voko-formiko k.a.), la redaktilo (voko-cetonio k.a.)...
 
-Atentu, ke la momente uzata kodo ankoraŭ troivĝas tie ĉi: https://sourceforge.net/projects/retavortaro/, dum tie ĉi okazas rekonstruo, por uzi la unuopajn partojn pli flekseble kaj laŭ la modelo de servetoj (docker-procesumoj).
+Atentu, ke la momente uzata kodo ankoraŭ troivĝas tie: https://sourceforge.net/projects/retavortaro/, dum tie ĉi okazas rekonstruo, por uzi la unuopajn partojn pli flekseble kaj laŭ la modelo de servetoj (docker-procesumoj).
 
 Sur la projekto fondiĝis ĝis nun du vortaroj: Reta Vortaro http://reta-voratro.de kaj Astronomia Terminaro https://web.archive.org/web/20090709225214/http://www.esperanto.org/AEK/AT, sed nur la unua travivis la jarojn.
 
