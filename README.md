@@ -1,6 +1,6 @@
 # voko-grundo
 
-La bazaj partoj de la projekto Vorataro por Komputiloj (Voko), kiuj estas uzataj komune de la diversaj aktivaj komponantoj kiel la publika servo (voko-araneo k.a.), la transformilo (voko-formiko k.a.), la redaktilo (voko-cetonio k.a.).
+La bazaj partoj de la projekto Vorataro por Komputiloj (Voko), kiuj estas uzataj komune de la diversaj aktivaj partoj kiel la publika servo (voko-araneo k.a.), la transformilo (voko-formiko k.a.), la redaktilo (voko-cetonio k.a.)...
 
 Atentu, ke la momente uzata kodo ankoraŭ troivĝas tie ĉi: https://sourceforge.net/projects/retavortaro/, dum tie ĉi okazas rekonstruo, por uzi la unuopajn partojn pli flekseble kaj laŭ la modelo de servetoj (docker-procesumoj).
 
