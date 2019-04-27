@@ -1,10 +1,22 @@
-# voko-iloj
+# voko-grundo
 
-All the software tools to create Reta Vortaro http://reta-voratro.de - a multilingual dictionary with Esperanto definitions.
+La bazaj partoj de la projekto Vorataro por Komputiloj (Voko), kiuj estas uzataj komune de la diversaj aktivaj komponantoj kiel la publika servo (voko-araneo k.a.), la transformilo (voko-formiko k.a.), la redaktilo (voko-cetonio k.a.).
 
-The software can by used for other dictionaries and terminlogies as well.
+Atentu, ke la momente uzata kodo ankoraŭ troivĝas tie ĉi: https://sourceforge.net/projects/retavortaro/, dum tie ĉi okazas rekonstruo, por uzi la unuopajn partojn pli flekseble kaj laŭ la modelo de servetoj (docker-procesumoj).
 
-Articles defining words are written in XML based on a DTD (voko.dtd) 
-and translated by XSL transformations to HTML including various indexes. 
+Sur la projekto fondiĝis ĝis nun du vortaroj: Reta Vortaro http://reta-voratro.de kaj Astronomia Terminaro https://web.archive.org/web/20090709225214/http://www.esperanto.org/AEK/AT, sed nur la unua travivis la jarojn.
 
-Ant scripts provide the framwork for all the necesary transformations to compile a full web dictionary from the XML articles.
+Baze la vortaro konsistas el artikoloj en XML sekvante dokumenttipdifinon (DTD) kaj tradukitaj al la fina vortaro kun ĉiuj indeksoj per XSL-transformoj.
+
+La kadron por apliki la transformojn donas Formiko (Ant).
+
+Dispartigante la partojn ni havos proksimume la sekvajn:
+- Araneo - la retservo por Revo, baziĝas sur Apache httpd
+- Abelo - la datumbazo kaj serĉilo, baziĝas sur MySQL + Perloskriptoj
+- Heliko - la retpoŝtilo, baziĝas sur Postfix
+- Ostro - la redaktoservo / akceptilo, baziĝas sur Perloskripto + CVS
+- Formiko - la transformilo, baziĝas sur Apache Ant + Java
+- Cetonio - la redaktilo, baziĝas sur SWI-Prolog
+- Cikado - citaĵoservo / tekstserĉilo, baziĝas sur SWI-Prolog
+- Akrido - la vortanalizilo, baziĝas sur SWI-Prolog 
+- Grilo - la sintakskontrolio laŭ RelaxNG baziĝanta sur Java + Jing-Trang
