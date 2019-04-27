@@ -20,4 +20,4 @@ Post dispartigo ni havos proksimume la sekvajn:
 - Cetonio - la redaktilo, baziĝas sur SWI-Prolog
 - Cikado - citaĵoservo / tekstserĉilo, baziĝas sur SWI-Prolog
 - Akrido - la vortanalizilo, baziĝas sur SWI-Prolog 
-- Grilo - la sintakskontrolio laŭ RelaxNG baziĝanta sur Java + Jing-Trang
+- Grilo - la sintakskontrolilo laŭ RelaxNG baziĝas sur Java + Jing-Trang
