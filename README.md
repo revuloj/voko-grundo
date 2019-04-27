@@ -4,13 +4,14 @@ La bazaj partoj de la projekto Vortaroj por Komputiloj (Voko), kiuj estas uzataj
 
 Atentu, ke la momente uzata kodo ankoraŭ troivĝas tie: https://sourceforge.net/projects/retavortaro/, dum tie ĉi okazas rekonstruo, por uzi la unuopajn partojn pli flekseble kaj laŭ la modelo de servetoj (docker-procesumoj).
 
-Sur la projekto fondiĝis ĝis nun du vortaroj: Reta Vortaro http://reta-voratro.de kaj Astronomia Terminaro https://web.archive.org/web/20090709225214/http://www.esperanto.org/AEK/AT, sed nur la unua travivis la jarojn.
+Sur la projekto fondiĝis ĝis nun du vortaroj: [Reta Vortaro](http://reta-voratro.de) kaj 
+[Astronomia Terminaro](https://web.archive.org/web/20090709225214/http://www.esperanto.org/AEK/AT),
+sed nur la unua travivis la jarojn.
 
-Baze la vortaro konsistas el artikoloj en XML sekvante dokumenttipdifinon (DTD) kaj tradukitaj al la fina vortaro kun ĉiuj indeksoj per XSL-transformoj.
+Baze la vortaro konsistas el artikoloj en XML sekvante dokumenttipdifinon (DTD) kaj tradukitaj al la fina vortaro kun ĉiuj indeksoj per XSL-transformoj. La kadron por apliki la transformojn donas Formiko (Ant).
 
-La kadron por apliki la transformojn donas Formiko (Ant).
-
-Dispartigante la partojn ni havos proksimume la sekvajn:
+Post dispartigo ni havos proksimume la sekvajn:
+- Grundo - la komunaj dosieroj (agordo, dokumentoj, listoj, transformoj kc)
 - Araneo - la retservo por Revo, baziĝas sur Apache httpd
 - Abelo - la datumbazo kaj serĉilo, baziĝas sur MySQL + Perloskriptoj
 - Heliko - la retpoŝtilo, baziĝas sur Postfix
