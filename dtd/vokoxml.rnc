@@ -350,13 +350,13 @@ art-marko = xsd:string { pattern = "$Id$|($Id: )?([a-z0-9_]+)(.xml)?.*" }
 ##  kapvorton, kie la radikon anstataŭ tildon oni montras per '0', ekz.
 ##  'hom.0o', 'berlin.B0o'.
 
-drv-marko = xsd:ID { pattern = "([a-z0-9_]+)\.[A-Za-z_]*0[A-Za-z_0]*(\.[A-Za-z_0]+)?" }
+drv-marko = xsd:ID { pattern = "([a-z0-9_]+)\.[A-Za-z_]*0[A-Za-z_0]*(\.[A-Za-z_0-9]+)?" }
 
 
 ## La marko de senco konsistas el la marko de la derivaĵo, punkto kaj
 ## identigilo de la senco, ekz. 'ord.0o.BIO', 'azen.0o.figure'.
 
-snc-marko = xsd:ID { pattern = "([a-z0-9_]+)\.[A-Za-z_]*0[A-Za-z_0]*\.[A-Za-z_0]+" }
+snc-marko = xsd:ID { pattern = "([a-z0-9_]+)\.[A-Za-z_]*0[A-Za-z_0]*\.[A-Za-z_0-9]+" }
 
 
 ##  La marko identigas 'nodon' de la vortaro, ekz. artikolon, derivaĵon, sencon aŭ rimarkon,
@@ -419,6 +419,7 @@ vspec = element vspec {
   | ("artikolo"|"determinilo")
   | ("interj."|"interjekcio"|"ekkrio"|"sonimito") 
   | ("konj."|"konjunkcio") 
+  | ("subordigilo") 
   | ("pref."|"prefikso") | ("suf."|"sufikso") 
   | ("prep."|"prepozicio") | "prepoziciaĵo"
   | ("pron."|"pronomo") 
