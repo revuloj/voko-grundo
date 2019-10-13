@@ -112,27 +112,35 @@ indikiloj =
 ##  La precipaj elementoj de la difino. Krom la difinaj frazoj, tio estas la ekzemploj, eble bildo.
 ##  Foje la difino anstataŭiĝas per difina referenco.
 
-difinoj =
-  dif
-  | bld
-  | ekz
-  | rim
-
-
 dif-ref =
-#  refgrp 
-#  | ref
 # limigita al tipo dif...:
 # FARENDA: difinu ref sen tip (engrupa) kaj ref kun tip (sola)
   element refgrp { attribute tip { "dif" } ,  (text? & ref+) }
-  | element ref { attribute tip { "dif" } , attribute cel { text }, text }
+  | element ref { attribute tip { "dif" } , attribute cel { text }, (text | tld | klr | sncref)* }
 
 
 ## Por difini oni povas uzi aŭ kompletan difinon aŭ ĉe sinonimoj referencon al alia vorto aŭ senco, kiu difinas ĝin.
 
-difiniloj =
-  difinoj
-  | dif-ref
+dif-ref-parto =
+  indikiloj*,
+  dif-ref,
+  referenciloj*,
+  rim*,
+  tradukiloj*,
+  adm*
+
+#difiniloj =
+#  dif 
+#  | dif-ref
+
+## Post difino povas veni diversaj suplementoj kiel ekzemploj, referencoj, bildoj, rimarkoj
+
+difiniloj-supl =
+  referenciloj
+  | ekz
+  | bld
+  | rim
+  | adm
 
 
 ##      La referenciloj montras al rilataj vortoj kaj sencoj, vortlistoj aŭ al intrereta paĝo.
@@ -158,52 +166,26 @@ tradukiloj =
 
 ## Rimarkoj kaj administraj notoj.
 
-notiloj =
-  rim 
-  | adm
+#notiloj =
+#  rim 
+#  | adm
 
 
-## Unua parto de teksto en artikolo, derivaĵo aŭ senco
+## Unua parto de teksto en artikolo, derivaĵo aŭ senco, 
+## kiu venas antaŭ subdividoj, t.e. ekz. en derivaĵo venas antaŭ sencoj
 
 unua-parto = 
   indikiloj*,
-  difiniloj*
+  dif?
+  #difiniloj*
 
-## Sekva parto de teksto en artikolo, derivaĵo aŭ senco venante post subdividoj
+## Sekva parto de teksto en artikolo, derivaĵo aŭ senco venante post subdividoj,
+## kiu ekz. en derivaĵo venas post sencoj
 
 sekva-parto =
-  difiniloj*,
-  referenciloj*,
-  notiloj*,
-  referenciloj*,
-  bld*,
+  difiniloj-supl*,
   tradukiloj*,
   adm*
-
-
-#  [%priskribaj-elementoj] La unuo <dfn>priskribaj-elementoj</dfn> 
-# listigas ĉiujn strukturilojn, kiuj priskribas kapvorton aŭ unuopan 
-# sencon de ĝi. Ĉar ili povas okazi multloke en la strukturo de 
-# artikolo estas avantaĝe difini tiun ĉi unuon.
-
-# priskribaj elementoj
-#priskribaj-elementoj =
-#  fnt
-#  | gra
-#  | uzo
-#  | dif
-#  | ekz
-#  | rim
-#  | ref
-#  | refgrp
-#  | trd
-#  | trdgrp
-#  | bld
-#  | adm
-#  | url
-#  | mlg
-#  | lstref
-#  | tezrad
 
 ## La unuo <dfn>tekst-stiloj</dfn> 
 ## listigas ĉiujn strukturilojn, kiuj donas stilon al tekstoparto,
@@ -212,7 +194,6 @@ sekva-parto =
 ## same povas esti multloke, do ankaŭ ili estas listigitaj tie ĉi.
 
 tekst-stiloj = tld | sncref | klr | em | sup | sub | ctl | frm | nom | nac
-
 
 ## Unuopa artikolo de la vortaro. Ĝi povas okazi en
 ## <dfn>vortaro</dfn> (se ne ekzistas precipa-parto),
@@ -254,9 +235,14 @@ drv =
   element drv {
     attlist-drv, 
     kap, 
-    unua-parto,
-    (subdrv | snc)*,
-    sekva-parto
+
+    (dif-ref-parto |
+      (
+        unua-parto,
+        (subdrv | snc)*,
+        sekva-parto
+      )
+    )
   }
 attlist-drv &= attribute mrk { drv-marko }
 
@@ -278,9 +264,14 @@ attlist-var &= empty
 subdrv =
   element subdrv { 
     attlist-subdrv, 
-    unua-parto,
-    (snc)*,
-    sekva-parto
+
+    (dif-ref-parto |
+      (
+        unua-parto,
+        (snc)*,
+        sekva-parto
+      )
+    )
   }
 attlist-subdrv &= attribute mrk { snc-marko }?
 
@@ -295,9 +286,14 @@ attlist-subdrv &= attribute mrk { snc-marko }?
 snc = 
   element snc { 
     attlist-snc, 
-    unua-parto,
-    (subsnc)*,
-    sekva-parto
+
+    (dif-ref-parto |
+      (
+        unua-parto,
+        (subsnc)*,
+        sekva-parto
+      )
+    )
   }
 attlist-snc &=
   attribute mrk { snc-marko }?,
@@ -311,8 +307,13 @@ attlist-snc &=
 subsnc = 
   element subsnc { 
     attlist-subsnc, 
-    unua-parto,
-    sekva-parto
+
+    (dif-ref-parto |
+      (
+        unua-parto,
+        sekva-parto
+      )
+    )
   }
 attlist-subsnc &=
   attribute mrk { marko }?,
@@ -442,7 +443,7 @@ attlist-uzo &= attribute tip { "fak" | "reg" | "klr" | "stl" }?
 dif =
   element dif {
     attlist-dif,
-    (text | trd | trdgrp | ref | refgrp | ekz | snc | tekst-stiloj)*
+    (text | trd | trdgrp | ref | refgrp | dif-ref | ekz | snc | tekst-stiloj)*
   }
 attlist-dif &= attribute lng { text }?
 
@@ -457,6 +458,7 @@ ekz =
      | uzo
      | ref
      | refgrp
+     | dif-ref
      | ind
      | trd
      | trdgrp
@@ -487,7 +489,7 @@ attlist-refgrp &=
   attribute tip {
     "vid"
     | "hom"
-    | "dif"
+#    | "dif"
     | "sin"
     | "ant"
     | "super"
@@ -497,7 +499,6 @@ attlist-refgrp &=
     | "lst"
     | "ekz"
   }?
-
 
 # [ref] Referenco montras al alia, simil- aŭ alisignifa vorto,
 # oni povas distingi diversajn rilattipon al la
@@ -516,7 +517,7 @@ attlist-ref &=
   attribute tip {
     "vid"
     | "hom"
-    | "dif"
+#    | "dif"
     | "sin"
     | "ant"
     | "super"
