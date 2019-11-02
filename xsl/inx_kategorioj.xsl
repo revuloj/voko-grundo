@@ -293,7 +293,7 @@ U.V = 2629 U.V radikoj + 141 fundamentaj (60+80+1) = 2770 (<>2768 r. !)    + 303
 
 <xsl:template name="kap-inv">
    <xsl:variable name="kap"><xsl:apply-templates select="text()|rad"/></xsl:variable>
-   <xsl:value-of select="normalize-space($kap)"/>
+   <xsl:value-of select="translate(normalize-space($kap),',','')"/>
 </xsl:template>
 
 <xsl:template match="tld">
