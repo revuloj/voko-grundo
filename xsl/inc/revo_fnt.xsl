@@ -121,12 +121,14 @@ la fontoreferencoj malsupre de la pagxoj
   </xsl:choose>
 
   <!-- interpunkcio -->
-  <xsl:if test="following-sibling::lok">
-    <xsl:text>, </xsl:text>
-  </xsl:if>
-  <xsl:if test="following-sibling::vrk">
-    <xsl:text>, </xsl:text>
-  </xsl:if>
+  <xsl:choose>
+    <xsl:when test="following-sibling::lok">
+      <xsl:text>, </xsl:text>
+    </xsl:when>
+    <xsl:when test="following-sibling::vrk">
+      <xsl:text>, </xsl:text>
+    </xsl:when>
+  </xsl:choose>
 
 </xsl:template>
 
