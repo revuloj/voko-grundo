@@ -62,7 +62,8 @@ reguloj por prezentado de kapvorto kun numeroj de sencoj, subsencoj ktp.
   <xsl:apply-templates select="ancestor::node()
     [self::drv or self::art][1]/kap" mode="kapvorto"/>
   <xsl:text> </xsl:text>
-  <xsl:number format="a"/>
+  <xsl:number from="drv|subart" level="multiple" count="snc|subsnc"
+    format="1.a"/>
 </xsl:template>
 
 
