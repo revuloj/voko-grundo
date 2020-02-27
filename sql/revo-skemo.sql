@@ -40,6 +40,13 @@ CREATE TABLE artikolo (
   txt TEXT
 );
 
+CREATE TABLE agordo (
+  nomo TEXT PRIMARY KEY NOT NULL,
+  valoro TEXT
+);
+INSERT INTO agordo (nomo,valoro)
+VALUES('kreotempo',datetime('now'));
+
 CREATE VIEW _eo AS
 SELECT
   nodo.kap AS eo,
@@ -93,8 +100,6 @@ FROM traduko, nodo, artikolo
 WHERE traduko.lng='ru'
   AND traduko.mrk = nodo.mrk
   AND nodo.art = artikolo.mrk;
-
-
 
 
 
