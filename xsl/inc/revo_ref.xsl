@@ -1,7 +1,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 		version="1.0">
 
-<!-- (c) 1999-2018 ĉe Wolfram Diestel laŭ GPLv2
+<!-- (c) 1999-2020 ĉe Wolfram Diestel laŭ GPLv2
 
 reguloj por prezentado de referencoj/tezauro-ligo
 

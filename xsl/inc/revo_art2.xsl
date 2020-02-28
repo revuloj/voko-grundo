@@ -194,6 +194,10 @@ reguloj por la prezentado de la artikolostrukturo
     format="1.a"/>
 </xsl:template>
 
+<xsl:template match="rim" mode="number-of-ref-snc">
+  rim. <xsl:value-of select="@num"/>
+</xsl:template>
+
 
 <xsl:template match="snc">
   <!-- xsl:apply-templates select="tez" mode="ref"/ -->
