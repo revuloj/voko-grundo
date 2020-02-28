@@ -368,11 +368,14 @@
   <xsl:param name="smb"/>
   <xsl:param name="alt"/>
   <xsl:for-each select="r">
-    <xsl:sort lang="eo" collation="http://saxon.sf.net/collation?class=de.steloj.respiro.EsperantoCollator" select="translate(//tez/nod[@mrk=current()/@c or @mrk2=current()/@c]/k,'-( )','')"/>
+     <!-- [1] ĉar foje mrk aperas dufoje pro erara artikolo, tiel ne haltas la tuta servo, sed aliflanke la eraroj ne rimarkiĝas... -->
+    <xsl:sort lang="eo" collation="http://saxon.sf.net/collation?class=de.steloj.respiro.EsperantoCollator" select="translate(//tez/nod[@mrk=current()/@c or @mrk2=current()/@c][1]/k,'-( )','')"/>
 
     <xsl:if test="not(following-sibling::r[@c=current()/@c])"> <!-- evitu duoblajhojn -->
 
-      <xsl:variable name="nod" select="//tez/nod[@mrk=current()/@c or @mrk2=current()/@c]"/>
+    <!-- [1] ĉar foje mrk aperas dufoje pro erara artikolo, tiel ne haltas la tuta servo, sed aliflanke la eraroj ne rimarkiĝas... -->
+
+      <xsl:variable name="nod" select="//tez/nod[@mrk=current()/@c or @mrk2=current()/@c][1]"/>
       <xsl:choose>
         <xsl:when test="$nod">
 

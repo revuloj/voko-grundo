@@ -1,7 +1,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 		version="1.0">
 
-<!-- (c) 1999-2003 che Wolfram Diestel
+<!-- (c) 1999-2020 ĉe Wolfram Diestel
 
 reguloj pri prisklribaj elementoj (dif, ekz, gra ktp.) 
 kaj stiloj (em,ctl,sup...)
@@ -98,37 +98,38 @@ kaj stiloj (em,ctl,sup...)
     <br/>
     <center>
       <xsl:choose>
-         <xsl:when test="@tip='svg'">
-         <picture>
-           <source class="svg" srcset="{@lok}" type="image/svg+xml">
-             <xsl:if test="@alt">
+        <xsl:when test="@tip='svg'">
+
+          <object data="{@lok}" type="image/svg+xml">
+            <xsl:if test="@alt">
                <xsl:attribute name="height"> 
                  <xsl:value-of select="@alt"/>
                </xsl:attribute>
-             </xsl:if>
-             <xsl:if test="@lrg">
+            </xsl:if>
+            <xsl:if test="@lrg">
                <xsl:attribute name="width">
                  <xsl:value-of select="@lrg"/>
                </xsl:attribute> 
-             </xsl:if> 
-             </source>
+            </xsl:if> 
+
              <!-- fallback to gif, verŝajne ekzistas... -->
              <img class="svg" src="{@lok}.gif">
-              <xsl:if test="@alt">
-                <xsl:attribute name="height">
-                  <xsl:value-of select="@alt"/>
-                </xsl:attribute>
-              </xsl:if>
-              <xsl:if test="@lrg">
-                <xsl:attribute name="width"> 
-                  <xsl:value-of select="@lrg"/>
-                </xsl:attribute>
-              </xsl:if> 
-            </img>
-           
-           </picture>
-         </xsl:when>
-         <xsl:otherwise>
+                <xsl:if test="@alt">
+                  <xsl:attribute name="height">
+                    <xsl:value-of select="@alt"/>
+                  </xsl:attribute>
+                </xsl:if>
+                <xsl:if test="@lrg">
+                  <xsl:attribute name="width"> 
+                    <xsl:value-of select="@lrg"/>
+                  </xsl:attribute>
+                </xsl:if> 
+              </img>            
+            <p>Bedaŭrinde la vektorgrafiko ne povas montriĝi!</p>
+          </object> 
+        </xsl:when>
+
+        <xsl:otherwise>
            <img class="bld" src="{@lok}">
              <xsl:if test="@alt">
                <xsl:attribute name="height">
@@ -141,7 +142,7 @@ kaj stiloj (em,ctl,sup...)
                </xsl:attribute>
              </xsl:if> 
            </img>
-         </xsl:otherwise>
+        </xsl:otherwise>
       </xsl:choose>
       <br/>
       <i>
@@ -278,6 +279,9 @@ kaj stiloj (em,ctl,sup...)
   <xsl:text>&#x201c;</xsl:text>
 </xsl:template>
 
+<xsl:template match="frm[@am]">
+  <span class="frm_am"><xsl:text>`</xsl:text><xsl:value-of select="@am"/><xsl:text>`</xsl:text></span>
+</xsl:template>
 
 <xsl:template match="frm">
   <span class="frm"><xsl:apply-templates/></span>

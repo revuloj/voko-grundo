@@ -1,0 +1,1 @@
+/home/revo/voko-formiko/bin/gitlogxml.sh

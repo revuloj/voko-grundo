@@ -1,11 +1,13 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 		version="1.0">
 
-<!-- (c) 1999-2003 che Wolfram Diestel
+<!-- (c) 1999-2020 ĉe Wolfram Diestel  laŭ GPLv2
 
 reguloj por la prezentado de la artikolostrukturo
 
 -->
+
+<xsl:variable name="mathjax-url">https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=AM_CHTML</xsl:variable>
 
 <!-- kruda artikolstrukturo -->
 
@@ -14,14 +16,13 @@ reguloj por la prezentado de la artikolostrukturo
     <head>
       <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
       <meta name="viewport" content="width=device-width,initial-scale=1"/>
-      <xsl:if test="$aspekto='ilustrite'">
-	<link title="artikolo-stilo" type="text/css" rel="stylesheet"
-              href="{$cssdir}/artikolo.css" />
+      <xsl:if test="//frm[@am]">
+        <script type="text/javascript" async="async" src="{$mathjax-url}"></script>
       </xsl:if>
-      <title>
-	<xsl:apply-templates select="//art/kap[1]" mode="titolo"/>
-      </title>
-
+      <xsl:if test="$aspekto='ilustrite'">
+      	<link title="artikolo-stilo" type="text/css" rel="stylesheet" href="{$cssdir}/artikolo.css" />
+      </xsl:if>
+      <title><xsl:apply-templates select="//art/kap[1]" mode="titolo"/></title>
       <script type="text/javascript">
 	<xsl:text>&lt;!--
 	top.document.title = 'Reta Vortaro [</xsl:text>
@@ -53,7 +54,7 @@ reguloj por la prezentado de la artikolostrukturo
 
   <xsl:choose>
 
-    <!-- se enestas subartikoloj au sencoj prezentu pr dl-listo -->
+    <!-- se enestas subartikoloj au sencoj prezentu per dl-listo -->
     <xsl:when test="subart|snc">
       <xsl:apply-templates select="kap"/>
       <dl>
@@ -82,7 +83,14 @@ reguloj por la prezentado de la artikolostrukturo
 <!-- subartikolo -->
 
 <xsl:template match="subart">
-  <dt><xsl:number format="I."/></dt>
+  <dt class="subart">
+    <xsl:if test="@mrk">
+      <xsl:attribute name="id">
+        <xsl:value-of select="@mrk"/>
+      </xsl:attribute>
+    </xsl:if>
+    <xsl:number format="I."/>
+  </dt>
   <dd>
     <xsl:choose>
 
@@ -105,27 +113,29 @@ reguloj por la prezentado de la artikolostrukturo
 <!-- derivajhoj -->
 
 <xsl:template match="drv">
-  <a name="{@mrk}"/>
-    <!-- xsl:apply-templates select="tez" mode="ref"/ -->
-    <xsl:apply-templates select="kap|gra|uzo|fnt|dif|ref[@tip='dif']"/>
-
-    <dl>
-      <xsl:apply-templates select="subdrv|snc"/>
-    </dl>
-  
-    <xsl:apply-templates
-      select="node()[
-        not(
-          self::subdrv|
-          self::snc|
-          self::gra|
-          self::uzo|
-          self::fnt|
-          self::kap|
-          self::dif|
-          self::mlg|
-          self::ref
-        [@tip='dif'])]"/>
+  <!-- xsl:apply-templates select="tez" mode="ref"/ -->
+  <div class="deriv">
+    <xsl:apply-templates select="kap"/>
+    <div class="kasxebla">
+      <xsl:apply-templates select="gra|uzo|fnt|dif|ref[@tip='dif']"/>
+      <dl>
+        <xsl:apply-templates select="subdrv|snc"/>
+      </dl>  
+      <xsl:apply-templates
+        select="node()[
+          not(
+            self::subdrv|
+            self::snc|
+            self::gra|
+            self::uzo|
+            self::fnt|
+            self::kap|
+            self::dif|
+            self::mlg|
+            self::ref
+          [@tip='dif'])]"/>
+    </div>
+  </div>
 </xsl:template>  
 	
 
@@ -133,6 +143,12 @@ reguloj por la prezentado de la artikolostrukturo
 
 <xsl:template match="subdrv">
   <dt>
+    <xsl:if test="@mrk">
+      <xsl:attribute name="id">
+        <xsl:value-of select="@mrk"/>
+      </xsl:attribute>
+    </xsl:if>
+
     <xsl:number format="A."/>
 
     <!-- tezauroligo -->
@@ -166,7 +182,7 @@ reguloj por la prezentado de la artikolostrukturo
 <!-- kapvorto de derivajho -->
 
 <xsl:template match="drv/kap">
-  <h2>
+  <h2 id="{ancestor::drv/@mrk}">
     <xsl:apply-templates/>
     <xsl:apply-templates select="../mlg"/>
 
@@ -190,12 +206,14 @@ reguloj por la prezentado de la artikolostrukturo
 
 
 <xsl:template match="snc">
-  <xsl:if test="@mrk">
-    <a name="{@mrk}"></a>
-  </xsl:if>
   <!-- xsl:apply-templates select="tez" mode="ref"/ -->
 
   <dt>
+    <xsl:if test="@mrk">
+      <xsl:attribute name="id">
+        <xsl:value-of select="@mrk"/>
+      </xsl:attribute>
+    </xsl:if>
     <xsl:choose>
 
       <xsl:when test="@ref">
@@ -247,13 +265,14 @@ reguloj por la prezentado de la artikolostrukturo
 
 
 <xsl:template match="subsnc">
-  <xsl:if test="@mrk">
-    <a name="{@mrk}"/>
-  </xsl:if>
   <!-- xsl:apply-templates select="tez" mode="ref"/ -->
 
   <dt>
-
+    <xsl:if test="@mrk">
+      <xsl:attribute name="id">
+        <xsl:value-of select="@mrk"/>
+      </xsl:attribute>
+    </xsl:if>
     <xsl:choose>
        <xsl:when test="@ref">
           <xsl:apply-templates mode="number-of-ref-snc" select="id(@ref)"/>:
@@ -282,6 +301,15 @@ reguloj por la prezentado de la artikolostrukturo
   </dd>
 </xsl:template>
 
+<xsl:template name="tezauro">
+  <xsl:if test="@tez">
+    &#xa0;<a href="{@tez}" class="tez-ref" target="indekso" title="al la teza&#x016d;ro">&#x219D;</a>
+<!--    
+      <img src="../smb/tezauro.png" class="tez" alt="TEZ" 
+           title="al la teza&#x016d;ro" border="0"/>
+    </a> -->
+  </xsl:if>
+</xsl:template>
 
 <xsl:template match="text()">
   <xsl:value-of select="."/>

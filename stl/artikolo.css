@@ -197,6 +197,7 @@ A IMG.viki:active {background-color:  #a0a070; border: 2px inset gray}
 
 /* formuloj */
 .frm { font-style: normal }
+.frm_am { font-size: 90% }
 
 .bld_atrib { font-size: 80%; color: gray }
 .bld_atrib:link { font-size: 80%; color: gray }
@@ -240,3 +241,21 @@ BUTTON.faldilo {
     -webkit-appearance: none;
     -moz-appearance: none;
 }
+
+.art-hist td:first-child {
+    /*font-family: "Lucida Console", Monaco, monospace; */
+    white-space: nowrap;
+    padding-right: .5em;
+}
+
+.art-hist td:nth-child(2) {
+    /*font-family: "Lucida Console", Monaco, monospace;*/
+    font-family: monospace;
+    white-space: nowrap;
+    padding-right: .5em;
+}
+
+.art-hist td:nth-child(3) {
+    font-style: italic
+}
+

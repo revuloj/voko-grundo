@@ -63,7 +63,7 @@ reguloj por prezentado de kapvorto kun numeroj de sencoj, subsencoj ktp.
     [self::drv or self::art][1]/kap" mode="kapvorto"/>
   <xsl:text> </xsl:text>
   <xsl:number from="drv|subart" level="multiple" count="snc|subsnc"
-    format="1.a"/>
+      format="1.a"/>
 </xsl:template>
 
 

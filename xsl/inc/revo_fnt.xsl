@@ -129,7 +129,6 @@ la fontoreferencoj malsupre de la pagxoj
       <xsl:text>, </xsl:text>
     </xsl:when>
   </xsl:choose>
-
 </xsl:template>
 
 

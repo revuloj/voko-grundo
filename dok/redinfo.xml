@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<manlibro>
+
+<h1>Informoj por redaktantoj kaj redaktontoj</h1>
+
+
+<h2>Kiel fariĝi kunredaktanto?</h2>
+<p>
+Aliĝu al la 
+<a href="revolist.html">dissendolisto</a> de redaktantoj
+kaj registriĝu kiel redaktanto ĉe &lt;wolfram(ĉe)steloj.de&gt;.
+</p>
+
+
+<h2>Kiel funkcias redaktado?</h2>
+
+<p>
+Por la redaktado ekzistas retpoŝta 
+<a href="revoserv.html">redaktoservo</a>, kiu
+traktas redaktitajn artikolojn senditajn de la
+redaktantoj.
+</p>
+
+<p>
+Por redakti artikolon vi havas la sekvajn eblecojn:
+<ul>
+  <li>Simplajn redaktojn vi povas fari per la formularo, kiu estas
+  ligita malsupre de ĉiu artikolo per la indiko [redakti...]</li>
+  <li>Pli komforta redaktilo troviĝas ĉe <a href="https://revaj.steloj.de/">revaj.steloj.de</a></li>
+  <li>Vi povas preni aktualan artikolon en formo XML kaj sendi redaktojn <a href="revoserv.html">per simpla retpoŝto</a>
+  (Atentu, ke tiel estas la risko, ke via retpoŝtilo fuŝas la tekston, ekzemple enmetante malĝustajn linirompojn.
+  Do tio estas nur por spertuloj)</li>
+</ul>
+</p>  
+
+<h2>Kiel la artikoloj estas strukturitaj?</h2>
+<p>
+ La artikoloj estas verkitaj per la lingvo XML.
+ La strukturon, kiun havu artikolo, priskribas
+ la <a href="dtd.html">dokumenttipdifino (DTD)</a>.
+</p>
+<p>
+  La sekvaj dosieroj apartenas al la DTD:
+</p>
+<ul>
+<li><a href="../dtd/vokoxml.dtd">Difino de la vortara strukturo</a></li>
+<li><a href="../dtd/vokosgn.dtd">Signounuoj</a></li>
+<li><a href="../dtd/vokourl.dtd">URL-unuoj (por eksteraj referencoj)</a></li>
+</ul>
+
+<blockquote>
+Bedaŭrinde pluraj TTT-legiloj provas interpreti ilin
+anstataŭ montri la enhavon. Do uzu la funkcion
+"sekurigi referencon" de via TTT-legilo (ofte en la kuntekstmenuo,
+aperanta ĉe dekstra musklako sur la referenco), kaj
+legu la sekurigitajn dosierojn poste per simpla tekstredaktilo.
+</blockquote>
+<p>
+Se vi volas indiki fakojn kaj la lingvojn de tradukoj, bv.
+uzi la sekvajn mallongigojn:
+</p>
+<ul>
+<li><a href="fakoj.html">Mallongigoj de fakoj</a></li>
+<li><a href="lingvoj.html">Mallongigoj de lingvoj</a></li>
+</ul>
+
+<h2>Ĉu mi devos lerni XML por kunredakti?</h2>
+<p>
+Kuraĝon! Vi povas komenci redaktadon per simplaj
+aferoj kiel aldono de tradukoj en la artikoloj. Iom
+post iom vi lernos, kiel la artikoloj estas konstruitaj
+kaj povos fari pli komplikajn redaktojn.
+</p>
+<p>
+Helpas ankaŭ la <a href="manlibro.html">teknika manlibro</a>
+lerni la uzon de bazaj strukturoj per klarigoj kaj
+ekzemploj.
+</p>
+
+<h2>Pri kio mi povas helpi en la redaktado?</h2>
+<p>
+Jen kelkaj aferoj, kiujn vi povus fari:
+<ul>
+  <li>Regule legi <a href="http://www.reta-vortaro.de/revo/inx/novaj.html">novajn</a>
+      kaj <a href="http://www.reta-vortaro.de/revo/inx/shanghoj.html">ŝanĝitajn</a> artikolojn kaj
+      komenti pri eraroj.</li>
+      <li>Forigi tajperarojn el la artikoloj. La
+      <a href="http://h1838790.stratoserver.net/revokontrolo/">vortokontrolo</a> helpas trovi tiujn.
+      (vidu ankaŭ la <a href="http://h1838790.stratoserver.net/revokontrolo/klarigoj.html">klarigojn</a>)</li>
+      <li>Aldoni tradukojn en via gepatra lingvo. Jen
+      <a href="http://www.reta-vortaro.de/revo/">kelkaj mankantaj tradukoj</a></li>
+<li>Aldoni indikojn pri oficialeco de vortoj 
+  (la steloj kaj ciferetoj ĉe la radikoj en PIV).</li>
+<li>Kontroli vortojn de iu fako, aldoni fakindikon ĉe
+mankantaj vortoj. Ĝustigi la difinojn.</li>
+<li>Trovi la fontojn de cititaj frazoj kaj aldoni pliajn ekzemplojn de vortuzo.
+  Vi povas uzi la komfortan serĉilon ĉe <a href="https://revaj.steloj.de/">revaj.steloj.de</a> tiucele.</li>
+<li>Desegni aŭ foti bildetojn rilate al iu fako
+  kaj aldoni la bildojn en la artikoloj.</li>
+</ul>
+</p>
+
+<h2>Ĉu ekzistas reguloj pri redaktado de artikoloj?</h2>
+<p>
+Vi trovas regulojn kaj rekomendojn pri redaktado de la
+artikoloj en la <a href="lingva_manlibro.html">lingva manlibro</a>.
+</p>
+<p>
+  Ni havas unu centran regulon, kiu certigu la karakteron de Revo kiel vortaro, kiu prefere registras la uzatan lingvon.
+  Tial ni interkonsentis, ke por aldono de vortoj, redaktantoj provizu almenaŭ du fontojn, el kiu almenaŭ unu ne estu vortaro.
+</p>
+<p>
+Multajn pliaj informojn vi trovas en la alineo "por redaktantoj" en la paĝo
+ "ktp."
+</p>
+
+</manlibro>

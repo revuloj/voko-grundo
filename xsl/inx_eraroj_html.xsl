@@ -44,10 +44,10 @@
               pri enhava analizo de la vortaro.
             </p>
             <xsl:variable name="n-sen-ekz"><xsl:value-of select="count(//art/ero[@tip='dos-sen-ekz'])"/></xsl:variable>
-            <xsl:if test="$n-sen-ekz &gt; 200">
+            <xsl:if test="$n-sen-ekz &gt; 600">
                 <p>
                     Estas entute <xsl:value-of select="$n-sen-ekz"/> artikoloj sen ekzemplo.
-                    Pro koncizeco nur la lastaj 200 estas listigitaj.
+                    Pro koncizeco nur la lastaj 600 estas listigitaj.
                 </p>
             </xsl:if>
             <xsl:choose>
@@ -70,7 +70,7 @@
 </xsl:template>
 
 <xsl:template match="art">
-    <xsl:if test="ero[not(@tip='dos-sen-ekz')] or position() &lt; 201">
+    <xsl:if test="ero[not(@tip='dos-sen-ekz')] or position() &lt; 601">
       <dt>
         <a href="{concat('../art/',@dos,'.html')}" target="precipa"><b><xsl:value-of select="@dos"/></b></a>
       </dt>

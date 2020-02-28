@@ -146,7 +146,7 @@
     </eld>
   </vrk>
 
-  <vrk mll="BT" tip="vortaro">
+  <vrk mll="BT" tip="terminaro">
     <aut>Douglas A. Portmann</aut>
     <tit>Biblioteka terminaro</tit>
   </vrk>
@@ -1388,7 +1388,7 @@ M&uuml;nchhausen</tit>
      </eld>
   </vrk>
 
-  <vrk mll="PMEG">
+  <vrk mll="PMEG" tip="leksikono">
     <url>http://bertilow.com/pmeg/</url>
     <aut><a>Bertilo</a> <n>Wennergren</n></aut>
     <tit>Plena Manlibro de Esperanta Gramatiko</tit>

@@ -640,9 +640,10 @@ aut = element aut { attlist-aut, text }
 attlist-aut &= empty
 
 
-# [frm] Matematika au kemia formulo
+# [frm] Matematika au kemia formulo, por matematikaj formuloj oni povas
+#    ankaŭ doni esprion laŭ sintakso de AsciiMath por pli bela kompostado
 frm = element frm { attlist-frm, (text | sup | sub | g | k)* }
-attlist-frm &= empty
+attlist-frm &= attribute am { text }?
 
 
 # [g] Grasa parto de formulo, ekz. vektoro, matrico k.s.,

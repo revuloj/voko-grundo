@@ -391,8 +391,11 @@ en la fontoj.
 <!-- [aut] Aŭtoro de citita frazo aŭ verko -->
 <!ELEMENT aut (#PCDATA)>
 
-<!-- [frm] Matematika au kemia formulo -->
+<!-- [frm] Matematika au kemia formulo, por matematikaj formuloj oni povas
+    ankaŭ doni esprion laŭ sintakso de AsciiMath por pli bela kompostado -->
 <!ELEMENT frm (#PCDATA|sup|sub|g|k)*>
+<!ATTLIST frm 
+          am CDATA #IMPLIED>
 
 <!-- [g] Grasa parto de formulo, ekz. vektoro, matrico k.s.,
   bv. uzi nur en frm -->
