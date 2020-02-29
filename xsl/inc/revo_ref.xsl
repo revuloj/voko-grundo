@@ -21,10 +21,17 @@ transformdosiero, ekz. revohtml.xsl
   xt -->
   <xsl:variable name="ref" select="(@ref|ancestor::ref/@cel)[last()]"/>
   <sup><i>
-    <xsl:apply-templates mode="number-of-ref-snc"
-    select=
-      "document(concat(substring-before(
-          $ref,'.'),'.xml'),/)//node()[@mrk=$ref]"/>
+    <xsl:choose>
+      <xsl:when test="substring-before($ref,'.') = substring-before(ancestor::*/@mrk,'.')">
+        <xsl:apply-templates mode="number-of-ref-snc"
+          select="//node()[@mrk=$ref]"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:apply-templates mode="number-of-ref-snc"
+          select="document(concat(substring-before(
+              $ref,'.'),'.xml'),/)//node()[@mrk=$ref]"/>
+      </xsl:otherwise>
+    </xsl:choose>
   </i></sup>
 </xsl:template>
 

@@ -195,6 +195,10 @@ reguloj por la prezentado de la artikolostrukturo
 
 <!-- sencoj/subsencoj -->
 
+<xsl:template match="subart" mode="number-of-ref-snc">
+  <xsl:number from="subart" count="subart" format="I"/>
+</xsl:template>
+
 <xsl:template match="snc" mode="number-of-ref-snc">
   <xsl:number from="drv|subart" level="any" count="snc"/>
 </xsl:template>
