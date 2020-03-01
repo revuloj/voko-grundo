@@ -10,7 +10,7 @@ reguloj por prezentado de referencoj/tezauro-ligo
 <!--
 
 tio uzas XSLT 2.0 funkcion "replace". Tio kaŭzas ekz. problemon en revotxt.xsl
-pro krei DICT-version. Eble provu inkludi tion anstataŭe en la plej supra
+pro krei DICT-version. Do inkludu tion anstataŭe en la plej supra
 transformdosiero, ekz. revohtml.xsl
 
 <xsl:include href="inx_kodigo.inc"/>
@@ -22,7 +22,7 @@ transformdosiero, ekz. revohtml.xsl
   <xsl:variable name="ref" select="(@ref|ancestor::ref/@cel)[last()]"/>
   <sup><i>
     <xsl:choose>
-      <xsl:when test="substring-before($ref,'.') = substring-before(ancestor::*/@mrk,'.')">
+      <xsl:when test="substring-before($ref,'.') = substring-before(ancestor::node()[@mrk][1]/@mrk,'.')">
         <xsl:apply-templates mode="number-of-ref-snc"
           select="//node()[@mrk=$ref]"/>
       </xsl:when>
