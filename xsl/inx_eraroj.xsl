@@ -191,8 +191,7 @@
   <xsl:if test="@tip='lst' and (not(@lst) or @lst='')">
     <ero kie="{$kie}" mrk="{$mrk}" tip="ref-tip-lst" arg="{@cel}"/>
   </xsl:if>
-  <xsl:if test="@lst and 
-not(document($klasoj)//kls[substring-after(@nom,'#')=current()/substring-after(@lst,':')])">
+  <xsl:if test="@lst and not(document($klasoj)//kls[substring-after(@nom,'#')=current()/substring-after(@lst,':')])">
     <ero kie="{$kie}" mrk="{$mrk}" tip="ref-lst" arg="{@lst}"/>
   </xsl:if>
 </xsl:template>
