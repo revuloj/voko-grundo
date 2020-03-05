@@ -62,11 +62,21 @@ transform-reguloj.
   <!-- Se ne ekzistas la XML-dosiero, la tuta transformado fiaskas cxe
   xt -->
   <xsl:variable name="ref" select="(@ref|ancestor::ref/@cel)[last()]"/>
+<!-- 
   <xsl:variable name="doc" select="concat($xml-ref-pado,'/',substring-before($ref,'.'),'.xml')"/>
-
-<!-- <xsl:message>ref: <xsl:value-of select="$ref"/> doc: <xsl:value-of select="$doc"/></xsl:message> --> 
-  <sup>&#x21b7;</sup>
-  
+  <xsl:message>ref: <xsl:value-of select="$ref"/> doc: <xsl:value-of select="$doc"/></xsl:message> 
+--> 
+  <xsl:choose>
+    <xsl:when test="substring-before($ref,'.') = substring-before(ancestor::node()[@mrk][1]/@mrk,'.')">
+      <sup><i>
+      <xsl:apply-templates mode="number-of-ref-snc"
+        select="//node()[@mrk=$ref]"/>
+      </i></sup>
+    </xsl:when>
+    <xsl:otherwise>
+      <sup>&#x21b7;</sup>
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 
