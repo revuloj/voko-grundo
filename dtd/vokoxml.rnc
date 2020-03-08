@@ -205,7 +205,7 @@ tekst-stiloj = tld | sncref | klr | em | sup | sub | ctl | frm | nom | nac
 art =  
   element art {
     attlist-art, 
-    kap, 
+    art-kap, 
     unua-parto,
     (subart | drv | snc)*,
     sekva-parto
@@ -234,7 +234,7 @@ attlist-subart &= attribute mrk { drv-marko }?
 drv =
   element drv {
     attlist-drv, 
-    kap, 
+    drv-kap, 
 
     (dif-ref-parto |
       (
@@ -252,9 +252,9 @@ attlist-drv &= attribute mrk { drv-marko }
 ## kaj ekzemplojn, sed ĝi ne havas propran difinon. Ĝi aperas ene
 ## de kapvorto, ĉar ĝi ja estas ĝia variaĵo.
 
-var = element var { attlist-var, kap, (uzo | klr | ekz | rim)* }
+art-var = element var { attlist-var, art-kap, (uzo | klr | ekz | rim)* }
+drv-var = element var { attlist-var, drv-kap, (uzo | klr | ekz | rim)* }
 attlist-var &= empty
-
 
 ## Subderivaĵo. Ĝi grupigas plurajn proksimajn sencojn, se la
 ## priskribita vorto havas tre multajn sencojn. Tio povas
@@ -372,7 +372,8 @@ marko = xsd:ID { pattern = "([a-z0-9_]+)\.[A-Za-z0-9\._]+" }
 ## refencanta al la kapvorto, krome en la kapvorto povas okazi
 ## fontindiko.
 
-kap = element kap { attlist-kap, (text | rad | ofc | fnt | tld | var)* }
+art-kap = element kap { attlist-kap, (text | rad | ofc | fnt | tld | art-var)* }
+drv-kap = element kap { attlist-kap, (text | ofc | fnt | tld | drv-var)* }
 attlist-kap &= empty
 
 
