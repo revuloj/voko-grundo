@@ -16,7 +16,7 @@
    </vrk>
    <vrk>
       <bib>BdV</bib>
-      <url>http://tekstaro.com/pl/prenitutantekston.pl?nomo=la-batalo-de-l-vivo</url>
+      <url>https://tekstaro.com/pl/prenitutantekston.pl?nomo=la-batalo-de-l-vivo</url>
       <text>Charles Dickens, trad. L. L. Zamenhof: La Batalo de l' Vivo</text>
    </vrk>
    <vrk>
@@ -84,7 +84,7 @@
    </vrk>
    <vrk>
       <bib>Ĉukĉoj</bib>
-      <url>http://tekstaro.com/pl/prenitutantekston.pl?nomo=el-vivo-de-chukchoj</url>
+      <url>https://tekstaro.com/pl/prenitutantekston.pl?nomo=el-vivo-de-chukchoj</url>
       <text>Vasilij Eroŝenko: El vivo de ĉukĉoj</text>
    </vrk>
    <vrk>
@@ -105,7 +105,7 @@
    </vrk>
    <vrk>
       <bib>DL</bib>
-      <url>http://tekstaro.com/pl/prenitutantekston.pl?nomo=dua-libro</url>
+      <url>https://tekstaro.com/pl/prenitutantekston.pl?nomo=dua-libro</url>
       <text>L. L. Zamenhof: Dua Libro de l’ lingvo Internacia</text>
    </vrk>
    <vrk>
@@ -114,7 +114,7 @@
    </vrk>
    <vrk>
       <bib>DOz</bib>
-      <url>http://ttt.esperanto.org/esperante/literatur/Baum/doroteo/</url>
+      <url>http://esperanto.org/esperante/literatur/Baum/doroteo/</url>
       <text>L. Frank Baum, trad. D. Broadribb: Doroteo kaj la Sorĉisto en Oz</text>
    </vrk>
    <vrk>
@@ -165,7 +165,7 @@
    </vrk>
    <vrk>
       <bib>Esperanto</bib>
-      <url>http://www.uea.org/revuo/</url>
+      <url>https://uea.org/revuoj/esperanto</url>
       <text>Esperanto</text>
    </vrk>
    <vrk>
@@ -222,7 +222,7 @@
    </vrk>
    <vrk>
       <bib>FK</bib>
-      <url>http://tekstaro.com/pl/prenitutantekston.pl?nomo=fundamenta-krestomatio</url>
+      <url>https://tekstaro.com/pl/prenitutantekston.pl?nomo=fundamenta-krestomatio</url>
       <text>Ludoviko Lazaro Zamenhof: Fundamenta Krestomatio de la lingvo Esperanto</text>
    </vrk>
    <vrk>
@@ -260,7 +260,7 @@
    </vrk>
    <vrk>
       <bib>Hamlet</bib>
-      <url>http://tekstaro.com/pl/prenitutantekston.pl?nomo=hamleto</url>
+      <url>https://tekstaro.com/pl/prenitutantekston.pl?nomo=hamleto</url>
       <text>William Shakespeare, trad. L. L. Zamenhof: Hamleto, Reĝido de Danujo</text>
    </vrk>
    <vrk>
@@ -279,7 +279,7 @@
    </vrk>
    <vrk>
       <bib>Ifigenio</bib>
-      <url>http://tekstaro.com/pl/prenitutantekston.pl?nomo=ifigenio-en-taurido</url>
+      <url>https://tekstaro.com/pl/prenitutantekston.pl?nomo=ifigenio-en-taurido</url>
       <text>J. W. Goethe, trad. L. L. Zamenhof: Ifigenio en Taŭrido</text>
    </vrk>
    <vrk>
@@ -293,7 +293,7 @@
    </vrk>
    <vrk>
       <bib>InfanTorent2</bib>
-      <url>http://tekstaro.com/pl/prenitutantekston.pl?nomo=infanoj-en-torento</url>
+      <url>https://tekstaro.com/pl/prenitutantekston.pl?nomo=infanoj-en-torento</url>
       <text>Stellan Engholm: Infanoj en Torento, dua libro en la 
        Torento-trilogio</text>
    </vrk>
@@ -307,7 +307,7 @@
    </vrk>
    <vrk>
       <bib>Iŝtar</bib>
-      <url>http://home.att.net/~karlpov/proisxtr.htm</url>
+      <url>https://tekstaro.com/pl/prenisekciojn.pl?nomo=pro-ishtar</url>
       <text>H. A. Luyken: Pro Iŝtar</text>
    </vrk>
    <vrk>
@@ -341,13 +341,18 @@
    </vrk>
    <vrk>
       <bib>Kiso</bib>
-      <url>http://tekstaro.com/pl/prenitutantekston.pl?nomo=la-kiso</url>
+      <url>https://tekstaro.com/pl/prenitutantekston.pl?nomo=la-kiso</url>
       <text>Hjalmar Söderberg, trad. Sten Johansson: La Kiso kaj dek tri aliaj noveloj</text>
    </vrk>
    <vrk>
       <bib>KompLeks</bib>
-      <url>http://bertilow.com/div/komputada_leksikono/</url>
+      <url>https://bertilow.com/div/komputada_leksikono/</url>
       <text>Sergio Pokrovskij: Komputada Leksikono</text>
+   </vrk>
+   <vrk>
+      <bib>Komputeko</bib>
+      <url>https://komputeko.net/</url>
+      <text>Komputeko</text>
    </vrk>
    <vrk>
       <bib>Kosmo</bib>
@@ -377,7 +382,7 @@
    </vrk>
    <vrk>
       <bib>LanLin</bib>
-      <url>http://purl.oclc.org/net/lanlin</url>
+      <url>https://bertilow.com/lanlin/</url>
       <text>Bertilo Wennergren: Landoj kaj lingvoj de la mondo</text>
    </vrk>
    <vrk>
@@ -391,7 +396,7 @@
    </vrk>
    <vrk>
       <bib>LF</bib>
-      <url>http://www.esperanto.be/monato/</url>
+      <url>https://www.monato.be/</url>
       <text>Literatura Foiro</text>
    </vrk>
    <vrk>
@@ -400,7 +405,7 @@
    </vrk>
    <vrk>
       <bib>LOdE</bib>
-      <url>http://www.esperanto.org/Ondo/</url>
+      <url>http://esperanto-ondo.ru/</url>
       <text>La Ondo de Esperanto</text>
    </vrk>
    <vrk>
@@ -468,6 +473,7 @@
    </vrk>
    <vrk>
       <bib>Metrop</bib>
+      <url>https://tekstaro.com/pl/prenisekciojn.pl?nomo=metropoliteno</url>
       <text>V. Varankin: Metropoliteno</text>
    </vrk>
    <vrk>
@@ -481,12 +487,12 @@
    </vrk>
    <vrk>
       <bib>Monato</bib>
-      <url>http://www.esperanto.be/monato/</url>
+      <url>https://www.monato.be/</url>
       <text>Monato</text>
    </vrk>
    <vrk>
       <bib>MortulŜip</bib>
-      <url>http://tekstaro.com/pl/prenisekciojn.pl?nomo=mortula-shipo</url>
+      <url>https://tekstaro.com/pl/prenisekciojn.pl?nomo=mortula-shipo</url>
       <text>B. Traven, trad. Hans Georg Kaiser: Mortula Ŝipo, Rakonto de usona maristo</text>
    </vrk>
    <vrk>
@@ -506,7 +512,7 @@ Münchhausen</text>
    </vrk>
    <vrk>
       <bib>NeĝaBlovado</bib>
-      <url>http://esperanto.org/Ondo/Rn-pusk2.htm</url>
+      <url>http://esperanto-ondo.ru/Rn-pusk2.htm</url>
       <text>Aleksandr Puŝkin, trad. Antoni Grabowski: La neĝa blovado</text>
    </vrk>
    <vrk>
@@ -564,12 +570,12 @@ Münchhausen</text>
    </vrk>
    <vrk>
       <bib>Plumamikoj</bib>
-      <url>http://tekstaro.com/pl/prenitutantekston.pl?nomo=ne-nur-leteroj-de-plumamikoj</url>
+      <url>https://tekstaro.com/pl/prenitutantekston.pl?nomo=ne-nur-leteroj-de-plumamikoj</url>
       <text>Marjorie Boulton: Ne nur leteroj de plum-amikoj</text>
    </vrk>
    <vrk>
       <bib>PMEG</bib>
-      <url>http://bertilow.com/pmeg/</url>
+      <url>https://bertilow.com/pmeg/</url>
       <text>Bertilo Wennergren: Plena Manlibro de Esperanta Gramatiko</text>
    </vrk>
    <vrk>
@@ -611,7 +617,7 @@ Münchhausen</text>
    </vrk>
    <vrk>
       <bib>RokPop</bib>
-      <url>http://purl.oclc.org/net/bertilow?d=roko/index.php</url>
+      <url>https://bertilow.com/roko/</url>
       <text>B. Wennergren: Roko kaj Popo, Popularmuzika Terminaro en Esperanto</text>
    </vrk>
    <vrk>
@@ -624,7 +630,7 @@ Münchhausen</text>
    </vrk>
    <vrk>
       <bib>SatirRak</bib>
-      <url>http://tekstaro.com/pl/prenitutantekston.pl?nomo=satiraj-rakontoj</url>
+      <url>https://tekstaro.com/pl/prenitutantekston.pl?nomo=satiraj-rakontoj</url>
       <text>Sándor Szathmári: Satiraj rakontoj</text>
    </vrk>
    <vrk>
@@ -639,7 +645,7 @@ Münchhausen</text>
    </vrk>
    <vrk>
       <bib>SkandalJozef</bib>
-      <url>http://tekstaro.com/pl/prenitutantekston.pl?nomo=la-skandalo-pro-jozefo</url>
+      <url>https://tekstaro.com/pl/prenitutantekston.pl?nomo=la-skandalo-pro-jozefo</url>
       <text>Valdemar Vinař: La skandalo pro Jozefo</text>
    </vrk>
    <vrk>
@@ -652,7 +658,7 @@ Münchhausen</text>
    </vrk>
    <vrk>
       <bib>Ŝtalrato</bib>
-      <url>http://ttt.esperanto.org/Ondo/Rato01.htm</url>
+      <url>http://esperanto-ondo.ru/Rato01.htm</url>
       <text>Harry Harrison, trad. Reinhard Fössmeier k.a.: Naskiĝo de la rustimuna ŝtalrato</text>
    </vrk>
    <vrk>
@@ -692,12 +698,12 @@ Münchhausen</text>
    </vrk>
    <vrk>
       <bib>VivZam</bib>
-      <url>http://tekstaro.com/pl/prenitutantekston.pl?nomo=vivo-de-zamenhof</url>
+      <url>https://tekstaro.com/pl/prenitutantekston.pl?nomo=vivo-de-zamenhof</url>
       <text>Edmond Privat: Vivo de Zamenhof</text>
    </vrk>
    <vrk>
       <bib>VojaĝImp</bib>
-      <url>http://tekstaro.com/pl/prenitutantekston.pl?nomo=vojaghimpresoj</url>
+      <url>https://tekstaro.com/pl/prenitutantekston.pl?nomo=vojaghimpresoj</url>
       <text>Valdemar Langlet: Vojaĝimpresoj</text>
    </vrk>
    <vrk>
