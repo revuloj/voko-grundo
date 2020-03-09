@@ -52,7 +52,7 @@
   </vrk>
 
   <vrk mll="BdV">
-    <url>http://tekstaro.com/pl/prenitutantekston.pl?nomo=la-batalo-de-l-vivo</url>
+    <url>https://tekstaro.com/pl/prenitutantekston.pl?nomo=la-batalo-de-l-vivo</url>
     <aut><a>Charles</a> <n>Dickens</n></aut>
     <trd><a>L. L.</a> <n>Zamenhof</n></trd>
     <tit>La Batalo de l' Vivo</tit>
@@ -199,7 +199,7 @@
   </vrk>
 
   <vrk mll="&Ccirc;uk&ccirc;oj">
-     <url>http://tekstaro.com/pl/prenitutantekston.pl?nomo=el-vivo-de-chukchoj</url>
+     <url>https://tekstaro.com/pl/prenitutantekston.pl?nomo=el-vivo-de-chukchoj</url>
      <aut><a>Vasilij</a> <n>Ero&scirc;enko</n></aut>
      <tit>El vivo de &ccirc;uk&ccirc;oj</tit>
      <eld>
@@ -258,7 +258,7 @@
   </vrk>
 
   <vrk mll="DL">
-    <url>http://tekstaro.com/pl/prenitutantekston.pl?nomo=dua-libro</url>
+    <url>https://tekstaro.com/pl/prenitutantekston.pl?nomo=dua-libro</url>
     <aut><a>L. L.</a> <n>Zamenhof</n></aut>
     <tit>Dua Libro de l’ lingvo Internacia</tit>
     <eld>
@@ -280,7 +280,7 @@
   </vrk>
 
   <vrk mll="DOz">
-    <url>http://ttt.esperanto.org/esperante/literatur/Baum/doroteo/</url>
+    <url>http://esperanto.org/esperante/literatur/Baum/doroteo/</url>
     <aut><a>L. Frank</a> <n>Baum</n></aut>
     <trd><a>D.</a> <n>Broadribb</n></trd>
     <tit>Doroteo kaj la Sor&ccirc;isto en Oz</tit>
@@ -421,7 +421,7 @@
 
 
   <vrk mll="Esperanto">
-    <url>http://www.uea.org/revuo/</url>
+    <url>https://uea.org/revuoj/esperanto</url>
     <tit>Esperanto</tit>
     <eld>
       <nom>Universala Esperanto-Asocio</nom>
@@ -555,7 +555,7 @@
   </vrk>
 
   <vrk mll="FK">
-     <url>http://tekstaro.com/pl/prenitutantekston.pl?nomo=fundamenta-krestomatio</url>
+     <url>https://tekstaro.com/pl/prenitutantekston.pl?nomo=fundamenta-krestomatio</url>
      <aut><a>Ludoviko Lazaro</a> <n>Zamenhof</n></aut>
      <tit>Fundamenta Krestomatio de la lingvo Esperanto</tit>
      <eld>
@@ -644,7 +644,7 @@
   </vrk>
 
   <vrk mll="Hamlet">
-    <url>http://tekstaro.com/pl/prenitutantekston.pl?nomo=hamleto</url>
+    <url>https://tekstaro.com/pl/prenitutantekston.pl?nomo=hamleto</url>
     <aut><a>William</a> <n>Shakespeare</n></aut>
     <trd><a>L. L.</a> <n>Zamenhof</n></trd>
     <tit>Hamleto, Reĝido de Danujo</tit>
@@ -691,7 +691,7 @@
   </vrk>
 
   <vrk mll="Ifigenio">
-    <url>http://tekstaro.com/pl/prenitutantekston.pl?nomo=ifigenio-en-taurido</url>
+    <url>https://tekstaro.com/pl/prenitutantekston.pl?nomo=ifigenio-en-taurido</url>
     <aut><a>J. W.</a> <n>Goethe</n></aut>
     <trd><a>L. L.</a> <n>Zamenhof</n></trd>
     <tit>Ifigenio en Taŭrido</tit>
@@ -726,7 +726,7 @@
   </vrk>
 
   <vrk mll="InfanTorent2">
-     <url>http://tekstaro.com/pl/prenitutantekston.pl?nomo=infanoj-en-torento</url>
+     <url>https://tekstaro.com/pl/prenitutantekston.pl?nomo=infanoj-en-torento</url>
      <aut><a>Stellan</a> <n>Engholm</n></aut>
      <tit>Infanoj en Torento, dua libro en la 
        Torento-trilogio</tit>
@@ -771,7 +771,7 @@
   </vrk>
 
   <vrk mll="I&scirc;tar">
-    <url>http://home.att.net/~karlpov/proisxtr.htm</url>
+    <url>https://tekstaro.com/pl/prenisekciojn.pl?nomo=pro-ishtar</url>
     <aut><a>H. A.</a> <n>Luyken</n></aut>
     <tit>Pro I&scirc;tar</tit>
     <eld>
@@ -869,7 +869,7 @@
    </vrk>
 
   <vrk mll="Kiso">
-     <url>http://tekstaro.com/pl/prenitutantekston.pl?nomo=la-kiso</url>
+     <url>https://tekstaro.com/pl/prenitutantekston.pl?nomo=la-kiso</url>
      <aut><a>Hjalmar</a> <n>S&ouml;derberg</n></aut>
      <trd><a>Sten</a> <n>Johansson</n></trd>
      <tit>La Kiso kaj dek tri aliaj noveloj</tit>
@@ -881,10 +881,15 @@
   </vrk>
 
   <vrk mll="KompLeks" tip="terminaro">
-    <url>http://bertilow.com/div/komputada_leksikono/</url>
+    <url>https://bertilow.com/div/komputada_leksikono/</url>
     <!--url>http://purl.oclc.org/NET/voko/URL/KompLeks/</url -->
     <aut><a>Sergio</a> <n>Pokrovskij</n></aut>
     <tit>Komputada Leksikono</tit>
+  </vrk>
+
+  <vrk mll="Komputeko" tip="terminaro">
+    <url>https://komputeko.net/</url>
+    <tit>Komputeko</tit>
   </vrk>
 
   <vrk mll="Kosmo">
@@ -954,7 +959,7 @@
   </vrk>
 
   <vrk mll="LanLin">
-    <url>http://purl.oclc.org/net/lanlin</url>
+    <url>https://bertilow.com/lanlin/</url>
     <aut><a>Bertilo</a> <n>Wennergren</n></aut>
     <tit>Landoj kaj lingvoj de la mondo</tit>
   </vrk>
@@ -978,7 +983,7 @@
   </vrk>
 
   <vrk mll="LF">
-    <url>http://www.esperanto.be/monato/</url>
+    <url>https://www.monato.be/</url>
     <tit>Literatura Foiro</tit>
     <ald>kultura revuo</ald>
     <eld>
@@ -1001,7 +1006,7 @@
   </vrk>
 
   <vrk mll="LOdE">
-    <url>http://www.esperanto.org/Ondo/</url>
+    <url>http://esperanto-ondo.ru/</url>
     <tit>La Ondo de Esperanto</tit>
     <ald>Gazeto</ald>
     <eld>
@@ -1155,6 +1160,7 @@
   </vrk>
 
   <vrk mll="Metrop">
+    <url>https://tekstaro.com/pl/prenisekciojn.pl?nomo=metropoliteno</url>
     <aut><a>V.</a> <n>Varankin</n></aut>
     <tit>Metropoliteno</tit>
   </vrk>
@@ -1182,7 +1188,7 @@
   </vrk>
 
   <vrk mll="Monato">
-    <url>http://www.esperanto.be/monato/</url>
+    <url>https://www.monato.be/</url>
     <tit>Monato</tit>
     <ald>internacia magazino</ald>
     <eld>
@@ -1193,7 +1199,7 @@
   </vrk>
 
   <vrk mll="Mortul&Scirc;ip">
-     <url>http://tekstaro.com/pl/prenisekciojn.pl?nomo=mortula-shipo</url>
+     <url>https://tekstaro.com/pl/prenisekciojn.pl?nomo=mortula-shipo</url>
      <aut><a>B.</a> <n>Traven</n></aut>
      <trd><a>Hans Georg</a> <n>Kaiser</n></trd>
      <tit>Mortula &Scirc;ipo, Rakonto de usona maristo</tit>
@@ -1242,7 +1248,7 @@ M&uuml;nchhausen</tit>
   </vrk>
 
   <vrk mll="Ne&gcirc;aBlovado">
-     <url>http://esperanto.org/Ondo/Rn-pusk2.htm</url>
+     <url>http://esperanto-ondo.ru/Rn-pusk2.htm</url>
      <aut><a>Aleksandr</a> <n>Pu&scirc;kin</n></aut>
      <trd><a>Antoni</a> <n>Grabowski</n></trd>
      <tit>La ne&gcirc;a blovado</tit>
@@ -1377,7 +1383,7 @@ M&uuml;nchhausen</tit>
   </vrk>
 
   <vrk mll="Plumamikoj">
-     <url>http://tekstaro.com/pl/prenitutantekston.pl?nomo=ne-nur-leteroj-de-plumamikoj</url>
+     <url>https://tekstaro.com/pl/prenitutantekston.pl?nomo=ne-nur-leteroj-de-plumamikoj</url>
      <aut><a>Marjorie</a> <n>Boulton</n></aut>
      <tit>Ne nur leteroj de plum-amikoj</tit>
      <eld>
@@ -1389,7 +1395,7 @@ M&uuml;nchhausen</tit>
   </vrk>
 
   <vrk mll="PMEG" tip="leksikono">
-    <url>http://bertilow.com/pmeg/</url>
+    <url>https://bertilow.com/pmeg/</url>
     <aut><a>Bertilo</a> <n>Wennergren</n></aut>
     <tit>Plena Manlibro de Esperanta Gramatiko</tit>
   </vrk>
@@ -1477,7 +1483,7 @@ M&uuml;nchhausen</tit>
   </vrk>
 
   <vrk mll="RokPop" tip="termiaro">
-    <url>http://purl.oclc.org/net/bertilow?d=roko/index.php</url>
+    <url>https://bertilow.com/roko/</url>
     <aut><a>B.</a> <n>Wennergren</n></aut>
     <tit>Roko kaj Popo, Popularmuzika Terminaro en Esperanto</tit>
   </vrk>
@@ -1501,7 +1507,7 @@ M&uuml;nchhausen</tit>
   </vrk>
 
   <vrk mll="SatirRak">
-     <url>http://tekstaro.com/pl/prenitutantekston.pl?nomo=satiraj-rakontoj</url>
+     <url>https://tekstaro.com/pl/prenitutantekston.pl?nomo=satiraj-rakontoj</url>
      <aut><a>S&aacute;ndor</a> <n>Szathm&aacute;ri</n></aut>
      <tit>Satiraj rakontoj</tit>
      <eld>
@@ -1531,7 +1537,7 @@ M&uuml;nchhausen</tit>
   </vrk>
 
   <vrk mll="SkandalJozef">
-     <url>http://tekstaro.com/pl/prenitutantekston.pl?nomo=la-skandalo-pro-jozefo</url>
+     <url>https://tekstaro.com/pl/prenitutantekston.pl?nomo=la-skandalo-pro-jozefo</url>
      <aut><a>Valdemar</a> <n>Vina&rcaron;</n></aut>
      <tit>La skandalo pro Jozefo</tit>
      <eld>
@@ -1583,7 +1589,7 @@ M&uuml;nchhausen</tit>
   </vrk>
 
   <vrk mll="&Scirc;talrato">
-    <url>http://ttt.esperanto.org/Ondo/Rato01.htm</url>
+    <url>http://esperanto-ondo.ru/Rato01.htm</url>
     <aut><a>Harry</a> <n>Harrison</n></aut>
     <trd><a>Reinhard</a> <n>F&ouml;ssmeier</n> k.a.</trd>
     <tit>Naski&gcirc;o de la rustimuna &scirc;talrato</tit>
@@ -1668,7 +1674,7 @@ M&uuml;nchhausen</tit>
   </vrk>
 
   <vrk mll="VivZam">
-    <url>http://tekstaro.com/pl/prenitutantekston.pl?nomo=vivo-de-zamenhof</url>
+    <url>https://tekstaro.com/pl/prenitutantekston.pl?nomo=vivo-de-zamenhof</url>
     <aut><a>Edmond</a> <n>Privat</n></aut>
     <tit>Vivo de Zamenhof</tit> 
     <eld>
@@ -1691,7 +1697,7 @@ M&uuml;nchhausen</tit>
   </vrk>
 
   <vrk mll="Voja&gcirc;Imp">
-     <url>http://tekstaro.com/pl/prenitutantekston.pl?nomo=vojaghimpresoj</url>
+     <url>https://tekstaro.com/pl/prenitutantekston.pl?nomo=vojaghimpresoj</url>
      <aut><a>Valdemar</a> <n>Langlet</n></aut>
      <tit>Voja&gcirc;impresoj</tit>
      <eld>
@@ -1739,11 +1745,3 @@ M&uuml;nchhausen</tit>
   </vrk>
 
 </bibliografio>
-
-
-
-
-
-
-
-
