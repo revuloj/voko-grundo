@@ -959,7 +959,7 @@
   </vrk>
 
   <vrk mll="LanLin">
-    <url>https://bertilow.com/lanlin/</url>
+    <url>https://purl.oclc.org/net/lanlin</url>
     <aut><a>Bertilo</a> <n>Wennergren</n></aut>
     <tit>Landoj kaj lingvoj de la mondo</tit>
   </vrk>
@@ -983,7 +983,7 @@
   </vrk>
 
   <vrk mll="LF">
-    <url>https://www.monato.be/</url>
+    <url>https://en.wikipedia.org/wiki/Literatura_Foiro</url>
     <tit>Literatura Foiro</tit>
     <ald>kultura revuo</ald>
     <eld>
