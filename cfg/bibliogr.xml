@@ -924,7 +924,7 @@
   </vrk>
 
   <vrk mll="Kukobak">
-    <!-- url>http://www.uni-leipzig.de/esperanto/texte/bakado.html</url -->
+    <url>http://web.archive.org/web/20060714032539/http://www.uni-leipzig.de/esperanto/texte/bakado.html</url>
     <aut><a>Cornelia</a> <n>Rau</n></aut>
     <aut>k.a.</aut>
     <tit>Kukobakado</tit>
@@ -983,7 +983,7 @@
   </vrk>
 
   <vrk mll="LF">
-    <url>https://en.wikipedia.org/wiki/Literatura_Foiro</url>
+    <url>https://eo.wikipedia.org/wiki/Literatura_Foiro</url>
     <tit>Literatura Foiro</tit>
     <ald>kultura revuo</ald>
     <eld>
