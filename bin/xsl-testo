@@ -1,0 +1,32 @@
+#!/bin/bash
+
+# haltu ĉe eraro
+set -e
+
+# kontrolas, ĉu ĉiuj XSL-dosieroj estas legeblaj (sintakso en ordo) per saxonb-xslt
+
+empty_xml="<?xml version='1.0'?><empty/>"
+
+for file in ${VOKO}/xsl/*.xsl
+do
+    # kelkaj provas legi aŭ skribi aldonajn dosierojn aŭ bezonas parametrojn
+    # aŭ bezonas respiro.jar el voko-formiko, kion ni dum testo evitu
+    if [[ "$file" != *"inx_html.xsl" && "$file" != *"inx_ofc.xsl" \
+        && "$file" != *"inx_ordigo2.xsl" && "$file" != *"inx_relax_html.xsl" \
+        && "$file" != *"inx_shanghoj.xsl" && "$file" != *"lst_html.xsl" \
+        && "$file" != *"reveto.xsl" && "$file" != *"revo_bedic.xsl" \
+        && "$file" != *"revohtml-cyberweb.xsl" && "$file" != *"revotxt_eo.xsl" \
+        && "$file" != *"revotxt.xsl" && "$file" != *"tez_html.xsl" ]]; then
+        echo "T: ${file}"
+        echo "${empty_xml}" | saxonb-xslt -ext:on -xsl:${file} -s:- -o:/dev/null
+    fi
+done
+
+#for file in ${VOKO}/xsl/inc/*.xsl
+#do
+#    if [[ "$file" != *"revo_adm.xsl" && "$file" != *"revo_art2.xsl" ]]; then
+#        echo "T: ${file}"
+#        echo "${empty_xml}" | saxonb-xslt -ext:on -xsl:${file} -s:- -o:/dev/null
+#    fi
+#done
+
