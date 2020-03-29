@@ -73,9 +73,9 @@ reguloj por prezentado de la administraj notoj
         <xsl:variable name="xml"
           select="substring-before(substring-after(@mrk,'$Id: '),',v')"/>
 
-	  <a class="redakto" title="al la enirpaĝo" 
-  	      href="../index.html" target="_top">&#x211B;evo</a> |
-	  <a class="redakto" title="Datumprotekta deklaro" 
+	        <a class="redakto" title="al la enirpaĝo" 
+  	          href="../index.html" target="_top">&#x211B;evo</a> |
+	        <a class="redakto" title="Datumprotekta deklaro" 
               href="../dok/datumprotekto.html">datumprotekto</a> |	  
           <a class="redakto" target="_new" title="fontoteksto de la artikolo"
               href="{$xmldir}/{$xml}"><xsl:value-of select="$xml"/></a> |
@@ -84,7 +84,7 @@ reguloj por prezentado de la administraj notoj
           <a class="redakto" target="_new" title="ViVo-tradukilo" 
               href="{$vivocgi}{substring-before($xml,'.xml')}.html">traduki...</a> |
           <a class="redakto" target="_new" title="al la artikolohistorio"
-              href="{$arhhivo}{substring-before($xml,'.xml')}">artikolversio</a>:
+              href="../hst/{substring-before($xml,'.xml')}.html">artikolversio</a>:
       </xsl:when>
       <xsl:otherwise>
         <a href="../index.html">Revo</a> | artikolversio:

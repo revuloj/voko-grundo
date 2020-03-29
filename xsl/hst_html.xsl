@@ -12,7 +12,7 @@
      permesilo GPL 2.0
 -->
 
-
+<!-- variabloj por referencoj -->
 <xsl:variable name="repo" select="'https://github.com/revuloj/revo-fonto/commit/'"/>
 <xsl:variable name="revo" select="'http://reta-vortaro.de/revo'"/>
 
