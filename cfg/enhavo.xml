@@ -43,6 +43,15 @@
 
   <!-- elshuto-pagho -->
   <elshuto titolo="El&scirc;uti Revo-rilatan materialon">
+    <sekcio titolo="Transiro al Github">
+      <ero titolo="Tiu ĉi paĝo ne plu aktualiĝos pro transiro al Github" ref="">
+        <alineo>
+        style="font-size: large; margin-top: 0.5em; margin-left: 0em; width: 70%">
+        Prenu paka&jcirc;ojn el la pa&gcirc;o kun la &ccirc;iutagaj
+	 <url ref="https://github.com/revuloj/revo-fonto/releases">Eldonoj de Revo-fonto</url>
+        </alineo>
+      </ero>
+    </sekcio>
     <sekcio titolo="Reta Vortaro - kompleto">
       <ero titolo="fontodosieroj (XML, DTD, XSL ktp.)" ref="revoxml"/>
       <ero titolo="prezentodosieroj (artikoloj, indeksoj, k. a. HTML-dosieroj)" ref="revohtml"/>
