@@ -153,7 +153,7 @@ referenciloj =
 
 
 #trdj-ab = 
-#  element trd { (attribute lng {"ab"} & attribute fnt { text }?), (text | klr | ind | mll | ofc)* }
+#  element trd { (attribute lng {"ab"} & attribute fnt { text }?), (text | klr | ind | mll | ofc | baz)* }
 #  | element trdgrp { attribute lng { "ab" }, (text | trd)* }
 
 
@@ -556,7 +556,7 @@ attlist-trdgrp &= attribute lng { text }
 ## kaj klarigoj, poste povos sekvi aliaj elementoj.
 # FARENDA: difinu trd engrupa (sen lng) kaj memstara, sola
 
-trd = element trd { attlist-trd, (text | klr | ind | mll | ofc)* }
+trd = element trd { attlist-trd, (text | klr | ind | mll | ofc | baz)* }
 attlist-trd &=
   attribute lng { text }?,
   attribute fnt { text }?
@@ -571,6 +571,9 @@ attlist-ind &= empty
 mll = element mll { attlist-mll, (text | tld | klr | ind)* }
 attlist-mll &= attribute tip { "kom" | "mez" | "fin" }?
 
+# [baz] Baza formo de traduko, sub kiu la vorto subordiĝos en la indekso.
+baz = element baz { attlist-baz, text* }
+attlist-baz &= empty
 
 ## Bildo povas ilustri iun vorton aŭ sencon. Per la
 ## atributo <dfn>lok</dfn> ĝi

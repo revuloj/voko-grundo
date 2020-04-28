@@ -318,7 +318,7 @@ sama lingvo.
 <!-- [trd] Traduko kosistas el traduka vorto aŭ frazo
 kaj klarigoj, poste povos sekvi aliaj elementoj.
 -->
-<!ELEMENT trd (#PCDATA|klr|ind|mll|ofc)*>
+<!ELEMENT trd (#PCDATA|klr|ind|mll|ofc|baz)*>
 <!ATTLIST trd
 	lng CDATA #IMPLIED
         fnt CDATA #IMPLIED
@@ -330,6 +330,10 @@ aperas sub bem&uuml;hen. Aŭ parto de ekzemplo aŭ bildpriskribo, al
 kiu rilatas internaj tradukoj ktp.
 -->
 <!ELEMENT ind (#PCDATA|tld|klr|mll)*>
+
+<!-- [baz] Baza formo de traduko, sub kiu la vorto subordiĝos en la indekso.
+-->
+<!ELEMENT baz (#PCDATA)>
 
 <!ELEMENT mll (#PCDATA|tld|klr|ind)*>
 <!ATTLIST mll
@@ -380,7 +384,7 @@ minuskligo.
 listo de difinitaj bibliografieroj kaj anstataŭas verko- kaj aŭtoroindikon
 en la fontoj.
 -->
-<!ELEMENT bib (#PCDATA)*>
+<!ELEMENT bib (#PCDATA)>
 
 <!-- [vrk] Verko, en kiu troviĝas citita frazo aŭ vorto -->
 <!ELEMENT vrk (#PCDATA|url)*>
@@ -399,11 +403,11 @@ en la fontoj.
 
 <!-- [g] Grasa parto de formulo, ekz. vektoro, matrico k.s.,
   bv. uzi nur en frm -->
-<!ELEMENT g (#PCDATA)*>
+<!ELEMENT g (#PCDATA)>
 
 <!-- [k] Kursiva parto de formulo, ekz. variablo k.s.,
   bv. uzi nur en frm -->
-<!ELEMENT k (#PCDATA)*>
+<!ELEMENT k (#PCDATA)>
 
 <!-- [em] Emfazo. Normale grase skribata vortoj.-->
 <!ELEMENT em (#PCDATA|tld)*>
