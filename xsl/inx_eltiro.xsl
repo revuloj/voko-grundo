@@ -8,7 +8,7 @@
 
 -->
 
-<!-- (c) 2006 che Wolfram Diestel
+<!-- (c) 2006 - 2020 ĉe Wolfram Diestel
      licenco GPL 2.0
 -->
 
@@ -60,7 +60,7 @@
     <trd lng="{$lng}">
       <xsl:choose>
         <xsl:when test="mll">
-          <xsl:apply-templates select="mll"/>
+          <xsl:apply-templates select="mll|baz"/>
         </xsl:when>
         <xsl:otherwise>
           <xsl:apply-templates/>
@@ -74,10 +74,10 @@
   <xsl:copy>
       <xsl:choose>
         <xsl:when test="mll">
-          <xsl:apply-templates select="@lng|mll"/>
+          <xsl:apply-templates select="@lng|mll|baz"/>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:apply-templates select="@lng|text()|ind|klr[@tip='ind' or @tip='amb']"/>
+          <xsl:apply-templates select="@lng|text()|ind|klr[@tip='ind' or @tip='amb']|baz"/>
         </xsl:otherwise>
       </xsl:choose>
   </xsl:copy>
@@ -91,7 +91,7 @@
 </xsl:template>
 
 <xsl:template match="kap|rad|ofc|var|@mrk|@lng|uzo[@tip='fak']|mlg
-  |ind|klr[@tip='ind' or @tip='amb']">
+  |ind|klr[@tip='ind' or @tip='amb']|baz">
   <xsl:copy><xsl:apply-templates/></xsl:copy>
 </xsl:template>
 
