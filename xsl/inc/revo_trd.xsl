@@ -230,11 +230,13 @@ montru tie, cxar ili estas esenca parto de tiuj -->
 <xsl:template match="klr[@tip='ind']" mode="tradukoj"/>
    <!-- ne skribu indeksajn klarigojn tie cxi -->
 
-<xsl:template match="baz" mode="tradukoj">
+<xsl:template match="baz" mode="tradukoj"/>
+<!--
   <xsl:text>/</xsl:text>
   <xsl:apply-templates/>
   <xsl:text>/</xsl:text>
 </xsl:template>
+-->
 
 </xsl:stylesheet>
 
