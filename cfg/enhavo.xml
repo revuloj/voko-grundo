@@ -264,8 +264,8 @@
        <ero ref="../dok/manlibro.html" titolo="Te&hcirc;nika manlibro" kadro="precipa"/>
        <ero ref="../dok/vindoza_manlibro.html" titolo="Manlibro por Vindozo" kadro="precipa"/>
        <ero ref="http://cyprych.neostrada.pl/tekstoj/komputiloj/vim_revo.html" titolo="Uzi redaktilon Vim" kadro="_new"/> 
-       <ero ref="../dok/dtd.html" titolo="Dokumenttipdifino"
-	    style="margin-top: 0.4em; margin-bottom: 0"/>
+       <ero ref="https://revuloj.github.io/temoj/rnc.html" titolo="Dokumentstrukturo"
+	          kadro="_new" style="margin-top: 0.4em; margin-bottom: 0"/>
        <ero ref="../dok/ordigo.html" titolo="Alfabetoj"/>
        <ero ref="../dok/klasoj.html" titolo="Listo de klasoj"/>
        <ero ref="../dok/fakoj.html" titolo="Listo de fakoj"/>
