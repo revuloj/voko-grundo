@@ -18,10 +18,10 @@ my @toc_elm;
 
 rnc2md(); 
 
-print "![ulmobranĉo](../assets/img/ulmo.jpg){: style=\"float: right; margin-left: 2em; border: solid gray 1px\"}\n\n";
+print "![ulmobranĉo](../assets/img/ulmo.jpg){: style=\"float: right; margin-left: 2em; max-width: 20%; border: solid gray 1px\"}\n\n";
 print "# Enhavo\n\n";
-print "[⮊ Strukturo de artikolo](#strukturo-de-artikolo)  \n";
-print "[⮊ Strukturoj de detalaj elementoj](#strukturoj-de-detalaj-elementoj)\n\n";
+print "[► Strukturo de artikolo](#strukturo-de-artikolo)  \n";
+print "[► Strukturoj de detalaj elementoj](#strukturoj-de-detalaj-elementoj)\n\n";
 
 # eligu la elementojn
 print "**Strukturelementoj (rekte uzeblaj en XML):**  \n";
@@ -132,7 +132,7 @@ sub title {
     my $entry = shift;
 
     $md .= "### $entry";
-    $md .= " <a href=\"#enhavo\">⮉</a>";
+    $md .= " <a href=\"#enhavo\">▲</a>";
     $md .= "\n\n";
     if ($entry =~ m/^_(.*)_/) {
         push @toc_hlp, $1;
