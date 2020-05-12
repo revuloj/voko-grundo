@@ -100,7 +100,9 @@ attlist-sekcio &= attribute lit { text }?
 ##              STRUKTURO DE ARTIKOLO
 ## ***********************************************************
 
-##  [_indikiloj_] Tuj post la kapvorto venas ordinare unue kelkaj indikiloj pri la gramatiko, uzo k.a.
+##  [_indikiloj_] Tuj post la kapvorto venas ordinare unue kelkaj indikiloj pri la 
+## <dfn>gra</dfn>matiko, <dfn>uzo</dfn> k.a.
+
 indikiloj = 
   fnt
   | gra
@@ -109,8 +111,9 @@ indikiloj =
   | tezrad
 
 ## [_dif-ref-parto_] 
-## Ĉe sinonimoj oni povas uzi referencon al alia vorto aŭ senco, kiu difinas ĝin.
-## Ĝin povas suplementi indikiloj, aliaj referencoj, rimarko, tradukoj kaj administra noto.
+## Ĉe sinonimoj oni povas uzi referencon al alia vorto aŭ senco (<dfn>dif-ref</dfn>), kiu difinas ĝin.
+## Ĝin povas suplementi <dfn>indikiloj</dfn>, aliaj <dfn>referenciloj</dfn>, <dfn>rim</dfn>arko, 
+## <dfn>tradukiloj</dfn> kaj <dfn>adm</dfn>inistra noto.
 
 dif-ref-parto =
   indikiloj*,
@@ -121,7 +124,8 @@ dif-ref-parto =
   adm*
 
 
-##  [_dif-ref_] Foje la difino anstataŭiĝas per difina referenco.
+##  [_dif-ref_] Foje la difino anstataŭiĝas per difina <dfn>ref</dfn>erenco
+## aŭ grupo da ili (<dfn>refgrp</dfn>). Oni uzas tiam la tipon <em>dif</em>.
 
 dif-ref =
 # limigita al tipo dif...:
@@ -132,7 +136,8 @@ dif-ref =
 
 
 ## [_difiniloj-supl_]
-## Post difino povas veni diversaj suplementoj kiel ekzemploj, referencoj, bildoj, rimarkoj...
+## Post difino povas veni diversaj suplementoj kiel <dfn>ekz</dfn>emploj, <dfn>referenciloj</dfn>, 
+## bildoj (<dfn>bld</dfn>), <dfn>rim</dfn>arkoj...
 
 difiniloj-supl =
   referenciloj
@@ -142,7 +147,8 @@ difiniloj-supl =
   | adm
 
 
-##  [_referenciloj_] La referenciloj montras al rilataj vortoj kaj sencoj, vortlistoj aŭ al interreta paĝo.
+##  [_referenciloj_] La referenciloj montras al rilataj vortoj kaj sencoj (<dfn>refgrp</dfn>, <dfn>ref</dfn>), 
+## vortlistoj (<dfn>lstref</dfn>) aŭ al interreta paĝo (<dfn>url</dfn>).
 
 referenciloj =
   ref
@@ -151,7 +157,8 @@ referenciloj =
   | url
 
 
-## [_tradukiloj_] La nacilingvaj tradukoj de la senco aŭ derivaĵo - unuopa aŭ pluraj grupigite.
+## [_tradukiloj_] La nacilingvaj tradukoj de la senco aŭ derivaĵo - unuopa (<dfn>trd</dfn>) 
+## aŭ pluraj grupigite (<dfn>trdgrp</dfn>).
 # FARENDA: difinu laŭlingvan ordon de tradukoj, se eble...
 # ? (trdgrp { attribute lng {"af"} } | trd { attribute lng {"af"} })? , ...
 tradukiloj = 
@@ -160,7 +167,7 @@ tradukiloj =
 
 ## [_unua-parto_] Unua parto de teksto en artikolo, derivaĵo aŭ senco, 
 ## kiu venas antaŭ subdividoj, t.e. ekz. en derivaĵo tio, kio venas antaŭ sencoj.
-## Tio povas esti indikiloj kaj eble difino.
+## Tio povas esti <dfn>indikiloj</dfn> kaj eble <dfn>dif</dfn>ino.
 
 unua-parto = 
   indikiloj*,
@@ -168,7 +175,8 @@ unua-parto =
   #difiniloj*
 
 ## [_sekva-parto_] Sekva parto de teksto en artikolo, derivaĵo aŭ senco venante post subdividoj,
-## kiu ekz. en derivaĵo venas post la sencoj.
+## kiu ekz. en derivaĵo venas post la sencoj. Ĝi konsistas el <dfn>difiniloj-supl</dfn> kaj
+## <dfn>tradukiloj</dfn>, sekvata de <dfn>adm</dfn>inistra noto. Ĉiuj partoj povas esti forlasitaj.
 
 sekva-parto =
   difiniloj-supl*,
@@ -177,8 +185,10 @@ sekva-parto =
 
 ## [_tekst-stiloj_] La unuo <dfn>tekst-stiloj</dfn> 
 ## listigas ĉiujn strukturilojn, kiuj donas stilon al tekstoparto,
-## ekz. emfazita, citilita, altigita aŭ malaltigita teksto.
-## Aliaj elementoj klarigo, tildo, sencreferenco, nomo aŭ nacilingva esprimo
+## ekz. <dfn>em</dfn>fazita, citilita (<dfn>ctl</dfn>), altigita (<dfn>sup</dfn>)
+## aŭ malaltigita (<dfn>sub</dfn>) teksto kaj formulo (<dfn>frm</dfn>).
+## Aliaj elementoj klarigo (<dfn>klr</dfn>), tildo (<dfn>tld</dfn>), 
+## sencreferenco (<dfn>sncref</dfn>), <dfn>nom</dfn>o aŭ <dfn>nac</dfn>ilingva esprimo
 ## same povas esti multloke, do ankaŭ ili estas listigitaj tie ĉi.
 
 tekst-stiloj = tld | sncref | klr | em | sup | sub | ctl | frm | nom | nac
@@ -201,7 +211,8 @@ art =
 attlist-art &= attribute mrk { art-marko }
 
 
-## [subart] Subartikolo. Ĝi povas okazi en <dfn>art</dfn>,
+## [subart] 
+## Subartikolo. Ĝi povas okazi en <dfn>art</dfn>,
 ## se la signifoj de vorto (ofte ĉe prepozicioj kaj afiksoj) estas
 ## tre diversaj.
 
@@ -218,6 +229,12 @@ attlist-subart &= attribute mrk { drv-marko }?
 ## derivaĵojn de la kapvorto. Derivaĵo komenciĝas je kapvorto kaj
 ## priskribaj elementoj pri ĝi aŭ el unu aŭ pluraj sencoj aŭ el unu aŭ
 ## pluraj subdividoj <dfn>subdrv</dfn>.
+##
+## La enhavo de derivaĵo povas obei al unu el du modeloj:
+## 1. Ordinare komence estas <dfn>unua-parto</dfn> sekvata de sencoj aŭ subderivaĵoj
+##    kaj poste <dfn>sekva-parto</dfn>. 
+## 2. En kelkaj okazoj ni difinas per referenco
+##    al alia vorto kaj aldonas nur indikilojn, vd. <dfn>dif-ref-parto</dfn>.
 
 drv =
   element drv {
@@ -248,6 +265,12 @@ attlist-var &= empty
 ## priskribita vorto havas tre multajn sencojn. Tio povas
 ## rezulti en pli klara strukturo de la artikolo. La subdividaĵoj
 ## estas nombrataj per A), B), ...
+##
+## La enhavo de subderivaĵo povas obei al unu el du modeloj:
+## 1. Ordinare komence estas <dfn>unua-parto</dfn> sekvata de sencoj 
+##    kaj poste <dfn>sekva-parto</dfn>. 
+## 2. En kelkaj okazoj ni difinas per referenco
+##    al alia vorto kaj aldonas nur indikilojn, vd. <dfn>dif-ref-parto</dfn>.
 
 subdrv =
   element subdrv { 
@@ -265,11 +288,19 @@ attlist-subdrv &= attribute mrk { snc-marko }?
 
 
 ## [snc] Senco de unuopa vorto en artikolo. Komparu la latinajn ciferojn en
-## la artikoloj de PIV. Per mrk oni povas referenci sencon de alie. Per <em>ref</em> oni
+## la artikoloj de PIV. 
+##
+## Per <em>mrk</em> (vd <dfn>snc-marko</dfn>) 
+## oni povas referenci sencon de alie. Per <em>ref</em> oni
 ## referencas al alia senco samartikola (uzata en malmultaj longaj artikoloj, ekz.
-## "al". Per <em>num</em> la senco ricevas numeron. Atentu, ke future simbolaj nomoj por
-## la sencoj estos perferataj kaj do numerado okazas aŭtomate ignorante la atributon
-## <em>num</em>.
+## "al". Per <em>num</em> oni povus atribui al la senco fiksitan numeron, 
+## sed tion ni normale ne uzas, ni lasas tion al la aŭtomata numerado.
+##
+## La enhavo de senco povas obei al unu el du modeloj:
+## 1. Ordinare komence estas <dfn>unua-parto</dfn> eble sekvata de subsencoj 
+##    kaj poste <dfn>sekva-parto</dfn>. 
+## 2. En kelkaj okazoj ni difinas per referenco
+##    al alia vorto kaj aldonas nur indikilojn, vd. <dfn>dif-ref-parto</dfn>.
 
 snc = 
   element snc { 
@@ -291,6 +322,12 @@ attlist-snc &=
 
 ## [subsnc] Subsenco ene de senco. Ĝi redonas subtilaĵojn ene de unu senco.
 ## Ili estas nombrataj per a), b), ...
+##
+## La enhavo de subsenco povas obei al unu el du modeloj:
+## 1. Ordinare komence estas <dfn>unua-parto</dfn>  
+##    kaj poste <dfn>sekva-parto</dfn>. 
+## 2. En kelkaj okazoj ni difinas per referenco
+##    al alia vorto kaj aldonas nur indikilojn, vd. <dfn>dif-ref-parto</dfn>.
 
 subsnc = 
   element subsnc { 
@@ -378,7 +415,7 @@ attlist-rad &= empty
 ofc = 
   element ofc { 
     attlist-ofc, 
-    xsd:string { pattern="\*|[1-9]|19[0-9]{2}" } 
+    xsd:string { pattern="\*|\(?[1-9]\)?|19[0-9]{2}" } 
   }
 attlist-ofc &= empty
 

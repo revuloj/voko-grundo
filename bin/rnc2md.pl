@@ -36,6 +36,8 @@ for (@toc_hlp) {
     print "[$_](#$_-)&nbsp;| "
 }
 print "\n\n";
+print "La [teĥnika manlibro](manlibro) montras al vi kiel en artikoloj kombini tiujn ";
+print "strukturelementojn pri la plej oftaj okazoj.\n\n";
 
 # eligu la enhavon
 print $md;
