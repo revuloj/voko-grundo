@@ -36,13 +36,14 @@
 <xsl:include href="inc/inx_ordigo2.inc"/>
 <xsl:template name="v"/> <!-- referencita de inx_ordigo2.inc, sed ne bezonata tie ĉi -->
 
+<xsl:param name="agordo-pado"/>
 <xsl:param name="verbose" select="'false'"/>
 <xsl:param name="warn-about-dead-refs" select="'false'"/>
 
 
 <xsl:variable name="fakoj">../cfg/fakoj.xml</xsl:variable>
 <xsl:variable name="klasoj_cfg" select="'../cfg/klasoj.xml'"/>
-<xsl:variable name="enhavo">../cfg/enhavo.xml</xsl:variable>
+<xsl:variable name="enhavo"><xsl:value-of select="concat($agordo-pado,'/enhavo.xml')"/></xsl:variable>
 <xsl:variable name="inx_paghoj" select="count(document($enhavo)//pagho[not(@kashita='jes')])"/>
 
 <xsl:variable name="root" select="/"/>
