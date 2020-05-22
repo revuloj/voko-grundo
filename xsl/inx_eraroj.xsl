@@ -64,7 +64,7 @@
   </xsl:if>
 
   <xsl:if test="kap/var and not(//drv/kap/var)  
-    and not(kap/rad[.='patriot']) and not(kap/rad[.='ideal']) and not(kap/rad[.='real'])">
+    and not(kap/rad[.='patriot']) and not(kap/rad[.='ideal']) and not(kap/rad[.='real'] and not(kap/rad[.='ego'])">
                       <!-- atentu kelkajn esceptojn x/ism/o ~ xism/o -->
       <ero  kie="art" mrk="{$mrk}" tip="drv-sen-var"/>
   </xsl:if>
