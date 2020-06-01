@@ -48,7 +48,7 @@
             <h1>laste &#x015d;an&#x011d;itaj</h1>
             <ul>
               <xsl:for-each select="//entry[count(.
-                |key('autoroj',substring-before(msg,':'))[1])=1 and contains(file/name,'.xml')]">
+                |key('autoroj',substring-before(msg,':'))[1])=1 and contains(file[1]/name,'.xml')]">
 
                 <xsl:sort select="substring-before(msg,':')"/>
 
@@ -70,7 +70,7 @@
             </ul>
 
             <xsl:for-each select="//entry[count(.
-                |key('autoroj',substring-before(msg,':'))[1])=1 and contains(file/name,'.xml')]">
+                |key('autoroj',substring-before(msg,':'))[1])=1 and contains(file[1]/name,'.xml')]">
 
                 <xsl:sort select="substring-before(msg,':')"/>
                 <hr/>
