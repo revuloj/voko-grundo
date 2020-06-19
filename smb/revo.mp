@@ -5,16 +5,16 @@ color bgcol; bgcol:=(.852,.645,.125);
 picture pic;
 pic := image (
     path round;
-    round := subpath (0, 6.8) of fullcircle rotated 25 scaled 100 shifted (53,55);
+    round := subpath (0, 6.8) of fullcircle rotated 10 scaled 100 shifted (53,55);
 
     path iheliko;
-    iheliko := (24,62){dir0}..tension4..(42,62)..tension6..{dir260}(46,20){dir80}..tension6..{dir80}(65,62){dir0}..tension1 and .8..round;
+    iheliko := (33,67){dir-20}..tension4..(42,60){dir-20}..tension2..{dir240}(42,22){dir0}..tension2..{dir100}(68,52){dir-10}..tension1 and .8..round{dir160}..(78,32);
 
     fill fullcircle scaled 130 shifted (53,55) withcolor bgcol;
 
     pickup pencircle scaled 8;
     draw iheliko;
-    fill fullcircle scaled 24 shifted (55,80);
+    fill fullcircle scaled 18 shifted (75,77);
 );
 
 %picture pica;
