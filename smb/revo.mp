@@ -10,19 +10,11 @@ pic := image (
     path iheliko;
     iheliko := (24,62){dir0}..tension4..(42,62)..tension6..{dir260}(46,20){dir80}..tension6..{dir80}(65,62){dir0}..tension1 and .8..round;
 
-    %pickup pencircle scaled 6;
-    fill fullcircle scaled 120 shifted (53,55) withcolor bgcol;
+    fill fullcircle scaled 130 shifted (53,55) withcolor bgcol;
 
-    pickup pencircle scaled 9;
+    pickup pencircle scaled 8;
     draw iheliko;
     fill fullcircle scaled 24 shifted (55,80);
-
-
-    %for t=0 upto 12:
-    %   z[t]=point t of iheliko;
-    %  draw z[t] withpen pencircle scaled 1 withcolor red;
-    %endfor;
-
 );
 
 %picture pica;
