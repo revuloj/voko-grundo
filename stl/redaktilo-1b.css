@@ -1,0 +1,165 @@
+BODY {
+    background-color: lightgoldenrodyellow;
+}
+
+H1 {
+    font-family: monospace;
+}
+
+#r\:redaktilo {
+    display: flex;
+    flex-direction: column;
+}
+
+#r\:navigado {    
+    display: flex;
+    align-items: flex-end;
+    margin-bottom: 0;
+}
+
+#r\:navigado div {
+    margin-bottom: 0;
+}
+
+
+#r\:navigado .filler {
+    width: 2em;
+    flex-grow: 3;
+}
+
+#r\:nav_btn {
+    display: flex;
+}
+
+#r\:tab_rigardo {
+    margin: 0.5em;
+    border: 2px solid goldenrod;
+}
+
+#r\:eraroj {
+    margin: 0.5em;
+    padding: 0.3em;
+    border: 2px solid orangered;
+}
+
+textarea {
+    margin: 1px;
+    width: 100%;
+    height: 25em;
+    min-height: 5em;
+}
+
+fieldset {
+    /*
+    display: flex;
+    flex-direction: row;*/
+
+    border: none;
+    border-bottom: 2px dotted gray;
+    margin: 0.5em;
+    margin-top: 0px;
+    margin-bottom: 1px;
+    padding: 0.5em;
+    background-color: palegoldenrod;
+}
+
+.collapsed {
+    display: none !important;
+    /*position: absolute;
+    top: -1000em;
+    left: -1000em;*/
+}
+
+fieldset legend {
+    text-decoration: underline;
+    font-weight: bold;
+    font-family: monospace;
+    padding: 0.5em;
+    border-radius: 4px;
+    background-color: palegoldenrod;
+}
+
+span.right {
+    float: right;
+}
+
+.tabs {
+    margin-left: 0.5em;
+    margin-top: 0em;
+    margin-bottom: 1em;
+}   
+
+.tabs a {
+    padding: 0.5em;
+    /*background-color: palegoldenrod; */
+    font-family: monospace;
+    font-weight: bold;
+    color: black;
+    text-decoration: none;
+}
+ 
+.tabs a.aktiva {
+   font-weight: bold;
+   color: black;
+   text-transform: uppercase;
+   border-left: 4px solid goldenrod;
+   border-right: 4px solid goldenrod;   
+   background-color: palegoldenrod;
+}
+
+.rhelpo a {
+    font-weight: bold;
+    color: black;
+}
+
+h2 {
+    background-color: palegoldenrod;
+    border: 2px solid palegoldenrod;
+    margin-bottom: 0;
+}
+
+.averto {
+    margin-top: 0;
+    border: 2px solid palegoldenrod;
+    /*font-style: italic; */
+    padding: 0.5em 2em;
+    /*width: 66%; */
+}
+
+input, select {
+    /*border-width: 2px;
+    border-radius: 3px;*/
+    padding: 0.3em 0.5em;
+}
+
+button, input[type="button"] {
+    padding: 0.3em 0.5em;
+    box-shadow: 1px 1px 2px;
+    font-family: monospace;
+}
+
+.help_btn {
+    width: 2em;
+    height: 2em;
+    font-weight: bold;
+    padding-left: 0;
+    padding-right: 0;
+    text-align: center;
+    border-radius: 50%;
+    border: 1px solid black;
+    box-shadow: 1px 1px 2px;
+}
+
+input {
+    margin: 3px 1px 0px 1px;
+}
+.rubriko {
+    text-align: right;
+}
+
+.piedlinio {
+    color: #104040; 
+    font-family: monospace;
+    text-align: center
+}
+
