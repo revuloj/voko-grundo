@@ -9,7 +9,7 @@
 #default namespace = "http://steloj.de/voko"
 namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
 
-## ****************************************************
+## ********************************************************
 ##           KADRA STRUKTURO DE VORTARO
 ## ********************************************************
 
@@ -96,7 +96,7 @@ attlist-sekcio &= attribute lit { text }?
 
 
 
-##  ******************************************************
+## ******************************************************
 ##              STRUKTURO DE ARTIKOLO
 ## ***********************************************************
 
@@ -405,8 +405,9 @@ attlist-kap &= empty
 ##  [rad] Radiko de kapvorto. Ĝi estas bezonata por anstaŭigo
 ## de tildoj. Sekve la "radiko" de afiksoj kaj finaĵoj estu
 ## ili mem, sen la streketoj antaŭe aŭ malantaŭe.
+## La atributo <em>var</em> povas identigi radikon de variaĵo.
 rad = element rad { attlist-rad, text }
-attlist-rad &= empty
+attlist-rad &= attribute var { text }?
 
 
 ## [ofc] Oficialeco de la kapvorto/derivaĵo, 
@@ -637,9 +638,12 @@ attlist-adm &= empty
 ## ĝi ne bezonas enhavon. La atributo <em>lit</em> indikas alian
 ## komencliteron ol havas la radiko, grava por majuskligo kaj
 ## minuskligo.
+## La atributo <em>var</em> povas identigi radikon de variaĵo.
 
 tld = element tld { attlist-tld, empty }
-attlist-tld &= attribute lit { text }?
+attlist-tld &= 
+  attribute lit { text }?,
+  attribute var { text }?
 
 
 ##  [klr] Klarigo pri vorto, difino, ekzemplo ktp.

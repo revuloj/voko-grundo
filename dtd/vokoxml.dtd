@@ -187,9 +187,14 @@ fontindiko.
 
 <!-- [rad] Radiko de kapvorto. Ĝi estas bezonata por anstaŭigo
 de tildoj. Sekve la "radiko" de afiksoj kaj finaĵoj estu
-ili mem, sen la streketoj antaŭe aŭ malantaŭe.-->
+ili mem, sen la streketoj antaŭe aŭ malantaŭe.
+La atributo <dfn>var</dfn> povas identigi radikon de variaĵo. 
+-->
 
 <!ELEMENT rad (#PCDATA)>
+<!ATTLIST rad
+       var CDATA #IMPLIED
+>
 
 <!-- [ofc] Oficialeco de la kapvorto/derivajho, 
   povas esti *, 1, ..., 8 kiel en PIV -->
@@ -369,11 +374,13 @@ diskutatebla.
 <!-- [tld] Tildo rilatas al la radiko, donita en la kapvorto
 ĝi ne bezonas enhavon. La atributo <dfn>lit</dfn> indikas alian
 komencliteron ol havas la radiko. Grava por majuskligo kaj
-minuskligo.
+minuskligo. La atributo <dfn>var</dfn> povas identigi radikon de variaĵo.
 -->
 <!ELEMENT tld EMPTY>
 <!ATTLIST tld
-            lit CDATA #IMPLIED>       
+            lit CDATA #IMPLIED
+            var CDATA #IMPLIED
+>       
 
 <!-- [klr] Klarigo pri vorto, difino, ekzemplo ktp.-->
 <!ELEMENT klr (#PCDATA|trd|trdgrp|ekz|ref|refgrp|%tekst-stiloj;)*>
