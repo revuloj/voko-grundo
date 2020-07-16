@@ -55,7 +55,7 @@ sub rnc2md {
 
     while (<IN>) {
 
-        # ignoru liniojn kune nur unu komenca '#', ĉar tio estas verŝajne elkomentitaj linioj
+        # ignoru liniojn kun nur unu komenca '#', ĉar tio estas verŝajne elkomentitaj linioj
         if (m/^\s*#[^#]/) {
             next;
         }
@@ -63,13 +63,17 @@ sub rnc2md {
         # ignoru liniojn antaŭ "namespace"
         if ($mode eq 'header') {
             if (m/^\s*namespace/) {
-                $mode = 'start'
+                $mode = 'start';
             }
             next;
         }
 
         if ($mode eq "start") {
-            if (m/^##\s*(?:\[([a-z_\-]+)\]\s*)?(.*)$/) {
+            if (m/^##\s*\*+\s*$/) {
+                $md .= "\n***\n.  \n";
+                $mode = "header2";
+                next;
+            } elsif (m/^##\s*(?:\[([a-z_\-]+)\]\s*)?(.*)$/) {
                 $mode = "desc";
                 if ($1) {
                     title($1);
@@ -79,6 +83,7 @@ sub rnc2md {
             next;
         }
 
+        # titolo nivelo du, montrata per komentitaj linioj el steletoj
         if ($mode eq "header2") {
             if (m/^##\s*\*+\s*$/) {
                 $md .= "***\n";
