@@ -1,0 +1,62 @@
+Bonvenon inter la Revuloj. Por faciligi al vi kunredaktadon
+de Revo jen:
+
+HELPO PRI REVO-SERVO
+--------------------
+
+Revo-Servo estas retpoŝta servo, kiu akceptas redaktitajn
+artikolojn kaj post sintaksa kontrolo enmetas ilin en la
+vortaron.
+
+Por uzi la servon vi devas esti inter la redaktantaro de
+Reta Vortaro. Por aliĝi kiel redaktanto, petu ĉe la 
+administranto (vd. malsupre).
+
+
+KIEL UZI LA SERVON
+
+Vi povas uzi la Revo-Servon per la TTT-formularo. Sekvu
+la ligon [redakti] malsupre de ĉiu artikolo. En la formularo
+vi povas ŝanĝi la tekston de la artikolo. Se vi premas
+"Sendu", la ŝanĝita artikolo retpoŝte sendiĝas al
+la servo.
+
+Pli komforta redaktilo troviĝas ĉe https://revaj.steloj.de
+
+Vi ankaŭ povas deŝuti la XML-tekston de la artikolo, redakti
+ĝin kaj sendi mesaĝon al <revo@retavortaro.de> kun la sekva enhavo:
+
+--------------------------------------------------------------
+redakto: jen koncize kaj precize priskribu,
+kion vi shanghis en la artikolo
+
+<?xml ... (sekvas la artikolo)
+...
+</vortaro>
+---------------------------------------------------------------
+
+La strekojn ne enmetu en la mesaĝon, "redakto:" estu la unua
+vorto sur la unua linio.
+
+
+KIAM REVO-SERVO TRAKTOS VIAN ARTIKOLON
+
+Revo-servo aŭtomate traktas redaktojn preskaŭ ĉiuhore 
+kaj refaras la vortaron ĉiunokte (laŭ eŭropa tempo)
+
+Se vi estas redaktanto, vi devus ricevi respondon pri ĉiu
+sendita mesaĝo aŭ konfirman aŭ informantan pri eraro. Se vi
+ne ricevos respondon dum longa tempo, vi informu min, eble
+temas pri eraro.
+
+La redaktita artikolo estos legebla en Interreto normale
+tuj post kiam ĝi traktiĝis de Revo-Servo.
+
+  Wolfram Diestel 
+
+--
+administranto de Reta Vortaro: Wolfram Diestel <wolfram@steloj.de>
+                          kaj  Wieland Pusch <wieland@wielandpusch.de>
+retpoŝta rondo de redaktantoj: <revuloj@groups.io>
+adreso de ReVo-servo         : <revo@retavortaro.de> (nur por redaktitaj artikoloj)
+ 
