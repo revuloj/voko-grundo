@@ -43,42 +43,61 @@ reguloj por la prezentado de la artikolostrukturo
   <xsl:apply-templates select="rad|text()"/>
 </xsl:template>
 
+
 <!-- art, subart -->
 
 <xsl:template match="art">
+  <header>
+    <!-- flagoj de la tradukoj -->
+    <xsl:if test="$aspekto='ilustrite'">
+      <xsl:call-template name="flagoj"/>
+    </xsl:if>
+  </header>
 
-  <!-- flagoj de la tradukoj -->
-  <xsl:if test="$aspekto='ilustrite'">
-    <xsl:call-template name="flagoj"/>
-  </xsl:if>
+  <article>
+      <section class="art">
+      <xsl:choose>
 
-  <xsl:choose>
+        <!-- se enestas subartikoloj aŭ rekte sencoj prezentu per dl-listo -->
+        <xsl:when test="subart|snc">
+          <xsl:apply-templates select="kap"/>
+          <dl>
+            <xsl:apply-templates select="node()[not(self::kap)]"/>
+          </dl>
+        </xsl:when>
 
-    <!-- se enestas subartikoloj au sencoj prezentu per dl-listo -->
-    <xsl:when test="subart|snc">
-      <xsl:apply-templates select="kap"/>
-      <dl>
-        <xsl:apply-templates select="node()[not(self::kap)]"/>
-      </dl>
-    </xsl:when>
+        <!-- prezentu la derivaĵojn ktp. -->
+        <xsl:otherwise>
+          <xsl:apply-templates/>
+        </xsl:otherwise>
 
-    <!-- prezentu la derivajhojn ktp. -->
-    <xsl:otherwise>
-      <xsl:apply-templates/>
-    </xsl:otherwise>
+      </xsl:choose>
+    </section>
 
-  </xsl:choose>
+    <!-- prezentu tradukojn en propra alineo -->
+    <section class="tradukoj">
+      <xsl:call-template name="tradukoj"/>
+    </section>
 
-  <!-- prezentu tradukojn en propra alineo -->
-  <xsl:call-template name="tradukoj"/>
+    <!-- prezentu fontoreferencojn en propra alineo -->
+    <section class="fontoj">
+      <xsl:call-template name="fontoj"/>
+    </section>
 
-  <!-- prezentu fontoreferencojn en propra alineo -->
-  <xsl:call-template name="fontoj"/>
+    <!-- administraj notoj -->
+    <section class="admin">
+      <xsl:call-template name="admin"/>
+    </section>
 
-  <!-- administraj notoj -->
-  <xsl:call-template name="admin"/>
+  </article>
 
+  <!-- piedlinio -->
+  <footer>
+    <hr />
+    <xsl:call-template name="redakto"/>
+  </footer>
 </xsl:template>
+
 
 <!-- subartikolo -->
 
@@ -281,6 +300,7 @@ reguloj por la prezentado de la artikolostrukturo
         <xsl:value-of select="@mrk"/>
       </xsl:attribute>
     </xsl:if>
+
     <xsl:choose>
        <xsl:when test="@ref">
           <xsl:apply-templates mode="number-of-ref-snc" select="id(@ref)"/>:
@@ -308,6 +328,7 @@ reguloj por la prezentado de la artikolostrukturo
   <xsl:apply-templates/>
   </dd>
 </xsl:template>
+
 
 <xsl:template name="tezauro">
   <xsl:if test="@tez">

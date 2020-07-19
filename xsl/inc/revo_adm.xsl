@@ -20,8 +20,6 @@ reguloj por prezentado de la administraj notoj
     </div>
   </xsl:if>
 
-  <hr />
-  <xsl:call-template name="redakto"/>
 </xsl:template>
 
 <!-- ne montru administrajn notojn rekte en la teksto -->

@@ -3,7 +3,7 @@
 
 
 <!-- (c) 1999-2003 che Wolfram Diestel 
-     licenco GPL 2.0
+     permesilo GPL 2.0
 
 tie chi trovighas nur variabloj por agordo kaj la
 importkomandoj por la unuopaj dosieroj, kie enestas la
