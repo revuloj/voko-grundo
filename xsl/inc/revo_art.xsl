@@ -48,10 +48,11 @@ reguloj por la prezentado de la artikolostrukturo
 
 <xsl:template match="art">
   <header>
-    <!-- flagoj de la tradukoj -->
+    <!-- flagoj de la tradukoj 
     <xsl:if test="$aspekto='ilustrite'">
       <xsl:call-template name="flagoj"/>
     </xsl:if>
+    -->
   </header>
 
   <article>
@@ -74,10 +75,11 @@ reguloj por la prezentado de la artikolostrukturo
       </xsl:choose>
     </section>
 
-    <!-- prezentu tradukojn en propra alineo -->
+    <!-- prezentu tradukojn en propra alineo 
     <section class="tradukoj">
       <xsl:call-template name="tradukoj"/>
     </section>
+    -->
 
     <!-- prezentu fontoreferencojn en propra alineo -->
     <section class="fontoj">
