@@ -31,6 +31,9 @@ transform-reguloj
 
 <!-- kelkaj variabloj  -->
 
+<xsl:variable name="mathjax-url">https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=AM_CHTML</xsl:variable>
+<xsl:variable name="art-css">artikolo-1b.css</xsl:variable>
+
 <xsl:variable name="bibliografio"><xsl:value-of select="concat($agordo-pado,'/bibliogr.xml')"/></xsl:variable>
 <xsl:variable name="lingvoj_cfg" select="'../../cfg/lingvoj.xml'"/>
 <xsl:variable name="klasoj_cfg" select="'../../cfg/klasoj.xml'"/>

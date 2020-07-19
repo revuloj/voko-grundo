@@ -7,8 +7,6 @@ reguloj por la prezentado de la artikolostrukturo
 
 -->
 
-<xsl:variable name="mathjax-url">https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=AM_CHTML</xsl:variable>
-
 <!-- kruda artikolstrukturo -->
 
 <xsl:template match="/">
@@ -20,7 +18,7 @@ reguloj por la prezentado de la artikolostrukturo
         <script type="text/javascript" async="async" src="{$mathjax-url}"></script>
       </xsl:if>
       <xsl:if test="$aspekto='ilustrite'">
-      	<link title="artikolo-stilo" type="text/css" rel="stylesheet" href="{$cssdir}/artikolo.css" />
+      	<link title="artikolo-stilo" type="text/css" rel="stylesheet" href="{$cssdir}/{$art-css}" />
       </xsl:if>
       <title><xsl:apply-templates select="//art/kap[1]" mode="titolo"/></title>
       <script type="text/javascript">

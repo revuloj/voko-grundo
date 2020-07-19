@@ -18,7 +18,7 @@ reguloj por prezentado de la tradukoj
 -->
 
 <xsl:template match="trdgrp|trd[@lng]">
-  <section lang="{@lng}">
+  <section lang="{@lng}" class="trd">
     <span lang="eo">
       <xsl:for-each select="document($lingvoj_cfg)/lingvoj/lingvo[@kodo=current()/@lng]">
         <h3>

@@ -2,12 +2,14 @@
 		version="1.0">
 
 
-<!-- (c) 1999-2003 che Wolfram Diestel 
-     permesilo GPL 2.0
+<!-- (c) 1999-2020 ĉe Wolfram Diestel 
+     laŭ permesilo GPL 2.0
 
-tie chi trovighas nur variabloj por agordo kaj la
+Uzata en la retservilo por ties redaktilo (perllib/revo/xml2html.pm)
+
+Tie ĉi troviĉas nur variabloj por agordo kaj la
 importkomandoj por la unuopaj dosieroj, kie enestas la
-transform-reguloj
+transform-reguloj.
 
 -->
 
@@ -25,6 +27,9 @@ transform-reguloj
 
 
 <!-- kelkaj variabloj  -->
+
+<xsl:variable name="mathjax-url">https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=AM_CHTML</xsl:variable>
+<xsl:variable name="art-css">artikolo-1b.css</xsl:variable>
 
 <xsl:variable name="smbdir">../smb</xsl:variable>
 <xsl:variable name="xmldir">../xml</xsl:variable> 
