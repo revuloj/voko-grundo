@@ -129,22 +129,29 @@ A.trdeo:active {text-decoration: underline; font-weight: bold; color: gray}
 div.trd_lng { margin-top: 0.5em; border-top-width: 2px; border-top-style: solid;
   border-top-color: #E0E0A0; padding-top: 0ex; margin-top: 0.7em }
 
-section.trd {
-    margin-top: 0em;
-    margin-right: 0.5em;
-    padding-left: 0.3em; 
+div.trdj {
+    display: grid;
+    width: fit-content;
+    grid-template-columns: auto auto; 
+    margin-top: 0.2em;
+    padding-left: 0.5em; 
     border-left: 0.1em solid #E0E0A0; 
 }  
+
+div.trdj span:lang(eo) {
+    color: gray; 
+    margin-right: 0.5em;
+}
+/*
 .trd h3 { 
     display: inline;
     border-style: none;
     font-weight: normal;
-    /* background: #E0E0A0; */ 
     color: gray; padding-right: 0.7em; 
 }
 .trd h3::after { content: ": " }
 div.trd_lng_2 { display: inline; line-height: 135%;  }
-
+*/
 
 /* fontindikoj en la teksto */
 .fnt {font-style: normal}

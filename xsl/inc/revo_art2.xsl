@@ -139,14 +139,18 @@ reguloj por la prezentado de la artikolostrukturo
           not(
             self::subdrv|
             self::snc|
+            self::trd|
+            self::trdgrp|
             self::gra|
             self::uzo|
             self::fnt|
             self::kap|
             self::dif|
             self::mlg|
-            self::ref
-          [@tip='dif'])]"/>
+            self::ref[@tip='dif'])]"/>
+        <div class="trdj">
+          <xsl:apply-templates select="trdgrp|trd"/>
+        </div>
     </div>
   </div>
 </xsl:template>  
@@ -180,12 +184,16 @@ reguloj por la prezentado de la artikolostrukturo
       select="node()[
        not(
          self::snc|
+         self::trd|
+         self::trdgrp|
          self::gra|
          self::uzo|
          self::fnt|
          self::dif|
-         self::ref
-       [@tip='dif'])]"/>    
+         self::ref[@tip='dif'])]"/>    
+        <div class="trdj">
+          <xsl:apply-templates select="trdgrp|trd"/>
+        </div>
   </dd>
 </xsl:template>
 
@@ -267,8 +275,12 @@ reguloj por la prezentado de la artikolostrukturo
            self::fnt|
            self::dif|
            self::subsnc|
-           self::ref
-         [@tip='dif'])]"/>
+           self::trd|
+           self::trdgrp|
+           self::ref[@tip='dif'])]"/>
+        <div class="trdj">
+          <xsl:apply-templates select="trdgrp|trd"/>
+        </div>
   </dd>
 </xsl:template>  
 

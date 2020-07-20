@@ -18,35 +18,32 @@ reguloj por prezentado de la tradukoj
 -->
 
 <xsl:template match="trdgrp|trd[@lng]">
-  <section lang="{@lng}" class="trd">
-    <span lang="eo">
-      <xsl:for-each select="document($lingvoj_cfg)/lingvoj/lingvo[@kodo=current()/@lng]">
-        <h3>
-          <!-- aldonu e anst. a -->
-          <xsl:value-of select="concat(substring(.,1,string-length(.)-1),'e')"/>
-        </h3>
-      </xsl:for-each>
-    </span>
-    <span lang="{@lng}">
-      <xsl:if test="@lng = 'ar' or
-                    @lng = 'fa' or
-                    @lng = 'he'">
-        <xsl:attribute name="dir">
-          <xsl:text>rtl</xsl:text>
-        </xsl:attribute>
-      </xsl:if>
+  <span lang="eo">
+    <xsl:for-each select="document($lingvoj_cfg)/lingvoj/lingvo[@kodo=current()/@lng]">
+      <!-- aldonu e anst. a -->
+      <xsl:value-of select="concat(substring(.,1,string-length(.)-1),'e')"/>
+    </xsl:for-each>:
+  </span>
+  <span lang="{@lng}">
+    <xsl:if test="@lng = 'ar' or
+                  @lng = 'fa' or
+                  @lng = 'he'">
+      <xsl:attribute name="dir">
+        <xsl:text>rtl</xsl:text>
+      </xsl:attribute>
+    </xsl:if>
 
-      <xsl:choose>
-        <!-- de kelkaj lingvoj kiel "ar", "fa" ni bezonas enmeti apartan specon de komo \u60c -->
-        <xsl:when test="trd">
-          <xsl:apply-templates select="trd"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:apply-templates/>
-        </xsl:otherwise>
-      </xsl:choose>
-    </span>
-  </section>
+    <xsl:choose>
+      <!-- de kelkaj lingvoj kiel "ar", "fa" ni bezonas enmeti apartan specon de komo \u60c -->
+      <xsl:when test="trd">
+        <xsl:apply-templates select="trd"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:apply-templates/>
+      </xsl:otherwise>
+    </xsl:choose>
+    <br/>
+  </span>
 </xsl:template>
 
 
