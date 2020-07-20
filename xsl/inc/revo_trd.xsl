@@ -56,11 +56,12 @@ reguloj por prezentado de la tradukoj
 
     <span>
       <xsl:apply-templates mode="tradukoj"
-        select=".//trdgrp[@lng=$lng and not(parent::ekz|parent::bld)]|
-                .//trd[@lng=$lng and not(parent::ekz|parent::bld)]"/>
+        select=".//trdgrp[@lng=$lng and not(parent::snc|parent::subsnc|parent::ekz|parent::bld)]|
+                .//trd[@lng=$lng and not(parent::snc|parent::subsnc|parent::ekz|parent::bld)]"/>
+      <xsl:text> </xsl:text>
       <xsl:apply-templates mode="tradukoj"
-        select=".//trdgrp[@lng=$lng and (parent::ekz|parent::bld)]|
-                .//trd[@lng=$lng and (parent::ekz|parent::bld)]"/>
+        select=".//trdgrp[@lng=$lng and (parent::snc|parent::subsnc|parent::ekz|parent::bld)]|
+                .//trd[@lng=$lng and (parent::snc|parent::subsnc|parent::ekz|parent::bld)]"/>
     </span>
     <!-- <br/> provizore -->
   </xsl:if>
@@ -74,21 +75,18 @@ reguloj por prezentado de la tradukoj
   <!-- rigardu, al kiu subarbo apartenas la traduko kaj skribu la
 	 tradukitan vorton/sencon -->
 
-  <xsl:variable name="mrk">
-    <xsl:value-of select="ancestor::node()[@mrk][1]/@mrk"/>
-  </xsl:variable>
-  <strong class="trdeo">
+  <xsl:variable name="n">
     <xsl:apply-templates 
       select="ancestor::node()[
-        self::drv or 
         self::snc or 
         self::subsnc or
-        self::subdrv or 
-        self::subart or 
-        self::art or 
         self::ekz or
-        self::bld][1]" mode="kapvorto"/>:
-  </strong>
+        self::bld][1]" mode="kaptrd"/>
+  </xsl:variable>
+
+  <xsl:if test="string-length($n)>0">
+    <strong class="trdeo"><xsl:value-of select="$n"/></strong>
+  </xsl:if>
 
   <!-- skribu la tradukon mem --> 
   <xsl:text> </xsl:text>
@@ -112,14 +110,9 @@ reguloj por prezentado de la tradukoj
     </xsl:choose>
   </span>
 
-  <xsl:choose>
-    <xsl:when test="not(position()=last())">
-      <xsl:text>; </xsl:text>
-    </xsl:when>
-    <xsl:otherwise>
-      <xsl:text>. </xsl:text>
-    </xsl:otherwise>
-  </xsl:choose>
+  <xsl:if test="not(position()=last())">
+    <xsl:text> </xsl:text>
+  </xsl:if>
 
 </xsl:template>
 
@@ -216,5 +209,26 @@ montru tie, cxar ili estas esenca parto de tiuj -->
   <xsl:text>/</xsl:text>
 </xsl:template>
 -->
+
+
+<xsl:template match="snc" mode="kaptrd">
+    <xsl:choose>
+
+      <xsl:when test="@ref">
+        <xsl:apply-templates mode="number-of-ref-snc" select="id(@ref)"/>:
+      </xsl:when>
+
+      <xsl:when test="count(ancestor::node()
+        [self::drv or self::subart][1]//snc)>1">
+        <xsl:number from="drv|subart" level="any" count="snc" format="1."/>
+      </xsl:when>
+
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template match="subsnc" mode="kaptrd">
+  <xsl:number from="drv|subart" level="multiple" count="snc|subsnc"
+      format="1.a"/>
+</xsl:template>
 
 </xsl:stylesheet>
