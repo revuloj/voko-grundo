@@ -20,28 +20,13 @@ H2 {color: #000000;
     padding-bottom: 0.5ex;
     margin-top: 2ex;
     }
+
+H2::after { content: "\01f5fa \01f5ea \01f30d" }
+
 H3 {font-size: 90%; border-top-width: 2px; border-top-style: solid; 
   border-top-color: #E0E0A0; padding-top: 0.5ex}
 
 DD {text-align: justify}
-
-@media
-only screen and (-webkit-min-device-pixel-ratio: 2),
-only screen and (   min--moz-device-pixel-ratio: 2),
-only screen and (     -o-min-device-pixel-ratio: 2/1),
-only screen and (        min-device-pixel-ratio: 2),
-only screen and (                min-resolution: 192dpi),
-only screen and (                min-resolution: 2dppx) { 
-
-    BODY { font-size: x-large }
-    H1 {font-size: xx-large}
-    H2 {font-size: xx-large}
-    H3 {font-size: x-large}
-/*    img { min-width: 36 } */
-    DD {text-align: left}
-}
-
-
 
 HR {border-style: dotted; border-color: black; 
   border-top-width: 2px;
@@ -125,20 +110,29 @@ A.trdeo:visited {text-decoration: underline; font-weight: bold; color:
 black}
 A.trdeo:active {text-decoration: underline; font-weight: bold; color: gray}
 
-/* pli densa arangxo de tradukoj */
+/* pli densa arangxo de tradukoj 
 div.trd_lng { margin-top: 0.5em; border-top-width: 2px; border-top-style: solid;
   border-top-color: #E0E0A0; padding-top: 0ex; margin-top: 0.7em }
+*/
 
-div.trdj {
+section.tradukoj {
     display: grid;
     width: fit-content;
-    grid-template-columns: auto auto; 
+    width: -moz-fit-content;
+    width: -webkit-fit-content;
+    /*
+    grid-auto-columns: min-content;
+    grid-template-columns: fit-content(10em) fit-content(20em); 
+    */
+    grid-template-columns: auto auto;
     margin-top: 0.2em;
     padding-left: 0.5em; 
+    padding-right: 0.5em; 
     border-left: 0.1em solid #E0E0A0; 
+    border-right: 0.1em solid #E0E0A0; 
 }  
 
-div.trdj span:lang(eo) {
+section.tradukoj span:lang(eo) {
     color: gray; 
     margin-right: 0.5em;
 }
@@ -238,8 +232,8 @@ A IMG.viki:active {background-color:  #a0a070; border: 2px inset gray}
     border: 1px solid #775533;
 }
 .kasxita { display: none }
-.ekz-propra-linio { display: block; margin-left: 1.6em; text-indent: -1.2em; text-align: left }
-.ekz-propra-linio::before { content: "\2014" }
+i.ekz { display: block; margin-left: 1.6em; text-indent: -1.2em; text-align: left }
+i.ekz::before { content: "\2014" }
 
 BUTTON.faldilo {
     display: inline-block;

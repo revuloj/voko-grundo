@@ -154,9 +154,7 @@ reguloj por la prezentado de la artikolostrukturo
             self::dif|
             self::mlg|
             self::ref[@tip='dif'])]"/>
-        <div class="trdj">
-          <xsl:apply-templates select="trdgrp|trd"/>
-        </div>
+        <xsl:call-template name="tradukoj"/>
     </div>
   </div>
 </xsl:template>  
@@ -297,9 +295,6 @@ reguloj por la prezentado de la artikolostrukturo
            self::trd|
            self::trdgrp|
            self::ref[@tip='dif'])]"/>
-        <div class="trdj">
-          <xsl:apply-templates select="trdgrp|trd"/>
-        </div>
   </dd>
 </xsl:template>  
 
