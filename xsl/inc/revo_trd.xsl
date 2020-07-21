@@ -29,7 +29,7 @@ montru tie, cxar ili estas esenca parto de tiuj -->
 <xsl:template name="tradukoj">
   <xsl:if test=".//trd">
     <xsl:variable name="self" select="."/>
-    <section class="tradukoj">
+    <section class="tradukoj kasxebla">
       <!-- elektu por chiu lingvo unu reprezentanton -->
       <xsl:for-each select="document($lingvoj_cfg)/lingvoj/lingvo">
         <xsl:sort lang="eo"/>

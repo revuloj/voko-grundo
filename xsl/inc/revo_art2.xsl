@@ -23,7 +23,7 @@ reguloj por la prezentado de la artikolostrukturo
 	      <link title="artikolo-stilo" type="text/css" rel="stylesheet" href="{$cssdir}/{$art-css}" />
       </xsl:if>
       <title><xsl:apply-templates select="//art/kap[1]" mode="titolo"/></title>
-      <script src="../jsc/revo-art.js"></script> 
+      <script src="../jsc/revo-art-1b.js"></script> 
   </head>
   <body>
     <xsl:apply-templates/>
@@ -48,7 +48,7 @@ reguloj por la prezentado de la artikolostrukturo
   </header>
 
   <article>
-    <section class="art">
+    <section id="s_artikolo" class="art">
       <xsl:choose>
 
         <!-- se enestas subartikoloj aŭ rekte sencoj prezentu per dl-listo -->

@@ -1,8 +1,15 @@
-var js_sojlo = 30+3;
+var js_sojlo = 3; //30+3;
+var sec_art = "s_artikolo";
 
+/*
 window.onload = function() {
+    preparu_art()
+}
+*/
+
+function preparu_art() {
     top.document.title='Reta Vortaro ['
-        + document.getElementsByTagName("H1")[0].textContent.trim()
+        + document.getElementById(sec_art).getElementsByTagName("H1")[0].textContent.trim()
         + ']';
     /* aktivigu nur por longaj artikoloj... */
     var d = document.getElementsByClassName("kasxebla");
@@ -21,14 +28,16 @@ function faldu_sekciojn() {
     var sojlo = 3+2; // ekde tri drv + trd + fnt, au du drv kaj adm
     if (d.length > sojlo) { // ĝis tri derivaĵoj (+tradukoj, fontoj), ne kaŝu la alineojn
         for (var i=0; i<d.length; i++) {
-            var h2 = getPrevH2(d[i]);            
-            if ((h && h2.id != h) || (!h && i>0)) { 
-                d[i].classList.add("kasxita") 
-            }; 
-            h2.classList.add("faldilo");
-            h2.addEventListener("click", function(event) { 
-                getNextDiv(this).classList.toggle("kasxita");
-            });
+            var h2 = getPrevH2(d[i]);
+            if (h2) {
+                if ((h && h2.id != h) || (!h && i>0)) { 
+                    d[i].classList.add("kasxita") 
+                }; 
+                h2.classList.add("faldilo");
+                h2.addEventListener("click", function(event) { 
+                    getNextDiv(this).classList.toggle("kasxita");
+                });    
+            }
         }    
     }
 }
