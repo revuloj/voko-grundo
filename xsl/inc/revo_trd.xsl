@@ -14,9 +14,9 @@ reguloj por prezentado de la tradukoj
 
 <!-- tradukoj -->
 
-<!-- ne montru tradukojn en la teksto, sed malsupre en propra alineo 
+<!-- ne montru tradukojn en la teksto, sed malsupre en propra alineo -->
 <xsl:template match="trdgrp|trd"/>
--->
+
 
 <xsl:template name="tradukoj">
   <xsl:if test=".//trd">
@@ -24,7 +24,7 @@ reguloj por prezentado de la tradukoj
     <section class="tradukoj">
       <!-- elektu por chiu lingvo unu reprezentanton -->
       <xsl:for-each select="document($lingvoj_cfg)/lingvoj/lingvo">
-        <xsl:sort lang="eo" use="."/>
+        <xsl:sort lang="eo"/>
         <xsl:variable name="lng" select="@kodo"/>
         <xsl:variable name="lingvo" select="concat(substring(.,1,string-length(.)-1),'e')"/>
                   
@@ -52,16 +52,28 @@ reguloj por prezentado de la tradukoj
 
   <xsl:if test=".//trd[@lng=$lng]|.//trdgrp[@lng=$lng]">
 
-    <span lang="eo"><xsl:value-of select="$lingvo"/>: </span>
+    <span lang="eo" class="lng"><xsl:value-of select="$lingvo"/>: </span>
 
     <span>
-      <xsl:apply-templates mode="tradukoj"
-        select=".//trdgrp[@lng=$lng and not(parent::snc|parent::subsnc|parent::ekz|parent::bld)]|
-                .//trd[@lng=$lng and not(parent::snc|parent::subsnc|parent::ekz|parent::bld)]"/>
-      <xsl:text> </xsl:text>
-      <xsl:apply-templates mode="tradukoj"
-        select=".//trdgrp[@lng=$lng and (parent::snc|parent::subsnc|parent::ekz|parent::bld)]|
-                .//trd[@lng=$lng and (parent::snc|parent::subsnc|parent::ekz|parent::bld)]"/>
+    <!--
+      eta ĝenaĵo: se senco kaj ekzemplo ene havas tradukojn, ili aperas kun cifero de la senco,
+      se nur ekzemplo aperas, la cifero mankas.
+      Oni povus solvi tion demandante ĉu la senco havas samlingvan tradukon, 
+      sed necesus parametrigi la ŝablonojn vokatajn ene de la malsupra <trong>...</strong>
+      per lingvo-parametro por atingi tion...
+    -->
+
+      <xsl:for-each select=".//trdgrp[@lng=$lng]|.//trd[@lng=$lng]">
+        <xsl:sort select="count(ancestor::node()[
+          self::snc or 
+          self::subsnc or
+          self::drv or
+          self::subdrv])" data-type="number"/>
+        <xsl:sort select="position()" data-type="number"/>
+        <xsl:apply-templates select="." mode="tradukoj"/>
+        <xsl:text> </xsl:text>
+      </xsl:for-each>
+
     </span>
     <!-- <br/> provizore -->
   </xsl:if>
@@ -75,18 +87,20 @@ reguloj por prezentado de la tradukoj
   <!-- rigardu, al kiu subarbo apartenas la traduko kaj skribu la
 	 tradukitan vorton/sencon -->
 
-  <xsl:variable name="n">
+  <strong class="trdeo">
     <xsl:apply-templates 
       select="ancestor::node()[
         self::snc or 
         self::subsnc or
         self::ekz or
         self::bld][1]" mode="kaptrd"/>
-  </xsl:variable>
+  </strong>
 
+  <!--
   <xsl:if test="string-length($n)>0">
-    <strong class="trdeo"><xsl:value-of select="$n"/></strong>
+    <span class="trdeo"><xsl:value-of select="$n"/></span>
   </xsl:if>
+  -->
 
   <!-- skribu la tradukon mem --> 
   <xsl:text> </xsl:text>
@@ -138,36 +152,6 @@ reguloj por prezentado de la tradukoj
     <xsl:text> </xsl:text>
   </xsl:if>
 </xsl:template>
-
-<!--
-<xsl:template match="trdgrp|trd[@lng]">
-  <span lang="eo">
-    <xsl:for-each select="document($lingvoj_cfg)/lingvoj/lingvo[@kodo=current()/@lng]">
-      <xsl:value-of select="concat(substring(.,1,string-length(.)-1),'e')"/>
-    </xsl:for-each>:
-  </span>
-  <span lang="{@lng}">
-    <xsl:if test="@lng = 'ar' or
-                  @lng = 'fa' or
-                  @lng = 'he'">
-      <xsl:attribute name="dir">
-        <xsl:text>rtl</xsl:text>
-      </xsl:attribute>
-    </xsl:if>
-
-    <xsl:choose>
-      <!- - de kelkaj lingvoj kiel "ar", "fa" ni bezonas enmeti apartan specon de komo \u60c - ->
-      <xsl:when test="trd">
-        <xsl:apply-templates select="trd"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:apply-templates/>
-      </xsl:otherwise>
-    </xsl:choose>
-    <br/>
-  </span>
-</xsl:template>
--->
 
 <!-- nur tradukojn ene de difino kaj bildo 
 montru tie, cxar ili estas esenca parto de tiuj --> 
@@ -229,6 +213,40 @@ montru tie, cxar ili estas esenca parto de tiuj -->
 <xsl:template match="subsnc" mode="kaptrd">
   <xsl:number from="drv|subart" level="multiple" count="snc|subsnc"
       format="1.a"/>
+</xsl:template>
+
+<!-- la sekvaj necesas nur por tradukoj en ekzemploj kaj bildoj -->
+
+<xsl:template match="ekz|bld" mode="kaptrd">
+  <span class="ekztrd">
+    <xsl:text> </xsl:text><xsl:apply-templates select="ind" mode="kaptrd"/>
+  </span>
+</xsl:template>
+
+<xsl:template match="ind" mode="kaptrd">
+  <xsl:choose>
+    <xsl:when test="mll">
+      <xsl:apply-templates select="mll" mode="kaptrd"/> 
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:apply-templates mode="kaptrd"/>
+    </xsl:otherwise>
+  </xsl:choose>:
+</xsl:template>
+
+<xsl:template match="ind/mll" mode="kaptrd">
+  <xsl:if test="@tip='fin' or @tip='mez'">
+    <xsl:text>...</xsl:text>
+  </xsl:if>
+  <xsl:apply-templates mode="kaptrd"/>
+  <xsl:if test="@tip='kom' or @tip='mez'">
+    <xsl:text>...</xsl:text>
+  </xsl:if>
+</xsl:template>
+
+<xsl:template match="tld" mode="kaptrd">
+  <xsl:value-of select="@lit"/>
+  <xsl:text>~</xsl:text>
 </xsl:template>
 
 </xsl:stylesheet>

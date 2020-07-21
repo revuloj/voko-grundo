@@ -88,33 +88,6 @@ reguloj por prezentado de kapvorto kun numeroj de sencoj, subsencoj ktp.
   <xsl:text>~</xsl:text>
 </xsl:template>
 
-<!-- la sekvaj necesas nur por tradukoj en ekzemploj kaj bildoj -->
-
-<xsl:template match="ekz|bld" mode="kapvorto">
-  <xsl:apply-templates select="ind" mode="kapvorto"/>
-</xsl:template>
-
-<xsl:template match="ind" mode="kapvorto">
-  <xsl:choose>
-    <xsl:when test="mll">
-      <xsl:apply-templates select="mll" mode="kapvorto"/> 
-    </xsl:when>
-    <xsl:otherwise>
-      <xsl:apply-templates mode="kapvorto"/>
-    </xsl:otherwise>
-  </xsl:choose>
-</xsl:template>
-
-
-<xsl:template match="ind/mll" mode="kapvorto">
-  <xsl:if test="@tip='fin' or @tip='mez'">
-    <xsl:text>...</xsl:text>
-  </xsl:if>
-  <xsl:apply-templates mode="kapvorto"/>
-  <xsl:if test="@tip='kom' or @tip='mez'">
-    <xsl:text>...</xsl:text>
-  </xsl:if>
-</xsl:template>
 
 
 </xsl:stylesheet>

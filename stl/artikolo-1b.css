@@ -21,7 +21,8 @@ H2 {color: #000000;
     margin-top: 2ex;
     }
 
-H2::after { content: "\01f5fa \01f5ea \01f30d" }
+/*H2::after { content: "\01f5fa \01f5ea \01f30d" }*/
+H2::after { content: "\01f5ea" }
 
 H3 {font-size: 90%; border-top-width: 2px; border-top-style: solid; 
   border-top-color: #E0E0A0; padding-top: 0.5ex}
@@ -133,7 +134,7 @@ section.tradukoj {
     border-right: 0.1em solid #E0E0A0; 
 }  
 
-section.tradukoj span:lang(eo) {
+section.tradukoj .lng {
     color: gray; 
     margin-right: 0.5em;
 }
@@ -234,7 +235,7 @@ A IMG.viki:active {background-color:  #a0a070; border: 2px inset gray}
 }
 .kasxita { display: none }
 i.ekz { display: block; margin-left: 1.6em; text-indent: -1.2em; text-align: left }
-i.ekz::before { content: "\2014" }
+i.ekz::before, span.ekztrd::before { content: "\2014 " }
 
 BUTTON.faldilo {
     display: inline-block;
