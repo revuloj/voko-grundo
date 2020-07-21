@@ -17,6 +17,14 @@ reguloj por prezentado de la tradukoj
 <!-- ne montru tradukojn en la teksto, sed malsupre en propra alineo -->
 <xsl:template match="trdgrp|trd"/>
 
+<!-- nur tradukojn ene de difino kaj bildo 
+montru tie, cxar ili estas esenca parto de tiuj --> 
+
+<xsl:template match="dif/trd|bld/trd">
+  <i><xsl:apply-templates/></i>
+</xsl:template>
+
+
 
 <xsl:template name="tradukoj">
   <xsl:if test=".//trd">
@@ -131,7 +139,7 @@ reguloj por prezentado de la tradukoj
 </xsl:template>
 
 
-<xsl:template match="trdgrp/trd" mode="tradukoj">
+<xsl:template match="trdgrp/trd|dif/trd" mode="tradukoj">
   <xsl:apply-templates mode="tradukoj"/>
 
   <xsl:variable name="komo">
@@ -151,22 +159,17 @@ reguloj por prezentado de la tradukoj
     <xsl:value-of select="$komo"/>
     <xsl:text> </xsl:text>
   </xsl:if>
-</xsl:template>
 
-<!-- nur tradukojn ene de difino kaj bildo 
-montru tie, cxar ili estas esenca parto de tiuj --> 
-
-<xsl:template match="dif/trd|bld/trd">
-  <i><xsl:apply-templates/></i>
 </xsl:template>
 
 
+<!--
 <xsl:template match="trdgrp/trd">
   <xsl:apply-templates/>
 
   <xsl:variable name="komo">
     <xsl:choose>
-      <!-- Ne validas por la hebrea. -->
+      <!- - Ne validas por la hebrea. - ->
       <xsl:when test="../@lng = 'fa' or
                       ../@lng = 'ar'">
         <xsl:text>&#x060C;</xsl:text>
@@ -182,6 +185,7 @@ montru tie, cxar ili estas esenca parto de tiuj -->
     <xsl:text> </xsl:text>
   </xsl:if>
 </xsl:template>
+-->
 
 <xsl:template match="klr[@tip='ind']"/>
    <!-- ne skribu indeksajn klarigojn tie cxi -->
