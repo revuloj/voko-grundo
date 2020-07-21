@@ -193,7 +193,6 @@ reguloj por la prezentado de la artikolostrukturo
          self::fnt|
          self::dif|
          self::ref[@tip='dif'])]"/>    
-    <xsl:call-template name="tradukoj"/>
   </dd>
 </xsl:template>
 
