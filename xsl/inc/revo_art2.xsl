@@ -119,6 +119,10 @@ reguloj por la prezentado de la artikolostrukturo
       </xsl:otherwise>
 
     </xsl:choose>
+
+    <xsl:if test="trd|trdgrp|snc/trd|snc/trdgrp">
+      <xsl:call-template name="tradukoj"/>
+    </xsl:if>
   </dd>
 </xsl:template> 
 
@@ -148,9 +152,7 @@ reguloj por la prezentado de la artikolostrukturo
             self::dif|
             self::mlg|
             self::ref[@tip='dif'])]"/>
-        <div class="trdj">
-          <xsl:apply-templates select="trdgrp|trd"/>
-        </div>
+      <xsl:call-template name="tradukoj"/>
     </div>
   </div>
 </xsl:template>  
@@ -191,9 +193,7 @@ reguloj por la prezentado de la artikolostrukturo
          self::fnt|
          self::dif|
          self::ref[@tip='dif'])]"/>    
-        <div class="trdj">
-          <xsl:apply-templates select="trdgrp|trd"/>
-        </div>
+    <xsl:call-template name="tradukoj"/>
   </dd>
 </xsl:template>
 
