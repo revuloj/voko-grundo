@@ -15,9 +15,9 @@ function preparu_art() {
     var d = document.getElementsByClassName("kasxebla");
     if (d.length > js_sojlo) {
         faldu_sekciojn();
-        faldu_malfaldu_butonoj();
+        h1_faldu_malfaldu_butonoj();
         interna_navigado();
-        malfaldu_ekzemplojn();   
+        //malfaldu_ekzemplojn();   
     }
 }
 
@@ -27,41 +27,65 @@ function faldu_sekciojn() {
     var h = document.location.hash.substr(1);
     var sojlo = 3+2; // ekde tri drv + trd + fnt, au du drv kaj adm
     if (d.length > sojlo) { // ĝis tri derivaĵoj (+tradukoj, fontoj), ne kaŝu la alineojn
-        for (var i=0; i<d.length; i++) {
-            var h2 = getPrevH2(d[i]);
-            if (h2) {
-                if ((h && h2.id != h) || (!h && i>0)) { 
-                    d[i].classList.add("kasxita") 
-                }; 
-                h2.classList.add("faldilo");
-                h2.addEventListener("click", function(event) { 
-                    getNextDiv(this).classList.toggle("kasxita");
-                });    
+        var first = true;
+        for (var el of d) {
+            if (el.classList.contains("tradukoj")) {
+                faldu_malfaldu_butonoj(el.parentElement,"tradukojn");
+            } else {
+                var h2 = getPrevH2(el);
+                if (h2) {
+                    if ((h && h2.id != h) || (!h && first)) { 
+                        el.classList.add("kasxita") 
+                    }; 
+                    first = false;
+                    h2.classList.add("faldilo");
+                    h2.addEventListener("click", function(event) { 
+                        getNextDiv(this).classList.toggle("kasxita");
+                    });    
+                }
             }
         }    
     }
 }
 
 function faldu_chiujn() {
-    var d = document.getElementsByClassName("kasxebla");
-    for (var i=0; i<d.length; i++) {
-        var h2 = getPrevH2(d[i]);
-        d[i].classList.add("kasxita") 
+    for (var el of document.getElementsByClassName("kasxebla")) {
+        var h2 = getPrevH2(el);
+        el.classList.add("kasxita") 
     }    
 }
 
 function malfaldu_chiujn() {
-    var d = document.getElementsByClassName("kasxebla");
-    for (var i=0; i<d.length; i++) {
-        var h2 = getPrevH2(d[i]);
-        d[i].classList.remove("kasxita") 
+    for (var el of document.getElementsByClassName("kasxebla")) {
+        var h2 = getPrevH2(el);
+        el.classList.remove("kasxita") 
     }    
 }
 
+function faldu(event) {
+    // pli bone elektu patran nodon, kiu estas section aŭ div!
+    for (var el of event.target.parentElement.getElementsByClassName("kasxebla")) {
+        el.classList.add("kasxita");
+    }
+}
 
-function faldu_malfaldu_butonoj() {
+function malfaldu(event) {
+    // pli bone elektu patran nodon, kiu estas section aŭ div!
+    for (var el of event.target.parentElement.getElementsByClassName("kasxebla")) {
+        el.classList.remove("kasxita");
+    }
+}
+
+function faldu_malfaldu_butonoj(element,kion) {
     // aldonu faldo/malfaldo-butonojn  
-    var h1 = document.getElementsByTagName("H1")[0];   
+    element.appendChild(make_button("\u23eb\uFE0E",faldu,"kaŝu "+kion));
+    element.appendChild(make_button("\u23ec\uFE0E",malfaldu,"malkaŝu "+kion));
+}
+
+function h1_faldu_malfaldu_butonoj() {
+    // aldonu faldo/malfaldo-butonojn  
+    var art = document.getElementById(sec_art);
+    var h1 = art.getElementsByTagName("H1")[0];   
     h1.appendChild(make_button("\u23eb\uFE0E",faldu_chiujn,"faldu ĉiujn"));
     h1.appendChild(make_button("\u23ec\uFE0E",malfaldu_chiujn,"malfaldu ĉiujn"));
 }
@@ -75,6 +99,7 @@ function make_button(label,handler,hint='') {
     return btn;
 }
 
+/*
 function malfaldu_ekzemplojn() {
     // malfaldu ekzemplojn
     var e = document.getElementsByClassName("ekz");
@@ -83,6 +108,7 @@ function malfaldu_ekzemplojn() {
         if (ie.nodeName == "I") ie.classList.add("ekz-propra-linio");
     }
 }
+*/
 
 function interna_navigado() {
     // certigu, ke sekcioj malfermiĝu, kiam ili entenas navig-celon

@@ -117,6 +117,11 @@ div.trd_lng { margin-top: 0.5em; border-top-width: 2px; border-top-style: solid;
 */
 
 section.tradukoj {
+    margin-top: 0.2em;
+    margin-left: 2em;
+}
+
+div.tradukoj {
     display: grid;
     width: fit-content;
     width: -moz-fit-content;
@@ -126,15 +131,13 @@ section.tradukoj {
     grid-template-columns: fit-content(10em) fit-content(20em); 
     */
     grid-template-columns: auto auto;
-    margin-top: 0.2em;
-    margin-left: 2em;
     padding-left: 0.5em; 
     padding-right: 0.5em; 
     border-left: 0.1em solid #E0E0A0; 
     border-right: 0.1em solid #E0E0A0; 
 }  
 
-section.tradukoj .lng {
+div.tradukoj .lng {
     color: gray; 
     margin-right: 0.5em;
 }
@@ -233,7 +236,7 @@ A IMG.viki:active {background-color:  #a0a070; border: 2px inset gray}
     background: #E8C888;
     border: 1px solid #775533;
 }
-.kasxita { display: none }
+.kasxita { display: none !important; }
 i.ekz { display: block; margin-left: 1.6em; text-indent: -1.2em; text-align: left }
 i.ekz::before, span.ekztrd::before { content: "\2014 " }
 

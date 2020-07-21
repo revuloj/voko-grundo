@@ -29,25 +29,27 @@ montru tie, cxar ili estas esenca parto de tiuj -->
 <xsl:template name="tradukoj">
   <xsl:if test=".//trd">
     <xsl:variable name="self" select="."/>
-    <section class="tradukoj kasxebla">
-      <!-- elektu por chiu lingvo unu reprezentanton -->
-      <xsl:for-each select="document($lingvoj_cfg)/lingvoj/lingvo">
-        <xsl:sort lang="eo"/>
-        <xsl:variable name="lng" select="@kodo"/>
-        <xsl:variable name="lingvo" select="concat(substring(.,1,string-length(.)-1),'e')"/>
-                  
-        <xsl:for-each select="$self">
-          <xsl:call-template name="lingvo">
-            <xsl:with-param name="lng">
-              <xsl:value-of select="$lng"/>
-            </xsl:with-param>
-            <xsl:with-param name="lingvo">
-              <xsl:value-of select="$lingvo"/>
-            </xsl:with-param>
-          </xsl:call-template>
+    <section class="tradukoj">
+      <div class="tradukoj kasxebla">
+        <!-- elektu por chiu lingvo unu reprezentanton -->
+        <xsl:for-each select="document($lingvoj_cfg)/lingvoj/lingvo">
+          <xsl:sort lang="eo"/>
+          <xsl:variable name="lng" select="@kodo"/>
+          <xsl:variable name="lingvo" select="concat(substring(.,1,string-length(.)-1),'e')"/>
+                    
+          <xsl:for-each select="$self">
+            <xsl:call-template name="lingvo">
+              <xsl:with-param name="lng">
+                <xsl:value-of select="$lng"/>
+              </xsl:with-param>
+              <xsl:with-param name="lingvo">
+                <xsl:value-of select="$lingvo"/>
+              </xsl:with-param>
+            </xsl:call-template>
 
+          </xsl:for-each>
         </xsl:for-each>
-      </xsl:for-each>
+      </div>
     </section>
   </xsl:if>
 </xsl:template>
