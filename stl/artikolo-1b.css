@@ -50,6 +50,67 @@ DT.subart::before { content: "– "}
 DT.subart::after { content: " –"}
 */
 
+/* ni provas ordigi difinojn ktp. flank-al-falnke kun la listo de tradukoj */
+section.drv>div {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-top: 1em;
+}
+
+div.drv-enh {
+    max-width: 50em;
+}
+
+div.drv-enh dl {
+    margin-block-start: 0;
+}
+
+
+section.tradukoj {
+    margin-top: 0.2em;
+    margin-left: 2em;
+    margin-right: 4em;
+
+    display: flex;
+    justify-content: flex-end;
+}
+
+div.tradukoj {
+    display: grid;    
+    height: fit-content;
+    height: -moz-fit-content;
+    height: -webkit-fit-content;
+    width: fit-content;
+    width: -moz-fit-content;
+    width: -webkit-fit-content;
+    /*
+    grid-auto-columns: min-content;
+    grid-template-columns: fit-content(10em) fit-content(20em); 
+    */
+    grid-template-columns: auto auto;
+    padding-left: 0.5em; 
+    padding-right: 0.5em; 
+    border-left: 2px solid #E0E0A0; 
+    border-right: 2px solid #E0E0A0; 
+}  
+
+div.tradukoj .lng {
+    color: gray; 
+    margin-right: 0.5em;
+}
+/*
+.trd h3 { 
+    display: inline;
+    border-style: none;
+    font-weight: normal;
+    color: gray; padding-right: 0.7em; 
+}
+.trd h3::after { content: ": " }
+div.trd_lng_2 { display: inline; line-height: 135%;  }
+*/
+
 /*A {text-decoration: none}*/
 A:link {color: blue}
 A:visited {color: blue}
@@ -110,51 +171,6 @@ A.trdeo:visited {text-decoration: underline; font-weight: bold; color:
 black}
 A.trdeo:active {text-decoration: underline; font-weight: bold; color: gray}
 
-/* pli densa arangxo de tradukoj 
-div.trd_lng { margin-top: 0.5em; border-top-width: 2px; border-top-style: solid;
-  border-top-color: #E0E0A0; padding-top: 0ex; margin-top: 0.7em }
-*/
-
-section.tradukoj {
-    margin-top: 0.2em;
-    margin-left: 2em;
-    margin-right: 4em;
-
-    display: flex;
-    justify-content: flex-end;
-}
-
-div.tradukoj {
-
-    display: grid;    
-    width: fit-content;
-    width: -moz-fit-content;
-    width: -webkit-fit-content;
-    /*
-    grid-auto-columns: min-content;
-    grid-template-columns: fit-content(10em) fit-content(20em); 
-    */
-    grid-template-columns: auto auto;
-    padding-left: 0.5em; 
-    padding-right: 0.5em; 
-    border-left: 2px solid #E0E0A0; 
-    border-right: 2px solid #E0E0A0; 
-}  
-
-div.tradukoj .lng {
-    color: gray; 
-    margin-right: 0.5em;
-}
-/*
-.trd h3 { 
-    display: inline;
-    border-style: none;
-    font-weight: normal;
-    color: gray; padding-right: 0.7em; 
-}
-.trd h3::after { content: ": " }
-div.trd_lng_2 { display: inline; line-height: 135%;  }
-*/
 
 /* fontindikoj en la teksto */
 .fnt {font-style: normal}

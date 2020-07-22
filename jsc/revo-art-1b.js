@@ -32,7 +32,9 @@ function faldu_sekciojn() {
             if (el.classList.contains("tradukoj")) {
                 faldu_trd(el);
             } else {
-                el.insertBefore(make_flat_button("\u22ee",malfaldu_trd,"montru ĉion"),el.firstChild);
+                el.parentElement.insertBefore(
+                    make_flat_button("\u22ee",malfaldu_trd,"montru ĉion"),
+                    el);
 
                 var h2 = getPrevH2(el);
                 if (h2) {

@@ -131,30 +131,32 @@ reguloj por la prezentado de la artikolostrukturo
 
 <xsl:template match="drv">
     <!-- xsl:apply-templates select="tez" mode="ref"/ -->
-  <div class="deriv">
+  <section class="drv">
     <xsl:apply-templates select="kap"/>
     <div class="kasxebla">
-      <xsl:apply-templates select="gra|uzo|fnt|dif|ref[@tip='dif']"/>
-      <dl>
-        <xsl:apply-templates select="subdrv|snc"/>
-      </dl>
-      <xsl:apply-templates
-        select="node()[
-          not(
-            self::subdrv|
-            self::snc|
-            self::trd|
-            self::trdgrp|
-            self::gra|
-            self::uzo|
-            self::fnt|
-            self::kap|
-            self::dif|
-            self::mlg|
-            self::ref[@tip='dif'])]"/>
+        <div class="drv">
+        <xsl:apply-templates select="gra|uzo|fnt|dif|ref[@tip='dif']"/>
+        <dl>
+          <xsl:apply-templates select="subdrv|snc"/>
+        </dl>
+        <xsl:apply-templates
+          select="node()[
+            not(
+              self::subdrv|
+              self::snc|
+              self::trd|
+              self::trdgrp|
+              self::gra|
+              self::uzo|
+              self::fnt|
+              self::kap|
+              self::dif|
+              self::mlg|
+              self::ref[@tip='dif'])]"/>
+      </div>
       <xsl:call-template name="tradukoj"/>
     </div>
-  </div>
+  </section>
 </xsl:template>  
 	
 
