@@ -30,15 +30,22 @@ function faldu_sekciojn() {
         var first = true;
         for (var el of d) {
             if (el.classList.contains("tradukoj")) {
-                faldu_malfaldu_butonoj(el.parentElement,"tradukojn");
+                faldu_trd(el);
             } else {
+                el.insertBefore(make_flat_button("\u22ee",malfaldu_trd,"montru ĉion"),el.firstChild);
+
                 var h2 = getPrevH2(el);
                 if (h2) {
-                    if ((h && h2.id != h) || (!h && first)) { 
-                        el.classList.add("kasxita") 
-                    }; 
-                    first = false;
                     h2.classList.add("faldilo");
+                    if ((h && h2.id != h) || (!h && first)) { 
+                        // \u25be
+                        h2.appendChild(make_flat_button("\u23f7",malfaldu,"malkaŝu derivaĵon"));
+                        el.classList.add("kasxita") 
+                    } else {
+                        // "\u25b2"
+                        h2.appendChild(make_flat_button("\u2305",faldu,"kaŝu derivaĵon"));
+                    }                    
+                    first = false;
                     h2.addEventListener("click", function(event) { 
                         getNextDiv(this).classList.toggle("kasxita");
                     });    
@@ -76,10 +83,35 @@ function malfaldu(event) {
     }
 }
 
-function faldu_malfaldu_butonoj(element,kion) {
-    // aldonu faldo/malfaldo-butonojn  
-    element.appendChild(make_button("\u23eb\uFE0E",faldu,"kaŝu "+kion));
-    element.appendChild(make_button("\u23ec\uFE0E",malfaldu,"malkaŝu "+kion));
+function faldu_trd(element) {
+    var nav_lng = navigator.languages || [navigator.language];
+    var eo;
+    for (var ch of element.children) {
+        var ch_lng = ch.getAttribute("lang");
+        if ( ch_lng == "eo") {
+            eo = ch;
+        } else if ( nav_lng.indexOf(ch_lng) < 0 ) {
+            eo.classList.add("kasxita");
+            ch.classList.add("kasxita");
+        }
+    }
+}
+
+function malfaldu_trd(event) {
+    var trdj = event.target.parentElement.querySelector("section.tradukoj");
+    for (var ch of trdj.firstChild.children) {
+        ch.classList.remove("kasxita");
+    }
+}
+
+
+function make_flat_button(label,handler,hint='') {
+    var span = document.createElement("SPAN");
+    span.classList.add("faldilo");
+    span.appendChild(document.createTextNode(label)); 
+    span.addEventListener("click",handler);
+    if (hint) span.setAttribute("title",hint)
+    return span;
 }
 
 function h1_faldu_malfaldu_butonoj() {
@@ -98,6 +130,7 @@ function make_button(label,handler,hint='') {
     if (hint) btn.setAttribute("title",hint)
     return btn;
 }
+
 
 /*
 function malfaldu_ekzemplojn() {

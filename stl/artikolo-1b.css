@@ -22,7 +22,6 @@ H2 {color: #000000;
     }
 
 /*H2::after { content: "\01f5fa \01f5ea \01f30d" }*/
-H2::after { content: "\01f5ea" }
 
 H3 {font-size: 90%; border-top-width: 2px; border-top-style: solid; 
   border-top-color: #E0E0A0; padding-top: 0.5ex}
@@ -119,10 +118,15 @@ div.trd_lng { margin-top: 0.5em; border-top-width: 2px; border-top-style: solid;
 section.tradukoj {
     margin-top: 0.2em;
     margin-left: 2em;
+    margin-right: 4em;
+
+    display: flex;
+    justify-content: flex-end;
 }
 
 div.tradukoj {
-    display: grid;
+
+    display: grid;    
     width: fit-content;
     width: -moz-fit-content;
     width: -webkit-fit-content;
@@ -133,8 +137,8 @@ div.tradukoj {
     grid-template-columns: auto auto;
     padding-left: 0.5em; 
     padding-right: 0.5em; 
-    border-left: 0.1em solid #E0E0A0; 
-    border-right: 0.1em solid #E0E0A0; 
+    border-left: 2px solid #E0E0A0; 
+    border-right: 2px solid #E0E0A0; 
 }  
 
 div.tradukoj .lng {
@@ -241,7 +245,8 @@ i.ekz { display: block; margin-left: 1.6em; text-indent: -1.2em; text-align: lef
 i.ekz::before, span.ekztrd::before { content: "\2014 " }
 
 BUTTON.faldilo {
-    display: inline-block;
+    /*display: inline-block;*/
+    float: right;
     /* border: none; */
     border: 1px solid #E0E0A0;
     border-radius: .5em;
@@ -259,6 +264,37 @@ BUTTON.faldilo {
     -webkit-appearance: none;
     -moz-appearance: none;
 }
+
+SPAN.faldilo {
+    float: right; 
+    margin-right: 0.5em; 
+    width: 1.6em; 
+    height: 1.6em; 
+    cursor: pointer;
+    text-align:center;
+    /*vertical-align: middle; */
+    border-radius: 50%;
+    font-size: 1rem;
+    background-color: #eee8aa;
+    color: darkgreen;    
+}
+
+.square_min {
+    background-color: black;
+    font-size: 0.2em;
+    height: 0.2em;
+}
+.square_mid {
+    background-color: black;
+    font-size: 0.6em;
+    height: 0.6em;
+}
+.square_max {
+    background-color: black;
+    font-size: 1em;
+    height: 1em;
+}
+
 
 .art-hist td:first-child {
     /*font-family: "Lucida Console", Monaco, monospace; */

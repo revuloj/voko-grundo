@@ -64,7 +64,7 @@ montru tie, cxar ili estas esenca parto de tiuj -->
 
     <span lang="eo" class="lng"><xsl:value-of select="$lingvo"/>: </span>
 
-    <span>
+    <span lang="{$lng}">
     <!--
       eta ĝenaĵo: se senco kaj ekzemplo ene havas tradukojn, ili aperas kun cifero de la senco,
       se nur ekzemplo aperas, la cifero mankas.
@@ -97,7 +97,7 @@ montru tie, cxar ili estas esenca parto de tiuj -->
   <!-- rigardu, al kiu subarbo apartenas la traduko kaj skribu la
 	 tradukitan vorton/sencon -->
 
-  <strong class="trdeo">
+  <strong lang="eo" class="trdeo">
     <xsl:apply-templates 
       select="ancestor::node()[
         self::snc or 

@@ -10,9 +10,9 @@ reguloj por la prezentado de la artikolostrukturo
 <!-- kruda artikolstrukturo -->
 
 <xsl:template match="/">
-  <html>
+  <html lang="eo">
     <head>
-      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+      <meta charset="utf-8"/>
       <meta name="viewport" content="width=device-width,initial-scale=1"/>
       <xsl:if test="//frm[@am]">
         <script type="text/javascript" async="async" src="{$mathjax-url}"></script>
