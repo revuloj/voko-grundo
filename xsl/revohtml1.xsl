@@ -7,7 +7,7 @@
 
 Tiuj transformreguloj estas uzataj por la nova redaktilo Cetonio. Ĝi ne uzas kelkajn XSLT 2 - regulojn por povi uzi
 la transformilon "xsltproc" anstataŭ Saxon, kiu aldone bezonas instalitan Javo-VM. XSLT 1 sufiĉas por la
-antaŭrigardo.
+antaŭrigardo. Kelkaj limigoj, kiel ordigo de supersignaj literoj post la aliaj (en la traduklisto) estas tolereblaj.
 
 revohtml1.xsl kaj revohtml.xsl estas preskaŭ identaj, estas iu diferenco ekz. en bibliografio-pado,
 necesus testi, ĉu oni povus anstataŭe uzi revohtml1.xl en ambaŭ redaktiloj nova kaj malnova...
