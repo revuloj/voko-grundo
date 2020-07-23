@@ -34,7 +34,7 @@ transform-reguloj.
 
 <!-- kelkaj variabloj  -->
 
-<xsl:variable name="mathjax-url">https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=AM_CHTML</xsl:variable>
+<xsl:variable name="mathjax-url">https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=AM_CHTML</xsl:variable>
 <xsl:variable name="art-css">artikolo-1b.css</xsl:variable>
 
 <xsl:variable name="smbdir">../smb</xsl:variable>
