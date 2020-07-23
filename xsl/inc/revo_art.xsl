@@ -112,24 +112,33 @@ reguloj por la prezentado de la artikolostrukturo
     <xsl:number format="I."/>
   </dt>
   <dd>
-    <xsl:choose>
+    <section class="subart">
+      <div>
+        <xsl:choose>
 
-      <xsl:when test="snc">
-        <xsl:apply-templates select="kap"/>
-        <dl>
-          <xsl:apply-templates select="node()[not(self::kap)]"/>
-        </dl>
-      </xsl:when>
+          <xsl:when test="snc">
+            <xsl:apply-templates select="kap"/>
+            <div class="subart-enh">
+              <dl>
+                <xsl:apply-templates select="node()[not(self::kap)]"/>
+              </dl>
+            </div>
+          </xsl:when>
 
-      <xsl:otherwise>
-        <xsl:apply-templates/>
-      </xsl:otherwise>
+          <xsl:otherwise>
+            <xsl:apply-templates/>
+          </xsl:otherwise>
 
-    </xsl:choose>
+        </xsl:choose>
 
-    <xsl:if test="trd|trdgrp|snc/trd|snc/trdgrp">
-      <xsl:call-template name="tradukoj"/>
-    </xsl:if>
+        <!-- KONTROLU: eble tio ne estas tute ĝusta, ĉar se aperas kaj drv/trd(grp) kaj subart/trd(grp)
+            ni eble duobligus ilin tiel. Do tiuokaze eble ni havu duan transformregulon
+            tradukoj-subart, kiu traktas nur ĉi-lastajn -->
+        <xsl:if test="trd|trdgrp|snc/trd|snc/trdgrp">
+          <xsl:call-template name="tradukoj"/>
+        </xsl:if>
+      </div>
+    </section>
   </dd>
 </xsl:template> 
 
@@ -160,9 +169,9 @@ reguloj por la prezentado de la artikolostrukturo
               self::dif|
               self::mlg|
               self::ref[@tip='dif'])]"/>
-      </div>
+      </div> <!-- drv-enh -->
       <xsl:call-template name="tradukoj"/>
-    </div>
+    </div> <!-- kasxebla -->
   </section>
 </xsl:template>  
 	

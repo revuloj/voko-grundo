@@ -50,8 +50,12 @@ DT.subart::before { content: "– "}
 DT.subart::after { content: " –"}
 */
 
+section.drv {
+    width: 100%;
+}
+
 /* ni provas ordigi difinojn ktp. flank-al-falnke kun la listo de tradukoj */
-section.drv>div {
+section.drv>div, section.subart>div {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
@@ -59,14 +63,13 @@ section.drv>div {
     margin-top: 1em;
 }
 
-div.drv-enh {
+div.drv-enh, div.subart-enh, div.tradukoj {
     max-width: 50em;
 }
 
-div.drv-enh dl {
+div.drv-enh dl, div.subart-enh dl {
     margin-block-start: 0;
 }
-
 
 section.tradukoj {
     margin-top: 0.2em;
