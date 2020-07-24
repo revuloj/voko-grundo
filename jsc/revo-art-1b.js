@@ -45,11 +45,11 @@ function faldu_sekciojn() {
                         el.classList.add("kasxita") 
                     } else {
                         // "\u25b2"
-                        h2.appendChild(make_flat_button("\u2305",faldu,"kaŝu derivaĵon"));
+                        h2.appendChild(make_flat_button("\u23f6",faldu,"kaŝu derivaĵon"));
                     }                    
                     first = false;
                     h2.addEventListener("click", function(event) { 
-                        getNextDiv(this).classList.toggle("kasxita");
+                        faldu_malfaldu(event);
                     });    
                 }
             }
@@ -60,30 +60,53 @@ function faldu_sekciojn() {
 function faldu_chiujn() {
     for (var el of document.getElementsByClassName("kasxebla")) {
         var h2 = getPrevH2(el);
-        el.classList.add("kasxita") 
+        if (h2) {
+            el.classList.add("kasxita");
+            h2.querySelector(".faldilo").textContent = "\u23f6";
+        }
     }    
 }
 
 function malfaldu_chiujn() {
     for (var el of document.getElementsByClassName("kasxebla")) {
         var h2 = getPrevH2(el);
-        el.classList.remove("kasxita") 
+        if (h2) {
+            el.classList.remove("kasxita") 
+            h2.querySelector(".faldilo").textContent = "\u23f7";
+        }
     }    
 }
 
+
 function faldu(event) {
-    // pli bone elektu patran nodon, kiu estas section aŭ div!
-    for (var el of event.target.parentElement.getElementsByClassName("kasxebla")) {
+    // pli bone certigu elekti patran nodon, kiu estas section!
+    var section = event.target.parentElement;    
+    for (var el of section.getElementsByClassName("kasxebla")) {
         el.classList.add("kasxita");
     }
+    section.querySelector("h2 .faldilo").textContent = "\u23f6";
 }
 
 function malfaldu(event) {
-    // pli bone elektu patran nodon, kiu estas section aŭ div!
-    for (var el of event.target.parentElement.getElementsByClassName("kasxebla")) {
+    // pli bone certigu elekti patran nodon, kiu estas section!
+    var section = event.target.parentElement;    
+    for (var el of section.getElementsByClassName("kasxebla")) {
         el.classList.remove("kasxita");
     }
+    section.querySelector("h2 .faldilo").textContent = "\u23f7";
 }
+
+function faldu_malfaldu(event) {
+    var section = event.target.parentElement;    
+    //getNextDiv(this).classList.toggle("kasxita");
+    if (section.getElementsByClassName("kasxebla")[0].classList.contains("kasxita")) {
+        malfaldu(event)
+    } else {
+        faldu(event)
+    }
+}
+
+
 
 function faldu_trd(element) {
     var nav_lng = navigator.languages || [navigator.language];
@@ -100,10 +123,12 @@ function faldu_trd(element) {
 }
 
 function malfaldu_trd(event) {
-    var trdj = event.target.parentElement.querySelector("section.tradukoj");
-    for (var ch of trdj.firstChild.children) {
+    var button = event.target;
+    var section = button.parentElement.querySelector("section.tradukoj");
+    for (var ch of section.firstChild.children) {
         ch.classList.remove("kasxita");
-    }
+    };
+    button.textContent = "\u22ef";
 }
 
 
