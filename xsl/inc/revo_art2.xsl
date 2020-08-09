@@ -73,13 +73,14 @@ reguloj por la prezentado de la artikolostrukturo
     </section>
     -->
 
-    <!-- prezentu fontoreferencojn en propra alineo -->
+    <!-- prezentu fontoreferencojn en propra alineo - ->
     <section class="fontoj">
       <xsl:call-template name="fontoj"/>
-    </section>
+    </section -->
 
     <!-- administraj notoj -->
     <section class="admin">
+      <xsl:call-template name="mankoj"/>
       <xsl:call-template name="admin"/>
     </section>
 
@@ -109,9 +110,12 @@ reguloj por la prezentado de la artikolostrukturo
 
       <xsl:when test="snc">
         <xsl:apply-templates select="kap"/>
-        <dl>
-          <xsl:apply-templates select="node()[not(self::kap)]"/>
-        </dl>
+          <div class="subart-enh">
+          <dl>
+            <xsl:apply-templates select="node()[not(self::kap)]"/>
+          </dl>
+          <xsl:call-template name="fontoj"/>
+        </div>
       </xsl:when>
 
       <xsl:otherwise>
@@ -153,6 +157,7 @@ reguloj por la prezentado de la artikolostrukturo
               self::dif|
               self::mlg|
               self::ref[@tip='dif'])]"/>
+        <xsl:call-template name="fontoj"/>
       </div>
       <xsl:call-template name="tradukoj"/>
     </div>

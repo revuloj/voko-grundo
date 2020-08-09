@@ -71,6 +71,15 @@ div.drv-enh dl, div.subart-enh dl {
     margin-block-start: 0;
 }
 
+div.fontoj {
+    margin-left: 3em;
+    margin-bottom: 1em;
+}
+
+section.admin {
+    margin-top: 1em;
+}
+
 section.tradukoj {
     margin-top: 0.2em;
     margin-left: 2em;

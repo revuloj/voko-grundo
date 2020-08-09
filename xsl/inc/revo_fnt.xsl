@@ -62,18 +62,16 @@ la fontoreferencoj malsupre de la pagxoj
 
 <xsl:template name="fontoj">
   <!-- se enestas strukturitaj fontoj, prezentu ilin en propra alineo -->
-<!--  <xsl:if test="//fnt[bib|aut|vrk|lok]"> -->
-  <hr />
-  <div class="fontoj">
-    <h2>fontoj</h2>
-    <div class="kasxebla">
-      <xsl:apply-templates select="//fnt[aut|vrk|lok]" mode="fontoj"/>
+  <xsl:if test=".//fnt[bib|aut|vrk|lok]"> 
+    <div class="fontoj">
+      <xsl:apply-templates select=".//fnt[aut|vrk|lok]" mode="fontoj"/>
+      <!--
       <p>
         <xsl:call-template name="mankoj"/>
       </p>
+      -->
     </div>
-  </div>
-<!--  </xsl:if> -->
+  </xsl:if>
 </xsl:template>
 
 
@@ -211,45 +209,43 @@ la fontoreferencoj malsupre de la pagxoj
 <!-- kvalito-kontrolo pri fontindikoj -->
 
 <xsl:template name="mankoj">
+  <!-- nombro da fontoj / nombro da vortaraj fontoj en art/kap -->
+  <xsl:variable name="art-fnt" select="count(kap/fnt)"/>
+  <xsl:variable name="art-vrtaraj">
+    <xsl:for-each select="kap/fnt">
+      <xsl:if test="document($bibliografio)//vrk[@mll=current()/bib
+          and (@tip='vortaro' or @tip='terminaro')]">
+        <xsl:text>1</xsl:text>
+      </xsl:if>
+    </xsl:for-each>
+  </xsl:variable>
+  <xsl:variable name="art-vrtr" select="string-length($art-vrtaraj)"/>
 
-    <!-- nombro da fontoj / nombro da vortaraj fontoj en art/kap -->
-    <xsl:variable name="art-fnt" select="count(kap/fnt)"/>
-      <xsl:variable name="art-vrtaraj">
-        <xsl:for-each select="kap/fnt">
-          <xsl:if test="document($bibliografio)//vrk[@mll=current()/bib
-                  and (@tip='vortaro' or @tip='terminaro')]">
-           <xsl:text>1</xsl:text>
-          </xsl:if>
-	</xsl:for-each>
-      </xsl:variable>
-      <xsl:variable name="art-vrtr" select="string-length($art-vrtaraj)"/>
-
-    <xsl:for-each select="//drv">
-
-      <!-- nombro da fontoj / nombro da vortaraj fontoj / nombro da
-	   vrk-indikoj en drv -->
-      <xsl:variable name="drv-ofc" select="count(./kap/ofc)"/>
-      <xsl:variable name="drv-fnt" select="count(.//fnt)"/>
-      <xsl:variable name="drv-vrtaraj">
-        <xsl:for-each select=".//fnt">
+  <xsl:for-each select="//drv">
+    <!-- nombro da fontoj / nombro da vortaraj fontoj / nombro da
+    vrk-indikoj en drv -->
+    <xsl:variable name="drv-ofc" select="count(./kap/ofc)"/>
+    <xsl:variable name="drv-fnt" select="count(.//fnt)"/>
+    <xsl:variable name="drv-vrtaraj">
+      <xsl:for-each select=".//fnt">
 <!--          <xsl:variable name="tip"
 			select="document($bibliografio)//vrk[@mll=current()/bib]/@tip"/> -->
-          <xsl:if test="document($bibliografio)//vrk[@mll=current()/bib
-                  and (@tip='vortaro' or @tip='terminaro')]">
-           <xsl:text>1</xsl:text>
-          </xsl:if>
-	</xsl:for-each>
-      </xsl:variable>
-      <xsl:variable name="drv-vrtr" select="string-length($drv-vrtaraj)"/>
+        <xsl:if test="document($bibliografio)//vrk[@mll=current()/bib
+                and (@tip='vortaro' or @tip='terminaro')]">
+          <xsl:text>1</xsl:text>
+        </xsl:if>
+	    </xsl:for-each>
+    </xsl:variable>
+    <xsl:variable name="drv-vrtr" select="string-length($drv-vrtaraj)"/>
 
-      <xsl:variable name="drv-vrkaj">
-        <xsl:for-each select=".//fnt">
-          <xsl:if test="bib|vrk">
-           <xsl:text>1</xsl:text>
-          </xsl:if>
-	</xsl:for-each>
-      </xsl:variable>
-      <xsl:variable name="drv-vrk" select="string-length($drv-vrkaj)"/>
+    <xsl:variable name="drv-vrkaj">
+      <xsl:for-each select=".//fnt">
+        <xsl:if test="bib|vrk">
+          <xsl:text>1</xsl:text>
+        </xsl:if>
+	    </xsl:for-each>
+    </xsl:variable>
+    <xsl:variable name="drv-vrk" select="string-length($drv-vrkaj)"/>
 
       <xsl:if test="$art-fnt + $drv-fnt + $drv-ofc &lt; 1">
         <xsl:call-template name="mesagho">
