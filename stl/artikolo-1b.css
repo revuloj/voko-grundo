@@ -251,15 +251,15 @@ A IMG.viki:active {background-color:  #a0a070; border: 2px inset gray}
 /* tildoj en ekzemploj */
 .ekztld { font-weight: bold } /*text-decoration: underline solid #775533} */
 
-.kashilo {
+.kashilo, .etendilo {
     border: 1px solid #E0E0A0;
     box-shadow: none;
 }
-.kashilo:hover {
+.kashilo:hover, .etendilo:hover {
     background: #FFEEAA;
     border: 1px solid #775533;
 }    
-.kashilo:active {
+.kashilo:active, .etendilo:active {
     background: #E8C888;
     border: 1px solid #775533;
 }
@@ -272,17 +272,18 @@ i.ekz::before, span.ekztrd::before { content: "\2014 " }
 BUTTON.kashilo {
     /*display: inline-block;*/
     float: right;
+    color: darkgreen;
+    background: #E0E0A0;
+
     /* border: none; */
     border: 1px solid #E0E0A0;
     border-radius: .5em;
     /* padding: 1rem 2rem; */
     margin: .2em;
     text-decoration: none;
-    background: #E0E0A0;
 
     /*box-shadow: 1px 1px 2px;*/
     box-shadow: none;
-    color: darkgreen; 
     font-family: sans-serif;
     font-size: 1rem; */
     cursor: pointer;
@@ -295,6 +296,8 @@ BUTTON.kashilo {
 
 SPAN.kashilo {
     float: right; 
+    color: darkgreen;
+
     margin-right: 0.5em; 
     width: 1.6em; 
     height: 100%; 
@@ -305,16 +308,19 @@ SPAN.kashilo {
     /*border-radius: 50%;*/
     font-size: 1rem;
     /*background-color: #eee8aa; */
-    color: darkgreen;    
 }
 
 SPAN.kashilo:hover {
     border: none;
 }
 
-.pli {
-    color: green;
+a.pli {
     font-style: oblique;
+    text-decoration: none;
+    color: darkgreen;
+    background: #E0E0A0;
+    border-radius: .5em;
+    padding: .1em .3em;
 }
 
 .square_min {

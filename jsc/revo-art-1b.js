@@ -128,7 +128,8 @@ function maletendu_trd(element) {
         var pli = document.createElement("A");
         pli.addEventListener("click",etendu_trd);
         pli.setAttribute("lang","eo");    
-        pli.classList.add("pli");
+        pli.setAttribute("href","#"); // por ebligi fokusadon per TAB-klavo
+        pli.classList.add("pli","etendilo");
         pli.appendChild(document.createTextNode('pli...')); 
         element.appendChild(pli);
     }
