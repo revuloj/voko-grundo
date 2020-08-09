@@ -251,11 +251,11 @@ A IMG.viki:active {background-color:  #a0a070; border: 2px inset gray}
 /* tildoj en ekzemploj */
 .ekztld { font-weight: bold } /*text-decoration: underline solid #775533} */
 
-.faldilo:hover {
+.kashilo:hover {
     background: #FFEEAA;
     border: 1px solid #775533;
 }    
-.faldilo:active {
+.kashilo:active {
     background: #E8C888;
     border: 1px solid #775533;
 }
@@ -263,7 +263,7 @@ A IMG.viki:active {background-color:  #a0a070; border: 2px inset gray}
 i.ekz { display: block; margin-left: 1.6em; text-indent: -1.2em; text-align: left }
 i.ekz::before, span.ekztrd::before { content: "\2014 " }
 
-BUTTON.faldilo {
+BUTTON.kashilo {
     /*display: inline-block;*/
     float: right;
     /* border: none; */
@@ -284,7 +284,7 @@ BUTTON.faldilo {
     -moz-appearance: none;
 }
 
-SPAN.faldilo {
+SPAN.kashilo {
     float: right; 
     margin-right: 0.5em; 
     width: 1.6em; 
