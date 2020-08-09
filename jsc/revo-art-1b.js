@@ -104,7 +104,8 @@ function kashu_malkashu_drv(event) {
         // aktualigu la salto-markon per la "id" de section>h2
         // por teni ĝin malkaŝita ĉe reŝargo de la dokumento
         // aŭ ĉu ni lasu la originan???
-        document.location.hash = "#"+section.firstChild.id;
+        // problemo: tiu derivaĵo saltas eble supren en la paĝo, kio povus konfuzi la leganton...
+        //document.location.hash = "#"+section.firstChild.id;
     } else {
         for (var el of section.getElementsByClassName("kasxebla")) {
             el.classList.add("kasxita");
