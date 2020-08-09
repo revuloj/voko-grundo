@@ -14,161 +14,157 @@ function preparu_art() {
     /* aktivigu nur por longaj artikoloj... */
     var d = document.getElementsByClassName("kasxebla");
     if (d.length > js_sojlo) {
-        faldu_sekciojn();
-        h1_faldu_malfaldu_butonoj();
+        preparu_kashu_sekciojn();
+        preparu_maletendu_sekciojn();
+        h1_kashu_malkashu_butonoj();
         interna_navigado();
-        //malfaldu_ekzemplojn();   
+        //etendu_ekzemplojn();   
     }
 }
 
-function faldu_sekciojn() {
-    // faldu sekciojn, se la artikolo estas tro longa
+/* kaŝu sekciojn de derivaĵoj, se la artikolo estas tro longa
+   kaj provizu per ebleco remalkaŝi */
+function preparu_kashu_sekciojn() {
     var d = document.getElementsByClassName("kasxebla");
     var h = document.location.hash.substr(1);
     var sojlo = 3+2; // ekde tri drv + trd + fnt, au du drv kaj adm
     if (d.length > sojlo) { // ĝis tri derivaĵoj (+tradukoj, fontoj), ne kaŝu la alineojn
         var first = true;
         for (var el of d) {
-            if (el.classList.contains("tradukoj")) {
-                faldu_trd(el);
-            } else {
-                el.parentElement.insertBefore(
-                    make_flat_button("\u22ee",malfaldu_trd,"montru ĉion"),
-                    el);
+            el.parentElement.insertBefore(
+                make_flat_button("\u22ee",etendu_trd,"montru ĉion"),
+                el);
 
-                var h2 = getPrevH2(el);
-                if (h2) {
-                    h2.classList.add("faldilo");
-                    if ((h && h2.id != h) || (!h && first)) { 
-                        // \u25be
-                        h2.appendChild(make_flat_button("\u23f7",malfaldu,"malkaŝu derivaĵon"));
-                        el.classList.add("kasxita") 
-                    } else {
-                        // "\u25b2"
-                        h2.appendChild(make_flat_button("\u23f6",faldu,"kaŝu derivaĵon"));
-                    }                    
-                    first = false;
-                    h2.addEventListener("click", function(event) { 
-                        faldu_malfaldu(event);
-                    });    
-                }
+            var h2 = getPrevH2(el);
+            if (h2) {
+                h2.classList.add("kashilo");
+                if ((h && h2.id != h) || (!h && first)) { 
+                    // \u25be
+                    h2.appendChild(make_flat_button("\u23f7",malkashu,"malkaŝu derivaĵon"));
+                    el.classList.add("kasxita") 
+                } else {
+                    // "\u25b2"
+                    h2.appendChild(make_flat_button("\u23f6",kashu,"kaŝu derivaĵon"));
+                }                    
+                first = false;
+                h2.addEventListener("click", function(event) { 
+                    kashu_malkashu_drv(event);
+                });    
             }
         }    
     }
 }
 
-function faldu_chiujn() {
+/* kelkajn sekciojn kiel ekzemploj, tradukoj, rimarkoj ni maletendas, pro eviti troan amplekson,
+  ili ricevas eblecon por reetendi ilin per "pli..." */
+function preparu_maletendu_sekciojn() {
+    var d = document.getElementsByClassName("etendebla");
+//    var sojlo = 3+2; // ekde tri drv + trd + fnt, au du drv kaj adm
+// if (d.length > sojlo) { // ĝis tri derivaĵoj (+tradukoj, fontoj), ne kaŝu la alineojn
+    for (var el of d) {
+            if (el.classList.contains("tradukoj")) {
+                maletendu_trd(el);
+            }
+    }
+}
+
+/** kaŝu ĉiujn derivaĵojn **/
+function kashu_chiujn_drv() {
     for (var el of document.getElementsByClassName("kasxebla")) {
         var h2 = getPrevH2(el);
         if (h2) {
             el.classList.add("kasxita");
-            h2.querySelector(".faldilo").textContent = "\u23f6";
+            h2.querySelector(".kashilo").textContent = "\u23f6";
         }
     }    
 }
 
-function malfaldu_chiujn() {
+/** malfkaŝu ĉiujn derivaĵojn **/
+function malkashu_chiujn_drv() {
     for (var el of document.getElementsByClassName("kasxebla")) {
         var h2 = getPrevH2(el);
         if (h2) {
             el.classList.remove("kasxita") 
-            h2.querySelector(".faldilo").textContent = "\u23f7";
+            h2.querySelector(".kashilo").textContent = "\u23f7";
         }
     }    
 }
 
-
-function faldu(event) {
-    // pli bone certigu elekti patran nodon, kiu estas section!
-    var section = event.target.parentElement;    
-    for (var el of section.getElementsByClassName("kasxebla")) {
-        el.classList.add("kasxita");
-    }
-    section.querySelector("h2 .faldilo").textContent = "\u23f6";
-}
-
-function malfaldu(event) {
-    // pli bone certigu elekti patran nodon, kiu estas section!
-    var section = event.target.parentElement;    
-    for (var el of section.getElementsByClassName("kasxebla")) {
-        el.classList.remove("kasxita");
-    }
-    section.querySelector("h2 .faldilo").textContent = "\u23f7";
-}
-
-function faldu_malfaldu(event) {
+function kashu_malkashu_drv(event) {
     var section = event.target.parentElement;    
     //getNextDiv(this).classList.toggle("kasxita");
     if (section.getElementsByClassName("kasxebla")[0].classList.contains("kasxita")) {
-        malfaldu(event)
+        for (var el of section.getElementsByClassName("kasxebla")) {
+            el.classList.remove("kasxita");
+        }
+        section.querySelector("h2 .kashilo").textContent = "\u23f7";
     } else {
-        faldu(event)
+        for (var el of section.getElementsByClassName("kasxebla")) {
+            el.classList.add("kasxita");
+        }
+        section.querySelector("h2 .kashilo").textContent = "\u23f6";
     }
 }
 
-
-
-function faldu_trd(element) {
+function maletendu_trd(element) {
     var nav_lng = navigator.languages || [navigator.language];
     var eo;
-    for (var ch of element.children) {
-        var ch_lng = ch.getAttribute("lang");
-        if ( ch_lng == "eo") {
-            eo = ch;
-        } else if ( nav_lng.indexOf(ch_lng) < 0 ) {
+    for (var id of element.children) {
+        var id_lng = id.getAttribute("lang");
+        // la tradukoj estas paroj de ea lingvo-nomo kaj nacilingvaj tradukoj
+        if ( id_lng == "eo") {
+            eo = id;
+        } else if ( nav_lng.indexOf(id_lng) < 0 ) {
             eo.classList.add("kasxita");
-            ch.classList.add("kasxita");
+            id.classList.add("kasxita");
         }
     }
+    // aldonu pli...
+    var pli = document.createElement("A");
+    pli.addEventListener("click",etendu_trd);
+    pli.setAttribute("lang","eo");    
+    pli.classList.add("pli");
+    pli.appendChild(document.createTextNode('pli...')); 
+    element.appendChild(pli);
 }
 
-function malfaldu_trd(event) {
-    var button = event.target;
-    var section = button.parentElement.querySelector("section.tradukoj");
-    for (var ch of section.firstChild.children) {
-        ch.classList.remove("kasxita");
+
+function etendu_trd(event) {
+    var div_trd = event.target.parentElement;
+    for (var id of div_trd.children) {
+        id.classList.remove("kasxita");
     };
-    button.textContent = "\u22ef";
+    // kaŝu pli...
+    div_trd.querySelector(".pli").classList.add("kasxita");
 }
+
 
 
 function make_flat_button(label,handler,hint='') {
     var span = document.createElement("SPAN");
-    span.classList.add("faldilo");
+    span.classList.add("kashilo");
     span.appendChild(document.createTextNode(label)); 
     span.addEventListener("click",handler);
     if (hint) span.setAttribute("title",hint)
     return span;
 }
 
-function h1_faldu_malfaldu_butonoj() {
-    // aldonu faldo/malfaldo-butonojn  
+function h1_kashu_malkashu_butonoj() {
+    // aldonu kasho/malkasho-butonojn  
     var art = document.getElementById(sec_art);
     var h1 = art.getElementsByTagName("H1")[0];   
-    h1.appendChild(make_button("\u23eb\uFE0E",faldu_chiujn,"faldu ĉiujn"));
-    h1.appendChild(make_button("\u23ec\uFE0E",malfaldu_chiujn,"malfaldu ĉiujn"));
+    h1.appendChild(make_button("\u23eb\uFE0E",kashu_chiujn_drv,"kaŝu ĉiujn derivaĵojn"));
+    h1.appendChild(make_button("\u23ec\uFE0E",malkashu_chiujn_drv,"malkaŝu ĉiujn derivaĵojn"));
 }
 
 function make_button(label,handler,hint='') {
     var btn = document.createElement("BUTTON");
     btn.appendChild(document.createTextNode(label)); 
     btn.addEventListener("click",handler);
-    btn.classList.add("faldilo");
+    btn.classList.add("kashilo");
     if (hint) btn.setAttribute("title",hint)
     return btn;
 }
-
-
-/*
-function malfaldu_ekzemplojn() {
-    // malfaldu ekzemplojn
-    var e = document.getElementsByClassName("ekz");
-    for (var j=0; j<e.length; j++) {
-        var ie = e[j];
-        if (ie.nodeName == "I") ie.classList.add("ekz-propra-linio");
-    }
-}
-*/
 
 function interna_navigado() {
     // certigu, ke sekcioj malfermiĝu, kiam ili entenas navig-celon
