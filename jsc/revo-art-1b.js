@@ -31,14 +31,15 @@ function preparu_art() {
    kaj provizu per ebleco remalkaŝi */
 function preparu_kashu_sekciojn() {
     var d = document.getElementsByClassName("kasxebla");
-    var h = document.location.hash.substr(1); // derivaĵo celita kaj do montrenda
+    var h = document.location.hash.substr(1); // derivaĵo aŭ alia elemento celita kaj do montrenda
+    var d_vid = h? document.getElementById(h).closest("section.drv, section.fontoj").firstChild.id : null;
     var first = true;
 
     for (var el of d) {
         var h2 = getPrevH2(el);
         if (h2) {
             h2.classList.add("kashilo");
-            if ((h && h2.id != h) || (!h && first)) { 
+            if ((h && h2.id != d_vid) || (!h && !first)) { 
                 // \u25be
                 h2.appendChild(make_flat_button(icon_malkashu,
                     kashu_malkashu_drv,"malkaŝu derivaĵon"));
@@ -100,6 +101,10 @@ function kashu_malkashu_drv(event) {
             el.classList.remove("kasxita");
         }
         section.querySelector("h2 .kashilo").textContent = icon_kashu;
+        // aktualigu la salto-markon per la "id" de section>h2
+        // por teni ĝin malkaŝita ĉe reŝargo de la dokumento
+        // aŭ ĉu ni lasu la originan???
+        document.location.hash = "#"+section.firstChild.id;
     } else {
         for (var el of section.getElementsByClassName("kasxebla")) {
             el.classList.add("kasxita");
@@ -178,7 +183,7 @@ function interna_navigado() {
     var a = document.getElementsByTagName("A");
     for (var k=0; k<a.length; k++) {
         var href = a[k].getAttribute("href");
-        if (href && isLocalLink(href)) {
+        if (href && isLocalLink(href) && href != "#") {
             a[k].addEventListener("click", function() {
                 var id = this.getAttribute("href").split('#')[1];
                 var trg = document.getElementById(id);
@@ -205,6 +210,9 @@ function showContainingDiv(element) {
         var div = getNextDiv(element);
         div.classList.remove("kasxita")
     } else {
+        var par = element.closest(".kasxita");
+        if (par) par.classList.remove("kasxita");
+        /*
         var par = element.parentElement;
         while (par) {
             if (par.classList.contains("kasxita")) {
@@ -213,6 +221,7 @@ function showContainingDiv(element) {
                 par = par.parentElement;
             }
         }
+        */
     }
 }
 
