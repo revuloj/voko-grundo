@@ -9,7 +9,7 @@ H2 {color: #000000;
 /*    background-image: url(angulo.png);
     background-repeat: no-repeat;
     */
-    border: 1px solid #E0E0A0;
+
     border-top-left-radius: .7em;
 /*    border-color: gray;
     border-style: outset;
@@ -19,7 +19,7 @@ H2 {color: #000000;
     padding-top: 0.5ex;
     padding-bottom: 0.5ex;
     margin-top: 2ex;
-    }
+}
 
 /*H2::after { content: "\01f5fa \01f5ea \01f30d" }*/
 
@@ -251,6 +251,10 @@ A IMG.viki:active {background-color:  #a0a070; border: 2px inset gray}
 /* tildoj en ekzemploj */
 .ekztld { font-weight: bold } /*text-decoration: underline solid #775533} */
 
+.kashilo {
+    border: 1px solid #E0E0A0;
+    box-shadow: none;
+}
 .kashilo:hover {
     background: #FFEEAA;
     border: 1px solid #775533;
@@ -259,7 +263,9 @@ A IMG.viki:active {background-color:  #a0a070; border: 2px inset gray}
     background: #E8C888;
     border: 1px solid #775533;
 }
+
 .kasxita { display: none !important; }
+
 i.ekz { display: block; margin-left: 1.6em; text-indent: -1.2em; text-align: left }
 i.ekz::before, span.ekztrd::before { content: "\2014 " }
 
@@ -273,7 +279,10 @@ BUTTON.kashilo {
     margin: .2em;
     text-decoration: none;
     background: #E0E0A0;
-    /* color: #ffffff; 
+
+    /*box-shadow: 1px 1px 2px;*/
+    box-shadow: none;
+    color: darkgreen; 
     font-family: sans-serif;
     font-size: 1rem; */
     cursor: pointer;
@@ -288,14 +297,24 @@ SPAN.kashilo {
     float: right; 
     margin-right: 0.5em; 
     width: 1.6em; 
-    height: 1.6em; 
+    height: 100%; 
     cursor: pointer;
     text-align:center;
+    border: none;
     /*vertical-align: middle; */
-    border-radius: 50%;
+    /*border-radius: 50%;*/
     font-size: 1rem;
-    background-color: #eee8aa;
+    /*background-color: #eee8aa; */
     color: darkgreen;    
+}
+
+SPAN.kashilo:hover {
+    border: none;
+}
+
+.pli {
+    color: green;
+    font-style: oblique;
 }
 
 .square_min {
