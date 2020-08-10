@@ -72,8 +72,8 @@ div.drv-enh dl, div.subart-enh dl {
 }
 
 div.fontoj {
-    margin-left: 3em;
-    margin-bottom: 1em;
+    margin: 1em 3em;
+    border-top: 1px solid #E0E0A0; 
 }
 
 section.admin {
@@ -293,7 +293,7 @@ BUTTON.kashilo {
 
     /*box-shadow: 1px 1px 2px;*/
     box-shadow: none;
-    font-family: sans-serif;
+    /*font-family: sans-serif;
     font-size: 1rem; */
     cursor: pointer;
     text-align: center;
