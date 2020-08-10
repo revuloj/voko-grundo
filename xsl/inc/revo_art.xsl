@@ -4,6 +4,7 @@
 <!-- (c) 1999-2020 ĉe Wolfram Diestel  laŭ GPLv2
 
 reguloj por la prezentado de la artikolostrukturo
+uzata kun XSLT1-transformilo
 
 -->
 

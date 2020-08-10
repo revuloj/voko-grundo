@@ -4,10 +4,9 @@
 <!-- (c) 1999-2020 ĉe Wolfram Diestel  laŭ GPLv2
 
 reguloj por la prezentado de la artikolostrukturo
+uzata kun XSLT2-transformilo
 
 -->
-
-<xsl:variable name="mathjax-url">https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=AM_CHTML</xsl:variable>
 
 <!-- kruda artikolstrukturo -->
 
@@ -106,27 +105,34 @@ reguloj por la prezentado de la artikolostrukturo
     <xsl:number format="I."/>
   </dt>
   <dd>
-    <xsl:choose>
+    <section class="subart">
+      <div>
+        <xsl:choose>
 
-      <xsl:when test="snc">
-        <xsl:apply-templates select="kap"/>
-          <div class="subart-enh">
-          <dl>
-            <xsl:apply-templates select="node()[not(self::kap)]"/>
-          </dl>
-          <xsl:call-template name="fontoj"/>
-        </div>
-      </xsl:when>
+          <xsl:when test="snc">
+            <xsl:apply-templates select="kap"/>
+              <div class="subart-enh">
+              <dl>
+                <xsl:apply-templates select="node()[not(self::kap)]"/>
+              </dl>
+              <xsl:call-template name="fontoj"/>
+            </div>
+          </xsl:when>
 
-      <xsl:otherwise>
-        <xsl:apply-templates/>
-      </xsl:otherwise>
+          <xsl:otherwise>
+            <xsl:apply-templates/>
+          </xsl:otherwise>
 
-    </xsl:choose>
+        </xsl:choose>
 
-    <xsl:if test="trd|trdgrp|snc/trd|snc/trdgrp">
-      <xsl:call-template name="tradukoj"/>
-    </xsl:if>
+          <!-- KONTROLU: eble tio ne estas tute ĝusta, ĉar se aperas kaj drv/trd(grp) kaj subart/trd(grp)
+              ni eble duobligus ilin tiel. Do tiuokaze eble ni havu duan transformregulon
+              tradukoj-subart, kiu traktas nur ĉi-lastajn -->
+        <xsl:if test="trd|trdgrp|snc/trd|snc/trdgrp">
+          <xsl:call-template name="tradukoj"/>
+        </xsl:if>
+      </div>
+    </section>
   </dd>
 </xsl:template> 
 
@@ -138,7 +144,7 @@ reguloj por la prezentado de la artikolostrukturo
   <section class="drv">
     <xsl:apply-templates select="kap"/>
     <div class="kasxebla">
-        <div class="drv">
+      <div class="drv-enh">
         <xsl:apply-templates select="gra|uzo|fnt|dif|ref[@tip='dif']"/>
         <dl>
           <xsl:apply-templates select="subdrv|snc"/>
@@ -158,9 +164,9 @@ reguloj por la prezentado de la artikolostrukturo
               self::mlg|
               self::ref[@tip='dif'])]"/>
         <xsl:call-template name="fontoj"/>
-      </div>
+      </div> <!-- drv-enh -->
       <xsl:call-template name="tradukoj"/>
-    </div>
+    </div> <!-- kasxebla -->
   </section>
 </xsl:template>  
 	
@@ -284,9 +290,6 @@ reguloj por la prezentado de la artikolostrukturo
            self::trd|
            self::trdgrp|
            self::ref[@tip='dif'])]"/>
-        <div class="trdj">
-          <xsl:apply-templates select="trdgrp|trd"/>
-        </div>
   </dd>
 </xsl:template>  
 
