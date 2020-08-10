@@ -293,6 +293,8 @@ BUTTON.kashilo {
 
     /*box-shadow: 1px 1px 2px;*/
     box-shadow: none;
+    font: inherit;
+    font-size: 1rem;
     /*font-family: sans-serif;
     font-size: 1rem; */
     cursor: pointer;
@@ -309,12 +311,13 @@ SPAN.kashilo {
 
     margin-right: 0.5em; 
     width: 1.6em; 
-    height: 100%; 
+    height: inherit; 
     cursor: pointer;
     text-align:center;
     border: none;
     /*vertical-align: middle; */
     /*border-radius: 50%;*/
+    font: inherit;
     font-size: 1rem;
     /*background-color: #eee8aa; */
 }
