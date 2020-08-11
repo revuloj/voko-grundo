@@ -60,33 +60,60 @@ montru tie, cxar ili estas esenca parto de tiuj -->
   <xsl:param name="lng"/>
   <xsl:param name="lingvo"/>
 
-  <xsl:if test=".//trd[@lng=$lng]|.//trdgrp[@lng=$lng]">
+  <xsl:choose>
+    <xsl:when test="self::drv">
+      <xsl:if test=".//trd[@lng=$lng]|.//trdgrp[@lng=$lng]">
+        <span lang="eo" class="lng"><xsl:value-of select="$lingvo"/>: </span>
+        <span lang="{$lng}">
+        <!--
+          eta ĝenaĵo: se senco kaj ekzemplo ene havas tradukojn, ili aperas kun cifero de la senco,
+          se nur ekzemplo aperas, la cifero mankas.
+          Oni povus solvi tion demandante ĉu la senco havas samlingvan tradukon, 
+          sed necesus parametrigi la ŝablonojn vokatajn ene de la malsupra <strong>...</strong>
+          per lingvo-parametro por atingi tion...
+        -->
+          <xsl:for-each select=".//trdgrp[@lng=$lng]|.//trd[@lng=$lng]">
+            <xsl:sort select="count(ancestor::node()[
+              self::snc or 
+              self::subsnc or
+              self::drv or
+              self::subdrv])" data-type="number"/>
+            <xsl:sort select="position()" data-type="number"/>
+            <xsl:apply-templates select="." mode="tradukoj"/>
+            <xsl:text> </xsl:text>
+          </xsl:for-each>
 
-    <span lang="eo" class="lng"><xsl:value-of select="$lingvo"/>: </span>
+        </span>
+        <!-- <br/> provizore -->
+      </xsl:if>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:if test="trd[@lng=$lng]|trdgrp[@lng=$lng]|snc/trd[@lng=$lng]|snc/trdgrp[@lng=$lng]">
+        <span lang="eo" class="lng"><xsl:value-of select="$lingvo"/>: </span>
+        <span lang="{$lng}">
+        <!--
+          eta ĝenaĵo: se senco kaj ekzemplo ene havas tradukojn, ili aperas kun cifero de la senco,
+          se nur ekzemplo aperas, la cifero mankas.
+          Oni povus solvi tion demandante ĉu la senco havas samlingvan tradukon, 
+          sed necesus parametrigi la ŝablonojn vokatajn ene de la malsupra <strong>...</strong>
+          per lingvo-parametro por atingi tion...
+        -->
+          <xsl:for-each select="trd[@lng=$lng]|trdgrp[@lng=$lng]|snc/trd[@lng=$lng]|snc/trdgrp[@lng=$lng]">
+            <xsl:sort select="count(ancestor::node()[
+              self::snc or 
+              self::subsnc or
+              self::drv or
+              self::subdrv])" data-type="number"/>
+            <xsl:sort select="position()" data-type="number"/>
+            <xsl:apply-templates select="." mode="tradukoj"/>
+            <xsl:text> </xsl:text>
+          </xsl:for-each>
 
-    <span lang="{$lng}">
-    <!--
-      eta ĝenaĵo: se senco kaj ekzemplo ene havas tradukojn, ili aperas kun cifero de la senco,
-      se nur ekzemplo aperas, la cifero mankas.
-      Oni povus solvi tion demandante ĉu la senco havas samlingvan tradukon, 
-      sed necesus parametrigi la ŝablonojn vokatajn ene de la malsupra <trong>...</strong>
-      per lingvo-parametro por atingi tion...
-    -->
-
-      <xsl:for-each select=".//trdgrp[@lng=$lng]|.//trd[@lng=$lng]">
-        <xsl:sort select="count(ancestor::node()[
-          self::snc or 
-          self::subsnc or
-          self::drv or
-          self::subdrv])" data-type="number"/>
-        <xsl:sort select="position()" data-type="number"/>
-        <xsl:apply-templates select="." mode="tradukoj"/>
-        <xsl:text> </xsl:text>
-      </xsl:for-each>
-
-    </span>
-    <!-- <br/> provizore -->
-  </xsl:if>
+        </span>
+        <!-- <br/> provizore -->
+      </xsl:if>
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>  
 
 
