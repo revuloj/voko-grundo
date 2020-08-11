@@ -88,7 +88,6 @@ uzata kun XSLT1-transformilo
 
     <!-- administraj notoj -->
     <section class="admin">
-      <xsl:call-template name="mankoj"/>
       <xsl:call-template name="admin"/>
     </section>
 
