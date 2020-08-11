@@ -32,7 +32,8 @@ function preparu_art() {
 function preparu_kashu_sekciojn() {
     var d = document.getElementsByClassName("kasxebla");
     var h = document.location.hash.substr(1); // derivaĵo aŭ alia elemento celita kaj do montrenda
-    var d_vid = h? document.getElementById(h).closest("section.drv, section.fontoj").firstChild.id : null;
+    var trg = h? document.getElementById(h) : null;
+    var d_vid = trg? trg.closest("section.drv, section.fontoj").firstElementChild.id : null;
     var first = true;
 
     for (var el of d) {
@@ -105,7 +106,9 @@ function kashu_malkashu_drv(event) {
         // por teni ĝin malkaŝita ĉe reŝargo de la dokumento
         // aŭ ĉu ni lasu la originan???
         // problemo: tiu derivaĵo saltas eble supren en la paĝo, kio povus konfuzi la leganton...
-        //document.location.hash = "#"+section.firstChild.id;
+        //var id = section.querySelector("h2").id;
+        //if (id)
+        //    document.location.hash = "#"+id;
     } else {
         for (var el of section.getElementsByClassName("kasxebla")) {
             el.classList.add("kasxita");
@@ -143,6 +146,7 @@ function maletendu_trd(element) {
 
 
 function etendu_trd(event) {
+    event.preventDefault();
     var div_trd = event.target.parentElement;
     for (var id of div_trd.children) {
         id.classList.remove("kasxita");
