@@ -3,8 +3,8 @@ var sec_art = "s_artikolo";
 
 var icon_kashu = "\u2305"; //"\u2306";
 var icon_malkashu = "\u2304"; // "\u23f7";
-var icon_kashu_chiujn = "\u2796"; // "\u23eb\uFE0E";
-var icon_malkashu_chiujn = "\u2795"; //"\u23ec\uFE0E";
+var icon_kashu_chiujn = "\u2796\uFE0E"; // "\u23eb\uFE0E";
+var icon_malkashu_chiujn = "\u2795\uFE0E"; //"\u23ec\uFE0E";
 
 /*
 window.onload = function() {

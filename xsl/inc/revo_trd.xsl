@@ -30,7 +30,7 @@ montru tie, cxar ili estas esenca parto de tiuj -->
   <xsl:if test=".//trd">
     <xsl:variable name="self" select="."/>
     <section class="tradukoj">
-      <div class="tradukoj etendebla">
+      <dl class="tradukoj etendebla">
         <!-- elektu por chiu lingvo unu reprezentanton -->
         <xsl:for-each select="document($lingvoj_cfg)/lingvoj/lingvo">
           <xsl:sort lang="eo"/>
@@ -49,7 +49,7 @@ montru tie, cxar ili estas esenca parto de tiuj -->
 
           </xsl:for-each>
         </xsl:for-each>
-      </div>
+      </dl>
     </section>
   </xsl:if>
 </xsl:template>
@@ -63,8 +63,8 @@ montru tie, cxar ili estas esenca parto de tiuj -->
   <xsl:choose>
     <xsl:when test="self::drv">
       <xsl:if test=".//trd[@lng=$lng]|.//trdgrp[@lng=$lng]">
-        <span lang="eo" class="lng"><xsl:value-of select="$lingvo"/>: </span>
-        <span lang="{$lng}">
+        <dt lang="eo" class="lng"><xsl:value-of select="$lingvo"/>:</dt>
+        <dd lang="{$lng}">
         <!--
           eta ĝenaĵo: se senco kaj ekzemplo ene havas tradukojn, ili aperas kun cifero de la senco,
           se nur ekzemplo aperas, la cifero mankas.
@@ -83,14 +83,13 @@ montru tie, cxar ili estas esenca parto de tiuj -->
             <xsl:text> </xsl:text>
           </xsl:for-each>
 
-        </span>
-        <!-- <br/> provizore -->
+        </dd>
       </xsl:if>
     </xsl:when>
     <xsl:otherwise>
       <xsl:if test="trd[@lng=$lng]|trdgrp[@lng=$lng]|snc/trd[@lng=$lng]|snc/trdgrp[@lng=$lng]">
-        <span lang="eo" class="lng"><xsl:value-of select="$lingvo"/>: </span>
-        <span lang="{$lng}">
+        <dt lang="eo" class="lng"><xsl:value-of select="$lingvo"/>:</dt>
+        <dd lang="{$lng}">
         <!--
           eta ĝenaĵo: se senco kaj ekzemplo ene havas tradukojn, ili aperas kun cifero de la senco,
           se nur ekzemplo aperas, la cifero mankas.
@@ -109,8 +108,7 @@ montru tie, cxar ili estas esenca parto de tiuj -->
             <xsl:text> </xsl:text>
           </xsl:for-each>
 
-        </span>
-        <!-- <br/> provizore -->
+        </dd>
       </xsl:if>
     </xsl:otherwise>
   </xsl:choose>
