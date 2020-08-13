@@ -76,8 +76,10 @@ kaj stiloj (em,ctl,sup...)
   snc/rim|
   subsnc/rim">
 
-  <br/>
-  <xsl:call-template name="rim"/>
+  <!-- br/ -->
+  <div class="rim">
+    <xsl:call-template name="rim"/>
+  </div>
 </xsl:template>
 
 

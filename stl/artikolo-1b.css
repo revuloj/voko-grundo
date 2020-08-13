@@ -63,12 +63,29 @@ section.drv>div, section.subart>div {
     margin-top: 1em;
 }
 
-div.drv-enh, div.subart-enh, div.tradukoj {
+div.drv-enh, div.subart-enh, dl.tradukoj {
     max-width: 50em;
 }
 
 div.drv-enh dl, div.subart-enh dl {
+    display: grid;
+    grid-template-columns: 2em auto;
+    grid-gap: 0.5em;
     margin-block-start: 0;
+    margin-block-end: 0;
+}
+  
+div.drv-enh dt, div.subart-enh dt {
+    grid-column-start: 1;
+}
+  
+div.drv-enh dd, div.subart-enh dd {
+    grid-column-start: 2;
+    margin-left: 0.5em;
+}
+
+div.drv-enh dl span, div.subart-enh dl span {
+    grid-column: 1 / span 2;
 }
 
 div.fontoj {
@@ -81,7 +98,7 @@ section.admin {
 }
 
 section.tradukoj {
-    margin-top: 0.2em;
+    margin-top: 0.5em;
     margin-left: 2em;
     margin-right: 4em;
 
@@ -89,28 +106,42 @@ section.tradukoj {
     justify-content: flex-end;
 }
 
-div.tradukoj {
-    display: grid;    
+dl.tradukoj {
     height: fit-content;
     height: -moz-fit-content;
     height: -webkit-fit-content;
     width: fit-content;
     width: -moz-fit-content;
     width: -webkit-fit-content;
+
     /*
-    grid-auto-columns: min-content;
-    grid-template-columns: fit-content(10em) fit-content(20em); 
-    */
+    display: grid;    
     grid-template-columns: auto auto;
+    */
     padding-left: 0.5em; 
     padding-right: 0.5em; 
     border-left: 2px solid #E0E0A0; 
     border-right: 2px solid #E0E0A0; 
 }  
 
-div.tradukoj .lng {
+dl.tradukoj {
+    display: grid;
+    grid-template-columns: max-content auto;
+    margin-block-start: 0;
+    margin-block-end: 0;
+}
+  
+dl.tradukoj dt {
+    grid-column-start: 1;
+}
+  
+dl.tradukoj dd {
+    grid-column-start: 2;
+}
+
+dl.tradukoj .lng {
     color: gray; 
-    margin-right: 0.5em;
+    /* margin-right: 0.5em;*/
 }
 /*
 .trd h3 { 
@@ -276,7 +307,7 @@ A IMG.viki:active {background-color:  #a0a070; border: 2px inset gray}
 .kasxita { display: none !important; }
 
 i.ekz { display: block; margin-left: 1.6em; text-indent: -1.2em; text-align: left }
-i.ekz::before, span.ekztrd::before { content: "\2014 " }
+i.ekz::before, span.ekztrd::before { content: "\00a0•\00a0" }
 
 BUTTON.kashilo {
     /*display: inline-block;*/

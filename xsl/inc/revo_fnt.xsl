@@ -63,7 +63,7 @@ la fontoreferencoj malsupre de la pagxoj
 <xsl:template name="fontoj">
   <!-- se enestas strukturitaj fontoj, prezentu ilin en propra alineo -->
   <xsl:if test=".//fnt[bib|aut|vrk|lok]"> 
-    <div class="fontoj">
+    <div class="fontoj kasxita">
       <xsl:apply-templates select=".//fnt[aut|vrk|lok]" mode="fontoj"/>
       <!--
       <p>
