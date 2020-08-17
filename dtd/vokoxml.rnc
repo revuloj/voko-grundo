@@ -6,13 +6,13 @@
 # (c) 2016 - 2020 ĉe Wolfram Diestel
 # uzebla sub kondiĉoj de GPL 2.0 
 
+#default namespace = "http://steloj.de/voko"
+namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
 
 ## ****************************************************
 ##           KADRA STRUKTURO DE VORTARO
 ## ********************************************************
 
-#default namespace = "http://steloj.de/voko"
-namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
 
 ##  [vortaro] Radiko de la strukturarbo de vortaro. La elemento ampleksas
 ## la tutan vortaron.<br/>
