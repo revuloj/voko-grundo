@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # from: https://github.com/leifgehrmann/svg-stroke-to-path/
 
