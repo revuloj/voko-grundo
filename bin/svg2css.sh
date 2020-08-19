@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# voku svg2css.sh dosieroj...
+
+# la sintakso dfe la stilfolio konvenu al "sed". Se tio estos tro malfacila estonte, oni povas
+# konsideri prepari la SVG-on per XSL-transformo
+STYLE='<style type=\"text\/css\"><![CDATA[path{stroke:darkgreen!important}]]><\/style>'
+
 urlencode() {
     # urlencode <string>
     old_lc_collate=$LC_COLLATE
@@ -17,15 +23,31 @@ urlencode() {
     LC_COLLATE=$old_lc_collate
 }
 
-# forigu: 
-# <?xml version="1.0"?>
-# <!-- ... -->
-# width="..." height="..."
+for f in $*
+do
 
-STR=$(sed 's/<?.*?>//' | sed 's/<!--.*-->//' | \
-      sed -re 's/(<svg.*) width="[0-9\.]+" height="[0-9\.]+"/\1/' | tr '\012' ' ')
-      #| sed -re 's/(<svg.*) height=".*"/\1/' | tr '\012' ' ')
+  # forigu: 
+  # <?xml version="1.0"?>
+  # <!-- ... -->
+  # width="..." height="..."
 
-#urlencode $STR
+  NAME=$(basename "$f" .svg)
+  
+  STR=$(cat "$f" | sed 's/<?.*?>//' | sed 's/<!--.*-->//' | \
+        sed -re "s/(<svg.*) width=\"[0-9\.]+\" height=\"[0-9\.]+\"(.*>)/\1\2${STYLE}/" \
+        | tr -d '\n' | sed 's/^[ \t]*//;s/[ \t]*$//' )
+        #| sed -re 's/(<svg.*) height=".*"/\1/' | tr '\012' ' ')
+  
+  #STR=$(urlencode $STR) 
+  #echo $STR
+  
+  cat <<EOP
+.$NAME {
+    background: 
+      url('data:image/svg+xml;utf8,$STR')
+      no-repeat;	
+    background-size: contain;
+}
+EOP
 
-echo $STR
+done
