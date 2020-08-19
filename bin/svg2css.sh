@@ -6,22 +6,24 @@
 # konsideri prepari la SVG-on per XSL-transformo
 STYLE='<style type=\"text\/css\"><![CDATA[path{stroke:darkgreen!important}]]><\/style>'
 
-urlencode() {
-    # urlencode <string>
-    old_lc_collate=$LC_COLLATE
-    LC_COLLATE=C
-    
-    local length="${#1}"
-    for (( i = 0; i < length; i++ )); do
-        local c="${1:i:1}"
-        case $c in
-            [a-zA-Z0-9.~_-]) printf "$c" ;;
-            *) printf '%%%02X' "'$c" ;;
-        esac
-    done
-    
-    LC_COLLATE=$old_lc_collate
-}
+# tio haltas ĉe spac-signo, verŝajne ni ne bezonas "urlencode"
+# nur IE laŭdire postulas tion!
+#urlencode() {
+#    # urlencode <string>
+#    old_lc_collate=$LC_COLLATE
+#    LC_COLLATE=C
+#    
+#    local length="${#1}"
+#    for (( i = 0; i < length; i++ )); do
+#        local c="${1:i:1}"
+#        case $c in
+#            [a-zA-Z0-9.~_-]) printf "$c" ;;
+#            *) printf '%%%02X' "'$c" ;;
+#        esac
+#    done
+#    
+#    LC_COLLATE=$old_lc_collate
+#}
 
 for f in $*
 do
