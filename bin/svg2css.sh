@@ -49,6 +49,7 @@ do
       url('data:image/svg+xml;utf8,$STR')
       no-repeat;	
     background-size: contain;
+    background-position: center;
 }
 EOP
 
