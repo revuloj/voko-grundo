@@ -10,15 +10,20 @@ New()
 Reencode("UnicodeFull")
 #Reencode("iso10646-1")
 
+SetFontNames("Revo","Revo","Revo","normal","(c) 2020 Wolfram Diestel, GPL 2.0")
+
 # ⌄ ⌅ ⌆ ⏬
 Select("uni2304")
 Import("smb/i_mkash.svg")
 Select("uni2305")
 Import("smb/i_kash.svg")
-Select("uni2306")
+Select("uni2353")
 Import("smb/i_kash_ch.svg")
-Select("uni23EC")
+Select("uni234C")
 Import("smb/i_mkash_ch.svg")
+
+SelectAll()
+AutoHint()
 
 # fak-vinjetoj
 #Select("u1F69C")
@@ -199,5 +204,7 @@ Import("smb/i_mkash_ch.svg")
 
 #Generate("Revo":r + ".otf")
 #Generate($1:r + ".svg")
+Generate("stl/Revo":r + ".ttf")
+Generate("stl/Revo":r + ".svg")
 Generate("stl/Revo":r + ".woff")
 Generate("stl/Revo":r + ".woff2")
