@@ -201,8 +201,9 @@ function etendu_trd(event) {
         id.classList.remove("kasxita");
     };
     // kaŝu pli...
-    div_trd.querySelector(".pli").classList.add("kasxita");
-    div_trd.querySelector(".pref").classList.add("kasxita");
+    var 
+    p = div_trd.querySelector(".pli"); if (p) p.classList.add("kasxita");
+    p = div_trd.querySelector(".pref"); if (p) p.classList.add("kasxita");
 }
 
 /*
@@ -217,8 +218,8 @@ function make_flat_button(label,handler,hint='') {
 
 function kashu_malkashu_butonoj() {
     // aldonu kasho/malkasho-butonojn  
-    var art = document.getElementById(sec_art);
-    //var h1 = art.getElementsByTagName("H1")[0];   
+    //var art = document.getElementById(sec_art);
+    var art = document.getElementsByTagName("article")[0];
     var div=make_element("DIV",{id: "kash_btn"});
     div.appendChild(make_icon_button("i_kash_ch",kashu_chiujn_drv,"kaŝu ĉiujn derivaĵojn"));
     div.appendChild(make_icon_button("i_mkash_ch",malkashu_chiujn_drv,"malkaŝu ĉiujn derivaĵojn"));

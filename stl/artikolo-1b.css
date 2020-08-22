@@ -1,25 +1,16 @@
 @import url("piktogram-1b.css");
 
 /* HTML-elementoj */
-BODY {background: #F5F5D5; 
-      padding-right: 1.5em;
-      /*font-family: "Latin Modern Roman", "TimesNewRoman", "Liberation Serif", serif;*/
-      /*font-family: "Utopia", "TimesNewRoman", "Liberation Serif", serif;*/
-    }
+
+BODY {
+    background: #F5F5D5; 
+}
 
 H1 {color: #000000; font-size: large}
 H2 {color: #000000; 
     font-size: 110%; 
     background: #E0E0A0;
-/*    background-image: url(angulo.png);
-    background-repeat: no-repeat;
-    */
-
     border-top-left-radius: .7em;
-/*    border-color: gray;
-    border-style: outset;
-    border-width: medium;
-*/
     padding-left: 1ex;
     padding-top: 0.5ex;
     padding-bottom: 0.5ex;
@@ -29,6 +20,8 @@ H2 {color: #000000;
 H3 {font-size: 90%; border-top-width: 2px; border-top-style: solid; 
   border-top-color: #E0E0A0; padding-top: 0.5ex}
 
+  /* ni limigu tion al larĝaj ekranoj,
+  por pli malvastaj la spacoj inter la vortoj tro kreskus... */
 DD {text-align: justify}
 
 HR {border-style: dotted; border-color: black; 
@@ -42,16 +35,11 @@ DT.subart {
     margin-top: 2ex; 
     margin-bottom: 1ex; 
     font-weight: bold; 
-/*    border-right-style: dotted;
-    background: #E0E0A0; 
-    background-image: url(angulo.png); 
-    background-repeat: no-repeat;
-*/
 }
-/*
-DT.subart::before { content: "– "}
-DT.subart::after { content: " –"}
-*/
+
+header, footer, article section {
+    padding-right: 1.5em;
+}
 
 section.drv {
     width: 100%;
@@ -329,15 +317,6 @@ i.ekz::before, span.ekztrd::before { content: "\00a0•\00a0" }
     box-shadow: 5px 5px 10px;
 }
 
-/*
-.overlay button {
-    display: inline-block;
-    position: absolute;
-    right: .5em;
-    top: .5em;
-}
-*/
-
 .preferoj {
     display: grid;
     grid-template-columns: auto auto;
@@ -384,17 +363,6 @@ i.ekz::before, span.ekztrd::before { content: "\00a0•\00a0" }
 #alia_lng {
     list-style: none; /* Remove list bullets */
     padding-left: 0;
-
-    /*
-    width: fit-content;
-    width: -moz-fit-content;
-    width: -webkit-fit-content;
-    */
-    /*
-    columns: 2;
-    -webkit-columns: 2;
-    -moz-columns: 2;
-    */
 }
 
 #pref_lng li, #alia_lng li {
@@ -432,7 +400,7 @@ i.ekz::before, span.ekztrd::before { content: "\00a0•\00a0" }
     flex-direction: column;
 }
 
-BUTTON {
+article BUTTON {
     height: 1.5rem;
     margin: .1em .2em;
     /*border: 1px solid gray;*/
@@ -456,11 +424,11 @@ BUTTON {
     border-radius: .5em;
 }
 
-BUTTON:hover, #kash_btn BUTTON:hover {
+article BUTTON:hover, #kash_btn BUTTON:hover {
     background-color: #FFEEAA;
     border: 1px solid #775533;
 }    
-BUTTON:active,#kash_btn BUTTON:active {
+article BUTTON:active,#kash_btn BUTTON:active {
     background-color: #E8C888;
     border: 1px solid #775533;
 }
@@ -496,18 +464,6 @@ H2 .icon_btn {
     height: 1rem;
     width: 1rem;
     margin-bottom: -.06rem;
-/*    
-    color: darkgreen;
-    margin-right: 0.5em; 
-    width: 1.6em; 
-    height: inherit; 
-    cursor: pointer;
-    text-align:center;
-    border: none;
-    font-size: 1.2rem;
-    padding-top: .4rem;
-    font-weight: normal;
-    */
 }
 
 H2 .icon_btn:hover, H2 .icon_btn:active, H2 .icon_btn:focus {
