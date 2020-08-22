@@ -103,8 +103,13 @@ function malkashu_chiujn_drv() {
 }
 
 function kashu_malkashu_drv(event) {
+    //event.stopPropagation();
+
     var section = event.target.closest("section"); //parentElement;    
     var div = section.getElementsByClassName("kasxebla")[0];
+
+    // kelkfoje 
+
     //getNextDiv(this).classList.toggle("kasxita");
     if (div.classList.contains("kasxita")) {
         for (var el of section.getElementsByClassName("kasxebla")) {
@@ -478,7 +483,8 @@ function interna_navigado() {
     for (var k=0; k<a.length; k++) {
         var href = a[k].getAttribute("href");
         if (href && isLocalLink(href) && href != "#") {
-            a[k].addEventListener("click", function() {
+            a[k].addEventListener("click", function(event) {
+                event.stopPropagation();
                 var id = this.getAttribute("href").split('#')[1];
                 var trg = document.getElementById(id);
                 showContainingDiv(trg);
@@ -502,7 +508,8 @@ function getNextDiv(element) {
 function showContainingDiv(element) {
     if (element.nodeName == "H2") {
         var div = getNextDiv(element);
-        div.classList.remove("kasxita")
+        div.classList.remove("kasxita");
+        div.querySelector(".i_mkash").classList.replace("i_mkash","i_kash");
     } else {
         var par = element.closest(".kasxita");
         if (par) par.classList.remove("kasxita");
