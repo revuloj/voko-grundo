@@ -16,9 +16,11 @@ window.onload = function() {
 }   
 
 function preparu_art() {
-    top.document.title='Reta Vortaro ['
+    if (window.location.protocol != 'file:') {
+        top.document.title='Reta Vortaro ['
         + document.getElementById(sec_art).getElementsByTagName("H1")[0].textContent.trim()
         + ']';
+    }
     /* aktivigu nur por longaj artikoloj... */
     var d = document.getElementsByClassName("kasxebla");
     //if (d.length > js_sojlo) {

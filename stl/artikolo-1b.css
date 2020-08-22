@@ -26,8 +26,6 @@ H2 {color: #000000;
     margin-top: 2ex;
 }
 
-/*H2::after { content: "\01f5fa \01f5ea \01f30d" }*/
-
 H3 {font-size: 90%; border-top-width: 2px; border-top-style: solid; 
   border-top-color: #E0E0A0; padding-top: 0.5ex}
 
@@ -495,7 +493,9 @@ BUTTON:active,#kash_btn BUTTON:active {
 H2 .icon_btn {
     float: right; 
     border: none;
-    margin-top: -.04em;
+    height: 1rem;
+    width: 1rem;
+    margin-bottom: -.06rem;
 /*    
     color: darkgreen;
     margin-right: 0.5em; 
