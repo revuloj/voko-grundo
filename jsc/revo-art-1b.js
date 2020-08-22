@@ -2,6 +2,10 @@ const js_sojlo = 3; //30+3;
 const sec_art = "s_artikolo";
 const lingvoj_xml = "../cfg/lingvoj.xml";
 
+//const KashEvento = new Event("kashu", {bubbles: true});
+const MalkashEvento = new Event("malkashu", {bubbles: true});
+const KomutEvento = new Event("komutu", {bubbles: true});
+
 var pref_lng = [];
 var pref_dat = Date.now();
 
@@ -25,6 +29,7 @@ function preparu_art() {
     var d = document.getElementsByClassName("kasxebla");
     //if (d.length > js_sojlo) {
         preparu_kashu_sekciojn();
+        preparu_malkashu_fontojn();
         preparu_maletendu_sekciojn();
         kashu_malkashu_butonoj();
         piedlinio_preferoj();
@@ -34,19 +39,31 @@ function preparu_art() {
 }
 
 /* kaŝu sekciojn de derivaĵoj, se la artikolo estas tro longa
-   kaj provizu per ebleco remalkaŝi */
+   kaj provizu ilin per ebleco remalkaŝi */
 function preparu_kashu_sekciojn() {
     var d = document.getElementsByClassName("kasxebla");
-    var h = document.location.hash.substr(1); // derivaĵo aŭ alia elemento celita kaj do montrenda
+
+    // derivaĵo aŭ alia elemento celita kaj do montrenda
+    var h = document.location.hash.substr(1); 
     var trg = h? document.getElementById(h) : null;
     var d_vid = trg? trg.closest("section.drv, section.fontoj").firstElementChild.id : null;
+
     var multaj = d.length > js_sojlo;
     var first = true;
 
     for (var el of d) {
+
+        // provizore ne bezonata: el.addEventListener("kashu", function(event) { kashu_drv(event.currentTarget) });
+        el.addEventListener("malkashu", function(event) { malkashu_drv(event.currentTarget) });
+        el.addEventListener("komutu", function(event) { kashu_malkashu_drv(event.currentTarget) });           
+
         var h2 = getPrevH2(el);
         if (h2) {
             h2.classList.add("kashilo");
+            // ni kaŝas derivaĵon sub la sekvaj kondiĉoj:
+            // 1. estas multaj derivaĵoj en la artikolo (vd. js_sojlo)
+            // 2a. ne temas pri derivaĵo, al kiu ni celis rekte (per marko #, povas esti drv, snc, ekz, fnt)
+            // 2b. aŭ ĝi ne estas la unua derivaĵo en la artikolo, kondiĉe ke ni ne celas al specifa derivaĵo 
             if ( multaj && (h && h2.id != d_vid) || (!h && !first) ) { 
                 // \u25be
                 h2.appendChild(make_icon_button("i_mkash",
@@ -58,11 +75,24 @@ function preparu_kashu_sekciojn() {
                     null,"kaŝu derivaĵon"));
             }                    
             first = false;
+
+            // difinu eventojn
             h2.addEventListener("click", function(event) { 
-                kashu_malkashu_drv(event);
-            });    
+                //kashu_malkashu_drv(event);
+                var sec = event.target.closest("section"); //parentElement;    
+                var div = sec.querySelector("div.kasxebla");
+                div.dispatchEvent(KomutEvento);
+                //triggerEvent(div,"komutu");
+            });
         }
     }    
+}
+
+function preparu_malkashu_fontojn() {
+    var d = document.getElementsByClassName("fontoj kasxita");
+    for (var el of d) {
+        el.addEventListener("malkashu", function(event) { event.currentTarget.classList.remove("kasxita") });
+    }
 }
 
 /* kelkajn sekciojn kiel ekzemploj, tradukoj, rimarkoj ni maletendas, poo eviti troan amplekson.
@@ -80,55 +110,47 @@ function preparu_maletendu_sekciojn() {
 
 /** kaŝu ĉiujn derivaĵojn **/
 function kashu_chiujn_drv() {
-    for (var el of document.getElementsByClassName("kasxebla")) {
-        var h2 = getPrevH2(el);
-        if (h2) {
-            el.classList.add("kasxita");
-            var kash = h2.querySelector(".i_kash");
-            if (kash) kash.classList.replace("i_kash","i_mkash");
-        }
-    }    
+    for (var el of document.getElementsByClassName("kasxebla")) 
+        if (el.parentElement.classList.contains("drv")) 
+            kashu_drv(el);
 }
 
-/** malfkaŝu ĉiujn derivaĵojn **/
+/** malkaŝu ĉiujn derivaĵojn **/
 function malkashu_chiujn_drv() {
-    for (var el of document.getElementsByClassName("kasxebla")) {
-        var h2 = getPrevH2(el);
-        if (h2) {
-            el.classList.remove("kasxita");
-            var mkash = h2.querySelector(".i_mkash");
-            if (mkash) mkash.classList.replace("i_mkash","i_kash");
-        }
-    }    
+    for (var el of document.getElementsByClassName("kasxebla")) 
+        if (el.parentElement.classList.contains("drv")) 
+            malkashu_drv(el);
 }
 
-function kashu_malkashu_drv(event) {
-    //event.stopPropagation();
-
-    var section = event.target.closest("section"); //parentElement;    
-    var div = section.getElementsByClassName("kasxebla")[0];
-
-    // kelkfoje 
-
-    //getNextDiv(this).classList.toggle("kasxita");
-    if (div.classList.contains("kasxita")) {
-        for (var el of section.getElementsByClassName("kasxebla")) {
-            el.classList.remove("kasxita");
-        }
-        section.querySelector("h2 .i_mkash").classList.replace("i_mkash","i_kash");
-        // aktualigu la salto-markon per la "id" de section>h2
-        // por teni ĝin malkaŝita ĉe reŝargo de la dokumento
-        // aŭ ĉu ni lasu la originan???
-        // problemo: tiu derivaĵo saltas eble supren en la paĝo, kio povus konfuzi la leganton...
-        //var id = section.querySelector("h2").id;
-        //if (id)
-        //    document.location.hash = "#"+id;
-    } else {
-        for (var el of section.getElementsByClassName("kasxebla")) {
-            el.classList.add("kasxita");
-        }
-        section.querySelector("h2 .i_kash").classList.replace("i_kash","i_mkash");
+function kashu_drv(el) {
+    el.classList.add("kasxita");
+    var h2 = getPrevH2(el);
+    if (h2) {
+        var kash = h2.querySelector(".i_kash");
+        if (kash) kash.classList.replace("i_kash","i_mkash");
     }
+}
+
+function malkashu_drv(el) {
+    el.classList.remove("kasxita");
+    var h2 = getPrevH2(el);
+    if (h2) {
+        var mkash = h2.querySelector(".i_mkash");
+        if (mkash) mkash.classList.replace("i_mkash","i_kash");
+    }
+}
+
+function kashu_malkashu_drv(el) {
+    //event.stopPropagation();
+    //var div = section.getElementsByClassName("kasxebla")[0];
+
+    var sec = el.closest("section"); //parentElement;    
+    var div = sec.querySelector("div.kasxebla");
+
+    if (div.classList.contains("kasxita")) 
+        malkashu_drv(div)
+    else 
+        kashu_drv(div);
 }
 
 function maletendu_trd(element) {
@@ -466,7 +488,6 @@ function add_radios(parent,name,glabel,radios,handler) {
     }
 }
 
-
 function make_element(name,attributes,textcontent) {
     var element = document.createElement(name);
     for (var a in attributes) {
@@ -476,6 +497,23 @@ function make_element(name,attributes,textcontent) {
     return element;
 }
 
+/*
+function triggerEvent(el, type){
+    
+    if ('createEvent' in document) {
+         // modern browsers, IE9+
+         var e = document.createEvent('HTMLEvents');
+         e.initEvent(type, false, true);
+         el.dispatchEvent(e);
+     } 
+//     else {
+//         // IE 8
+//         var e = document.createEventObject();
+//         e.eventType = type;
+//         el.fireEvent('on'+e.eventType, e);
+//     }
+}
+*/
 
 function interna_navigado() {
     // certigu, ke sekcioj malfermiĝu, kiam ili entenas navig-celon
@@ -487,7 +525,9 @@ function interna_navigado() {
                 event.stopPropagation();
                 var id = this.getAttribute("href").split('#')[1];
                 var trg = document.getElementById(id);
-                showContainingDiv(trg);
+                //showContainingDiv(trg);
+                //triggerEvent(trg,"malkashu");
+                trg.dispatchEvent(MalkashEvento);
             });
         }
     }
@@ -499,13 +539,15 @@ function getPrevH2(element) {
     return prv;
 }
 
-function getNextDiv(element) {
-    var nxt = element.nextSibling;
-    while ( nxt && nxt.nodeName != "DIV") { nxt = nxt.nextSibling }
-    return nxt;
-}
 
+/*
 function showContainingDiv(element) {
+    function getNextDiv(element) {
+        var nxt = element.nextSibling;
+        while ( nxt && nxt.nodeName != "DIV") { nxt = nxt.nextSibling }
+        return nxt;
+    }
+
     if (element.nodeName == "H2") {
         var div = getNextDiv(element);
         div.classList.remove("kasxita");
@@ -513,18 +555,9 @@ function showContainingDiv(element) {
     } else {
         var par = element.closest(".kasxita");
         if (par) par.classList.remove("kasxita");
-        /*
-        var par = element.parentElement;
-        while (par) {
-            if (par.classList.contains("kasxita")) {
-                par.classList.remove("kasxita")
-            } else {
-                par = par.parentElement;
-            }
-        }
-        */
     }
 }
+*/
 
 function isLocalLink(url) {
     if (url[0] == '#') return true;
