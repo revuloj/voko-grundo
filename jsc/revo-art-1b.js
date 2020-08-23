@@ -19,6 +19,29 @@ window.onload = function() {
     preparu_art()
 }   
 
+window.onhashchange = function() {
+    //console.log("hashchange: "+window.location.hash )
+    //event.stopPropagation();
+    //var id = this.getAttribute("href").split('#')[1];
+    var id = window.location.hash.substr(1);
+    var trg = document.getElementById(id);
+
+    // this.console.log("ni malkaŝu "+id);
+
+    if (trg && trg.tagName == "H2") {
+        // ĉe derivaĵoj, la kaŝita div venos post h2
+        var sec = trg.closest("section"); //parentElement;    
+        var trg = sec.querySelector("div.kasxebla");
+    }
+
+    //showContainingDiv(trg);
+    //triggerEvent(trg,"malkashu");
+    if (trg)
+        trg.dispatchEvent(MalkashEvento);
+    else
+        this.console.error("ne troviĝis saltomarko "+id)
+}
+
 function preparu_art() {
     if (window.location.protocol != 'file:') {
         top.document.title='Reta Vortaro ['
@@ -33,7 +56,7 @@ function preparu_art() {
         preparu_maletendu_sekciojn();
         kashu_malkashu_butonoj();
         piedlinio_preferoj();
-        interna_navigado();
+        //interna_navigado();
         //etendu_ekzemplojn();   
     //}
 }
@@ -134,6 +157,7 @@ function kashu_drv(el) {
 }
 
 function malkashu_drv(el) {
+    // console.log("malkaŝu drv");
     el.classList.remove("kasxita");
     var h2 = getPrevH2(el);
     if (h2) {
@@ -409,7 +433,7 @@ function aldonuLingvon(event) {
     if (el.tagName == "LI") {
         var lng = el.getAttribute("data-lng");
         if (lng) {
-            console.log("+"+lng);
+            //console.log("+"+lng);
             pref_lng.push(lng);
             pref_dat = Date.now();
         }
@@ -425,7 +449,7 @@ function foriguLingvon(event) {
     if (el.tagName == "LI") {
         var lng = el.getAttribute("data-lng");
         if (lng) {
-            console.log("-"+lng);
+            //console.log("-"+lng);
             // forigu elo la areo pref_lng
             var i = pref_lng.indexOf(lng);
             pref_lng.splice(i, 1);
@@ -518,6 +542,7 @@ function triggerEvent(el, type){
 }
 */
 
+/*
 function interna_navigado() {
     // certigu, ke sekcioj malfermiĝu, kiam ili entenas navig-celon
     var a = document.getElementsByTagName("A");
@@ -535,6 +560,7 @@ function interna_navigado() {
         }
     }
 }
+*/
 
 function getPrevH2(element) {
     var prv = element.previousSibling;
