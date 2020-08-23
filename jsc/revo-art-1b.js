@@ -111,14 +111,16 @@ function preparu_maletendu_sekciojn() {
 /** kaŝu ĉiujn derivaĵojn **/
 function kashu_chiujn_drv() {
     for (var el of document.getElementsByClassName("kasxebla")) 
-        if (el.parentElement.classList.contains("drv")) 
+        if (el.parentElement.classList.contains("drv")
+        || el.parentElement.classList.contains("notoj")) 
             kashu_drv(el);
 }
 
 /** malkaŝu ĉiujn derivaĵojn **/
 function malkashu_chiujn_drv() {
     for (var el of document.getElementsByClassName("kasxebla")) 
-        if (el.parentElement.classList.contains("drv")) 
+        if (el.parentElement.classList.contains("drv")
+        || el.parentElement.classList.contains("notoj"))  
             malkashu_drv(el);
 }
 
