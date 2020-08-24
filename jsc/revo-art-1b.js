@@ -256,10 +256,12 @@ function kashu_malkashu_butonoj() {
 function piedlinio_preferoj() {
     var pied = document.body.getElementsByTagName("FOOTER")[0];
     var first_a = pied.querySelector("A");
-    var pref = make_element("A",{class: "redakto", href: "#", title: "agordu preferatajn lingvojn"},"preferoj");
-    pref.addEventListener("click",preferoj_dlg);
-    first_a.insertAdjacentElement("afterend",pref);
-    first_a.insertAdjacentText("afterend"," | ");
+    if (first_a) {
+        var pref = make_element("A",{class: "redakto", href: "#", title: "agordu preferatajn lingvojn"},"preferoj");
+        pref.addEventListener("click",preferoj_dlg);
+        first_a.insertAdjacentElement("afterend",pref);
+        first_a.insertAdjacentText("afterend"," | ");   
+    }
 }
 
 function make_button(label,handler,hint='') {
