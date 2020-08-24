@@ -16,5 +16,10 @@ scp jsc/revo-art-${release}.js ${host}:/html/revo/jsc/
 scp stl/artikolo-${release}.css ${host}:/html/revo/stl/
 scp stl/piktogram-${release}.css ${host}:/html/revo/stl/
 
+for f in xsl/inc/*
+do
+    scp $f ${host}:/html/revo/xsl/inc/
+done
+
 # poste ankaŭ novajn xsl-dosierojn... eble
 # eldonu per aparta skripto...
