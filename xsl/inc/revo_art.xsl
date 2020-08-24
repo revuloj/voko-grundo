@@ -30,7 +30,7 @@ uzata kun XSLT1-transformilo
 	</xsl:text>
 	<xsl:text>//--&gt;</xsl:text>
       </script>
-      <script src="../jsc/revo-art-1b.js"></script> 
+      <script src="{$jscdir}/{$art-jsc}"></script> 
      
     </head>
     <body>

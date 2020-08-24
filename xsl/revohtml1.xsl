@@ -36,10 +36,13 @@ transform-reguloj.
 
 <xsl:variable name="mathjax-url">https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=AM_CHTML</xsl:variable>
 <xsl:variable name="art-css">artikolo-1b.css</xsl:variable>
+<xsl:variable name="art-jsc">revo-art-1b.js</xsl:variable>
 
 <xsl:variable name="smbdir">../smb</xsl:variable>
 <xsl:variable name="xmldir">../xml</xsl:variable> 
 <xsl:variable name="cssdir">../stl</xsl:variable>
+<xsl:variable name="jscdir">../jsc</xsl:variable>
+
 <xsl:variable name="redcgi">/cgi-bin/vokomail.pl?art=</xsl:variable>
 <xsl:variable name="vivocgi">http://kono.be/cgi-bin/vivo/ViVo.cgi?tradukiReVon=</xsl:variable>
 <xsl:variable name="bibliografio">../../cfg/bibliogr.xml</xsl:variable>

@@ -22,7 +22,7 @@ uzata kun XSLT2-transformilo
 	      <link title="artikolo-stilo" type="text/css" rel="stylesheet" href="{$cssdir}/{$art-css}" />
       </xsl:if>
       <title><xsl:apply-templates select="//art/kap[1]" mode="titolo"/></title>
-      <script src="../jsc/revo-art-1b.js"></script> 
+      <script src="{$jscdir}/{$art-jsc}"></script> 
   </head>
   <body>
     <xsl:apply-templates/>
