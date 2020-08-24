@@ -15,8 +15,13 @@ var pref_dat = Date.now();
 
 ///
 window.onload = function() {    
-    restore_preferences();            
-    preparu_art()
+    restore_preferences();   
+    
+    // evitu preparon, se ni troviĝas en la redaktilo kaj
+    // la artikolo ne ĉeestas!
+    if (document.getElementById(sec_art)) {
+        preparu_art()
+    }
 }   
 
 window.onhashchange = function() {
@@ -255,12 +260,14 @@ function kashu_malkashu_butonoj() {
 
 function piedlinio_preferoj() {
     var pied = document.body.getElementsByTagName("FOOTER")[0];
-    var first_a = pied.querySelector("A");
-    if (first_a) {
-        var pref = make_element("A",{class: "redakto", href: "#", title: "agordu preferatajn lingvojn"},"preferoj");
-        pref.addEventListener("click",preferoj_dlg);
-        first_a.insertAdjacentElement("afterend",pref);
-        first_a.insertAdjacentText("afterend"," | ");   
+    if (pied) { // en la redeaktilo eble jam foriĝis...
+        var first_a = pied.querySelector("A");
+        if (first_a) {
+            var pref = make_element("A",{class: "redakto", href: "#", title: "agordu preferatajn lingvojn"},"preferoj");
+            pref.addEventListener("click",preferoj_dlg);
+            first_a.insertAdjacentElement("afterend",pref);
+            first_a.insertAdjacentText("afterend"," | ");      
+        }
     }
 }
 
