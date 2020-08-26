@@ -14,8 +14,8 @@
     extension-element-prefixes="redirect" -->
 
 
-<!-- (c) 2006 che Wolfram Diestel
-     licenco GPL 2.0
+<!-- (c) 2006-2020 ĉe Wolfram Diestel
+     laŭ permesilo GPL 2.0
 -->
 
 <xsl:include href="inc/inx_kodigo.inc"/>
@@ -123,7 +123,7 @@ select="concat($agordo-pado,'/klasoj.xml')"/></xsl:variable>
             rel="stylesheet" href="../stl/indeksoj.css"/>
     </head>
     <body>
-      <table cellspacing="0">
+      <table id="{concat('x:',substring-before(@dosiero,'.html'))}" cellspacing="0">
         <xsl:call-template name="menuo"/>
         <tr>
           <td colspan="{count(../pagho[not(@kashita='jes')])}" class="enhavo">
@@ -194,16 +194,16 @@ select="concat($agordo-pado,'/klasoj.xml')"/></xsl:variable>
 
 <xsl:template match="LISTOJ">
   <ul style="padding-left: 0; font-weight: 600">
-  <xsl:for-each select="document($klasoj)/klasoj/kls">
-    <xsl:call-template name="listoj1"/>
-  </xsl:for-each>
+    <xsl:for-each select="document($klasoj)/klasoj/kls">
+      <xsl:call-template name="listoj1"/>
+    </xsl:for-each>
   </ul>
 </xsl:template>
 
 
 <xsl:template name="listoj1">
    <li style="margin-top: 0.4em">
-      <xsl:value-of select="translate(substring-after(@nom,'#'),'_',' ')"/>
+      <span class="kls_nom"><xsl:value-of select="translate(substring-after(@nom,'#'),'_',' ')"/></span>
       <xsl:for-each select="kls">
         <ul style="font-weight: normal">
           <xsl:call-template name="listoj2"/>
@@ -403,7 +403,7 @@ select="concat($agordo-pado,'/klasoj.xml')"/></xsl:variable>
 
 <xsl:template name="menuo">
   <xsl:variable name="aktiva" select="@dosiero"/>
-  <tr>
+  <tr class="menuo">
     <xsl:for-each select="../pagho[not(@kashita='jes')]">
       <xsl:choose>
         <xsl:when test="@dosiero=$aktiva">
@@ -534,7 +534,7 @@ select="concat($agordo-pado,'/klasoj.xml')"/></xsl:variable>
             rel="stylesheet" href="../stl/indeksoj.css"/>
     </head>
     <body>
-      <table cellspacing="0">
+      <table id="{concat('x:',$pref,$lit)}" cellspacing="0">
         <xsl:choose>
           <xsl:when test="parent::node()[self::kap-oj]">
             <xsl:call-template name="menuo-eo"/>
@@ -1015,22 +1015,24 @@ select="concat($agordo-pado,'/klasoj.xml')"/></xsl:variable>
 <!-- <xsl:message><xsl:value-of select="$context/@lng"/></xsl:message> -->
 
   <xsl:variable name="lng" select="string($context/@lng)"/>
-  <xsl:for-each select="$context/litero[v]">
+  <span class="literoj">
+    <xsl:for-each select="$context/litero[v]">
 
-    <xsl:choose>
-      <xsl:when test="$lit=@name">
-        <b class="elektita">
-          <xsl:value-of select="@min"/>
-        </b><xsl:text> </xsl:text>
-      </xsl:when>
-      <xsl:otherwise>
-        <a href="{$pref}{@name}.html">
-          <xsl:value-of select="@min"/>
-        </a><xsl:text> </xsl:text>
-      </xsl:otherwise>
-    </xsl:choose>
+      <xsl:choose>
+        <xsl:when test="$lit=@name">
+          <b class="elektita">
+            <xsl:value-of select="@min"/>
+          </b><xsl:text> </xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+          <a href="{$pref}{@name}.html">
+            <xsl:value-of select="@min"/>
+          </a><xsl:text> </xsl:text>
+        </xsl:otherwise>
+      </xsl:choose>
 
-  </xsl:for-each>
+    </xsl:for-each>
+  </span>
 </xsl:template>
 
 

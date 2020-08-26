@@ -16,8 +16,8 @@
     extension-element-prefixes="redirect" -->
 
 
-<!-- (c) 2006-2018 ĉe Wolfram Diestel
-     licenco GPL 2.0
+<!-- (c) 2006 - 2020 ĉe Wolfram Diestel
+     laŭ permesilo GPL 2.0
 -->
 
 
@@ -71,53 +71,58 @@ aperas "c _x_" anstata "c_x_" -->
   <!-- redirect:write select="'titolo.html'" -->
   <html>
     <head>
-      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+      <meta charset="utf-8"/>
       <meta name="viewport" content="width=device-width,initial-scale=1"/>
       <title><xsl:value-of select="@nomo"/></title>
       <link title="artikolo-stilo" type="text/css" 
-            rel="stylesheet" href="stl/artikolo.css"/>
+            rel="stylesheet" href="stl/artikolo-1b.css"/>
       <script type="text/javascript" src="jsc/kuketoj.js"></script>
       <xsl:if test="bonveno/sercho">
         <xsl:call-template name="script-literoj"/>
       </xsl:if>
     </head>
     <body>
-      <xsl:if test="bonveno/sercho">
-        <xsl:attribute name="onload">
-  	      <xsl:text>checkCookieConsent(); document.f.sercxata.focus();</xsl:text>
-        </xsl:attribute>
-      </xsl:if>
+      <header></header>
+      <article>
+         <section id="s_artikolo" class="art">
+          <xsl:if test="bonveno/sercho">
+            <xsl:attribute name="onload">
+              <xsl:text>checkCookieConsent(); document.f.sercxata.focus();</xsl:text>
+            </xsl:attribute>
+          </xsl:if>
 
-      <h1 align="center" style="color:black; font-size: xx-large"><xsl:value-of select="@nomo"/></h1>
+          <h1 align="center" style="color:black; font-size: xx-large"><xsl:value-of select="@nomo"/></h1>
 
-      <xsl:apply-templates select="bonveno/(alineo|bildo|sercho)"/>
+          <xsl:apply-templates select="bonveno/(alineo|bildo|sercho)"/>
 
-
-      <p class="piedlinio">
-        <a class="redakto" title="Reta Vortaro, konstanta URL" target="_top"
-	   href="http://purl.org/net/voko/revo/">&#x211B;evo</a> |
-	<a class="redakto" title="Datumprotekta deklaro" 
-           href="dok/datumprotekto.html">datumprotekto</a> |
-	<a class="redakto" title="Permeso de uzado" target="_new"
-           href="dok/copying.txt">permeso</a> |
-	<a class="redakto" title="Bibliografio" target="indekso"
-	   href="dok/bibliogr.html">bibliografio</a> |
-	<a class="redakto" title="Vortaraj mallongigoj" target="indekso"
-           href="dok/mallongigoj.html">mallongigoj</a> |
-	<a class="redakto" title="Superserĉo per ViVo" target="_new"
-           href="http://kono.be/vivo">ViVo</a>
-      </p>
-      
-      <div class="kuketoaverto" id="kuketoaverto">
-        <p>
-	  Ni uzas kuketojn (retumilajn memoretojn).
-	  Uzante nian servon vi konsentas al konservado de informoj en kuketoj.
-	  Eksciu pli pri la uzado de personaj datumoj en la
-	  <a href="dok/datumprotekto.html">datumprotekta deklaro</a>.<br/>
-          <button name="konfirmo" onClick="setCookieConsent(); document.f.sercxata.focus();">Mi konfirmas</button>
-	</p>
-      </div>
-      
+        </section>
+      </article>
+      <footer>
+          <p class="piedlinio">
+            <a class="redakto" title="Reta Vortaro, konstanta URL" target="_top"
+        href="http://purl.org/net/voko/revo/">&#x211B;evo</a> |
+      <a class="redakto" title="Datumprotekta deklaro" 
+              href="dok/datumprotekto.html">datumprotekto</a> |
+      <a class="redakto" title="Permeso de uzado" target="_new"
+              href="dok/copying.txt">permeso</a> |
+      <a class="redakto" title="Bibliografio" target="indekso"
+        href="dok/bibliogr.html">bibliografio</a> |
+      <a class="redakto" title="Vortaraj mallongigoj" target="indekso"
+              href="dok/mallongigoj.html">mallongigoj</a> |
+      <a class="redakto" title="Superserĉo per ViVo" target="_new"
+              href="http://kono.be/vivo">ViVo</a>
+          </p>
+          
+          <div class="kuketoaverto" id="kuketoaverto">
+            <p>
+        Ni uzas kuketojn (retumilajn memoretojn).
+        Uzante nian servon vi konsentas al konservado de informoj en kuketoj.
+        Eksciu pli pri la uzado de personaj datumoj en la
+        <a href="dok/datumprotekto.html">datumprotekta deklaro</a>.<br/>
+              <button name="konfirmo" onClick="setCookieConsent(); document.f.sercxata.focus();">Mi konfirmas</button>
+            </p>
+          </div>
+      </footer>
     </body>
   </html>
   <!-- /redirect:write -->
