@@ -28,7 +28,7 @@ window.onhashchange = function() {
     //console.log("hashchange: "+window.location.hash )
     //event.stopPropagation();
     //var id = this.getAttribute("href").split('#')[1];
-    var id = window.location.hash.substr(1);
+    var id = getHashParts().mrk;
     var trg = document.getElementById(id);
 
     // this.console.log("ni malkaŝu "+id);
@@ -72,7 +72,7 @@ function preparu_kashu_sekciojn() {
     var d = document.getElementsByClassName("kasxebla");
 
     // derivaĵo aŭ alia elemento celita kaj do montrenda
-    var h = document.location.hash.substr(1); 
+    var h = getHashParts().mrk; 
     var trg = h? document.getElementById(h) : null;
     var d_vid = trg? trg.closest("section.drv, section.fontoj").firstElementChild.id : null;
 
@@ -137,9 +137,9 @@ function preparu_maletendu_sekciojn() {
 //    var sojlo = 3+2; // ekde tri drv + trd + fnt, au du drv kaj adm
 // if (d.length > sojlo) { // ĝis tri derivaĵoj (+tradukoj, fontoj), ne kaŝu la alineojn
     for (var el of d) {
-            if (el.classList.contains("tradukoj")) {
-                maletendu_trd(el);
-            }
+        if (el.classList.contains("tradukoj")) {
+            maletendu_trd(el);
+        }
     }
 }
 
@@ -195,13 +195,15 @@ function maletendu_trd(element) {
     //var nav_lng = navigator.languages || [navigator.language];
     var eo;
     var maletendita = false;
+    var serch_lng = getHashParts().lng;
+
     for (var id of element.children) {
         var id_lng = id.getAttribute("lang");
         // la tradukoj estas paroj de ea lingvo-nomo kaj nacilingvaj tradukoj
         if (id_lng) {
             if ( id_lng == "eo") {
                 eo = id;
-            } else if ( pref_lng.indexOf(id_lng) < 0 ) {
+            } else if ( id_lng != serch_lng && pref_lng.indexOf(id_lng) < 0 ) {
                 eo.classList.add("kasxita");
                 id.classList.add("kasxita");
                 maletendita = true;
@@ -496,17 +498,6 @@ function restore_preferences() {
     pref_dat = (prefs && prefs["w:prefdat"])? prefs["w:prefdat"] : Date.now();
 }
 
-/* 
-// kreas opcio-menuon de la artikolo
-function make_options() {
-    var div = make_element("DIV",{class: "opcioj"});
-    add_radios(div,"o_drv","derivaĵoj",[{id: "drv_elektitaj", label: "elektitaj"},{id: "drv_chiuj", label: "ĉiuj"}]);
-    add_radios(div,"o_trd","tradukoj",[{id: "trd_preferataj", label: "preferataj"},{id: "trd_chiuj", label: "ĉiuj"}]);
-    add_radios(div,"o_fnt","fontoj",[{id: "fnt_elektita", label: "elektita"},{id: "fnt_chiuj", label: "ĉiuj"}]);
-    return div;
-}
-*/
-
 // kreas grupon de opcioj (radio), donu ilin kiel vektoro da {id,label}
 function add_radios(parent,name,glabel,radios,handler) {
     if (glabel) {
@@ -540,69 +531,11 @@ function make_element(name,attributes,textcontent) {
     return element;
 }
 
-/*
-function triggerEvent(el, type){
-    
-    if ('createEvent' in document) {
-         // modern browsers, IE9+
-         var e = document.createEvent('HTMLEvents');
-         e.initEvent(type, false, true);
-         el.dispatchEvent(e);
-     } 
-//     else {
-//         // IE 8
-//         var e = document.createEventObject();
-//         e.eventType = type;
-//         el.fireEvent('on'+e.eventType, e);
-//     }
-}
-*/
-
-/*
-function interna_navigado() {
-    // certigu, ke sekcioj malfermiĝu, kiam ili entenas navig-celon
-    var a = document.getElementsByTagName("A");
-    for (var k=0; k<a.length; k++) {
-        var href = a[k].getAttribute("href");
-        if (href && isLocalLink(href) && href != "#") {
-            a[k].addEventListener("click", function(event) {
-                event.stopPropagation();
-                var id = this.getAttribute("href").split('#')[1];
-                var trg = document.getElementById(id);
-                //showContainingDiv(trg);
-                //triggerEvent(trg,"malkashu");
-                trg.dispatchEvent(MalkashEvento);
-            });
-        }
-    }
-}
-*/
-
 function getPrevH2(element) {
     var prv = element.previousSibling;
     while ( prv && prv.nodeName != "H2") { prv = prv.previousSibling }
     return prv;
 }
-
-
-/*
-function showContainingDiv(element) {
-    function getNextDiv(element) {
-        var nxt = element.nextSibling;
-        while ( nxt && nxt.nodeName != "DIV") { nxt = nxt.nextSibling }
-        return nxt;
-    }
-
-    if (element.nodeName == "H2") {
-        var div = getNextDiv(element);
-        div.classList.remove("kasxita");
-        div.querySelector(".i_mkash").classList.replace("i_mkash","i_kash");
-    } else {
-        var par = element.closest(".kasxita");
-        if (par) par.classList.remove("kasxita");
-    }
-}
-*/
 
 function isLocalLink(url) {
     if (url[0] == '#') return true;
@@ -614,6 +547,22 @@ function isLocalLink(url) {
 
 function getUrlFileName(url) {
    return url.substring(url.lastIndexOf('/')+1).split('#')[0];
+}
+
+function getHashParts() {
+    var h = (location.hash[0] == '#'
+        ? location.hash.substr(1) 
+        : location.hash);
+    var r = {};
+    for (p of h.split('&')) {
+        if (p.indexOf('=') < 0) {
+            r.mrk = p
+        } else {
+            var v = p.split('=');
+            r[v[0]] = v[1];
+        }
+    }
+    return r;
 }
 
 function eo_ascii(str) {
