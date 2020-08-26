@@ -81,12 +81,19 @@ function preparu_kashu_sekciojn() {
 
     for (var el of d) {
 
+        // forigu titolon "administraj notoj", se la sekcio estas malplena
+        if (el.closest(".admin") && el.childElementCount == 0) {
+            el.closest(".admin").textContent= '';
+            continue;
+        }
+        
         // provizore ne bezonata: el.addEventListener("kashu", function(event) { kashu_drv(event.currentTarget) });
         el.addEventListener("malkashu", function(event) { malkashu_drv(event.currentTarget) });
         el.addEventListener("komutu", function(event) { kashu_malkashu_drv(event.currentTarget) });           
 
         var h2 = getPrevH2(el);
         if (h2) {
+
             h2.classList.add("kashilo");
             // ni kaŝas derivaĵon sub la sekvaj kondiĉoj:
             // 1. estas multaj derivaĵoj en la artikolo (vd. js_sojlo)
