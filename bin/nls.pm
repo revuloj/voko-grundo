@@ -39,8 +39,8 @@ sub cmp_nls {
     my $letters = \%{"letters_$lng"};
     my $aliases = \%{"aliases_$lng"};
     
-    unless (defined %$letters) { 
-	$letters = \%letters_la;
+    unless (%$letters) { 
+	    $letters = \%letters_la;
     }
 
     # ignoru interpunkcion
@@ -50,11 +50,11 @@ sub cmp_nls {
 #    $vorto1 =~ s/\PL//g;
 #    $vorto2 =~ s/\PL//g;
 
-    if (defined %$aliases) {
-	while (($from,$to)=each %$aliases) {
-	    $vorto1 = replace($vorto1,$from,$to);
-	    $vorto2 = replace($vorto2,$from,$to);
-	}
+    if (%$aliases) {
+        while (($from,$to)=each %$aliases) {
+            $vorto1 = replace($vorto1,$from,$to);
+            $vorto2 = replace($vorto2,$from,$to);
+        }
     }
 
 
@@ -96,17 +96,17 @@ sub letter_nls {
 #    $chr = pack("U*",unpack("U*",$chr));
 #    print "letter_nls: $chr (".length($chr).")\n" if ($debug);
  
-    unless (defined %$letters) {
+    unless (%$letters) {
 	$letters = \%{"letters_la"};
     }
     
-    if (defined %$aliases) {
+    if (%$aliases) {
 	while (($from,$to)=each %$aliases) {
 	    $chr = replace($chr,$from,$to); 
 	}
     }
    
-    if (defined %$letters) {
+    if (%$letters) {
 #	return ( ${$$letters{substr($chr,0,1)}}[2] || '?' );
 #	print "letter_nls 1a: ".unpack("U",$chr).".".
 #	    pack("U",unpack("U",$chr))."\n" if ($debug);
@@ -155,17 +155,17 @@ sub letter_asci_nls {
     my $letters = \%{"letters_$lng"};
     my $aliases = \%{"aliases_$lng"};
     
-    unless (defined %$letters) {
+    unless (%$letters) {
 	$letters = \%{"letters_la"};
     }
 
-    if (defined %$aliases) {
+    if (%$aliases) {
 	while (($from,$to)=each %$aliases) {
 	    $chr = replace($chr,$from,$to); 
 	}
     }
        
-    if (defined %$letters) {
+    if (%$letters) {
 	return ( ${$$letters{pack("U",unpack("U",$chr))}}[3] || '0' );
     } else {
 	$chr =~ s/[^A-Za-z]/0/; # specialaj signoj ne estu en dosiernomoj
@@ -349,7 +349,7 @@ sub defined_nls {
 
   while (($lit,$d)=each(%$letters)) {
       my @desc = @$d;
-      if (defined %$aliases) {
+      if (%$aliases) {
 	  while (($from,$to)=each %$aliases) {
 	      if ($to) { 
 		  $lit = replace($lit,$to,$from); 
