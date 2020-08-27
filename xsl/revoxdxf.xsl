@@ -27,15 +27,23 @@ reguloj por XDXF universala vortar-intershangha formato
 
 <!-- kelkaj variabloj -->
 
-<!-- xsl:variable name="smbdir">../smb</xsl:variable -->
+<xsl:variable name="mathjax-url">https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=AM_CHTML</xsl:variable>
+<xsl:variable name="art-css">artikolo-1b.css</xsl:variable>
+<xsl:variable name="art-jsc">revo-art-1b.js</xsl:variable>
+
+<xsl:variable name="cssdir">/revo/stl</xsl:variable>
+<xsl:variable name="jscdir">/revo/jsc</xsl:variable>
+
+<xsl:variable name="smbdir">../smb</xsl:variable>
 <xsl:variable name="xmldir">../xml</xsl:variable> 
 <!-- xsl:variable name="cssdir">../stl</xsl:variable -->
 <!-- xsl:variable
 name="redcgi">/cgi-bin/vokomail.pl?art=</xsl:variable -->
-<xsl:variable name="bibliografio">../cfg/bibliogr.xml</xsl:variable>
-<xsl:variable name="bibliogrhtml">../dok/bibliogr.xml</xsl:variable>
+<xsl:variable name="bibliografio">../../../revo/cfg/bibliogr.xml</xsl:variable>
+<xsl:variable name="bibliogrhtml">../../../revo/dok/bibliogr.xml</xsl:variable>
 <xsl:variable name="revo">/home/revo/revo</xsl:variable>
 <xsl:variable name="lingvoj_cfg" select="'../cfg/lingvoj.xml'"/>
+<xsl:variable name="klasoj_cfg" select="'../../cfg/klasoj.xml'"/>
 <xsl:variable name="fakoj_cfg" select="'../cfg/fakoj.xml'"/>
 
 <!-- ilustrite por HTML kun grafikoj ktp.
@@ -426,6 +434,12 @@ inx_kodigo.inc (saxon) -->
   <xsl:value-of select="normalize-space(.)"/>
 </xsl:template>
  -->
+
+<xsl:template name="eo-kodigo">
+  <xsl:param name="str"/>
+  <xsl:value-of select="$str"/> 
+</xsl:template>
+
 
 </xsl:stylesheet>
 
