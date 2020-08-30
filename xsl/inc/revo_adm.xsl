@@ -91,7 +91,9 @@ reguloj por prezentado de la administraj notoj
     </xsl:choose>
   
     <xsl:value-of 
-      select="substring-before(substring-after(@mrk,',v'),'revo')"/>
+      select="concat(
+        substring-before(substring-after(@mrk,',v'),'revo'),
+        substring-before(substring-after(@mrk,',v'),'afido'))"/>
   </span>
   <br />
 </xsl:template>
