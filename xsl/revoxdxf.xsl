@@ -215,7 +215,8 @@ name="redcgi">/cgi-bin/vokomail.pl?art=</xsl:variable -->
   ) and (
   @lng='la' or 
   @lng='de' or 
-  @lng='en' or 
+  @lng='en' or
+  @lng='es' or 
   @lng='ru' or
   @lng='fr' or 
   @lng='hu' or 
@@ -261,6 +262,7 @@ name="redcgi">/cgi-bin/vokomail.pl?art=</xsl:variable -->
   @lng='la' or 
   @lng='de' or 
   @lng='en' or 
+  @lng='es' or 
   @lng='ru' or 
   @lng='fr' or 
   @lng='hu' or 
