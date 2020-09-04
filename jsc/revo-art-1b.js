@@ -88,8 +88,14 @@ function preparu_kashu_sekciojn() {
         }
         
         // provizore ne bezonata: el.addEventListener("kashu", function(event) { kashu_drv(event.currentTarget) });
-        el.addEventListener("malkashu", function(event) { malkashu_drv(event.currentTarget) });
-        el.addEventListener("komutu", function(event) { kashu_malkashu_drv(event.currentTarget) });           
+        el.addEventListener("malkashu", function(event) { 
+            malkashu_drv(event.currentTarget);
+            event.stopPropagation();
+        });
+        el.addEventListener("komutu", function(event) { 
+            kashu_malkashu_drv(event.currentTarget);
+            event.stopPropagation();
+        });           
 
         var h2 = getPrevH2(el);
         if (h2) {
@@ -126,7 +132,10 @@ function preparu_kashu_sekciojn() {
 function preparu_malkashu_fontojn() {
     var d = document.getElementsByClassName("fontoj kasxita");
     for (var el of d) {
-        el.addEventListener("malkashu", function(event) { event.currentTarget.classList.remove("kasxita") });
+        el.addEventListener("malkashu", function(event) { 
+            event.currentTarget.classList.remove("kasxita");
+            event.stopPropagation();
+        });
     }
 }
 
@@ -259,12 +268,13 @@ function make_flat_button(label,handler,hint='') {
 function kashu_malkashu_butonoj() {
     // aldonu kasho/malkasho-butonojn  
     //var art = document.getElementById(sec_art);
-    var art = document.getElementsByTagName("article")[0];
+    //var art = document.getElementsByTagName("article")[0];
     var div=make_element("DIV",{id: "kash_btn"});
     div.appendChild(make_icon_button("i_kash_ch",kashu_chiujn_drv,"kaŝu ĉiujn derivaĵojn"));
     div.appendChild(make_icon_button("i_mkash_ch",malkashu_chiujn_drv,"malkaŝu ĉiujn derivaĵojn"));
     //h1.appendChild(make_button(icon_opcioj,preferoj_dlg,"agordu viajn preferatajn lingvojn"));
-    art.appendChild(div);
+    //art.appendChild(div);
+    document.body.prepend(div);
 }
 
 function piedlinio_preferoj() {
