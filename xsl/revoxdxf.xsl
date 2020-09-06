@@ -2,8 +2,8 @@
 		version="1.0">
 
 
-<!-- (c) 2015 che Wolfram Diestel 
-     licenco GPL 2.0
+<!-- (c) 2015-2020 ĉe Wolfram Diestel 
+     permesilo GPL 2.0
 
 reguloj por XDXF universala vortar-intershangha formato
 
