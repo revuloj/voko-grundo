@@ -16,12 +16,7 @@ var pref_dat = Date.now();
 ///
 window.onload = function() {    
     restore_preferences();   
-    
-    // evitu preparon, se ni troviĝas en la redaktilo kaj
-    // la artikolo ne ĉeestas!
-    if (document.getElementById(sec_art)) {
-        preparu_art()
-    }
+    preparu_art()
 }   
 
 window.onhashchange = function() {
@@ -48,6 +43,10 @@ window.onhashchange = function() {
 }
 
 function preparu_art() {
+    // evitu preparon, se ni troviĝas en la redaktilo kaj
+    // la artikolo ne ĉeestas!
+    if (! document.getElementById(sec_art)) return;
+
     if (window.location.protocol != 'file:') {
         top.document.title='Reta Vortaro ['
         + document.getElementById(sec_art).getElementsByTagName("H1")[0].textContent.trim()
