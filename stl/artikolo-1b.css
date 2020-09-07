@@ -38,7 +38,7 @@ DT.subart {
 }
 
 header, footer, article section {
-    padding-right: 1.5em;
+    padding-right: 2.2em;
 }
 
 section.drv {
@@ -271,6 +271,10 @@ A IMG.viki:active {background-color:  #a0a070; border: 2px inset gray}
 .frm { font-style: normal }
 .frm_am { font-size: 90% }
 
+.nom, .nac {
+    letter-spacing: .05em;
+}
+
 .bld_atrib { font-size: 80%; color: gray }
 .bld_atrib:link { font-size: 80%; color: gray }
 .bld_atrib:visited { font-size: 80%; color: gray }
@@ -392,12 +396,29 @@ i.ekz::before, span.ekztrd::before { content: "\00a0•\00a0" }
 }    
 
 #kash_btn {
-    position: fixed;
-    right: 0;
-    bottom: 50%;
-    margin-bottom: -1rem;
+    position: absolute;
+    right: .75em;
+    /*bottom: 50%;
+    margin-bottom: -1rem;*/
+    top: 80vh;
     display: flex;
     flex-direction: column;
+}
+
+#kash_btn BUTTON {
+    height: 2rem;
+    width: 1.5rem;
+    margin: .3em .2em;
+    background-size: 80%;
+    background-position: center; 
+
+    /*border: 1px solid gray;*/
+    box-shadow: 1px 1px 3px gray;
+    background-color: #E0E0A0;
+
+    /* border: none; */
+    border: 1px solid #E0E0A0;
+    border-radius: .4em;
 }
 
 article BUTTON {
@@ -412,17 +433,6 @@ article BUTTON {
     border-radius: .5em;
 }
 
-#kash_btn BUTTON {
-    height: 1.5rem;
-    margin: .3em .2em;
-    /*border: 1px solid gray;*/
-    box-shadow: 1px 1px 3px gray;
-    background-color: #E0E0A0;
-
-    /* border: none; */
-    border: 1px solid #E0E0A0;
-    border-radius: .5em;
-}
 
 article BUTTON:hover, #kash_btn BUTTON:hover {
     background-color: #FFEEAA;

@@ -27,13 +27,24 @@ kaj stiloj (em,ctl,sup...)
 </xsl:template>
 
 <xsl:template match="ekz/tld|ind/tld">
+  <xsl:variable name="rad">
+    <xsl:choose>
+      <xsl:when test="@var">
+        <xsl:value-of select="ancestor::art/kap/var/kap/rad[@var=current()/@var]"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="ancestor::art/kap/rad"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
   <span class="ekztld">
   <xsl:choose>
     <xsl:when test="@lit">
-      <xsl:value-of select="concat(@lit,substring(ancestor::art/kap/rad,2))"/>
+      <xsl:value-of select="concat(@lit,substring($rad,2))"/>
     </xsl:when>
     <xsl:otherwise>
-      <xsl:value-of select="ancestor::art/kap/rad"/>
+      <xsl:value-of select="$rad"/>
     </xsl:otherwise>
   </xsl:choose>
   </span>
@@ -289,6 +300,17 @@ kaj stiloj (em,ctl,sup...)
   <span class="frm"><xsl:apply-templates/></span>
 </xsl:template>
 
+<xsl:template match="nom">
+  <span class="nom"><xsl:apply-templates/></span>
+</xsl:template>
+
+<xsl:template match="nac">
+  <span class="nac"><xsl:apply-templates/></span>
+</xsl:template>
+
+<xsl:template match="esc">
+  <span class="esc"><xsl:apply-templates/></span>
+</xsl:template>
 
 <xsl:template match="k">
   <i><xsl:apply-templates/></i>

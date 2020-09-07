@@ -6,6 +6,8 @@ skalo:=1;
 picture pic;
 pic := image (
 
+    drawoptions(withcolor .3green);
+
     pickup pencircle scaled 12;
     draw (-50,92)--(50,92);
     draw (-40,30)--(0,70)--(40,30);
@@ -16,6 +18,6 @@ pic := image (
 );
 
 coc_svg(pic,skalo);
-%coc_png(pic,skalo);
+coc_rgb_png(pic,skalo);
 
 end.

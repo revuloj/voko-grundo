@@ -2,8 +2,8 @@
 		version="1.0">
 
 
-<!-- (c) 2015 che Wolfram Diestel 
-     licenco GPL 2.0
+<!-- (c) 2015-2020 ĉe Wolfram Diestel 
+     permesilo GPL 2.0
 
 reguloj por XDXF universala vortar-intershangha formato
 
@@ -200,10 +200,41 @@ name="redcgi">/cgi-bin/vokomail.pl?art=</xsl:variable -->
         </ar>
 -->
 
+<!-- 
+  Pliaj lingvoj laŭ: https://github.com/revuloj/voko-formiko/issues/10
+  Franca, Itala, Portugala, Latineca, Greka, Sveda, Angla, Bretona, Bulgara, Kataluna, Nederlanda,
+  Persa, Pola, Rumana, Rusa, Slovaka:
 
+  fr, it, pt, la, el, sv, en, br, bg, ca, nl, fa, pl, ro, ru, sk
+-->
 
-<xsl:template match="node()[self::snc or self::drv or self::subdrv]/trdgrp[@lng='la' or @lng='de' or @lng='en' or @lng='ru'
-                            or @lng='fr' or @lng='hu' or @lng='be']">
+<xsl:template match="trdgrp[(
+  parent::snc or 
+  parent::drv or 
+  parent::subdrv
+  ) and (
+  @lng='la' or 
+  @lng='de' or 
+  @lng='en' or
+  @lng='es' or 
+  @lng='ru' or
+  @lng='fr' or 
+  @lng='hu' or 
+  @lng='be' or
+  @lng='it' or 
+  @lng='pt' or 
+  @lng='el' or 
+  @lng='sv' or 
+  @lng='br' or 
+  @lng='bg' or 
+  @lng='ca' or 
+  @lng='nl' or 
+  @lng='fa' or 
+  @lng='pl' or 
+  @lng='ro' or 
+  @lng='sk' or 
+  @lng='cs' 
+  )]">
   <dtrn>
     <xsl:text>/</xsl:text>
     <xsl:value-of select="@lng"/>
@@ -223,8 +254,33 @@ name="redcgi">/cgi-bin/vokomail.pl?art=</xsl:variable -->
 -->
 </xsl:template>
 
-<xsl:template match="node()[self::snc or self::drv or self::subdrv]/trd[@lng='la' or @lng='de' or @lng='en' or @lng='ru'
-                            or @lng='fr' or @lng='hu' or @lng='be']">
+<xsl:template match="trd[(
+  parent::snc or 
+  parent::drv or 
+  parent::subdrv
+  ) and (
+  @lng='la' or 
+  @lng='de' or 
+  @lng='en' or 
+  @lng='es' or 
+  @lng='ru' or 
+  @lng='fr' or 
+  @lng='hu' or 
+  @lng='be' or
+  @lng='it' or 
+  @lng='pt' or 
+  @lng='el' or 
+  @lng='sv' or 
+  @lng='br' or 
+  @lng='bg' or 
+  @lng='ca' or 
+  @lng='nl' or 
+  @lng='fa' or 
+  @lng='pl' or 
+  @lng='ro' or 
+  @lng='sk' or 
+  @lng='cs' 
+  )]">
   <dtrn>
     <xsl:text>/</xsl:text>
     <xsl:value-of select="@lng"/>
