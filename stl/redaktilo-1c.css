@@ -1,0 +1,326 @@
+/***
+
+html {
+    margin: 0;
+    height: 100%;
+}
+
+body {
+    background-color: lightgoldenrodyellow;
+    height: 100%;
+    margin: 0;
+}
+
+h2 {
+    background-color: palegoldenrod;
+    border: 2px solid palegoldenrod;
+    margin-bottom: 0;
+}
+
+***/
+
+#r\:redaktilo {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    /*overflow: auto; */
+}
+
+#r\:navigado h1 {
+    /*font-family: monospace;*/
+    border-radius: 3px;
+    border: 1px solid black;
+    padding: 0.1em 0.5em;
+}
+
+#r\:art_titolo {
+    color: black;
+    text-decoration: none;
+    /*overflow: auto; */
+}
+
+#r\:tabulo {
+    flex-basis: 50%;
+    flex-grow: 1;
+    flex-shrink: 1;
+    overflow: auto; /* ŝajne grava */
+    /*max-height: 0%; */
+
+    margin: 0.3em 0.5em;
+    padding: 0; /*0.5em;*/
+    border: 1px dotted goldenrod;
+
+}
+
+#r\:navigado {    
+    flex-shrink: 0;
+    flex-grow: 0;
+
+    display: flex;
+    align-items: flex-end;
+
+    margin-bottom: 0;
+    margin-right: 0.5em;
+    margin-left: 0.5em;
+}
+
+#r\:navigado>* {
+    margin-bottom: 0;
+    /*dbg:  border: 1px solid red; */
+}
+
+#r\:navigado .filler {
+    width: 2em;
+    flex-grow: 3;
+}
+
+#r\:nav_btn {
+    display: flex;
+    align-items: center;
+}
+
+/*
+#r\:nav_btn>* {
+    dbg  border: 1px solid green;
+}*/
+
+#r\:tab_txmltxt {
+    height: 100%;
+    min-height: 10em;
+    display: flex;    
+    flex-direction: column;
+}
+
+#r\:tab_trigardo {
+   height: 100%; /* aŭ "auto"? */
+   margin: 0.5em;
+    /*
+    margin: 0.3em 0.5em;
+    padding: 0.5em;
+    border: 1px dotted goldenrod;
+    */
+}
+
+#r\:eraroj {
+    margin: 0.5em;
+    padding: 0.3em;
+    min-height: 2em;
+    max-height: 8em;
+    overflow: auto;
+    border: 2px solid orangered;
+}
+
+#r\:eraroj.konfirmo {
+    border: 2px solid seagreen;
+}
+
+textarea {
+    margin: 0; /*1px 0.3em;*/
+    height: 25em;
+    min-height: 8em;
+
+    flex: 1; /* consume available width */     
+}
+
+fieldset {
+    /*
+    display: flex;
+    flex-direction: row;*/
+
+    border: none;
+    border-bottom: 2px dotted gray;
+    margin: 0;
+    margin-bottom: 1px;
+    padding: 0.5em;
+    background-color: palegoldenrod;
+}
+
+.collapsed {
+    display: none !important;
+    /*position: absolute;
+    top: -1000em;
+    left: -1000em;*/
+}
+
+fieldset legend {
+    text-decoration: underline;
+    font-weight: bold;
+    /*font-family: monospace;*/
+    padding: 0.5em;
+    border-radius: 4px;
+    background-color: palegoldenrod;
+}
+
+span.right {
+    float: right;
+}
+
+
+.rhelpo a {
+    font-weight: bold;
+    color: black;
+}
+
+
+.averto {
+    margin-top: 0;
+    border: 2px solid palegoldenrod;
+    /*font-style: italic; */
+    padding: 0.5em 2em;
+    /*width: 66%; */
+}
+
+select {
+    /*border-width: 2px;
+    border-radius: 3px;*/
+    /*-webkit-appearance: none;*/
+    padding: 0.3em 0.5em;
+    /*font-size: 1rem;*/
+}
+
+input {
+    margin: 3px 1px 0px 1px;
+    padding: 0.3em 0.5em;
+    /*font-size: 1rem;*/
+    max-width: 40%;
+}
+
+button, input[type="button"], input[type="checkbox"] {
+    padding: 0.3em 0.5em;
+    /*border-radius: 3px;*/
+    box-shadow: 1px 1px 2px;
+    /*font-family: monospace;*/
+    /* font-size: 1rem;*/
+}
+
+.help_btn {
+    width: 2em;
+    height: 2em;
+    font-weight: bold;
+    padding-left: 0;
+    padding-right: 0;
+    text-align: center;
+    border-radius: 50%;
+    border: 1px solid black;
+    box-shadow: 1px 1px 2px;
+}
+
+.rubriko {
+    text-align: right;
+}
+
+.piedlinio {
+    max-height: 1.6em;
+    color: #104040; 
+    font-family: monospace;
+    text-align: center
+}
+
+/* https://codepen.io/mallendeo/pen/eLIiG */
+.tgl-cnt {
+    margin: 1px .2em;
+}
+.tgl {
+    display: none;
+}
+.tgl, .tgl:after, .tgl:before, .tgl *, .tgl *:after, .tgl *:before, .tgl + .tgl-btn {
+    box-sizing: border-box;
+}
+.tgl::-moz-selection, .tgl:after::-moz-selection, .tgl:before::-moz-selection, .tgl *::-moz-selection, .tgl *:after::-moz-selection, .tgl *:before::-moz-selection, .tgl + .tgl-btn::-moz-selection {
+    background: none;
+}
+.tgl::selection, .tgl:after::selection, .tgl:before::selection, .tgl *::selection, .tgl *:after::selection, .tgl *:before::selection, .tgl + .tgl-btn::selection {
+    background: none;
+}
+.tgl + .tgl-btn {
+    display: inline-block;
+    outline: 0;
+    padding: 0.3em 0.5em;
+
+    width: 3em;
+    height: 1.85em;
+/*
+    box-sizing: border-box;    
+    position: relative;
+    */
+    cursor: pointer;
+    -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none;
+}
+.tgl + .tgl-btn:after, .tgl + .tgl-btn:before {
+    position: relative;
+    display: block;
+    content: "";
+    width: 50%;
+    height: 100%;
+}
+.tgl + .tgl-btn:after {
+    left: 0;
+}
+.tgl + .tgl-btn:before {
+    display: none;
+}
+.tgl:checked + .tgl-btn:after {
+    left: 50%;
+}
+
+.tgl-flip + .tgl-btn {
+    /*padding: 2px;*/
+    -webkit-transition: all .2s ease;
+    transition: all .2s ease;
+    /*font-family: monospace;*/
+    /*font-size: 1rem;*/
+    height: 1.8rem;
+    -webkit-perspective: 100px;
+            perspective: 100px;
+}
+.tgl-flip + .tgl-btn:after, .tgl-flip + .tgl-btn:before {
+    display: inline-block;
+    -webkit-transition: all .4s ease;
+    transition: all .4s ease;
+    width: 100%;
+    text-align: center;
+    position: absolute;
+    line-height: 2em;
+    /*font-weight: bold;*/
+    color: black;
+    position: absolute;
+    top: 0;
+    left: 0;
+    -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+    border-radius: 2px;
+}
+.tgl-flip + .tgl-btn:after {
+    content: attr(data-tg-on);
+    background: goldenrod;
+    -webkit-transform: rotateY(-180deg);
+            transform: rotateY(-180deg);
+}
+.tgl-flip + .tgl-btn:before {
+    background: #eee;
+    border:1px solid gray;
+    content: attr(data-tg-off);
+}
+.tgl-flip + .tgl-btn:active:before {
+    -webkit-transform: rotateY(-20deg);
+            transform: rotateY(-20deg);
+}
+.tgl-flip:checked + .tgl-btn:before {
+    -webkit-transform: rotateY(180deg);
+            transform: rotateY(180deg);
+}
+.tgl-flip:checked + .tgl-btn:after {
+    -webkit-transform: rotateY(0);
+            transform: rotateY(0);
+    left: 0;
+    background: palegoldenrod;
+    border: 1px solid goldenrod;
+}
+.tgl-flip:checked + .tgl-btn:active:after {
+    -webkit-transform: rotateY(20deg);
+            transform: rotateY(20deg);
+}
+

@@ -1,0 +1,543 @@
+@import url("normalize.css");
+@import url("koloroj.css");
+@import url("piktogram-1c.css");
+
+/* HTML-elementoj */
+BODY, ARTICLE, HEADER, FOOTER {
+    background-color: var(--main-bgr-clr); 
+    color: var(--main-fnt-clr); 
+    padding-right: min(2%,1.5em);
+    padding-left: min(1%,.75em);
+      /*font-family: "Latin Modern Roman", "TimesNewRoman", "Liberation Serif", serif;*/
+      /*font-family: "Utopia", "TimesNewRoman", "Liberation Serif", serif;*/
+    }
+
+H1 {color: var(--main-fnt-clr); font-size: large}
+H2 {color: var(--main-fnt-clr); 
+    font-size: 110%; 
+    background: var(--mh2-bgr-clr);
+/*    background-image: url(angulo.png);
+    background-repeat: no-repeat;
+    */
+
+    border-top-left-radius: .7em;
+    padding-left: 1ex;
+    padding-top: 0.5ex;
+    padding-bottom: 0.5ex;
+    margin-top: 2ex;
+}
+
+/*** H3 ne plu estas uzata en artikoloj, sed eble tamen en kadro "precipa" - necesas kontroli tion!
+H3 {font-size: 90%; border-top-width: 2px; border-top-style: solid; 
+  border-top-color: #E0E0A0; padding-top: 0.5ex}
+***/
+
+  /* ni limigu tion al larĝaj ekranoj,
+  por pli malvastaj la spacoj inter la vortoj tro kreskus... */
+DD {text-align: justify}
+
+HR {
+  border-style: dotted; 
+  border-color: var(--main-fnt-clr); 
+  border-top-width: 2px;
+  border-bottom-width: 0px;
+  margin-top: 4ex}
+DT.subart { 
+    border-top-style: dotted; 
+    border-width: 2px; 
+    padding: 1ex;
+    margin-top: 2ex; 
+    margin-bottom: 1ex; 
+    font-weight: bold; 
+}
+
+header, footer, article section {
+    padding-right: 1.5em;
+}
+
+section.drv {
+    width: 100%;
+}
+
+/* ni provas ordigi difinojn ktp. flank-al-falnke kun la listo de tradukoj */
+section.drv>div, section.subart>div {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-top: 1em;
+}
+
+div.drv-enh, div.subart-enh, dl.tradukoj {
+    max-width: 50em;
+    line-height: 120%;
+}
+
+div.drv-enh dl, div.subart-enh dl {
+    display: grid;
+    grid-template-columns: 2em auto;
+    grid-gap: 0.5em;
+    margin-block-start: 0;
+    margin-block-end: 0;
+}
+
+div.drv-enh dt, div.subart-enh dt {
+    grid-column-start: 1;
+}
+  
+div.drv-enh dd, div.subart-enh dd {
+    grid-column-start: 2;
+    margin-left: 0.5em;
+}
+
+div.drv-enh dl span, div.subart-enh dl span {
+    grid-column: 1 / span 2;
+}
+
+div.fontoj {
+    margin: 1em 3em;
+    border-top: 1px solid var(--main-brd-clr); 
+}
+
+section.admin {
+    margin-top: 1em;
+}
+
+section.tradukoj {
+    margin-top: 0.5em;
+    margin-left: 2em;
+    margin-right: 4em;
+
+    display: flex;
+    justify-content: flex-end;
+}
+
+dl.tradukoj {
+    height: fit-content;
+    height: -moz-fit-content;
+    height: -webkit-fit-content;
+    width: fit-content;
+    width: -moz-fit-content;
+    width: -webkit-fit-content;
+    /*
+    display: grid;    
+    grid-template-columns: auto auto;
+    */
+
+    padding-left: 0.5em; 
+    padding-right: 0.5em; 
+    border-left: 2px solid var(--main-brd-clr); 
+    border-right: 2px solid var(--main-brd-clr); 
+}  
+
+dl.tradukoj {
+    display: grid;
+    grid-template-columns: max-content auto;
+    margin-block-start: 0;
+    margin-block-end: 0;
+}
+  
+dl.tradukoj dt {
+    grid-column-start: 1;
+}
+  
+dl.tradukoj dd {
+    grid-column-start: 2;
+}
+
+dl.tradukoj .lng {
+    color: var(--label-fnt-clr); 
+    /* margin-right: 0.5em;*/
+}
+/*
+.trd h3 { 
+    display: inline;
+    border-style: none;
+    font-weight: normal;
+    color: gray; padding-right: 0.7em; 
+}
+.trd h3::after { content: ": " }
+div.trd_lng_2 { display: inline; line-height: 135%;  }
+*/
+
+SUP {font-size: 75%}
+SUP.ofc { margin-right: 0.7ex; }
+
+
+/* ekzemploj */
+.ekz {color: var(--ekz-fnt-clr)}
+.rimekz {font-style: italic}
+
+/* difinoj */
+.drvdif {color: var(--main-fnt-clr)}
+.sncgrpdif {color: var(--main-fnt-clr)}
+.dif {color: var(--main-fnt-clr)}
+
+/* rimarkoj */
+div.rim { margin-top: .3em; }
+.rim {color: var(--rim-fnt-clr)}
+
+/* referencoj */
+.ref {color: var(--ref-fnt-clr)}
+
+/* klarigo */
+.klr {font-style: normal}
+
+/*tradukoj*/
+.trd {color: var(--label-fnt-clr)}
+.rimtrd {font-style: italic}
+.diftrd {font-style: italic}
+.trdeo {color: var(--label-fnt-clr); font-weight: bold}
+.trdnac {color: var(--label-fnt-clr)}
+
+/* fontindikoj en la teksto */
+.fnt {font-style: normal}
+.fntref {font-size: small; font-style: normal; font-stretch: extra-condensed}
+
+/* fontindikaj piednotoj */
+.fontoj {color: var(--fnt-fnt-clr); font-size: small}
+.notoj {color: var(--adm-fnt-clr); font-size: small}
+/* notoj pri mankoj */
+.mankoj {font-family: monospace; font-size: small}
+
+/* redaktolinio malsupre de la artikolo */
+.redakto {color: var(--label-fnt-clr)}
+
+
+/* A... */
+A:link, A:visited {color: var(--a-fnt-clr)}
+
+A.dif:link, 
+A.ekz:link, 
+A.bld:link, 
+A.klr:link, 
+A.ref:link, 
+A.fnt:link, 
+A.fntref:link, 
+A.rim:link,
+A.mankoj:link,
+A.redakto:link,
+A.dif:visited, 
+A.ekz:visited, 
+A.bld:visited, 
+A.klr:visited, 
+A.ref:visited, 
+A.fnt:visited, 
+A.fntref:visited, 
+A.rim:visited,
+A.mankoj:visited,
+A.redakto:visited {
+    text-decoration: underline; 
+    color: inherit;
+}
+
+A:hover {
+    color: var(--main-hov-fnt-clr) !important
+}
+A.active {
+    color: var(--main-act-fnt-clr) !important
+}
+
+/* bildoj k.s. */
+.flago {  border-color: var(--svg-brd-clr); border-width: 1px;  border-style: outset}
+EMBED.svg { border-color: var(--svg-brd-clr); border-width: 1px; background: var(--svg-bgr-clr); 
+    border-style: solid; padding: 2px; margin: 0.5em} 
+OBJECT.svg { border-color: var(--svg-brd-clr); border-width: 1px; background: var(--svg-bgr-clr); 
+    border-style: solid; padding: 2px; margin: 0.5em} 
+
+IMG { background: none }
+IMG.svg { border-color: var(--svg-brd-clr); border-width: 1px; background: var(--svg-bgr-clr); 
+    border-style: solid; padding: 2px; margin: 0.5em} 
+IMG.bld { border-color: var(--bld-brd-clr); border-width: 1px; background: var(--bld-bgr-clr); 
+    border-style: solid; padding: 2px; margin: 0.5em} 
+IMG.fak { 
+    height: 1.5em; 
+    vertical-align: bottom; 
+    background: none;
+}
+
+IMG.tez { height: 1.2em; padding: 1px; vertical-align: bottom;
+      border-radius: 20%; border: 2px outset transparent}
+     
+/* 
+    tezaŭrobildoj funkcias simile al butono, do eble ni uzu la klason "btn" anstataaŭe... 
+
+    momente ili ne (plu?) estas parto de la artikolo, sed eble ankoraŭ en la tez-indeksoj...
+*/
+/*
+A IMG.tez:focus {background-color:  #c0c090; border: 2px outset gray}
+A IMG.tez:hover {background-color:  #c0c090; border: 2px outset gray}
+A IMG.tez:active {background-color:  #a0a070; border: 2px inset gray}
+
+A IMG.tez:focus {background-color:  var(--btn-act-bgr-clr); border: 2px outset var(--btn-act-brd-clr)}
+A IMG.tez:hover {background-color:  var(--btn-hov-bgr-clr); border: 2px outset var(--btn-act-brd-clr)}
+A IMG.tez:active {background-color:  var(--btn-act-bgr-clr); border: 2px inset var(--btn-act-brd-clr)}
+*/
+
+A.tez-ref { text-decoration: none; 
+    color: var(--icn-fnt-clr); font-weight: normal; padding: 0.1em; border-radius: 40%}
+A.tez-ref:visited { background-color: transparent; 
+    color: var(--icn-fnt-clr)}
+A.tez-ref:focus {background-color:  var(--icn-act-bgr-clr); 
+    color: var(--icn-act-fnt-clr)}
+A.tez-ref:hover {background-color:  var(--icn-hov-bgr-clr); 
+    color: var(--icn-hov-fnt-clr)}
+A.tez-ref:active {background-color:  var(--icn-act-bgr-clr); 
+    color: var(--icn-act-fnt-clr)}
+
+IMG.viki { height: 1.2em; vertical-align: bottom;
+	   border-radius: 20%; border: 2px outset transparent}
+A IMG.viki:focus {background-color:  var(--tez-act-bgr-clr); 
+    border: 2px outset var(--tez-act-fnt-clr)}
+A IMG.viki:hover {background-color:  var(--tez-hov-bgr-clr); 
+    border: 2px outset var(--tez-hov-fnt-clr)}
+A IMG.viki:active {background-color:  var(--tez-act-bgr-clr); 
+    border: 2px inset var(--tez-act-fnt-clr)}
+
+.piedlinio {color: var(--label-fnt-clr); text-align: center}
+.kuketoaverto { position: fixed; bottom: 0px; left: 5%; width: 90%; min-height:7em;
+		background-color: var(--ovr-bgr-clr); margin: 0; display: none;
+		border-radius: 5px 5px 0 0; border: 1px solid var(--ovr-brd-clr); border-bottom: none
+	    }
+.kuketoaverto P { text-align:center }
+.kuketoaverto FORM { text-align:center }
+
+/* formuloj */
+.frm { font-style: normal }
+.frm_am { font-size: 90% }
+
+.nom, .nac {
+    letter-spacing: .05em;
+}
+
+.bld_atrib { font-size: 80%; color: var(--label-fnt-clr) }
+.bld_atrib:link { font-size: 80%; color: var(--label-fnt-clr) }
+.bld_atrib:visited { font-size: 80%; color: var(--label-fnt-clr) }
+.bld_atrib:focus { font-size: 80%; color: var(--label-fnt-clr) }
+.bld_atrib:hover { font-size: 80%; color: var(--label-fnt-clr) }
+.bld_atrib:active { font-size: 80%; color: var(--label-fnt-clr) }
+
+
+/* tildoj en ekzemploj */
+.ekztld { font-weight: bold } /*text-decoration: underline solid #775533} */
+
+.kashilo, .etendilo, .pref {
+    border: 1px solid var(--btn-brd-clr);
+    box-shadow: none;
+}
+.kashilo:hover, .etendilo:hover, .pref:hover {
+    background-color: var(--btn-hov-bgr-clr);
+    color: var(--btn-hov-fnt-clr);
+    border: 1px solid var(--btn-hov-brd-clr);
+}    
+.kashilo:active, .etendilo:active, .pref:active {
+    background: var(--btn-act-bgr-clr);
+    color: var(--main-act-fnt-clr);
+    border: 1px solid var(--btn-act-brd-clr);
+}
+
+.kasxita { display: none !important; }
+
+i.ekz { 
+    display: block; 
+    margin-left: 1.6em; 
+    text-indent: -1.6em; 
+    text-align: left 
+}
+i.ekz::before, span.ekztrd::before { 
+    content: "\00a0•\00a0" 
+}
+
+.overlay {
+    position: absolute;
+    z-index: 100;
+    max-width: 90%;     
+    overflow-x: auto;
+    right: 0.5em;
+    top: 2.5em;
+    font-weight: normal;
+    font-size: 1rem;
+    background-color: var(--ovr-bgr-clr);
+
+    padding: 0.5em;
+    border: 2px dotted var(--ovr-brd-clr);
+    box-shadow: 5px 5px 10px;
+}
+
+.preferoj {
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: 0.2em 0.2em;
+    width: fit-content;
+    width: -moz-fit-content;
+    width: -webkit-fit-content;
+}
+.preferoj H3 {
+    margin-bottom: 0;
+}
+
+#pref_lng {
+    font-weight: bold;
+    list-style: none; /* Remove list bullets */
+    padding-left: 0;
+}
+
+#alia_lng {
+    list-style: none; /* Remove list bullets */
+    padding-left: 0;
+}
+
+#pref_lng li, #alia_lng li {
+    background: var(--list-bgr-clr);
+    margin: .1em;
+    padding: .1em .5em;
+    border-radius: 2px;
+}
+
+#pref_lng li:before {
+    content: "\2296"; /* Insert content that looks like bullets */
+    padding-right: .5em;
+}   
+
+#alia_lng li:before {
+    content: "\2295"; /* Insert content that looks like bullets */
+    padding-right: .5em;
+}                           
+
+#pref_lng li:hover, #alia_lng li:hover {
+    background-color: var(--list-bgr-clr);
+}              
+
+#pref_lng li:active, #alia_lng li:active {
+    background-color: var(--list-act-bgr-clr);
+    ;
+}    
+
+#kash_btn {
+    position: fixed;
+    right: .75em;
+    /*bottom: 50%;
+    margin-bottom: -1rem;*/
+    top: 40%;
+    display: flex;
+    flex-direction: column;
+}
+
+#kash_btn BUTTON {
+    height: 2rem;
+    width: 1.5rem;
+    margin: .3em .2em;
+    background-size: 80%;
+    background-position: center; 
+    /*border: 1px solid gray;*/
+    box-shadow: 1px 1px 3px var(--main-shd-clr);
+    background-color: var(--btn-bgr-clr);
+
+    /* border: none; */
+    border: 1px solid var(--btn-brd-clr);
+    border-radius: .4em;
+}
+
+article BUTTON {
+    height: 1.5rem;
+    margin: .1em .2em;
+    /*border: 1px solid gray;*/
+    box-shadow: 1px 1px 3px var(--main-shd-clr);
+    background-color: var(--btn-bgr-clr);
+
+    /* border: none; */
+    border: 1px solid var(--btn-brd-clr);
+    border-radius: .5em;
+}
+
+article BUTTON:hover, #kash_btn BUTTON:hover {
+    background-color: #FFEEAA;
+    border: 1px solid #775533;
+}    
+article BUTTON:active,#kash_btn BUTTON:active {
+    background-color: #E8C888;
+    border: 1px solid #775533;
+}
+
+.icon_btn {
+    height: 1.2rem;
+    width: 1.2rem;
+    /*display: inline-block;*/
+    float: right;
+    color: var(--icn-fnt-clr);
+    /* padding: 1rem 2rem; */
+    padding: .2em;
+    margin: .2em;
+    text-decoration: none;
+
+    /*box-shadow: 1px 1px 2px;*/
+    box-shadow: none;
+    /*font: inherit;*/
+    font-size: 1rem;
+    /*font-family: sans-serif;
+    font-size: 1rem; */
+    cursor: pointer;
+    text-align: center;
+    transition: background 250ms ease-in-out, 
+                transform 150ms ease;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+H2 .icon_btn {
+    float: right; 
+    border: none;
+    height: 1rem;
+    width: 1rem;
+    margin-bottom: -.06rem;
+}
+
+H2 .icon_btn:hover, H2 .icon_btn:active, H2 .icon_btn:focus {
+    border: none;
+}
+
+
+a.pli, a.pref {
+    font-style: oblique;
+    text-decoration: none;
+    color: darkgreen;
+    background: var(--btn-bgr-clr);
+    border-radius: .5em;
+    padding: .1em .3em;
+    margin-bottom: .1em;
+}
+
+.square_min {
+    background-color: black;
+    font-size: 0.2em;
+    height: 0.2em;
+}
+.square_mid {
+    background-color: black;
+    font-size: 0.6em;
+    height: 0.6em;
+}
+.square_max {
+    background-color: black;
+    font-size: 1em;
+    height: 1em;
+}
+
+
+.art-hist td:first-child {
+    /*font-family: "Lucida Console", Monaco, monospace; */
+    white-space: nowrap;
+    padding-right: .5em;
+}
+
+.art-hist td:nth-child(2) {
+    /*font-family: "Lucida Console", Monaco, monospace;*/
+    font-family: monospace;
+    white-space: nowrap;
+    padding-right: .5em;
+}
+
+.art-hist td:nth-child(3) {
+    font-style: italic
+}
+

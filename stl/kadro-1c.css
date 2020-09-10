@@ -1,0 +1,705 @@
+@import "normalize.css";
+@import "koloroj.css";
+@import "piktogram-1c.css";
+@import "artikolo-1c.css";
+@import "redaktilo-1c.css";
+
+/***************************************
+   Ĉefa kadro
+****************************************/
+
+html {
+    height: 100vh;
+    /* width: 100% */
+}
+
+body {
+    display: flex;
+    flex-direction: row-reverse;
+    height: 100vh;
+    margin: 0 !important;
+    padding: 0 !important;
+    background-color: var(--main-bgr-clr); 
+    color: var(--main-fnt-clr);
+    font-size: 120%;
+    font-family: sans-serif; 
+    /*font-family: "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, Geneva, sans-serif;*/
+}
+
+nav {
+    height: 100vh;
+    background-color: var(--nav-bgr-clr);
+    overflow: auto;
+    flex-basis: 36rem;
+    /* flex-shrink: 3;  ne funkcias kiel atendite... */
+    flex-grow: 0;
+    margin: 0;
+    padding: 0;
+
+    z-index: 100;
+
+    box-shadow: 1px 1px 2px;
+
+    /*border: 1px solid blue;*/
+    /*background-color: lightgoldenrodyellow;*/
+}
+
+main {
+    height: 100vh;
+    overflow-y: auto;
+    flex-grow: 3;
+    /* flex-shrink: 1; /* ne funkcias kiel atendite... */
+    background-color: var(--main-bgr-clr);
+
+    /*
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    */
+    /*border: 1px solid green;*/
+}
+
+
+/***************************************
+   Navigado
+****************************************/
+
+/* https://www.w3schools.com/howto/howto_css_display_element_hover.asp 
+...
+    https://www.w3schools.com/howto/howto_js_popup.asp
+    https://www.w3schools.com/howto/howto_js_collapsible.asp
+*/
+.nav_btn {
+    display: none;
+    position: absolute;
+    z-index: 200;
+    font-size: 150%;
+    padding: 0.1em;
+    text-shadow: 1px 1px silver;
+    border-right: 2px solid gray;
+    border-bottom: 2px solid gray;    
+    background-color: var(--nav-bgr-clr);
+    border-bottom-right-radius: 0.2em;
+}
+
+nav::-webkit-scrollbar-corner,
+nav::-moz-scrollbar-corner { /* FF ne funkcias, sed uzas body-backround-color...? */
+    background-color: var(--nav-bgr-clr);
+}
+
+nav a:focus {
+    outline: 2px dotted var(--nav-act-bgr-clr) !important;
+    background-color: inherit;
+    box-shadow: none;
+    /* border-bottom: 3px solid var(--nav-act-brd-clr);*/
+}
+
+nav a:hover {
+    background-color: var(--nav-hov-bgr-clr);
+    color: var(--nav-hov-fnt-clr) !important;
+    background-image: none;
+    color: var(--highlight-color);
+}
+
+nav a:active {
+    background-color: var(--nav-act-bgr-clr);
+    color: var(--nav-act-fnt-clr);
+    background-image: none;
+    border: 1px solid var(--nav-act-bgr-clr); /* ne montru randon: */
+    box-shadow: none;
+}
+
+/*
+.nav_btn:hover + ul {
+    display: block;
+    background-color: goldenrod;
+}
+*/
+#navigado {
+    display: block;
+    /*font-family: monospace;*/
+    /*overflow-x: visible;*/
+    width: 100%; /* prenu tutan spacon de nav, kaj lasu al tiu
+                difini la larĝecon! */
+    /*
+    min-width: 16em;
+    max-width: 33em;
+    */
+
+    /*overflow-y: auto;
+    min-height: 100vh;*/
+
+    /*padding-inline-start: 0;*/    
+    margin: 0;
+    padding: 0.5em; 
+    /*padding-right: 0.5em;*/
+
+    /* background-color: var(--nav-bgr-clr);*/
+    /*z-index: 100;*/
+    /*box-shadow: 1px 1px 2px;*/
+
+    /* nur se ni volos rezervi lokon por butono [≡]:
+    padding-top: 2.2em;
+    */
+}
+
+#navigado > table {
+    width: 100%;
+}
+
+#navigado h1 {
+    font-style: italic;
+    font-size: 120%;
+    color: var(--nav-fnt-clr);
+}
+
+#navigado .enhavo {
+    font-family: sans-serif;
+    line-height: 150%;
+}
+
+
+#x\:_eo .enhavo p:first-of-type {
+    margin-top: -.8em;
+}
+
+#x\:_lng br {
+    display: none;
+}
+
+#navigado .kls_nom {
+    font-style: italic;
+}
+
+#navigado .kls_nom:before {
+    content: "-"
+}
+
+#navigado .kls_nom:after {
+    content: ":"
+}
+
+#navigado>a {
+    margin: 0.5em 0em;
+    max-width: 95%
+}
+
+#navigado td>ul  {
+    margin: 0.3em;    
+    margin-right: 0;
+    max-width: 95%;
+}
+
+#navigado>ul>li {
+    margin-top: 1em !important;
+}
+
+      
+@media (prefers-color-scheme: dark) {
+    IMG {
+        filter: invert(1) brightness(0.9) sepia(0.9);
+    }
+}
+
+/**
+#navigado img.fak {
+    * ŝovu la origina bildon dekstren kaj
+    per la klaso de la piktogramo la SVG-vinjeto aperu kiel fon-bildo*
+    **display: block;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 1.5em;
+    padding-left: 1.5em; **
+    background: none;
+    filter: invert(1) brightness(0.85) sepia(1);
+}
+**/
+
+/***
+#navigado br {
+    display: none;
+}
+***/
+
+/*
+#navigado table tr:first {
+    position: absolut;
+    top: 0;
+}
+*/
+
+#navigado td.aktiva a {
+    width: initial;
+    font-weight: bold;
+    /* ŝanĝiĝanta larĝeco ĝenas! text-transform: uppercase;*/
+    border-bottom: 3px solid var(--nav-act-brd-clr);
+}
+
+#navigado td.fona a {
+    width: initial;
+    font-weight: bold;
+    border-bottom: none;
+
+    /*margin-left: .2em;*/
+
+    /*
+    background-image: 
+    linear-gradient(
+        var(--nav-bgr-clr) 5%, 
+        var(--nav-act-bgr-clr) 35%,
+        var(--nav-act-bgr-clr) 70%, 
+        var(--nav-bgr-clr) 95%);
+        */
+
+    text-shadow: 2px 2px 5px var(--nav-act-bgr-clr);
+}
+
+@media all and (max-width: 50em) {
+    .nav_btn {
+        display: block;
+    }
+    #navigado {
+        position: absolute;
+        /* Kaŝu navigadon 
+        font: 0/0 serif;   
+        z-index: -1;
+        */
+        display: none;
+        box-shadow: 5px 5px 20px;
+    }
+}
+
+/*
+nav li {
+    list-style-type: none;
+    padding-left: 2em;
+    padding-right: 0.2em;
+    padding-top: 0.4em;
+    padding-bottom: 0.4em;
+    width: 100%;
+    letter-spacing: .09rem;
+    text-transform: uppercase;
+}
+
+*/
+
+.literoj {
+    line-height: 185%;
+    font-size: 1.2rem !important; /* 120% estas tro granda */
+    /*max-width: 29.5rem;*/
+    width: 100%;
+    /*font-family: monospace;*/
+    display: inline-block;
+    margin-top: .5em;
+}
+
+.literoj a {
+    height: 2em;
+    font-weight: bold;
+    
+    padding: 0.1em 0.2em !important; 
+    margin: 0 !important;
+    text-decoration: none;
+    /*background-color: #cA9510;*/
+    color: black;
+
+    /*
+    background-image: linear-gradient(
+        var(--nav-bgr-clr) 40%, 
+          var(--nav-act-bgr-clr) 35%,
+        var(--nav-hov-bgr-clr) 45%, 
+          var(--nav-act-bgr-clr) 70%, 
+        var(--nav-bgr-clr) 70%);
+        */
+    text-shadow: 2px 2px 5px var(--nav-act-bgr-clr);
+        
+    /*background-image: radial-gradient(ellipse closest-side at 30% 50%, #eAb530 5%, goldenrod 55%);*/
+
+    /*border-left: 3px dotted lightgoldenrodyellow;*/
+    /*border-radius: 4px;*/
+    /*border-left: 3px solid var(--button-border-color);*/
+    /*border-top: 2px solid var(--button-border-color);*/
+    /*box-shadow: 1px 1px 3px var(--button-border-color); */
+}
+
+.literoj a:hover {
+    background-image: none;
+    background-color: var(--nav-hov-bgr-clr);
+    color: var(--nav-hov-fnt-clr) !important;
+    /*background-color: var(--active-bg-color);*/
+}
+
+.literoj a:active {
+    background-image: none;
+    background-color: var(--nav-act-bgr-clr);
+    color: var(--nav-act-fnt-clr) !important;
+    /*background-color: var(--active-bg-color);*/
+}
+
+.literoj .elektita {
+    border-bottom: 3px solid var(--nav-act-brd-clr);
+}
+
+#navigado li, #navigado li>a, #navigado p>a {
+    display: block;
+    width: 100%
+}
+
+/***
+#navigado li, li>a, p>a {
+    display: block;
+    width: 100%
+}
+***/
+
+/***
+#navigado td>a {
+    display: block;
+    width: 100%
+}
+***/
+
+/*
+#nav_menu>a, li a, 
+*/ 
+
+#navigado p b {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .2em;
+    
+}
+
+#navigado .menuo a {
+    display: inline-block;
+    padding: 0 0.3em; 
+    margin-top: 0.3em;
+    text-decoration: none;
+    letter-spacing: -.05em;
+    color: var(--nav-fnt-clr);
+}
+
+#navigado td a, #navigado li a {
+    /*
+    padding: 0.3em; 
+    margin-top: 0.3em;*/
+    text-decoration: none;
+    color: var(--nav-fnt-clr);
+    /*background-image: linear-gradient(0deg, goldenrod 15%, #eAb530 50%, goldenrod 85%);*/
+}
+
+/***************************************
+   Precipa paĝo
+****************************************/
+
+
+header {
+    flex-grow: 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin-top: 0.5em;
+    margin-bottom: 3.5em;
+    /*border: 1px dotted red;*/
+}
+
+footer {
+    flex-grow: 0;
+    text-align: center;
+    /*border: 1px dotted red;*/
+}
+
+#titol_sercho {
+    display: grid;
+    grid-template-columns: auto auto auto;
+}
+
+
+
+.tabs {
+    margin-left: 0.5em;
+    margin-top: 0em;
+    margin-bottom: 1em;
+}   
+
+.tabs > label {
+    font-weight: bold;
+    text-align: right;
+    padding: .1em;
+}
+
+.tabs > label::after {
+    content: ":\00a0"
+} 
+.tabs input {
+    display: none;
+} 
+.tabs input:checked + label {
+    padding: .1em;
+    /*background: var(--list-act-bgr-clr);*/
+    border-bottom: 3px solid var(--main-brd-clr);
+} 
+
+.tabs a {
+    padding: 0.5em;
+    /*background-color: palegoldenrod; */
+    /*font-family: monospace;*/
+    font-weight: bold;
+    color: black;
+    text-decoration: none;
+}
+ 
+.tabs a.aktiva {
+   font-weight: bold;
+   color: black;
+   text-transform: uppercase;
+   border-left: 4px solid goldenrod;
+   border-right: 4px solid goldenrod;   
+   background-color: palegoldenrod;
+}
+
+#w\:ix_literoj {
+    grid-column-start: 1;
+    grid-column-end: 3;
+}
+
+#w\:ix_literoj span {
+    padding: 0 .3em;
+    border-left: 2px solid var(--main-brd-clr)
+}
+
+/*
+.ix_literoj > label {
+    font-weight: bold;
+    text-align: right;
+    padding: .1em;
+}
+.ix_literoj > label::after {
+    content: ":\00a0"
+} 
+.ix_literoj input {
+    display: none;
+} 
+.ix_literoj input:checked + label {
+    *border-radius: 2px;*
+    padding: .1em;
+    *background: var(--list-act-bgr-clr);*
+    border-bottom: 3px solid var(--main-brd-clr);
+} 
+*/
+
+/***
+#s_artikolo {
+    margin-left: 1em;
+    margin-right: 1em;
+    font-family: serif;
+}
+
+#s_sercho {
+    flex-grow: 1;
+    text-align: center;
+    margin-top: 1em;
+}
+
+#sercho {
+    text-align: center;
+}
+
+#sercho_ek {
+    font-size: 200%;
+}
+
+#trovoj {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#trovoj table {
+    min-width: 48%;
+    padding: 1em;
+    margin: auto;
+    border-collapse: separate;
+    border-spacing: 0 0.3em;
+}
+
+#trovoj td {
+    padding: 0.5em;
+}
+
+#trovoj td:first-child {
+    background-color: var(--list-bgr-clr);
+    border-top-left-radius: 0.5em;
+    border-bottom-left-radius: 0.5em;
+    border-right: 2px solid gainsboro;
+}
+
+#trovoj td:nth-child(2) {
+    background-color: var(--list2-bg-color);
+    border-top-right-radius: 0.5em;
+    border-bottom-right-radius: 0.5em;
+}
+
+#trovoj td:nth-child(2):hover {
+    background-color: var(--list2-highlight-bg-color);
+    color: var(--highlight-color);
+}
+
+#lng, #kat {
+    width: 3em;
+}
+
+.cirklo {
+    height: 1.1em;
+    width: 1.1em;
+    font-size: 400%;
+    font-family: sans-serif;
+    font-weight: 900;
+    text-shadow: 1px 1px silver;
+    padding: 0.2em;
+    text-align: center;
+    border-radius: 50%;
+    border: 2px solid gray;
+    background-color: var(--button-bg-color);
+    background-image: radial-gradient(at 49.5% 49.5%, darkgoldenrod 20%, goldenrod 60%, khaki 80%);
+    box-shadow: 10px 10px 20px;
+    position: relative;
+}
+.cirklo.R { top: 0em; }
+.cirklo.E { z-index: 10; top: 0.6em; left: -0.2em; }
+.cirklo.V { z-index: 5; top: 0.25em; left: -0.3em; }
+.cirklo.O { top: 0.5em; left: -0.4em; }
+
+@media all and (max-width: 50em) {
+    #serchteksto { width: 70% }
+}
+@media all and (max-height: 50em) {
+    header { margin-bottom: 1.5em }
+    .cirklo { font-size: 280% }
+}
+@media all and (max-width: 30em) {
+    header { padding-left: 1.8em; margin-right: -0.4em }
+    .cirklo { font-size: 250% }
+}
+***/
+
+/* Buttons
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+/***
+.button,
+button,
+input[type="submit"],
+input[type="reset"],
+input[type="button"] {
+    display: inline-block;
+    font-size: 133%;
+    background-color: goldenrod;
+    background-image: radial-gradient(at 49.5% 49.5%, darkgoldenrod 20%, goldenrod 60%, khaki 80%);
+    box-shadow: 4px 4px 8px;
+    border-radius: 2em;
+    border: 2px solid gray;
+    cursor: pointer;
+    box-sizing: border-box; 
+
+    text-align: center;
+    font-weight: 600;
+    letter-spacing: .1rem;
+    text-transform: uppercase;
+    text-decoration: none;
+    white-space: nowrap;
+}
+.button:hover,
+button:hover,
+input[type="submit"]:hover,
+input[type="reset"]:hover,
+input[type="button"]:hover,
+.button:focus,
+button:focus,
+input[type="submit"]:focus,
+input[type="reset"]:focus,
+input[type="button"]:focus {
+    box-shadow: 2px 2px 4px darkslategray;
+    background-image: none;    
+}
+***/
+
+/* Forms
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+/***
+input[type="email"],
+input[type="number"],
+input[type="search"],
+input[type="text"],
+input[type="tel"],
+input[type="url"],
+input[type="password"],
+textarea,
+select {
+    height: 2.4em;
+    padding: 0.3em 0.6em;
+    background-color: var(--input-bg-color);
+    color: var(--input-color);
+    border: 2px solid darkgray;
+    border-radius: 4px;
+    box-shadow: none;
+    box-sizing: border-box; 
+}
+***/
+
+/* Removes awkward default styles on some inputs for iOS */
+/***
+input[type="email"],
+input[type="number"],
+input[type="search"],
+input[type="text"],
+input[type="tel"],
+input[type="url"],
+input[type="password"],
+textarea {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none; 
+}
+
+textarea {
+    min-height: 65px;
+    padding-top: 6px;
+    padding-bottom: 6px; 
+}
+
+input[type="email"]:focus,
+input[type="number"]:focus,
+input[type="search"]:focus,
+input[type="text"]:focus,
+input[type="tel"]:focus,
+input[type="url"]:focus,
+input[type="password"]:focus,
+textarea:focus,
+select:focus {
+    border: 2px dashed darkgoldenrod;
+    outline: 0; 
+}
+
+label,
+legend {
+    display: block;
+    margin-bottom: .5rem;
+    font-weight: 600; 
+}
+
+fieldset {
+    padding: 0;
+    border-width: 0; 
+}
+
+input[type="checkbox"],
+    input[type="radio"] {
+    display: inline; 
+}
+
+label > .label-body {
+    display: inline-block;
+    margin-left: .5rem;
+    font-weight: normal; 
+}
+***/

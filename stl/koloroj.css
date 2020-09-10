@@ -1,0 +1,149 @@
+/* 
+    La nomoj sekvas la skemon:
+    --<element-tipo>-<parto>-<atributo>
+
+    Por :active, :hover ni aldonas infikson al la atributo, 
+    ekz. --nav-hov-bgr-clr, --btn-act-fnt-clr
+    Ni provas uzi centrajn main-act-*, main-hov-* kaj nur
+    esceptokaze difini por apartaj elementoj...
+
+    Ni ne distingas :focus de :active, sed por ambaŭ uzas -act-,
+    same ni uzas por :visited la ordinaran koloron.
+
+*/
+
+:root {
+
+    /* por navigado */
+    --nav-fnt-clr: black;
+    --nav-bgr-clr: #eAb530  /* #FAC540  #eAb530 goldenrod */;
+    --nav-hov-bgr-clr: lightgoldenrodyellow;
+    --nav-hov-fnt-clr: salmon;
+    --nav-act-bgr-clr: lightgoldenrodyellow;
+    --nav-act-brd-clr: black;
+    --nav-act-fnt-clr: salmon;
+
+    /* por la ĉefa paĝo (main) */
+    --main-bgr-clr: lightgoldenrodyellow;
+    --main-brd-clr: goldenrod;
+    --main-fnt-clr: black;
+    --main-act-fnt-clr: black;
+    --main-hov-fnt-clr: coral;
+    --main-shd-clr: gray;
+
+    --ovr-bgr-clr: #F5F5D5;
+    --ovr-brd-clr: green;
+
+    --a-fnt-clr: royalblue;
+ 
+    --mh2-bgr-clr: goldenrod; 
+    --mh2-act-fnt-clr: black; 
+
+    --btn-bgr-clr: goldenrod; 
+    --btn-brd-clr: darkgoldenrod;
+
+    --btn-hov-bgr-clr: khaki;
+    --btn-hov-brd-clr: black;
+    --btn-hov-fnt-clr: black; 
+
+    --btn-act-bgr-clr: #FAC540 /*khaki*/;
+    --btn-act-brd-clr: black;
+
+    --input-bgr-clr: white;
+    --input-fnt-clr: black;
+
+    --list-bgr-clr: khaki; /*#FFEEAA;*/
+    --list-act-bgr-clr: #FAC540; /*#E8C888;*/
+
+    --lst2-bgr-clr: khaki;
+    --lst2-act-bgr-clr: lightgoldenrodyellow;
+
+    --ekz-fnt-clr: #303030;
+    --ekz-hov-fnt-clr: coral;
+    --ekz-act-fnt-clr: silver;
+
+    --fnt-fnt-clr: #303030;
+
+    --rim-fnt-clr: #000060;
+    --rim-hov-fnt-clr: var(--a-hov-fnt-clr);
+    --rim-act-fnt-clr: var(--a-fnt-clr);
+
+    --ref-fnt-clr: #600000;
+
+    --icn-fnt-clr: darkgreen; 
+    --icn-act-fnt-clr: brown;
+    --icn-hov-fnt-clr: coral;
+
+    --icn-hov-bgr-clr:  lightgoldenrodyellow; 
+    --icn-act-bgr-clr:  lightgoldenrodyellow; 
+
+    --adm-fnt-clr: #303030;
+    --label-fnt-clr: #104040;
+    --vnj-bgr-clr: lightgoldenrodyellow;
+
+    --svg-bgr-clr: #ffffee; 
+    --svg-brd-clr: #cccccc;
+
+    --bld-bgr-clr: lightgoldenrodyellow;
+    --bld-brd-clr: #cccccc;
+
+}
+
+
+@media (prefers-color-scheme: dark) {
+    /* CSS por malhela aspekto */ 
+    :root {
+
+    /* por navigado */
+    --nav-fnt-clr: ivory;
+    --nav-bgr-clr: #774400 /* #B8860B #FAC540  #eAb530 goldenrod */;
+    --nav-hov-bgr-clr: lightgoldenrodyellow;
+    --nav-hov-fnt-clr: black;
+    --nav-act-bgr-clr: goldenrod;
+    --nav-act-brd-clr: ivory;
+
+
+    /* por la ĉefa paĝo (main) */
+    --main-fnt-clr: lightgoldenrodyellow;
+    --main-bgr-clr: #0f0800;
+    --main-act-fnt-clr: lightgoldenrodyellow;
+    --main-hov-fnt-clr: #EE6F40;
+    --main-shd-clr: lightgoldenrodyellow;
+
+
+    --mh2-bgr-clr: darkgoldenrod; 
+    --mh2-act-fnt-clr: lightgoldenrodyellow; 
+ 
+    --btn-bgr-clr: darkgoldenrod; 
+    --btn-act-fnt-clr: lightgoldenrodyellow; 
+
+    --btn-hov-bgr-clr: khaki;
+    --btn-hov-brd-clr: black;
+    --btn-hov-fnt-clr: coral; 
+
+    --btn-act-bgr-clr: #FAC540 /*khaki*/;
+    --btn-act-brd-clr: black;
+ 
+    --input-bgr-clr: white;
+    --input-fnt-clr: lightgoldenrodyellow;
+
+    --list-bgr-clr: palegoldenrod;
+    --lst2-bgr-clr: khaki;
+    --lst2-act-bgr-clr: lightgoldenrodyellow;
+
+    --ekz-fnt-clr: goldenrod;
+    --ekz-act-fnt-clr: darkgoldenrod;
+
+    --fnt-fnt-clr: goldenrod;
+    --klr-fnt-clr: #775533;
+    --rim-fnt-clr: steelblue;
+    --ref-fnt-clr: khaki;
+
+    --adm-fnt-clr: goldenrod;
+    --label-fnt-clr: goldenrod;
+    --vnj-bgr-clr: #996600;
+
+    --svg-bgr-clr: #ffffee; 
+    --svg-brd-clr: #cccccc;
+    }
+}
