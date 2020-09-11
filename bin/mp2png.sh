@@ -7,7 +7,7 @@ RSVG=rsvg-convert
 
 cd smb
 
-for file in ???.mp ????.mp
+for file in ???.mp ????.mp [ir]_*.mp
 do
     svg=${file%%.mp}.svg
     echo ${MP} ${file} ${svg}
