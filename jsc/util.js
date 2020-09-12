@@ -3,8 +3,10 @@ function HTTPRequest(method, url, params, onSuccess) {
     var request = new XMLHttpRequest();
     var data = new FormData();
 
+    // PLIBONIGU: momente tio funkcias nur por POST, 
+    //sed ĉe GET ni devus alpendigi tion al la URL!
     for (let [key, value] of Object.entries(params)) {
-    data.append(key,value);
+        data.append(key,value);
     }
 
     request.open(method, url , true);

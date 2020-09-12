@@ -1,4 +1,5 @@
 const revo_url = "reta-vortaro.de";
+const sercho_url = "/cgi-bin/sercxu-json.pl";
 
 // instalu farendaĵojn por prepari la paĝon: evento-reagoj...
 when_doc_ready(function() { 
@@ -300,9 +301,46 @@ function serchu(event) {
 
     console.log("Ni serĉu:"+esprimo);
 
-    HTTPRequest('GET', "/cgi-bin/sercxu-json.pl", {sercxata: esprimo},
+    HTTPRequest('POST', sercho_url, {sercxata: esprimo},
         function(data) {
-            console.log("Ni trovis: "+data)
+
+            // la rezulto estas listo de objektoj po lingvo kiu enhavas po unu trov-liston:
+            // [
+            //     {
+            //    "lng1":"eo","lng2":"de","titolo":"esperante (de)", "trovoj": [
+            //         {"art":"cxeval","mrk1":"cxeval.0o","vrt1":"ĉevalo","mrk2":"lng_de","vrt2":"Gaul, Pferd, Ross, Springer"} 
+            //     ]}
+            // ]
+
+            function findings(lng) {
+                var div = make_element("div");
+                div.append(make_element("h1",{},lng.titolo));
+                var dl = make_element("dl",{},"");
+                for (var t of lng.trovoj) {
+                    var dt = make_element("dt",{},"");
+                    var dd = make_element("dd",{},"");
+                    var a1 = make_element("a",{target: "precipa", href: t.art+"#"+t.mrk1},t.vrt1);
+                    var a2 = make_element("a",{target: "precipa", href: t.art+"#"+t.mrk2},t.vrt2);
+                    dt.append(a1);
+                    dd.append(a2);
+                    dl.append(dt,dd);
+                }
+                div.append(dl);
+                return div;
+            }
+        
+            console.log("Ni trovis: "+data);
+            var json = JSON.parse(data);
+            var navigado = document.getElementById("navigado");
+
+            var trovoj = make_element("div",{id: "x:trovoj"},"");
+            for (var lng of json) {
+                console.log("TRD:"+lng.lng1+"-"+lng.lng2);
+                trovoj.append(findings(lng));
+            }
+
+            navigado.textContent = "";
+            navigado.append(trovoj);
         }
     );
 
