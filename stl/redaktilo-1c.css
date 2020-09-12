@@ -170,29 +170,6 @@ span.right {
     /*width: 66%; */
 }
 
-select {
-    /*border-width: 2px;
-    border-radius: 3px;*/
-    /*-webkit-appearance: none;*/
-    padding: 0.3em 0.5em;
-    /*font-size: 1rem;*/
-}
-
-input {
-    margin: 3px 1px 0px 1px;
-    padding: 0.3em 0.5em;
-    /*font-size: 1rem;*/
-    max-width: 40%;
-}
-
-button, input[type="button"], input[type="checkbox"] {
-    padding: 0.3em 0.5em;
-    /*border-radius: 3px;*/
-    box-shadow: 1px 1px 2px;
-    /*font-family: monospace;*/
-    /* font-size: 1rem;*/
-}
-
 .help_btn {
     width: 2em;
     height: 2em;

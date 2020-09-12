@@ -7,9 +7,9 @@ files=(\
   $dir/normalize.css \
   $dir/koloroj.css \
   $dir/piktogram-1c.css \
+  $dir/kadro-1c.css \
   $dir/artikolo-1c.css \
-  $dir/redaktilo-1c.css \
-  $dir/kadro-1c.css)
+  $dir/redaktilo-1c.css)
 #files=($dir/revo-1c.css)
 
 # malgrandigas CSS-dosieron per
