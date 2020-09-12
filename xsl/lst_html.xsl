@@ -13,8 +13,8 @@
     extension-element-prefixes="redirect" -->
 
 
-<!-- (c) 2006-2018 che Wolfram Diestel
-     licenco GPL 2.0
+<!-- (c) 2006-2020 ĉe Wolfram Diestel
+     laŭ permesilo GPL 2.0
 
      Klasoj estas vortoj de sama kategorio, ekz. muzikiloj, ĥemiaj elementoj, stelfiguroj, festoj ktp.
      La klasanoj estas trovitaj en la artikoloj per la referenctipoj 'lst' (<ref tip='lst'...)
@@ -77,111 +77,111 @@
        </xsl:variable>
 
       <xsl:if test="$verbose='true'">
-	<xsl:message>skribas al <xsl:value-of select="$dosiero"/></xsl:message>
+	      <xsl:message>skribas al <xsl:value-of select="$dosiero"/></xsl:message>
       </xsl:if>
 
-      <!-- redirect:write select="$dosiero" -->
-      <xsl:result-document href="{$dosiero}" method="@format@" encoding="utf-8" indent="yes">
+  <!-- redirect:write select="$dosiero" -->
+  <xsl:result-document href="{$dosiero}" method="@format@" encoding="utf-8" indent="yes">
 	<html>
 	  <head>
-            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 	    <meta name="viewport" content="width=device-width,initial-scale=1"/>
-            <title><xsl:value-of 
-	    select="concat('vortlisto: ',translate($kls,'_',' '))"/></title>
-            <link title="indekso-stilo" type="text/css" 
-		  rel="stylesheet" href="../stl/indeksoj.css"/>
+      <title><xsl:value-of 
+	      select="concat('vortlisto: ',translate($kls,'_',' '))"/></title>
+      <link title="indekso-stilo" type="text/css" 
+		    rel="stylesheet" href="../stl/indeksoj.css"/>
 	  </head>
 	  <body>
-            <table cellspacing="0">
-              <xsl:call-template name="menuo-eo"/>
-              <tr>
-		<td colspan="{$inx_paghoj}" class="enhavo">
+      <table id="{concat('x:',substring-before($dosiero,'.html')}" cellspacing="0">
+      <xsl:call-template name="menuo-eo"/>
+      <tr>
+		    <td colspan="{$inx_paghoj}" class="enhavo">
 		  
-		  <h1>
-		    <xsl:value-of select="translate($kls,'_',' ')"/>
-		  </h1>
+        <h1>
+          <xsl:value-of select="translate($kls,'_',' ')"/>
+        </h1>
 
-		  <!-- prezentu liston de ligoj al subklasoj -->
-		  <ul style="padding-left: 0">
-                    <xsl:for-each select="kls">
-                      <xsl:variable name="refkls"
-				    select="substring-after(@nom,'#')"/>
+        <!-- prezentu liston de ligoj al subklasoj -->
+        <ul style="padding-left: 0">
+          <xsl:for-each select="kls">
+            <xsl:variable name="refkls"
+				      select="substring-after(@nom,'#')"/>
 		   
-                      <xsl:choose>
-                        <xsl:when test="not(@prezento='integrita')">
-			  <li>
-			    <a>
-			      <xsl:attribute name="href">
-				<xsl:text>vx_</xsl:text>
-				<xsl:call-template name="eo-kodigo">
-				  <xsl:with-param name="str"><xsl:value-of select="$refkls"/></xsl:with-param>
-				</xsl:call-template>
-				<xsl:text>.html</xsl:text>
-			      </xsl:attribute>
-			      <img border="0" src="../smb/listo.gif"/>
-			      <xsl:value-of select="translate($refkls,'_',' ')"/>
-			    </a>
-			  </li>
-			</xsl:when>
-			<xsl:otherwise>
-			  <li>
-			    <a>
-			      <xsl:attribute name="href">
-				<xsl:text>#</xsl:text>
-				<xsl:call-template name="eo-kodigo">
-				  <xsl:with-param name="str"><xsl:value-of select="$refkls"/></xsl:with-param>
-				</xsl:call-template>
-			      </xsl:attribute>  
-			      <img border="0" src="../smb/listo.gif"/>
-			      <xsl:value-of select="translate($refkls,'_',' ')"/>
-			    </a>
-			  </li>
-			</xsl:otherwise>
-		      </xsl:choose>
-                    </xsl:for-each>
-		  </ul>
-		  
-		  <!-- rektaj klasanoj -->
-		  <xsl:for-each select="$root">
-                    <xsl:call-template name="klasanoj">
-                      <xsl:with-param name="klaso"
-				      select="concat('voko:',$kls)"/>
-		      <xsl:with-param name="ordigita"
-				      select="$ordigita"/>
-                    </xsl:call-template>
-		  </xsl:for-each>
-
-                  <!-- anojn de integritaj klasoj prezentu en sama dosiero, sed en propra
-		  chapitro -->
-                  <xsl:for-each select="kls[@prezento='integrita']">
-                     <xsl:variable name="intkls"
-				   select="substring-after(@nom,'#')"/>
-		     <xsl:variable name="ordigita"
-				   select="@ordigita"/>
-                     <a>
-                      <xsl:attribute name="name">
+              <xsl:choose>
+                <xsl:when test="not(@prezento='integrita')">
+                  <li>
+                    <a>
+                        <xsl:attribute name="href">
+                        <xsl:text>vx_</xsl:text>
                         <xsl:call-template name="eo-kodigo">
-			  <xsl:with-param name="str"><xsl:value-of select="$intkls"/></xsl:with-param>
-			</xsl:call-template>
-		      </xsl:attribute>
-		     </a>
-                     <h2>
-		       <xsl:value-of select="translate($intkls,'_',' ')"/>
-		     </h2>
-	             <xsl:for-each select="$root">
-                       <xsl:call-template name="klasanoj">
-                         <xsl:with-param name="klaso"
-					 select="concat('voko:',$intkls)"/>
-			 <xsl:with-param name="ordigita"
-					 select="$ordigita"/>
-                       </xsl:call-template>
-		     </xsl:for-each>
-                  </xsl:for-each>
+                          <xsl:with-param name="str"><xsl:value-of select="$refkls"/></xsl:with-param>
+                        </xsl:call-template>
+                        <xsl:text>.html</xsl:text>
+                      </xsl:attribute>
+                      <img border="0" src="../smb/listo.gif"/>
+                      <xsl:value-of select="translate($refkls,'_',' ')"/>
+                    </a>
+                  </li>
+			          </xsl:when>
+		          	<xsl:otherwise>
+                  <li>
+                    <a>
+                      <xsl:attribute name="href">
+                        <xsl:text>#</xsl:text>
+                        <xsl:call-template name="eo-kodigo">
+                          <xsl:with-param name="str"><xsl:value-of select="$refkls"/></xsl:with-param>
+                        </xsl:call-template>
+                      </xsl:attribute>  
+                      <img border="0" src="../smb/listo.gif"/>
+                      <xsl:value-of select="translate($refkls,'_',' ')"/>
+                    </a>
+                  </li>
+                </xsl:otherwise>
+		          </xsl:choose>
+            </xsl:for-each>
+		      </ul>
+          
+          <!-- rektaj klasanoj -->
+          <xsl:for-each select="$root">
+            <xsl:call-template name="klasanoj">
+              <xsl:with-param name="klaso"
+				        select="concat('voko:',$kls)"/>
+		         <xsl:with-param name="ordigita"
+				        select="$ordigita"/>
+            </xsl:call-template>
+		      </xsl:for-each>
 
-		</td>
-              </tr>
-            </table>
-          </body>
+          <!-- anojn de integritaj klasoj prezentu en sama dosiero, sed en propra
+		        chapitro -->
+          <xsl:for-each select="kls[@prezento='integrita']">
+            <xsl:variable name="intkls"
+				      select="substring-after(@nom,'#')"/>
+		        <xsl:variable name="ordigita"
+				      select="@ordigita"/>
+              <a>
+                <xsl:attribute name="name">
+                  <xsl:call-template name="eo-kodigo">
+			             <xsl:with-param name="str"><xsl:value-of select="$intkls"/></xsl:with-param>
+			            </xsl:call-template>
+		            </xsl:attribute>
+		          </a>
+              <h2>
+		           <xsl:value-of select="translate($intkls,'_',' ')"/>
+		          </h2>
+	            <xsl:for-each select="$root">
+                <xsl:call-template name="klasanoj">
+                  <xsl:with-param name="klaso"
+					          select="concat('voko:',$intkls)"/>
+			            <xsl:with-param name="ordigita"
+					          select="$ordigita"/>
+                </xsl:call-template>
+		          </xsl:for-each>
+            </xsl:for-each>
+
+		      </td>
+        </tr>
+      </table>
+    </body>
 	</html>
 	<!-- /redirect:write -->
       </xsl:result-document>
@@ -245,10 +245,9 @@
 </xsl:template>
 
 
-
 <xsl:template name="menuo-eo">
   <xsl:variable name="aktiva" select="'_eo.html'"/>
-  <tr>
+  <tr class="menuo">
     <xsl:for-each select="$enhavo-root//pagho[not(@kashita='jes')]">
       <xsl:choose>
         <xsl:when test="@dosiero=$aktiva">

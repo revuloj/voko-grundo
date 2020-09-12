@@ -6,9 +6,8 @@
 <!-- xsl:output method="html" version="3.2"/ -->
 <xsl:strip-space elements="trdgrp"/>
 
-<!--
-
-kreita de Wolfram Diestel
+<!-- (c) 2006-2020 ĉe Wolfram Diestel
+     laŭ permesilo GPL 2.0
 
 -->
 
@@ -17,26 +16,25 @@ kreita de Wolfram Diestel
 <xsl:template match="/">
   <html>
   <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-  <link title="artikolo-stilo" type="text/css" rel="stylesheet"
-  href="{$cssdir}/indeksoj.css" />
-  <title>Revo - bibliografio</title>
+    <meta charset="utf-8" />
+    <link title="artikolo-stilo" type="text/css" rel="stylesheet"
+       href="{$cssdir}/indeksoj.css" />
+    <title>Revo - bibliografio</title>
   </head>
   <body>
-     <table cellspacing="0">
-        <tr><td class="fona"><a href="../inx/_eo.html">Esperanto</a></td>
-            <td class="fona"><a href="../inx/_lng.html">Lingvoj</a></td>
-	    <td class="fona"><a href="../inx/_fak.html">Fakoj</a></td>
-	    <td class="aktiva"><a href="../inx/_ktp.html">ktp.</a></td>
-	 </tr>
-	 <tr><td colspan="4" class="enhavo">
-
-    <h1>bibliografio</h1>
-  
-    <xsl:apply-templates/>
-	  </td>
-	</tr>
-     </table>  
+    <table cellspacing="0">
+      <tr class="menuo">
+        <td class="fona"><a href="../inx/_eo.html">Esperanto</a></td>
+        <td class="fona"><a href="../inx/_lng.html">Lingvoj</a></td>
+	      <td class="fona"><a href="../inx/_fak.html">Fakoj</a></td>
+	      <td class="aktiva"><a href="../inx/_ktp.html">ktp.</a></td>
+	    </tr>
+	    <tr><td colspan="4" class="enhavo">
+        <h1>bibliografio</h1>
+        <xsl:apply-templates/>
+        </td>
+	    </tr>
+    </table>  
   </body>
   </html>
 </xsl:template>

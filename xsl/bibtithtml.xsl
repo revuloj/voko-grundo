@@ -3,9 +3,8 @@
 		version="1.0"
                 extension-element-prefixes="xt">
 
-<!--
-
-kreita de Wolfram Diestel
+<!-- (c) 2006-2020 ĉe Wolfram Diestel
+     laŭ permesilo GPL 2.0
 
 -->
 
