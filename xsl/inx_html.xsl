@@ -146,6 +146,9 @@ select="concat($agordo-pado,'/klasoj.xml')"/></xsl:variable>
  
 <xsl:template match="ero[@ref]">
   <p>
+    <xsl:attribute name="id">
+      <xsl:value-fo select="concat('x:',translate(normalize-space(@titolo),' ','_'))"/>
+    </xsl:attribute>
     <xsl:choose>
       <xsl:when test="@style">
        <xsl:attribute name="style"><xsl:value-of select="@style"/></xsl:attribute>

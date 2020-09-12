@@ -18,6 +18,8 @@ js_out=jsc/revo-1c.js
 opt=BUNDLE
 #opt=SIMPLE
 
+echo "$js_out <-- $js_in"
+
 # vi povas antaŭinstali por eviti ĉiufoje ŝargi el la reto:
 #   npm install google-closure-compiler
 ${compiler} --compilation_level ${opt} \

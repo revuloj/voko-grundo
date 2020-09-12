@@ -135,12 +135,12 @@ function load_page(trg,url,push_state=true) {
             if (nav && trg == "nav") {
                 nav.textContent= '';
                 var table = doc.querySelector("table"); 
-                fix_url_path(table);
+                adaptu_paghon(table,url);
                 nav.append(table);
                 //img_svg_bg(); // anst. fakvinjetojn, se estas la fak-indekso - ni testos en la funkcio mem!
             } else if (main && trg == "main") {
                 var body = doc.body;
-                fix_url_path(body);
+                adaptu_paghon(body,url);
                 main.textContent = '';
                 main.append(...body.children);
                 main.setAttribute("id","w:"+url);
@@ -167,12 +167,53 @@ function load_page(trg,url,push_state=true) {
     });
 }
 
-function fix_url_path(element) {
-    for (var i of element.getElementsByTagName("img")) {
-        var src = i.getAttribute("src");
-        if (src.startsWith("..")) i.setAttribute("src",src.substring(1))
+function adaptu_paghon(root_el, url) {
+    function fix_img_src() {
+        // ĉar la kadra paĝo estas unu ŝtupo pli alta
+        // ol la enhavaj paĝoj, la relativajn padojn de bildoj
+        // ni devos adapti: ../ -> ./
+        for (var i of root_el.getElementsByTagName("img")) {
+            var src = i.getAttribute("src");
+            if (src.startsWith("..")) i.setAttribute("src",src.substring(1))
+        }
     }
+
+    function x_utf8(event) {
+        if (document.getElementById("x").checked) {
+            var serch_in = event.target;
+            t = serch_in.value.replace(/c[xX]/g, "\u0109")
+                .replace(/g[xX]/g, "\u011d")
+                .replace(/h[xX]/g, "\u0125")
+                .replace(/j[xX]/g, "\u0135")
+                .replace(/s[xX]/g, "\u015d")
+                .replace(/u[xX]/g, "\u016d")
+                .replace(/C[xX]/g, "\u0108")
+                .replace(/G[xX]/g, "\u011c")
+                .replace(/H[xX]/g, "\u0124")
+                .replace(/J[xX]/g, "\u0134")
+                .replace(/S[xX]/g, "\u015c")
+                .replace(/U[xX]/g, "\u016c");
+            if (t != serch_in.value) {
+                serch_in.value = t;
+           }
+        }
+    }
+
+    fix_img_src();
+
+    var filename = url.split('/').pop()
+    if (filename == 'titolo.html') {
+        // adaptu serĉilon
+        var s_form = root_el.querySelector("form[name='f']");
+        var sercxata = s_form.querySelector("#sercxata");
+        var submit = s_form.querySelector("input[type='submit']");
+        s_form.setAttribute("action","");
+        submit.addEventListener("click",serchu);
+        sercxata.setAttribute("onkeyup","");
+        sercxata.addEventListener("keyup",x_utf8);
+    }    
 }
+
 
 // anstataŭigu vinjetojn per CSS-SVG-klasoj
 //function img_svg_bg() {
@@ -253,6 +294,17 @@ function load_xml(art) {
 
 function serchu(event) {
     event.preventDefault();
+
+    var serch_in = document.getElementById('sercxata');
+    var esprimo = serch_in.value;
+
+    console.log("Ni serĉu:"+esprimo);
+
+    HTTPRequest('GET', "/cgi-bin/sercxu-json.pl", {sercxata: esprimo},
+        function(data) {
+            console.log("Ni trovis: "+data)
+        }
+    );
 
     /*
     
