@@ -169,6 +169,7 @@ function load_page(trg,url,push_state=true) {
 }
 
 function adaptu_paghon(root_el, url) {
+    // adapto de atributoj img-src
     function fix_img_src() {
         // ĉar la kadra paĝo estas unu ŝtupo pli alta
         // ol la enhavaj paĝoj, la relativajn padojn de bildoj
@@ -203,16 +204,16 @@ function adaptu_paghon(root_el, url) {
     fix_img_src();
 
     var filename = url.split('/').pop()
-    if (filename == 'titolo.html') {
+    if ( filename == 'titolo.html' || filename.startsWith("sercxu.pl") ) {
         // adaptu serĉilon
         var s_form = root_el.querySelector("form[name='f']");
-        var sercxata = s_form.querySelector("#sercxata");
+        var sercxata = s_form.querySelector("input[name='sercxata']");
         var submit = s_form.querySelector("input[type='submit']");
         s_form.setAttribute("action","");
         submit.addEventListener("click",serchu);
         sercxata.setAttribute("onkeyup","");
         sercxata.addEventListener("keyup",x_utf8);
-    }    
+    }
 }
 
 
@@ -314,17 +315,22 @@ function serchu(event) {
             // ]
 
             function findings(lng) {
-                var div = make_element("div");
-                div.append(make_element("h1",{},lng.titolo));
-                var dl = make_element("dl",{},"");
+                var div = make_elements([
+                    ["div",{},
+                        [["h1",{},lng.titolo]]
+                    ]
+                ])[0];
+                var dl = make_element("dl");
                 for (var t of lng.trovoj) {
-                    var dt = make_element("dt",{},"");
-                    var dd = make_element("dd",{},"");
-                    var a1 = make_element("a",{target: "precipa", href: t.art+".html#"+t.mrk1},t.vrt1);
-                    var a2 = make_element("a",{target: "precipa", href: t.art+".html#"+t.mrk2},t.vrt2);
-                    dt.append(a1,":");
-                    dd.append(a2);
-                    dl.append(dt,dd);
+                    var dt_dd = make_elements([
+                        ["dt",{},
+                            [["a",{target: "precipa", href: t.art+".html#"+t.mrk1},t.vrt1]]
+                        ],
+                        ["dd",{},
+                            [["a",{target: "precipa", href: t.art+".html#"+t.mrk2},t.vrt2]]
+                        ]
+                    ]);
+                    dl.append(...dt_dd);
                 }
                 div.append(dl);
                 return div;
