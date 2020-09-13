@@ -328,10 +328,50 @@ function serchu(event) {
                 div.append(dl);
                 return div;
             }
+
+        // <form method="post" action="" target="indekso" name="f">
+        //     <input type="text" id="sercxata" name="sercxata" size="31" maxlength="255" onkeyup="xAlUtf8(this.value, 'sercxata')" value="testo" placeholder="Ĵokeroj: % (pluraj) kaj _ (unu)">
+        //     <input type="submit" value="trovu">
+        //     <br>
+        //     <script type="text/javascript">
+        //         document.write("<input type=\"checkbox\" id=\"x\" name=\"x\" onClick=\"xAlUtf8(document.f.sercxata.value,'sercxata')\" checked>anstata&#365;igu cx, gx, ..., ux");</script><input type="checkbox" id="x" name="x" onclick="xAlUtf8(document.f.sercxata.value,'sercxata')" checked="">anstataŭigu cx, gx, ..., ux
+        //     <noscript><input type="hidden" id="cx" name="cx" value="1"></noscript>
+        // </form>
+            function serch_frm(esprimo) {
+                return make_elements([
+                    ["form",{id:"x:sercho", name:"f"},[
+                        ["input",{
+                            type:"text", 
+                            id:"x:sercxata", 
+                            name:"sercxata", 
+                            size:"31", 
+                            maxlength:"255",
+                            value:esprimo,
+                            paceholder:"ĵokeroj: % (pluraj) kaj _ (unu)"
+                        }],
+                        ["input",{
+                            type:"submit",
+                            value:"trovu"
+                        }],
+                        ["input",{
+                            type:"checkbox",
+                            name:"x",
+                            value:"checked"
+                        }],
+                        ["label",{
+                            for:"x"
+                        },
+                        "anstataŭigu cx, gx, ..., ux"
+                        ]
+                    ]
+                ]]);
+            }
         
             //console.debug("Ni trovis: "+data);
             var json = JSON.parse(data);
             var inx_enh = document.getElementById("navigado").querySelector(".enhavo");
+
+            var s_frm = serch_frm(esprimo);
 
             var trovoj = make_element("div",{id: "x:trovoj"},"");
             for (var lng of json) {
@@ -340,9 +380,11 @@ function serchu(event) {
             }
 
             inx_enh.textContent = "";
-            inx_enh.append(trovoj);
+            inx_enh.append(...s_frm,trovoj);
         }
     );
+
+
 
     /*
     
