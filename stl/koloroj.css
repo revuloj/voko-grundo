@@ -96,7 +96,7 @@
 
     /* por navigado */
     --nav-fnt-clr: ivory;
-    --nav-bgr-clr: #774400 /* #B8860B #FAC540  #eAb530 goldenrod */;
+    --nav-bgr-clr: #663300 /* #B8860B #FAC540  #eAb530 goldenrod */;
     --nav-hov-bgr-clr: lightgoldenrodyellow;
     --nav-hov-fnt-clr: black;
     --nav-act-bgr-clr: goldenrod;
@@ -111,10 +111,10 @@
     --main-shd-clr: lightgoldenrodyellow;
 
 
-    --mh2-bgr-clr: darkgoldenrod; 
+    --mh2-bgr-clr: #663300; 
     --mh2-act-fnt-clr: lightgoldenrodyellow; 
  
-    --btn-bgr-clr: darkgoldenrod; 
+    --btn-bgr-clr: #663300; 
     --btn-act-fnt-clr: lightgoldenrodyellow; 
 
     --btn-hov-bgr-clr: khaki;
