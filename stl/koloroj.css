@@ -98,28 +98,28 @@
     /* por navigado */
     --nav-fnt-clr: ivory;
     --nav-bgr-clr: #c2590E /* #B8860B #FAC540  #eAb530 goldenrod */;
-    --nav-hov-bgr-clr: lightgoldenrodyellow;
+    --nav-hov-bgr-clr: palegoldenrod;
     --nav-hov-fnt-clr: black;
     --nav-act-bgr-clr: burlywood;
     --nav-act-brd-clr: ivory;
 
 
     /* por la ĉefa paĝo (main) */
-    --main-fnt-clr: lightgoldenrodyellow;
+    --main-fnt-clr: palegoldenrod;
     --main-bgr-clr: #0f0800;
     --main-act-bgr-clr: #c2590E;
-    --main-act-fnt-clr: lightgoldenrodyellow;
+    --main-act-fnt-clr: palegoldenrod;
     --main-hov-fnt-clr: #EE6F40;
-    --main-shd-clr: lightgoldenrodyellow;
+    --main-shd-clr: palegoldenrod;
 
 
     --mh2-bgr-clr: #c2590E; 
-    --mh2-act-fnt-clr: lightgoldenrodyellow; 
+    --mh2-act-fnt-clr: palegoldenrod;
  
     --btn-bgr-clr: #c2590E; 
     --btn-brd-clr: chocolate;
 
-    --btn-act-fnt-clr: lightgoldenrodyellow; 
+    --btn-act-fnt-clr: palegoldenrod; 
 
     --btn-hov-bgr-clr: khaki;
     --btn-hov-brd-clr: black;
@@ -129,22 +129,22 @@
     --btn-act-brd-clr: black;
  
     --input-bgr-clr: #2f0800; /* #52090E; #82190E; #a2390E;*/
-    --input-fnt-clr: lightgoldenrodyellow;
+    --input-fnt-clr: palegoldenrod;
 
     --list-bgr-clr: palegoldenrod;
     --lst2-bgr-clr: khaki;
     --lst2-act-bgr-clr: lightgoldenrodyellow;
 
-    --ekz-fnt-clr: goldenrod;
+    --ekz-fnt-clr: orange;
     --ekz-act-fnt-clr: darkgoldenrod;
 
-    --fnt-fnt-clr: goldenrod;
+    --fnt-fnt-clr: orange;
     --klr-fnt-clr: #775533;
     --rim-fnt-clr: steelblue;
     --ref-fnt-clr: khaki;
 
-    --adm-fnt-clr: goldenrod;
-    --label-fnt-clr: goldenrod;
+    --adm-fnt-clr: orange;
+    --label-fnt-clr: orange;
     --vnj-bgr-clr: #996600;
 
     --svg-bgr-clr: #ffffee; 
