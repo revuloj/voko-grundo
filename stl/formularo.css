@@ -5,6 +5,9 @@ textarea {
     height: 25em;
     min-height: 8em;
 
+    background-color: var(--input-bgr-clr);
+    color: var(--input-fnt-clr);
+
     flex: 1; /* consume available width */     
 }
 
@@ -30,8 +33,9 @@ fieldset legend {
     background-color: var(--nav-bgr-clr);
 }
 
-
 select {
+    background-color: var(--input-bgr-clr);
+    color: var(--input-fnt-clr);
     /*border-width: 2px;
     border-radius: 3px;*/
     /*-webkit-appearance: none;*/

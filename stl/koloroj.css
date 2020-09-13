@@ -100,7 +100,7 @@
     --nav-bgr-clr: #c2590E /* #B8860B #FAC540  #eAb530 goldenrod */;
     --nav-hov-bgr-clr: lightgoldenrodyellow;
     --nav-hov-fnt-clr: black;
-    --nav-act-bgr-clr: goldenrod;
+    --nav-act-bgr-clr: burlywood;
     --nav-act-brd-clr: ivory;
 
 
@@ -128,7 +128,7 @@
     --btn-act-bgr-clr: #FAC540 /*khaki*/;
     --btn-act-brd-clr: black;
  
-    --input-bgr-clr: darkgoldenrod;
+    --input-bgr-clr: #2f0800; /* #52090E; #82190E; #a2390E;*/
     --input-fnt-clr: lightgoldenrodyellow;
 
     --list-bgr-clr: palegoldenrod;
