@@ -52,6 +52,22 @@ function make_element(name,attributes,textcontent) {
     return element;
 }
 
+function make_elements(jlist) {
+    var dlist = [];
+    for (var el of jlist) {
+        var element;
+        if (el[2] && el[2] instanceof Array) {
+            var content = make_elements(el[2]);
+            element = make_element(el[0],el[1]);
+            element.append(...content);
+        } else {
+            element=make_element(el[0],el[1],el[2]);
+        }
+        dlist.push(element)
+    }
+    return dlist;
+}
+
 function make_button(label,handler,hint='') {
     var btn = document.createElement("BUTTON");
     btn.appendChild(document.createTextNode(label)); 
