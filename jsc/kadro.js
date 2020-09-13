@@ -299,7 +299,7 @@ function serchu(event) {
     var serch_in = document.getElementById('sercxata');
     var esprimo = serch_in.value;
 
-    console.log("Ni serĉu:"+esprimo);
+    //console.debug("Ni serĉu:"+esprimo);
 
     HTTPRequest('POST', sercho_url, {sercxata: esprimo},
         function(data) {
@@ -319,9 +319,9 @@ function serchu(event) {
                 for (var t of lng.trovoj) {
                     var dt = make_element("dt",{},"");
                     var dd = make_element("dd",{},"");
-                    var a1 = make_element("a",{target: "precipa", href: t.art+"#"+t.mrk1},t.vrt1);
-                    var a2 = make_element("a",{target: "precipa", href: t.art+"#"+t.mrk2},t.vrt2);
-                    dt.append(a1);
+                    var a1 = make_element("a",{target: "precipa", href: t.art+".html#"+t.mrk1},t.vrt1);
+                    var a2 = make_element("a",{target: "precipa", href: t.art+".html#"+t.mrk2},t.vrt2);
+                    dt.append(a1,":");
                     dd.append(a2);
                     dl.append(dt,dd);
                 }
@@ -329,18 +329,18 @@ function serchu(event) {
                 return div;
             }
         
-            console.log("Ni trovis: "+data);
+            //console.debug("Ni trovis: "+data);
             var json = JSON.parse(data);
-            var navigado = document.getElementById("navigado");
+            var inx_enh = document.getElementById("navigado").querySelector(".enhavo");
 
             var trovoj = make_element("div",{id: "x:trovoj"},"");
             for (var lng of json) {
-                console.log("TRD:"+lng.lng1+"-"+lng.lng2);
+                //console.debug("TRD:"+lng.lng1+"-"+lng.lng2);
                 trovoj.append(findings(lng));
             }
 
-            navigado.textContent = "";
-            navigado.append(trovoj);
+            inx_enh.textContent = "";
+            inx_enh.append(trovoj);
         }
     );
 
