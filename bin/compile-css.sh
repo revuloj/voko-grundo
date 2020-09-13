@@ -7,6 +7,7 @@ files=(\
   $dir/normalize.css \
   $dir/koloroj.css \
   $dir/piktogram-1c.css \
+  $dir/formularo.css \
   $dir/kadro-1c.css \
   $dir/artikolo-1c.css \
   $dir/redaktilo-1c.css)

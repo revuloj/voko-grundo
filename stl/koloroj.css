@@ -27,6 +27,7 @@
     --main-bgr-clr: lightgoldenrodyellow;
     --main-brd-clr: goldenrod;
     --main-fnt-clr: black;
+    --main-act-bgr-clr: #eAb530;
     --main-act-fnt-clr: black;
     --main-hov-fnt-clr: coral;
     --main-shd-clr: gray;
@@ -106,6 +107,7 @@
     /* por la ĉefa paĝo (main) */
     --main-fnt-clr: lightgoldenrodyellow;
     --main-bgr-clr: #0f0800;
+    --main-act-bgr-clr: #c2590E;
     --main-act-fnt-clr: lightgoldenrodyellow;
     --main-hov-fnt-clr: #EE6F40;
     --main-shd-clr: lightgoldenrodyellow;

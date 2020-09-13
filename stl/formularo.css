@@ -1,0 +1,229 @@
+@import url("koloroj.css");
+
+textarea {
+    margin: 0; /*1px 0.3em;*/
+    height: 25em;
+    min-height: 8em;
+
+    flex: 1; /* consume available width */     
+}
+
+fieldset {
+    /*
+    display: flex;
+    flex-direction: row;*/
+    background-color: var(--nav-bgr-clr);
+    border-bottom: 2px dotted var(--nav-brd-clr);
+
+    border: none;
+    margin: 0;
+    margin-bottom: 1px;
+    padding: 0.5em;
+}
+
+fieldset legend {
+    text-decoration: underline;
+    font-weight: bold;
+    /*font-family: monospace;*/
+    padding: 0.5em;
+    border-radius: 4px;
+    background-color: var(--nav-bgr-clr);
+}
+
+
+select {
+    /*border-width: 2px;
+    border-radius: 3px;*/
+    /*-webkit-appearance: none;*/
+    padding: 0.3em 0.5em;
+    /*font-size: 1rem;*/
+}
+
+input {
+    background-color: var(--input-bgr-clr);
+    color: var(--input-fnt-clr);
+
+    margin: 3px 1px 0px 1px;
+    padding: 0.3em 0.5em;
+    /*font-size: 1rem;*/
+    max-width: 40%;
+}
+
+button, input[type="button"], input[type="checkbox"] {
+    background-color: var(--btn-bgr-clr);
+    border-color: var(--btn-brd-clr);
+    color: var(--btn-fnt-clr);
+
+    padding: 0.3em 0.5em;
+    /*border-radius: 3px;*/
+    box-shadow: 1px 1px 2px;
+    /*font-family: monospace;*/
+    /* font-size: 1rem;*/
+}
+
+.tabs {
+    margin-left: 0.5em;
+    margin-top: 0em;
+    margin-bottom: 1em;
+
+    color: inherit;
+}   
+
+.tabs > label {
+    font-weight: bold;
+    text-align: right;
+    padding: .1em;
+}
+
+.tabs > label::after {
+    content: ":\00a0"
+} 
+.tabs input {
+    display: none;
+} 
+.tabs input:checked + label {
+    padding: .1em;
+    /*background: var(--list-act-bgr-clr);*/
+    border-bottom: 3px solid var(--main-brd-clr);
+} 
+
+.tabs a {
+    padding: 0.5em;
+    /*background-color: palegoldenrod; */
+    /*font-family: monospace;*/
+    font-weight: bold;
+    /*color: black;*/
+    text-decoration: none;
+}
+ 
+.tabs a.aktiva {
+   font-weight: bold;
+   /*color: black;*/
+   /*text-transform: uppercase;*/
+   text-decoration: underline;
+
+   border-left: 4px solid var(--main-brd-clr);
+   border-right: 4px solid var(--main-brd-clr);   
+   background-color: var(--main-act-bgr-clr);
+}
+
+/* Buttons
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+/***
+.button,
+button,
+input[type="submit"],
+input[type="reset"],
+input[type="button"] {
+    display: inline-block;
+    font-size: 133%;
+    background-color: goldenrod;
+    background-image: radial-gradient(at 49.5% 49.5%, darkgoldenrod 20%, goldenrod 60%, khaki 80%);
+    box-shadow: 4px 4px 8px;
+    border-radius: 2em;
+    border: 2px solid gray;
+    cursor: pointer;
+    box-sizing: border-box; 
+
+    text-align: center;
+    font-weight: 600;
+    letter-spacing: .1rem;
+    text-transform: uppercase;
+    text-decoration: none;
+    white-space: nowrap;
+}
+.button:hover,
+button:hover,
+input[type="submit"]:hover,
+input[type="reset"]:hover,
+input[type="button"]:hover,
+.button:focus,
+button:focus,
+input[type="submit"]:focus,
+input[type="reset"]:focus,
+input[type="button"]:focus {
+    box-shadow: 2px 2px 4px darkslategray;
+    background-image: none;    
+}
+***/
+
+/* Forms
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+/***
+input[type="email"],
+input[type="number"],
+input[type="search"],
+input[type="text"],
+input[type="tel"],
+input[type="url"],
+input[type="password"],
+textarea,
+select {
+    height: 2.4em;
+    padding: 0.3em 0.6em;
+    background-color: var(--input-bg-color);
+    color: var(--input-color);
+    border: 2px solid darkgray;
+    border-radius: 4px;
+    box-shadow: none;
+    box-sizing: border-box; 
+}
+***/
+
+/* Removes awkward default styles on some inputs for iOS */
+/***
+input[type="email"],
+input[type="number"],
+input[type="search"],
+input[type="text"],
+input[type="tel"],
+input[type="url"],
+input[type="password"],
+textarea {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none; 
+}
+
+textarea {
+    min-height: 65px;
+    padding-top: 6px;
+    padding-bottom: 6px; 
+}
+
+input[type="email"]:focus,
+input[type="number"]:focus,
+input[type="search"]:focus,
+input[type="text"]:focus,
+input[type="tel"]:focus,
+input[type="url"]:focus,
+input[type="password"]:focus,
+textarea:focus,
+select:focus {
+    border: 2px dashed darkgoldenrod;
+    outline: 0; 
+}
+
+label,
+legend {
+    display: block;
+    margin-bottom: .5rem;
+    font-weight: 600; 
+}
+
+fieldset {
+    padding: 0;
+    border-width: 0; 
+}
+
+input[type="checkbox"],
+    input[type="radio"] {
+    display: inline; 
+}
+
+label > .label-body {
+    display: inline-block;
+    margin-left: .5rem;
+    font-weight: normal; 
+}
+***/
