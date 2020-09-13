@@ -116,11 +116,11 @@ function getHashParts() {
 
 // ĉu ni vere bezonos tion? parametroj estas afero de la servilo,
 // sed ni povas kaŝi ilin ankaŭ post #, vd. supre getHashParts
-function getParamValue(param) {
+function getParamValue(param,params) {
     var result = null,
-        tmp = [];
-    location.search.substr(1).split("&")
-        .forEach(function (item) {
+        tmp = [],
+        parstr = params || location.search.substr(1);
+        parstr.split("&").forEach(function (item) {
           tmp = item.split("=");
           if (tmp[0] === param) result = decodeURIComponent(tmp[1]);
         });

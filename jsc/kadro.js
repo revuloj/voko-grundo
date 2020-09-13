@@ -145,8 +145,13 @@ function load_page(trg,url,push_state=true) {
                 main.textContent = '';
                 main.append(...body.children);
                 main.setAttribute("id","w:"+url);
-                artikolo.preparu_art();
-            }                    
+                var filename = url.split('/').pop();
+                if (filename.startsWith("redaktilo.html"))
+                    redaktilo.preparu_red(filename.split('?').pop()); // redaktilo-paĝo
+                else
+                    artikolo.preparu_art();                
+            }           
+         
 
             //if (push_state)
             //    history.pushState({
@@ -215,28 +220,7 @@ function adaptu_paghon(root_el, url) {
         submit.addEventListener("click",serchu);
         sercxata.setAttribute("onkeyup","");
         sercxata.addEventListener("keyup",x_utf8);
-
-    // redaktilo-paĝo
-    } else if ( filename.startsWith("redaktilo.html") ) {
-        var tgl = root_el.querySelector("div[id='r:fs_toggle']");
-        for (var a of tgl.getElementsByTagName("a") ) {
-            a.removeAttribute("onclick","");
-            a.addEventListener("click", function(event) {
-                var id = event.target.id;
-                redaktilo.fs_toggle(id);
-            });
-        }
-        var tab = root_el.querySelector("div[id='r:tabs']");
-        for (var a of tab.getElementsByTagName("a") ) {
-            a.removeAttribute("onclick","");
-            a.addEventListener("click", function(event) {
-                var id = event.target.id;
-                redaktilo.tab_toggle(id);
-                if (id == "r:trigardo")
-                    redaktilo.rantaurigardo();
-            });
-        }
-    }
+    } 
 }
 
 

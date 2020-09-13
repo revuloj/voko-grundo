@@ -647,7 +647,7 @@ var redaktilo = function() {
       if (article) {
         rigardo.textContent = '';
         rigardo.append(...article);  
-        preparu_art();
+        artikolo.preparu_art();
 
         // eble tio devas esti en preparu_art?
         // refaru matematikajn formulojn, se estas
@@ -706,14 +706,14 @@ var redaktilo = function() {
       });
   }
 
-  function load_xml() {
-    var art = getParamValue("art");
+  function load_xml(params) {
+    var art = getParamValue("art",params);
     if (art) {
 
       HTTPRequest('GET','/revo/xml/'+art+'.xml',{},
-      function() {
+      function(data) {
           // Success!
-          document.getElementById('r:xmltxt').value=this.response;
+          document.getElementById('r:xmltxt').value = data;
           document.getElementById("r:art").value = art;
           var titolo = document.getElementById("r:art_titolo");
           titolo.textContent = "\u00ab" + art + "\u00bb"; 
@@ -741,7 +741,7 @@ var redaktilo = function() {
     }
   }
 
-  function preparu_red() {
+  function preparu_red(params) {
     // enlegu bezonaĵojn (listojn, XML-artikolon, preferojn)
     if (document.getElementById("r:xmltxt")) {
       sf(0, 0, 1);
@@ -749,23 +749,29 @@ var redaktilo = function() {
       revo_codes.lingvoj.load();
       revo_codes.fakoj.load("r:sfak");
       revo_codes.stiloj.load("r:sstl");
-      load_xml(); // se doniĝis ?art=xxx ni fone ŝargas tiun artikolon
+      load_xml(params); // se doniĝis ?art=xxx ni fone ŝargas tiun artikolon
     }
 
     // preparu aktivajn elmentoj / eventojn
     var tabs = document.getElementById("r:tabs");
+    tabs.querySelectorAll("a").forEach(function (a) { 
+      a.removeAttribute("onclick") 
+    });
     tabs.addEventListener("click", function(event) {
       var a = event.target.closest("a");
       tab_toggle(a.id);
+      if (a.id == "r:trigardo") {
+        rantaurigardo();
+      }
     });
 
     var fs_t = document.getElementById("r:fs_toggle");
+    fs_t.querySelectorAll("a").forEach(function (a) { 
+      a.removeAttribute("onclick") 
+    });
     fs_t.addEventListener("click", function(event) {
       var a = event.target.closest("a");
       fs_toggle(a.id);
-      if (a.id == "r:trigardo") {
-        trigardo();
-      }
     });
   }
 
