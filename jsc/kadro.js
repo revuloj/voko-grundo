@@ -296,7 +296,8 @@ function load_xml(art) {
 function serchu(event) {
     event.preventDefault();
 
-    var serch_in = document.getElementById('sercxata');
+    var serch_in = event.target.closest("form")
+        .querySelector('input[name=sercxata]');
     var esprimo = serch_in.value;
 
     //console.debug("Ni serĉu:"+esprimo);
@@ -353,6 +354,7 @@ function serchu(event) {
                             type:"submit",
                             value:"trovu"
                         }],
+                        ["br",{}],
                         ["input",{
                             type:"checkbox",
                             name:"x",
@@ -371,7 +373,9 @@ function serchu(event) {
             var json = JSON.parse(data);
             var inx_enh = document.getElementById("navigado").querySelector(".enhavo");
 
-            var s_frm = serch_frm(esprimo);
+            var s_form = serch_frm(esprimo);
+            var submit = s_form[0].querySelector("input[type='submit']");
+            submit.addEventListener("click",serchu);
 
             var trovoj = make_element("div",{id: "x:trovoj"},"");
             for (var lng of json) {
@@ -380,7 +384,7 @@ function serchu(event) {
             }
 
             inx_enh.textContent = "";
-            inx_enh.append(...s_frm,trovoj);
+            inx_enh.append(...s_form,trovoj);
         }
     );
 
