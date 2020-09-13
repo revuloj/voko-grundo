@@ -114,6 +114,8 @@ function normalize_href(target, href) {
     const prefix = { main: "art/", nav: "inx/"};
     if (href.startsWith('../')) {
         return '/revo/' + href.substr(3);
+    } else if (href.startsWith('tz_') || href.startsWith('vx_')) {
+        return '/revo/tez/' + href;
     } else if (href[0] != '/' && ! href.startsWith('http')) {
         return '/revo/' + prefix[target] + href;
     } else if (href.startsWith('/cgi-bin/vokomail.pl')) {
@@ -181,7 +183,11 @@ function adaptu_paghon(root_el, url) {
         // ni devos adapti: ../ -> ./
         for (var i of root_el.getElementsByTagName("img")) {
             var src = i.getAttribute("src");
-            if (src.startsWith("..")) i.setAttribute("src",src.substring(1))
+            if (src.startsWith("..")) i.setAttribute("src",src.substring(1));
+
+            // aldonu klason por rerencoj
+            if (src.endsWith('.gif'))
+                i.classList.add("ref");
         }
     }
 
