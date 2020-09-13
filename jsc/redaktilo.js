@@ -782,6 +782,9 @@ var redaktilo = function() {
     preparu_red: preparu_red,
     create_new_art: create_new_art,
     insertTags: insertTags,
-    insertTags2: insertTags2
+    insertTags2: insertTags2,
+    fs_toggle: fs_toggle,
+    tab_toggle: tab_toggle,
+    rantaurigardo: rantaurigardo
   }
 }();

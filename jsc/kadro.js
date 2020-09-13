@@ -204,15 +204,38 @@ function adaptu_paghon(root_el, url) {
     fix_img_src();
 
     var filename = url.split('/').pop()
+
+    // serĉilo en titol- kaj serĉo-paĝoj
     if ( filename == 'titolo.html' || filename.startsWith("sercxu.pl") ) {
         // adaptu serĉilon
         var s_form = root_el.querySelector("form[name='f']");
         var sercxata = s_form.querySelector("input[name='sercxata']");
         var submit = s_form.querySelector("input[type='submit']");
-        s_form.setAttribute("action","");
+        s_form.removeAttribute("action");
         submit.addEventListener("click",serchu);
         sercxata.setAttribute("onkeyup","");
         sercxata.addEventListener("keyup",x_utf8);
+
+    // redaktilo-paĝo
+    } else if ( filename.startsWith("redaktilo.html") ) {
+        var tgl = root_el.querySelector("div[id='r:fs_toggle']");
+        for (var a of tgl.getElementsByTagName("a") ) {
+            a.removeAttribute("onclick","");
+            a.addEventListener("click", function(event) {
+                var id = event.target.id;
+                redaktilo.fs_toggle(id);
+            });
+        }
+        var tab = root_el.querySelector("div[id='r:tabs']");
+        for (var a of tab.getElementsByTagName("a") ) {
+            a.removeAttribute("onclick","");
+            a.addEventListener("click", function(event) {
+                var id = event.target.id;
+                redaktilo.tab_toggle(id);
+                if (id == "r:trigardo")
+                    redaktilo.rantaurigardo();
+            });
+        }
     }
 }
 
