@@ -9,55 +9,103 @@
    Ĉefa kadro
 ****************************************/
 
-html {
-    height: 100vh;
-    /* width: 100% */
+:root {
+    /*--small-screen-limit: 60em;*/
+    --nav-left-width: 24em; 
 }
 
-body {
-    display: flex;
-    flex-direction: row-reverse;
+html {
+    margin: 0;
+    padding: 0;
     height: 100vh;
+    max-height: 100vh;
+}
+body {
     margin: 0 !important;
     padding: 0 !important;
+    height: 100vh;
+    max-height: 100vh;
+    width: 100vw !important;
+
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: space-between;
+
     background-color: var(--main-bgr-clr); 
     color: var(--main-fnt-clr);
     font-size: 120%;
     font-family: sans-serif; 
-    /*font-family: "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, Geneva, sans-serif;*/
 }
-
-nav {
-    height: 100vh;
-    background-color: var(--nav-bgr-clr);
+main {
+    height: auto;
     overflow: auto;
-    flex-basis: 36rem;
-    /* flex-shrink: 3;  ne funkcias kiel atendite... */
+    flex-grow: 2;
+    background-color: var(--main-bgr-clr);
+}
+nav {
+    /*height: 2.5em;*/
+    max-height: 100vh;
+    height: auto;
+    width: 100vw;
+    /*align-self: stretch;*/
+
+    flex-basis: auto; /* auto aŭ content, ne subtenita eble de ĉiuj retumiloj */ 
     flex-grow: 0;
-    margin: 0;
-    padding: 0;
+    flex-shrink: 0;
 
     z-index: 100;
-
+    background-color: var(--nav-bgr-clr);
     box-shadow: 1px 1px 2px;
 
-    /*border: 1px solid blue;*/
-    /*background-color: lightgoldenrodyellow;*/
-}
-
-main {
-    height: 100vh;
-    overflow-y: auto;
-    flex-grow: 3;
-    /* flex-shrink: 1; /* ne funkcias kiel atendite... */
-    background-color: var(--main-bgr-clr);
-
-    /*
+    /* dividu la spacon inter indekso kaj navig-trabo */
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
+}
+#navigado {
+    /*display: block;*/
     width: 100%;
-    */
-    /*border: 1px solid green;*/
+    overflow: auto;
+    /*width: 100%;*/ /* prenu tutan spacon de nav, kaj lasu al tiu
+                difini la larĝecon! */
+    margin: 0;
+    padding: 0.5em; 
+}
+#navigado.eble_kasxita {
+    display: none;
+}
+#navbar {
+    min-height: 2.2em;
+    height: auto;
+    display: flex;
+    justify-content: space-between;
+
+    flex-grow: 0;
+    flex-shrink: 0;
+}
+#navbar button {
+    flex-grow: 0;
+}
+#navbar input {
+    flex-shrink: 1;
+    flex-grow: 1;
+    max-width: 90%;
+}
+
+@media (min-width: 60em) {
+    body {
+        flex-direction: row-reverse;
+    }
+    nav {
+        width: var(--nav-left-width);
+    }
+    #navigado.eble_kasxita {
+       display: block;
+    }
+    #nav_inx_btn {
+        display: none;
+    }
 }
 
 
@@ -116,33 +164,7 @@ nav a:active {
     background-color: goldenrod;
 }
 */
-#navigado {
-    display: block;
-    /*font-family: monospace;*/
-    /*overflow-x: visible;*/
-    width: 100%; /* prenu tutan spacon de nav, kaj lasu al tiu
-                difini la larĝecon! */
-    /*
-    min-width: 16em;
-    max-width: 33em;
-    */
 
-    /*overflow-y: auto;
-    min-height: 100vh;*/
-
-    /*padding-inline-start: 0;*/    
-    margin: 0;
-    padding: 0.5em; 
-    /*padding-right: 0.5em;*/
-
-    /* background-color: var(--nav-bgr-clr);*/
-    /*z-index: 100;*/
-    /*box-shadow: 1px 1px 2px;*/
-
-    /* nur se ni volos rezervi lokon por butono [≡]:
-    padding-top: 2.2em;
-    */
-}
 
 #navigado > table {
     width: 100%;
@@ -253,21 +275,6 @@ nav a:active {
         */
 
     text-shadow: 2px 2px 5px var(--nav-act-bgr-clr);
-}
-
-@media all and (max-width: 50em) {
-    .nav_btn {
-        display: block;
-    }
-    #navigado {
-        position: absolute;
-        /* Kaŝu navigadon 
-        font: 0/0 serif;   
-        z-index: -1;
-        */
-        display: none;
-        box-shadow: 5px 5px 20px;
-    }
 }
 
 /*

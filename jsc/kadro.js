@@ -15,6 +15,8 @@ when_doc_ready(function() {
             load_page("main","titolo.html");
             load_page("nav","/revo/inx/_eo.html");   
         }
+        document.getElementById("nav_inx_btn")
+            .addEventListener("click",index_toggle);
         
         document.body 
         //document.getElementById("navigado")
@@ -25,6 +27,10 @@ when_doc_ready(function() {
     }
 });
 
+function index_toggle(event) {
+    document.getElementById("navigado").classList.toggle("eble_kasxita");
+    //document.querySelector("main").classList.toggle("kasxita");
+}
 
 // se la artikolo ŝargiĝis aparte de la kadro ni aldonu la kadron
 function enkadrigu() {
@@ -140,6 +146,8 @@ function load_page(trg,url,push_state=true) {
                 var table = doc.querySelector("table"); 
                 adaptu_paghon(table,url);
                 nav.append(table);
+                document.getElementById("navigado").classList.remove("eble_kasxita");
+
                 //img_svg_bg(); // anst. fakvinjetojn, se estas la fak-indekso - ni testos en la funkcio mem!
             } else if (main && trg == "main") {
                 var body = doc.body;
@@ -152,6 +160,7 @@ function load_page(trg,url,push_state=true) {
                     redaktilo.preparu_red(filename.split('?').pop()); // redaktilo-paĝo
                 else
                     artikolo.preparu_art();                
+                document.getElementById("navigado").classList.add("eble_kasxita");
             }           
          
 
@@ -188,6 +197,10 @@ function adaptu_paghon(root_el, url) {
             // aldonu klason por rerencoj
             if (src.endsWith('.gif'))
                 i.classList.add("ref");
+            else if (src == 'revo.jpg') {
+                i.setAttribute("src","titolo.jpg");
+                i.setAttribute("width","700");
+            }
         }
     }
 
