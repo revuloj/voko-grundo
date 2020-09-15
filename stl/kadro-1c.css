@@ -12,6 +12,7 @@
 :root {
     /*--small-screen-limit: 60em;*/
     --nav-left-width: 24em; 
+    --nav-enh-width: 22em; 
 }
 
 html {
@@ -79,7 +80,9 @@ nav {
     min-height: 2.2em;
     height: auto;
     display: flex;
+    align-items: center;
     justify-content: space-between;
+    z-index: 200;
 
     flex-grow: 0;
     flex-shrink: 0;
@@ -91,6 +94,7 @@ nav {
     flex-shrink: 1;
     flex-grow: 1;
     max-width: 90%;
+    min-width: 5em;
 }
 
 @media (min-width: 60em) {
@@ -106,6 +110,10 @@ nav {
     #nav_inx_btn {
         display: none;
     }
+    #navigado > table {
+        width: var(--nav-enh-width); /*100%;*/
+        margin-right: auto;
+    }    
 }
 
 
@@ -117,7 +125,7 @@ nav {
 ...
     https://www.w3schools.com/howto/howto_js_popup.asp
     https://www.w3schools.com/howto/howto_js_collapsible.asp
-*/
+
 .nav_btn {
     display: none;
     position: absolute;
@@ -130,6 +138,7 @@ nav {
     background-color: var(--nav-bgr-clr);
     border-bottom-right-radius: 0.2em;
 }
+*/
 
 nav::-webkit-scrollbar-corner,
 nav::-moz-scrollbar-corner { /* FF ne funkcias, sed uzas body-backround-color...? */
@@ -167,8 +176,18 @@ nav a:active {
 
 
 #navigado > table {
-    width: 100%;
+    width: 95vw;
+    margin-right: auto;
+    table-layout: fixed;
 }
+
+#navigado > table td:first-child {
+    width: 30%;
+}
+#navigado > table td:last-child {
+    width: 20%;
+}
+
 
 #navigado h1 {
     font-style: italic;
@@ -250,6 +269,10 @@ nav a:active {
     top: 0;
 }
 */
+#navigado td.aktiva, #navigado td.fona {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 
 #navigado td.aktiva a {
     width: initial;

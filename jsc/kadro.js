@@ -18,6 +18,9 @@ when_doc_ready(function() {
         document.getElementById("nav_inx_btn")
             .addEventListener("click",index_toggle);
         
+        document.getElementById("nav_srch_btn")
+            .addEventListener("click",serchu);
+
         document.body 
         //document.getElementById("navigado")
             .addEventListener("click",navigate_link);
@@ -30,6 +33,14 @@ when_doc_ready(function() {
 function index_toggle(event) {
     document.getElementById("navigado").classList.toggle("eble_kasxita");
     //document.querySelector("main").classList.toggle("kasxita");
+}
+
+function index_spread() {
+    document.getElementById("navigado").classList.remove("eble_kasxita");
+}
+
+function index_collapse() {
+    document.getElementById("navigado").classList.add("eble_kasxita");
 }
 
 // se la artikolo ŝargiĝis aparte de la kadro ni aldonu la kadron
@@ -126,7 +137,7 @@ function normalize_href(target, href) {
         return '/revo/' + prefix[target] + href;
     } else if (href.startsWith('/cgi-bin/vokomail.pl')) {
         var query = href.substring(href.search('art='));
-        return '/revo/dlg/redaktilo.html?' + query
+        return '/revo/dlg/redaktilo-1c.html?' + query
     } else {
         return href;
     }
@@ -146,7 +157,7 @@ function load_page(trg,url,push_state=true) {
                 var table = doc.querySelector("table"); 
                 adaptu_paghon(table,url);
                 nav.append(table);
-                document.getElementById("navigado").classList.remove("eble_kasxita");
+                index_spread();
 
                 //img_svg_bg(); // anst. fakvinjetojn, se estas la fak-indekso - ni testos en la funkcio mem!
             } else if (main && trg == "main") {
@@ -156,11 +167,16 @@ function load_page(trg,url,push_state=true) {
                 main.append(...body.children);
                 main.setAttribute("id","w:"+url);
                 var filename = url.split('/').pop();
-                if (filename.startsWith("redaktilo.html"))
+                if (filename.startsWith("redaktilo")) {
                     redaktilo.preparu_red(filename.split('?').pop()); // redaktilo-paĝo
-                else
-                    artikolo.preparu_art();                
-                document.getElementById("navigado").classList.add("eble_kasxita");
+                } else {
+                    artikolo.preparu_art();     
+                    // refaru matematikajn formulojn, se estas
+                    if (typeof(MathJax) != 'undefined' && MathJax.Hub) {
+                        MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+                    }
+                }
+                index_collapse();
             }           
          
 
@@ -370,6 +386,7 @@ function serchu(event) {
         //         document.write("<input type=\"checkbox\" id=\"x\" name=\"x\" onClick=\"xAlUtf8(document.f.sercxata.value,'sercxata')\" checked>anstata&#365;igu cx, gx, ..., ux");</script><input type="checkbox" id="x" name="x" onclick="xAlUtf8(document.f.sercxata.value,'sercxata')" checked="">anstataŭigu cx, gx, ..., ux
         //     <noscript><input type="hidden" id="cx" name="cx" value="1"></noscript>
         // </form>
+        /*
             function serch_frm(esprimo) {
                 return make_elements([
                     ["form",{id:"x:sercho", name:"f"},[
@@ -400,14 +417,17 @@ function serchu(event) {
                     ]
                 ]]);
             }
-        
+        */
             //console.debug("Ni trovis: "+data);
+
+            index_spread();
+
             var json = JSON.parse(data);
             var inx_enh = document.getElementById("navigado").querySelector(".enhavo");
 
-            var s_form = serch_frm(esprimo);
-            var submit = s_form[0].querySelector("input[type='submit']");
-            submit.addEventListener("click",serchu);
+            //var s_form = serch_frm(esprimo);
+            //var submit = s_form[0].querySelector("input[type='submit']");
+            //submit.addEventListener("click",serchu);
 
             var trovoj = make_element("div",{id: "x:trovoj"},"");
             for (var lng of json) {
@@ -416,7 +436,8 @@ function serchu(event) {
             }
 
             inx_enh.textContent = "";
-            inx_enh.append(...s_form,trovoj);
+            //inx_enh.append(...s_form,trovoj);
+            inx_enh.append(trovoj);
         }
     );
 
