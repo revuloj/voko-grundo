@@ -18,6 +18,73 @@ var redaktilo = function() {
   var re_ref = /<ref([^g>]*)>([^]*?)<\/ref/mg;
   var re_refcel = /cel\s*=\s*"([^"]+?)"/m;
 
+  function shablono(name,indent) {
+    var ni = "\n" + indent;
+    var n_i = "\n  " + indent;
+    function xml(jlist) {
+      function val(v) {
+        return v[0] == "$"? document.getElementById(v.substring(1)).value : v
+      }
+      for (var el of jlist) {
+        var xml = "<" + el[0];
+        if (el[1]) {
+          for (var atr of el[1]) {
+            xml += " " + atr + "=\"" + val(el[1][atr]) + "\""
+          }
+        }
+        xml += ">"
+        if (el[2] && el[2] instanceof Array) {
+          xml += make(el[2]);
+        } else {
+          xml += val(el[2]);
+        }
+        xml += "</" + el[0] + ">"      
+      }
+      return xml;
+    }
+
+    return xml({
+      trd: ["trd"],
+      trd_lng: ["trd",{lng:"$r:trdlng"}],
+      trdgrp: ["trdgrp",{lng:"$r:trdlng"},[
+          ni,["trd"],
+          ni,["trd"]
+        ]],
+      klr: ["klr"],
+      klr_tip: ["klr",{tip:"$r:klrtip"}],
+      ind: ["ind"],
+      ref_tip: ["ref",{tip:"$r:reftip",cel:""}],
+      ref: ["ref",{cel:""}],
+      refgrp: ["refgrp",{tip:"$r:reftip"},[
+          ni,["ref",{cel:""}],
+          ni,["ref",{cel:""}]
+        ]],
+      rim: ["rim"],
+      ofc: ["ofc",{},["$r:ofc"]],    
+      gra: ["gra",{},["$r:gra"]],
+      uzo_fak: ["uzo",{tip:"fak"}["$r:sfak"]],
+      uzo_stl: ["uzo",{tip:"stl"}["$r:sstl"]],
+      ekz: ["ekz"],
+      tld: ["tld"],
+      klr_ppp: ["klr",{},["&#x2026;"]],
+      fnt: ["fnt",{},[
+              ni,["bib"],
+              ni,["aut"],
+              ni,["vrk",{},[["url",{ref:""}]]],
+              ni,["lok"]]
+            ],
+      drv: ["drv",{mrk:"XXXX.0"},[
+              ni,["kap",{},[["tld",{},["..."]]]],
+              ni,["snc",{mrk:"XXXX.0o.YYY"},[
+                n_i,["dif"]
+              ]]  
+      ]],
+      snc: ["snc",{mrk:"XXX.0o.YYY"},[
+        ni,["dif"]
+      ]],  
+      dif: ["dif"]       
+    }[name]);
+  }
 
   function Codelist(xmlTag,url) {
     this.url = url;
@@ -318,6 +385,73 @@ var redaktilo = function() {
       //restore textarea scroll position
       txtarea.scrollTop = textScroll;
   } 
+
+  function insertXML(schabl) {
+      var txtarea = document.getElementById('r:xmltxt');
+      var selText, isSample=false;
+
+  
+      if (document.selection && document.selection.createRange) { // IE/Opera
+        //save window scroll position
+        if (document.documentElement && document.documentElement.scrollTop)
+          var winScroll = document.documentElement.scrollTop
+        else if (document.body)
+          var winScroll = document.body.scrollTop;
+  
+        //get current selection  
+        txtarea.focus();
+        var range = document.selection.createRange();
+        selText = range.text;
+  
+        //insert tags
+        checkSelectedText();
+        range.text = shablono(schabl,selText,str_indent());
+  
+        //mark sample text as selected
+//        if (isSample && range.moveStart) {
+//          if (window.opera)
+//        tagClose = tagClose.replace(/\n/g,'');
+//        range.moveStart('character', - tagClose.length - selText.length); 
+//        range.moveEnd('character', - tagClose.length); 
+//          }
+//          range.select();   
+  
+        //restore window scroll position
+        if (document.documentElement && document.documentElement.scrollTop)
+            document.documentElement.scrollTop = winScroll
+        else if (document.body)
+          document.body.scrollTop = winScroll;
+  
+      } else if (txtarea.selectionStart || txtarea.selectionStart == '0') { // Mozilla
+  
+        //save textarea scroll position
+        var textScroll = txtarea.scrollTop;
+        //get current selection
+        txtarea.focus();
+  
+        var startPos = txtarea.selectionStart;
+        var endPos = txtarea.selectionEnd;
+        selText = txtarea.value.substring(startPos, endPos);
+  
+        //insert tags
+        checkSelectedText();
+        txtarea.value = txtarea.value.substring(0, startPos)
+          + shablono(schabl,selText,str_indent())
+          + txtarea.value.substring(endPos, txtarea.value.length);
+  
+        //set new selection
+//        if (isSample) {
+//          txtarea.selectionStart = startPos + tagOpen.length;
+//          txtarea.selectionEnd = startPos + tagOpen.length + selText.length;
+//        } else {
+//          txtarea.selectionStart = startPos + tagOpen.length + selText.length + tagClose.length;
+//          txtarea.selectionEnd = txtarea.selectionStart;
+//        }
+  
+        //restore textarea scroll position
+        txtarea.scrollTop = textScroll;
+    } 
+  }
     
   function checkSelectedText(){
       if (!selText) {
@@ -787,10 +921,48 @@ var redaktilo = function() {
   return {
     preparu_red: preparu_red,
     create_new_art: create_new_art,
-    insertTags: insertTags,
-    insertTags2: insertTags2,
     fs_toggle: fs_toggle,
     tab_toggle: tab_toggle,
-    rantaurigardo: rantaurigardo
+    rantaurigardo: rantaurigardo,
+
+    // enmetoj laŭ ŝablono
+    trd: insertXML("trd"),
+    trd_lng: insertXML("trd"),
+    trdgrp: insertXML("trd")// ktp...
+/*
+    klr: ["klr"],
+    klr_tip: ["klr",{tip:"$r:klrtip"}],
+    ind: ["ind"],
+    ref_tip: ["ref",{tip:"$r:reftip",cel:""}],
+    ref: ["ref",{cel:""}],
+    refgrp: ["refgrp",{tip:"$r:reftip"},[
+        ni,["ref",{cel:""}],
+        ni,["ref",{cel:""}]
+      ]],
+    rim: ["rim"],
+    ofc: ["ofc",{},["$r:ofc"]],    
+    gra: ["gra",{},["$r:gra"]],
+    uzo_fak: ["uzo",{tip:"fak"}["$r:sfak"]],
+    uzo_stl: ["uzo",{tip:"stl"}["$r:sstl"]],
+    ekz: ["ekz"],
+    tld: ["tld"],
+    klr_ppp: ["klr",{},["&#x2026;"]],
+    fnt: ["fnt",{},[
+            ni,["bib"],
+            ni,["aut"],
+            ni,["vrk",{},[["url",{ref:""}]]],
+            ni,["lok"]]
+          ],
+    drv: ["drv",{mrk:"XXXX.0"},[
+            ni,["kap",{},[["tld",{},["..."]]]],
+            ni,["snc",{mrk:"XXXX.0o.YYY"},[
+              n_i,["dif"]
+            ]]  
+    ]],
+    snc: ["snc",{mrk:"XXX.0o.YYY"},[
+      ni,["dif"]
+    ]],  
+    dif: ["dif"]     
+    */   
   }
 }();
