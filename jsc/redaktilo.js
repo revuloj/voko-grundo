@@ -18,37 +18,51 @@ var redaktilo = function() {
   var re_ref = /<ref([^g>]*)>([^]*?)<\/ref/mg;
   var re_refcel = /cel\s*=\s*"([^"]+?)"/m;
 
-  function shablono(name,indent) {
+
+  function shablono(name,indent) {    
     var ni = "\n" + indent;
     var n_i = "\n  " + indent;
-    function xml(jlist) {
+
+  function xmlstr(jlist) {
       function val(v) {
         return v[0] == "$"? document.getElementById(v.substring(1)).value : v
       }
+      var xml = "";
       for (var el of jlist) {
-        var xml = "<" + el[0];
-        if (el[1]) {
-          for (var atr of el[1]) {
-            xml += " " + atr + "=\"" + val(el[1][atr]) + "\""
-          }
-        }
-        xml += ">"
-        if (el[2] && el[2] instanceof Array) {
-          xml += make(el[2]);
+        // string content
+        if (typeof el == "string") {
+          xml += val(el);
         } else {
-          xml += val(el[2]);
-        }
-        xml += "</" + el[0] + ">"      
+          // tag name
+          xml += "<" + el[0];
+          // attributes
+          if (el[1]) {
+            for (var atr in el[1]) {
+              xml += " " + atr + "=\"" + val(el[1][atr]) + "\""
+            }
+          }
+          xml += ">"
+          // content
+          if (el[2]) {
+            if (el[2] instanceof Array) {
+              xml += xmlstr(el[2]);
+            } else {
+              xml += val(el[2]);
+            } 
+          }
+          // closing tag
+          xml += "</" + el[0] + ">"    
+        }  
       }
       return xml;
     }
 
-    return xml({
+    return xmlstr([{
       trd: ["trd"],
       trd_lng: ["trd",{lng:"$r:trdlng"}],
       trdgrp: ["trdgrp",{lng:"$r:trdlng"},[
-          ni,["trd"],
-          ni,["trd"]
+          n_i,["trd"],
+          n_i,["trd"]
         ]],
       klr: ["klr"],
       klr_tip: ["klr",{tip:"$r:klrtip"}],
@@ -56,22 +70,22 @@ var redaktilo = function() {
       ref_tip: ["ref",{tip:"$r:reftip",cel:""}],
       ref: ["ref",{cel:""}],
       refgrp: ["refgrp",{tip:"$r:reftip"},[
-          ni,["ref",{cel:""}],
-          ni,["ref",{cel:""}]
+          n_i,["ref",{cel:""}],
+          n_i,["ref",{cel:""}]
         ]],
       rim: ["rim"],
       ofc: ["ofc",{},["$r:ofc"]],    
       gra: ["gra",{},["$r:gra"]],
-      uzo_fak: ["uzo",{tip:"fak"}["$r:sfak"]],
-      uzo_stl: ["uzo",{tip:"stl"}["$r:sstl"]],
+      uzo_fak: ["uzo",{tip:"fak"},"$r:sfak"],
+      uzo_stl: ["uzo",{tip:"stl"},"$r:sstl"],
       ekz: ["ekz"],
       tld: ["tld"],
       klr_ppp: ["klr",{},["&#x2026;"]],
       fnt: ["fnt",{},[
-              ni,["bib"],
-              ni,["aut"],
-              ni,["vrk",{},[["url",{ref:""}]]],
-              ni,["lok"]]
+              n_i,["bib"],
+              n_i,["aut"],
+              n_i,["vrk",{},[["url",{ref:""}]]],
+              n_i,["lok"]]
             ],
       drv: ["drv",{mrk:"XXXX.0"},[
               ni,["kap",{},[["tld",{},["..."]]]],
@@ -83,8 +97,8 @@ var redaktilo = function() {
         ni,["dif"]
       ]],  
       dif: ["dif"]       
-    }[name]);
-  }
+    }[name]]);
+  };
 
   function Codelist(xmlTag,url) {
     this.url = url;
@@ -123,7 +137,7 @@ var redaktilo = function() {
             } 
         });
     };  
-  }
+  };
 
   /*
   function showhide(id){
@@ -169,7 +183,7 @@ var redaktilo = function() {
         while (txtarea.value.substring(0, startPos).charCodeAt(linestart+1+indent) == 32) {indent++;}
       }
       return (str_repeat(" ", indent));
-  }
+  };
   
     
   function klavo(event) {
@@ -268,7 +282,7 @@ var redaktilo = function() {
           insertTags2('<trd lng="',document.getElementById('r:trdlng').value,'">','</trd>','');
         }
       }
-  }
+  };
     
   function insertTags2(tagOpen, tagAttr, tagEndOpen, tagClose, sampleText) {
       if (tagAttr == "") {
@@ -319,6 +333,8 @@ var redaktilo = function() {
     } 
   }
     
+
+/***
     // apply tagOpen/tagClose to selection in textarea,
     // use sampleText instead of selection if there is none
   function insertTags(tagOpen, tagClose, sampleText) {
@@ -384,30 +400,44 @@ var redaktilo = function() {
 
       //restore textarea scroll position
       txtarea.scrollTop = textScroll;
-  } 
+  }
+**/  
 
-  function insertXML(schabl) {
-      var txtarea = document.getElementById('r:xmltxt');
-      var selText, isSample=false;
+    
+  function insert_xml(shabl) {
+    var txtarea = document.getElementById('r:xmltxt');
+    var selText, isSample=false;
 
-  
-      if (document.selection && document.selection.createRange) { // IE/Opera
-        //save window scroll position
-        if (document.documentElement && document.documentElement.scrollTop)
-          var winScroll = document.documentElement.scrollTop
-        else if (document.body)
-          var winScroll = document.body.scrollTop;
-  
-        //get current selection  
-        txtarea.focus();
-        var range = document.selection.createRange();
-        selText = range.text;
-  
-        //insert tags
-        checkSelectedText();
-        range.text = shablono(schabl,selText,str_indent());
-  
-        //mark sample text as selected
+    /*
+    function checkSelectedText(){
+      if (!selText) {
+        selText = sampleText;
+        isSample = true;
+      } else 
+      if (selText.charAt(selText.length - 1) == ' ') { //exclude ending space char
+        selText = selText.substring(0, selText.length - 1);
+        tagClose += ' '
+      } 
+    }
+    */
+
+    if (document.selection && document.selection.createRange) { // IE/Opera
+      //save window scroll position
+      if (document.documentElement && document.documentElement.scrollTop)
+        var winScroll = document.documentElement.scrollTop
+      else if (document.body)
+        var winScroll = document.body.scrollTop;
+
+      //get current selection  
+      txtarea.focus();
+      var range = document.selection.createRange();
+      selText = range.text;
+
+      //insert tags
+      //checkSelectedText();
+      range.text = shablono(shabl,selText,str_indent());
+
+      //mark sample text as selected
 //        if (isSample && range.moveStart) {
 //          if (window.opera)
 //        tagClose = tagClose.replace(/\n/g,'');
@@ -415,31 +445,31 @@ var redaktilo = function() {
 //        range.moveEnd('character', - tagClose.length); 
 //          }
 //          range.select();   
-  
-        //restore window scroll position
-        if (document.documentElement && document.documentElement.scrollTop)
-            document.documentElement.scrollTop = winScroll
-        else if (document.body)
-          document.body.scrollTop = winScroll;
-  
-      } else if (txtarea.selectionStart || txtarea.selectionStart == '0') { // Mozilla
-  
-        //save textarea scroll position
-        var textScroll = txtarea.scrollTop;
-        //get current selection
-        txtarea.focus();
-  
-        var startPos = txtarea.selectionStart;
-        var endPos = txtarea.selectionEnd;
-        selText = txtarea.value.substring(startPos, endPos);
-  
-        //insert tags
-        checkSelectedText();
-        txtarea.value = txtarea.value.substring(0, startPos)
-          + shablono(schabl,selText,str_indent())
-          + txtarea.value.substring(endPos, txtarea.value.length);
-  
-        //set new selection
+
+      //restore window scroll position
+      if (document.documentElement && document.documentElement.scrollTop)
+          document.documentElement.scrollTop = winScroll
+      else if (document.body)
+        document.body.scrollTop = winScroll;
+
+    } else if (txtarea.selectionStart || txtarea.selectionStart == '0') { // Mozilla
+
+      //save textarea scroll position
+      var textScroll = txtarea.scrollTop;
+      //get current selection
+      txtarea.focus();
+
+      var startPos = txtarea.selectionStart;
+      var endPos = txtarea.selectionEnd;
+      selText = txtarea.value.substring(startPos, endPos);
+
+      //insert tags
+      //checkSelectedText();
+      txtarea.value = txtarea.value.substring(0, startPos)
+        + shablono(shabl,selText,str_indent())
+        + txtarea.value.substring(endPos, txtarea.value.length);
+
+      //set new selection
 //        if (isSample) {
 //          txtarea.selectionStart = startPos + tagOpen.length;
 //          txtarea.selectionEnd = startPos + tagOpen.length + selText.length;
@@ -447,22 +477,11 @@ var redaktilo = function() {
 //          txtarea.selectionStart = startPos + tagOpen.length + selText.length + tagClose.length;
 //          txtarea.selectionEnd = txtarea.selectionStart;
 //        }
-  
-        //restore textarea scroll position
-        txtarea.scrollTop = textScroll;
-    } 
-  }
-    
-  function checkSelectedText(){
-      if (!selText) {
-        selText = sampleText;
-        isSample = true;
-      } else if (selText.charAt(selText.length - 1) == ' ') { //exclude ending space char
-        selText = selText.substring(0, selText.length - 1);
-        tagClose += ' '
-      } 
-    }
-  }
+
+      //restore textarea scroll position
+      txtarea.scrollTop = textScroll;
+    }  
+  };
 
   function resetCursor() { 
     el = document.getElementById('r:xmltxt');
@@ -924,45 +943,30 @@ var redaktilo = function() {
     fs_toggle: fs_toggle,
     tab_toggle: tab_toggle,
     rantaurigardo: rantaurigardo,
+    shablono: shablono,
 
     // enmetoj laŭ ŝablono
-    trd: insertXML("trd"),
-    trd_lng: insertXML("trd"),
-    trdgrp: insertXML("trd")// ktp...
-/*
-    klr: ["klr"],
-    klr_tip: ["klr",{tip:"$r:klrtip"}],
-    ind: ["ind"],
-    ref_tip: ["ref",{tip:"$r:reftip",cel:""}],
-    ref: ["ref",{cel:""}],
-    refgrp: ["refgrp",{tip:"$r:reftip"},[
-        ni,["ref",{cel:""}],
-        ni,["ref",{cel:""}]
-      ]],
-    rim: ["rim"],
-    ofc: ["ofc",{},["$r:ofc"]],    
-    gra: ["gra",{},["$r:gra"]],
-    uzo_fak: ["uzo",{tip:"fak"}["$r:sfak"]],
-    uzo_stl: ["uzo",{tip:"stl"}["$r:sstl"]],
-    ekz: ["ekz"],
-    tld: ["tld"],
-    klr_ppp: ["klr",{},["&#x2026;"]],
-    fnt: ["fnt",{},[
-            ni,["bib"],
-            ni,["aut"],
-            ni,["vrk",{},[["url",{ref:""}]]],
-            ni,["lok"]]
-          ],
-    drv: ["drv",{mrk:"XXXX.0"},[
-            ni,["kap",{},[["tld",{},["..."]]]],
-            ni,["snc",{mrk:"XXXX.0o.YYY"},[
-              n_i,["dif"]
-            ]]  
-    ]],
-    snc: ["snc",{mrk:"XXX.0o.YYY"},[
-      ni,["dif"]
-    ]],  
-    dif: ["dif"]     
-    */   
+    ins: insert_xml,
+    trd: () => redaktilo.ins("trd"),
+    trd_lng: () => redaktilo.ins("trd_lng"),
+    trdgrp: () => redaktilo.ins("trdgrp"),
+    klr: () => redaktilo.ins("klr"),
+    klr_tip: () => redaktilo.ins("klr_tip"),
+    ind: () => redaktilo.ins("ind"),
+    ref_tip: () => redaktilo.ins("ref_tip"),
+    ref: () => redaktilo.ins("ref"),
+    refgrp: () => redaktilo.ins("refgrp"),
+    rim: () => redaktilo.ins("rim"),
+    ofc: () => redaktilo.ins("ofc"),
+    gra: () => redaktilo.ins("gra"),
+    uzo_fak: () => redaktilo.ins("uzo_fak"),
+    uzo_stl: () => redaktilo.ins("uzo_stl"),
+    ekz: () => redaktilo.ins("ekz"),
+    tld: () => redaktilo.ins("tld"),
+    klr_ppp: () => redaktilo.ins("klr_ppp"),
+    fnt: () => redaktilo.ins("fnt"),
+    drv: () => redaktilo.ins("drv"),
+    snc: () => redaktilo.ins("snc"),
+    dif: () => redaktilo.ins("dif")
   }
 }();
