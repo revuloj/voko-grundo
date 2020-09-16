@@ -2,6 +2,8 @@
 // difinu ĉion sub nomprefikso "redaktilo"
 var redaktilo = function() {
 
+  var xmlarea = null;
+
   var revo_codes = {
     lingvoj: new Codelist('lingvo', '/revo/cfg/lingvoj.xml'),
     fakoj: new Codelist('fako','/revo/cfg/fakoj.xml'),
@@ -18,14 +20,70 @@ var redaktilo = function() {
   var re_ref = /<ref([^g>]*)>([^]*?)<\/ref/mg;
   var re_refcel = /cel\s*=\s*"([^"]+?)"/m;
 
+  const xml_shbl = {
+    // la XML-ŝablonoj, el kiuj ni elektos laŭ nomo...
+    // ili estas (eble nestitaj) listoj de la formo 
+    // [string,Object,List|string] = [elemento,atributoj,enhavo]
+    // $r:... referencas al formular-elemento en la redaktilo (input.value)
+    // $_ anstataŭiĝos per la momente elektita teksto aŭ ""
+    trd: ["trd",{},"$_"],
+    trd_lng: ["trd",{lng:"$r:trdlng"},"$_"],
+    trdgrp: ["trdgrp",{lng:"$r:trdlng"},[
+        "\n  ",["trd",{},"$_"],
+        "\n  ",["trd"],
+        "\n"
+      ]],
+    klr: ["klr",{},"$_"],
+    klr_tip: ["klr",{tip:"$r:klrtip"},"$_"],
+    ind: ["ind",{},"$_"],
+    ref_tip: ["ref",{tip:"$r:reftip",cel:""},"$_"],
+    ref: ["ref",{cel:""},"$_"],
+    refgrp: ["refgrp",{tip:"$r:reftip"},[
+        "\n  ",["ref",{cel:""},"$_"],
+        "\n  ",["ref",{cel:""}],
+        "\n"
+      ]],
+    rim: ["rim",{},"$_"],
+    ofc: ["ofc",{},["$r:ofc"]],    
+    gra: ["gra",{},["$r:gra","$_"]],
+    uzo_fak: ["uzo",{tip:"fak"},"$r:sfak"],
+    uzo_stl: ["uzo",{tip:"stl"},"$r:sstl"],
+    ekz: ["ekz",{},"$_"],
+    tld: ["tld/"],
+    klr_ppp: ["klr",{},["&#x2026;"]],
+    fnt: ["fnt",{},[
+            "\n  ",["bib"],
+            "\n  ",["aut",{},"$_"],
+            "\n  ",["vrk",{},[["url",{ref:""}]]],
+            "\n  ",["lok"],
+            "\n"]
+          ],
+    drv: ["drv",{mrk:"XXXX.0"},[
+            "\n  ",["kap",{},[["tld/"],"..."]],
+            "\n  ",["snc",{mrk:"XXXX.0o.YYY"},[
+            "\n    ",["dif",{},"$_"],
+            "\n  "
+            ]],
+            "\n"  
+    ]],
+    snc: ["snc",{mrk:"XXX.0o.YYY"},[
+      "\n  ",["dif",{},"$_"],
+      "\n"
+    ]],  
+    dif: ["dif",{},"$_"]       
+  }
 
-  function shablono(name,indent) {    
-    var ni = "\n" + indent;
-    var n_i = "\n  " + indent;
 
-  function xmlstr(jlist) {
+  function shablono(name,selection) {    
+
+    //function xmlstr(jlist) {
+    return (function xmlstr(jlist) {
       function val(v) {
-        return v[0] == "$"? document.getElementById(v.substring(1)).value : v
+        return v == "$_"? 
+          selection 
+          : (v[0] == "$"? 
+          document.getElementById(v.substring(1)).value 
+          : v)
       }
       var xml = "";
       for (var el of jlist) {
@@ -51,54 +109,16 @@ var redaktilo = function() {
             } 
           }
           // closing tag
-          xml += "</" + el[0] + ">"    
+          if ("/" != el[0].slice(-1)) {
+            xml += "</" + el[0] + ">"    
+          }
         }  
       }
       return xml;
     }
-
-    return xmlstr([{
-      trd: ["trd"],
-      trd_lng: ["trd",{lng:"$r:trdlng"}],
-      trdgrp: ["trdgrp",{lng:"$r:trdlng"},[
-          n_i,["trd"],
-          n_i,["trd"]
-        ]],
-      klr: ["klr"],
-      klr_tip: ["klr",{tip:"$r:klrtip"}],
-      ind: ["ind"],
-      ref_tip: ["ref",{tip:"$r:reftip",cel:""}],
-      ref: ["ref",{cel:""}],
-      refgrp: ["refgrp",{tip:"$r:reftip"},[
-          n_i,["ref",{cel:""}],
-          n_i,["ref",{cel:""}]
-        ]],
-      rim: ["rim"],
-      ofc: ["ofc",{},["$r:ofc"]],    
-      gra: ["gra",{},["$r:gra"]],
-      uzo_fak: ["uzo",{tip:"fak"},"$r:sfak"],
-      uzo_stl: ["uzo",{tip:"stl"},"$r:sstl"],
-      ekz: ["ekz"],
-      tld: ["tld"],
-      klr_ppp: ["klr",{},["&#x2026;"]],
-      fnt: ["fnt",{},[
-              n_i,["bib"],
-              n_i,["aut"],
-              n_i,["vrk",{},[["url",{ref:""}]]],
-              n_i,["lok"]]
-            ],
-      drv: ["drv",{mrk:"XXXX.0"},[
-              ni,["kap",{},[["tld",{},["..."]]]],
-              ni,["snc",{mrk:"XXXX.0o.YYY"},[
-                n_i,["dif"]
-              ]]  
-      ]],
-      snc: ["snc",{mrk:"XXX.0o.YYY"},[
-        ni,["dif"]
-      ]],  
-      dif: ["dif"]       
-    }[name]]);
-  };
+    // rekte apliku la supran algoritmon al la ŝablono donita per sia nomo...
+    ([ xml_shbl[name] ]) // ni transdonas ĝin kiel unu-elementa listo 
+  )}; 
 
   function Codelist(xmlTag,url) {
     this.url = url;
@@ -139,377 +159,86 @@ var redaktilo = function() {
     };  
   };
 
-  /*
-  function showhide(id){
-      if (document.getElementById){
-        obj = document.getElementById(id);
-        objb = document.getElementById(id+"b");
-        if (obj.style.display == "none"){
-          obj.style.display = "";
-          objb.style.display = "none";
-        } else {
-          obj.style.display = "none";
-          objb.style.display = "";
-        }
-      }
-  } 
-
-    
-  function get_ta() {
-      var txtarea;
-      if (document.f) {
-        txtarea = document.f.xmlTxt;
-      } else {
-        // some alternate form? take the first one we can find
-        var areas = document.getElementsByTagName('textarea');
-        txtarea = areas[0];
-      }
-      return txtarea;
-  }
-  */
-    
-  function str_indent() {
-      var txtarea = document.getElementById('r:xmltxt');
-      var indent = 0;
-      if (document.selection  && document.selection.createRange) { // IE/Opera
-        var range = document.selection.createRange();
-        range.moveStart('character', - 200); 
-        var selText = range.text;
-        var linestart = selText.lastIndexOf("\n");
-        while (selText.charCodeAt(linestart+1+indent) == 32) {indent++;}
-      } else if (txtarea.selectionStart || txtarea.selectionStart == '0') { // Mozilla
-        var startPos = txtarea.selectionStart;
-        var linestart = txtarea.value.substring(0, startPos).lastIndexOf("\n");
-        while (txtarea.value.substring(0, startPos).charCodeAt(linestart+1+indent) == 32) {indent++;}
-      }
-      return (str_repeat(" ", indent));
-  };
-  
-    
   function klavo(event) {
-      var key = event.keyCode ? event.keyCode : event.which ? event.which : event.charCode;
-      var cx = document.getElementById("r:cx");
-
+    var key = event.keyCode ? event.keyCode : event.which ? event.which : event.charCode;
     //  alert(key);
-      if (key == 13) {
-        var txtarea = document.getElementById('r:xmltxt');
-        var selText, isSample = false;
-    
-        if (document.selection  && document.selection.createRange) { // IE/Opera
-          //save window scroll position
-          if (document.documentElement && document.documentElement.scrollTop)
-        var winScroll = document.documentElement.scrollTop
-          else if (document.body)
-        var winScroll = document.body.scrollTop;
-          //get current selection  
-          txtarea.focus();
-          var range = document.selection.createRange();
-          selText = range.text;
-    
-          range.text = "\n" + str_indent();
-          //mark sample text as selected
-          range.select();   
-          //restore window scroll position
-          if (document.documentElement && document.documentElement.scrollTop)
-        document.documentElement.scrollTop = winScroll
-          else if (document.body)
-        document.body.scrollTop = winScroll;
-          return false;
-        } else if (txtarea.selectionStart || txtarea.selectionStart == '0') { // Mozilla
-          //save textarea scroll position
-          var textScroll = txtarea.scrollTop;
-          //get current selection
-          txtarea.focus();
-          var startPos = txtarea.selectionStart;
-          var endPos = txtarea.selectionEnd;
-          var tmpstr = "\n" + str_indent();
-          txtarea.value = txtarea.value.substring(0, startPos)
-                + tmpstr
-                + txtarea.value.substring(endPos, txtarea.value.length);
-          txtarea.selectionStart = startPos + tmpstr.length;
-          txtarea.selectionEnd = txtarea.selectionStart;
-          //restore textarea scroll position
-          txtarea.scrollTop = textScroll;
-          return false;
-        }
-      } else if (key == 88 || key == 120) {   // X or x
-        if (event.altKey) {	// shortcut alt-x  --> toggle cx
-          cx.checked = !cx.checked;
-          return false;
-        }
-    
-        if (!cx.checked) return true;
-        var txtarea = document.getElementById('r:xmltxt');
-        if (document.selection  && document.selection.createRange) { // IE/Opera
-          //save window scroll position
-          if (document.documentElement && document.documentElement.scrollTop)
-        var winScroll = document.documentElement.scrollTop
-          else if (document.body)
-        var winScroll = document.body.scrollTop;
-          //get current selection  
-          txtarea.focus();
-          var range = document.selection.createRange();
-          var selText = range.text;
-          if (selText != "") return true;
-          range.moveStart('character', - 1); 
-          var before = range.text;
-          var nova = cxigi(before, key);
-          if (nova != "") {
-            range.text = nova;
-            return false;
-          }
-        } else if (txtarea.selectionStart || txtarea.selectionStart == '0') { // Mozilla
-          var startPos = txtarea.selectionStart;
-          var endPos = txtarea.selectionEnd;
-          if (startPos != endPos || startPos == 0) { return true; }
-          var before = txtarea.value.substring(startPos - 1, startPos);
-          var nova = cxigi(before, key);
-          if (nova != "") {
-        //save textarea scroll position
-        var textScroll = txtarea.scrollTop;
-        txtarea.value = txtarea.value.substring(0, startPos - 1)
-            + nova
-            + txtarea.value.substring(endPos, txtarea.value.length);
-        txtarea.selectionStart = startPos + nova.length - 1;
-        txtarea.selectionEnd = txtarea.selectionStart;
-        //restore textarea scroll position
-        txtarea.scrollTop = textScroll;
-            return false;
-          }
-        }
-      } else if (key == 84 || key == 116 || key == 1090 || key == 1058) {   // T or t or kir-t or kir-T
-        if (event.altKey) {	// shortcut alt-t  --> trd
-          insertTags2('<trd lng="',document.getElementById('r:trdlng').value,'">','</trd>','');
-        }
+
+    // RET: aldonu enŝovon (spacojn) komence de nova linio
+    if (key == 13) {  
+      var scrollPos = xmlarea.scrollPos();        
+      indent = xmlarea.indent();
+      xmlarea.selection("\n"+indent);
+      xmlarea.scrollPos(scrollPos);
+      return false;  // event.preventDefaul();
+
+    // X aŭ x
+    } else if (key == 88 || key == 120) {   
+      var cx = document.getElementById("r:cx");
+      if (event.altKey) {	// shortcut alt-x  --> toggle cx
+        cx.checked = !cx.checked;
+        return false;
       }
+  
+      if (!cx.checked) return true;
+
+      var txtarea = document.getElementById('r:xmltxt');
+      var scrollPos = xmlarea.scrollPos();
+      selText = xmlarea.selection();
+
+      if (selText != "") return true;
+
+      var before = xmlarea.charBefore();
+      var nova = cxigi(before, key);
+
+      if (nova != "") {
+        //range.text = nova;
+        xmlarea.selection(nova);
+        xmlarea.scrollPos(scrollPos);
+        return false;
+      }
+      
+    // T aŭ t aŭ kir-t aŭ kir-T
+    } else if (key == 84 || key == 116 || key == 1090 || key == 1058) {   
+      if (event.altKey) {	// shortcut alt-t  --> trd
+        insert_xml("trd_lng")
+      }
+    }
   };
-    
-  function insertTags2(tagOpen, tagAttr, tagEndOpen, tagClose, sampleText) {
-      if (tagAttr == "") {
-        insertTags(tagOpen, tagEndOpen+tagClose, sampleText)
-      } else {
-        insertTags(tagOpen+tagAttr+tagEndOpen, tagClose, sampleText)
-      }
-  }
-    
-  function indent(offset) {
-    var txtarea = document.getElementById('r:xmltxt');
-    var selText, isSample=false;
 
-    if (document.selection  && document.selection.createRange) { // IE/Opera
-      alert("tio ankoraux ne funkcias.");
-    } else if (txtarea.selectionStart || txtarea.selectionStart==0) { // Mozilla
 
-      //save textarea scroll position
-      var textScroll = txtarea.scrollTop;
-      //get current selection
-      txtarea.focus();
-      var startPos = txtarea.selectionStart;
-      if (startPos > 0) {
-        startPos--;
-      }
-      var endPos = txtarea.selectionEnd;
-      if (endPos > 0) {
-        endPos--;
-      }
-      selText = txtarea.value.substring(startPos, endPos);
-      if (selText=="") {
-        alert("Marku kion vi volas en-/elsxovi.");
-      } else {
-        var nt;
-        if (offset == 2)
-          nt = selText.replace(/\n/g, "\n  ");
-        else 
-          nt = selText.replace(/\n  /g, "\n");
-        txtarea.value = txtarea.value.substring(0, startPos)
-              + nt
-              + txtarea.value.substring(endPos, txtarea.value.length);
-        txtarea.selectionStart = startPos+1;
-        txtarea.selectionEnd = startPos + nt.length+1;
-
-        //restore textarea scroll position
-        txtarea.scrollTop = textScroll;
-      }
-    } 
-  }
-    
-
-/***
-    // apply tagOpen/tagClose to selection in textarea,
-    // use sampleText instead of selection if there is none
-  function insertTags(tagOpen, tagClose, sampleText) {
-    var txtarea = document.getElementById('r:xmltxt');
-    var selText, isSample=false;
-
-    if (document.selection && document.selection.createRange) { // IE/Opera
-      //save window scroll position
-      if (document.documentElement && document.documentElement.scrollTop)
-        var winScroll = document.documentElement.scrollTop
-      else if (document.body)
-        var winScroll = document.body.scrollTop;
-
-      //get current selection  
-      txtarea.focus();
-      var range = document.selection.createRange();
-      selText = range.text;
-
-      //insert tags
-      checkSelectedText();
-      range.text = tagOpen + selText + tagClose;
-
-      //mark sample text as selected
-      if (isSample && range.moveStart) {
-        if (window.opera)
-      tagClose = tagClose.replace(/\n/g,'');
-      range.moveStart('character', - tagClose.length - selText.length); 
-      range.moveEnd('character', - tagClose.length); 
-        }
-        range.select();   
-
-      //restore window scroll position
-    if (document.documentElement && document.documentElement.scrollTop)
-        document.documentElement.scrollTop = winScroll
-    else if (document.body)
-      document.body.scrollTop = winScroll;
-
-    } else if (txtarea.selectionStart || txtarea.selectionStart == '0') { // Mozilla
-
-      //save textarea scroll position
-      var textScroll = txtarea.scrollTop;
-      //get current selection
-      txtarea.focus();
-
-      var startPos = txtarea.selectionStart;
-      var endPos = txtarea.selectionEnd;
-      selText = txtarea.value.substring(startPos, endPos);
-
-      //insert tags
-      checkSelectedText();
-      txtarea.value = txtarea.value.substring(0, startPos)
-              + tagOpen + selText + tagClose
-              + txtarea.value.substring(endPos, txtarea.value.length);
-
-      //set new selection
-      if (isSample) {
-        txtarea.selectionStart = startPos + tagOpen.length;
-        txtarea.selectionEnd = startPos + tagOpen.length + selText.length;
-      } else {
-        txtarea.selectionStart = startPos + tagOpen.length + selText.length + tagClose.length;
-        txtarea.selectionEnd = txtarea.selectionStart;
-      }
-
-      //restore textarea scroll position
-      txtarea.scrollTop = textScroll;
-  }
-**/  
-
-    
   function insert_xml(shabl) {
     var txtarea = document.getElementById('r:xmltxt');
-    var selText, isSample=false;
+    var selText;
 
-    /*
-    function checkSelectedText(){
-      if (!selText) {
-        selText = sampleText;
-        isSample = true;
-      } else 
-      if (selText.charAt(selText.length - 1) == ' ') { //exclude ending space char
-        selText = selText.substring(0, selText.length - 1);
-        tagClose += ' '
-      } 
-    }
-    */
-
-    if (document.selection && document.selection.createRange) { // IE/Opera
-      //save window scroll position
-      if (document.documentElement && document.documentElement.scrollTop)
-        var winScroll = document.documentElement.scrollTop
-      else if (document.body)
-        var winScroll = document.body.scrollTop;
-
-      //get current selection  
-      txtarea.focus();
-      var range = document.selection.createRange();
-      selText = range.text;
-
-      //insert tags
-      //checkSelectedText();
-      range.text = shablono(shabl,selText,str_indent());
-
-      //mark sample text as selected
-//        if (isSample && range.moveStart) {
-//          if (window.opera)
-//        tagClose = tagClose.replace(/\n/g,'');
-//        range.moveStart('character', - tagClose.length - selText.length); 
-//        range.moveEnd('character', - tagClose.length); 
-//          }
-//          range.select();   
-
-      //restore window scroll position
-      if (document.documentElement && document.documentElement.scrollTop)
-          document.documentElement.scrollTop = winScroll
-      else if (document.body)
-        document.body.scrollTop = winScroll;
-
-    } else if (txtarea.selectionStart || txtarea.selectionStart == '0') { // Mozilla
-
-      //save textarea scroll position
-      var textScroll = txtarea.scrollTop;
-      //get current selection
-      txtarea.focus();
-
-      var startPos = txtarea.selectionStart;
-      var endPos = txtarea.selectionEnd;
-      selText = txtarea.value.substring(startPos, endPos);
-
-      //insert tags
-      //checkSelectedText();
-      txtarea.value = txtarea.value.substring(0, startPos)
-        + shablono(shabl,selText,str_indent())
-        + txtarea.value.substring(endPos, txtarea.value.length);
-
-      //set new selection
-//        if (isSample) {
-//          txtarea.selectionStart = startPos + tagOpen.length;
-//          txtarea.selectionEnd = startPos + tagOpen.length + selText.length;
-//        } else {
-//          txtarea.selectionStart = startPos + tagOpen.length + selText.length + tagClose.length;
-//          txtarea.selectionEnd = txtarea.selectionStart;
-//        }
-
-      //restore textarea scroll position
-      txtarea.scrollTop = textScroll;
-    }  
+    var pos = xmlarea.scrollPos();
+    selText = xmlarea.selection();
+    var text = shablono(shabl,selText).replace(/\n/g,"\n"+xmlarea.indent());
+    xmlarea.selection(text);
+    xmlarea.scrollPos(pos)
   };
 
-  function resetCursor() { 
-    el = document.getElementById('r:xmltxt');
-    if (el.setSelectionRange) { 
-        el.focus(); 
-        el.setSelectionRange(0, 0); 
-    } else if (el.createTextRange) { 
-        var range = el.createTextRange();  
-        range.moveStart('character', 0); 
-        range.select(); 
-    } 
-    el.focus();
-  }
-    
-  function lines(str){try {return((str.match(/[^\n]*\n[^\n]*/gi).length));} catch(e) {return 0;}}
     
   function nextTag(tag, dir) {
+        
+      function lines(str){
+        try { return(str.match(/[^\n]*\n[^\n]*/gi).length); } 
+        catch(e) { return 0; }
+      }
+
       var txtarea = document.getElementById('r:xmltxt');
+
       if (document.selection  && document.selection.createRange) { // IE/Opera
-        alert("tio ankoraŭ ne funkcias.");
+        alert("tio ne funkcias por malnova retumilo IE aŭ Opera.");
       } else if (txtarea.selectionStart || txtarea.selectionStart == '0') { // Mozilla
         var startPos = txtarea.selectionStart;
         var t;
         var pos;
+        // serĉu "tag" malantaŭ la nuna pozicio
         if (dir > 0) {
           t = txtarea.value.substring(startPos+1);
           pos = startPos + 1 + t.indexOf(tag);
         }
+        // serĉu "tag" antaŭ la nuna pozicio
         if (dir < 0) {
           t = txtarea.value.substring(0, startPos);
           pos = t.lastIndexOf(tag);    
@@ -517,18 +246,20 @@ var redaktilo = function() {
         txtarea.selectionStart = pos;
         txtarea.selectionEnd = pos;
         txtarea.focus();
-        var line = lines(txtarea.value.substring(0,pos))-10;
-        var lastline = lines(txtarea.value.substring(pos))+line+10;
+
+        // rulu al pozicio laŭble dek linioj antaŭ la trov-loko 
+        var line = lines(txtarea.value.substring(0,pos)) - 10;
+        var lastline = lines(txtarea.value.substring(pos)) + line + 10;
         if (line < 0) line = 0;
         if (line > lastline) line = lastline;
-        txtarea.scrollTop = txtarea.scrollHeight * line / lastline;   
+
+        xmlarea.scrollPos(txtarea.scrollHeight * line / lastline)
+        //txtarea.scrollTop = txtarea.scrollHeight * line / lastline;   
     
     //    alert("tio baldaux funkcias. tag="+tag+" pos="+pos+" line="+line+ " lastline="+lastline);
     //    alert("scrollTop="+txtarea.scrollTop+" scrollHeight="+txtarea.scrollHeight);
       }
   }
-
-
 
   // memoras valorojn de kelkaj kampoj en la loka memoro de la retumilo
   function store_preferences() {
@@ -871,7 +602,7 @@ var redaktilo = function() {
           var titolo = document.getElementById("r:art_titolo");
           titolo.textContent = "\u00ab" + art + "\u00bb"; 
           titolo.setAttribute("href","/revo/art/"+art+".html");
-          resetCursor();     
+          xmlarea.resetCursor();     
         });
     }
   }
@@ -902,6 +633,8 @@ var redaktilo = function() {
       revo_codes.lingvoj.load();
       revo_codes.fakoj.load("r:sfak");
       revo_codes.stiloj.load("r:sstl");
+
+      if (!xmlarea) xmlarea = new Textarea("r:xmltxt");
       load_xml(params); // se doniĝis ?art=xxx ni fone ŝargas tiun artikolon
     }
 
@@ -939,6 +672,8 @@ var redaktilo = function() {
   // eksportu publikajn funkction
   return {
     preparu_red: preparu_red,
+    klavo: klavo,
+    nextTag: nextTag,
     create_new_art: create_new_art,
     fs_toggle: fs_toggle,
     tab_toggle: tab_toggle,

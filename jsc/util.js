@@ -183,3 +183,152 @@ function cxigi(b, key) {
   
     return n;
 }
+
+function Textarea(ta_id) {
+    this.txtarea = document.getElementById(ta_id);
+}
+
+    Textarea.prototype.scrollPos =  function(pos) {
+        var txtarea = this.txtarea;
+        if (typeof pos == "number") {
+          // set scroll pos
+          if (typeof txtarea.scrollTop == "number")  // Mozilla & Co
+            txtarea.scrollTop = pos;
+          else if (document.documentElement && document.documentElement.scrollTop)
+            document.documentElement.scrollTop = pos
+          else if (document.body)
+            document.body.scrollTop = pos;
+        } else {
+          // get scroll pos
+          if (txtarea.scrollTop)  // Mozilla
+            return txtarea.scrollTop;
+          else if (document.documentElement && document.documentElement.scrollTop)
+            return document.documentElement.scrollTop
+          else /*if (document.body)*/
+            return document.body.scrollTop;
+        }
+    },
+    
+    Textarea.prototype.selection = function(insertion) {
+        //var txtarea = document.getElementById('r:xmltxt');
+        var txtarea = this.txtarea;
+        txtarea.focus();
+    
+        if (typeof insertion == "string") { // enmetu tekston ĉe la markita loko
+          if (document.selection && document.selection.createRange) { // IE/Opera
+            var range = document.selection.createRange();
+            range.text = insertion;  
+            range.select();   
+          } else {
+            var startPos = txtarea.selectionStart
+            txtarea.value = 
+              txtarea.value.substring(0, startPos)
+              + insertion
+              + txtarea.value.substring(txtarea.selectionEnd, txtarea.value.length);
+            // movu la kursoron post la aldonita teksto
+            txtarea.selectionStart = startPos + insertion.length;
+            txtarea.selectionEnd = txtarea.selectionStart;
+          }
+        } else { // redonu la markitan tekston
+          if (document.selection && document.selection.createRange) { // IE/Opera
+            var range = document.selection.createRange();
+            return range.text;  
+          } else { // Mozilla
+            var startPos = txtarea.selectionStart;
+            var endPos = txtarea.selectionEnd;
+            return txtarea.value.substring(startPos, endPos); 
+          }
+        }
+    },
+    
+    Textarea.prototype.indent = function(indent) {
+        //var txtarea = document.getElementById('r:xmltxt');
+        var txtarea = this.txtarea;
+        if (typeof indent == "number") { // enŝovu
+          var selText;
+      
+          if (document.selection  && document.selection.createRange) { // IE/Opera
+            alert("enŝovado por malnova retumilo IE aŭ Opera ne funkcias.");
+          } else if (txtarea.selectionStart || txtarea.selectionStart==0) { // Mozilla
+      
+            //save textarea scroll position
+            var scrollPos = scrollPos();
+      
+            //get current selection
+            txtarea.focus();
+            var startPos = txtarea.selectionStart;
+            if (startPos > 0) {
+              startPos--;
+            }
+            var endPos = txtarea.selectionEnd;
+            if (endPos > 0) {
+              endPos--;
+            }
+            selText = txtarea.value.substring(startPos, endPos);
+            if (selText=="") {
+              alert("Marku kion vi volas en-/elŝovi.");
+            } else {
+              var nt;
+              if (indent == 2)
+                nt = selText.replace(/\n/g, "\n  ");
+              else 
+                nt = selText.replace(/\n  /g, "\n");
+      
+              selection(nt);
+              // txtarea.value = txtarea.value.substring(0, startPos)
+              //       + nt
+              //       + txtarea.value.substring(endPos, txtarea.value.length);
+              // txtarea.selectionStart = startPos+1;
+              // txtarea.selectionEnd = startPos + nt.length+1;
+      
+              //restore textarea scroll position
+              scrollPos(scrollPos);
+            }
+          } 
+        } else { // eltrovu la nunan enŝovon
+          indent = 0;
+          if (document.selection  && document.selection.createRange) { // IE/Opera
+            var range = document.selection.createRange();
+            range.moveStart('character', - 200); 
+            var selText = range.text;
+            var linestart = selText.lastIndexOf("\n");
+            while (selText.charCodeAt(linestart+1+indent) == 32) {indent++;}
+          } else if (txtarea.selectionStart || txtarea.selectionStart == '0') { // Mozilla
+            var startPos = txtarea.selectionStart;
+            var linestart = txtarea.value.substring(0, startPos).lastIndexOf("\n");
+            while (txtarea.value.substring(0, startPos).charCodeAt(linestart+1+indent) == 32) {indent++;}
+          }
+          return (str_repeat(" ", indent));  
+        }
+    },
+    
+    Textarea.prototype.charBefore = function() {
+        //var txtarea = document.getElementById('r:xmltxt');
+        var txtarea = this.txtarea;
+        if (document.selection  && document.selection.createRange) { // IE/Opera  
+          txtarea.focus();
+          var range = document.selection.createRange();
+          range.moveStart('character', - 1); 
+          return range.text;
+        } else {
+          txtarea.value.substring(startPos - 1, startPos)
+        }
+    },
+
+    Textarea.prototype.resetCursor = function() { 
+        var txtarea = this.txtarea;
+        if (txtarea.setSelectionRange) { 
+            txtarea.focus(); 
+            //txtarea.setSelectionRange(0, 0); // problemo en Chrome?
+            txtarea.selectionStart = 0;
+            txtarea.selectionEnd = 0;
+        } else if (txtarea.createTextRange) { 
+            var range = txtarea.createTextRange();  
+            range.moveStart('character', 0); 
+            range.select(); 
+        } 
+        txtarea.focus();
+      }
+
+
+   
