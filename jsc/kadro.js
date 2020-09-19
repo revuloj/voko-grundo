@@ -255,6 +255,17 @@ function adaptu_paghon(root_el, url) {
         submit.addEventListener("click",serchu);
         sercxata.setAttribute("onkeyup","");
         sercxata.addEventListener("keyup",x_utf8);
+        // Google -> Ecosia
+        var g_form = root_el.querySelector("input[name='btnG']").closest("form");
+        g_form.setAttribute("action","https://www.ecosia.org/search");
+        var g_img = g_form.querySelector("img");
+        g_img.parentNode.replaceChild(document.createTextNode("Ecosia"),g_img);
+        var g_btn = g_form.querySelector("input[type='submit']");
+        g_btn.addEventListener("click", function(event) {
+            event.preventDefault();
+            location.href = "https://www.ecosia.org/search?q="
+                + encodeURIComponent(document.getElementById("q").value) + " site:retavortaro.de";
+        });
     } 
 }
 
