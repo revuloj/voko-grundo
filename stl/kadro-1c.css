@@ -60,10 +60,11 @@ nav {
     /* dividu la spacon inter indekso kaj navig-trabo */
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: flex-start;
 }
 #navigado {
     /*display: block;*/
+    flex: 1;
     width: 100%;
     overflow: auto;
     /*width: 100%;*/ /* prenu tutan spacon de nav, kaj lasu al tiu
@@ -76,14 +77,12 @@ nav {
 }
 #navbar {
     min-height: 2.2em;
+    flex: none;
     height: auto;
     display: flex;
     align-items: center;
     justify-content: space-between;
     z-index: 200;
-
-    flex-grow: 0;
-    flex-shrink: 0;
 }
 #navbar button {
     flex-grow: 0;
@@ -204,9 +203,29 @@ nav a:active {
     line-height: 150%;
 }
 
+#navigado .enhavo p {
+    margin-bottom: 0;
+}
 
+#navigado .enhavo p+p {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+/*
 #x\:_eo .enhavo p:first-of-type {
     margin-top: -.8em;
+}
+*/
+
+
+#x\:_eo .enhavo p:first-of-type+p {
+    display: none /* kaŝu serĉon */
+}
+
+#x\:_lng p>a {
+    display: block;
+    width: 100%
 }
 
 #x\:_lng br {
@@ -375,7 +394,13 @@ nav li {
     border-bottom: 3px solid var(--nav-act-brd-clr);
 }
 
+/*
 #navigado li, #navigado li>a, #navigado p>a {
+    display: block;
+    width: 100%
+}
+*/
+#navigado li, #navigado li>a {
     display: block;
     width: 100%
 }

@@ -467,12 +467,12 @@ article BUTTON {
 }
 
 article BUTTON:hover, #kash_btn BUTTON:hover {
-    background-color: #FFEEAA;
-    border: 1px solid #775533;
+    background-color: var(--btn-hov-bgr-clr);
+    border: 1px solid var(--btn-hov-brd-clr);
 }    
 article BUTTON:active,#kash_btn BUTTON:active {
-    background-color: #E8C888;
-    border: 1px solid #775533;
+    background-color: var(--btn-act-bgr-clr);
+    border: 1px solid var(--btn-act-brd-clr);
 }
 
 .icon_btn {

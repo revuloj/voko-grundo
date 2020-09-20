@@ -129,7 +129,9 @@ function ref_target(a_el) {
 function normalize_href(target, href) {
     // ĉu estas fidinde uzi "target" tie ĉi aŭ ĉu ni uzu "source"?
     const prefix = { main: "art/", nav: "inx/"};
-    if (href.startsWith('../')) {
+    if (href.endsWith('titolo.html')) {
+        return '/revo/dlg/titolo-1c.html'
+    } else if (href.startsWith('../')) {
         return '/revo/' + href.substr(3);
     } else if (href.startsWith('tz_') || href.startsWith('vx_')) {
         return '/revo/tez/' + href;
@@ -155,6 +157,8 @@ function load_page(trg,url,push_state=true) {
             if (nav && trg == "nav") {
                 nav.textContent= '';
                 var table = doc.querySelector("table"); 
+                var filename = url.split('/').pop().split('.')[0];
+                table.id = "x:"+filename;
                 adaptu_paghon(table,url);
                 nav.append(table);
                 index_spread();
