@@ -9,17 +9,20 @@
 # http://blogs.perl.org/users/smylers/2011/08/ssh-productivity-tips.html
 
 host=retavortaro.de
-release=1b
+release=1c
 
-scp jsc/revo-art-${release}.js ${host}:/html/revo/jsc/
+scp jsc/revo-${release}.js ${host}:/html/revo/jsc/
+scp stl/revo-${release}-min.css ${host}:/html/revo/stl/
 
-scp stl/artikolo-${release}.css ${host}:/html/revo/stl/
-scp stl/piktogram-${release}.css ${host}:/html/revo/stl/
-
-for f in xsl/inc/*
-do
-    scp $f ${host}:/html/revo/xsl/inc/
-done
+#scp jsc/revo-art-${release}.js ${host}:/html/revo/jsc/
+#
+#scp stl/artikolo-${release}.css ${host}:/html/revo/stl/
+#scp stl/piktogram-${release}.css ${host}:/html/revo/stl/
+#
+#for f in xsl/inc/*
+#do
+#    scp $f ${host}:/html/revo/xsl/inc/
+#done
 
 # poste ankaŭ novajn xsl-dosierojn... eble
 # eldonu per aparta skripto...
