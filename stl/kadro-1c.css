@@ -35,13 +35,13 @@ body {
 
     background-color: var(--main-bgr-clr); 
     color: var(--main-fnt-clr);
-    font-size: 120%;
+    /*font-size: 120%;*/
     font-family: sans-serif; 
 }
 main {
     height: auto;
     overflow: auto;
-    flex-grow: 2;
+    flex: 1;
     background-color: var(--main-bgr-clr);
 }
 nav {
@@ -51,9 +51,7 @@ nav {
     width: 100vw;
     /*align-self: stretch;*/
 
-    flex-basis: auto; /* auto aŭ content, ne subtenita eble de ĉiuj retumiloj */ 
-    flex-grow: 0;
-    flex-shrink: 0;
+    flex: none; /* i.e. 0 0 auto */ 
 
     z-index: 100;
     background-color: var(--nav-bgr-clr);
@@ -176,16 +174,22 @@ nav a:active {
 
 
 #navigado > table {
-    width: 95vw;
+    width: 95%;
     margin-right: auto;
-    table-layout: fixed;
+    /*table-layout: fixed;*/
 }
 
 #navigado > table td:first-child {
-    width: 30%;
+    width: 7em;
+}
+#navigado > table td:nth-child(2) {
+    width: 5.5em;
+}
+#navigado > table td:nth-child(3) {
+    width: 5em;
 }
 #navigado > table td:last-child {
-    width: 20%;
+    width: 4.5em;
 }
 
 
@@ -425,7 +429,7 @@ nav li {
 
 
 header {
-    flex-grow: 0;
+    flex: 0;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -436,7 +440,7 @@ header {
 }
 
 footer {
-    flex-grow: 0;
+    flex: 0;
     text-align: center;
     /*border: 1px dotted red;*/
 }
@@ -444,14 +448,6 @@ footer {
 .piedlinio {
     color: var(--main-fnt-clr); 
     text-align: center
-}
-
-main[id^='w\:titolo'] {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-
-    font-family: sans-serif;
 }
 
 .titolfono {
@@ -464,15 +460,34 @@ main[id^='w\:titolo'] {
     background-size: cover;
 }
 
-.titolpagho, main[id^='w\:titolo'] footer {
+.titolmalfono {
+    position: relative;
+    height: 100%;
+    width: 70%;
+    margin-top: 0;
+    margin-left: 2em;
+    margin-right: 2em;
+    padding: 2em;
+
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: space-between;
+    z-index: 50;
+
+    font-family: sans-serif;
+}
+
+.titolmalfono>* {
     background: rgba(210, 200, 200, 40%);
-    z-index: 10;
+    background-size: cover;
+    width: 100%;
     margin: 0;
     padding: 2em;
     box-shadow: 0 0 1em rgba(10, 0, 0);
 }
 
-main[id^='w\:titolo'] footer {
+.titolmalfono footer {
     padding-top: 0;
 }
 
@@ -481,7 +496,7 @@ main[id^='w\:titolo'] footer {
         filter: sepia(20%) hue-rotate(-40deg);
     }
 
-    .titolpagho, main[id^='w\:titolo'] footer {
+    .titolmalfono>* {
         background: rgba(10, 0, 0, 40%);
         box-shadow: none;
 /*        box-shadow: 0 0 1em rgba(210, 200, 200);*/
