@@ -297,13 +297,24 @@ A IMG.viki:hover {background-color:  var(--tez-hov-bgr-clr);
 A IMG.viki:active {background-color:  var(--tez-act-bgr-clr); 
     border: 2px inset var(--tez-act-fnt-clr)}
 
-.piedlinio {color: var(--label-fnt-clr); text-align: center}
-.kuketoaverto { position: fixed; bottom: 0px; left: 5%; width: 90%; min-height:7em;
-		background-color: var(--ovr-bgr-clr); margin: 0; display: none;
-		border-radius: 5px 5px 0 0; border: 1px solid var(--ovr-brd-clr); border-bottom: none
-	    }
+
+/*
+.kuketoaverto { 
+    position: fixed; 
+    bottom: 0px; 
+    left: 5%; 
+    width: 90%; 
+    min-height:7em;
+    background-color: var(--ovr-bgr-clr); 
+    margin: 0; 
+    display: none;
+    border-radius: 5px 5px 0 0; 
+    border: 1px solid var(--ovr-brd-clr); 
+    border-bottom: none
+}
 .kuketoaverto P { text-align:center }
 .kuketoaverto FORM { text-align:center }
+*/
 
 /* formuloj */
 .frm { font-style: normal }

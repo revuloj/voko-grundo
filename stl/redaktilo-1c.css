@@ -157,14 +157,17 @@ span.right {
     text-align: right;
 }
 
+/*
 .piedlinio {
     max-height: 1.6em;
     color: #104040; 
     font-family: monospace;
     text-align: center
 }
+*/
 
 /* https://codepen.io/mallendeo/pen/eLIiG */
+/**
 .tgl-cnt {
     margin: 1px .2em;
 }
@@ -187,10 +190,7 @@ span.right {
 
     width: 3em;
     height: 1.85em;
-/*
-    box-sizing: border-box;    
-    position: relative;
-    */
+
     cursor: pointer;
     -webkit-user-select: none;
         -moz-user-select: none;
@@ -271,4 +271,4 @@ span.right {
     -webkit-transform: rotateY(20deg);
             transform: rotateY(20deg);
 }
-
+**/

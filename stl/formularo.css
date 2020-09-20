@@ -1,5 +1,10 @@
 @import url("koloroj.css");
 
+:root {
+    --button-size: 3em;
+    --toggle-size: 1.79em;
+}
+
 textarea {
     margin: 0; /*1px 0.3em;*/
     height: 25em;
@@ -60,7 +65,9 @@ button, input[type="button"], input[type="checkbox"] {
 
     padding: 0.3em 0.5em;
     /*border-radius: 3px;*/
-    box-shadow: 1px 1px 2px;
+    /*box-shadow: 1px 1px 2px;*/
+    box-shadow: 2px 2px .5em;
+
     /*font-family: monospace;*/
     /* font-size: 1rem;*/
 }
@@ -110,6 +117,193 @@ button, input[type="button"], input[type="checkbox"] {
    border-right: 4px solid var(--main-brd-clr);   
    background-color: var(--main-act-bgr-clr);
 }
+
+
+.titolpagho form {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.titolpagho  form>*{
+    margin-left: .6em;
+}
+
+.titolpagho input {
+    background-color: lightgoldenrodyellow;
+    height: 2.2em;
+    border: 2px solid darkslategray;
+    border-radius: 4px;    
+} 
+
+#w\:revo_sercho {
+    height: var(--button-size);
+    width: var(--button-size);
+    margin-right: 1em;
+    border-radius: 50%;
+    background: url(../smb/revo.svg) no-repeat;
+    background-position: -.14em -.27em;
+    background-size: 110%;
+    /*
+    background-color: gray;
+    border: 1px solid black;
+    */
+    /*
+    border: 2px solid darkslategray;
+    background-color: lightgoldenrodyellow;
+    box-shadow: 1px 1px .5em black;
+    */
+}
+#w\:anaso_sercho {
+    height: var(--button-size);
+    width: var(--button-size);
+    border-radius: 50%;
+    background: url(../smb/duckduckgo.svg) no-repeat;
+    background-position: 0.17em 0.16em;
+    background-size: 88%;
+    /*
+    border: 2px solid darkslategray;
+    background-color: lightgoldenrodyellow;
+    box-shadow: 1px 1px .5em black;
+    */
+}
+#w\:ecosia_sercho {
+    height: var(--button-size);
+    width: var(--button-size);
+    border-radius: 50%;
+    background: url(../smb/ecosia.svg) no-repeat;
+    background-position: center;
+    background-size: 150%;
+    /*
+    border: 2px solid darkslategray;
+    background-color: lightgoldenrodyellow;
+    box-shadow: 1px 1px .5em black;
+    */
+}
+
+
+/* https://codepen.io/mallendeo/pen/eLIiG */
+.tgl-cnt {
+    margin: 1px .2em;
+    position:relative;
+    left: -2em;
+    top: -.1em;
+}
+.tgl {
+    display: none;
+}
+.tgl, .tgl:after, .tgl:before, .tgl *, .tgl *:after, .tgl *:before, .tgl + .tgl-btn {
+    box-sizing: border-box;
+}
+.tgl::-moz-selection, .tgl:after::-moz-selection, .tgl:before::-moz-selection, 
+.tgl *::-moz-selection, .tgl *:after::-moz-selection, 
+.tgl *:before::-moz-selection, .tgl + .tgl-btn::-moz-selection {
+    background: none;
+}
+.tgl::selection, .tgl:after::selection, .tgl:before::selection, 
+.tgl *::selection, .tgl *:after::selection, .tgl *:before::selection, 
+.tgl + .tgl-btn::selection {
+    background: none;
+}
+.tgl + .tgl-btn {
+    display: inline-block;
+    outline: 0;
+    /*padding: 0.3em 0.5em;*/
+
+    /*width: var(--toggle-size);*/
+    width: 3em;
+    height: var(--toggle-size);
+    /*height: 1.85em;*/
+/*
+    box-sizing: border-box;    
+    position: relative;
+    */
+    cursor: pointer;
+    -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none;
+}
+.tgl + .tgl-btn:after, .tgl + .tgl-btn:before {
+    position: relative;
+    display: block;
+    content: "";
+    width: 50%;
+    height: 100%;
+}
+.tgl + .tgl-btn:after {
+    left: 0;
+}
+.tgl + .tgl-btn:before {
+    display: none;
+}
+.tgl:checked + .tgl-btn:after {
+    left: 50%;
+}
+
+.tgl-flip + .tgl-btn {
+    /*padding: 2px;*/
+    -webkit-transition: all .2s ease;
+    transition: all .2s ease;
+    /*font-family: monospace;*/
+    /*font-size: 1rem;*/
+    /*height: 1.8rem;*/
+    height: var(--toggle-size);
+
+    -webkit-perspective: 100px;
+            perspective: 100px;
+}
+.tgl-flip + .tgl-btn:after, .tgl-flip + .tgl-btn:before {
+    display: inline-block;
+    -webkit-transition: all .4s ease;
+    transition: all .4s ease;
+    width: 100%;
+    text-align: center;
+    position: absolute;
+    line-height: 2em;
+    /*font-weight: bold;*/
+    color: black;
+    position: absolute;
+    top: 0;
+    left: 0;
+    -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+
+    /*border-radius: 50%;*/
+    border-radius: 2px;
+}
+.tgl-flip + .tgl-btn:after {
+    content: attr(data-tg-on);
+    background: goldenrod;
+    -webkit-transform: rotateY(-180deg);
+            transform: rotateY(-180deg);
+}
+.tgl-flip + .tgl-btn:before {
+    background: #eee;
+    border: 2px solid darkslategray;
+    border-left-style: dotted;
+    content: attr(data-tg-off);
+}
+.tgl-flip + .tgl-btn:active:before {
+    -webkit-transform: rotateY(-20deg);
+            transform: rotateY(-20deg);
+}
+.tgl-flip:checked + .tgl-btn:before {
+    -webkit-transform: rotateY(180deg);
+            transform: rotateY(180deg);
+}
+.tgl-flip:checked + .tgl-btn:after {
+    -webkit-transform: rotateY(0);
+            transform: rotateY(0);
+    left: 0;
+    background: palegoldenrod;
+    border: 2px solid darkslategray;
+    border-left-style: dotted;
+}
+.tgl-flip:checked + .tgl-btn:active:after {
+    -webkit-transform: rotateY(20deg);
+            transform: rotateY(20deg);
+}  
 
 /* Buttons
 –––––––––––––––––––––––––––––––––––––––––––––––––– */

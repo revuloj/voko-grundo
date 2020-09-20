@@ -664,7 +664,8 @@ var redaktilo = function() {
   when_doc_ready(function() { 
     console.log("redaktilo.when_doc_ready...:" +  location.href);
     window.onbeforeunload = function() {
-      store_preferences();
+      if (this.document.getElementById('r:redaktilo'))
+        store_preferences();
     }  
 
   });

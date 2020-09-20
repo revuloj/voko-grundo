@@ -12,7 +12,7 @@ when_doc_ready(function() {
         // enkadrigu();
         if (document.getElementById("navigado")) {
             // anstataŭe ŝargu tiujn du el ĉefa indeks-paĝo
-            load_page("main","titolo.html");
+            load_page("main","titolo-1c.html");
             load_page("nav","/revo/inx/_eo.html");   
         }
         document.getElementById("nav_inx_btn")
