@@ -394,16 +394,18 @@ i.ekz::before, span.ekztrd::before {
     font-weight: bold;
     list-style: none; /* Remove list bullets */
     padding-left: 0;
+    color: var(--list-fnt-clr);
 }
 
 #alia_lng {
     list-style: none; /* Remove list bullets */
     padding-left: 0;
+    color: var(--list-fnt-clr);
 }
 
 #pref_lng li, #alia_lng li {
     background: var(--list-bgr-clr);
-    margin: .1em;
+    margin: .11em;
     padding: .1em .5em;
     border-radius: 2px;
 }
