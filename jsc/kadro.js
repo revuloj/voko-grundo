@@ -201,22 +201,15 @@ function load_page(trg,url,push_state=true) {
 }
 
 function adaptu_paghon(root_el, url) {
-    // adapto de atributoj img-src
-    function fix_img_src() {
-        // ĉar la kadra paĝo estas unu ŝtupo pli alta
-        // ol la enhavaj paĝoj, la relativajn padojn de bildoj
-        // ni devos adapti: ../ -> ./
+    // adapto de atributoj img-atributoj
+    function fix_img() {
         for (var i of root_el.getElementsByTagName("img")) {
             var src = i.getAttribute("src");
-            if (src.startsWith("..")) i.setAttribute("src",src.substring(1));
+            //if (src.startsWith("..")) i.setAttribute("src",src.substring(1));
 
             // aldonu klason por rerencoj
             if (src.endsWith('.gif'))
                 i.classList.add("ref");
-            else if (src == 'revo.jpg') {
-                i.setAttribute("src","titolo.jpg");
-                i.setAttribute("width","700");
-            }
         }
     }
 
@@ -241,7 +234,7 @@ function adaptu_paghon(root_el, url) {
         }
     }
 
-    fix_img_src();
+    fix_img();
 
     var filename = url.split('/').pop()
 
