@@ -659,6 +659,10 @@ var redaktilo = function() {
       var a = event.target.closest("a");
       fs_toggle(a.id);
     });
+
+    var v_sets = document.getElementById("r:v_sets");
+    for (b of v_sets.querySelectorAll("button"))
+      b.addEventListener("click",btn_clicked)
   }
 
   when_doc_ready(function() { 
@@ -669,6 +673,13 @@ var redaktilo = function() {
     }  
 
   });
+
+  function btn_clicked(event) {
+    var id = event.target.id;
+    if (id) {
+      insert_xml(id.split(":").pop());
+    }
+  }
 
   // eksportu publikajn funkction
   return {
