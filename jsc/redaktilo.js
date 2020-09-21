@@ -638,7 +638,23 @@ var redaktilo = function() {
       load_xml(params); // se doniĝis ?art=xxx ni fone ŝargas tiun artikolon
     }
 
-    // preparu aktivajn elmentoj / eventojn
+    /******************
+     *  preparu aktivajn elmentoj / eventojn
+     *  **************/
+    var nav = document.getElementById("r:nav_btn");
+    nav.querySelectorAll("button").forEach(function (b) { 
+        var val = b.getAttribute("value");
+        if (val) {
+          var n = parseInt(val.substring(0,2));
+          var t = val.substring(2);
+          if ( t == "d") {
+            b.addEventListener("click", function() { nextTag('<drv',n) })
+          } else if (t == "i") {
+            b.addEventListener("click", function() { xmlarea.indent(n) })
+          }
+        }
+    });
+
     var tabs = document.getElementById("r:tabs");
     tabs.querySelectorAll("a").forEach(function (a) { 
       a.removeAttribute("onclick") 
@@ -661,8 +677,16 @@ var redaktilo = function() {
     });
 
     var v_sets = document.getElementById("r:v_sets");
-    for (b of v_sets.querySelectorAll("button"))
-      b.addEventListener("click",btn_clicked)
+    for (b of v_sets.querySelectorAll("button")) {
+      if (b.classList.contains("help_btn"))
+        b.addEventListener("click", function(event) {
+          helpo_pagho(event.target.getAttribute("value"))
+        })
+      else
+        b.addEventListener("click",function(event) {
+          insert_xml(event.target.getAttribute("value"))
+        });
+    }
   }
 
   when_doc_ready(function() { 
@@ -674,46 +698,12 @@ var redaktilo = function() {
 
   });
 
-  function btn_clicked(event) {
-    var id = event.target.id;
-    if (id) {
-      insert_xml(id.split(":").pop());
-    }
-  }
-
   // eksportu publikajn funkction
   return {
     preparu_red: preparu_red,
     klavo: klavo,
-    nextTag: nextTag,
     create_new_art: create_new_art,
-    fs_toggle: fs_toggle,
-    tab_toggle: tab_toggle,
     rantaurigardo: rantaurigardo,
-    shablono: shablono,
-
-    // enmetoj laŭ ŝablono
-    ins: insert_xml,
-    trd: () => redaktilo.ins("trd"),
-    trd_lng: () => redaktilo.ins("trd_lng"),
-    trdgrp: () => redaktilo.ins("trdgrp"),
-    klr: () => redaktilo.ins("klr"),
-    klr_tip: () => redaktilo.ins("klr_tip"),
-    ind: () => redaktilo.ins("ind"),
-    ref_tip: () => redaktilo.ins("ref_tip"),
-    ref: () => redaktilo.ins("ref"),
-    refgrp: () => redaktilo.ins("refgrp"),
-    rim: () => redaktilo.ins("rim"),
-    ofc: () => redaktilo.ins("ofc"),
-    gra: () => redaktilo.ins("gra"),
-    uzo_fak: () => redaktilo.ins("uzo_fak"),
-    uzo_stl: () => redaktilo.ins("uzo_stl"),
-    ekz: () => redaktilo.ins("ekz"),
-    tld: () => redaktilo.ins("tld"),
-    klr_ppp: () => redaktilo.ins("klr_ppp"),
-    fnt: () => redaktilo.ins("fnt"),
-    drv: () => redaktilo.ins("drv"),
-    snc: () => redaktilo.ins("snc"),
-    dif: () => redaktilo.ins("dif")
+    shablono: shablono
   }
 }();
