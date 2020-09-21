@@ -172,9 +172,11 @@ SUP.ofc { margin-right: 0.7ex; }
 .rimekz {font-style: italic}
 
 /* difinoj */
-.drvdif {color: var(--main-fnt-clr)}
-.sncgrpdif {color: var(--main-fnt-clr)}
-.dif {color: var(--main-fnt-clr)}
+.dif,
+.drvdif,
+.sncgrpdif {
+    color: var(--main-fnt-clr)
+}
 
 /* rimarkoj */
 div.rim { margin-top: .3em; }
@@ -188,8 +190,10 @@ div.rim { margin-top: .3em; }
 
 /*tradukoj*/
 .trd {color: var(--label-fnt-clr)}
-.rimtrd {font-style: italic}
+
+.rimtrd,
 .diftrd {font-style: italic}
+
 .trdeo {color: var(--label-fnt-clr); font-weight: bold}
 .trdnac {color: var(--label-fnt-clr)}
 
@@ -242,29 +246,45 @@ A.active {
 }
 
 /* bildoj k.s. */
-.flago {  border-color: var(--svg-brd-clr); border-width: 1px;  border-style: outset}
-EMBED.svg { border-color: var(--svg-brd-clr); border-width: 1px; background: var(--svg-bgr-clr); 
-    border-style: solid; padding: 2px; margin: 0.5em} 
-OBJECT.svg { border-color: var(--svg-brd-clr); border-width: 1px; background: var(--svg-bgr-clr); 
-    border-style: solid; padding: 2px; margin: 0.5em} 
 
-IMG { background: none }
-IMG.svg { border-color: var(--svg-brd-clr); border-width: 1px; background: var(--svg-bgr-clr); 
-    border-style: solid; padding: 2px; margin: 0.5em} 
-IMG.bld { border-color: var(--bld-brd-clr); border-width: 1px; background: var(--bld-bgr-clr); 
-    border-style: solid; padding: 2px; margin: 0.5em} 
+IMG { 
+    background: none 
+}
+
+OBJECT.svg, OBJECT, IMG.svg, EMBED.svg { 
+    border-color: var(--svg-brd-clr); 
+    border-width: 1px; 
+    background: var(--svg-bgr-clr); 
+    border-style: solid; 
+    padding: 2px; 
+    margin: 0.5em
+} 
+
+IMG.bld { 
+    border-color: var(--bld-brd-clr); 
+    border-width: 1px; 
+    background: var(--bld-bgr-clr); 
+    border-style: solid; 
+    padding: 2px; 
+    margin: 0.5em
+}
+
 IMG.fak { 
     height: 1.5em; 
     vertical-align: bottom; 
     background: none;
 }
 
-IMG.tez { height: 1.2em; padding: 1px; vertical-align: bottom;
-      border-radius: 20%; border: 2px outset transparent}
+IMG.tez { 
+    height: 1.2em; 
+    padding: 1px; 
+    vertical-align: bottom;
+    border-radius: 20%; 
+    border: 2px outset transparent
+}
      
 /* 
-    tezaŭrobildoj funkcias simile al butono, do eble ni uzu la klason "btn" anstataaŭe... 
-
+    tezaŭrobildoj funkcias simile al butono, do eble ni uzu la klason "btn" anstataŭe... 
     momente ili ne (plu?) estas parto de la artikolo, sed eble ankoraŭ en la tez-indeksoj...
 */
 /*
@@ -277,25 +297,48 @@ A IMG.tez:hover {background-color:  var(--btn-hov-bgr-clr); border: 2px outset v
 A IMG.tez:active {background-color:  var(--btn-act-bgr-clr); border: 2px inset var(--btn-act-brd-clr)}
 */
 
-A.tez-ref { text-decoration: none; 
-    color: var(--icn-fnt-clr); font-weight: normal; padding: 0.1em; border-radius: 40%}
-A.tez-ref:visited { background-color: transparent; 
-    color: var(--icn-fnt-clr)}
-A.tez-ref:focus {background-color:  var(--icn-act-bgr-clr); 
-    color: var(--icn-act-fnt-clr)}
-A.tez-ref:hover {background-color:  var(--icn-hov-bgr-clr); 
-    color: var(--icn-hov-fnt-clr)}
-A.tez-ref:active {background-color:  var(--icn-act-bgr-clr); 
-    color: var(--icn-act-fnt-clr)}
+A.tez-ref { 
+    text-decoration: none; 
+    color: var(--icn-fnt-clr); 
+    font-weight: normal; 
+    padding: 0.1em; 
+    border-radius: 40%
+}
 
-IMG.viki { height: 1.2em; vertical-align: bottom;
-	   border-radius: 20%; border: 2px outset transparent}
-A IMG.viki:focus {background-color:  var(--tez-act-bgr-clr); 
-    border: 2px outset var(--tez-act-fnt-clr)}
-A IMG.viki:hover {background-color:  var(--tez-hov-bgr-clr); 
-    border: 2px outset var(--tez-hov-fnt-clr)}
-A IMG.viki:active {background-color:  var(--tez-act-bgr-clr); 
-    border: 2px inset var(--tez-act-fnt-clr)}
+A.tez-ref:visited { 
+    background-color: transparent; 
+    color: var(--icn-fnt-clr)
+}
+
+A.tez-ref:focus, 
+A.tez-ref:active {
+    background-color: var(--icn-act-bgr-clr); 
+    color: var(--icn-act-fnt-clr)
+}
+
+A.tez-ref:hover {
+    background-color: var(--icn-hov-bgr-clr); 
+    color: var(--icn-hov-fnt-clr)
+}
+
+
+IMG.viki { 
+    height: 1.2em; 
+    vertical-align: bottom;
+    border-radius: 20%; 
+    border: 2px outset transparent
+}
+
+A IMG.viki:focus,
+A IMG.viki:active {
+    background-color: var(--tez-act-bgr-clr); 
+    border: 2px outset var(--tez-act-fnt-clr)
+}
+
+A IMG.viki:hover {
+    background-color: var(--tez-hov-bgr-clr); 
+    border: 2px outset var(--tez-hov-fnt-clr)
+}
 
 
 /*
@@ -320,31 +363,46 @@ A IMG.viki:active {background-color:  var(--tez-act-bgr-clr);
 .frm { font-style: normal }
 .frm_am { font-size: 90% }
 
-.nom, .nac {
+.nom,
+.nac {
     letter-spacing: .05em;
 }
 
-.bld_atrib { font-size: 80%; color: var(--label-fnt-clr) }
-.bld_atrib:link { font-size: 80%; color: var(--label-fnt-clr) }
-.bld_atrib:visited { font-size: 80%; color: var(--label-fnt-clr) }
-.bld_atrib:focus { font-size: 80%; color: var(--label-fnt-clr) }
-.bld_atrib:hover { font-size: 80%; color: var(--label-fnt-clr) }
-.bld_atrib:active { font-size: 80%; color: var(--label-fnt-clr) }
-
+.bld_atrib,
+.bld_atrib:link,
+.bld_atrib:visited,
+.bld_atrib:focus,
+.bld_atrib:hover,
+.bld_atrib:active { 
+    font-size: 80%; 
+    color: var(--label-fnt-clr)
+}
 
 /* tildoj en ekzemploj */
-.ekztld { font-weight: bold } /*text-decoration: underline solid #775533} */
+.ekztld { 
+    font-weight: bold 
+} /*text-decoration: underline solid #775533} */
 
-.kashilo, .etendilo, .pref {
+.kashilo, 
+.etendilo, 
+.pref {
     border: 1px solid var(--btn-brd-clr);
     box-shadow: none;
 }
-.kashilo:hover, .etendilo:hover, .pref:hover {
+.kashilo:hover, 
+.etendilo:hover, 
+.pref:hover {
     background-color: var(--btn-hov-bgr-clr);
     color: var(--btn-hov-fnt-clr);
     border: 1px solid var(--btn-hov-brd-clr);
-}    
-.kashilo:active, .etendilo:active, .pref:active {
+}
+
+.kashilo:active,
+.kashilo:focus, 
+.etendilo:active,
+.etendilo:focus, 
+.pref:active,
+.pref:focus {
     background: var(--btn-act-bgr-clr);
     color: var(--main-act-fnt-clr);
     border: 1px solid var(--btn-act-brd-clr);
@@ -358,7 +416,9 @@ i.ekz {
     text-indent: -1.6em; 
     text-align: left 
 }
-i.ekz::before, span.ekztrd::before { 
+
+i.ekz::before, 
+span.ekztrd::before { 
     content: "\00a0•\00a0" 
 }
 
@@ -386,6 +446,7 @@ i.ekz::before, span.ekztrd::before {
     width: -moz-fit-content;
     width: -webkit-fit-content;
 }
+
 .preferoj H3 {
     margin-bottom: 0;
 }
@@ -403,7 +464,8 @@ i.ekz::before, span.ekztrd::before {
     color: var(--list-fnt-clr);
 }
 
-#pref_lng li, #alia_lng li {
+#pref_lng li, 
+#alia_lng li {
     background: var(--list-bgr-clr);
     margin: .11em;
     padding: .1em .5em;
@@ -420,11 +482,13 @@ i.ekz::before, span.ekztrd::before {
     padding-right: .5em;
 }                           
 
-#pref_lng li:hover, #alia_lng li:hover {
+#pref_lng li:hover, 
+#alia_lng li:hover {
     background-color: var(--list-bgr-clr);
 }              
 
-#pref_lng li:active, #alia_lng li:active {
+#pref_lng li:active, 
+#alia_lng li:active {
     background-color: var(--list-act-bgr-clr);
     ;
 }    
@@ -466,12 +530,17 @@ article BUTTON {
     border-radius: .5em;
 }
 
-article BUTTON:hover, #kash_btn BUTTON:hover {
+article BUTTON:hover, 
+#kash_btn BUTTON:hover {
     background-color: var(--btn-hov-bgr-clr);
+    color: var(--btn-hov-fnt-clr);
     border: 1px solid var(--btn-hov-brd-clr);
-}    
-article BUTTON:active,#kash_btn BUTTON:active {
+}  
+
+article BUTTON:active,
+#kash_btn BUTTON:active {
     background-color: var(--btn-act-bgr-clr);
+    color: var(--btn-act-fnt-clr);
     border: 1px solid var(--btn-act-brd-clr);
 }
 
@@ -508,15 +577,17 @@ H2 .icon_btn {
     margin-bottom: -.06rem;
 }
 
-H2 .icon_btn:hover, H2 .icon_btn:active, H2 .icon_btn:focus {
+H2 .icon_btn:hover, 
+H2 .icon_btn:active, 
+H2 .icon_btn:focus {
     border: none;
 }
 
-
-a.pli, a.pref {
+a.pli, 
+a.pref {
     font-style: oblique;
     text-decoration: none;
-    color: darkgreen;
+    color: var(--btn-fnt-clr);
     background: var(--btn-bgr-clr);
     border-radius: .5em;
     padding: .1em .3em;
@@ -538,7 +609,6 @@ a.pli, a.pref {
     font-size: 1em;
     height: 1em;
 }
-
 
 .art-hist td:first-child {
     /*font-family: "Lucida Console", Monaco, monospace; */

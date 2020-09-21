@@ -252,7 +252,7 @@ function Textarea(ta_id) {
           } else if (txtarea.selectionStart || txtarea.selectionStart==0) { // Mozilla
       
             //save textarea scroll position
-            var scrollPos = scrollPos();
+            var scrollPos = this.scrollPos();
       
             //get current selection
             txtarea.focus();
@@ -274,7 +274,7 @@ function Textarea(ta_id) {
               else 
                 nt = selText.replace(/\n  /g, "\n");
       
-              selection(nt);
+              this.selection(nt);
               // txtarea.value = txtarea.value.substring(0, startPos)
               //       + nt
               //       + txtarea.value.substring(endPos, txtarea.value.length);
@@ -282,7 +282,7 @@ function Textarea(ta_id) {
               // txtarea.selectionEnd = startPos + nt.length+1;
       
               //restore textarea scroll position
-              scrollPos(scrollPos);
+              this.scrollPos(scrollPos);
             }
           } 
         } else { // eltrovu la nunan enŝovon
@@ -311,7 +311,8 @@ function Textarea(ta_id) {
           range.moveStart('character', - 1); 
           return range.text;
         } else {
-          txtarea.value.substring(startPos - 1, startPos)
+          var startPos = txtarea.selectionStart;
+          return txtarea.value.substring(startPos - 1, startPos)
         }
     },
 

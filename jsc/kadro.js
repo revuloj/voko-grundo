@@ -15,11 +15,30 @@ when_doc_ready(function() {
             load_page("main","titolo-1c.html");
             load_page("nav","/revo/inx/_eo.html");   
         }
-        document.getElementById("nav_inx_btn")
+        document.getElementById("x:nav_inx_btn")
             .addEventListener("click",index_toggle);
         
-        document.getElementById("nav_srch_btn")
+        document.getElementById("x:nav_srch_btn")
             .addEventListener("click",serchu);
+
+        var query = document.getElementById("x:q");
+        query.addEventListener("keydown", function(event) {
+            var key = 
+                event.keyCode ? event.keyCode 
+                : event.which ? event.which 
+                : event.charCode;
+            if (key == 13) {  
+                serchu(event);
+            }
+        });
+
+        //    var s_form = root_el.querySelector("form[name='f']");
+        //    var query = s_form.querySelector("input[name='q']");
+        //    var submit = s_form.querySelector("input[type='submit']");
+        //    s_form.removeAttribute("action");
+        //    submit.addEventListener("click",serchu);
+        //    query.addEventListener("keyup",x_utf8);
+    
 
         document.body 
         //document.getElementById("navigado")
@@ -246,23 +265,11 @@ function adaptu_paghon(root_el, url) {
     if ( filename == 'titolo.html' || filename.startsWith("sercxu.pl") ) {
         // adaptu serĉilon
         var s_form = root_el.querySelector("form[name='f']");
-        var sercxata = s_form.querySelector("input[name='sercxata']");
+        var query = s_form.querySelector("input[name='q']");
         var submit = s_form.querySelector("input[type='submit']");
         s_form.removeAttribute("action");
         submit.addEventListener("click",serchu);
-        sercxata.setAttribute("onkeyup","");
-        sercxata.addEventListener("keyup",x_utf8);
-        // Google -> Ecosia
-        var g_form = root_el.querySelector("input[name='btnG']").closest("form");
-        g_form.setAttribute("action","https://www.ecosia.org/search");
-        var g_img = g_form.querySelector("img");
-        g_img.parentNode.replaceChild(document.createTextNode("Ecosia"),g_img);
-        var g_btn = g_form.querySelector("input[type='submit']");
-        g_btn.addEventListener("click", function(event) {
-            event.preventDefault();
-            location.href = "https://www.ecosia.org/search?q="
-                + encodeURIComponent(document.getElementById("q").value) + " site:retavortaro.de";
-        });
+        query.addEventListener("keyup",x_utf8);
     } 
 }
 
@@ -348,7 +355,7 @@ function serchu(event) {
     event.preventDefault();
 
     var serch_in = event.target.closest("form")
-        .querySelector('input[name=sercxata]');
+        .querySelector('input[name=q]');
     var esprimo = serch_in.value;
 
     //console.debug("Ni serĉu:"+esprimo);
@@ -386,46 +393,6 @@ function serchu(event) {
                 return div;
             }
 
-        // <form method="post" action="" target="indekso" name="f">
-        //     <input type="text" id="sercxata" name="sercxata" size="31" maxlength="255" onkeyup="xAlUtf8(this.value, 'sercxata')" value="testo" placeholder="Ĵokeroj: % (pluraj) kaj _ (unu)">
-        //     <input type="submit" value="trovu">
-        //     <br>
-        //     <script type="text/javascript">
-        //         document.write("<input type=\"checkbox\" id=\"x\" name=\"x\" onClick=\"xAlUtf8(document.f.sercxata.value,'sercxata')\" checked>anstata&#365;igu cx, gx, ..., ux");</script><input type="checkbox" id="x" name="x" onclick="xAlUtf8(document.f.sercxata.value,'sercxata')" checked="">anstataŭigu cx, gx, ..., ux
-        //     <noscript><input type="hidden" id="cx" name="cx" value="1"></noscript>
-        // </form>
-        /*
-            function serch_frm(esprimo) {
-                return make_elements([
-                    ["form",{id:"x:sercho", name:"f"},[
-                        ["input",{
-                            type:"text", 
-                            id:"x:sercxata", 
-                            name:"sercxata", 
-                            size:"31", 
-                            maxlength:"255",
-                            value:esprimo,
-                            paceholder:"ĵokeroj: % (pluraj) kaj _ (unu)"
-                        }],
-                        ["input",{
-                            type:"submit",
-                            value:"trovu"
-                        }],
-                        ["br",{}],
-                        ["input",{
-                            type:"checkbox",
-                            name:"x",
-                            value:"checked"
-                        }],
-                        ["label",{
-                            for:"x"
-                        },
-                        "anstataŭigu cx, gx, ..., ux"
-                        ]
-                    ]
-                ]]);
-            }
-        */
             //console.debug("Ni trovis: "+data);
 
             index_spread();

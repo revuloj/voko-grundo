@@ -2,6 +2,7 @@
 
 :root {
     --button-size: 3em;
+    --small-button-size: 2.4em;
     --toggle-size: 1.79em;
 }
 
@@ -66,7 +67,8 @@ button, input[type="button"], input[type="checkbox"] {
     padding: 0.3em 0.5em;
     /*border-radius: 3px;*/
     /*box-shadow: 1px 1px 2px;*/
-    box-shadow: 2px 2px .5em;
+    /*box-shadow: 2px 2px .5em;*/
+    box-shadow: 1px 1px 4px;
 
     /*font-family: monospace;*/
     /* font-size: 1rem;*/
@@ -135,6 +137,16 @@ button, input[type="button"], input[type="checkbox"] {
     border: 2px solid darkslategray;
     border-radius: 4px;    
 } 
+
+#x\:nav_srch_btn {
+    background: url(../smb/revo.svg) no-repeat;
+    height: var(--small-button-size);
+    width: var(--small-button-size);
+    margin: .1em;
+    border-radius: 50%;
+    background-position: 0 -.2em;
+    background-size: contain;
+}
 
 #w\:revo_sercho {
     height: var(--button-size);

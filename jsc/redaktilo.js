@@ -34,7 +34,10 @@ var redaktilo = function() {
         "\n"
       ]],
     klr: ["klr",{},"$_"],
-    klr_tip: ["klr",{tip:"$r:klrtip"},"$_"],
+    klr_ronda: ["klr",{},["(","$_",")"]],
+    klr_angula: ["klr",{},["[","$_","]"]],
+    klr_tip: ["klr",{tip:"$r:klrtip"},["(","$_",")"]],
+    klr_ppp: ["klr",{},"[&#x2026;]"],
     ind: ["ind",{},"$_"],
     ref_tip: ["ref",{tip:"$r:reftip",cel:""},"$_"],
     ref: ["ref",{cel:""},"$_"],
@@ -50,7 +53,6 @@ var redaktilo = function() {
     uzo_stl: ["uzo",{tip:"stl"},"$r:sstl"],
     ekz: ["ekz",{},"$_"],
     tld: ["tld/"],
-    klr_ppp: ["klr",{},["&#x2026;"]],
     fnt: ["fnt",{},[
             "\n  ",["bib"],
             "\n  ",["aut",{},"$_"],
@@ -84,6 +86,10 @@ var redaktilo = function() {
           : (v[0] == "$"? 
           document.getElementById(v.substring(1)).value 
           : v)
+      }
+      if (!jlist) {
+        console.error("Nedifinita ŝablono: \""+name+"\"");
+        return;
       }
       var xml = "";
       for (var el of jlist) {
@@ -169,14 +175,14 @@ var redaktilo = function() {
       indent = xmlarea.indent();
       xmlarea.selection("\n"+indent);
       xmlarea.scrollPos(scrollPos);
-      return false;  // event.preventDefaul();
+      event.preventDefault();
 
     // X aŭ x
     } else if (key == 88 || key == 120) {   
       var cx = document.getElementById("r:cx");
       if (event.altKey) {	// shortcut alt-x  --> toggle cx
         cx.checked = !cx.checked;
-        return false;
+        event.preventDefault();
       }
   
       if (!cx.checked) return true;
@@ -194,7 +200,7 @@ var redaktilo = function() {
         //range.text = nova;
         xmlarea.selection(nova);
         xmlarea.scrollPos(scrollPos);
-        return false;
+        event.preventDefault();
       }
       
     // T aŭ t aŭ kir-t aŭ kir-T
@@ -496,7 +502,7 @@ var redaktilo = function() {
       + '<vortaro>\n'
       + '<art mrk="\$Id\$">\n'
       + '<kap>\n'
-      + '    <rad>' + art + '</rad>/o <fnt><bib>PIV1</bib></fnt>\n'
+      + '    <rad>' + art + '</rad>/o <fnt><bib>FNT</bib></fnt>\n'
       + '</kap>\n'
       + '<drv mrk="' + art + '.0o">\n'
       + '  <kap><tld/>o</kap>\n'
@@ -641,6 +647,16 @@ var redaktilo = function() {
     /******************
      *  preparu aktivajn elmentoj / eventojn
      *  **************/
+
+    // klav-premoj en XML-redaktilo
+    document.getElementById("r:xmltxt")
+      .addEventListener("keypress",klavo);
+
+    // butono por konservi
+    document.getElementById("r:konservo")
+      .addEventListener("click",rkonservo);
+
+    // butonoj por navigi inter drv kaj en-/elŝovo
     var nav = document.getElementById("r:nav_btn");
     nav.querySelectorAll("button").forEach(function (b) { 
         var val = b.getAttribute("value");
@@ -654,7 +670,12 @@ var redaktilo = function() {
           }
         }
     });
+    document.getElementById("r:cx")
+      .addEventListener("click",function() {
+        document.getElementById('r:xmltxt').focus()
+    });
 
+    // sub-paĝoj "redakti", "antaŭrigardo"
     var tabs = document.getElementById("r:tabs");
     tabs.querySelectorAll("a").forEach(function (a) { 
       a.removeAttribute("onclick") 
@@ -667,6 +688,7 @@ var redaktilo = function() {
       }
     });
 
+    // navigi inter diversaj paneloj kun enmeto-butonoj ktp.
     var fs_t = document.getElementById("r:fs_toggle");
     fs_t.querySelectorAll("a").forEach(function (a) { 
       a.removeAttribute("onclick") 
@@ -676,8 +698,12 @@ var redaktilo = function() {
       fs_toggle(a.id);
     });
 
+    // butonoj sur tiuj paneloj por enmeti elementojn
     var v_sets = document.getElementById("r:v_sets");
     for (b of v_sets.querySelectorAll("button")) {
+      if (b.id == "r:create_new_art") {
+        b.addEventListener("click", create_new_art);
+      }
       if (b.classList.contains("help_btn"))
         b.addEventListener("click", function(event) {
           helpo_pagho(event.target.getAttribute("value"))
@@ -702,7 +728,6 @@ var redaktilo = function() {
   return {
     preparu_red: preparu_red,
     klavo: klavo,
-    create_new_art: create_new_art,
     rantaurigardo: rantaurigardo,
     shablono: shablono
   }
