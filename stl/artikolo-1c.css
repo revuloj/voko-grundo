@@ -183,7 +183,10 @@ div.rim { margin-top: .3em; }
 .rim {color: var(--rim-fnt-clr)}
 
 /* referencoj */
-.ref {color: var(--ref-fnt-clr)}
+.ref,
+A.ref {color: var(--ref-fnt-clr) !important}
+A.ref:active, 
+A.ref:hover { color: var(--main-act-fnt-clr) !important}
 
 /* klarigo */
 .klr {font-style: normal}

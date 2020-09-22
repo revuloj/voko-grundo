@@ -253,12 +253,28 @@ function adaptu_paghon(root_el, url) {
 
             // aldonu klason por rerencoj
             if (src.endsWith('.gif'))
-                i.classList.add("ref");
+                if (! i.classList.length) {
+                    // referencilo
+                    var src = i.getAttribute("src");
+                    if (src) {
+                        var nom = src.split('/').pop().split('.')[0];
+                        var svg = {
+                            dif: "r_dif", difino: "r_dif", 
+                            sin: "r_sin", ant: "r_ant",
+                            sub: "r_sub", super: "r_super",
+                            vid: "r_vid", vidu: "r_vid",
+                            prt: "r_prt", malprt: "r_malprt",
+                            lst: "r_lst", listo: "r_lst",
+                            ekz: "r_ekz"                            
+                        }[nom]
+                        if (nom) i.classList.add("ref",svg);
+                    }                    
+                }                    
         }
     }
 
     function x_utf8(event) {
-        if (document.getElementById("x").checked) {
+        if (document.getElementById("w:cx").checked) {
             var serch_in = event.target;
             t = serch_in.value.replace(/c[xX]/g, "\u0109")
                 .replace(/g[xX]/g, "\u011d")
@@ -283,14 +299,50 @@ function adaptu_paghon(root_el, url) {
     var filename = url.split('/').pop()
 
     // serĉilo en titol- kaj serĉo-paĝoj
-    if ( filename == 'titolo.html' || filename.startsWith("sercxu.pl") ) {
+    if ( filename.startsWith('titolo') ) {
         // adaptu serĉilon
         var s_form = root_el.querySelector("form[name='f']");
         var query = s_form.querySelector("input[name='q']");
-        var submit = s_form.querySelector("input[type='submit']");
-        s_form.removeAttribute("action");
-        submit.addEventListener("click",serchu);
+        //var submit = s_form.querySelector("input[type='submit']");
+        //s_form.removeAttribute("action");
+        //submit.addEventListener("click",serchu);
+        
         query.addEventListener("keyup",x_utf8);
+        query.addEventListener("keydown", function(event) {
+            var key = 
+                event.keyCode ? event.keyCode 
+                : event.which ? event.which 
+                : event.charCode;
+            if (key == 13) {  
+                serchu(event);
+            }
+        });
+
+        s_form.querySelector("button[value='revo']")
+            .addEventListener("click",serchu);
+
+        s_form.querySelector("button[value='ecosia']")
+            .addEventListener("click", function(event) {
+                event.preventDefault();
+                var q = document.getElementById('w:q').value
+                location.href = 'https://www.ecosia.org?q='+encodeURIComponent(q+' site:reta-vortaro.de')
+            });
+
+        s_form.querySelector("button[value='anaso']")
+            .addEventListener("click", function(event) {
+                event.preventDefault();
+                var q = document.getElementById('w:q').value
+                location.href = 'https://duckduckgo.com?q='+encodeURIComponent(q+' site:reta-vortaro.de')
+        });
+
+        /*
+        s_form.querySelector("button[value='google']")
+            .addEventListener("click", function(event) {
+                event.preventDefault();
+                var q = document.getElementById('w:q').value
+                location.href = 'https://www.google.com/search?q='+encodeURIComponent(q+' site:reta-vortaro.de')
+        });
+        */
     } 
 }
 

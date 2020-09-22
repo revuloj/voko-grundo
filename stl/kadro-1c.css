@@ -261,9 +261,26 @@ nav a:active {
 
       
 @media (prefers-color-scheme: dark) {
-    IMG.fak, IMG.ref {
+    IMG.fak {
         filter: invert(1) brightness(0.8) sepia(0.9);
     }
+    #navigado IMG.ref {
+        filter: brightness(8);
+    }
+}
+
+IMG.ref {
+    /* forŝovu flanken la originan bildon por
+    montri anstataŭe la SVG-fonon, donitan per 
+    .r_vid, .r_sin ktp. el piktogram.css */
+    position: relative;
+    overflow: hidden;
+    width: 16px;
+    height: 12px;
+    padding: 16px 12px 0 0;
+    margin-left: 6px;
+    margin-right: 6px;
+    box-sizing: border-box;
 }
 
 /**
@@ -516,6 +533,7 @@ footer {
     padding-top: 0;
 }
 
+
 @media (prefers-color-scheme: dark) {
     .titolfono {
         filter: sepia(20%) hue-rotate(-40deg);
@@ -527,6 +545,10 @@ footer {
 /*        box-shadow: 0 0 1em rgba(210, 200, 200);*/
     }
 }
+
+/* => 
+  pliaj detaloj de la titolpaĝo (serĉ-formularo) vd. formularo.css 
+  */
 
 
 #w\:ix_literoj {
