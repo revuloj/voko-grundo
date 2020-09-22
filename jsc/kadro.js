@@ -217,7 +217,7 @@ function load_page(trg,url,push_state=true) {
                             }
                         ); 
                         */                         
-                        
+                        MathJax.Hub.Config({showMathMenu: false, showMathMenuMSIE: false});                        
                         MathJax.Hub.Queue(["Typeset",MathJax.Hub,"s_artikolo"]);
                     }                    
                 }
@@ -419,6 +419,11 @@ function serchu(event) {
             index_spread();
 
             var json = JSON.parse(data);
+
+            // debug Unicode issues...
+            //console.debug("data: "+data);
+            //console.debug("stng: "+JSON.stringify(json));
+
             var inx_enh = document.getElementById("navigado").querySelector(".enhavo");
 
             //var s_form = serch_frm(esprimo);
