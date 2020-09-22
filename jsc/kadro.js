@@ -193,15 +193,36 @@ function load_page(trg,url,push_state=true) {
                 if (filename.startsWith("redaktilo")) {
                     redaktilo.preparu_red(filename.split('?').pop()); // redaktilo-paĝo
                 } else {
-                    artikolo.preparu_art();     
-                    // refaru matematikajn formulojn, se estas
-                    if (typeof(MathJax) != 'undefined' && MathJax.Hub) {
-                        MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
-                    }
+                    artikolo.preparu_art();  
+                    var s_artikolo = document.getElementById("s_artikolo");
+                     // refaru matematikajn formulojn, se estas
+                    if (s_artikolo &&
+                        typeof(MathJax) != 'undefined' && MathJax.Hub) {
+
+                        /*
+                        MathJax.Hub.Register.MessageHook("Math Processing Error",function (message) {
+                            //  message[2] is the Error object that records the problem.
+                            console.error(message)
+                            });
+
+                        MathJax.Hub.Startup.signal.Interest(
+                            function (message) {console.debug("Startup: "+message)}
+                        );
+                        MathJax.Hub.signal.Interest(
+                            function (message) {
+                                console.debug("Hub: "+message)
+                                if (message[1] instanceof HTMLElement) {
+                                    console.debug("  >>"+message[1].tagName+message[1].id)
+                                }
+                            }
+                        ); 
+                        */                         
+                        
+                        MathJax.Hub.Queue(["Typeset",MathJax.Hub,"s_artikolo"]);
+                    }                    
                 }
                 index_collapse();
-            }           
-         
+            }                    
 
             //if (push_state)
             //    history.pushState({
