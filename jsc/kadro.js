@@ -16,7 +16,10 @@ when_doc_ready(function() {
             load_page("nav","/revo/inx/_eo.html");   
         }
         document.getElementById("x:nav_inx_btn")
-            .addEventListener("click",index_toggle);
+            .addEventListener("click", function(event) {
+                event.preventDefault();
+                index_toggle()
+            });
         
         document.getElementById("x:nav_srch_btn")
             .addEventListener("click",serchu);
@@ -262,8 +265,8 @@ function adaptu_paghon(root_el, url) {
                             dif: "r_dif", difino: "r_dif", 
                             sin: "r_sin", ant: "r_ant",
                             sub: "r_sub", super: "r_super",
+                            prt: "r_sub", malprt: "r_super",
                             vid: "r_vid", vidu: "r_vid",
-                            prt: "r_prt", malprt: "r_malprt",
                             lst: "r_lst", listo: "r_lst",
                             ekz: "r_ekz"                            
                         }[nom]
