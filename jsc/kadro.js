@@ -196,7 +196,12 @@ function load_page(trg,url,push_state=true) {
                 if (filename.startsWith("redaktilo")) {
                     redaktilo.preparu_red(filename.split('?').pop()); // redaktilo-paĝo
                 } else {
-                    artikolo.preparu_art();  
+                    if (url.indexOf('#') > -1) {
+                        var hash = url.split('#').pop()
+                        window.location.hash = hash;
+                    }
+
+                    artikolo.preparu_art();                      
                     var s_artikolo = document.getElementById("s_artikolo");
                      // refaru matematikajn formulojn, se estas
                     if (s_artikolo &&
