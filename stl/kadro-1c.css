@@ -15,19 +15,41 @@
     --nav-enh-width: 22em; 
 }
 
+*, ::before, ::after { 
+    box-sizing: border-box; 
+}
+
 html {
     margin: 0;
     padding: 0;
+
     height: 100vh;
     max-height: 100vh;
+    /*
+    height: 50vh;
+    max-height: 50vh;
+    width: 50vw;
+    max-width: 50vw;
+    */
 }
 body {
     margin: 0 !important;
     padding: 0 !important;
+    
     height: 100vh;
+    min-height: 100vh;
     max-height: 100vh;
     width: 100vw !important;
-
+    overflow: hidden;
+    /*
+    height: 50vh;
+    max-height: 50vh;
+    width: 80vw;
+    max-width: 80vw;
+    
+    border: 1px solid red;
+    */
+    /* */
     display: flex;
     flex-direction: column;
     align-items: stretch;
@@ -92,25 +114,6 @@ nav {
     flex-grow: 1;
     max-width: 90%;
     min-width: 5em;
-}
-
-@media (min-width: 60em) {
-    body {
-        flex-direction: row;
-    }
-    nav {
-        width: var(--nav-left-width);
-    }
-    #navigado.eble_kasxita {
-       display: block;
-    }
-    #x\:nav_inx_btn {
-        display: none;
-    }
-    #navigado > table {
-        width: var(--nav-enh-width); /*100%;*/
-        margin-right: auto;
-    }    
 }
 
 
@@ -492,24 +495,40 @@ footer {
     text-align: center
 }
 
+
 .titolfono {
-    position: absolute;
+    position: absolute; /* do w, h, pos rilatas al root/html, ĉar
+            aliaj elementoj kiel body kaj main ne havas position:... */
     width: 100%;
     height: 100%;
     z-index: 0;
 
     background:url('/revo/dlg/titolo.jpg') no-repeat; 
-    background-size: cover;
+    background-size: cover; /* 100% 100% ŝanĝus la proporciojn, krutigante la monton... */
+    background-position: right bottom;
 }
+
+/*
+.titolmalfono::before {
+    position: absolute;
+    content: '';
+    z-index: 1;
+    width: 800px;
+    height: 150px;
+    background-image: url('/revo/dlg/titolo.jpg') no-repeat;
+}
+*/
 
 .titolmalfono {
     position: relative;
     height: 100%;
-    width: 70%;
     margin-top: 0;
+    /*
+    width: 70%;
     margin-left: 2em;
     margin-right: 2em;
-    padding: 2em;
+    */
+    padding: 0;
 
     display: flex;
     flex-direction: column;
@@ -523,14 +542,20 @@ footer {
 .titolmalfono>* {
     background: rgba(210, 200, 200, 40%);
     background-size: cover;
-    width: 100%;
+    /*width: 100%;*/
     margin: 0;
+    margin-left: auto;
+    margin-right: auto;
+    
+    max-width: 100vw;
+
     padding: 2em;
-    box-shadow: 0 0 1em rgba(10, 0, 0);
+    padding-top: 0;
+    box-shadow: 0 .3em .5em rgba(10, 0, 0);
 }
 
 .titolmalfono footer {
-    padding-top: 0;
+    padding: .5em;
 }
 
 
@@ -560,6 +585,41 @@ footer {
     padding: 0 .3em;
     border-left: 2px solid var(--main-brd-clr)
 }
+
+/***********************************
+ Pli grandaj ekranoj
+ ***********************************/
+
+@media (min-height: 30em) and (min-width: 30em) {
+    .titolmalfono {
+        padding-top: 2em;
+    }
+}
+@media (min-width: 30em) {
+    .titolmalfono>* {
+        width: 90%;
+    }    
+}
+
+@media (min-width: 60em) {
+    body {
+        flex-direction: row;
+    }
+    nav {
+        width: var(--nav-left-width);
+    }
+    #navigado.eble_kasxita {
+       display: block;
+    }
+    #x\:nav_inx_btn {
+        display: none;
+    }
+    #navigado > table {
+        width: var(--nav-enh-width); /*100%;*/
+        margin-right: auto;
+    }    
+}
+
 
 /*
 .ix_literoj > label {

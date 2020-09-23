@@ -125,10 +125,11 @@ button, input[type="button"], input[type="checkbox"] {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
+    margin-top: -.2em;
 }
 
-.titolpagho  form>*{
-    margin-left: .6em;
+.titolpagho form>*{
+    margin-right: .6em;
 }
 
 .titolpagho input {
