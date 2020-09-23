@@ -132,10 +132,17 @@ button, input[type="button"], input[type="checkbox"] {
 }
 
 .titolpagho input {
-    background-color: lightgoldenrodyellow;
-    height: 2.2em;
+    height: 2em;
+    opacity: .8;
+    
+    background-color: var(--input-bgr-clr);
+    color: var(--input-fnt-clr);
+    /*filter: invert(1);*/
+
+    /*
     border: 2px solid darkslategray;
     border-radius: 4px;    
+    */
 } 
 
 #x\:nav_srch_btn {
