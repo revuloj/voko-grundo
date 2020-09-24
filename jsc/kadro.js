@@ -22,7 +22,12 @@ when_doc_ready(function() {
             });
         
         document.getElementById("x:nav_srch_btn")
-            .addEventListener("click",serchu);
+            .addEventListener("click", function(event) {
+                event.preventDefault();
+                // turnu la revo-fiŝon...
+                document.getElementById('x:revo_icon').classList.add('revo_icon_run');
+                serchu(event);
+            });
 
         var query = document.getElementById("x:q");
         query.addEventListener("keydown", function(event) {
@@ -31,6 +36,8 @@ when_doc_ready(function() {
                 : event.which ? event.which 
                 : event.charCode;
             if (key == 13) {  
+                // turnu la revo-fiŝon...
+                document.getElementById('x:revo_icon').classList.add('revo_icon_run');
                 serchu(event);
             }
         });
@@ -331,12 +338,19 @@ function adaptu_paghon(root_el, url) {
                 : event.which ? event.which 
                 : event.charCode;
             if (key == 13) {  
+                // turnu la revo-fiŝon...
+                document.getElementById('w:revo_icon').classList.add('revo_icon_run');
                 serchu(event);
             }
         });
 
         s_form.querySelector("button[value='revo']")
-            .addEventListener("click",serchu);
+            .addEventListener("click", function(event) {
+                event.preventDefault();
+                // turnu la revo-fiŝon...
+                document.getElementById('w:revo_icon').classList.add('revo_icon_run');
+                serchu(event)
+            });
 
         s_form.querySelector("button[value='ecosia']")
             .addEventListener("click", function(event) {
@@ -442,15 +456,12 @@ function load_xml(art) {
 
 
 function serchu(event) {
-    event.preventDefault();
 
     var serch_in = event.target.closest("form")
         .querySelector('input[name=q]');
     var esprimo = serch_in.value;
 
     //console.debug("Ni serĉu:"+esprimo);
-    // turnu la revo-fiŝon...
-    document.getElementById('revo_icon').classList.add('revo_icon_run');
 
     HTTPRequest('POST', sercho_url, {sercxata: esprimo},
         function(data) {
@@ -512,8 +523,8 @@ function serchu(event) {
             inx_enh.append(trovoj);
 
             // haltigu la revo-fiŝon
-            document.getElementById('revo_icon').classList.remove('revo_icon_run');
-
+            document.getElementById('x:revo_icon').classList.remove('revo_icon_run');
+            document.getElementById('w:revo_icon').classList.remove('revo_icon_run');
         }
     );
 

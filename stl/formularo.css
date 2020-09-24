@@ -163,12 +163,10 @@ button, input[type="button"], input[type="checkbox"] {
     width: var(--button-size);
     margin-right: 1em;
     border-radius: 50%;
+    /*
     background: url(../smb/revo.svg) no-repeat;
     background-position: -.14em -.27em;
     background-size: 110%;
-    /*
-    background-color: gray;
-    border: 1px solid black;
     */
     /*
     border: 2px solid darkslategray;
@@ -177,21 +175,21 @@ button, input[type="button"], input[type="checkbox"] {
     */
 }
 
-.revo_icon {
-    /*transform: translate(-100,-100);*/
-    width: 3em;
-    height: 3em;
-    margin-left: -.89em;
-    margin-top: -.86em;
-    transform-origin: 50% 54.5%;
+#x\:nav_srch_btn:focus, 
+#w\:revo_sercho:focus {
+    outline: none;
+}
 
+.revo_icon {
     pointer-events: none;
 
+    transform-origin: 50% 54.5%;
     animation: spin 3.14s infinite;
     animation-play-state: paused;
     /*animation-delay: 2s;*/
     animation-timing-function: linear;
 }
+
 
 .revo_icon_run {
     animation-play-state: running;
@@ -201,6 +199,25 @@ button, input[type="button"], input[type="checkbox"] {
     from {transform:rotate(0deg);}
     to {transform:rotate(359deg);}
 }
+
+#x\:revo_icon {
+    width: 2.9em;
+    height: 2.9em;
+
+    position: relative;
+    left: -.89em;
+    top: -.86em;    
+}
+
+#w\:revo_icon {
+    width: 3.4em;
+    height: 3.4em;
+
+    position: relative;
+    left: -.80em;
+    top: -.80em;    
+}
+
 
 #w\:anaso_sercho {
     height: var(--button-size);
