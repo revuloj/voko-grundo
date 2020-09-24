@@ -203,7 +203,7 @@ var artikolo = function() {
     function maletendu_trd(element) {
         //var nav_lng = navigator.languages || [navigator.language];
         var eo;
-        var maletendita = false;
+        var maletenditaj = 0;
         var serch_lng = getHashParts().lng;
 
         for (var id of element.children) {
@@ -215,7 +215,7 @@ var artikolo = function() {
                 } else if ( id_lng != serch_lng && pref_lng.indexOf(id_lng) < 0 ) {
                     eo.classList.add("kasxita");
                     id.classList.add("kasxita");
-                    maletendita = true;
+                    maletenditaj += 1;
                 } else {
                     // tio necesas, se ni adaptas la preferojn
                     // por vidi pli da tradukoj!
@@ -225,8 +225,8 @@ var artikolo = function() {
             }
         }
         // aldonu pli...
-        if (maletendita && ! element.querySelector(".pli")) {
-            var pli = make_element("A",{lang: "eo", href: "#"},"pli...");
+        if (maletenditaj && ! element.querySelector(".pli")) {
+            var pli = make_element("A",{lang: "eo", href: "#"},"+"+maletenditaj);
                 // href=# necesas por ebligi fokusadon per TAB-klavo
             pli.addEventListener("click",etendu_trd);
             pli.classList.add("pli","etendilo");
