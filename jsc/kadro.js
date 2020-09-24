@@ -185,6 +185,13 @@ function load_page(trg,url,push_state=true) {
                 nav.append(table);
                 index_spread();
 
+                // laŭbezone ankoraŭ iru al loka marko
+                if (url.indexOf('#') > -1) {
+                    var hash = url.split('#').pop()
+                    window.location.hash = hash;
+                }
+                // ALDONU: ankoraŭ document.getElementById(hash).scrollIntoView()...
+
                 //img_svg_bg(); // anst. fakvinjetojn, se estas la fak-indekso - ni testos en la funkcio mem!
             } else if (main && trg == "main") {
                 var body = doc.body;
@@ -196,10 +203,12 @@ function load_page(trg,url,push_state=true) {
                 if (filename.startsWith("redaktilo")) {
                     redaktilo.preparu_red(filename.split('?').pop()); // redaktilo-paĝo
                 } else {
+                    // laŭbezone ankoraŭ iru al loka marko
                     if (url.indexOf('#') > -1) {
                         var hash = url.split('#').pop()
                         window.location.hash = hash;
                     }
+                    // ALDONU: ankoraŭ document.getElementById(hash).scrollIntoView()...
 
                     artikolo.preparu_art();                      
                     var s_artikolo = document.getElementById("s_artikolo");
@@ -440,6 +449,8 @@ function serchu(event) {
     var esprimo = serch_in.value;
 
     //console.debug("Ni serĉu:"+esprimo);
+    // turnu la revo-fiŝon...
+    document.getElementById('revo_icon').classList.add('revo_icon_run');
 
     HTTPRequest('POST', sercho_url, {sercxata: esprimo},
         function(data) {
@@ -499,6 +510,10 @@ function serchu(event) {
             inx_enh.textContent = "";
             //inx_enh.append(...s_form,trovoj);
             inx_enh.append(trovoj);
+
+            // haltigu la revo-fiŝon
+            document.getElementById('revo_icon').classList.remove('revo_icon_run');
+
         }
     );
 
