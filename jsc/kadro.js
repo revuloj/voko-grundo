@@ -333,7 +333,7 @@ function adaptu_paghon(root_el, url) {
             .addEventListener("click", function(event) {
                 event.preventDefault();
                 var q = document.getElementById('w:q').value
-                location.href = 'https://www.ecosia.org?q='+encodeURIComponent(q+' site:reta-vortaro.de')
+                location.href = 'https://www.ecosia.org/search?q='+encodeURIComponent(q+' site:reta-vortaro.de')
             });
 
         s_form.querySelector("button[value='anaso']")
