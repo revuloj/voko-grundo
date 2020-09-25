@@ -49,7 +49,7 @@ select {
     /*font-size: 1rem;*/
 }
 
-input {
+fieldset input {
     background-color: var(--input-bgr-clr);
     color: var(--input-fnt-clr);
 
@@ -148,14 +148,57 @@ button, input[type="button"], input[type="checkbox"] {
 
 #x\:nav_srch_btn {
     /*background: url(../smb/revo.svg) no-repeat;*/
-    height: var(--small-button-size);
-    width: var(--small-button-size);
+    height: var(--small-button-size) !important;
+    width: var(--small-button-size) !important;
     margin: .1em;
     border-radius: 50%;
+
+    flex-grow: 0;
+    flex-shrink: 0;
     /*
     background-position: 0 -.2em;
     background-size: contain;
     */
+}
+
+.sercho {
+    background-color: var(--input-bgr-clr);
+    color: var(--input-fnt-clr);
+    border: 2px solid var(--nav-brd-clr);
+    border-radius: 2px;
+
+    /*margin: 3px 1px 0px 1px;*/
+    /*padding: 0.3em 0.5em;*/
+    flex: 2;
+
+    /*max-width: 90%;*/
+    width: 5em;
+
+    /*font-size: 1rem;*/
+    display: flex;
+    justify-content: space-between;
+}
+
+
+.sercho input {
+    border: none;
+    flex: 2;
+    /*max-width: 75%; /* strangmanier ĝi ŝovas la butonon dekstren, sen tiu limigo! */
+}
+
+.sercho input:focus {
+    outline: none;
+}
+
+/* cx */
+.sercho button {
+    flex: 0;
+    border: none;
+    box-shadow: none;
+    border-left: 1px dotted var(--nav-brd-clr);
+    border-radius: 0;
+    margin: initial;
+    height: auto;
 }
 
 #w\:revo_sercho {

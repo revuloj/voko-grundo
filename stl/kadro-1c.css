@@ -106,6 +106,7 @@ nav {
     justify-content: space-between;
     z-index: 200;
 }
+/*
 #navbar button {
     flex-grow: 0;
 }
@@ -115,6 +116,7 @@ nav {
     max-width: 90%;
     min-width: 5em;
 }
+*/
 
 
 /***************************************
@@ -600,7 +602,7 @@ footer {
     }    
 }
 
-@media (min-width: 60em) {
+@media (min-width: 50em) {
     body {
         flex-direction: row;
     }
