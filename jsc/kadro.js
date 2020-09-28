@@ -175,6 +175,16 @@ function normalize_href(target, href) {
 }     
 
 function load_page(trg,url,push_state=true) {
+    function update_hash() {
+        if (url.indexOf('#') > -1) {
+            var hash = url.split('#').pop();
+        } else {
+            hash = '';
+        }
+        window.location.hash = hash;    
+        // ALDONU: ankoraŭ document.getElementById(hash).scrollIntoView()...    
+    }
+
     HTTPRequest('GET', url, {},
         function(data) {
             // Success!
@@ -193,11 +203,7 @@ function load_page(trg,url,push_state=true) {
                 index_spread();
 
                 // laŭbezone ankoraŭ iru al loka marko
-                if (url.indexOf('#') > -1) {
-                    var hash = url.split('#').pop()
-                    window.location.hash = hash;
-                }
-                // ALDONU: ankoraŭ document.getElementById(hash).scrollIntoView()...
+                update_hash();
 
                 //img_svg_bg(); // anst. fakvinjetojn, se estas la fak-indekso - ni testos en la funkcio mem!
             } else if (main && trg == "main") {
@@ -211,11 +217,7 @@ function load_page(trg,url,push_state=true) {
                     redaktilo.preparu_red(filename.split('?').pop()); // redaktilo-paĝo
                 } else {
                     // laŭbezone ankoraŭ iru al loka marko
-                    if (url.indexOf('#') > -1) {
-                        var hash = url.split('#').pop()
-                        window.location.hash = hash;
-                    }
-                    // ALDONU: ankoraŭ document.getElementById(hash).scrollIntoView()...
+                    update_hash();
 
                     artikolo.preparu_art();                      
                     var s_artikolo = document.getElementById("s_artikolo");
