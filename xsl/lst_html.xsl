@@ -92,7 +92,7 @@
 		    rel="stylesheet" href="../stl/indeksoj.css"/>
 	  </head>
 	  <body>
-      <table id="{concat('x:',substring-before($dosiero,'.html')}" cellspacing="0">
+      <table id="{concat('x:',substring-before($dosiero,'.html'))}" cellspacing="0">
       <xsl:call-template name="menuo-eo"/>
       <tr>
 		    <td colspan="{$inx_paghoj}" class="enhavo">
