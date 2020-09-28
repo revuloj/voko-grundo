@@ -23,5 +23,5 @@ pic := image (
 ) shifted (5,5);
 
 coc_svg(pic,skalo);
-%coc_png(pic,skalo);
+coc_png(pic,skalo);
 end.

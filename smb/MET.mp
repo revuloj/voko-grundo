@@ -20,5 +20,5 @@ pic := image(
 coc_svg(pic,skalo);
 % pro eraro en png-eligo de mpost 1.999 ne funkcias
 % uzu rsvg-convert anstataŭe:
-% coc_png(pic,saklo); 
+coc_png(pic,skalo); 
 end.

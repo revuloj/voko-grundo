@@ -45,5 +45,5 @@ pic := image (
 );
 
 coc_svg(pic,skalo);
-%coc_png(pic,skalo);
+coc_png(pic,skalo);
 end.

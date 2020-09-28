@@ -32,7 +32,7 @@ pic := image (
 );
 
 coc_svg(pic,skalo);
-% pro cimo en r1.999 PNG-netapost uzu rsvg-convert anstataŭe
-% coc_png(pic,skalo);
+% pro cimo en r1.999 PNG-metapost uzu rsvg-convert anstataŭe
+coc_png(pic,skalo);
 
 end.

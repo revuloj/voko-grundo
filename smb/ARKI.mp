@@ -26,6 +26,6 @@ pic := image (
 
 coc_svg(pic,skalo);
 % pro cimo en mpost-PNG 1.999 uzu rsvg-convert anstataŭe:
-% coc_png(pic,skalo);
+coc_png(pic,skalo);
 
 end.

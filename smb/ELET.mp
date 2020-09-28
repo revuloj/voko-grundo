@@ -20,5 +20,5 @@ draw (50,100)--(50,50);
 );
 
 coc_svg(pic,skalo);
-%coc_png(pic,skalo);
+coc_png(pic,skalo);
 end.

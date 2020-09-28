@@ -21,5 +21,5 @@ pic := image (
 ) xscaled 1.2;
 
 coc_svg(pic,skalo);
-%coc_png(pic,skalo);
+coc_png(pic,skalo);
 end.
