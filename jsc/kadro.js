@@ -30,6 +30,8 @@ when_doc_ready(function() {
             });
 
         var query = document.getElementById("x:q");
+        var cx = document.getElementById("x:cx");
+
         query.addEventListener("keydown", function(event) {
             var key = 
                 event.keyCode ? event.keyCode 
@@ -41,6 +43,12 @@ when_doc_ready(function() {
                 serchu(event);
             }
         });
+
+        cx.addEventListener("click", function(event) {
+            event.preventDefault();
+            event.target.classList.toggle("premita");
+        })
+
 
         //    var s_form = root_el.querySelector("form[name='f']");
         //    var query = s_form.querySelector("input[name='q']");
@@ -324,11 +332,21 @@ function adaptu_paghon(root_el, url) {
 
     var filename = url.split('/').pop()
 
+    if ( filename.startsWith('_eo.') ) {
+        for (var n of root_el.querySelectorAll(".kls_nom")) {
+            n.classList.add("maletendita");
+
+            n.addEventListener("click", function(event) {
+                event.target.classList.toggle("maletendita");
+            })
+        }
+    }
     // serĉilo en titol- kaj serĉo-paĝoj
-    if ( filename.startsWith('titolo') ) {
+    else if ( filename.startsWith('titolo') ) {
         // adaptu serĉilon
         var s_form = root_el.querySelector("form[name='f']");
         var query = s_form.querySelector("input[name='q']");
+        var cx = s_form.querySelector("button.cx");
         //var submit = s_form.querySelector("input[type='submit']");
         //s_form.removeAttribute("action");
         //submit.addEventListener("click",serchu);
@@ -345,6 +363,11 @@ function adaptu_paghon(root_el, url) {
                 serchu(event);
             }
         });
+
+        cx.addEventListener("click", function(event) {
+            event.preventDefault();
+            event.target.classList.toggle("premita");
+        })
 
         s_form.querySelector("button[value='revo']")
             .addEventListener("click", function(event) {

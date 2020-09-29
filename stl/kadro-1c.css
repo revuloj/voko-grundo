@@ -240,12 +240,41 @@ nav a:active {
     font-style: italic;
 }
 
+
+#navigado .kls_nom:hover {
+    background-color: var(--nav-hov-bgr-clr);
+    color: var(--nav-hov-fnt-clr) !important;
+    background-image: none;
+    color: var(--highlight-color);
+    cursor: pointer;
+}
+
+#navigado .kls_nom:active {
+    background-color: var(--nav-act-bgr-clr);
+    color: var(--nav-act-fnt-clr);
+    background-image: none;
+    border: 1px solid var(--nav-act-bgr-clr); /* ne montru randon: */
+    box-shadow: none;
+}
+
 #navigado .kls_nom:before {
     content: "-"
 }
 
 #navigado .kls_nom:after {
     content: ":"
+}
+
+#navigado .kls_nom.maletendita:before {
+    content: "+"
+}
+
+#navigado .kls_nom.maletendita:after {
+    content: ""
+}
+
+#navigado .kls_nom.maletendita ~ ul {
+    display: none;
 }
 
 #navigado>a {

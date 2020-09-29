@@ -183,6 +183,7 @@ button, input[type="button"], input[type="checkbox"] {
 .sercho input {
     border: none;
     flex: 2;
+    overflow: hidden;
     /*max-width: 75%; /* strangmanier ĝi ŝovas la butonon dekstren, sen tiu limigo! */
 }
 
@@ -199,6 +200,10 @@ button, input[type="button"], input[type="checkbox"] {
     border-radius: 0;
     margin: initial;
     height: auto;
+}
+
+.cx.premita {
+    background-color: gray;
 }
 
 #w\:revo_sercho {
@@ -244,12 +249,12 @@ button, input[type="button"], input[type="checkbox"] {
 }
 
 #x\:revo_icon {
-    width: 2.9em;
-    height: 2.9em;
+    width: 2.7em;
+    height: 2.7em;
 
     position: relative;
-    left: -.89em;
-    top: -.86em;    
+    left: -.79em;
+    top: -.72em;    
 }
 
 #w\:revo_icon {
@@ -257,8 +262,8 @@ button, input[type="button"], input[type="checkbox"] {
     height: 3.4em;
 
     position: relative;
-    left: -.80em;
-    top: -.80em;    
+    left: -.76em;
+    top: -.72em;    
 }
 
 
@@ -266,9 +271,13 @@ button, input[type="button"], input[type="checkbox"] {
     height: var(--button-size);
     width: var(--button-size);
     border-radius: 50%;
+    border-width: 0px;
     background: url(../smb/duckduckgo.svg) no-repeat;
+    background-size: 100%;
+    /*
     background-position: 0.17em 0.16em;
     background-size: 88%;
+    */
     /*
     border: 2px solid darkslategray;
     background-color: lightgoldenrodyellow;
@@ -279,6 +288,7 @@ button, input[type="button"], input[type="checkbox"] {
     height: var(--button-size);
     width: var(--button-size);
     border-radius: 50%;
+    border-width: 2px;
     background: url(../smb/ecosia.svg) no-repeat;
     background-position: center;
     background-size: 150%;
