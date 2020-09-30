@@ -33,31 +33,31 @@ when_doc_ready(function() {
         var cx = document.getElementById("x:cx");
 
         query.addEventListener("keydown", function(event) {
-            var key = 
-                event.keyCode ? event.keyCode 
-                : event.which ? event.which 
-                : event.charCode;
-            if (key == 13) {  
+            if (event.key == "Enter") {  
                 // turnu la revo-fiŝon...
                 document.getElementById('x:revo_icon').classList.add('revo_icon_run');
                 serchu(event);
             }
         });
 
+        query.addEventListener("keyup",function(event){
+            //console.debug("which: "+event.which+" code:"+event.code + " key: "+ event.key);
+            if (event.key == "x" || event.key == "Shift") { // x-klavo
+                var cx_checked = ! document.getElementById("x:cx").classList.contains("premita");
+                if (cx_checked) {
+                    var s = event.target.value;
+                    var s1 = ascii_eo(s);
+                    if (s != s1)
+                        event.target.value = s1
+                }
+            }
+        });
+
         cx.addEventListener("click", function(event) {
             event.preventDefault();
             event.target.classList.toggle("premita");
-        })
-
-
-        //    var s_form = root_el.querySelector("form[name='f']");
-        //    var query = s_form.querySelector("input[name='q']");
-        //    var submit = s_form.querySelector("input[type='submit']");
-        //    s_form.removeAttribute("action");
-        //    submit.addEventListener("click",serchu);
-        //    query.addEventListener("keyup",x_utf8);
+        });
     
-
         document.body 
         //document.getElementById("navigado")
             .addEventListener("click",navigate_link);
@@ -307,27 +307,6 @@ function adaptu_paghon(root_el, url) {
         }
     }
 
-    function x_utf8(event) {
-        if (document.getElementById("w:cx").checked) {
-            var serch_in = event.target;
-            t = serch_in.value.replace(/c[xX]/g, "\u0109")
-                .replace(/g[xX]/g, "\u011d")
-                .replace(/h[xX]/g, "\u0125")
-                .replace(/j[xX]/g, "\u0135")
-                .replace(/s[xX]/g, "\u015d")
-                .replace(/u[xX]/g, "\u016d")
-                .replace(/C[xX]/g, "\u0108")
-                .replace(/G[xX]/g, "\u011c")
-                .replace(/H[xX]/g, "\u0124")
-                .replace(/J[xX]/g, "\u0134")
-                .replace(/S[xX]/g, "\u015c")
-                .replace(/U[xX]/g, "\u016c");
-            if (t != serch_in.value) {
-                serch_in.value = t;
-           }
-        }
-    }
-
     fix_img();
 
     var filename = url.split('/').pop()
@@ -351,16 +330,23 @@ function adaptu_paghon(root_el, url) {
         //s_form.removeAttribute("action");
         //submit.addEventListener("click",serchu);
         
-        query.addEventListener("keyup",x_utf8);
+        
         query.addEventListener("keydown", function(event) {
-            var key = 
-                event.keyCode ? event.keyCode 
-                : event.which ? event.which 
-                : event.charCode;
-            if (key == 13) {  
+            if (event.key == "Enter") {  
                 // turnu la revo-fiŝon...
                 document.getElementById('w:revo_icon').classList.add('revo_icon_run');
                 serchu(event);
+            }
+        });
+        query.addEventListener("keyup",function(event){
+            if (event.key == "x" || event.key == "Shift") { // x-klavo 
+                var cx_checked = ! document.getElementById("w:cx").classList.contains("premita");
+                if (cx_checked) {
+                    var s = event.target.value;
+                    var s1 = ascii_eo(s);
+                    if (s != s1)
+                        event.target.value = s1
+                }
             }
         });
 

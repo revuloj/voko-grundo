@@ -146,7 +146,26 @@ function eo_ascii(str) {
         .replace(/ĥ/g,'hx')
         .replace(/ŭ/g,'ux');
 }
+
+function ascii_eo(str) {
+  return str
+    .replace(/c[xX]/g, "\u0109")
+    .replace(/g[xX]/g, "\u011d")
+    .replace(/h[xX]/g, "\u0125")
+    .replace(/j[xX]/g, "\u0135")
+    .replace(/s[xX]/g, "\u015d")
+    .replace(/u[xX]/g, "\u016d")
+    .replace(/C[xX]/g, "\u0108")
+    .replace(/G[xX]/g, "\u011c")
+    .replace(/H[xX]/g, "\u0124")
+    .replace(/J[xX]/g, "\u0134")
+    .replace(/S[xX]/g, "\u015c")
+    .replace(/U[xX]/g, "\u016c");
+}
+
   
+// en textarea ni nur rigardas la antaŭan signon
+// por anstataŭigi cx -> ĉ ktp.
 function cxigi(b, key) {
     var n="";
     var k=String.fromCharCode(key);
