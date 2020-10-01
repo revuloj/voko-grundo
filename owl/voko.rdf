@@ -1119,6 +1119,13 @@
     </Class>
     
 
+    <!-- http://purl.org/net/voko#komunikoj -->
+
+    <Class rdf:about="&voko;komunikoj">
+        <rdfs:subClassOf rdf:resource="&voko;kulturaĵoj"/>
+        <rdfs:label>komuniko</rdfs:label>
+        <rdfs:seeAlso rdf:resource="&revo;komuni1.0o"/>
+    </Class>
 
     <!-- http://purl.org/net/voko#lingvoj -->
 
