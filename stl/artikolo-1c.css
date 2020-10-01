@@ -36,8 +36,9 @@ H3 {font-size: 90%; border-top-width: 2px; border-top-style: solid;
 ***/
 
   /* ni limigu tion al larĝaj ekranoj,
-  por pli malvastaj la spacoj inter la vortoj tro kreskus... */
-DD {text-align: justify}
+  por pli malvastaj la spacoj inter la vortoj tro kreskus... 
+  vd. kadro.css
+DD {text-align: justify} */
 
 HR {
   border-style: dotted; 
@@ -589,12 +590,16 @@ H2 .icon_btn:focus {
 a.pli, 
 a.pref {
     font-style: oblique;
+    color: var(--label-fnt-clr);
+    border: none;
+        /*
     text-decoration: none;
     color: var(--btn-fnt-clr);
     background: var(--btn-bgr-clr);
     border-radius: .5em;
     padding: .1em .3em;
     margin-bottom: .1em;
+    */
 }
 
 .square_min {

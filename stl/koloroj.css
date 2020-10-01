@@ -105,7 +105,6 @@
     --nav-act-bgr-clr: burlywood;
     --nav-act-brd-clr: ivory;
 
-
     /* por la ĉefa paĝo (main) */
     --main-fnt-clr: lightyellow;
     --main-bgr-clr: #0f0800;
@@ -131,7 +130,7 @@
     --btn-act-fnt-clr: black; 
     --btn-act-brd-clr: black;
  
-    --input-bgr-clr: #2f0800; /* #52090E; #82190E; #a2390E;*/
+    --input-bgr-clr: #070721; /*#00082f; #2f0800; #52090E; #82190E; #a2390E;*/
     --input-fnt-clr: palegoldenrod;
 
     --list-bgr-clr: chocolate; /*#894415; darkgoldenrod;*/

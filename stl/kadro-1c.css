@@ -648,6 +648,10 @@ footer {
         width: var(--nav-enh-width); /*100%;*/
         margin-right: auto;
     }    
+
+    main DD {
+        text-align: justify; 
+    } 
 }
 
 
