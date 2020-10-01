@@ -181,11 +181,11 @@ var redaktilo = function() {
     } else if (key == 88 || key == 120) {   
       var cx = document.getElementById("r:cx");
       if (event.altKey) {	// shortcut alt-x  --> toggle cx
-        cx.checked = !cx.checked;
+        cx.value = 1 - cx.value;
         event.preventDefault();
       }
   
-      if (!cx.checked) return true;
+      if (cx.value != "1") return true;
 
       var txtarea = document.getElementById('r:xmltxt');
       var scrollPos = xmlarea.scrollPos();
@@ -199,6 +199,7 @@ var redaktilo = function() {
       if (nova != "") {
         //range.text = nova;
         xmlarea.selection(nova);
+        
         xmlarea.scrollPos(scrollPos);
         event.preventDefault();
       }
@@ -671,7 +672,10 @@ var redaktilo = function() {
         }
     });
     document.getElementById("r:cx")
-      .addEventListener("click",function() {
+      .addEventListener("click",function(event) {
+        event.preventDefault();
+        var cx = event.target;
+        cx.value = 1 - cx.value; 
         document.getElementById('r:xmltxt').focus()
     });
 

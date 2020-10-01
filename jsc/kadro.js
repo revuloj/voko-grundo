@@ -43,8 +43,7 @@ when_doc_ready(function() {
         query.addEventListener("keyup",function(event){
             //console.debug("which: "+event.which+" code:"+event.code + " key: "+ event.key);
             if (event.key == "x" || event.key == "Shift") { // x-klavo
-                var cx_checked = ! document.getElementById("x:cx").classList.contains("premita");
-                if (cx_checked) {
+                if (document.getElementById("x:cx").value == "1") {
                     var s = event.target.value;
                     var s1 = ascii_eo(s);
                     if (s != s1)
@@ -55,7 +54,9 @@ when_doc_ready(function() {
 
         cx.addEventListener("click", function(event) {
             event.preventDefault();
-            event.target.classList.toggle("premita");
+            var cx = event.target;
+            cx.value = 1 - cx.value; 
+            document.getElementById('x:q').focus()
         });
     
         document.body 
@@ -340,8 +341,7 @@ function adaptu_paghon(root_el, url) {
         });
         query.addEventListener("keyup",function(event){
             if (event.key == "x" || event.key == "Shift") { // x-klavo 
-                var cx_checked = ! document.getElementById("w:cx").classList.contains("premita");
-                if (cx_checked) {
+                if (document.getElementById("w:cx").value == "1") {
                     var s = event.target.value;
                     var s1 = ascii_eo(s);
                     if (s != s1)
@@ -352,7 +352,9 @@ function adaptu_paghon(root_el, url) {
 
         cx.addEventListener("click", function(event) {
             event.preventDefault();
-            event.target.classList.toggle("premita");
+            var cx = event.target;
+            cx.value = 1 - cx.value; 
+            document.getElementById('w:q').focus()
         })
 
         s_form.querySelector("button[value='revo']")
@@ -471,6 +473,9 @@ function serchu(event) {
     var serch_in = event.target.closest("form")
         .querySelector('input[name=q]');
     var esprimo = serch_in.value;
+    if (esprimo.indexOf('%') < 0 && esprimo.indexOf('_') < 0 && esprimo.length >= 3)
+        esprimo += '%' // serĉu laŭ vortkomenco, se ne jam enestas jokeroj, kaj
+                        // almenaŭ 3 literoj
 
     //console.debug("Ni serĉu:"+esprimo);
 
@@ -507,6 +512,11 @@ function serchu(event) {
                 return div;
             }
 
+            function stop_search(btn_id) {
+                var s_btn = document.getElementById(btn_id);
+                if (s_btn) s_btn.classList.remove('revo_icon_run');
+            }
+
             //console.debug("Ni trovis: "+data);
 
             index_spread();
@@ -534,8 +544,8 @@ function serchu(event) {
             inx_enh.append(trovoj);
 
             // haltigu la revo-fiŝon
-            document.getElementById('x:revo_icon').classList.remove('revo_icon_run');
-            document.getElementById('w:revo_icon').classList.remove('revo_icon_run');
+            stop_search('x:revo_icon');
+            stop_search('w:revo_icon');
         }
     );
 

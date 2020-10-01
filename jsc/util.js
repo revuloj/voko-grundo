@@ -169,38 +169,22 @@ function ascii_eo(str) {
 function cxigi(b, key) {
     var n="";
     var k=String.fromCharCode(key);
-  
-          if (b=='s'     ) n='\u015D';
-    else if (b=='\u015D') n='s'+k;
-    else if (b=='S'     ) n='\u015C';
-    else if (b=='\u015C') n='S'+k;
-  
-    else if (b=='c'     ) n='\u0109';
-    else if (b=='\u0109') n='c'+k;
-    else if (b=='C'     ) n='\u0108';
-    else if (b=='\u0108') n='C'+k;
-  
-    else if (b=='h'     ) n='\u0125';
-    else if (b=='\u0125') n='h'+k;
-    else if (b=='H'     ) n='\u0124';
-    else if (b=='\u0124') n='H'+k;
-  
-    else if (b=='g'     ) n='\u011D';
-    else if (b=='\u011D') n='g'+k;
-    else if (b=='G'     ) n='\u011C';
-    else if (b=='\u011C') n='G'+k;
-  
-    else if (b=='u'     ) n='\u016D';
-    else if (b=='\u016D') n='u'+k;
-    else if (b=='U'     ) n='\u016C';
-    else if (b=='\u016C') n='U'+k;
-  
-    else if (b=='j'     ) n='\u0135';
-    else if (b=='\u0135') n='j'+k;
-    else if (b=='J'     ) n='\u0134';
-    else if (b=='\u0134') n='J'+k;
-  
-    return n;
+
+    return {
+    s: '\u015D', '\u015D': 's'+k, 
+    S: '\u015C', '\u015C': 'S'+k, 
+    c: '\u0109', '\u0109': 'c'+k,
+    C: '\u0108', '\u0108': 'C'+k,
+    h: '\u0125', '\u0125': 'h'+k,
+    H: '\u0124', '\u0124': 'H'+k,
+    g: '\u011D', '\u011D': 'g'+k,
+    G: '\u011C', '\u011C': 'G'+k,
+    u: '\u016D', '\u016D': 'u'+k,
+    U: '\u016C', '\u016C': 'U'+k,
+    j: '\u0135', '\u0135': 'j'+k,
+    J: '\u0134', '\u0134': 'J'+k,
+    x: 'x'+k, X: 'X'+k
+  }[b] || '';
 }
 
 function Textarea(ta_id) {
@@ -331,6 +315,7 @@ function Textarea(ta_id) {
           return range.text;
         } else {
           var startPos = txtarea.selectionStart;
+          txtarea.setSelectionRange(startPos-1,startPos);
           return txtarea.value.substring(startPos - 1, startPos)
         }
     },
