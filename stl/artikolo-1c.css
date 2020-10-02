@@ -587,8 +587,13 @@ H2 .icon_btn:focus {
     border: none;
 }
 
-a.pli, 
-a.pref {
+dt.pli, .ekz.pli, a.pli {
+    font-style: normal;
+    color: var(--label-fnt-clr);
+    border: none;
+}
+
+.pref, a.pref {
     font-style: oblique;
     color: var(--label-fnt-clr);
     border: none;
