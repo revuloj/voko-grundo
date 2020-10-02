@@ -1,4 +1,5 @@
 const js_sojlo = 3; //30+3;
+const ekz_sojlo = 3;
 const sec_art = "s_artikolo";
 const lingvoj_xml = "../cfg/lingvoj.xml";
 
@@ -150,6 +151,14 @@ var artikolo = function() {
                 maletendu_trd(el);
             }
         }
+
+        var art = document.getElementById("s_artikolo");
+        if (art) {
+            var d1 = art.querySelectorAll("span.dif");
+            for (var dif of d1) {
+                maletendu_ekz(dif);
+            }
+        }
     }
 
     /** kaŝu ĉiujn derivaĵojn **/
@@ -226,33 +235,81 @@ var artikolo = function() {
         }
         // aldonu pli...
         if (maletenditaj && ! element.querySelector(".pli")) {
-            var pli = make_element("A",{lang: "eo", href: "#"},"+"+maletenditaj);
+            var pli = make_elements([
+                ["DT",{class: "pli lng"},
+                    ["(",["A",{lang: "eo", href: "#", class: "pli etendilo"},"+"+maletenditaj],")"]
+                ],
+                ["DD", {class: "pli"}]
+            ]);
                 // href=# necesas por ebligi fokusadon per TAB-klavo
-            pli.addEventListener("click",etendu_trd);
-            pli.classList.add("pli","etendilo");
-            element.appendChild(pli);
+            pli[0].addEventListener("click",etendu_trd);
+            element.append(...pli);
 
             const _MS_PER_DAY = 1000 * 60 * 60 * 24;
             if ( Math.round((Date.now() - pref_dat) / _MS_PER_DAY, 0) < 1 ) {
-                var pref = make_element("A",{lang: "eo", href: "#"}, "preferoj...");
-                pref.addEventListener("click",preferoj_dlg);
-                pref.classList.add("pref");
-                element.appendChild(make_element("SPAN")); // pro la krado
-                element.appendChild(pref);
+                var pref = make_elements([
+                    ["DT",{class: "pref"},
+                        [["A",{lang: "eo", href: "#", class: "pref"}, "preferoj..."]]
+                    ],
+                    ["DD", {class: "pref"}]
+                ]);
+                pref[0].addEventListener("click",preferoj_dlg);
+                element.append(...pref);
             }
         }
     }
 
     function etendu_trd(event) {
         event.preventDefault();
-        var div_trd = event.target.parentElement;
+        var div_trd = event.target.closest("DL");
         for (var id of div_trd.children) {
             id.classList.remove("kasxita");
         };
         // kaŝu pli...
-        var 
-        p = div_trd.querySelector(".pli"); if (p) p.classList.add("kasxita");
-        p = div_trd.querySelector(".pref"); if (p) p.classList.add("kasxita");
+        div_trd.querySelectorAll("dt.pli, dd.pli").forEach(
+            p => p.classList.add("kasxita")
+        );
+        div_trd.querySelectorAll("dt.pref, dd.pref").forEach(
+            p => p.classList.add("kasxita")
+        ) 
+    }
+
+
+    function maletendu_ekz(dif) {
+        var ekz_cnt = 0;
+        for (var ch of dif.childNodes) {
+            if (ch.classList && ch.classList.contains("ekz")) {
+                ekz_cnt += 1;
+                if (ekz_cnt > ekz_sojlo) {
+                    ch.classList.add("kasxita");
+                }
+            } else {
+                // se ni ĵus kaŝis iujn ekzemplojn, ni montru
+                // etendilon "+nn..."
+                if (ekz_cnt > ekz_sojlo) {
+                    var maletenditaj = ekz_cnt - ekz_sojlo;
+                    var pli = make_elements([
+                            ["i",{class: "ekz pli"},
+                                ["(",["A",{href: "#", class: "pli etendilo"},"+"+maletenditaj],")"]
+                            ]])[0];
+                    pli.addEventListener("click",etendu_ekz);
+                    dif.insertBefore(pli,ch);        
+                }
+                // ni rekomencu kalkuladon - atentu, ke ekzemploj de difino
+                // ne nepre estas unu post alia, sed povas esti pli distritaj...
+                ekz_cnt = 0;
+            }
+        }    
+    }
+
+    function etendu_ekz(event) {
+        var dif = event.target.closest("span.dif");
+        for (var ch of dif.querySelectorAll(".ekz")) {
+            ch.classList.remove("kasxita");
+            if (ch.classList.contains("pli"))
+                // ĉu forigi aŭ kaŝi - dependas, ĉu poste ni denove bezonus ĝin...
+                dif.removeChild(ch);
+        }
     }
 
     /*

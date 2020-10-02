@@ -55,7 +55,10 @@ function make_element(name,attributes,textcontent) {
 function make_elements(jlist) {
     var dlist = [];
     for (var el of jlist) {
-        var element;
+      var element;
+      if (typeof el == "string") {
+        element = document.createTextNode(el);
+      } else {
         if (el[2] && el[2] instanceof Array) {
             var content = make_elements(el[2]);
             element = make_element(el[0],el[1]);
@@ -63,8 +66,9 @@ function make_elements(jlist) {
         } else {
             element=make_element(el[0],el[1],el[2]);
         }
-        dlist.push(element)
-    }
+      } //else
+      dlist.push(element)
+    } // for
     return dlist;
 }
 
