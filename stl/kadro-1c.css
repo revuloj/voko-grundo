@@ -23,8 +23,12 @@ html,body {
     margin: 0 !important;
     padding: 0 !important;
 
+    /* problemo kun iOS Webkit:...
     height: 100vh !important;
     width: 100vw !important;
+    */
+    height: 100% !important;
+    width: 100% !important;
 
     background-color: var(--main-bgr-clr); 
     color: var(--main-fnt-clr);
@@ -42,6 +46,7 @@ html,body {
 }
 body {
     overflow: hidden;
+    /*overflow: visible;*/
     /*
     height: 50vh;
     max-height: 50vh;
