@@ -73,9 +73,9 @@ main {
 }
 nav {
     /*height: 2.5em;*/
-    max-height: 100vh;
+    max-height: 100%;
     height: auto;
-    width: 100vw;
+    width: 100%;
     /*align-self: stretch;*/
 
     flex: none; /* i.e. 0 0 auto */ 
@@ -113,6 +113,14 @@ nav {
     align-items: center;
     justify-content: space-between;
     z-index: 200;
+
+    margin: .1em 0;
+}
+#navbar>button {
+    margin: 0 .3em;
+}
+#navbar>div {
+    margin-top: .1em;
 }
 /*
 #navbar button {
