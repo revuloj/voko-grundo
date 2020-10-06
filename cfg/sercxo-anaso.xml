@@ -1,0 +1,11 @@
+<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/" xmlns:moz="http://www.mozilla.org/2006/browser/search/">
+<ShortName>Reta Vortaro (per DuckDuckGo)</ShortName>
+<Description>Ĝenerala reta vortaro en Esperanto</Description>
+<InputEncoding>utf-8</InputEncoding>
+<Image width="16" height="16">data:image/x-icon;base64,AAABAAEAEBAAAAEAGABoAwAAFgAAACgAAAAQAAAAIAAAAAEAGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgpNkAAAAAAAAgpNkhp94irOMireUireUirOMhp90gpNgAAAAAAAAAAAAAAAAgpNoAAAAAAAAhrOMiseofntIUZYYNRFoNRFoUZIUgo9cjs+0hrOMAAAAgpNkAAAAAAAAAAAAhrOQhrOMSWnYAAAAHJDAPT2kPT2gIICoAAAAPUWshq+MhquEAAAAgpNkfo9ghrOQhp90LMkIFGyIdmMkZg60ck8Iis+wjuPQemssDCw0MP1Qhptshqd8AAAAgpdkirOMNP1MJLTwhp9wjt/IFGCIAAAASW3kirOMcjbsCDRIWdZogpNggptwgpNkgptsbirYDEhggotcgptwir+gQUGkJLTwGICsXdZsZf6cSXHoireUgpdogpNkgpNkgptsSYoINRFohqN0gpNkhreUUZYYHJzIcj7wEFRsendAenM8el8cen9Igp90gpNkgo9gOSmITY4Mgp90gpNkjsuwSXHoJKTUkuPQIKjgIJjIJKDQIJzMIJjEdk8Mgptwgo9gOSmETY4Qgp90hqN8aha8AAAAWbZIir+YdmcoemMofnM4fpNgKM0UPT2chq+MgptsTY4INQ1khqN4emMkHIi4Xc5giq+IgptsgptwWbZAel8gkt/IHICsUY4Qhq+IgptsbirgEFBkfn9MhquEhrOQhquAgpNohq+ISW3kAAAAFGSEemssBBAUfo9Ygptsgpdohq+INQVUIJjMir+ggqN8gpNkgpNkgqN0ckL8MPlIXcZYJLjwTWXcireQgo9ggpNkgqd8ireQHJDEFHScfndAhq+Mgqd8hqd8hrOUhptsIKDUKMUEgpNkhquAAAAAAAAAhpt0hqN4ir+gOSF8DDBAMO00RWHQRWHQMOk0CBwsNQlghp90hqeEAAAAgo9kgpNkAAAAgqNshquIir+gck8IVaYwQVXEQVXAVaYscksEjseogquAbmckgotwgp9cAAAAgpNkAAAAAAAAgpNogptwgptwgptsgptsgptwgptwgpNkgpNgAAAAfo9cAAAD8PwAA8A8AAMADAADAAwAAgAEAAIAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAIABAADAAwAAwAM</Image>
+<Image height="64" width="64" type="image/png">/revo/smb/revo64.png</Image>
+<Url type="text/html" method="get" template="https://duckduckgo.com">
+    <Param name="q" value="{searchTerms} site:reta-vortaro.de"/>
+</Url>
+<moz:SearchForm>http://reta-vortaro.de/revo/</moz:SearchForm>
+</OpenSearchDescription>
