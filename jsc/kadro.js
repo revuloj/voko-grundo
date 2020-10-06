@@ -1,5 +1,8 @@
 const revo_url = "reta-vortaro.de";
 const sercho_url = "/cgi-bin/sercxu-json.pl";
+const hazarda_url = "/cgi-bin/hazarda_art.pl";
+const titolo_url = "titolo-1c.html";
+const inx_eo_url = "/revo/inx/_eo.html";
 
 // instalu farendaĵojn por prepari la paĝon: evento-reagoj...
 when_doc_ready(function() { 
@@ -12,8 +15,8 @@ when_doc_ready(function() {
         // enkadrigu();
         if (document.getElementById("navigado")) {
             // anstataŭe ŝargu tiujn du el ĉefa indeks-paĝo
-            load_page("main","titolo-1c.html");
-            load_page("nav","/revo/inx/_eo.html");   
+            load_page("main",titolo_url);
+            load_page("nav",inx_eo_url);   
         }
         document.getElementById("x:nav_inx_btn")
             .addEventListener("click", function(event) {
@@ -90,7 +93,7 @@ function enkadrigu() {
         main.append(...document.body.children);
         document.body.appendChild(main);
     } else {
-        load_page("main","titolo.html");
+        load_page("main",titolo_url);
     }
 
     // preparu la navigo-parton de la paĝo
@@ -168,7 +171,7 @@ function normalize_href(target, href) {
     // ĉu estas fidinde uzi "target" tie ĉi aŭ ĉu ni uzu "source"?
     const prefix = { main: "art/", nav: "inx/"};
     if (href.endsWith('titolo.html')) {
-        return '/revo/dlg/titolo-1c.html'
+        return '/revo/dlg/'+titolo_url
     } else if (href.startsWith('../')) {
         return '/revo/' + href.substr(3);
     } else if (href.startsWith('tz_') || href.startsWith('vx_')) {
@@ -321,16 +324,25 @@ function adaptu_paghon(root_el, url) {
             })
         }
     }
+    else if ( filename.startsWith('_ktp.') ) {
+        // hazarda artikolo
+        const hazarda = root_el.querySelector("p[id='x:Iu_ajn_artikolo'] a");
+        hazarda.addEventListener("click", function(event) {
+            event.preventDefault();
+            hazarda_art();
+            event.stopPropagation(); // ne voku navigate_link!
+        })        
+    }
     // serĉilo en titol- kaj serĉo-paĝoj
     else if ( filename.startsWith('titolo') ) {
         // adaptu serĉilon
-        var s_form = root_el.querySelector("form[name='f']");
-        var query = s_form.querySelector("input[name='q']");
-        var cx = s_form.querySelector("button.cx");
+        const s_form = root_el.querySelector("form[name='f']");
+        const query = s_form.querySelector("input[name='q']");
+        const cx = s_form.querySelector("button.cx");
+        const hazarda = root_el.querySelector("a[id='w:hazarda']");
         //var submit = s_form.querySelector("input[type='submit']");
         //s_form.removeAttribute("action");
         //submit.addEventListener("click",serchu);
-        
         
         query.addEventListener("keydown", function(event) {
             if (event.key == "Enter") {  
@@ -387,6 +399,12 @@ function adaptu_paghon(root_el, url) {
                 location.href = 'https://www.google.com/search?q='+encodeURIComponent(q+' site:reta-vortaro.de')
         });
         */
+
+        // hazarda artikolo
+        hazarda.addEventListener("click", function(event) {
+            event.preventDefault();
+            hazarda_art();
+        })
     } 
 }
 
@@ -564,6 +582,19 @@ function serchu(event) {
         }
     });
     */
+}
+
+function hazarda_art() {
+
+    HTTPRequest('POST', hazarda_url, {senkadroj: "1"},
+        function(data) {
+            // Success!
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(data,"text/html");     
+            const a = doc.querySelector("a[target='precipa']");
+            const href = a.getAttribute("href");
+            if (href) load_page("main",href);
+        });
 }
 
 function restore_preferences() {
