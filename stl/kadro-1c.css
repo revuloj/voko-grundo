@@ -274,7 +274,8 @@ nav a:active {
 }
 
 #navigado .kls_nom:before {
-    content: "-"
+    content: "▼";
+    font-style: normal;
 }
 
 #navigado .kls_nom:after {
@@ -282,7 +283,13 @@ nav a:active {
 }
 
 #navigado .kls_nom.maletendita:before {
-    content: "+"
+    content: "▶ ";
+    font-size: 80%;
+    position: relative;
+    vertical-align: baseline;
+    top: -0.2em;
+    left: .2em;
+    font-style: normal;
 }
 
 #navigado .kls_nom.maletendita:after {
