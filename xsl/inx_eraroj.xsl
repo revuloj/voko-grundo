@@ -23,15 +23,18 @@
 
 
 <xsl:output method="xml" encoding="utf-8" indent="no"/>
+<xsl:param name="agordo-pado"/>
 
 <xsl:variable name="file" select="document-uri(/)"/>
 <xsl:variable name="filename" select="substring-before(tokenize($file,'/')[last()],'.xml')"/>
 <xsl:variable name="base" select="string-join(tokenize($file,'/')[position() &lt; last()],'/')"/>
 
+<!-- agordo-dosieroj kies enhavo estas uzata en la XSL-reguloj -->
+<xsl:variable name="klasoj" select="concat($agordo-pado,'/klasoj.xml')"/>
+
 <xsl:variable name="lingvoj">../cfg/lingvoj.xml</xsl:variable>
 <xsl:variable name="fakoj">../cfg/fakoj.xml</xsl:variable>
 <xsl:variable name="stiloj">../cfg/stiloj.xml</xsl:variable>
-<xsl:variable name="klasoj">../cfg/klasoj.xml</xsl:variable>
 
 <xsl:template match="/">
   <xsl:apply-templates/>

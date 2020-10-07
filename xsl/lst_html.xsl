@@ -45,7 +45,7 @@
 		select="count(document($enhavo)//pagho[not(@kashita='jes')])"/>
 <xsl:variable name="enhavo-root" select="document($enhavo)"/>
 
-<xsl:variable name="klasoj">../cfg/klasoj.xml</xsl:variable>
+<xsl:variable name="klasoj"><xsl:value-of select="concat($agordo-pado,'/klasoj.xml')"/></xsl:variable>
 <xsl:variable name="klasoj-root" select="document($klasoj)"/>
 
 <xsl:variable name="root" select="/"/>

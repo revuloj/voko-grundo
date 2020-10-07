@@ -44,7 +44,7 @@ name="redcgi">/cgi-bin/vokomail.pl?art=</xsl:variable -->
 <xsl:variable name="bibliogrhtml">../../../revo/dok/bibliogr.html</xsl:variable>
 <xsl:variable name="revo">/home/revo/revo</xsl:variable>
 <xsl:variable name="lingvoj_cfg" select="'../../cfg/lingvoj.xml'"/>
-<xsl:variable name="klasoj_cfg" select="'../../cfg/klasoj.xml'"/>
+<xsl:variable name="klasoj_cfg" select="'../../../revo/cfg/klasoj.xml'"/>
 <xsl:variable name="fakoj_cfg" select="'../../cfg/fakoj.xml'"/>
 <xsl:variable name="permesoj_cfg" select="'../../cfg/permesoj.xml'"/>
 

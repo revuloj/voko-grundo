@@ -28,18 +28,17 @@ transform-reguloj
 <xsl:output method="html" version="4.0" encoding="utf-8"/>
 <xsl:strip-space elements="trdgrp refgrp kap"/>
 
+<!-- agordo-dosieroj kies enhavo estas uzata en la XSL-reguloj -->
+<xsl:variable name="bibliografio"><xsl:value-of select="concat($agordo-pado,'/bibliogr.xml')"/></xsl:variable>
+<xsl:variable name="klasoj_cfg"><xsl:value-of select="concat($agordo-pado,'/klasoj.xml')"/></xsl:variable>
+<xsl:variable name="lingvoj_cfg" select="'../../cfg/lingvoj.xml'"/>
+<xsl:variable name="fakoj_cfg" select="'../../cfg/fakoj.xml'"/>
+<xsl:variable name="permesoj_cfg" select="'../../cfg/permesoj.xml'"/>
 
-<!-- kelkaj variabloj  -->
-
+<!-- padoj por referencado -->
 <xsl:variable name="mathjax-url">https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=AM_CHTML</xsl:variable>
 <xsl:variable name="art-css">artikolo-1b.css</xsl:variable>
 <xsl:variable name="art-jsc">revo-art-1b.js</xsl:variable>
-
-<xsl:variable name="bibliografio"><xsl:value-of select="concat($agordo-pado,'/bibliogr.xml')"/></xsl:variable>
-<xsl:variable name="lingvoj_cfg" select="'../../cfg/lingvoj.xml'"/>
-<xsl:variable name="klasoj_cfg" select="'../../cfg/klasoj.xml'"/>
-<xsl:variable name="fakoj_cfg" select="'../../cfg/fakoj.xml'"/>
-<xsl:variable name="permesoj_cfg" select="'../../cfg/permesoj.xml'"/>
 
 <xsl:variable name="smbdir">../smb</xsl:variable>
 <xsl:variable name="xmldir">../xml</xsl:variable> 

@@ -17,7 +17,7 @@
 <xsl:variable name="apos">'</xsl:variable>
 <xsl:variable name="quot">"</xsl:variable>
 
-<xsl:variable name="klasoj">../cfg/klasoj.xml</xsl:variable>
+<xsl:variable name="klasoj"><xsl:value-of select="concat($agordo-pado,'/klasoj.xml')"/></xsl:variable>
 <xsl:variable name="klasoj-root" select="document($klasoj)"/>
 
 <xsl:variable name="root" select="/"/>

@@ -28,8 +28,7 @@
 <xsl:variable name="lingvoj"><xsl:value-of select="concat($agordo-pado,'/lingvoj.xml')"/></xsl:variable>
 <xsl:variable name="fakoj"><xsl:value-of select="concat($agordo-pado,'/fakoj.xml')"/></xsl:variable>
 <xsl:variable name="enhavo"><xsl:value-of select="concat($agordo-pado,'/enhavo.xml')"/></xsl:variable>
-<xsl:variable name="klasoj"><xsl:value-of
-select="concat($agordo-pado,'/klasoj.xml')"/></xsl:variable>
+<xsl:variable name="klasoj"><xsl:value-of select="concat($agordo-pado,'/klasoj.xml')"/></xsl:variable>
 
 <xsl:key name="trd-oj" match="//trd-oj/litero/v" use="concat(../../@lng,'-',../@name,'-',t)"/>
 
@@ -196,23 +195,22 @@ select="concat($agordo-pado,'/klasoj.xml')"/></xsl:variable>
 
 
 <xsl:template match="LISTOJ">
-  <ul style="padding-left: 0; font-weight: 600">
+  <details style="padding-left: 0; font-weight: 600">
     <xsl:for-each select="document($klasoj)/klasoj/kls">
       <xsl:call-template name="listoj1"/>
     </xsl:for-each>
-  </ul>
+  </details>
 </xsl:template>
 
-
 <xsl:template name="listoj1">
-   <li style="margin-top: 0.4em">
-      <span class="kls_nom"><xsl:value-of select="translate(substring-after(@nom,'#'),'_',' ')"/></span>
+   <summary class="kls_nom"><xsl:value-of select="translate(substring-after(@nom,'#'),'_',' ')"/></summary>
+   <p style="margin-top: 0.4em">
       <xsl:for-each select="kls">
         <ul style="font-weight: normal">
           <xsl:call-template name="listoj2"/>
         </ul>
       </xsl:for-each>
-    </li>
+    </p>
 </xsl:template>
 
 <xsl:template name="listoj2">

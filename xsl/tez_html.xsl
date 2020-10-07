@@ -40,14 +40,14 @@
 <xsl:param name="verbose" select="'false'"/>
 <xsl:param name="warn-about-dead-refs" select="'false'"/>
 
-
+<!-- agordo-dosieroj kies enhavo estas uzata en la XSL-reguloj -->
 <xsl:variable name="fakoj">../cfg/fakoj.xml</xsl:variable>
-<xsl:variable name="klasoj_cfg" select="'../cfg/klasoj.xml'"/>
+<xsl:variable name="klasoj_cfg" select="concat($agordo-pado,'/klasoj.xml')"/>
 <xsl:variable name="enhavo"><xsl:value-of select="concat($agordo-pado,'/enhavo.xml')"/></xsl:variable>
 <xsl:variable name="inx_paghoj" select="count(document($enhavo)//pagho[not(@kashita='jes')])"/>
 
-<xsl:variable name="root" select="/"/>
 
+<xsl:variable name="root" select="/"/>
 
 <xsl:template match="/">
   <xsl:text>XXXX</xsl:text> <!-- dosiero .tempo ne estu malplena -->
