@@ -305,6 +305,7 @@ function adaptu_paghon(root_el, url) {
                             sub: "r_sub", super: "r_super",
                             prt: "r_sub", malprt: "r_super",
                             vid: "r_vid", vidu: "r_vid",
+                            hom: "r_vid",
                             lst: "r_lst", listo: "r_lst",
                             ekz: "r_ekz"                            
                         }[nom]
