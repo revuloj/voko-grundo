@@ -9,6 +9,9 @@ when_doc_ready(function() {
     console.log("kadro.when_doc_ready...")
     restore_preferences();
 
+    const srch = getParamValue("q");
+    if (srch) serchu_q(srch);
+
     // ni ne kreas la kadron, se ni estas en (la malnova) "frameset"
     if (! top.frames.length) {
         // provizore rezignu pri tia preparo, aparte la aŭtomata enkadrigo de artikoloj
@@ -495,6 +498,12 @@ function serchu(event) {
         esprimo += '%' // serĉu laŭ vortkomenco, se ne jam enestas jokeroj, kaj
                         // almenaŭ 3 literoj
 
+    location.search = "?q="+encodeURIComponent(esprimo);
+    serchu_q(esprimo);
+}
+
+function serchu_q(esprimo) {
+
     //console.debug("Ni serĉu:"+esprimo);
 
     HTTPRequest('POST', sercho_url, {sercxata: esprimo},
@@ -583,6 +592,7 @@ function serchu(event) {
     });
     */
 }
+
 
 function hazarda_art() {
 
