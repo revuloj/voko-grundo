@@ -203,7 +203,7 @@ A.ref:hover { color: var(--main-act-fnt-clr) !important}
 
 /* fontindikoj en la teksto */
 .fnt {font-style: normal}
-.fntref {font-size: small; font-style: normal; font-stretch: extra-condensed}
+.fntref {font-size: smaller; font-style: normal; font-stretch: extra-condensed}
 
 /* fontindikaj piednotoj */
 .fontoj {color: var(--fnt-fnt-clr); font-size: small}
