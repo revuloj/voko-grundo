@@ -283,6 +283,9 @@ var artikolo = function() {
                 if (ekz_cnt > ekz_sojlo) {
                     ch.classList.add("kasxita");
                 }
+            } else if ( ch.nextSibling && ch.nodeType == 3 && ! ch.nodeValue.trim() ) {
+                // ignoru "blankjn" tekstojn
+                continue;
             } else {
                 // se ni ĵus kaŝis iujn ekzemplojn, ni montru
                 // etendilon "+nn..."
