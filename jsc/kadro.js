@@ -200,6 +200,73 @@ function load_page(trg,url,push_state=true) {
         // ALDONU: ankoraŭ document.getElementById(hash).scrollIntoView()...    
     }
 
+    function load_page_nav(doc,nav) {
+        nav.textContent= '';
+        var table = doc.querySelector("table"); 
+        try {
+            var filename = url.split('/').pop().split('.')[0];
+            table.id = "x:"+filename;
+            adaptu_paghon(table,url);    
+        } catch(error) {
+            console.error(error);
+        }
+
+        nav.append(table);
+        index_spread();
+
+        // laŭbezone ankoraŭ iru al loka marko
+        update_hash();
+    }
+
+    function load_page_main(doc,main) {
+        var body = doc.body;
+        try {
+            adaptu_paghon(body,url);
+        } catch(error) {
+            console.error(error);
+        }
+        main.textContent = '';
+        main.append(...body.children);
+        main.setAttribute("id","w:"+url);
+        var filename = url.split('/').pop();
+
+        if (filename.startsWith("redaktilo")) {
+            redaktilo.preparu_red(filename.split('?').pop()); // redaktilo-paĝo
+        } else {
+            // laŭbezone ankoraŭ iru al loka marko
+            update_hash();
+
+            artikolo.preparu_art();                      
+            var s_artikolo = document.getElementById("s_artikolo");
+            // refaru matematikajn formulojn, se estas
+            if (s_artikolo &&
+                typeof(MathJax) != 'undefined' && MathJax.Hub) {
+
+                /*
+                MathJax.Hub.Register.MessageHook("Math Processing Error",function (message) {
+                    //  message[2] is the Error object that records the problem.
+                    console.error(message)
+                    });
+
+                MathJax.Hub.Startup.signal.Interest(
+                    function (message) {console.debug("Startup: "+message)}
+                );
+                MathJax.Hub.signal.Interest(
+                    function (message) {
+                        console.debug("Hub: "+message)
+                        if (message[1] instanceof HTMLElement) {
+                            console.debug("  >>"+message[1].tagName+message[1].id)
+                        }
+                    }
+                ); 
+                */                         
+                MathJax.Hub.Config({showMathMenu: false, showMathMenuMSIE: false});                        
+                MathJax.Hub.Queue(["Typeset",MathJax.Hub,"s_artikolo"]);
+            }                    
+        }
+        index_collapse();
+    }
+
     HTTPRequest('GET', url, {},
         function(data) {
             // Success!
@@ -209,60 +276,11 @@ function load_page(trg,url,push_state=true) {
             var main = document.querySelector("main");
 
             if (nav && trg == "nav") {
-                nav.textContent= '';
-                var table = doc.querySelector("table"); 
-                var filename = url.split('/').pop().split('.')[0];
-                table.id = "x:"+filename;
-                adaptu_paghon(table,url);
-                nav.append(table);
-                index_spread();
-
-                // laŭbezone ankoraŭ iru al loka marko
-                update_hash();
+                load_page_nav(doc,nav,update_hash);
 
                 //img_svg_bg(); // anst. fakvinjetojn, se estas la fak-indekso - ni testos en la funkcio mem!
             } else if (main && trg == "main") {
-                var body = doc.body;
-                adaptu_paghon(body,url);
-                main.textContent = '';
-                main.append(...body.children);
-                main.setAttribute("id","w:"+url);
-                var filename = url.split('/').pop();
-                if (filename.startsWith("redaktilo")) {
-                    redaktilo.preparu_red(filename.split('?').pop()); // redaktilo-paĝo
-                } else {
-                    // laŭbezone ankoraŭ iru al loka marko
-                    update_hash();
-
-                    artikolo.preparu_art();                      
-                    var s_artikolo = document.getElementById("s_artikolo");
-                     // refaru matematikajn formulojn, se estas
-                    if (s_artikolo &&
-                        typeof(MathJax) != 'undefined' && MathJax.Hub) {
-
-                        /*
-                        MathJax.Hub.Register.MessageHook("Math Processing Error",function (message) {
-                            //  message[2] is the Error object that records the problem.
-                            console.error(message)
-                            });
-
-                        MathJax.Hub.Startup.signal.Interest(
-                            function (message) {console.debug("Startup: "+message)}
-                        );
-                        MathJax.Hub.signal.Interest(
-                            function (message) {
-                                console.debug("Hub: "+message)
-                                if (message[1] instanceof HTMLElement) {
-                                    console.debug("  >>"+message[1].tagName+message[1].id)
-                                }
-                            }
-                        ); 
-                        */                         
-                        MathJax.Hub.Config({showMathMenu: false, showMathMenuMSIE: false});                        
-                        MathJax.Hub.Queue(["Typeset",MathJax.Hub,"s_artikolo"]);
-                    }                    
-                }
-                index_collapse();
+                load_page_main(doc,main,update_hash);
             }                    
 
             //if (push_state)
@@ -284,6 +302,7 @@ function load_page(trg,url,push_state=true) {
             }                
     });
 }
+
 
 function adaptu_paghon(root_el, url) {
     // adapto de atributoj img-atributoj
@@ -561,6 +580,13 @@ function serchu_q(esprimo) {
             //var submit = s_form[0].querySelector("input[type='submit']");
             //submit.addEventListener("click",serchu);
 
+            // se troviĝis ekzakte unu, iru tuj al tiu paĝo
+            if (json.length == 1 && json[0].trovoj.length == 1) {
+                var t = json[0].trovoj[0];
+                load_page("main","/revo/art/"+t.art+".html#"+t.mrk1);
+            }
+
+            // montru la trovojn d la serĉo
             var trovoj = make_element("div",{id: "x:trovoj"},"");
             for (var lng of json) {
                 //console.debug("TRD:"+lng.lng1+"-"+lng.lng2);
