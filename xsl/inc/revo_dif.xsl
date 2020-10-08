@@ -108,8 +108,7 @@ kaj stiloj (em,ctl,sup...)
 
 <xsl:template match="bld">
   <xsl:if test="$aspekto='ilustrite'">
-    <br/>
-    <center>
+    <div class="center">
       <xsl:choose>
         <xsl:when test="@tip='svg'">
 
@@ -175,7 +174,7 @@ kaj stiloj (em,ctl,sup...)
       </xsl:if>
       <xsl:apply-templates select="fnt"/>
       <br/>
-    </center>
+    </div>
   </xsl:if>
 </xsl:template>
 

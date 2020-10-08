@@ -244,7 +244,9 @@ A.redakto:link {text-decoration: underline; color: black}
 A.redakto:visited {text-decoration: underline; color: black}
 A.redakto:active {text-decoration: underline; color: gray}
 
-.flago {  border-color: #cccccc; border-width: 1px;  border-style: outset}
+.flago { border-color: #cccccc; border-width: 1px;  border-style: outset}
+.center { text-align: center; }
+
 EMBED.svg { border-color: #cccccc; border-width: 1px; background: #ffffee; border-style: solid; padding: 2px; margin: 0.5em} 
 OBJECT.svg { border-color: #cccccc; border-width: 1px; background: #ffffee; border-style: solid; padding: 2px; margin: 0.5em} 
 IMG.svg { border-color: #cccccc; border-width: 1px; background: #ffffee; border-style: solid; padding: 2px; margin: 0.5em} 

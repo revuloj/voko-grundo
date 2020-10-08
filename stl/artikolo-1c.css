@@ -269,6 +269,10 @@ IMG {
     background: none 
 }
 
+.center {
+    text-align: center;
+}
+
 OBJECT.svg, OBJECT, IMG.svg, EMBED.svg { 
     border-color: var(--svg-brd-clr); 
     border-width: 1px; 
@@ -279,6 +283,7 @@ OBJECT.svg, OBJECT, IMG.svg, EMBED.svg {
 } 
 
 IMG.bld { 
+    max-width: 100%;
     border-color: var(--bld-brd-clr); 
     border-width: 1px; 
     background: var(--bld-bgr-clr); 
