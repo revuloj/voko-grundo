@@ -28,6 +28,8 @@ h2 {color: var(--main-fnt-clr);
     padding-top: 0.5ex;
     padding-bottom: 0.5ex;
     margin-top: 2ex;
+    margin-block-start: 0.5em;
+    margin-block-end: 0em;
 }
 
 /*** H3 ne plu estas uzata en artikoloj, sed eble tamen en kadro "precipa" - necesas kontroli tion!
@@ -46,6 +48,11 @@ HR {
   border-top-width: 2px;
   border-bottom-width: 0px;
   margin-top: 4ex}
+
+main DL {
+    margin-block-start: 0;
+    margin-block-end: 0;
+}
 DT.subart { 
     border-top-style: dotted; 
     border-width: 2px; 
@@ -53,10 +60,6 @@ DT.subart {
     margin-top: 2ex; 
     margin-bottom: 1ex; 
     font-weight: bold; 
-}
-
-header, footer, article section {
-    padding-right: 1.5em;
 }
 
 section.drv {
@@ -79,19 +82,20 @@ div.drv-enh, div.subart-enh, dl.tradukoj {
 
 div.drv-enh dl, div.subart-enh dl {
     display: grid;
-    grid-template-columns: 2em auto;
-    grid-gap: 0.5em;
+    grid-template-columns: 1em auto;
     margin-block-start: 0;
     margin-block-end: 0;
 }
 
 div.drv-enh dt, div.subart-enh dt {
     grid-column-start: 1;
+    margin-top: .5em;
 }
   
 div.drv-enh dd, div.subart-enh dd {
     grid-column-start: 2;
     margin-left: 0.5em;
+    margin-top: .5em;
 }
 
 div.drv-enh dl span, div.subart-enh dl span {
@@ -99,7 +103,7 @@ div.drv-enh dl span, div.subart-enh dl span {
 }
 
 div.fontoj {
-    margin: 1em 3em;
+    margin: 1em;
     border-top: 1px solid var(--main-brd-clr); 
 }
 
@@ -109,8 +113,8 @@ section.admin {
 
 section.tradukoj {
     margin-top: 0.5em;
-    margin-left: 2em;
-    margin-right: 4em;
+    margin-left: 1em;
+    margin-right: 1em;
 
     display: flex;
     justify-content: flex-end;
@@ -147,6 +151,7 @@ dl.tradukoj dt {
   
 dl.tradukoj dd {
     grid-column-start: 2;
+    margin-left: 0.5em;
 }
 
 dl.tradukoj .lng {
@@ -203,10 +208,19 @@ A.ref:hover { color: var(--main-act-fnt-clr) !important}
 
 /* fontindikoj en la teksto */
 .fnt {font-style: normal}
-.fntref {font-size: smaller; font-style: normal; font-stretch: extra-condensed}
+.fntref {font-size: smaller; font-style: normal; font-stretch: extra-condensed }
+h1 .fntref, h2 .fntref { font-size: .72em }
 
 /* fontindikaj piednotoj */
-.fontoj {color: var(--fnt-fnt-clr); font-size: small}
+.fontoj {
+    color: var(--fnt-fnt-clr); 
+    font-size: small
+}
+span.fontoj {
+    display: inline-block;
+    margin-left: 1.2em;
+    text-indent: -1.2em;
+}
 .notoj {color: var(--adm-fnt-clr); font-size: small}
 /* notoj pri mankoj */
 .mankoj {font-family: monospace; font-size: small}
@@ -416,7 +430,7 @@ A IMG.viki:hover {
 
 i.ekz { 
     display: block; 
-    margin-left: 1.6em; 
+    margin-left: .4em; 
     text-indent: -1.6em; 
     text-align: left 
 }
@@ -638,5 +652,46 @@ dt.pli, .ekz.pli, a.pli {
 
 .art-hist td:nth-child(3) {
     font-style: italic
+}
+
+
+@media (max-width: 50em) {
+    .art > DL > DD {
+        margin-left: 0.5em;
+        margin-block-start: -1.2em;
+    }
+}
+
+@media (min-width: 30em) {
+
+    header, footer, article section {
+        padding-right: 1.0em;
+    }
+
+    div.drv-enh dl, div.subart-enh dl {
+        grid-template-columns: 2em auto;
+        grid-gap: 0.5em;    
+    }
+
+    div.fontoj {
+        margin: 1em 3em;
+    }    
+
+    section.tradukoj {
+        margin-left: 2em;
+        margin-right: 2em;
+    }
+}
+
+@media (min-width: 50em) {
+    
+    section.tradukoj {
+        margin-right: 4em;
+    }
+
+    i.ekz {
+        margin-left: 1.6em; 
+    }
+
 }
 
