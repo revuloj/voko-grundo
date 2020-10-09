@@ -181,3 +181,9 @@ span.right {
     text-align: right;
 }
 
+
+@media (min-width: 50em) {
+    #r\:redaktilo {
+        height: 100%; 
+    }
+}
