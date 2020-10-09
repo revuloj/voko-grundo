@@ -163,7 +163,9 @@ kaj stiloj (em,ctl,sup...)
       <xsl:if test="@prm">
           <xsl:variable name="prm"><xsl:value-of select="@prm"/></xsl:variable>
           <br/><a rel="license" target="_new" class="bld_atrib">
-            <xsl:attribute name="href"><xsl:value-of select = "$permesoj/prm[(@name=$prm)]/@lok"/></xsl:attribute>
+            <xsl:attribute name="href"><xsl:value-of select = "$permesoj/prm[
+              translate(@name,' ','-')=translate($prm,' ','-')
+              ]/@lok"/></xsl:attribute>
             <xsl:value-of select="@prm"/>
           <!-->
           <xsl:for-each select="$permesoj/permeso[(@prm=$prm)]">
