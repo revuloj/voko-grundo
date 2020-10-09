@@ -522,6 +522,33 @@ nav li {
 }
 
 /***************************************
+   Supermetitaj dialogoj
+****************************************/
+
+.overlay {
+    position: absolute;
+    z-index: 100;
+    max-width: 96vw;
+    max-height: 85vh;     
+    overflow: auto;
+    right: 0.5em;
+    top: 2.5em;
+    font-weight: normal;
+    font-size: 1rem;
+    background-color: var(--ovr-bgr-clr);
+
+    padding: 0.5em;
+    border: 2px dotted var(--ovr-brd-clr);
+    box-shadow: 5px 5px 10px;
+}
+
+
+.overlay button {
+    height: 2.2em;
+    padding: 0 .5em;
+}
+
+/***************************************
    Precipa paĝo
 ****************************************/
 
@@ -551,9 +578,22 @@ footer {
     /*border: 1px dotted red;*/
 }
 
-.piedlinio {
+.piedlinio, span.redakto {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
     color: var(--main-fnt-clr); 
-    text-align: center
+    margin-block-start: 0;
+    margin-block-end: 0;
+}
+
+.piedlinio a, span.redakto a {
+    flex: 0 1 auto;
+    padding: 0 .2em;
+    /*text-overflow: ellipsis;*/
+    white-space: nowrap;
+    overflow: hidden;
+    text-align: center;
 }
 
 
@@ -637,18 +677,8 @@ footer {
   */
 
 
-#w\:ix_literoj {
-    grid-column-start: 1;
-    grid-column-end: 3;
-}
-
-#w\:ix_literoj span {
-    padding: 0 .3em;
-    border-left: 2px solid var(--main-brd-clr)
-}
-
 /***********************************
- Pli grandaj ekranoj
+ Pli grandaj aŭ malgrandaj ekranoj
  ***********************************/
 
 @media (min-height: 30em) and (min-width: 30em) {
@@ -680,10 +710,24 @@ footer {
         margin-right: auto;
     }    
 
+    .overlay {
+        right: 5vw;
+        bottom: 5vh;     
+        top: auto;
+    }
+
     main DD {
         text-align: justify; 
     } 
 }
+
+
+@media (max-width: 30em) {
+    .overlay {
+        max-height: 92vh;     
+    }
+}
+
 
 
 /*

@@ -22,7 +22,7 @@ h2 {
 #r\:redaktilo {
     display: flex;
     flex-direction: column;
-    height: 100%;
+    height: 105%; /* piedlinio rajtas ŝoviĝi malsupren */
     /*overflow: auto; */
 }
 
@@ -49,9 +49,10 @@ h2 {
     overflow: auto; /* ŝajne grava */
     /*max-height: 0%; */
 
-    margin: 0 0.5em .3em;
+    margin: 0;
+    margin-bottom: .3em;
     padding: 0; /*0.5em;*/
-    border: 1px dotted goldenrod;
+    border: 1px dotted var(--main-brd-clr);
 
 }
 
@@ -65,9 +66,7 @@ h2 {
     justify-content: flex-end;
     align-items: flex-end;
 
-    margin-bottom: 0;
-    margin-right: 0.5em;
-    margin-left: 0.5em;
+    margin: 0;
 }
 
 #r\:navigado>* {
@@ -118,8 +117,16 @@ h2 {
     */
 }
 
+#r\:redaktilo summary {
+    cursor: pointer;
+    color: var(--a-fnt-clr);
+    margin-bottom: .3em;
+    /*text-decoration: underline;*/
+    border-top: 1px dotted var(--main-brd-clr);
+}
+
 #r\:eraroj {
-    margin: 0.5em;
+    margin: 0.25em;
     padding: 0.3em;
     min-height: 2em;
     max-height: 8em;
@@ -173,13 +180,4 @@ span.right {
 .rubriko {
     text-align: right;
 }
-
-/*
-.piedlinio {
-    max-height: 1.6em;
-    color: #104040; 
-    font-family: monospace;
-    text-align: center
-}
-*/
 

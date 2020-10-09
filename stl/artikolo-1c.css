@@ -208,8 +208,9 @@ A.ref:hover { color: var(--main-act-fnt-clr) !important}
 
 /* fontindikoj en la teksto */
 .fnt {font-style: normal}
-.fntref {font-size: smaller; font-style: normal; font-stretch: extra-condensed }
-h1 .fntref, h2 .fntref { font-size: .72em }
+.fntref { font-style: normal; font-stretch: extra-condensed }
+h1 sup.fntref { font-size: .6em }
+h2 sup.fntref { font-size: .8em }
 
 /* fontindikaj piednotoj */
 .fontoj {
@@ -257,7 +258,8 @@ A.redakto:visited {
 }
 
 A:hover {
-    color: var(--main-hov-fnt-clr) !important
+    color: var(--main-hov-fnt-clr) !important;
+    cursor: pointer;
 }
 A.active {
     color: var(--main-act-fnt-clr) !important
@@ -445,22 +447,6 @@ span.ekztrd::before {
     content: "\00a0•\00a0" 
 }
 
-.overlay {
-    position: absolute;
-    z-index: 100;
-    max-width: 90%;     
-    overflow-x: auto;
-    right: 0.5em;
-    top: 2.5em;
-    font-weight: normal;
-    font-size: 1rem;
-    background-color: var(--ovr-bgr-clr);
-
-    padding: 0.5em;
-    border: 2px dotted var(--ovr-brd-clr);
-    box-shadow: 5px 5px 10px;
-}
-
 .preferoj {
     display: grid;
     grid-template-columns: auto auto;
@@ -470,29 +456,57 @@ span.ekztrd::before {
     width: -webkit-fit-content;
 }
 
+.preferoj .tabs {
+    margin-bottom: .2em;
+}
+
 .preferoj H3 {
-    margin-bottom: 0;
+    margin-block-start: .3em;
+    margin-block-end: 0;
+    font-size: 100% /* 100% = pli malgranda ol apriore */
+}
+
+
+#w\:ix_literoj {
+    grid-column-start: 1;
+    grid-column-end: 3;
+    text-align: right;
+}
+
+#w\:ix_literoj span {
+    padding: 0 .3em;
+    border-left: 2px solid var(--main-brd-clr)
+}
+
+#pref_lng, #alia_lng {
+    list-style: none; /* Remove list bullets */
+    padding-left: 0;
+    margin-block-start: .2em;
 }
 
 #pref_lng {
     font-weight: bold;
-    list-style: none; /* Remove list bullets */
-    padding-left: 0;
-    color: var(--list-fnt-clr);
+    color: var(--lst2-fnt-clr);
 }
 
 #alia_lng {
-    list-style: none; /* Remove list bullets */
-    padding-left: 0;
+    columns: 2;
     color: var(--list-fnt-clr);
+    column-gap: .15em;
 }
 
 #pref_lng li, 
 #alia_lng li {
-    background: var(--list-bgr-clr);
     margin: .11em;
     padding: .1em .5em;
     border-radius: 2px;
+}
+
+#pref_lng li {
+    background: var(--lst2-bgr-clr);
+}
+#alia_lng li {
+    background: var(--list-bgr-clr);
 }
 
 #pref_lng li:before {
@@ -697,6 +711,17 @@ dt.pli, .ekz.pli, a.pli {
     i.ekz {
         margin-left: 1.6em; 
     }
+}
 
+@media (max-width: 30em) {
+    #alia_lng {
+        columns: 1;
+    }   
+}
+
+@media (max-height: 30em) and (min-width: 30em) {
+    #alia_lng {
+        columns: 3;
+    }
 }
 

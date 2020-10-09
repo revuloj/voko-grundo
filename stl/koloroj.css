@@ -54,11 +54,12 @@
     --input-bgr-clr: white;
     --input-fnt-clr: black;
 
-    --list-bgr-clr: khaki; /*#FFEEAA;*/
+    --list-bgr-clr: #eAb530; /*#FFEEAA;*/
     --list-fnt-clr: black;
-    --list-act-bgr-clr: #FAC540; /*#E8C888;*/
+    --list-act-bgr-clr: khaki; /*#E8C888;*/
 
     --lst2-bgr-clr: khaki;
+    --lst2-fnt-clr: #222;
     --lst2-act-bgr-clr: lightgoldenrodyellow;
 
     --ekz-fnt-clr: #303030;
@@ -108,6 +109,8 @@
     /* por la ĉefa paĝo (main) */
     --main-fnt-clr: lightyellow;
     --main-bgr-clr: #0f0800;
+    --main-brd-clr: orange;
+
     --main-act-bgr-clr: #c2590E;
     --main-act-fnt-clr: palegoldenrod;
     --main-hov-fnt-clr: #EE6F40;
@@ -140,6 +143,7 @@
     --list-act-bgr-clr: orange; /*#E8C888;*/
 
     --lst2-bgr-clr: khaki;
+    --lst2-fnt-clr: #222;
     --lst2-act-bgr-clr: lightgoldenrodyellow;
 
     --ekz-fnt-clr: orange;
