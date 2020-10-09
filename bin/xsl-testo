@@ -16,6 +16,7 @@ do
         && "$file" != *"inx_shanghoj.xsl" && "$file" != *"lst_html.xsl" \
         && "$file" != *"reveto.xsl" && "$file" != *"revo_bedic.xsl" \
         && "$file" != *"revohtml-cyberweb.xsl" && "$file" != *"revotxt_eo.xsl" \
+        && "$file" != *"onto_lst.xsl" \
         && "$file" != *"revotxt.xsl" && "$file" != *"tez_html.xsl" ]]; then
         echo "T: ${file}"
         echo "${empty_xml}" | saxonb-xslt -ext:on -xsl:${file} -s:- -o:/dev/null
