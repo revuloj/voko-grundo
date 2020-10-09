@@ -75,6 +75,8 @@ P.tez { margin-top: 0.1em; margin-bottom: 0.1em }
 
 ul { list-style-type: none; margin-left: 0; padding-left: 1em }
 
-li {}
+details ul {
+  margin-block-start: 0.2em;
+}
 
 img.fak { height: 1.5em; vertical-align: bottom; }

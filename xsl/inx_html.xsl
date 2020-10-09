@@ -195,22 +195,21 @@
 
 
 <xsl:template match="LISTOJ">
-  <details style="padding-left: 0; font-weight: 600">
-    <xsl:for-each select="document($klasoj)/klasoj/kls">
+  <xsl:for-each select="document($klasoj)/klasoj/kls">
+    <details>
       <xsl:call-template name="listoj1"/>
-    </xsl:for-each>
-  </details>
+    </details>
+  </xsl:for-each>
 </xsl:template>
 
+
 <xsl:template name="listoj1">
-   <summary class="kls_nom"><xsl:value-of select="translate(substring-after(@nom,'#'),'_',' ')"/></summary>
-   <p style="margin-top: 0.4em">
+   <summary class="kls_nom"><strong><xsl:value-of select="translate(substring-after(@nom,'#'),'_',' ')"/></strong></summary>
+   <ul style="font-weight: normal">
       <xsl:for-each select="kls">
-        <ul style="font-weight: normal">
-          <xsl:call-template name="listoj2"/>
-        </ul>
+        <xsl:call-template name="listoj2"/>
       </xsl:for-each>
-    </p>
+   </ul>
 </xsl:template>
 
 <xsl:template name="listoj2">
