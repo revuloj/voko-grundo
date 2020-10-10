@@ -545,7 +545,20 @@ function serchu_q(esprimo) {
                     ]
                 ])[0];
                 var dl = make_element("dl");
-                for (var t of lng.trovoj) {
+
+                // ĉe lng1=eo pro variaĵoj povas okazi, ke la ordo ne estas
+                // perfekta, do ni reordigu
+                var trvj = [];
+                if (lng.lng1 == "eo") {
+                    trvj = lng.trovoj.sort(function(a,b) {
+                        // ĉu localeCompare por eo funkcias ĉie, kio pri iOS, Windows...?
+                        return a.vrt1.localeCompare(b.vrt1,'eo');
+                    })
+                } else {
+                    trvj = lng.trovoj; // lasu la ordon por aliaj lingvoj
+                }
+
+                for (var t of trvj) {
                     var dt_dd = make_elements([
                         ["dt",{},
                             [["a",{target: "precipa", href: t.art+".html#"+t.mrk1},t.vrt1]]
@@ -587,7 +600,7 @@ function serchu_q(esprimo) {
                 load_page("main","/revo/art/"+t.art+".html#"+t.mrk1);
             }
 
-            // montru la trovojn d la serĉo
+            // montru la trovojn de la serĉo
             var trovoj = make_element("div",{id: "x:trovoj"},"");
             for (var lng of json) {
                 //console.debug("TRD:"+lng.lng1+"-"+lng.lng2);
