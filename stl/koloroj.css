@@ -16,6 +16,7 @@
 
     /* por navigado */
     --nav-fnt-clr: black;
+    --nav-enh-fnt-clr: #021; /* teksto en la indekso, kiun oni ne povas alklaki */
     --nav-bgr-clr: #eAb530  /* #FAC540  #eAb530 goldenrod */;
     --nav-brd-clr: black;
     --nav-hov-bgr-clr: lightgoldenrodyellow;
@@ -98,8 +99,9 @@
     :root {
 
     /* por navigado */
-    --nav-fnt-clr: ivory;
-    --nav-bgr-clr: #c2590E /* #B8860B #FAC540  #eAb530 goldenrod */;
+    --nav-fnt-clr: black;
+    --nav-enh-fnt-clr: #021; /*bisque; /* teksto en la indekso, kiun oni ne povas alklaki */
+    --nav-bgr-clr: darkorange; /* #c2590E /* #B8860B #FAC540  #eAb530 goldenrod */;
     --nav-brd-clr: ivory;
     --nav-hov-bgr-clr: palegoldenrod;
     --nav-hov-fnt-clr: black;
