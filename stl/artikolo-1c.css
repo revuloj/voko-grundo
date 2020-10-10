@@ -12,11 +12,11 @@ BODY, ARTICLE, HEADER, FOOTER {
       /*font-family: "Utopia", "TimesNewRoman", "Liberation Serif", serif;*/
     }
 
-h1 {
+main h1 {
     color: var(--main-fnt-clr) !important;
     /*font-size: large*/
     }
-h2 {color: var(--main-fnt-clr); 
+main h2 {color: var(--main-fnt-clr); 
     font-size: 110%; 
     background: var(--mh2-bgr-clr);
 /*    background-image: url(angulo.png);
