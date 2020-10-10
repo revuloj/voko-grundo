@@ -337,14 +337,15 @@ function adaptu_paghon(root_el, url) {
     fix_img();
 
     var filename = url.split('/').pop()
-
     if ( filename.startsWith('_eo.') ) {
         for (var n of root_el.querySelectorAll(".kls_nom")) {
-            n.classList.add("maletendita");
+            if (n.tagName != "summary") {
+                n.classList.add("maletendita");
 
-            n.addEventListener("click", function(event) {
-                event.target.classList.toggle("maletendita");
-            })
+                n.addEventListener("click", function(event) {
+                    event.target.classList.toggle("maletendita");
+                })    
+            }
         }
     }
     else if ( filename.startsWith('_ktp.') ) {

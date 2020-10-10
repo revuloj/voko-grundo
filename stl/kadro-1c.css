@@ -89,6 +89,7 @@ nav {
     flex-direction: column;
     justify-content: flex-start;
 }
+
 #navigado {
     /*display: block;*/
     flex: 1;
@@ -221,6 +222,7 @@ nav a:active {
 #navigado .enhavo {
     font-family: sans-serif;
     line-height: 150%;
+    color: var(--nav-enh-fnt-clr);
 }
 
 #navigado .enhavo p {
@@ -273,16 +275,12 @@ nav a:active {
     box-shadow: none;
 }
 
-#navigado .kls_nom:before {
+/* uzante summary ni povos forigi tiujn sekvajn span.kls_nom* ... */
+#navigado span.kls_nom:before {
     content: "▼";
     font-style: normal;
 }
-
-#navigado .kls_nom:after {
-    content: ":"
-}
-
-#navigado .kls_nom.maletendita:before {
+#navigado span.kls_nom.maletendita:before {
     content: "▶ ";
     font-size: 80%;
     position: relative;
@@ -291,13 +289,18 @@ nav a:active {
     left: .2em;
     font-style: normal;
 }
-
-#navigado .kls_nom.maletendita:after {
+#navigado span.kls_nom.maletendita ~ ul {
+    display: none;
+}
+#navigado span.kls_nom.maletendita:after {
     content: ""
 }
+#navigado span.kls_nom:after {
+    content: ":"
+}
 
-#navigado .kls_nom.maletendita ~ ul {
-    display: none;
+#navigado details>ul {
+    margin-block-start: .2em;
 }
 
 #navigado>a {
@@ -473,8 +476,9 @@ nav li {
     width: 100%
 }
 */
-#navigado li, #navigado li>a {
-    display: block;
+/*#navigado li,*/ 
+#navigado li>a {
+    display: inline-block;
     width: 100%
 }
 
