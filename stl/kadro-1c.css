@@ -97,6 +97,7 @@ nav {
     margin: 0;
     padding: 0.5em; 
     overflow: auto;
+    scrollbar-color: var(--nav-brd-clr) var(--nav-bgr-clr);
     padding-bottom: 2em; /* en iOS Webkit foje la pied-linio ne estas atingebla aliokaze! */
 
     /*width: 100%;*/ /* prenu tutan spacon de nav, kaj lasu al tiu
@@ -530,6 +531,21 @@ nav li {
     color: var(--nav-fnt-clr);
     /*background-image: linear-gradient(0deg, goldenrod 15%, #eAb530 50%, goldenrod 85%);*/
 }
+
+/***************************************
+   Serĉrezultoj
+****************************************/
+
+#x\:trovoj dt a {
+    border-bottom: 1px dotted var(--nav-brd-clr);
+}
+
+#x\:trovoj dd {
+    border-left: 2px solid var(--nav-brd-clr);
+    margin-left: 5em;
+    padding-left: .3em;
+}
+
 
 /***************************************
    Supermetitaj dialogoj
