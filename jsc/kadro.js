@@ -3,6 +3,7 @@ const sercho_url = "/cgi-bin/sercxu-json.pl";
 const hazarda_url = "/cgi-bin/hazarda_art.pl";
 const titolo_url = "titolo-1c.html";
 const inx_eo_url = "/revo/inx/_eo.html";
+const sercho_videblaj = 7;
 
 // instalu farendaĵojn por prepari la paĝon: evento-reagoj...
 when_doc_ready(function() { 
@@ -511,7 +512,7 @@ function load_xml(art) {
 
 
 function serchu(event) {
-
+    event.preventDefault();
     var serch_in = event.target.closest("form")
         .querySelector('input[name=q]');
     var esprimo = serch_in.value;
@@ -541,7 +542,7 @@ function serchu_q(esprimo) {
             function findings(lng) {
                 var div = make_elements([
                     ["div",{},
-                        [["h1",{},lng.titolo]]
+                        [["h1",{},lng.titolo || "["+lng.lng1+"]"]]
                     ]
                 ])[0];
                 var dl = make_element("dl");
@@ -558,12 +559,34 @@ function serchu_q(esprimo) {
                     trvj = lng.trovoj; // lasu la ordon por aliaj lingvoj
                 }
 
+                var n=0;
+                var atr = {};
                 for (var t of trvj) {
+                    if (++n > sercho_videblaj && trvj.length > sercho_videblaj+1) {
+                        // enmetu +nn antaŭ la unua kaŝita elemento
+                        if (n - sercho_videblaj == 1) {
+                            var pli = make_elements([
+                                ["dt",{},
+                                    [["a",{href: "#"},"(+"+(trvj.length-sercho_videblaj)+")"]]
+                                ],
+                                ["dd"]
+                            ]);
+                            pli[0].addEventListener("click",function(event) {
+                                var dl = event.target.closest("dl");
+                                for (ch of dl.childNodes) {
+                                    ch.classList.remove("kasxita")
+                                }
+                                event.target.closest("dt").classList.add("kasxita");
+                            })
+                            dl.append(...pli);
+                        }                        
+                        atr = {class: "kasxita"}
+                    }
                     var dt_dd = make_elements([
-                        ["dt",{},
+                        ["dt",atr,
                             [["a",{target: "precipa", href: t.art+".html#"+t.mrk1},t.vrt1]]
                         ],
-                        ["dd",{},
+                        ["dd",atr,
                             [["a",{target: "precipa", href: t.art+".html#"+t.mrk2},t.vrt2]]
                         ]
                     ]);
