@@ -82,7 +82,8 @@ nav {
 
     z-index: 100;
     background-color: var(--nav-bgr-clr);
-    box-shadow: 1px 1px 3px;
+    color: var(--nav-fnt-clr);
+    box-shadow: 1px -2px 3px;
 
     /* dividu la spacon inter indekso kaj navig-trabo */
     display: flex;
@@ -310,6 +311,10 @@ nav a:active {
     margin-block-start: .2em;
 }
 
+#navigado details li {
+    display: list-item;
+}
+
 #navigado>a {
     margin: 0.5em 0em;
     max-width: 95%
@@ -483,7 +488,7 @@ nav li {
     width: 100%
 }
 */
-/*#navigado li,*/ 
+#navigado li,
 #navigado li>a {
     display: inline-block;
     width: 100%
