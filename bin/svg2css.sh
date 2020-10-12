@@ -2,14 +2,15 @@
 
 # voku svg2css.sh dosieroj..., ekz. smb/[ir]_*.svg
 
-# la sintakso dfe la stilfolio konvenu al "sed". Se tio estos tro malfacila estonte, oni povas
+# la sintakso de la stilfolio konvenu al "sed". Se tio estos tro malfacila estonte, oni povas
 # konsideri prepari la SVG-on per XSL-transformo
 #STYLE_default='<style><\/style>'
 #STYLE_dark='<style type=\"text\/css\"><![CDATA[path{stroke:lightgoldenrodyellow!important}]]><\/style>'
 #STYLE_icon='<style type=\"text\/css\"><![CDATA[path{stroke:darkgreen!important}]]><\/style>'
 STYLE_default=''
-STYLE_dark='<style><![CDATA[path{stroke:chocolate!important}]]><\/style>'
-STYLE_icon='<style><![CDATA[path{stroke:darkgreen!important}]]><\/style>'
+STYLE_dark='<style><![CDATA[path{stroke:lightgoldenrodyellow!important}]]><\/style>'
+#STYLE_light='<style><![CDATA[path{stroke:black!important}]]><\/style>'
+STYLE_ref='<style><![CDATA[path{stroke:chocolate!important}]]><\/style>'
 
 
 files=$*
@@ -47,11 +48,12 @@ pics() {
   do
     NAME=$(basename "$f" .svg)
 
-    if [[ "$NAME" == i_* ]]; then
-      STYLE="$STYLE_icon"
-    else
-      STYLE="$style"
-    fi
+    #if [[ "$NAME" == r_* ]]; then
+    #  STYLE="$STYLE_ref"
+    #else
+    #  STYLE="$style"
+    #fi
+    STYLE="$style"
 
     # Ni adaptas SVG kiel sekve:
     # - forigi XML process-instrukcioj <?...?>

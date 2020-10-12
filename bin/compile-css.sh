@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# preparu CSS de piktogramoj el SVG
+bin/svg2css.sh smb/[ir]_*.svg > stl/piktogram-1c.css 
+
 # files=$*
 
 dir=stl
