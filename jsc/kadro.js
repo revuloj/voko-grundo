@@ -559,6 +559,14 @@ function serchu_q(esprimo) {
                     trvj = lng.trovoj; // lasu la ordon por aliaj lingvoj
                 }
 
+                // nun ankoraŭ ni kungrupigas erojn kun sama "vrt1"
+                //trvj = trvj.reduce((r, a) => {
+                //    console.debug("a", a);
+                //    console.debug('r', r);
+                //    r[a.vrt1] = [...r[a.vrt1] || [], a];
+                //    return r;
+                //}, {});
+
                 var n=0;
                 var atr = {};
                 for (var t of trvj) {
@@ -571,12 +579,15 @@ function serchu_q(esprimo) {
                                 ],
                                 ["dd"]
                             ]);
+                            // funkcio por malkovri la reston...
                             pli[0].addEventListener("click",function(event) {
                                 var dl = event.target.closest("dl");
                                 for (ch of dl.childNodes) {
                                     ch.classList.remove("kasxita")
                                 }
                                 event.target.closest("dt").classList.add("kasxita");
+                                var p = dl.parentElement.querySelector("p");
+                                if (p) p.classList.remove("kasxita")
                             })
                             dl.append(...pli);
                         }                        
@@ -593,6 +604,12 @@ function serchu_q(esprimo) {
                     dl.append(...dt_dd);
                 }
                 div.append(dl);
+
+                // atentigo pri limo
+                if (lng.max == lng.trovoj.length) {
+                    const noto = make_element("p",{class: "kasxita"},"noto: por trovi ankoraŭ pli, bv. precizigu la serĉon!");
+                    div.append(noto);
+                }
                 return div;
             }
 
