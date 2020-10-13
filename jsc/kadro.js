@@ -538,6 +538,25 @@ function serchu_q(esprimo) {
             //         {"art":"cxeval","mrk1":"cxeval.0o","vrt1":"ĉevalo","mrk2":"lng_de","vrt2":"Gaul, Pferd, Ross, Springer"} 
             //     ]}
             // ]
+            function make_pli(n_kasxitaj) {
+                var pli = make_elements([
+                    ["dt",{},
+                        [["a",{href: "#"},"(+"+(n_kasxitaj)+")"]]
+                    ],
+                    ["dd"]
+                ]);
+                // funkcio por malkovri la reston...
+                pli[0].addEventListener("click",function(event) {
+                    var dl = event.target.closest("dl");
+                    for (ch of dl.childNodes) {
+                        ch.classList.remove("kasxita")
+                    }
+                    event.target.closest("dt").classList.add("kasxita");
+                    var p = dl.parentElement.querySelector("p");
+                    if (p) p.classList.remove("kasxita")
+                });
+                return pli;
+            }
 
             function findings(lng) {
                 var div = make_elements([
@@ -567,41 +586,39 @@ function serchu_q(esprimo) {
                 //    return r;
                 //}, {});
 
-                var n=0;
                 var atr = {};
-                for (var t of trvj) {
-                    if (++n > sercho_videblaj && trvj.length > sercho_videblaj+1) {
+                for (var n=0; n<trvj.length; n++) {
+                    var t = trvj[n];
+                    if (n+1 > sercho_videblaj && trvj.length > sercho_videblaj+1) {
                         // enmetu +nn antaŭ la unua kaŝita elemento
                         if (n - sercho_videblaj == 1) {
-                            var pli = make_elements([
-                                ["dt",{},
-                                    [["a",{href: "#"},"(+"+(trvj.length-sercho_videblaj)+")"]]
-                                ],
-                                ["dd"]
-                            ]);
-                            // funkcio por malkovri la reston...
-                            pli[0].addEventListener("click",function(event) {
-                                var dl = event.target.closest("dl");
-                                for (ch of dl.childNodes) {
-                                    ch.classList.remove("kasxita")
-                                }
-                                event.target.closest("dt").classList.add("kasxita");
-                                var p = dl.parentElement.querySelector("p");
-                                if (p) p.classList.remove("kasxita")
-                            })
+                            var pli = make_pli(trvj.length - sercho_videblaj);
                             dl.append(...pli);
                         }                        
                         atr = {class: "kasxita"}
                     }
-                    var dt_dd = make_elements([
+                    var dt = make_elements([
                         ["dt",atr,
                             [["a",{target: "precipa", href: t.art+".html#"+t.mrk1},t.vrt1]]
-                        ],
+                        ]])[0];
+                    var dd = make_elements([
                         ["dd",atr,
                             [["a",{target: "precipa", href: t.art+".html#"+t.mrk2},t.vrt2]]
                         ]
-                    ]);
-                    dl.append(...dt_dd);
+                    ])[0];
+                    // grupigu tradukojn de samaj trov-vortojn
+                    while (trvj[n+1] && trvj[n+1].mrk1 == t.mrk1 && trvj[n+1].vrt1 == t.vrt1) {
+                        var t1 = trvj[++n];
+                        // ignorante duoblajn salto-markojn...
+                        if (t.mrk2 != t1.mrk2 || t.vrt2 != t1.vrt2) {
+                            var a = make_elements([
+                                ["br"],
+                                ["a",{target: "precipa", href: t1.art+".html#"+t1.mrk2},t1.vrt2]
+                            ]);
+                            dd.append(...a);    
+                        }
+                    }
+                    dl.append(dt,dd);
                 }
                 div.append(dl);
 
