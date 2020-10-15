@@ -303,7 +303,7 @@ var redaktilo = function() {
       tab_id = 'r:tab_'+el.id.substring(2);
       document.getElementById(tab_id).classList.remove('collapsed');
     }
-    // ni ankaŭ devas kaŝi la butonojn super la reakto-tabulo por la antaŭrigardo...
+    // ni ankaŭ devas kaŝi la butonojn super la redakto-tabulo por la antaŭrigardo...
     if (id == "r:txmltxt") {
       document.getElementById("r:nav_btn").classList.remove('collapsed');
     } else {
@@ -654,7 +654,7 @@ var redaktilo = function() {
       .addEventListener("keypress",klavo);
 
     // butono por konservi
-    document.getElementById("r:konservo")
+    document.getElementById("r:konservu")
       .addEventListener("click",rkonservo);
 
     // butonoj por navigi inter drv kaj en-/elŝovo
