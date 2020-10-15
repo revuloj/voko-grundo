@@ -1,5 +1,5 @@
-
-function HTTPRequest(method, url, params, onSuccess) {
+// ajax http request
+function HTTPRequest(method, url, params, onSuccess, onError = null) {
     var request = new XMLHttpRequest();
     var data = new FormData();
 
@@ -12,17 +12,18 @@ function HTTPRequest(method, url, params, onSuccess) {
     request.open(method, url , true);
     
     request.onload = function() {
-    if (this.status >= 200 && this.status < 400) {
-        onSuccess.call(this,this.response);
-    } else {
-        // post konektiĝo okazis eraro
-        console.error('Eraro dum ŝargo de ' + url);       
+      if (this.status >= 200 && this.status < 400) {
+          onSuccess.call(this,this.response);
+      } else {
+          // post konektiĝo okazis eraro
+          console.error('Eraro dum ŝargo de ' + url);  
+      };
     }
-    };
     
     request.onerror = function() {
-    // konekteraro
-    console.error('Eraro dum konektiĝo por ' + url);
+      // konekteraro
+      console.error('Eraro dum konektiĝo por ' + url);
+      if (onError) onError(request);
     };
     
     //request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
@@ -39,7 +40,7 @@ function when_doc_ready(onready_fn) {
     if (document.readyState != 'loading'){
       onready_fn();
     } else {
-      document.addEventListener('DOMContentLoaded', onready_fn);
+      document.addEventListener('DOMContentLoaded',  onready_fn)
     }
 }
 

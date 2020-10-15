@@ -8,6 +8,7 @@ const sercho_videblaj = 7;
 // instalu farendaĵojn por prepari la paĝon: evento-reagoj...
 when_doc_ready(function() { 
     console.log("kadro.when_doc_ready...")
+
     restore_preferences();
 
     const srch = getParamValue("q");
@@ -31,8 +32,6 @@ when_doc_ready(function() {
         document.getElementById("x:nav_srch_btn")
             .addEventListener("click", function(event) {
                 event.preventDefault();
-                // turnu la revo-fiŝon...
-                document.getElementById('x:revo_icon').classList.add('revo_icon_run');
                 serchu(event);
             });
 
@@ -41,8 +40,6 @@ when_doc_ready(function() {
 
         query.addEventListener("keydown", function(event) {
             if (event.key == "Enter") {  
-                // turnu la revo-fiŝon...
-                document.getElementById('x:revo_icon').classList.add('revo_icon_run');
                 serchu(event);
             }
         });
@@ -188,7 +185,21 @@ function normalize_href(target, href) {
     } else {
         return href;
     }
-}     
+}   
+
+function start_wait() {
+    var s_btn = document.getElementById('x:revo_icon');
+    if (s_btn) s_btn.classList.add('revo_icon_run');
+    var s_btn = document.getElementById('w:revo_icon');
+    if (s_btn) s_btn.classList.add('revo_icon_run');
+}
+
+function stop_wait(btn_id) {
+    var s_btn = document.getElementById('x:revo_icon');
+    if (s_btn) s_btn.classList.remove('revo_icon_run');
+    var s_btn = document.getElementById('w:revo_icon');
+    if (s_btn) s_btn.classList.remove('revo_icon_run');
+}
 
 function load_page(trg,url,push_state=true) {
     function update_hash() {
@@ -268,6 +279,7 @@ function load_page(trg,url,push_state=true) {
         index_collapse();
     }
 
+    start_wait();
     HTTPRequest('GET', url, {},
         function(data) {
             // Success!
@@ -300,8 +312,11 @@ function load_page(trg,url,push_state=true) {
                     },
                     null,
                     null);
-            }                
-    });
+            }   
+            
+            stop_wait();
+    }, stop_wait // onerror
+    );
 }
 
 
@@ -371,8 +386,6 @@ function adaptu_paghon(root_el, url) {
         
         query.addEventListener("keydown", function(event) {
             if (event.key == "Enter") {  
-                // turnu la revo-fiŝon...
-                document.getElementById('w:revo_icon').classList.add('revo_icon_run');
                 serchu(event);
             }
         });
@@ -397,8 +410,6 @@ function adaptu_paghon(root_el, url) {
         s_form.querySelector("button[value='revo']")
             .addEventListener("click", function(event) {
                 event.preventDefault();
-                // turnu la revo-fiŝon...
-                document.getElementById('w:revo_icon').classList.add('revo_icon_run');
                 serchu(event)
             });
 
@@ -520,14 +531,16 @@ function serchu(event) {
         esprimo += '%' // serĉu laŭ vortkomenco, se ne jam enestas jokeroj, kaj
                         // almenaŭ 3 literoj
 
-    location.search = "?q="+encodeURIComponent(esprimo);
+    // evitu ŝanĝi .serach, ĉar tio refreŝigas la paĝon nevolite: location.search = "?q="+encodeURIComponent(esprimo);
+    history.pushState(null,null,location.origin+location.pathname+"?q="+encodeURIComponent(esprimo));
     serchu_q(esprimo);
 }
 
 function serchu_q(esprimo) {
 
     //console.debug("Ni serĉu:"+esprimo);
-
+    // turnu la revo-fiŝon...
+    start_wait();
     HTTPRequest('POST', sercho_url, {sercxata: esprimo},
         function(data) {
 
@@ -630,9 +643,12 @@ function serchu_q(esprimo) {
                 return div;
             }
 
-            function stop_search(btn_id) {
-                var s_btn = document.getElementById(btn_id);
-                if (s_btn) s_btn.classList.remove('revo_icon_run');
+            function nofindings() {
+                return make_elements([
+                    ["p",{},
+                        [["strong",{},"Nenio troviĝis!"]]
+                    ]
+                ])[0];
             }
 
             //console.debug("Ni trovis: "+data);
@@ -650,15 +666,19 @@ function serchu_q(esprimo) {
             //var s_form = serch_frm(esprimo);
             //var submit = s_form[0].querySelector("input[type='submit']");
             //submit.addEventListener("click",serchu);
+            var trovoj = make_element("div",{id: "x:trovoj"},"");
+
+            // se nenio troviĝis...
+            if (! json.length) {
+                trovoj.append(nofindings());
 
             // se troviĝis ekzakte unu, iru tuj al tiu paĝo
-            if (json.length == 1 && json[0].trovoj.length == 1) {
+            } else if (json.length == 1 && json[0].trovoj.length == 1) {
                 var t = json[0].trovoj[0];
                 load_page("main","/revo/art/"+t.art+".html#"+t.mrk1);
             }
 
             // montru la trovojn de la serĉo
-            var trovoj = make_element("div",{id: "x:trovoj"},"");
             for (var lng of json) {
                 //console.debug("TRD:"+lng.lng1+"-"+lng.lng2);
                 trovoj.append(findings(lng));
@@ -669,9 +689,9 @@ function serchu_q(esprimo) {
             inx_enh.append(trovoj);
 
             // haltigu la revo-fiŝon
-            stop_search('x:revo_icon');
-            stop_search('w:revo_icon');
-        }
+            stop_wait();
+        },
+        stop_wait // onerror
     );
 
 
@@ -694,6 +714,7 @@ function serchu_q(esprimo) {
 
 function hazarda_art() {
 
+    start_wait();
     HTTPRequest('POST', hazarda_url, {senkadroj: "1"},
         function(data) {
             // Success!
@@ -702,7 +723,9 @@ function hazarda_art() {
             const a = doc.querySelector("a[target='precipa']");
             const href = a.getAttribute("href");
             if (href) load_page("main",href);
-        });
+            stop_wait();
+        }, stop_wait // onerror
+    );
 }
 
 function restore_preferences() {
