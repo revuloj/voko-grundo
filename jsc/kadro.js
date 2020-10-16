@@ -3,6 +3,8 @@ const sercho_url = "/cgi-bin/sercxu-json.pl";
 const hazarda_url = "/cgi-bin/hazarda_art.pl";
 const titolo_url = "titolo-1c.html";
 const inx_eo_url = "/revo/inx/_eo.html";
+const mx_trd_url = "/cgi-bin/mx_trd.pl"
+const http_404_url = "/revo/dlg/404.html";
 const sercho_videblaj = 7;
 
 // instalu farendaĵojn por prepari la paĝon: evento-reagoj...
@@ -201,6 +203,11 @@ function stop_wait(btn_id) {
     if (s_btn) s_btn.classList.remove('revo_icon_run');
 }
 
+function load_error(request) {
+    if (request.status == 404)
+        load_page("main",http_404_url);
+}
+
 function load_page(trg,url,push_state=true) {
     function update_hash() {
         if (url.indexOf('#') > -1) {
@@ -279,7 +286,6 @@ function load_page(trg,url,push_state=true) {
         index_collapse();
     }
 
-    start_wait();
     HTTPRequest('GET', url, {},
         function(data) {
             // Success!
@@ -314,8 +320,10 @@ function load_page(trg,url,push_state=true) {
                     null);
             }   
             
-            stop_wait();
-    }, stop_wait // onerror
+    },  
+    start_wait,
+    stop_wait,
+    load_error
     );
 }
 
@@ -353,6 +361,7 @@ function adaptu_paghon(root_el, url) {
     fix_img();
 
     var filename = url.split('/').pop()
+    // index Esperanto
     if ( filename.startsWith('_eo.') ) {
         for (var n of root_el.querySelectorAll(".kls_nom")) {
             if (n.tagName != "summary") {
@@ -364,6 +373,7 @@ function adaptu_paghon(root_el, url) {
             }
         }
     }
+    // index "ktp.
     else if ( filename.startsWith('_ktp.') ) {
         // hazarda artikolo
         const hazarda = root_el.querySelector("p[id='x:Iu_ajn_artikolo'] a");
@@ -372,6 +382,16 @@ function adaptu_paghon(root_el, url) {
             hazarda_art();
             event.stopPropagation(); // ne voku navigate_link!
         })        
+    }
+    else if ( filename.startsWith('mx_trd.') ) {
+        var a;
+        for (a of root_el.querySelectorAll("a[href^='?']")){
+            var href = a.getAttribute("href");
+            a.setAttribute("href",mx_trd_url+href);
+        }
+        for (a of root_el.querySelectorAll("a[target='_blank']")){
+            a.removeAttribute("target");
+        }
     }
     // serĉilo en titol- kaj serĉo-paĝoj
     else if ( filename.startsWith('titolo') ) {
@@ -539,8 +559,6 @@ function serchu(event) {
 function serchu_q(esprimo) {
 
     //console.debug("Ni serĉu:"+esprimo);
-    // turnu la revo-fiŝon...
-    start_wait();
     HTTPRequest('POST', sercho_url, {sercxata: esprimo},
         function(data) {
 
@@ -687,11 +705,9 @@ function serchu_q(esprimo) {
             inx_enh.textContent = "";
             //inx_enh.append(...s_form,trovoj);
             inx_enh.append(trovoj);
-
-            // haltigu la revo-fiŝon
-            stop_wait();
         },
-        stop_wait // onerror
+        start_wait,
+        stop_wait 
     );
 
 
@@ -711,10 +727,8 @@ function serchu_q(esprimo) {
     */
 }
 
-
 function hazarda_art() {
 
-    start_wait();
     HTTPRequest('POST', hazarda_url, {senkadroj: "1"},
         function(data) {
             // Success!
@@ -723,8 +737,9 @@ function hazarda_art() {
             const a = doc.querySelector("a[target='precipa']");
             const href = a.getAttribute("href");
             if (href) load_page("main",href);
-            stop_wait();
-        }, stop_wait // onerror
+        }, 
+        start_wait,
+        stop_wait 
     );
 }
 

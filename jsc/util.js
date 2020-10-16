@@ -1,5 +1,8 @@
 // ajax http request
-function HTTPRequest(method, url, params, onSuccess, onError = null) {
+function HTTPRequest(method, url, params, onSuccess, 
+    onStart = null, onFinish = null,
+    onError = null) {
+
     var request = new XMLHttpRequest();
     var data = new FormData();
 
@@ -9,6 +12,7 @@ function HTTPRequest(method, url, params, onSuccess, onError = null) {
         data.append(key,value);
     }
 
+    if (onStart) onStart();
     request.open(method, url , true);
     
     request.onload = function() {
@@ -17,13 +21,16 @@ function HTTPRequest(method, url, params, onSuccess, onError = null) {
       } else {
           // post konektiĝo okazis eraro
           console.error('Eraro dum ŝargo de ' + url);  
-      };
+          if (onError) onError(request);
+        };
+      if (onFinish) onFinish();
     }
     
     request.onerror = function() {
       // konekteraro
       console.error('Eraro dum konektiĝo por ' + url);
       if (onError) onError(request);
+      if (onFinish) onFinish();
     };
     
     //request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
