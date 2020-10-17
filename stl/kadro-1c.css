@@ -748,8 +748,8 @@ div.e404 {
   margin: 0 1em;
 } 
 .e404 img {
-  max-width: 100%;
-  max-height: 80vh;
+  width: 300px;
+  height: 300px;
 
   border-color: var(--bld-brd-clr); 
   border-width: 1px; 
@@ -835,7 +835,6 @@ div.e404 {
         padding-top: 2em;
     }
 }
-
 
 @media (max-width: 30em) {
     .overlay {
