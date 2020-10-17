@@ -61,7 +61,7 @@ var artikolo = function() {
             preparu_malkashu_fontojn();
             preparu_maletendu_sekciojn();
             kashu_malkashu_butonoj();
-            piedlinio_preferoj();
+            piedlinio_modifo();
             //interna_navigado();
             //etendu_ekzemplojn();   
         //}
@@ -336,7 +336,7 @@ var artikolo = function() {
         art.appendChild(div);
     }
 
-    function piedlinio_preferoj() {
+    function piedlinio_modifo() {
         var pied = document.body.getElementsByTagName("FOOTER")[0];
         if (pied) { // en la redeaktilo eble jam foriĝis...
             var first_a = pied.querySelector("A");
@@ -346,7 +346,25 @@ var artikolo = function() {
                 first_a.insertAdjacentElement("afterend",pref);
                 first_a.insertAdjacentText("afterend"," | ");      
             }
-        }
+            // forigu nun unuan ligilon "Revo"
+            first_a.nextSibling.remove();
+            first_a.remove();
+            // mallongigu referencon xml
+            var xml = pied.querySelector("A[href^='../xml/']");
+            if (xml) {
+                xml.textContent="xml"
+            }
+            var hst = pied.querySelector("A[href^='../hst/']");
+            var ver = hst.nextSibling;
+            hst.textContent = "v" + ver.nodeValue
+                .split(/\s+/)
+                .slice(1,3)
+                .join(' ')
+                .replace(/\//g,'-');
+            ver.remove();
+            // forigu finan <br>
+            pied.querySelector("br").remove()
+        }        
     }
 
     function preferoj_dlg() {
