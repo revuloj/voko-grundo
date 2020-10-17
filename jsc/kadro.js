@@ -376,7 +376,8 @@ function adaptu_paghon(root_el, url) {
     // index "ktp.
     else if ( filename.startsWith('_ktp.') ) {
         // hazarda artikolo
-        const hazarda = root_el.querySelector("p[id='x:Iu_ajn_artikolo'] a");
+        const hazarda = root_el.querySelector("p[id='x:Iu_ajn_artikolo'] a")
+            || root_el.querySelector("a[href*='hazarda_art.pl'");
         hazarda.addEventListener("click", function(event) {
             event.preventDefault();
             hazarda_art();
