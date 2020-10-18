@@ -143,25 +143,35 @@ var redaktilo = function() {
 
     this.load = function(selection) {
       var self = this;
-      var codes = {};
 
-      HTTPRequest('GET', this.url, {},
-        function() {
-            // Success!
-            var parser = new DOMParser();
-            var doc = parser.parseFromString(this.response,"text/xml");
-      
-            for (e of doc.getElementsByTagName(self.xmlTag)) {
-                var c = e.attributes["kodo"];
-                //console.log(c);
-                codes[c.value] = e.textContent;
-            } 
-            self.codes = codes;
+      // unuafoje ŝargu la tutan liston el XML-dosiero
+      if (! self.codes.keys) {
+        var codes = {};
 
-            if (selection) {
-              self.fill.call(self,selection);
-            } 
-        });
+        HTTPRequest('GET', this.url, {},
+          function() {
+              // Success!
+              var parser = new DOMParser();
+              var doc = parser.parseFromString(this.response,"text/xml");
+        
+              for (e of doc.getElementsByTagName(self.xmlTag)) {
+                  var c = e.attributes["kodo"];
+                  //console.log(c);
+                  codes[c.value] = e.textContent;
+              } 
+              self.codes = codes;
+  
+              if (selection) {
+                self.fill.call(self,selection);
+              } 
+          });
+
+      // se ni jam ŝargis iam antaŭw, ni eble nur devas plenigi la videbalan elektilon
+      } else {
+        if (selection) {
+          self.fill.call(self,selection);
+        } 
+      }
     };  
   };
 
@@ -636,11 +646,6 @@ var redaktilo = function() {
     // enlegu bezonaĵojn (listojn, XML-artikolon, preferojn)
     if (document.getElementById("r:xmltxt")) {
       sf(0, 0, 1);
-      restore_preferences();
-      revo_codes.lingvoj.load();
-      revo_codes.fakoj.load("r:sfak");
-      revo_codes.stiloj.load("r:sstl");
-
       if (!xmlarea) xmlarea = new Textarea("r:xmltxt");
       load_xml(params); // se doniĝis ?art=xxx ni fone ŝargas tiun artikolon
     }
@@ -691,6 +696,18 @@ var redaktilo = function() {
         rantaurigardo();
       }
     });
+  }
+
+  function preparu_menu() {
+    // enlegu bezonaĵojn (listojn, XML-artikolon, preferojn)
+    restore_preferences();
+    revo_codes.lingvoj.load();
+    revo_codes.fakoj.load("r:sfak");
+    revo_codes.stiloj.load("r:sstl");
+
+    /******************
+     *  preparu aktivajn elmentoj / eventojn
+     *  **************/
 
     // navigi inter diversaj paneloj kun enmeto-butonoj ktp.
     var fs_t = document.getElementById("r:fs_toggle");
@@ -717,7 +734,7 @@ var redaktilo = function() {
           insert_xml(event.target.getAttribute("value"))
         });
     }
-  }
+  }  
 
   when_doc_ready(function() { 
     console.log("redaktilo.when_doc_ready...:" +  location.href);
@@ -731,6 +748,7 @@ var redaktilo = function() {
   // eksportu publikajn funkction
   return {
     preparu_red: preparu_red,
+    preparu_menu: preparu_menu,
     klavo: klavo,
     rantaurigardo: rantaurigardo,
     shablono: shablono

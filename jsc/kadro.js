@@ -2,10 +2,16 @@ const revo_url = "reta-vortaro.de";
 const sercho_url = "/cgi-bin/sercxu-json.pl";
 const hazarda_url = "/cgi-bin/hazarda_art.pl";
 const titolo_url = "titolo-1c.html";
+const redaktilo_url = "redaktilo-1c.html";
+const redaktmenu_url = "redaktmenu-1c.html";
 const inx_eo_url = "/revo/inx/_eo.html";
 const mx_trd_url = "/cgi-bin/mx_trd.pl"
 const http_404_url = "/revo/dlg/404.html";
 const sercho_videblaj = 7;
+
+/*
+    navigado laŭ a href=... estas traktata per navigate_link()...
+*/
 
 // instalu farendaĵojn por prepari la paĝon: evento-reagoj...
 when_doc_ready(function() { 
@@ -153,6 +159,8 @@ function ref_target(a_el) {
         || href.startsWith('https://') && href.substring('https://'.length-1,revo_url.length) != revo_url
         ) {
         return "ext";
+    } else if (href.indexOf("/cgi-bin/vokomail.pl")>=0) {
+        return "red"; // redakti...
     } else if (trg == "precipa") {
         return "main"
     } else if (trg == "indekso") {
@@ -181,9 +189,10 @@ function normalize_href(target, href) {
         return '/revo/tez/' + href;
     } else if (href[0] != '/' && ! href.startsWith('http')) {
         return '/revo/' + prefix[target] + href;
-    } else if (href.startsWith('/cgi-bin/vokomail.pl')) {
+    /*} else if (href.startsWith('/cgi-bin/vokomail.pl')) {
         var query = href.substring(href.search('art='));
         return '/revo/dlg/redaktilo-1c.html?' + query
+        */
     } else {
         return href;
     }
@@ -231,6 +240,11 @@ function load_page(trg,url,push_state=true) {
         }
 
         nav.append(table);
+
+
+        if (filename.startsWith("redaktmenu")) {
+            redaktilo.preparu_menu(); // redaktilo-paĝo
+        }; 
         index_spread();
 
         // laŭbezone ankoraŭ iru al loka marko
@@ -487,8 +501,15 @@ function navigate_link(event) {
     
         if (href && target && target != "int") {
             event.preventDefault();
+            // ekstera paĝo
             if (target == "ext") {
                 window.open(href);
+
+            // redaktilo
+            } else if (target == "red") {
+                redaktu(href)
+
+            // paĝo en la ĉefa parto (main)
             } else if (target == "main") {
                 load_page(target,normalize_href(target,href));
                 /*
@@ -496,6 +517,7 @@ function navigate_link(event) {
                     preparu_art
                 );   
                 */  
+            // paĝo en la naviga parto (nav)
             } else if (target == "nav") {                   
                 load_page(target,normalize_href(target,href));
                 /*
@@ -742,6 +764,14 @@ function hazarda_art() {
         start_wait,
         stop_wait 
     );
+}
+
+function redaktu(href) {
+    const params = href.split('?')[1];
+    //const art = getParamValue("art",params);
+      
+    load_page("main",redaktilo_url+'?'+params);
+    load_page("nav",redaktmenu_url);
 }
 
 function restore_preferences() {
