@@ -617,6 +617,7 @@ footer {
     flex: 0;
     text-align: center;
     /*border: 1px dotted red;*/
+    font-size: 8pt; /* t.e. 50% - pligrandigo por pli grandaj ekranoj malsupre... */
 }
 
 .piedlinio, span.redakto {
@@ -798,6 +799,9 @@ div.e404 {
     }
 }
 @media (min-width: 30em) {
+    footer {
+        font-size: small;
+    }
     .titolmalfono>* {
         width: 90%;
     }    
