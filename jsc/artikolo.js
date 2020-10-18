@@ -356,10 +356,8 @@ var artikolo = function() {
             }
             var hst = pied.querySelector("A[href^='../hst/']");
             var ver = hst.nextSibling;
-            hst.textContent = "v" + ver.nodeValue
-                .split(/\s+/)
-                .slice(1,3)
-                .join(' ')
+            hst.textContent = ver.nodeValue
+                .split(/\s+/)[2]
                 .replace(/\//g,'-');
             ver.remove();
             // forigu finan <br>
