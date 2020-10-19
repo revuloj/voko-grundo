@@ -296,8 +296,13 @@ var redaktilo = function() {
       for (key of ['r:redaktanto','r:trdlng','r:klrtip','r:reftip','r:sxangxo']) {
         document.getElementById(key).value = prefs[key];
       }
-      document.getElementById('r:cx').checked = prefs['r:cx'];
     }
+  }
+
+  function restore_preferences_xml() {
+    var str = window.localStorage.getItem("redaktilo_preferoj");
+    var prefs = (str? JSON.parse(str) : null);
+    document.getElementById('r:cx').checked = prefs['r:cx'];
   }
 
   function tab_toggle(id) {
@@ -645,6 +650,7 @@ var redaktilo = function() {
   function preparu_red(params) {
     // enlegu bezonaĵojn (listojn, XML-artikolon, preferojn)
     if (document.getElementById("r:xmltxt")) {
+      restore_preferences_xml();
       sf(0, 0, 1);
       if (!xmlarea) xmlarea = new Textarea("r:xmltxt");
       load_xml(params); // se doniĝis ?art=xxx ni fone ŝargas tiun artikolon
@@ -657,10 +663,6 @@ var redaktilo = function() {
     // klav-premoj en XML-redaktilo
     document.getElementById("r:xmltxt")
       .addEventListener("keypress",klavo);
-
-    // butono por konservi
-    document.getElementById("r:konservu")
-      .addEventListener("click",rkonservo);
 
     // butonoj por navigi inter drv kaj en-/elŝovo
     var nav = document.getElementById("r:nav_btn");
@@ -708,6 +710,11 @@ var redaktilo = function() {
     /******************
      *  preparu aktivajn elmentoj / eventojn
      *  **************/
+
+
+    // butono por konservi
+    document.getElementById("r:konservu")
+    .addEventListener("click",rkonservo);
 
     // navigi inter diversaj paneloj kun enmeto-butonoj ktp.
     var fs_t = document.getElementById("r:fs_toggle");

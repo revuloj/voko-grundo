@@ -119,7 +119,7 @@ function enkadrigu() {
         // ni bezonas unue revo-1b.js:
         load_page("nav","/revo/inx/"+history.state.inx.substring(2)+".html",false);
     } else {
-        load_page("nav","/revo/inx/_eo.html");
+        load_page("nav",inx_eo_url);
     }
 }
 
@@ -244,6 +244,13 @@ function load_page(trg,url,push_state=true) {
 
         if (filename.startsWith("redaktmenu")) {
             redaktilo.preparu_menu(); // redaktilo-paĝo
+            // butono por rezigni
+            document.getElementById("r:rezignu")
+                .addEventListener("click",function() {
+
+                load_page("main",titolo_url); // pli bone la ĵus redaktatan artikolon!
+                load_page("nav",inx_eo_url);   
+            });
         }; 
         index_spread();
 
