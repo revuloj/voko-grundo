@@ -17,18 +17,23 @@ textarea {
     flex: 1; /* consume available width */     
 }
 
-fieldset {
+#navigado fieldset {
     /*
     display: flex;
     flex-direction: row;*/
     background-color: var(--nav-bgr-clr);
-    border-bottom: 2px dotted var(--nav-brd-clr);
-
     border: none;
+    border-bottom: 2px dotted var(--nav-brd-clr);
+    
     margin: 0;
-    margin-bottom: 1px;
+    margin-bottom: .1em;
     padding: .2em;
 }
+
+#r\:fs_toggle {
+    border-bottom: 2px dotted var(--nav-brd-clr);
+}
+
 
 fieldset legend {
     text-decoration: underline;
@@ -75,8 +80,12 @@ button, input[type="button"], input[type="checkbox"] {
     /* font-size: 1rem;*/
 }
 
+#r\:agobutonoj button {
+    padding: .1em .3em;
+}
+
 fieldset button, fieldset select {
-    padding: 0.3em;
+    padding: .1em;
 }
 
 .tabs {
@@ -86,9 +95,13 @@ fieldset button, fieldset select {
     margin-top: 0em;
     margin-bottom: 1em;
     */
-    line-height: 2em;
+    /* eble nur se ekranspaco sufiĉas: line-height: 2em;*/
     color: inherit;
 }   
+
+main .tabs {
+    line-height: 2em;
+}
 
 .tabs > label {
     font-weight: bold;
@@ -109,15 +122,19 @@ fieldset button, fieldset select {
 } 
 
 .tabs a {
-    padding: 0.5em;
+    padding: 0.3em;
     /*background-color: palegoldenrod; */
     /*font-family: monospace;*/
     font-weight: bold;
     /*color: black;*/
     text-decoration: none;
 }
+
+main .tabs a {
+    padding: 0.5em;
+}
  
-.tabs a.aktiva {
+main .tabs a.aktiva {
    font-weight: bold;
    /*color: black;*/
    /*text-transform: uppercase;*/
@@ -126,6 +143,21 @@ fieldset button, fieldset select {
    border-left: 4px solid var(--main-brd-clr);
    border-right: 4px solid var(--main-brd-clr);   
    background-color: var(--main-act-bgr-clr);
+}
+
+
+#navigado .tabs a.aktiva {
+    font-weight: bold;
+    padding: .1em;
+    /* ŝanĝiĝanta larĝeco ĝenas! text-transform: uppercase;*/
+    border-bottom: 3px solid var(--nav-act-brd-clr);
+}
+
+#navigado .tabs a.fona {
+    font-weight: bold;
+    text-shadow: 2px 2px 5px var(--nav-act-bgr-clr);
+    padding: .1em;
+    border-bottom: none;
 }
 
 

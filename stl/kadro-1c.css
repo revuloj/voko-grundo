@@ -105,7 +105,10 @@ nav {
     /*width: 100%;*/ /* prenu tutan spacon de nav, kaj lasu al tiu
                 difini la larĝecon! */
 }
-#navigado.eble_kasxita {
+#navigado.eble_kasxita, 
+#navigado table .eble_kasxita,
+/*#r\:fs_toggle .eble_kasxita,*/
+#r\:navigado .eble_kasxita {
     display: none;
 }
 #navbar {
@@ -796,6 +799,12 @@ div.e404 {
 @media (min-height: 30em) and (min-width: 30em) {
     .titolmalfono {
         padding-top: 2em;
+    }
+    #r\:navigado .eble_kasxita,
+    #navigado table .eble_kasxita
+/*  #r\:fs_toggle .eble_kasxita */
+    {
+        display: initial;
     }
 }
 @media (min-width: 30em) {
