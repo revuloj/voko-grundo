@@ -34,7 +34,14 @@ when_doc_ready(function() {
         document.getElementById("x:nav_inx_btn")
             .addEventListener("click", function(event) {
                 event.preventDefault();
-                index_toggle()
+                index_toggle();
+            });
+
+        document.getElementById("x:redakt_btn")
+            .addEventListener("click", function(event) {
+                event.preventDefault();
+                load_page("nav",redaktmenu_url);
+                index_spread();
             });
         
         document.getElementById("x:nav_srch_btn")

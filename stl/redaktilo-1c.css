@@ -125,12 +125,22 @@ h2 {
     border-top: 1px dotted var(--main-brd-clr);
 }
 
+.rimarkoj ul {
+    margin-block-start: .2em;
+    margin-left: 0.1em;
+    padding-left: .9em;
+}
+.rimarkoj a {
+    text-decoration: underline !important;
+    /*text-decoration-style: dotted !important;*/
+}
+
 #r\:eraroj {
     margin: 0.25em;
     padding: 0.3em;
     min-height: 2em;
-    max-height: 8em;
-    overflow: auto;
+    /*max-height: 8em;
+    overflow: auto;*/
     border: 2px solid orangered;
 }
 
