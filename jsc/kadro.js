@@ -241,7 +241,6 @@ function load_page(trg,url,push_state=true) {
 
         nav.append(table);
 
-
         if (filename.startsWith("redaktmenu")) {
             redaktilo.preparu_menu(); // redaktilo-paĝo
         }; 
