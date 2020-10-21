@@ -608,6 +608,11 @@ var redaktilo = function() {
           console.log("div id=" + konfirmo.id);
           err_list.appendChild(konfirmo);
           err_list.classList.add("konfirmo");
+
+          // finu redaktadon
+          var nb; if (nb = document.getElementById("x:redakt_btn")) {
+            nb.classList.add("kasxita");
+          }
         }
       });
   }
@@ -622,7 +627,7 @@ var redaktilo = function() {
           document.getElementById('r:xmltxt').value = data;
           document.getElementById("r:art").value = art;
           var titolo = document.getElementById("r:art_titolo");
-          titolo.textContent = "\u00ab" + art + "\u00bb"; 
+          titolo.textContent = art; 
           titolo.setAttribute("href","/revo/art/"+art+".html");
           xmlarea.resetCursor();     
         });
@@ -711,10 +716,14 @@ var redaktilo = function() {
      *  preparu aktivajn elmentoj / eventojn
      *  **************/
 
+    // montru redakto-butonon en navig-trabo
+    var nb; if (nb = document.getElementById("x:redakt_btn")) {
+      nb.classList.remove("kasxita");
+    }
 
     // butono por konservi
     document.getElementById("r:konservu")
-    .addEventListener("click",rkonservo);
+      .addEventListener("click",rkonservo);
 
     // navigi inter diversaj paneloj kun enmeto-butonoj ktp.
     var fs_t = document.getElementById("r:fs_toggle");
