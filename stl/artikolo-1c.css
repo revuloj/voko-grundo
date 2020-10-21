@@ -211,7 +211,15 @@ A.ref:hover { color: var(--main-act-fnt-clr) !important}
 .fntref { font-style: normal; font-stretch: extra-condensed }
 h1 sup.fntref { font-size: .6em }
 h2 sup.fntref { font-size: .8em }
-
+.fnturl { /* bridu tro longajn URL-ojn... */
+    display: inline-block;
+    vertical-align: bottom;
+    max-width: 22.5em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-indent: 0;
+    /*white-space: nowrap;*/
+}
 /* fontindikaj piednotoj */
 .fontoj {
     color: var(--fnt-fnt-clr); 
