@@ -238,6 +238,7 @@ nav a:active {
 }
 
 #navigado .enhavo {
+    max-width: var(--nav-enh-width);
     font-family: sans-serif;
     line-height: 150%;
     color: var(--nav-enh-fnt-clr);

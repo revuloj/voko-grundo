@@ -137,10 +137,20 @@ h2 {
     /*text-decoration-style: dotted !important;*/
 }
 
+#r\:priskribo {
+    display: grid;
+    grid-template-columns: auto auto;
+}
+#r\:priskribo br {
+    display: none
+}
+
+
 #r\:eraroj {
     margin: 0.25em;
     padding: 0.3em;
     min-height: 2em;
+    max-width: var(--nav-enh-width);
     /*max-height: 8em;
     overflow: auto;*/
     border: 2px solid orangered;
