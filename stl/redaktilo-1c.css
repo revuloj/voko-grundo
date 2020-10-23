@@ -30,9 +30,11 @@ h2 {
     /*font-family: monospace;*/
     /*border-radius: 3px;
     border: 1px solid black;*/
+    max-width: 4em;
+    overflow: hidden;
     border: none;
-    padding: 0.1em 0.5em;
-    font-size: 1.5em;
+    padding: 0.3em 0em;
+    font-size: 1.2em;
     background: linear-gradient(140deg, var(--main-bgr-clr), var(--main-act-bgr-clr));
 }
 
@@ -125,12 +127,32 @@ h2 {
     border-top: 1px dotted var(--main-brd-clr);
 }
 
+.rimarkoj ul {
+    margin-block-start: .2em;
+    margin-left: 0.1em;
+    padding-left: .9em;
+}
+.rimarkoj a {
+    text-decoration: underline !important;
+    /*text-decoration-style: dotted !important;*/
+}
+
+#r\:priskribo {
+    display: grid;
+    grid-template-columns: auto auto;
+}
+#r\:priskribo br {
+    display: none
+}
+
+
 #r\:eraroj {
     margin: 0.25em;
     padding: 0.3em;
     min-height: 2em;
-    max-height: 8em;
-    overflow: auto;
+    max-width: var(--nav-enh-width);
+    /*max-height: 8em;
+    overflow: auto;*/
     border: 2px solid orangered;
 }
 

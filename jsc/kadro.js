@@ -31,17 +31,29 @@ when_doc_ready(function() {
             load_page("main",titolo_url);
             load_page("nav",inx_eo_url);   
         }
-        document.getElementById("x:nav_inx_btn")
-            .addEventListener("click", function(event) {
+
+        var nb;
+        if (nb = document.getElementById("x:nav_inx_btn")) {
+            nb.addEventListener("click", function(event) {
                 event.preventDefault();
-                index_toggle()
+                index_toggle();
             });
+        }
+            
+        if (nb = document.getElementById("x:redakt_btn")) {
+            nb.addEventListener("click", function(event) {
+                event.preventDefault();
+                load_page("nav",redaktmenu_url);
+                index_spread();
+            });
+        }
         
-        document.getElementById("x:nav_srch_btn")
-            .addEventListener("click", function(event) {
+        if (nb = document.getElementById("x:nav_srch_btn")) {
+            nb.addEventListener("click", function(event) {
                 event.preventDefault();
                 serchu(event);
             });
+        }   
 
         var query = document.getElementById("x:q");
         var cx = document.getElementById("x:cx");
@@ -114,10 +126,10 @@ function enkadrigu() {
     }
 
     // rekreu la indekson laŭ la historio aŭ ŝargu la centran eo-indekson
-    if (history.state && history.state.inx) {
+    if (history.state && history.state.nav) {
         console.log(history.state);
         // ni bezonas unue revo-1b.js:
-        load_page("nav","/revo/inx/"+history.state.inx.substring(2)+".html",false);
+        load_page("nav",history.state.nav,false);
     } else {
         load_page("nav",inx_eo_url);
     }
@@ -224,8 +236,12 @@ function load_page(trg,url,push_state=true) {
         } else {
             hash = '';
         }
-        window.location.hash = hash;    
-        // ALDONU: ankoraŭ document.getElementById(hash).scrollIntoView()...    
+        // evitu, ĉar tio konfuzas la historion:... window.location.hash = hash;
+        if (hash && (h=document.getElementById(hash))) {
+            h.scrollIntoView();
+            history.replaceState(history.state,null,
+                location.origin+location.pathname+"#"+encodeURIComponent(hash));
+        }
     }
 
     function load_page_nav(doc,nav) {
@@ -249,11 +265,17 @@ function load_page(trg,url,push_state=true) {
 
                 load_page("main",titolo_url); // pli bone la ĵus redaktatan artikolon!
                 load_page("nav",inx_eo_url);   
+                var nb; if (nb = document.getElementById("x:redakt_btn")) {
+                    nb.classList.add("kasxita");
+                }
             });
         }; 
         index_spread();
 
-        // laŭbezone ankoraŭ iru al loka marko
+        // laŭbezone ankoraŭ iru al loka marko,
+        // atentu ke tio kreas ankaŭ eventon popstate(state = null)
+        // alternative oni povus shnaghi la URL per history.pushState
+        // kaj uzi scrollIntoView...
         update_hash();
     }
 
@@ -314,32 +336,26 @@ function load_page(trg,url,push_state=true) {
             var nav = document.getElementById("navigado");
             var main = document.querySelector("main");
 
+            // elprenu la historio-staton
+            var hstate=history.state || {};
+
             if (nav && trg == "nav") {
                 load_page_nav(doc,nav,update_hash);
+                hstate.nav = url;
 
                 //img_svg_bg(); // anst. fakvinjetojn, se estas la fak-indekso - ni testos en la funkcio mem!
             } else if (main && trg == "main") {
                 load_page_main(doc,main,update_hash);
+                hstate.main = url;
             }                    
 
-            //if (push_state)
-            //    history.pushState({
-            //        inx: nav.firstElementChild.id,
-            //        art: main.id
-            //        },
-            //        null,
-            //    main.id.substring(2));
-            // provizore ne ŝanĝu la URL de la paĝo
+            // aktualigu la historion
             if (push_state) {
-                var nf = nav.firstElementChild? nav.firstElementChild.id : null;
-                history.pushState({
-                    inx: nf,
-                    art: main.id
-                    },
-                    null,
-                    null);
+                console.debug("transiru el:"+JSON.stringify(history.state));
+                console.debug("=======> al:"+JSON.stringify(hstate));
+                // provizore ne ŝanĝu la URL de la paĝo
+                history.pushState(hstate,null,null);
             }   
-            
     },  
     start_wait,
     stop_wait,
@@ -535,15 +551,16 @@ function navigate_link(event) {
 }   
 
 function navigate_history(event) {
+    event.preventDefault();
     var state = event.state;
 
-    console.log("event.state:"+state);
-
-    // FARENDA: ni komparu kun la nuna stato antaŭ decidi, ĉu parton
+    // FARENDA: eble ni komparu kun la nuna stato antaŭ decidi, ĉu parton
     // ni devos renovigi!
     if (state) {
-        if (state.inx) load_page("nav","/revo/inx/"+state.inx.substring(2)+".html",false);
-        if (state.art) load_page("main",state.art.substring(2),false);    
+        console.debug("revenu el:"+JSON.stringify(history.state));
+        console.debug("<===== al:"+JSON.stringify(state));
+        if (state.nav) load_page("nav",state.nav,false);
+        if (state.main) load_page("main",state.main,false);    
     }
 }            
 
@@ -580,8 +597,9 @@ function serchu(event) {
         esprimo += '%' // serĉu laŭ vortkomenco, se ne jam enestas jokeroj, kaj
                         // almenaŭ 3 literoj
 
-    // evitu ŝanĝi .serach, ĉar tio refreŝigas la paĝon nevolite: location.search = "?q="+encodeURIComponent(esprimo);
-    history.pushState(null,null,location.origin+location.pathname+"?q="+encodeURIComponent(esprimo));
+    // evitu ŝanĝi .search, ĉar tio refreŝigas la paĝon nevolite: 
+    // location.search = "?q="+encodeURIComponent(esprimo);
+    history.pushState(history.state,null,location.origin+location.pathname+"?q="+encodeURIComponent(esprimo));
     serchu_q(esprimo);
 }
 

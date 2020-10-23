@@ -460,6 +460,24 @@ var redaktilo = function() {
       listigu_erarojn(errors); 
   }
 
+  function kontrolu_xml_loke(art,xml) {
+    if (xml.startsWith("<?xml")) {
+      kontrolu_mrk(art);
+      kontrolu_trd();
+      kontrolu_ref();
+
+  // kontrolu_fak();
+    //kontrolu_stl();
+    //...
+
+      add_err_msg("Nekonata lingvo-kodo: ",kontrolu_kodojn("lingvoj",re_lng));
+      add_err_msg("Nekonata fako: ",kontrolu_kodojn("fakoj",re_fak));
+      add_err_msg("Nekonata stilo: ",kontrolu_kodojn("stiloj",re_stl));
+    } else {
+      listigu_erarojn(["Averto: Artikolo devas komenciĝi je <?xml !"]);
+    }
+  }
+
   function rantaurigardo() {
     var eraroj = document.getElementById("r:eraroj");
     var art = document.getElementById("r:art").value;
@@ -467,22 +485,29 @@ var redaktilo = function() {
 
     eraroj.textContent='';
     eraroj.classList.remove("collapsed"); // ĉu nur kiam certe estas eraroj?
+    eraroj.parentNode.setAttribute("open","open");
 
+    kontrolu_xml_loke(art,xml);
     if (xml.startsWith("<?xml")) {
-      vokohtmlx(xml);
       vokomailx("nur_kontrolo",art,xml);
-      kontrolu_mrk(art);
-      kontrolu_trd();
-      kontrolu_ref();
-      add_err_msg("Nekonata lingvo-kodo: ",kontrolu_kodojn("lingvoj",re_lng));
-      add_err_msg("Nekonata fako: ",kontrolu_kodojn("fakoj",re_fak));
-      add_err_msg("Nekonata stilo: ",kontrolu_kodojn("stiloj",re_stl));
-    } else {
-      listigu_erarojn(["Averto: Artikolo devas komenciĝi je <?xml !"]);
+      vokohtmlx(xml);
     }
-  // kontrolu_fak();
-    //kontrolu_stl();
-    //...
+  }
+
+  // kontrolo sen antaurigardo
+  function rkontrolo() {
+    var eraroj = document.getElementById("r:eraroj");
+    var art = document.getElementById("r:art").value;
+    var xml = document.getElementById("r:xmltxt").value;
+
+    eraroj.textContent='';
+    eraroj.classList.remove("collapsed"); // ĉu nur kiam certe estas eraroj?
+    eraroj.parentNode.setAttribute("open","open");
+
+    kontrolu_xml_loke(art,xml);
+    if (xml.startsWith("<?xml")) {
+      vokomailx("nur_kontrolo",art,xml);
+    }
   }
 
   function rkonservo() {
@@ -492,19 +517,16 @@ var redaktilo = function() {
     var eraroj = document.getElementById("r:eraroj");
     eraroj.textContent='';
     eraroj.classList.remove("collapsed"); // ĉu nur kiam certe estas eraroj?
+    eraroj.parentNode.setAttribute("open","open");
 
-    if (xml.startsWith("<?xml")) {
-      kontrolu_mrk(art);
-      kontrolu_trd();
-      kontrolu_ref();
-      add_err_msg("Nekonata lingvo-kodo: ",kontrolu_kodojn("lingvoj",re_lng));
-      add_err_msg("Nekonata fako: ",kontrolu_kodojn("fakoj",re_fak));
-      add_err_msg("Nekonata stilo: ",kontrolu_kodojn("stiloj",re_stl));
-      if (document.getElementById("r:eraroj").textContent == '')
+    // kontrolu loke revenas nur post kontrolo,
+    // dum kontrole ene de vokomailx as nesinkrona
+    kontrolu_xml_loke(art,xml);
+
+    if (xml.startsWith("<?xml") 
+      && document.getElementById("r:eraroj").textContent == '')
         vokomailx("forsendo",art,xml);
-    } else {
-      listigu_erarojn(["Averto: Artikolo devas komenciĝi je <?xml !"]);
-    }
+
   }
 
   function create_new_art() {
@@ -608,6 +630,20 @@ var redaktilo = function() {
           console.log("div id=" + konfirmo.id);
           err_list.appendChild(konfirmo);
           err_list.classList.add("konfirmo");
+
+          // finu redaktadon
+          var nb; if (nb = document.getElementById("x:redakt_btn")) {
+            nb.classList.add("kasxita");
+          }
+
+        } else if (command == "nur_kontrolo" 
+          && err_list.textContent.replace(/\s+/,'') == '') {
+          // nur kontrolo kaj neniu eraro
+          err_list.appendChild(
+            document.createTextNode("Bone! Neniu eraro troviĝis."));
+          err_list.classList.add("konfirmo");
+        } else {
+          err_list.classList.remove("konfirmo");
         }
       });
   }
@@ -622,7 +658,7 @@ var redaktilo = function() {
           document.getElementById('r:xmltxt').value = data;
           document.getElementById("r:art").value = art;
           var titolo = document.getElementById("r:art_titolo");
-          titolo.textContent = "\u00ab" + art + "\u00bb"; 
+          titolo.textContent = art; 
           titolo.setAttribute("href","/revo/art/"+art+".html");
           xmlarea.resetCursor();     
         });
@@ -711,10 +747,18 @@ var redaktilo = function() {
      *  preparu aktivajn elmentoj / eventojn
      *  **************/
 
+    // montru redakto-butonon en navig-trabo
+    var nb; if (nb = document.getElementById("x:redakt_btn")) {
+      nb.classList.remove("kasxita");
+    }
+
+    // butono por kontroli
+    document.getElementById("r:kontrolu")
+      .addEventListener("click",rkontrolo);
 
     // butono por konservi
     document.getElementById("r:konservu")
-    .addEventListener("click",rkonservo);
+      .addEventListener("click",rkonservo);
 
     // navigi inter diversaj paneloj kun enmeto-butonoj ktp.
     var fs_t = document.getElementById("r:fs_toggle");

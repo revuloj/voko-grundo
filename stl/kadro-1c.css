@@ -66,8 +66,6 @@ body {
 main {
     height: auto;
     overflow: auto;
-    padding-bottom: 2em; /* en iOS Webkit foje la pied-linio ne estas atingebla, 
-                            ni provas tiel doni pli da spaco sub ĝi! */
     flex: 1;
     background-color: var(--main-bgr-clr);
 }
@@ -96,15 +94,23 @@ nav {
     flex: 1;
     width: 100%;
     margin: 0;
-    padding: 0.5em; 
+    padding: 0.1em; 
     overflow: auto;
     scrollbar-color: var(--nav-brd-clr) var(--nav-bgr-clr);
     scrollbar-width: thin;
-    padding-bottom: 2em; /* en iOS Webkit foje la pied-linio ne estas atingebla aliokaze! */
 
     /*width: 100%;*/ /* prenu tutan spacon de nav, kaj lasu al tiu
                 difini la larĝecon! */
 }
+
+#navigado table {
+    padding-bottom: 2em; /* en iOS Webkit foje la pied-linio ne estas atingebla aliokaze! */
+}
+
+#navigado table[id^="x:redakt"] {
+    padding-bottom: .2em;
+}
+
 #navigado.eble_kasxita, 
 #navigado table .eble_kasxita,
 /*#r\:fs_toggle .eble_kasxita,*/
@@ -232,6 +238,7 @@ nav a:active {
 }
 
 #navigado .enhavo {
+    max-width: var(--nav-enh-width);
     font-family: sans-serif;
     line-height: 150%;
     color: var(--nav-enh-fnt-clr);
@@ -314,7 +321,6 @@ nav a:active {
 #navigado details>ul {
     margin-block-start: .2em;
 }
-
 #navigado details li {
     display: list-item;
 }
@@ -619,6 +625,8 @@ header:empty {
 footer {
     flex: 0;
     text-align: center;
+    padding-bottom: 1em; /* en iOS Webkit foje la pied-linio ne estas atingebla, 
+                            ni provas tiel doni pli da spaco sub ĝi! */
     /*border: 1px dotted red;*/
     font-size: 8pt; /* t.e. 50% - pligrandigo por pli grandaj ekranoj malsupre... */
 }
