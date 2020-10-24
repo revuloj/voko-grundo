@@ -272,13 +272,13 @@ function Textarea(ta_id) {
             //get current selection
             txtarea.focus();
             var startPos = txtarea.selectionStart;
-            if (startPos > 0) {
-              startPos--;
-            }
+            //if (startPos > 0) {
+            //  startPos--;
+            //}
             var endPos = txtarea.selectionEnd;
-            if (endPos > 0) {
-              endPos--;
-            }
+            //if (endPos > 0) {
+            //  endPos--;
+            //}
             selText = txtarea.value.substring(startPos, endPos);
             if (selText=="") {
               alert("Marku kion vi volas en-/elŝovi.");
