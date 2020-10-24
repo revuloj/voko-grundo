@@ -688,7 +688,8 @@ var redaktilo = function() {
     if (document.getElementById("r:xmltxt")) {
       restore_preferences_xml();
       sf(0, 0, 1);
-      if (!xmlarea) xmlarea = new Textarea("r:xmltxt");
+      //if (!xmlarea) 
+      xmlarea = new Textarea("r:xmltxt");
       load_xml(params); // se doniĝis ?art=xxx ni fone ŝargas tiun artikolon
     }
 
