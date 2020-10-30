@@ -86,7 +86,19 @@ when_doc_ready(function() {
         document.body 
         //document.getElementById("navigado")
             .addEventListener("click",navigate_link);
-    
+
+        window
+            .addEventListener('beforeunload', function() {
+                // tio vokiĝas, i.a. kiam la uzanto reŝargas la paĝon aŭ fermas la redaktilon
+                // por ebligi ŝargi freŝajn paĝojn ni altigas la version, kiu
+                // estas alpendigata al GET, tiel evitante ricevi paĝojn el la loka bufro
+                // uzante sessionStorage ni post remalfermo de la retumilo denove
+                // ricevus pli malnovajn paĝ-versiojn, do ni uzas localStorage
+                const akt = window.localStorage.getItem("aktualigilo");
+                const akt1 = ((akt && parseInt(akt)) || 0) + 1;
+                window.localStorage.setItem("aktualigilo",akt1);
+        });
+            
         window
             .addEventListener('popstate', navigate_history);    
     }
@@ -262,6 +274,9 @@ function load_page(trg,url,push_state=true) {
             // butono por rezigni
             document.getElementById("r:rezignu")
                 .addEventListener("click",function() {
+
+                // memoru enhavon de kelkaj kampoj de la redaktilo
+                redaktilo.store_preferences();
 
                 load_page("main",titolo_url); // pli bone la ĵus redaktatan artikolon!
                 load_page("nav",inx_eo_url);   

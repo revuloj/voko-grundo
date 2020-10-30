@@ -523,9 +523,12 @@ var redaktilo = function() {
     kontrolu_xml_loke(art,xml);
 
     if (xml.startsWith("<?xml") 
-      && document.getElementById("r:eraroj").textContent == '')
+      && document.getElementById("r:eraroj").textContent == '') {
+        // forsendu la redaktitan artikolon
         vokomailx("forsendo",art,xml);
-
+        // memoru enhavon de kelkaj kampoj
+        store_preferences();
+      }
   }
 
   function create_new_art() {
@@ -787,14 +790,16 @@ var redaktilo = function() {
     }
   }  
 
+  /* 
   when_doc_ready(function() { 
     console.log("redaktilo.when_doc_ready...:" +  location.href);
     window.onbeforeunload = function() {
+      // tro malfrue uzante Ajax!
       if (this.document.getElementById('r:redaktilo'))
         store_preferences();
     }  
-
   });
+  */
 
   // eksportu publikajn funkction
   return {
@@ -802,6 +807,7 @@ var redaktilo = function() {
     preparu_menu: preparu_menu,
     klavo: klavo,
     rantaurigardo: rantaurigardo,
-    shablono: shablono
+    shablono: shablono,
+    store_preferences: store_preferences,
   }
 }();

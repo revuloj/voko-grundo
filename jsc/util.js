@@ -12,6 +12,16 @@ function HTTPRequest(method, url, params, onSuccess,
         data.append(key,value);
     }
 
+    if (method.toUpperCase() == "GET") {
+      // alpendigu aktualigilon por eventuale certigi freŝajn paĝojn
+      var akt = window.localStorage.getItem("aktualigilo");
+      akt = (akt && parseInt(akt)) || 0;
+      if (url.indexOf('?') > -1)
+        url += "&v="+akt
+      else
+        url += "?v="+akt
+    }
+
     if (onStart) onStart();
     request.open(method, url , true);
     
