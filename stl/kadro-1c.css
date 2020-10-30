@@ -598,6 +598,16 @@ nav li {
     padding: 0 .5em;
 }
 
+#console {
+    position:absolute;
+    max-height: 30%;
+    width: 40%;
+    bottom: 5em;
+    right: 5em;
+    overflow: auto;
+    background-color: gray;
+}
+
 /***************************************
    Precipa paĝo
 ****************************************/

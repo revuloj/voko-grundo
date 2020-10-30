@@ -15,6 +15,7 @@ const sercho_videblaj = 7;
 
 // instalu farendaĵojn por prepari la paĝon: evento-reagoj...
 when_doc_ready(function() { 
+    dom_console();
     console.log("kadro.when_doc_ready...")
 
     restore_preferences();
