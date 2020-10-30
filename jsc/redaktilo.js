@@ -282,7 +282,8 @@ var redaktilo = function() {
   function store_preferences() {
     var prefs = {};
     for (key of ['r:redaktanto','r:trdlng','r:klrtip','r:reftip','r:sxangxo','r:cx']) {
-      prefs[key] = document.getElementById(key).value;
+      const el = document.getElementById(key);
+      if (el) prefs[key] = el.value;
     }
     window.localStorage.setItem("redaktilo_preferoj",JSON.stringify(prefs));  
   }
@@ -290,18 +291,18 @@ var redaktilo = function() {
   // reprenas memorigitajn valorojn de kelkaj kampoj el la loka memoro de la retumilo
   function restore_preferences() {
     var str = window.localStorage.getItem("redaktilo_preferoj");
-    var prefs = (str? JSON.parse(str) : null);
+    var prefs = (str? JSON.parse(str) : {});
     if (prefs) {
       for (key of ['r:redaktanto','r:trdlng','r:klrtip','r:reftip','r:sxangxo']) {
-        document.getElementById(key).value = prefs[key];
+        if (prefs[key]) document.getElementById(key).value = prefs[key];
       }
     }
   }
 
   function restore_preferences_xml() {
     var str = window.localStorage.getItem("redaktilo_preferoj");
-    var prefs = (str? JSON.parse(str) : null);
-    document.getElementById('r:cx').value = prefs['r:cx'];
+    var prefs = (str? JSON.parse(str) : {});
+    document.getElementById('r:cx').value = prefs['r:cx'] || 0;
   }
 
   function tab_toggle(id) {
