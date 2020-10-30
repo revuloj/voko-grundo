@@ -281,10 +281,9 @@ var redaktilo = function() {
   // memoras valorojn de kelkaj kampoj en la loka memoro de la retumilo
   function store_preferences() {
     var prefs = {};
-    for (key of ['r:redaktanto','r:trdlng','r:klrtip','r:reftip','r:sxangxo']) {
+    for (key of ['r:redaktanto','r:trdlng','r:klrtip','r:reftip','r:sxangxo','r:cx']) {
       prefs[key] = document.getElementById(key).value;
     }
-    prefs['r:cx'] = document.getElementById('r:cx').checked;
     window.localStorage.setItem("redaktilo_preferoj",JSON.stringify(prefs));  
   }
 
@@ -302,7 +301,7 @@ var redaktilo = function() {
   function restore_preferences_xml() {
     var str = window.localStorage.getItem("redaktilo_preferoj");
     var prefs = (str? JSON.parse(str) : null);
-    document.getElementById('r:cx').checked = prefs['r:cx'];
+    document.getElementById('r:cx').value = prefs['r:cx'];
   }
 
   function tab_toggle(id) {
