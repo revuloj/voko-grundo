@@ -1,5 +1,7 @@
 #!/bin/bash
 
+#set -x
+
 # 1. closure-compiler:
 # https://github.com/google/closure-compiler ...
 # necesas nun mvn aŭ npx por ruli ĝin:
@@ -14,7 +16,7 @@ compiler="java -jar /usr/local/share/java/closure-compiler.jar"
 # npx google-closure-compiler
 
 js_in="jsc/util.js jsc/artikolo.js jsc/kadro.js jsc/redaktilo.js"
-js_out=jsc/revo-1c.js
+js_out=build/jsc/revo-1c.js
 opt=BUNDLE
 #opt=SIMPLE
 
