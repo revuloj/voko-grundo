@@ -209,6 +209,7 @@ function cxigi(b, key) {
   }[b] || '';
 }
 
+/*
 function dom_console() {
   if (navigator.userAgent.indexOf("AppleWebKit") > -1) {
     document.getElementById("console").classList.remove("kasxita");
@@ -237,6 +238,7 @@ function dom_console() {
     }
   }
 }
+*/
 
 function Textarea(ta_id) {
     this.txtarea = document.getElementById(ta_id);

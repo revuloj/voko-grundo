@@ -644,11 +644,15 @@ nav li {
 #console {
     position:absolute;
     max-height: 30%;
-    width: 40%;
+    max-width: 50%;
     bottom: 5em;
     right: 5em;
     overflow: auto;
     background-color: gray;
+}
+
+#console:empty{
+    display: none
 }
 
 /***************************************

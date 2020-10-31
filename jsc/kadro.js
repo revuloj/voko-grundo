@@ -1,3 +1,5 @@
+
+const debug=true; // ni bezonas provizore aparte por vidi erarojn en iOS Webkit
 const revo_url = "reta-vortaro.de";
 const sercho_url = "/cgi-bin/sercxu-json.pl";
 const hazarda_url = "/cgi-bin/hazarda_art.pl";
@@ -16,8 +18,20 @@ const sercho_videblaj = 7;
 
 // instalu farendaĵojn por prepari la paĝon: evento-reagoj...
 when_doc_ready(function() { 
-    dom_console();
+    // dom_console();
     console.log("kadro.when_doc_ready...")
+
+    // sendu erarojn al #console
+    if (debug) {
+        window.addEventListener("error", function(message,source,line) {
+            const c = document.getElementById("console");
+            if (c) {
+              const tn = document.createTextNode(source+"@"+line+": "+message);
+              const br = document.createElement("br");
+              c.append(tn,br);
+            }
+        })    
+    }
 
     restore_preferences();
 
