@@ -22,7 +22,7 @@
 
 
 <!-- necesas indent=no, cxar aliokaze cxe la elektokesto
-aperas "c _x_" anstata "c_x_" -->
+aperas "c _x_" anstatau "c_x_" -->
 <xsl:output method="xhtml" encoding="utf-8" indent="no"/>
 <xsl:variable name="inx" select="'inx/'"/>
 

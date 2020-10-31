@@ -57,7 +57,7 @@
   </xsl:if>
 </xsl:template>
 
-
+<!-- tio kreas la unuopajn indeks-paĝojn laŭ lingvoj, literoj, fakoj ktp. -->
 <xsl:template name="indeksoj">
   <xsl:param name="kap-oj"/>
   <xsl:param name="trd-oj"/>
@@ -106,7 +106,7 @@
   <xsl:apply-templates select="litero[v]"/>
 </xsl:template>
 
-
+<!-- tio kreas la kvin centrajn indekspaĝojn (e-o, lingvoj, fakoj, ktp kaj plena -->
 <xsl:template match="pagho">
   <!-- xsl:message>skribas al <xsl:value-of
   select="@dosiero"/></xsl:message -->

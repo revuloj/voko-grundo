@@ -4,7 +4,8 @@ const hazarda_url = "/cgi-bin/hazarda_art.pl";
 const titolo_url = "titolo-1c.html";
 const redaktilo_url = "redaktilo-1c.html";
 const redaktmenu_url = "redaktmenu-1c.html";
-const inx_eo_url = "/revo/inx/_eo.html";
+//const inx_eo_url = "/revo/inx/_eo.html";
+const inx_eo_url = "/revo/inx/_plena.html";
 const mx_trd_url = "/cgi-bin/mx_trd.pl"
 const http_404_url = "/revo/dlg/404.html";
 const sercho_videblaj = 7;
@@ -402,8 +403,9 @@ function adaptu_paghon(root_el, url) {
                             vid: "r_vid", vidu: "r_vid",
                             hom: "r_vid",
                             lst: "r_lst", listo: "r_lst",
-                            ekz: "r_ekz"                            
-                        }[nom]
+                            ekz: "r_ekz",
+                            url: "r_url"
+                        }[nom];
                         if (nom) i.classList.add("ref",svg);
                     }                    
                 }                    
