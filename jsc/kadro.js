@@ -265,6 +265,17 @@ function load_page(trg,url,push_state=true) {
             var filename = url.split('/').pop().split('.')[0];
             table.id = "x:"+filename;
             adaptu_paghon(table,url);    
+
+            // aldonu butonon por reveni al ĉefa indekso
+            if (! filename.startsWith("_plena") ) {
+                const ibtn = make_icon_button("i_index",()=>{load_page("nav",inx_eo_url)})
+                const enh = table.querySelector(".enhavo");
+                if (enh.children && enh.children[0].tagName != "A")
+                    enh.children[0].prepend(ibtn);   
+                else
+                    enh.prepend(ibtn); 
+            }
+
         } catch(error) {
             console.error(error);
         }
@@ -412,6 +423,7 @@ function adaptu_paghon(root_el, url) {
         }
     }
 
+    // anstataŭigu GIF per SVG  
     fix_img();
 
     var filename = url.split('/').pop()
@@ -447,6 +459,9 @@ function adaptu_paghon(root_el, url) {
         for (a of root_el.querySelectorAll("a[target='_blank']")){
             a.removeAttribute("target");
         }
+    }
+    else if ( filename.startsWith('tz_') ) {
+        root_el.querySelector("tr").classList.add("menuo")
     }
     // serĉilo en titol- kaj serĉo-paĝoj
     else if ( filename.startsWith('titolo') ) {

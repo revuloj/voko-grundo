@@ -248,9 +248,28 @@ nav a:active {
     margin-bottom: 0;
 }
 
+#navigado .enhavo>p:first-of-type {
+    margin-top: 0;
+}
+
 #navigado .enhavo p+p {
     margin-top: 0;
     margin-bottom: 0;
+}
+
+#navigado .icon_btn {
+    /*
+    float: left; 
+    border: none;   
+    */
+    float: none;
+    border-radius: 5px;
+    height: 1.6em;
+    width: 2em;
+    margin: 0;
+    margin-right: .5em;
+    vertical-align: middle;    
+    background-position: .2em -.2em;    
 }
 
 /*
@@ -264,7 +283,9 @@ nav a:active {
     display: none //kaŝu serĉon...
 }
 */
-#x\:ser\0109o {
+#x\:ser\0109o, 
+#x\:_plena h1 
+{
     display: none /* kaŝu serĉon */
 }
 
@@ -458,7 +479,7 @@ nav li {
     width: 100%;
     /*font-family: monospace;*/
     display: inline-block;
-    margin-top: .5em;
+    /*margin-top: .5em;*/
 }
 
 .literoj a {
