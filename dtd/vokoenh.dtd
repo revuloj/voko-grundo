@@ -34,7 +34,7 @@
                 dosiero CDATA #REQUIRED
                 kashita (ne|jes) #IMPLIED>
 
-<!ELEMENT sekcio (ero|KAP-OJ|TRD-OJ|FAKOJ|INV|BLD-OJ|MLG-OJ|MANKOJ|STAT|TEZAURO)*>
+<!ELEMENT sekcio (ero|KAP-OJ|TRD-OJ|FAKOJ|INV|BLD-OJ|MLG-OJ|MANKOJ|STAT|LISTOJ|TEZAURO)*>
 <!ATTLIST sekcio titolo CDATA #REQUIRED
                  tipo (balgo) #IMPLIED
                  kadro CDATA #IMPLIED>
@@ -42,6 +42,7 @@
 <!ELEMENT ero (alineo|bildo*)>
 <!ATTLIST ero titolo CDATA #REQUIRED
               ref CDATA #REQUIRED
+              style CDATA #IMPLIED
               kadro CDATA #IMPLIED>
 
 <!ELEMENT KAP-OJ EMPTY>
@@ -55,14 +56,19 @@
 <!ELEMENT FAKOJ EMPTY>
 <!ATTLIST FAKOJ titolo CDATA #IMPLIED>
 <!ELEMENT INV EMPTY>
-<!ATTLIST INV titolo CDATA #REQUIRED>
+<!ATTLIST INV titolo CDATA #REQUIRED
+              style CDATA #IMPLIED>
 <!ELEMENT BLD-OJ EMPTY>
-<!ATTLIST BLD-OJ titolo CDATA #REQUIRED>
+<!ATTLIST BLD-OJ titolo CDATA #REQUIRED
+                 style CDATA #IMPLIED>
 <!ELEMENT MLG-OJ EMPTY>
 <!ATTLIST MLG-OJ titolo CDATA #REQUIRED
                  style CDATA #IMPLIED>
 <!ELEMENT STAT EMPTY>
-<!ATTLIST STAT titolo CDATA #REQUIRED>
+<!ATTLIST STAT titolo CDATA #REQUIRED
+               style CDATA #IMPLIED>
+<!ELEMENT LISTOJ EMPTY>
+<!ATTLIST LISTOJ style CDATA #IMPLIED>
 <!ELEMENT TEZAURO EMPTY>
 
 
