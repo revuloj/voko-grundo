@@ -85,7 +85,8 @@
   <xsl:result-document href="{$dos}.html" method="html" encoding="utf-8" indent="no">
   <html>
     <head>
-      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+      <meta charset="UTF-8"/>      
+      <meta name="viewport" content="width=device-width,initial-scale=1"/>     
       <title>Historio de <xsl:value-of select="$dos"/>.xml</title>
       <link rel="stylesheet" type="text/css" href="../stl/artikolo.css"/>
     </head>
