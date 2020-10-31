@@ -36,6 +36,7 @@
 
 <!ELEMENT sekcio (ero|KAP-OJ|TRD-OJ|FAKOJ|INV|BLD-OJ|MLG-OJ|MANKOJ|STAT|TEZAURO)*>
 <!ATTLIST sekcio titolo CDATA #REQUIRED
+                 tipo (balgo) #IMPLIED
                  kadro CDATA #IMPLIED>
 
 <!ELEMENT ero (alineo|bildo*)>
