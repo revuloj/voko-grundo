@@ -284,10 +284,13 @@ function load_page(trg,url,push_state=true) {
             table.id = "x:"+filename;
             adaptu_paghon(table,url);    
 
-            // aldonu butonon por reveni al ĉefa indekso
+            // forigu menuon kaj "colspan" 
+            table.querySelector("tr.menuo").remove();
+            const enh = table.querySelector(".enhavo");
+            enh.removeAttribute("colspan");
+            // kaj aldonu butonon por reveni al ĉefa indekso
             if (! filename.startsWith("_plena") ) {
                 const ibtn = make_icon_button("i_index",()=>{load_page("nav",inx_eo_url)})
-                const enh = table.querySelector(".enhavo");
                 if (enh.children && enh.children[0].tagName != "A")
                     enh.children[0].prepend(ibtn);   
                 else
