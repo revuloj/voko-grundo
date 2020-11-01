@@ -23,10 +23,14 @@ when_doc_ready(function() {
 
     // sendu erarojn al #console
     if (debug) {
-        window.addEventListener("error", function(message,source,line) {
+        window.addEventListener("error", function(event) {
+            // message,filename,lineno,error.message,error.stack
             const c = document.getElementById("console");
             if (c) {
-              const tn = document.createTextNode(source+"@"+line+": "+message);
+              const tn = document.createTextNode(
+                event.filename+"@"
+                +event.lineno+": "
+                +event.message);
               const br = document.createElement("br");
               c.append(tn,br);
             }
@@ -455,6 +459,16 @@ function adaptu_paghon(root_el, url) {
     }
     // index "ktp.
     else if ( filename.startsWith('_ktp.') ) {
+        // hazarda artikolo
+        const hazarda = root_el.querySelector("p[id='x:Iu_ajn_artikolo'] a")
+            || root_el.querySelector("a[href*='hazarda_art.pl'");
+        hazarda.addEventListener("click", function(event) {
+            event.preventDefault();
+            hazarda_art();
+            event.stopPropagation(); // ne voku navigate_link!
+        })        
+    }
+    else if ( filename.startsWith('_plena.') ) {
         // hazarda artikolo
         const hazarda = root_el.querySelector("p[id='x:Iu_ajn_artikolo'] a")
             || root_el.querySelector("a[href*='hazarda_art.pl'");
