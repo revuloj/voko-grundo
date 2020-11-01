@@ -87,7 +87,7 @@ var redaktilo = function() {
           document.getElementById(v.substring(1)).value 
           : v)
       }
-      if (!jlist) {
+      if (!jlist || !jlist[0]) {
         console.error("Nedifinita ŝablono: \""+name+"\"");
         return;
       }
