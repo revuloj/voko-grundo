@@ -142,6 +142,12 @@
   <xsl:apply-templates/>
 </xsl:template>
 
+<xsl:template match="sekcio[@tipo='balgo']">
+  <details>
+    <summary><strong><xsl:value-of select="@titolo"/></strong></summary>
+    <xsl:apply-templates/>
+  </details>
+</xsl:template>
  
 <xsl:template match="ero[@ref]">
   <p>
