@@ -622,7 +622,8 @@ var redaktilo = function() {
 
         var err_list = document.getElementById("r:eraroj");
 
-        for (div of doc.body.getElementsByClassName("eraroj")) {
+        //for (div of doc.body.getElementsByClassName("eraroj")) {
+        for (div of doc.body.querySelectorAll(".eraroj")) {
           // debugging...
           console.log("div id=" + div.id);
           err_list.appendChild(div);
