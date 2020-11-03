@@ -94,7 +94,7 @@ nav {
     flex: 1;
     width: 100%;
     margin: 0;
-    padding: 0.1em; 
+    padding: .1em .3em; 
     overflow: auto;
     scrollbar-color: var(--nav-brd-clr) var(--nav-bgr-clr);
     scrollbar-width: thin;
@@ -263,13 +263,19 @@ nav a:active {
     border: none;   
     */
     float: none;
-    border-radius: 5px;
-    height: 1.6em;
+    /*border-radius: 50%;*/
+    border-width: 0;
+    height: 2em;
     width: 2em;
     margin: 0;
-    margin-right: .5em;
-    vertical-align: middle;    
-    background-position: .2em -.2em;    
+    margin-right: .2em;
+    vertical-align: top; /*middle;  */  
+    background-size: 1.6em;
+    /*background-position: 0.14em 0.05em;*/    
+}
+
+.enhavo>a>IMG.fak {
+    vertical-align: initial;
 }
 
 /*

@@ -261,6 +261,16 @@ function load_error(request) {
         load_page("main",http_404_url);
 }
 
+function index_home_btn(parent) {
+    // aldonu butonon por reveni al ĉefa indekso
+    const ibtn = make_icon_button("i_start",()=>{load_page("nav",inx_eo_url)})
+    ibtn.setAttribute("title","al la enira indekso")
+    if (parent.children && parent.children[0].tagName != "A")
+        parent.children[0].prepend(ibtn);   
+    else
+        parent.prepend(ibtn); 
+}
+
 function load_page(trg,url,push_state=true) {
     function update_hash() {
         if (url.indexOf('#') > -1) {
@@ -285,17 +295,12 @@ function load_page(trg,url,push_state=true) {
             adaptu_paghon(table,url);    
 
             // forigu menuon kaj "colspan" 
-            table.querySelector("tr.menuo").remove();
+            const menu = table.querySelector("tr.menuo");
+            if (menu) menu.remove();
             const enh = table.querySelector(".enhavo");
             enh.removeAttribute("colspan");
-            // kaj aldonu butonon por reveni al ĉefa indekso
-            if (! filename.startsWith("_plena") ) {
-                const ibtn = make_icon_button("i_index",()=>{load_page("nav",inx_eo_url)})
-                if (enh.children && enh.children[0].tagName != "A")
-                    enh.children[0].prepend(ibtn);   
-                else
-                    enh.prepend(ibtn); 
-            }
+            // aldonu butonon por reveni al ĉefa indekso
+            if (! filename.startsWith("_plena") ) index_home_btn(enh);
 
         } catch(error) {
             console.error(error);
@@ -812,6 +817,9 @@ function serchu_q(esprimo) {
                 //console.debug("TRD:"+lng.lng1+"-"+lng.lng2);
                 trovoj.append(findings(lng));
             }
+
+            // aldonu butonon por reveni al ĉefa indekso
+            index_home_btn(trovoj.children[0]);
 
             inx_enh.textContent = "";
             //inx_enh.append(...s_form,trovoj);
