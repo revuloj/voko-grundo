@@ -74,7 +74,8 @@ button, input[type="button"], input[type="checkbox"] {
     /*border-radius: 3px;*/
     /*box-shadow: 1px 1px 2px;*/
     /*box-shadow: 2px 2px .5em;*/
-    box-shadow: 1px 2px 3px;
+    border-width: 0;
+    box-shadow: 1px 1px 3px;
 
     /*font-family: monospace;*/
     /* font-size: 1rem;*/
