@@ -130,6 +130,7 @@ nav {
     margin: .1em 0;
 }
 #navbar>button {
+    flex: none;
     margin: 0 .3em;
 }
 #navbar>div {
@@ -897,7 +898,9 @@ div.e404 {
     #navigado.eble_kasxita {
        display: block;
     }
-    #x\:nav_inx_btn {
+    #x\:nav_inx_btn,
+    #x\:nav_montru_btn,
+    #x\:nav_kashu_btn {
         display: none;
     }
     #navigado > table {
