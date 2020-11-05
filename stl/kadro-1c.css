@@ -131,8 +131,25 @@ nav {
 }
 #navbar>button {
     flex: none;
-    margin: 0 .3em;
+    margin: 0 .1em;
 }
+
+#navbar button.icon_btn {
+    height: 1.7em;
+    width: 1.7em;
+    border-radius: 3px;
+
+    background-color: var(--btn-bgr-clr);
+    background-size: 1.2em;
+    background-position: center;
+    
+    /*color: var(--btn-fnt-clr);
+    padding: 0.3em 0.5em;*/
+    
+    border-width: 0;
+    box-shadow: 1px 1px 3px black;
+}
+
 #navbar>div {
     margin-top: .1em;
 }

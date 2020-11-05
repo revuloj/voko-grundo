@@ -311,7 +311,8 @@ function load_page(trg,url,push_state=true) {
                 hide("x:titol_btn"); // ne montru ambaŭ samtempe por ŝpari spacon!
             } else {
                 hide("x:nav_start_btn");
-                show("x:titol_btn"); // KOREKTU: montru nur se ne jam montriĝas titolpaĝo!
+                if (! document.getElementsByTagName("main").id.startsWidth("w:titolo"))
+                    show("x:titol_btn"); // montru nur se ne jam montriĝas titolpaĝo!
             }
 
         } catch(error) {
@@ -391,8 +392,8 @@ function load_page(trg,url,push_state=true) {
                 MathJax.Hub.Queue(["Typeset",MathJax.Hub,"s_artikolo"]);
             }                    
         }
-        if (url == titolo_url) hide("x:titol_btn");
-        // else show("x:titol_btn");
+        if (url == titolo_url) hide("x:titol_btn"); 
+        else if ( document.getElementById("x:_plena") ) show("x:titol_btn");
         index_collapse();
     }
 
