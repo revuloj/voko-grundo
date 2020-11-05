@@ -47,6 +47,19 @@ function HTTPRequest(method, url, params, onSuccess,
     request.send(data);  
 }
 
+function show(id) {
+  document.getElementById(id).classList.remove("kasxita");
+}
+
+function hide(id) {
+  document.getElementById(id).classList.add("kasxita");
+}
+
+function toggle(id) {
+  document.getElementById(id).classList.toggle("kasxita");
+}
+
+
 // aliras helpo-paĝon
 function helpo_pagho(url) {
     window.open('https://revuloj.github.io/temoj/'+url);

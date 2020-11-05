@@ -1,11 +1,10 @@
 input centoblecent;
 skalo:=.9;
-color bgcol; bgcol:=(.852,.645,.125);
 
 picture pic;
 pic := image (
 
-    pickup pencircle scaled 12;
+    pickup pencircle scaled 10;
     draw subpath (0, 6) of fullcircle rotated 176 scaled 72 shifted (53,55);
     draw (19,94) -- (50,60);
     draw (18,76) -- (18,95) -- (37,94);

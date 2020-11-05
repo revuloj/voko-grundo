@@ -557,6 +557,7 @@ span.ekztrd::before {
     /*border: 1px solid gray;*/
     box-shadow: 1px 1px 3px var(--main-shd-clr);
     background-color: var(--btn-bgr-clr);
+    opacity: .8;
 
     /* border: none; */
     border: 1px solid var(--btn-brd-clr);
@@ -692,12 +693,16 @@ dt.pli, .ekz.pli, a.pli {
 @media (min-width: 30em) {
 
     header, footer, article section {
-        padding-right: 1.0em;
+        padding-right: 1em;
     }
 
     div.drv-enh dl, div.subart-enh dl {
         grid-template-columns: 2em auto;
         grid-gap: 0.5em;    
+    }
+
+    #kash_btn BUTTON {
+        opacity: 1;
     }
 
     div.fontoj {
