@@ -636,9 +636,8 @@ var redaktilo = function() {
           err_list.classList.add("konfirmo");
 
           // finu redaktadon
-          var nb; if (nb = document.getElementById("x:redakt_btn")) {
-            nb.classList.add("kasxita");
-          }
+          hide("x:redakt_btn");
+          hide("x:rigardo_btn");
 
         } else if (command == "nur_kontrolo" 
           && err_list.textContent.replace(/\s+/,'') == '') {
@@ -752,10 +751,9 @@ var redaktilo = function() {
      *  preparu aktivajn elmentoj / eventojn
      *  **************/
 
-    // montru redakto-butonon en navig-trabo
-    var nb; if (nb = document.getElementById("x:redakt_btn")) {
-      nb.classList.remove("kasxita");
-    }
+    // montru redakto-butonojn en navig-trabo
+    show("x:redakt_btn");
+    show("x:rigardo_btn");
 
     // butono por kontroli
     document.getElementById("r:kontrolu")

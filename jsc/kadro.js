@@ -311,7 +311,7 @@ function load_page(trg,url,push_state=true) {
                 hide("x:titol_btn"); // ne montru ambaŭ samtempe por ŝpari spacon!
             } else {
                 hide("x:nav_start_btn");
-                if (! document.getElementsByTagName("main").id.startsWidth("w:titolo"))
+                if (! document.getElementsByTagName("main").id.startsWith("w:titolo") )
                     show("x:titol_btn"); // montru nur se ne jam montriĝas titolpaĝo!
             }
 
@@ -331,10 +331,10 @@ function load_page(trg,url,push_state=true) {
                 redaktilo.store_preferences();
 
                 load_page("main",titolo_url); // pli bone la ĵus redaktatan artikolon!
-                load_page("nav",inx_eo_url);   
-                var nb; if (nb = document.getElementById("x:redakt_btn")) {
-                    nb.classList.add("kasxita");
-                }
+                load_page("nav",inx_eo_url);
+
+                hide("x:redakt_btn");
+                hide("x:rigardo_btn");
             });
         }; 
         index_spread();
