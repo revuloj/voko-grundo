@@ -47,16 +47,16 @@ function HTTPRequest(method, url, params, onSuccess,
     request.send(data);  
 }
 
-function show(id) {
-  document.getElementById(id).classList.remove("kasxita");
+function show(id,cls='kasxita') {
+  document.getElementById(id).classList.remove(cls);
 }
 
-function hide(id) {
-  document.getElementById(id).classList.add("kasxita");
+function hide(id,cls='kasxita') {
+  document.getElementById(id).classList.add(cls);
 }
 
-function toggle(id) {
-  document.getElementById(id).classList.toggle("kasxita");
+function toggle(id,cls='kasxita') {
+  document.getElementById(id).classList.toggle(cls);
 }
 
 

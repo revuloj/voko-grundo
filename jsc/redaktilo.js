@@ -305,6 +305,7 @@ var redaktilo = function() {
     document.getElementById('r:cx').value = prefs['r:cx'] || 0;
   }
 
+  /*
   function tab_toggle(id) {
     var el = document.getElementById(id);
     var tab_id;
@@ -324,8 +325,8 @@ var redaktilo = function() {
     } else {
       document.getElementById("r:nav_btn").classList.add('collapsed');
     }
-
   }
+  */
 
   function fs_toggle(id) {
     var el = document.getElementById(id);
@@ -727,6 +728,7 @@ var redaktilo = function() {
     });
 
     // sub-paĝoj "redakti", "antaŭrigardo"
+    /*
     var tabs = document.getElementById("r:tabs");
     tabs.querySelectorAll("a").forEach(function (a) { 
       a.removeAttribute("onclick") 
@@ -738,6 +740,7 @@ var redaktilo = function() {
         rantaurigardo();
       }
     });
+    */
   }
 
   function preparu_menu() {

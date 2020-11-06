@@ -71,16 +71,27 @@ when_doc_ready(function() {
         onclick("x:titol_btn",()=>{ load_page("main",titolo_url) });
         onclick("x:nav_srch_btn",(event)=>{ serchu(event) })
 
+        onclick("x:redakt_btn",()=>{ 
+            show("r:tab_txmltxt",'collapsed');
+            hide("r:tab_trigardo",'collapsed');
+            /***
+             * se ne videbla...?:
+                load_page("nav",redaktmenu_url);
+                index_spread();
+             */    
+        });
+        onclick("x:rigardo_btn",()=>{ 
+            hide("r:tab_txmltxt",'collapsed');
+            show("r:tab_trigardo",'collapsed');
+            redaktilo.rantaurigardo();
+        });
+
         onclick("x:cx",(event)=>{ 
             var cx = event.target;
             cx.value = 1 - cx.value; 
             document.getElementById('x:q').focus() 
         });
 
-        onclick("x:redakt_btn",()=>{
-            load_page("nav",redaktmenu_url);
-            index_spread();
-        })
 
         var query = document.getElementById("x:q");
         query.addEventListener("keydown", function(event) {
