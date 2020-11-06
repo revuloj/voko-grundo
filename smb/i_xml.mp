@@ -5,12 +5,10 @@ skalo:=1;
 
 picture pic;
 pic := image (
-
-    pickup pencircle scaled 18;
-    draw (-50,0)--(-90,50)--(-50,100);
-    draw (50,0)--(90,50)--(50,100);
-    draw (-20,0)--(20,100);
-
+    pickup pencircle scaled 12;
+    draw (-35,0)--(-55,50)--(-35,100);
+    draw (35,0)--(55,50)--(35,100);
+    draw (-10,10)--(10,90);
 );
 
 coc_svg(pic,skalo);

@@ -3,14 +3,17 @@ set +e
 set +x
 
 MP=mpost
+thisdir=$(pwd)
+builddir=$(pwd)/build/smb
+srcdir=$(pwd)/smb
 
 # pro cimo en mpost-PNG 1.999 ni uzis rsvg-convert
 # sed nun rsvg-convert fuŝas kaj mpost-PNG denove funkcias!
 #RSVG=rsvg-convert
 
-cd smb
+cd ${builddir}
 
-for file in ???.mp ????.mp [ir]_*.mp
+for file in ${srcdir}/???.mp ${srcdir}/????.mp ${srcdir}/[ir]_*.mp
 do
     #svg=${file%%.mp}.svg
     #echo ${MP} ${file} ${svg}
@@ -22,4 +25,4 @@ do
     #${RSVG} -w 100 -h 100 -o ${png} ${svg}
 done
 
-cd ..
+cd ${thisdir}

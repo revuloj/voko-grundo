@@ -1,11 +1,15 @@
 #!/bin/bash
 
 # preparu CSS de piktogramoj el SVG
-bin/svg2css.sh smb/[ir]_*.svg > stl/piktogram-1c.css 
+svgdir=$(pwd)/build/smb
+#stldir=$(pwd)/build/stl
+dir=stl
+out=$(pwd)/build/stl/revo-1c-min.css
+
+bin/svg2css.sh ${svgdir}/[ir]_*.svg > ${dir}/piktogram-1c.css 
 
 # files=$*
 
-dir=stl
 files=(\
   $dir/normalize.css \
   $dir/koloroj.css \
@@ -26,11 +30,14 @@ files=(\
 # - forigo de superfluaj spacoj antaŭ/post : ; ,
 
         #| sed -r 's/\/\*+[^*]+\*+\///g' 
+echo "Kreante $out..."
+echo "" >$out
 
 for f in "${files[@]}"; 
 do
     NAME=$(basename "$f")
-    echo "/*$NAME*/"
+    echo "  <- $NAME"
+    echo "/*$NAME*/" >>$out
     CSS=$( cat "$f" \
           | sed 's/@import.*//' \
           | tr -d '\n' \
@@ -39,5 +46,5 @@ do
           | sed 's/^[ \t]*//;s/[ \t]*$//' \
           | sed -r 's/[ \t]*([{}:;,])[ \t]*/\1/g' \
         )
-    echo ${CSS}
+    echo ${CSS} >>$out
 done

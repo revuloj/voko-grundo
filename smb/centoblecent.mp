@@ -1,12 +1,15 @@
 def centoblecent(expr pic, skalo) =
   save ll,ur, width,height,etendo,factor,xoffset;
   
-  pair ll; ll = llcorner pic;
-  pair ur; ur = urcorner pic;
+  pair ll; ll = llcorner pic; % lower left
+  pair ur; ur = urcorner pic; % upper right
 
   width := xpart ur - xpart ll;
   height :=  ypart ur - ypart ll;
   etendo := max(width,height);
+
+  %show ur;
+  %show width,height,etendo;
 
   factor :=  skalo * 90/etendo; 
   xoffset := (100-factor*width)/2;
