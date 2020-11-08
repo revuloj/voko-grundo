@@ -1,5 +1,5 @@
 
-const debug=true; // ni bezonas provizore aparte por vidi erarojn en iOS Webkit
+const debug=false; // ni bezonas provizore aparte por vidi erarojn en iOS Webkit, kie ni ne havas "console"
 const revo_url = "reta-vortaro.de";
 const sercho_url = "/cgi-bin/sercxu-json.pl";
 const hazarda_url = "/cgi-bin/hazarda_art.pl";
@@ -11,6 +11,10 @@ const inx_eo_url = "/revo/inx/_plena.html";
 const mx_trd_url = "/cgi-bin/mx_trd.pl"
 const http_404_url = "/revo/dlg/404.html";
 const sercho_videblaj = 7;
+
+// stato-masinoj
+var t_nav = new Transiroj("nav");
+var t_main = new Transiroj("main");
 
 /*
     navigado laŭ a href=... estas traktata per navigate_link()...
@@ -52,8 +56,47 @@ when_doc_ready(function() {
 
     restore_preferences();
 
+    // difinu stato-transirojn por "nav"
+    t_nav.de_al("ĉefindekso","subindekso");
+    t_nav.de_al("ĉefindekso","serĉo");
+    t_nav.de_al("subindekso","ĉefindekso");
+    t_nav.de_al("serĉo","ĉefindekso");
+    t_nav.de_al("ĉefindekso","redaktilo");
+    t_nav.de_al("redaktilo","ĉefindekso");
+
+    // difinu agojn por transiroj al cel-statoj
+    t_nav.al("ĉefindekso",()=>{ load_page("nav",inx_eo_url) })
+    t_nav.al("serĉo",(event)=>{ serchu(event) });
+    t_nav.al("serĉo",serchu,(event)=>{event.key == "Enter"});
+
+    /*
     const srch = getParamValue("q");
     if (srch) serchu_q(srch);
+    */
+    t_nav.al("serĉo",()=>{ const s=getParamValue("q"); serchu_q(s) },getParamValue("q"));
+   
+    // difinu stato-trasirojn por "main"
+    t_main.de_al("titolo","artikolo");
+    t_main.de_al("artikolo","red_xml");
+    t_main.de_al("red_xml","red_rigardo");
+    t_main.de_al("red_rigardo","red_xml");
+
+    // difinu agojn por transiroj al cel-statoj
+    t_main.al("titolo",()=>{ load_page("main",titolo_url) });
+    t_main.al("red_xml",()=>{ 
+        show("r:tab_txmltxt",'collapsed');
+        hide("r:tab_trigardo",'collapsed');
+        /***
+         * se ne videbla...?:
+            load_page("nav",redaktmenu_url);
+            index_spread();
+         */    
+    });
+    t_main.al("red_rigardo",()=>{ 
+        hide("r:tab_txmltxt",'collapsed');
+        show("r:tab_trigardo",'collapsed');
+        redaktilo.rantaurigardo();
+    });
 
     // ni ne kreas la kadron, se ni estas en (la malnova) "frameset"
     if (! top.frames.length) {
@@ -67,24 +110,33 @@ when_doc_ready(function() {
 
         onclick("x:nav_montru_btn",index_spread);
         onclick("x:nav_kashu_btn",index_collapse);
-        onclick("x:nav_start_btn",()=>{ load_page("nav",inx_eo_url) });
-        onclick("x:titol_btn",()=>{ load_page("main",titolo_url) });
-        onclick("x:nav_srch_btn",(event)=>{ serchu(event) })
 
+        //onclick("x:nav_start_btn",()=>{ load_page("nav",inx_eo_url) });
+        t_nav.je("x:nav_start_btn","click","ĉefindekso");
+
+        //onclick("x:titol_btn",()=>{ load_page("main",titolo_url) });
+        t_main.je("x:titol_btn","click","titolo")
+
+        //onclick("x:nav_srch_btn",(event)=>{ serchu(event) })
+        t_nav.je("x:nav_srch_btn","click","serĉo");
+
+        /*
         onclick("x:redakt_btn",()=>{ 
             show("r:tab_txmltxt",'collapsed');
             hide("r:tab_trigardo",'collapsed');
-            /***
-             * se ne videbla...?:
-                load_page("nav",redaktmenu_url);
-                index_spread();
-             */    
+            //...
         });
+        */
+        t_main.je("x:redakt_btn","click","red_xml");
+
+        /*
         onclick("x:rigardo_btn",()=>{ 
             hide("r:tab_txmltxt",'collapsed');
             show("r:tab_trigardo",'collapsed');
             redaktilo.rantaurigardo();
         });
+        */
+        t_main.je("x:rigardo_btn","click","red_rigardo");
 
         onclick("x:cx",(event)=>{ 
             var cx = event.target;
@@ -92,13 +144,15 @@ when_doc_ready(function() {
             document.getElementById('x:q').focus() 
         });
 
-
+        /*
         var query = document.getElementById("x:q");
         query.addEventListener("keydown", function(event) {
             if (event.key == "Enter") {  
                 serchu(event);
             }
         });
+        */
+        t_nav.je("x:q","keydown","serĉo");
 
         query.addEventListener("keyup",function(event){
             //console.debug("which: "+event.which+" code:"+event.code + " key: "+ event.key);
@@ -130,6 +184,11 @@ when_doc_ready(function() {
             
         window
             .addEventListener('popstate', navigate_history);    
+
+        // kondiĉe, ke serĉo-parametro (q) estis donita en URL ni tuj sercos
+        // ĉu ni bezonos ankoraŭ originan staton "start" anstataŭ tuj "ĉefindekso"?
+        t_nav.transiro("ĉefindekso","serĉo"); // ĉu parametro ?q= estis donita, devus testi la stato-maŝino per la pli supra difino kun gardo
+
     }
 });
 
