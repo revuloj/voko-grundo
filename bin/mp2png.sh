@@ -7,13 +7,20 @@ thisdir=$(pwd)
 builddir=$(pwd)/build/smb
 srcdir=$(pwd)/smb
 
+files=$*
+if [[ -z "$file" ]]; then
+    files=(${srcdir}/???.mp ${srcdir}/????.mp ${srcdir}/[ir]_*.mp)
+fi
+
+echo "FILES: ${files[@]}"
+
 # pro cimo en mpost-PNG 1.999 ni uzis rsvg-convert
 # sed nun rsvg-convert fuŝas kaj mpost-PNG denove funkcias!
 #RSVG=rsvg-convert
 
 cd ${builddir}
 
-for file in ${srcdir}/???.mp ${srcdir}/????.mp ${srcdir}/[ir]_*.mp
+for file in "${files[@]}"
 do
     #svg=${file%%.mp}.svg
     #echo ${MP} ${file} ${svg}
