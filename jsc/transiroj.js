@@ -68,8 +68,9 @@ Transiroj.prototype.je = function(element_id,evento,al,de=null) {
     const t = de? a[de] : a["ĉiam"];
     const self=this;
     el.addEventListener(evento, function(ev) {
-        if(!t.grd || t.grd(ev)) {
+        if(!t.grd || t.grd(ev)) { // KOREKTU: tiel ni duoble testas grd: tie ĉi kaj en transiro!
             console.debug("transiro "+de+" -> "+al);
+            ev.preventDefault();
             self.transiro(al,de||this.stato,ev)
         }
     });
