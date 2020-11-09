@@ -23,6 +23,7 @@ var t_main = new Transiroj("main");
 // instalu farendaĵojn por prepari la paĝon: evento-reagoj...
 when_doc_ready(function() { 
 
+    // helpofunkcio, por instali klak-reagojn
     function onclick(id,reaction) {
         var nb;
         if (nb = document.getElementById(id)) {
@@ -57,6 +58,8 @@ when_doc_ready(function() {
     restore_preferences();
 
     // difinu stato-transirojn por "nav"
+    t_nav.de_al("start","ĉefindekso");
+    t_nav.de_al("start","serĉo");
     t_nav.de_al("ĉefindekso","subindekso");
     t_nav.de_al("ĉefindekso","serĉo");
     t_nav.de_al("subindekso","ĉefindekso");
@@ -76,6 +79,7 @@ when_doc_ready(function() {
     t_nav.al("serĉo",()=>{ const s=getParamValue("q"); serchu_q(s) },getParamValue("q"));
    
     // difinu stato-trasirojn por "main"
+    t_main.de_al("start","titolo");
     t_main.de_al("titolo","artikolo");
     t_main.de_al("artikolo","red_xml");
     t_main.de_al("red_xml","red_rigardo");
@@ -154,6 +158,7 @@ when_doc_ready(function() {
         */
         t_nav.je("x:q","keydown","serĉo");
 
+        var query = document.getElementById("x:q");
         query.addEventListener("keyup",function(event){
             //console.debug("which: "+event.which+" code:"+event.code + " key: "+ event.key);
             if (event.key == "x" || event.key == "Shift") { // x-klavo
@@ -381,7 +386,7 @@ function load_page(trg,url,push_state=true) {
                 hide("x:titol_btn"); // ne montru ambaŭ samtempe por ŝpari spacon!
             } else {
                 hide("x:nav_start_btn");
-                if (! document.getElementsByTagName("main").id.startsWith("w:titolo") )
+                if (! document.getElementsByTagName("main")[0].id.startsWith("w:titolo") )
                     show("x:titol_btn"); // montru nur se ne jam montriĝas titolpaĝo!
             }
 
@@ -479,12 +484,16 @@ function load_page(trg,url,push_state=true) {
             var hstate=history.state || {};
 
             if (nav && trg == "nav") {
-                load_page_nav(doc,nav,update_hash);
+                // load_page_nav(doc,nav,update_hash);
+                t_nav.transiro("subindekso", // ĉu ĉiam?
+                    new CustomEvent("nav",{detail: {doc: doc, element: nav, update_hash: update_hash}}));
                 hstate.nav = url;
 
                 //img_svg_bg(); // anst. fakvinjetojn, se estas la fak-indekso - ni testos en la funkcio mem!
             } else if (main && trg == "main") {
-                load_page_main(doc,main,update_hash);
+                //load_page_main(doc,main,update_hash);
+                t_main.transiro("artikolo", // ĉu ĉiam?
+                    new CustomEvent("main",{detail: {doc: doc, element: main, update_hash: update_hash}}))
                 hstate.main = url;
             }                    
 

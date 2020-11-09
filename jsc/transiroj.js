@@ -31,12 +31,17 @@
 
 */
 
-function Transiroj(nomo) {
+function Transiroj(nomo, start="start") {
     this.nomo = nomo;
-    this.stato = "";
+    this.stato = start;
     this.trans = {}; //komence malplena
     //this.stats = {}; //komence malplena
 }
+
+function TransiroEscepto(message) {
+    this.message = message;
+    this.name = "TransiroEscepto";
+  }
 
 // difino de transiro inter statoj "de" kaj "al", 
 // kondiĉe ke funkcio "gardo" redonas true
@@ -72,12 +77,14 @@ Transiroj.prototype.je = function(element_id,evento,al,de=null) {
 
 Transiroj.prototype.transiro = function (de,al,evento) {
     // ĉu transiro estas difinita?
-    const a = this.trans[al] || console.error("transira stato \""+al+"\" ne difinita.");
-    const t =a[de] || console.error("transiro de \""+de+"\" al \""+al+"\" ne difinita.");
+    const a = this.trans[al];
+    if (!a) throw new TransiroEscepto("transira stato \""+al+"\" ne difinita.");
+    const t = a[de];
+    if (!t) throw new TransiroEscepto("transiro de \""+de+"\" al \""+al+"\" ne difinita.");
     // se gardkondiĉo validas?
-    if(t.grd(evento)) {
+    if(!t.grd || t.grd(evento)) {
         // faru transiran agon
-        t.ago(evento)
+        if (t.ago) t.ago(evento);
         // notu novan staton    
         this.stato = al;
     }
