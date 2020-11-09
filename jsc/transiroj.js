@@ -85,6 +85,8 @@ Transiroj.prototype.transiro = function (al,de=null,evento) {
     const a = this.trans[al]; // ĉu transiro estas difinita?
     if (!a) throw new TransiroEscepto("transira stato \""+al+"\" ne difinita.");
     if (!de) de = this.stato;
+
+    // gardo/ago difinita por de->al
     const t = a[de];
     if (!t) throw new TransiroEscepto("transiro de \""+de+"\" al \""+al+"\" ne difinita.");
     // se gardkondiĉo validas?
@@ -93,6 +95,15 @@ Transiroj.prototype.transiro = function (al,de=null,evento) {
         // faru transiran agon
         if (t.ago) t.ago(evento);
         // notu novan staton    
+        this.stato = al;
+    }
+    // gardo/ago difinita por ->al
+    const t1 = a["ĉiam"];
+    if (t1 && (!t1.grd||t1.grd(evento))) {
+        console.debug("alveno al: "+al);
+        // faru transiran agon
+        if (t1.ago) t1.ago(evento);
+        // notu novan staton, en okazo, ke t.ago ne estis farita...    
         this.stato = al;
     }
 }
