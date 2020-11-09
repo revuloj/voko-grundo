@@ -70,19 +70,26 @@ Transiroj.prototype.je = function(element_id,evento,al,de=null) {
     el.addEventListener(evento, function(ev) {
         if(!t.grd || t.grd(ev)) {
             console.debug("transiro "+de+" -> "+al);
-            self.transiro(de||this.stato,al,ev)
+            self.transiro(al,de||this.stato,ev)
         }
     });
 }
 
-Transiroj.prototype.transiro = function (de,al,evento) {
-    // ĉu transiro estas difinita?
-    const a = this.trans[al];
+Transiroj.prototype.transiro = function (al,de=null,evento) {
+    // provizore ni ignoras transirojn al identa stato,
+    // ĉe eble ni poste bezonos ankaŭ agojn por transiroj kiel artikolo->artikolo?
+    if (al == this.stato) {
+        console.debug("transiro "+this.stato+" -> "+al+ "(ignorata).");
+        return;
+    }
+    const a = this.trans[al]; // ĉu transiro estas difinita?
     if (!a) throw new TransiroEscepto("transira stato \""+al+"\" ne difinita.");
+    if (!de) de = this.stato;
     const t = a[de];
     if (!t) throw new TransiroEscepto("transiro de \""+de+"\" al \""+al+"\" ne difinita.");
     // se gardkondiĉo validas?
     if(!t.grd || t.grd(evento)) {
+        console.debug("transiro "+de+" -> "+al);
         // faru transiran agon
         if (t.ago) t.ago(evento);
         // notu novan staton    
