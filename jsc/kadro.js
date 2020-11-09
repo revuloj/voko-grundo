@@ -484,16 +484,24 @@ function load_page(trg,url,push_state=true) {
             var hstate=history.state || {};
 
             if (nav && trg == "nav") {
-                // load_page_nav(doc,nav,update_hash);
-                t_nav.transiro("subindekso", // ĉu ĉiam?
-                    new CustomEvent("nav",{detail: {doc: doc, element: nav, update_hash: update_hash}}));
+                // PLIBONIGU: difinu load_page_nav kiel ago de transiro
+                load_page_nav(doc,nav,update_hash);
+                if (url = redaktmenu_url)
+                    t_nav.transiro("redaktilo"); 
+                else
+                    t_nav.transiro("subindekso"); 
                 hstate.nav = url;
 
                 //img_svg_bg(); // anst. fakvinjetojn, se estas la fak-indekso - ni testos en la funkcio mem!
             } else if (main && trg == "main") {
-                //load_page_main(doc,main,update_hash);
-                t_main.transiro("artikolo", // ĉu ĉiam?
-                    new CustomEvent("main",{detail: {doc: doc, element: main, update_hash: update_hash}}))
+                // PLIBONIGU: difinu load_page_main kiel ago de transiro
+                load_page_main(doc,main,update_hash);
+                if (url == titolo_url)
+                    t_main.transiro("titolo"); 
+                else if (url.startsWith(redaktilo_url))
+                    t_main.transiro("red_xml");
+                else
+                    t_main.transiro("artikolo");
                 hstate.main = url;
             }                    
 
@@ -960,7 +968,7 @@ function hazarda_art() {
 function redaktu(href) {
     const params = href.split('?')[1];
     //const art = getParamValue("art",params);
-      
+    
     load_page("main",redaktilo_url+'?'+params);
     load_page("nav",redaktmenu_url);
 }
