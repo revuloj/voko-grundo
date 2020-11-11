@@ -1,11 +1,14 @@
 /*
     Ni difinos stato-transirojn "de1"->"al1", "de2"->"al1" ktp. 
-    kiel strukturo:
+    kiel strukturo, kiu korme enhavas agojn forlasajn kaj alvenajn.
+    Transiroj krome povas esti protektataj per gardo-kondiĉo.
 
     { al1: { 
-        "ĉiam"; {
-            ago: ag_func,
-            grd: gard_func
+        "__alvene__"; {
+            ago: ag_func
+        },
+        "__forire__"; {
+            ago: ag_func
         },
         de1: {
             ago: ag_func,
@@ -41,25 +44,48 @@ function Transiroj(nomo, start="start") {
 function TransiroEscepto(message) {
     this.message = message;
     this.name = "TransiroEscepto";
-  }
+}
 
 // difino de transiro inter statoj "de" kaj "al", 
 // kondiĉe ke funkcio "gardo" redonas true
 // tiam la fukcio "ago" estos procedata
-Transiroj.prototype.de_al = function(de,al,ago=null,gardo=null) {
+Transiroj.prototype.transire = function(de,al,ago,gardo=null) {
     //...
     if (!this.trans[al]) this.trans[al] = {};
-    this.trans[al][de] = {ago: ago, grd: gardo}    
+    if (! this.trans[al][de])
+        this.trans[al][de] = {ago: ago, grd: gardo};
+    else 
+        throw new TransiroEscepto("Transiro "+de+" -> "+al+" jam difinita.");   
 }
 
-// difino de eniro al stato "en", kondiĉe ke funkcio "gardo" redonas true
+// difino de alveno al stato, kondiĉe ke funkcio "gardo" redonas true
 // tiam la fukcio "ago" estos procedata
-Transiroj.prototype.al = function(al,ago=null,gardo=null) {
+Transiroj.prototype.alvene = function(al,ago) {
     //...
     if (!this.trans[al]) this.trans[al] = {};
-    this.trans[al]["ĉiam"] = {ago: ago, grd: gardo}
+    if (!this.trans[al]["__alvene__"])
+        this.trans[al]["__alvene__"] = {ago: ago};
+    else 
+        throw new TransiroEscepto("Alveno al "+al+" jam difinita.");   
 }
 
+// difino de forio de stato, kondiĉe ke funkcio "gardo" redonas true
+// tiam la fukcio "ago" estos procedata
+Transiroj.prototype.forire = function(de,ago) {
+    //...
+    if (!this.trans[de]) this.trans[de] = {};
+    if (!this.trans[de]["__forire__"])
+        this.trans[de]["__forire__"] = {ago: ago};
+    else 
+        throw new TransiroEscepto("Foriro de "+de+" jam difinita.");   
+}
+
+/** 
+ * por ne konolikigi ni momente rezignas konekti rekte DOM-eventojn kun Transiroj,
+ * sed lasas tion en kadro.js ktp. Tamen ni povus pripensi uzi CustomEvent("transiro",{details:{...}})
+ * por transiri al nova stato...:
+ * document.addEventHandler("transiro", ...)
+ * 
 // alligu transiron [de->]al ĉe elemento je evento
 Transiroj.prototype.je = function(element_id,evento,al,de=null) {
     var el = document.getElementById(element_id);
@@ -75,31 +101,66 @@ Transiroj.prototype.je = function(element_id,evento,al,de=null) {
         }
     });
 }
+*/
 
 Transiroj.prototype.transiro = function (al,de=null,evento) {
+    // PLIBONIGU:
+    // strukturu ĉi-funkcion
+    // 1. eltrovu eĝon al nova stato konsidernate eblajn gardojn
+    // 2. forlasu nunan staton (senkondiĉe)
+    // 3. transiru al nova stato
+    // 4. alvenu ĉe nova stato (senkondiĉe)
+
+
     // provizore ni ignoras transirojn al identa stato,
     // ĉe eble ni poste bezonos ankaŭ agojn por transiroj kiel artikolo->artikolo?
     if (al == this.stato) {
         console.debug("transiro "+this.stato+" -> "+al+ "(ignorata).");
         return;
     }
+
     const a = this.trans[al]; // ĉu transiro estas difinita?
-    if (!a) throw new TransiroEscepto("transira stato \""+al+"\" ne difinita.");
-    if (!de) de = this.stato;
+    // proviore ne kreu escepton, sed nur avertu
+    // if (!a) throw new TransiroEscepto("transira stato \""+al+"\" ne difinita.");
+    if (!a) {
+        console.error("transira stato \""+al+"\" ne difinita.");
+        //return;
+    }
+
+    if (!de) de = this.stato;    
+    const d = this.trans[de]; // ĉu transiro estas difinita?
+    // proviore ne kreu escepton, sed nur avertu
+    // if (!d) throw new TransiroEscepto("forlasita stato \""+de+"\" ne difinita.");
+    if (!d) {
+        console.error("forlasita stato \""+de+"\" ne difinita.");
+        //return;
+    }
+
+    // gardo/ago difinita por ->al
+    const t0 = d? d["__forire__"]: null;
+    if (t0 && (!t0.grd||t0.grd(evento))) {
+        console.debug("foriro de: "+de);
+        // faru transiran agon
+        if (t0.ago) t0.ago(evento);
+    }
 
     // gardo/ago difinita por de->al
-    const t = a[de];
-    if (!t) throw new TransiroEscepto("transiro de \""+de+"\" al \""+al+"\" ne difinita.");
+    const t = a? a[de]: null;
+    // proviore ne kreu escepton, sed nur avertu
+    //if (!t) throw new TransiroEscepto("transiro de \""+de+"\" al \""+al+"\" ne difinita.");
     // se gardkondiĉo validas?
-    if(!t.grd || t.grd(evento)) {
+    //if (!t) console.error("transiro de \""+de+"\" al \""+al+"\" ne difinita.");
+
+    if(t && (!t.grd || t.grd(evento)) ) {
         console.debug("transiro "+de+" -> "+al);
         // faru transiran agon
         if (t.ago) t.ago(evento);
         // notu novan staton    
         this.stato = al;
     }
+
     // gardo/ago difinita por ->al
-    const t1 = a["ĉiam"];
+    const t1 = a? a["__alvene__"]: null;
     if (t1 && (!t1.grd||t1.grd(evento))) {
         console.debug("alveno al: "+al);
         // faru transiran agon

@@ -57,50 +57,74 @@ when_doc_ready(function() {
 
     restore_preferences();
 
+    //// PLIBONIGU: provizore limigu Transiroj-n al memorado de la momenta stato
+    //// kaj adapto de videbleco / stato de butonoj, sed rezignu pri tro komplikaj
+    //// agoj kiel ŝargi paĝojn ktp. (?)
+
     // difinu stato-transirojn por "nav"
-    t_nav.de_al("start","ĉefindekso");
-    t_nav.de_al("start","serĉo");
-    t_nav.de_al("ĉefindekso","subindekso");
-    t_nav.de_al("ĉefindekso","serĉo");
-    t_nav.de_al("subindekso","ĉefindekso");
-    t_nav.de_al("serĉo","ĉefindekso");
-    t_nav.de_al("ĉefindekso","redaktilo");
-    t_nav.de_al("redaktilo","ĉefindekso");
+    /* ni provizore rezignas pri detala limigo de transiroj
+    kontentiĝante pri alvene, forire, transire... 
+    nur se estas konkretaj farendaĵoj:
+    t_nav.transire("start","ĉefindekso");
+    t_nav.transire("start","serĉo");
+    t_nav.transire("ĉefindekso","subindekso");
+    t_nav.transire("ĉefindekso","serĉo");
+    t_nav.transire("subindekso","ĉefindekso");
+    t_nav.transire("serĉo","ĉefindekso");
+    t_nav.transire("ĉefindekso","redaktilo");
+    t_nav.transire("redaktilo","ĉefindekso");
+    */
 
     // difinu agojn por transiroj al cel-statoj
-    t_nav.al("ĉefindekso",()=>{ load_page("nav",inx_eo_url) })
-    t_nav.al("serĉo",(event)=>{ serchu(event) });
-    t_nav.al("serĉo",serchu,(event)=>{event.key == "Enter"});
+    //t_nav.alvene("ĉefindekso",()=>{ load_page("nav",inx_eo_url) })
+    //t_nav.alvene("serĉo",(event)=>{ serchu(event) });
+    //t_nav.alvene("serĉo",serchu,(event)=>{event.key == "Enter"});
 
-    /*
+    
     const srch = getParamValue("q");
     if (srch) serchu_q(srch);
-    */
-    t_nav.al("serĉo",()=>{ const s=getParamValue("q"); serchu_q(s) },getParamValue("q"));
-   
+    
+    ////t_nav.alvene("serĉo",()=>{ const s=getParamValue("q"); serchu_q(s) },getParamValue("q"));
+
+    t_nav.alvene("ĉefindekso",()=>{ 
+        show("x:titol_btn");
+        hide("x:nav_start_btn");
+    });
+
+    t_nav.forire("ĉefindekso",()=>{ 
+        hide("x:titol_btn");
+        show("x:nav_start_btn");
+    });
+
     // difinu stato-trasirojn por "main"
-    t_main.de_al("start","titolo");
-    t_main.de_al("titolo","artikolo");
-    t_main.de_al("artikolo","red_xml");
-    t_main.de_al("red_xml","red_rigardo");
-    t_main.de_al("red_rigardo","red_xml");
+    /*
+    t_main.transire("start","titolo");
+    t_main.transire("titolo","artikolo");
+    t_main.transire("artikolo","red_xml");
+    t_main.transire("red_xml","red_rigardo");
+    t_main.transire("red_rigardo","red_xml");
+    */
+
+    t_main.alvene("titolo",()=>{ 
+       hide("x:titol_btn");
+    });
 
     // difinu agojn por transiroj al cel-statoj
-    t_main.al("titolo",()=>{ load_page("main",titolo_url) });
-    t_main.al("red_xml",()=>{ 
+    //t_main.alvene("titolo",()=>{ load_page("main",titolo_url) });
+    t_main.alvene("red_xml",()=>{ 
         show("r:tab_txmltxt",'collapsed');
-        hide("r:tab_trigardo",'collapsed');
         /***
          * se ne videbla...?:
             load_page("nav",redaktmenu_url);
             index_spread();
          */    
     });
-    t_main.al("red_rigardo",()=>{ 
-        hide("r:tab_txmltxt",'collapsed');
+    t_main.forire("red_xml",()=>{ hide("r:tab_txmltxt",'collapsed') });
+    t_main.alvene("red_rigardo",()=>{ 
         show("r:tab_trigardo",'collapsed');
         redaktilo.rantaurigardo();
     });
+    t_main.forire("red_rigardo",()=>{ hide("r:tab_trigardo",'collapsed') });
 
     // ni ne kreas la kadron, se ni estas en (la malnova) "frameset"
     if (! top.frames.length) {
@@ -116,13 +140,25 @@ when_doc_ready(function() {
         onclick("x:nav_kashu_btn",index_collapse);
 
         //onclick("x:nav_start_btn",()=>{ load_page("nav",inx_eo_url) });
-        t_nav.je("x:nav_start_btn","click","ĉefindekso");
+        //t_nav.je("x:nav_start_btn","click","ĉefindekso");
+        onclick("x:nav_start_btn",()=>{ 
+            load_page("nav",inx_eo_url);
+            //t_nav.transiro("ĉefindekso") 
+        });
 
         //onclick("x:titol_btn",()=>{ load_page("main",titolo_url) });
-        t_main.je("x:titol_btn","click","titolo")
+        onclick("x:titol_btn",()=>{ 
+            load_page("main",titolo_url)
+            //t_main.transiro("titolo") 
+        });
+        //t_main.je("x:titol_btn","click","titolo")
 
         //onclick("x:nav_srch_btn",(event)=>{ serchu(event) })
-        t_nav.je("x:nav_srch_btn","click","serĉo");
+        onclick("x:nav_srch_btn",(event)=>{ 
+            serchu(event);
+            // transiro aŭ lanĉu la serĉon aŭ evtl. sekvu ĝin...
+        })
+        //t_nav.je("x:nav_srch_btn","click","serĉo");
 
         /*
         onclick("x:redakt_btn",()=>{ 
@@ -131,7 +167,8 @@ when_doc_ready(function() {
             //...
         });
         */
-        t_main.je("x:redakt_btn","click","red_xml");
+        onclick("x:redakt_btn",()=>{ t_main.transiro("red_xml") });
+        //t_main.je("x:redakt_btn","click","red_xml");
 
         /*
         onclick("x:rigardo_btn",()=>{ 
@@ -140,7 +177,8 @@ when_doc_ready(function() {
             redaktilo.rantaurigardo();
         });
         */
-        t_main.je("x:rigardo_btn","click","red_rigardo");
+        onclick("x:rigardo_btn",()=>{ t_main.transiro("red_rigardo") });
+        //t_main.je("x:rigardo_btn","click","red_rigardo");
 
         onclick("x:cx",(event)=>{ 
             var cx = event.target;
@@ -148,15 +186,16 @@ when_doc_ready(function() {
             document.getElementById('x:q').focus() 
         });
 
-        /*
+        
         var query = document.getElementById("x:q");
         query.addEventListener("keydown", function(event) {
             if (event.key == "Enter") {  
                 serchu(event);
+                // t_nav.transiro("serĉo")...
             }
         });
-        */
-        t_nav.je("x:q","keydown","serĉo");
+        
+        //t_nav.je("x:q","keydown","serĉo");
 
         var query = document.getElementById("x:q");
         query.addEventListener("keyup",function(event){
@@ -381,6 +420,7 @@ function load_page(trg,url,push_state=true) {
             const enh = table.querySelector(".enhavo");
             enh.removeAttribute("colspan");
             // aldonu butonon por reveni al ĉefa indekso
+            /*
             if (! filename.startsWith("_plena") ) {
                 show("x:nav_start_btn");
                 hide("x:titol_btn"); // ne montru ambaŭ samtempe por ŝpari spacon!
@@ -389,6 +429,7 @@ function load_page(trg,url,push_state=true) {
                 if (! document.getElementsByTagName("main")[0].id.startsWith("w:titolo") )
                     show("x:titol_btn"); // montru nur se ne jam montriĝas titolpaĝo!
             }
+            */
 
         } catch(error) {
             console.error(error);
@@ -486,8 +527,11 @@ function load_page(trg,url,push_state=true) {
             if (nav && trg == "nav") {
                 // PLIBONIGU: difinu load_page_nav kiel ago de transiro
                 load_page_nav(doc,nav,update_hash);
-                if (url = redaktmenu_url)
+
+                if (url == redaktmenu_url)
                     t_nav.transiro("redaktilo"); 
+                else if (url == inx_eo_url)
+                    t_nav.transiro("ĉefindekso"); 
                 else
                     t_nav.transiro("subindekso"); 
                 hstate.nav = url;
@@ -922,7 +966,8 @@ function serchu_q(esprimo) {
 
             // montru butonon por reveni al ĉefa indekso
             //index_home_btn(trovoj.children[0]);
-            show("x:nav_start_btn");
+            //show("x:nav_start_btn");
+            t_nav.transiro("serĉo");
 
             inx_enh.textContent = "";
             //inx_enh.append(...s_form,trovoj);
