@@ -139,7 +139,7 @@ Transiroj.prototype.transiro = function (al,de=null,evento) {
     // gardo/ago difinita por ->al
     const t0 = d? d["__forire__"]: null;
     if (t0 && (!t0.grd||t0.grd(evento))) {
-        console.debug("foriro de: "+de);
+        console.debug(this.nomo+": foriro de "+de);
         // faru transiran agon
         if (t0.ago) t0.ago(evento);
     }
@@ -152,20 +152,19 @@ Transiroj.prototype.transiro = function (al,de=null,evento) {
     //if (!t) console.error("transiro de \""+de+"\" al \""+al+"\" ne difinita.");
 
     if(t && (!t.grd || t.grd(evento)) ) {
-        console.debug("transiro "+de+" -> "+al);
+        console.debug(this.nomo+": transiro "+de+" -> "+al);
         // faru transiran agon
         if (t.ago) t.ago(evento);
-        // notu novan staton    
-        this.stato = al;
     }
 
     // gardo/ago difinita por ->al
     const t1 = a? a["__alvene__"]: null;
     if (t1 && (!t1.grd||t1.grd(evento))) {
-        console.debug("alveno al: "+al);
+        console.debug(this.nomo+": alveno al "+al);
         // faru transiran agon
         if (t1.ago) t1.ago(evento);
-        // notu novan staton, en okazo, ke t.ago ne estis farita...    
-        this.stato = al;
     }
+
+    // notu novan staton, en okazo, ke t.ago ne estis farita...    
+    this.stato = al;
 }
