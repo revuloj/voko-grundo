@@ -115,7 +115,7 @@ Transiroj.prototype.transiro = function (al,de=null,evento) {
     // provizore ni ignoras transirojn al identa stato,
     // ĉe eble ni poste bezonos ankaŭ agojn por transiroj kiel artikolo->artikolo?
     if (al == this.stato) {
-        console.debug("transiro "+this.stato+" -> "+al+ "(ignorata).");
+        console.info("transiro "+this.stato+" -> "+al+ "(ignorata).");
         return;
     }
 
@@ -123,7 +123,7 @@ Transiroj.prototype.transiro = function (al,de=null,evento) {
     // proviore ne kreu escepton, sed nur avertu
     // if (!a) throw new TransiroEscepto("transira stato \""+al+"\" ne difinita.");
     if (!a) {
-        console.error("transira stato \""+al+"\" ne difinita.");
+        console.warn("transira stato \""+al+"\" ne difinita.");
         //return;
     }
 
@@ -132,7 +132,7 @@ Transiroj.prototype.transiro = function (al,de=null,evento) {
     // proviore ne kreu escepton, sed nur avertu
     // if (!d) throw new TransiroEscepto("forlasita stato \""+de+"\" ne difinita.");
     if (!d) {
-        console.error("forlasita stato \""+de+"\" ne difinita.");
+        console.warn("forlasita stato \""+de+"\" ne difinita.");
         //return;
     }
 

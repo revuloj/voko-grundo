@@ -97,6 +97,10 @@ when_doc_ready(function() {
         show("x:nav_start_btn");
     });
 
+    t_nav.forire("redaktilo",()=>{ 
+        hide("x:rigardo_btn");
+    });
+
     // difinu stato-trasirojn por "main"
     /*
     t_main.transire("start","titolo");
@@ -114,18 +118,29 @@ when_doc_ready(function() {
     //t_main.alvene("titolo",()=>{ load_page("main",titolo_url) });
     t_main.alvene("red_xml",()=>{ 
         show("r:tab_txmltxt",'collapsed');
+        show("x:rigardo_btn"); 
+        hide("x:redakt_btn"); 
         /***
          * se ne videbla...?:
             load_page("nav",redaktmenu_url);
             index_spread();
          */    
     });
-    t_main.forire("red_xml",()=>{ hide("r:tab_txmltxt",'collapsed') });
+    t_main.forire("red_xml",()=>{ 
+        hide("r:tab_txmltxt",'collapsed');
+        hide("x:rigardo_btn"); 
+        // tiu servos por reveni al la redaktilo
+        // ĝis ni definitive finis redaktadon!
+        show("x:redakt_btn"); 
+    });
     t_main.alvene("red_rigardo",()=>{ 
         show("r:tab_trigardo",'collapsed');
+        show("x:redakt_btn"); 
         redaktilo.rantaurigardo();
     });
-    t_main.forire("red_rigardo",()=>{ hide("r:tab_trigardo",'collapsed') });
+    t_main.forire("red_rigardo",()=>{ 
+        hide("r:tab_trigardo",'collapsed');
+    });
 
     // ni ne kreas la kadron, se ni estas en (la malnova) "frameset"
     if (! top.frames.length) {
@@ -168,7 +183,11 @@ when_doc_ready(function() {
             //...
         });
         */
-        onclick("x:redakt_btn",()=>{ t_main.transiro("red_xml") });
+        onclick("x:redakt_btn",()=>{ 
+            if (t_nav.stato != "redaktilo")
+                load_page("nav",redaktmenu_url);
+            t_main.transiro("red_xml");
+        });
         //t_main.je("x:redakt_btn","click","red_xml");
 
         /*
@@ -509,8 +528,8 @@ function load_page(trg,url,push_state=true) {
                 MathJax.Hub.Queue(["Typeset",MathJax.Hub,"s_artikolo"]);
             }                    
         }
-        if (url == titolo_url) hide("x:titol_btn"); 
-        else if ( document.getElementById("x:_plena") ) show("x:titol_btn");
+        //if (url == titolo_url) hide("x:titol_btn"); 
+        //else if ( document.getElementById("x:_plena") ) show("x:titol_btn");
         index_collapse();
     }
 

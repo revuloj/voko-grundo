@@ -484,13 +484,21 @@ var redaktilo = function() {
     var art = document.getElementById("r:art").value;
     var xml = document.getElementById("r:xmltxt").value;
 
-    eraroj.textContent='';
-    eraroj.classList.remove("collapsed"); // ĉu nur kiam certe estas eraroj?
-    eraroj.parentNode.setAttribute("open","open");
+    // eblas, ke en "nav" montriĝas indekso, ĉar la uzanto foiris de la redaktado tie
+    // ni testas do antaŭ kontroli erarojn
+    // alternative ni povus renavigi al la navigilo...!?
+    if (eraroj) {
+      eraroj.textContent='';
+      eraroj.classList.remove("collapsed"); // ĉu nur kiam certe estas eraroj?
+      eraroj.parentNode.setAttribute("open","open");  
 
-    kontrolu_xml_loke(art,xml);
+      kontrolu_xml_loke(art,xml);
+      if (xml.startsWith("<?xml")) {
+        vokomailx("nur_kontrolo",art,xml);
+      }
+    }
+
     if (xml.startsWith("<?xml")) {
-      vokomailx("nur_kontrolo",art,xml);
       vokohtmlx(xml);
     }
   }
@@ -637,8 +645,8 @@ var redaktilo = function() {
           err_list.classList.add("konfirmo");
 
           // finu redaktadon
-          hide("x:redakt_btn");
-          hide("x:rigardo_btn");
+          //hide("x:redakt_btn");
+          //hide("x:rigardo_btn");
 
         } else if (command == "nur_kontrolo" 
           && err_list.textContent.replace(/\s+/,'') == '') {
@@ -755,8 +763,8 @@ var redaktilo = function() {
      *  **************/
 
     // montru redakto-butonojn en navig-trabo
-    show("x:redakt_btn");
-    show("x:rigardo_btn");
+    //show("x:redakt_btn");
+    //show("x:rigardo_btn");
 
     // butono por kontroli
     document.getElementById("r:kontrolu")
