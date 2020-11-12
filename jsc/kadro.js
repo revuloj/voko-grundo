@@ -87,7 +87,8 @@ when_doc_ready(function() {
     ////t_nav.alvene("serĉo",()=>{ const s=getParamValue("q"); serchu_q(s) },getParamValue("q"));
 
     t_nav.alvene("ĉefindekso",()=>{ 
-        show("x:titol_btn");
+        if (!t_main.stato == "titolo") 
+            show("x:titol_btn");
         hide("x:nav_start_btn");
     });
 
