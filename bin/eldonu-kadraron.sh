@@ -11,8 +11,8 @@
 host=retavortaro.de
 release=1c
 
-scp jsc/revo-${release}.js ${host}:/html/revo/jsc/
-scp stl/revo-${release}-min.css ${host}:/html/revo/stl/
+scp build/jsc/revo-${release}.js ${host}:/html/revo/jsc/
+scp build/stl/revo-${release}-min.css ${host}:/html/revo/stl/
 
 #scp jsc/revo-art-${release}.js ${host}:/html/revo/jsc/
 #
