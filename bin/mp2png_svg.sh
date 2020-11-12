@@ -7,8 +7,10 @@ thisdir=$(pwd)
 builddir=$(pwd)/build/smb
 srcdir=$(pwd)/smb
 
+# donante unuopajn dosierojn sur komandlinio aldonu $(pwd)/ !
 files=$*
-if [[ -z "$file" ]]; then
+
+if [[ -z "$files" ]]; then
     files=(${srcdir}/???.mp ${srcdir}/????.mp ${srcdir}/[ir]_*.mp)
 fi
 
