@@ -437,6 +437,11 @@ function load_page(trg,url,push_state=true) {
             // forigu menuon kaj "colspan" 
             const menu = table.querySelector("tr.menuo");
             if (menu) menu.remove();
+            else if (!url.startsWith("redak")) {
+                // provizora solvo, ĉar class="menuo" mankas ankoraŭ en kelkaj dosieroj
+                const tr_menu = table.querySelector("td.fona").parentElement;
+                if (tr_menu) tr_menu.remove();
+            }
             const enh = table.querySelector(".enhavo");
             enh.removeAttribute("colspan");
             // aldonu butonon por reveni al ĉefa indekso
