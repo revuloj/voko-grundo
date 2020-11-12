@@ -48,15 +48,21 @@ function HTTPRequest(method, url, params, onSuccess,
 }
 
 function show(id,cls='kasxita') {
-  document.getElementById(id).classList.remove(cls);
+  const el = document.getElementById(id);
+  if (el) el.classList.remove(cls);
+  else console.warn("show: elemento "+id+" ne troviĝis.")
 }
 
 function hide(id,cls='kasxita') {
-  document.getElementById(id).classList.add(cls);
+  const el = document.getElementById(id);
+  if (el) el.classList.add(cls);
+  else console.warn("hide: elemento "+id+" ne troviĝis.")
 }
 
 function toggle(id,cls='kasxita') {
-  document.getElementById(id).classList.toggle(cls);
+  const el = document.getElementById(id);
+  if (el) el.classList.toggle(cls);
+  else console.warn("toggle: elemento "+id+" ne troviĝis.")
 }
 
 
