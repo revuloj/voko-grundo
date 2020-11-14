@@ -34,11 +34,11 @@
 
 */
 
-function Transiroj(nomo, start="start") {
+function Transiroj(nomo, start="start", stats = []) {
     this.nomo = nomo;
     this.stato = start;
     this.trans = {}; //komence malplena
-    //this.stats = {}; //komence malplena
+    this.stats = stats; //komence malplena
 }
 
 function TransiroEscepto(message) {
@@ -50,7 +50,11 @@ function TransiroEscepto(message) {
 // kondiĉe ke funkcio "gardo" redonas true
 // tiam la fukcio "ago" estos procedata
 Transiroj.prototype.transire = function(de,al,ago,gardo=null) {
-    //...
+    // permesu difinojn nur por jam difinitaj statoj, 
+    // provizore ni ne permesas traniran funkcion start-><iu stato> - ĉu bezonata?
+    if (this.stats.indexOf(al) == -1) throw TransiroEscepto("Stato \""+al+"\" ne difinita.");
+    if (this.stats.indexOf(de) == -1) throw TransiroEscepto("Stato \""+de+"\" ne difinita.");
+    // enigu la transiran funkcion en la strukturon "trans"
     if (!this.trans[al]) this.trans[al] = {};
     if (! this.trans[al][de])
         this.trans[al][de] = {ago: ago, grd: gardo};
@@ -61,7 +65,9 @@ Transiroj.prototype.transire = function(de,al,ago,gardo=null) {
 // difino de alveno al stato, kondiĉe ke funkcio "gardo" redonas true
 // tiam la fukcio "ago" estos procedata
 Transiroj.prototype.alvene = function(al,ago) {
-    //...
+    // permesu difinojn nur por jam difinitaj statoj aŭ this.stato (start)
+    if (this.stats.indexOf(al) == -1) throw TransiroEscepto("Stato \""+al+"\" ne difinita.");
+    // enigu la transiran funkcion en la strukturon "trans"
     if (!this.trans[al]) this.trans[al] = {};
     if (!this.trans[al]["__alvene__"])
         this.trans[al]["__alvene__"] = {ago: ago};
@@ -72,7 +78,9 @@ Transiroj.prototype.alvene = function(al,ago) {
 // difino de forio de stato, kondiĉe ke funkcio "gardo" redonas true
 // tiam la fukcio "ago" estos procedata
 Transiroj.prototype.forire = function(de,ago) {
-    //...
+    // permesu difinojn nur por jam difinitaj statoj aŭ this.stato (start)
+    if (this.stats.indexOf(de) == -1) throw TransiroEscepto("Stato \""+de+"\" ne difinita.");
+    // enigu la transiran funkcion en la strukturon "trans"
     if (!this.trans[de]) this.trans[de] = {};
     if (!this.trans[de]["__forire__"])
         this.trans[de]["__forire__"] = {ago: ago};
@@ -80,37 +88,47 @@ Transiroj.prototype.forire = function(de,ago) {
         throw new TransiroEscepto("Foriro de "+de+" jam difinita.");   
 }
 
-/** 
- * por ne konolikigi ni momente rezignas konekti rekte DOM-eventojn kun Transiroj,
- * sed lasas tion en kadro.js ktp. Tamen ni povus pripensi uzi CustomEvent("transiro",{details:{...}})
- * por transiri al nova stato...:
- * document.addEventHandler("transiro", ...)
- * 
-// alligu transiron [de->]al ĉe elemento je evento
-Transiroj.prototype.je = function(element_id,evento,al,de=null) {
-    var el = document.getElementById(element_id);
-    const a = this.trans[al];
-    if (!a) console.error(this.nomo+": alira stato \""+al+"\" ne difinita.");
-    const t = de? a[de] : a["ĉiam"];
-    const self=this;
-    el.addEventListener(evento, function(ev) {
-        if(!t.grd || t.grd(ev)) { // KOREKTU: tiel ni duoble testas grd: tie ĉi kaj en transiro!
-            console.debug("transiro "+de+" -> "+al);
-            ev.preventDefault();
-            self.transiro(al,de||this.stato,ev)
-        }
-    });
-}
-*/
 
 Transiroj.prototype.transiro = function (al,de=null,evento) {
     // PLIBONIGU:
-    // strukturu ĉi-funkcion
-    // 1. eltrovu eĝon al nova stato konsidernate eblajn gardojn
+    // restrukturu ĉi-funkcion
+    // 1. eltrovu eĝon al nova stato konsiderante eblajn gardojn
     // 2. forlasu nunan staton (senkondiĉe)
     // 3. transiru al nova stato
     // 4. alvenu ĉe nova stato (senkondiĉe)
 
+    const n = this.nomo;
+
+    function _forire(d) {
+        // ago difinita por de->...
+        const t = d["__forire__"];
+        if (t && t.ago) {
+            console.debug(n+": foriro de "+de);
+            // faru transiran agon
+            t.ago(evento);
+        }
+    }    
+
+    function _alvene(a) {
+        // ago difinita por ...->al
+        const t = a["__alvene__"];
+        if (t && t.ago) {
+            console.debug(n+": alveno al "+al);
+            // faru transiran agon
+            t.ago(evento);
+        }
+    }
+
+    function _transire(t) {
+        if( t.ago && (!t.grd || t.grd(evento)) ) {
+            console.debug(n+": transiro "+de+" -> "+al);
+            // faru transiran agon
+            t.ago(evento);
+        }    
+    }
+    
+    // permesu transiron nur al difinita stato
+    if (this.stats.indexOf(al) == -1) throw TransiroEscepto("Stato \""+al+"\" ne difinita.");
 
     // provizore ni ignoras transirojn al identa stato,
     // ĉe eble ni poste bezonos ankaŭ agojn por transiroj kiel artikolo->artikolo?
@@ -120,51 +138,25 @@ Transiroj.prototype.transiro = function (al,de=null,evento) {
     }
 
     const a = this.trans[al]; // ĉu transiro estas difinita?
-    // proviore ne kreu escepton, sed nur avertu
-    // if (!a) throw new TransiroEscepto("transira stato \""+al+"\" ne difinita.");
-    if (!a) {
-        console.warn("transira stato \""+al+"\" ne difinita.");
-        //return;
-    }
-
     if (!de) de = this.stato;    
     const d = this.trans[de]; // ĉu transiro estas difinita?
-    // proviore ne kreu escepton, sed nur avertu
-    // if (!d) throw new TransiroEscepto("forlasita stato \""+de+"\" ne difinita.");
-    if (!d) {
-        console.warn("forlasita stato \""+de+"\" ne difinita.");
-        //return;
-    }
+    const t = a? a[de]: null;
 
-    // gardo/ago difinita por ->al
-    const t0 = d? d["__forire__"]: null;
-    if (t0 && (!t0.grd||t0.grd(evento))) {
-        console.debug(this.nomo+": foriro de "+de);
-        // faru transiran agon
-        if (t0.ago) t0.ago(evento);
-    }
+    // ago por de -> ..
+    if (d) _forire(d);
 
     // gardo/ago difinita por de->al
-    const t = a? a[de]: null;
-    // proviore ne kreu escepton, sed nur avertu
-    //if (!t) throw new TransiroEscepto("transiro de \""+de+"\" al \""+al+"\" ne difinita.");
-    // se gardkondiĉo validas?
-    //if (!t) console.error("transiro de \""+de+"\" al \""+al+"\" ne difinita.");
+    if (t) _transire(t);
 
-    if(t && (!t.grd || t.grd(evento)) ) {
-        console.debug(this.nomo+": transiro "+de+" -> "+al);
-        // faru transiran agon
-        if (t.ago) t.ago(evento);
-    }
+    // ago por .. -> al
+    if (a) _alvene(a);
 
-    // gardo/ago difinita por ->al
-    const t1 = a? a["__alvene__"]: null;
-    if (t1 && (!t1.grd||t1.grd(evento))) {
-        console.debug(this.nomo+": alveno al "+al);
-        // faru transiran agon
-        if (t1.ago) t1.ago(evento);
-    }
+    // ATENTU: provizore ni senkondiĉe iras al la nova stato
+    // do fiaskinta gardo ne malhelpas tion!
+    // se pluraj transiroj eblus depende de la gardo
+    // ni devus unue kontroli la gardon kaj nur poste
+    // fario ĉion ĉi supran kaj fine transiri al la nova stato
 
-    // notu novan staton, en okazo, ke t.ago ne estis farita...    
+    // notu novan staton...    
     this.stato = al;
 }

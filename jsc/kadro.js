@@ -12,9 +12,11 @@ const mx_trd_url = "/cgi-bin/mx_trd.pl"
 const http_404_url = "/revo/dlg/404.html";
 const sercho_videblaj = 7;
 
-// stato-masinoj
-var t_nav = new Transiroj("nav");
-var t_main = new Transiroj("main");
+// statoj kaj transiroj
+var t_nav  = new Transiroj("nav","start",["ĉefindekso","subindekso","serĉo","redaktilo"]);
+var t_main = new Transiroj("main","start",["titolo","artikolo","red_xml","red_rigardo"]);
+var t_red  = new Transiroj("red","ne_redaktante",["ne_redaktante","redaktante"]);
+
 
 /*
     navigado laŭ a href=... estas traktata per navigate_link()...
@@ -61,19 +63,6 @@ when_doc_ready(function() {
     //// kaj adapto de videbleco / stato de butonoj, sed rezignu pri tro komplikaj
     //// agoj kiel ŝargi paĝojn ktp. (?)
 
-    // difinu stato-transirojn por "nav"
-    /* ni provizore rezignas pri detala limigo de transiroj
-    kontentiĝante pri alvene, forire, transire... 
-    nur se estas konkretaj farendaĵoj:
-    t_nav.transire("start","ĉefindekso");
-    t_nav.transire("start","serĉo");
-    t_nav.transire("ĉefindekso","subindekso");
-    t_nav.transire("ĉefindekso","serĉo");
-    t_nav.transire("subindekso","ĉefindekso");
-    t_nav.transire("serĉo","ĉefindekso");
-    t_nav.transire("ĉefindekso","redaktilo");
-    t_nav.transire("redaktilo","ĉefindekso");
-    */
 
     // difinu agojn por transiroj al cel-statoj
     //t_nav.alvene("ĉefindekso",()=>{ load_page("nav",inx_eo_url) })
@@ -99,16 +88,11 @@ when_doc_ready(function() {
 
     t_nav.forire("redaktilo",()=>{ 
         hide("x:rigardo_btn");
+        // se ni ankoraŭ redaktas, ni bezonas butonon por reveni al la redaktilo!
+        if (t_red.stato == "redaktante") {
+            show("x:redakt_btn");
+        }
     });
-
-    // difinu stato-trasirojn por "main"
-    /*
-    t_main.transire("start","titolo");
-    t_main.transire("titolo","artikolo");
-    t_main.transire("artikolo","red_xml");
-    t_main.transire("red_xml","red_rigardo");
-    t_main.transire("red_rigardo","red_xml");
-    */
 
     t_main.alvene("titolo",()=>{ 
        hide("x:titol_btn");
@@ -117,6 +101,7 @@ when_doc_ready(function() {
     // difinu agojn por transiroj al cel-statoj
     //t_main.alvene("titolo",()=>{ load_page("main",titolo_url) });
     t_main.alvene("red_xml",()=>{ 
+        t_red.transiro("redaktante"); // transiro al ne_redaktante okazas ĉe sendo aŭ rezigno!
         show("r:tab_txmltxt",'collapsed');
         show("x:rigardo_btn"); 
         hide("x:redakt_btn"); 
@@ -140,6 +125,17 @@ when_doc_ready(function() {
     });
     t_main.forire("red_rigardo",()=>{ 
         hide("r:tab_trigardo",'collapsed');
+    });
+
+    t_red.forire("redaktante",()=>{
+        // memoru enhavon de kelkaj kampoj de la redaktilo
+        redaktilo.store_preferences();
+
+        load_page("main",titolo_url); // ĉu pli bone la ĵus redaktatan artikolon - sed povus konfuzi pro malapero de ŝangoj?
+        load_page("nav",inx_eo_url);
+
+        hide("x:redakt_btn");
+        hide("x:rigardo_btn");
     });
 
     // ni ne kreas la kadron, se ni estas en (la malnova) "frameset"
@@ -467,7 +463,8 @@ function load_page(trg,url,push_state=true) {
             // butono por rezigni
             document.getElementById("r:rezignu")
                 .addEventListener("click",function() {
-
+                    t_red.transiro("ne_redaktante");
+                /* ni faros ene de t_red...
                 // memoru enhavon de kelkaj kampoj de la redaktilo
                 redaktilo.store_preferences();
 
@@ -476,7 +473,13 @@ function load_page(trg,url,push_state=true) {
 
                 hide("x:redakt_btn");
                 hide("x:rigardo_btn");
+                */
             });
+            document.getElementById("r:konservu")
+                .addEventListener("click",function() {
+                    t_red.transiro("ne_redaktante");
+            });
+
         }; 
         index_spread();
 
