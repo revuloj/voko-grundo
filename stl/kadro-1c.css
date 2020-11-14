@@ -388,6 +388,10 @@ nav a:active {
     display: list-item;
 }
 
+#navigado details details {
+    margin-left: 1.2em;
+}
+
 #navigado>a {
     margin: 0.5em 0em;
     max-width: 95%
