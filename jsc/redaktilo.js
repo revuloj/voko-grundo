@@ -305,6 +305,26 @@ var redaktilo = function() {
     document.getElementById('r:cx').value = prefs['r:cx'] || 0;
   }
 
+  // sekurigi la XML-tekston al loka retumila memoro
+  function store_art() {
+    window.localStorage.setItem("red_artikolo",JSON.stringify({
+      'xml': document.getElementById("r:xmltxt").value,
+      'nom': document.getElementById("r:art").value
+      //'red': nova/redakti...
+    }));
+  }
+
+  // restarigi XML-tekston el loka retumila memoro
+  function restore_art() {
+    var str = window.localStorage.getItem("red_artikolo");
+    var art = (str? JSON.parse(str) : null);
+    if (art) {
+      document.getElementById("r:xmltxt").value = art.xml;
+      //  document.getElementById("...").value = art.red;
+      document.getElementById("r:art").value = art.nom;
+    };
+  }
+
   /*
   function tab_toggle(id) {
     var el = document.getElementById(id);
@@ -674,6 +694,10 @@ var redaktilo = function() {
           titolo.setAttribute("href","/revo/art/"+art+".html");
           xmlarea.resetCursor();     
         });
+    } else {
+      // se ne estas donita artikolo kiel parametro, ni provu legi
+      // lastan artikol-tekston el retumila memoro
+      restore_art();
     }
   }
 
@@ -820,5 +844,6 @@ var redaktilo = function() {
     rantaurigardo: rantaurigardo,
     shablono: shablono,
     store_preferences: store_preferences,
+    store_art: store_art
   }
 }();

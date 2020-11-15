@@ -182,7 +182,16 @@ when_doc_ready(function() {
         onclick("x:redakt_btn",()=>{ 
             if (t_nav.stato != "redaktilo")
                 load_page("nav",redaktmenu_url);
-            t_main.transiro("red_xml");
+
+            // ni bezonas eble relegi la redaktilan kadron kaj
+            // fine de tio relegi la artikolon!...
+            if (t_main.stato != "red_xml" && t_main.stato != "red_rigardo")
+                load_page("main",redaktilo_url);
+
+            // metu staton "red_xml" se ni venos de red_rigardo,
+            // aliokaze ni faros tion en load_page - tie ĉi estus tro frue tiuokaze
+            if (t_main.stato == "red_rigardo")
+                t_main.transiro("red_xml");
         });
         //t_main.je("x:redakt_btn","click","red_xml");
 
@@ -566,7 +575,12 @@ function load_page(trg,url,push_state=true) {
 
                 //img_svg_bg(); // anst. fakvinjetojn, se estas la fak-indekso - ni testos en la funkcio mem!
             } else if (main && trg == "main") {
-                // PLIBONIGU: difinu load_page_main kiel ago de transiro
+                // se redaktado ne jam estas finita, sekurigu la artikolon
+                if (t_red.stato == "redaktante" 
+                    && (t_main.stato == "red_xml" || t_main.stato == "red_rigardo"))
+                    redaktilo.store_art();
+
+                // PLIBONIGU: difinu load_page_main kiel ago de transiro(?()
                 load_page_main(doc,main,update_hash);
                 if (url == titolo_url)
                     t_main.transiro("titolo"); 
