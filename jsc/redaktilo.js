@@ -322,6 +322,7 @@ var redaktilo = function() {
       document.getElementById("r:xmltxt").value = art.xml;
       //  document.getElementById("...").value = art.red;
       document.getElementById("r:art").value = art.nom;
+      document.getElementById("r:art_titolo").textContent = art.nom; 
     };
   }
 
@@ -664,6 +665,11 @@ var redaktilo = function() {
           err_list.appendChild(konfirmo);
           err_list.classList.add("konfirmo");
 
+          // ŝanĝu tekston al nurlege
+          document.getElementById("r:xmltxt").setAttribute("readonly","readonly");
+          // ŝanĝu buton-surskribon Rezignu->Finu
+          document.getElementById("r:rezignu").textContent = "Finu"; 
+
           // finu redaktadon
           //hide("x:redakt_btn");
           //hide("x:rigardo_btn");
@@ -725,6 +731,10 @@ var redaktilo = function() {
       restore_preferences_xml();
       sf(0, 0, 1);
       //if (!xmlarea) 
+
+      // ŝanĝu tekston al nurlege
+      document.getElementById("r:xmltxt").removeAttribute("readonly");
+
       xmlarea = new Textarea("r:xmltxt");
       load_xml(params); // se doniĝis ?art=xxx ni fone ŝargas tiun artikolon
     }
@@ -797,6 +807,9 @@ var redaktilo = function() {
     // butono por konservi
     document.getElementById("r:konservu")
       .addEventListener("click",rkonservo);
+
+    // metu buton-surskribon Rezignu
+    document.getElementById("r:rezignu").textContent = "Rezignu"; 
 
     // navigi inter diversaj paneloj kun enmeto-butonoj ktp.
     var fs_t = document.getElementById("r:fs_toggle");

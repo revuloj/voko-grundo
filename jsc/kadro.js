@@ -484,11 +484,6 @@ function load_page(trg,url,push_state=true) {
                 hide("x:rigardo_btn");
                 */
             });
-            document.getElementById("r:konservu")
-                .addEventListener("click",function() {
-                    t_red.transiro("ne_redaktante");
-            });
-
         }; 
         index_spread();
 
