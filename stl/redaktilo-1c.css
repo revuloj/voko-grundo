@@ -30,12 +30,13 @@ h2 {
     /*font-family: monospace;*/
     /*border-radius: 3px;
     border: 1px solid black;*/
-    max-width: 4em;
+    /*max-width: 4em;*/
+    flex: 1;
     overflow: hidden;
     border: none;
     padding: 0.3em 0em;
-    font-size: 1.2em;
-    background: linear-gradient(140deg, var(--main-bgr-clr), var(--main-act-bgr-clr));
+    font-size: 1em;
+    background: linear-gradient(-140deg, var(--main-bgr-clr), var(--main-act-bgr-clr));
 }
 
 #r\:art_titolo {
