@@ -77,9 +77,12 @@ var redaktilo = function() {
 
 
   function shablono(name,selection) {    
+    var p_kursoro = -1;
 
     //function xmlstr(jlist) {
-    return (function xmlstr(jlist) {
+    return [(function xmlstr(jlist) {
+      // $_ ni anstataŭigos per la elektita teksto, 
+      // $<var> per la valoro de elemento kun id="var"
       function val(v) {
         return v == "$_"? 
           selection 
@@ -95,6 +98,7 @@ var redaktilo = function() {
       for (var el of jlist) {
         // string content
         if (typeof el == "string") {
+          if (el == "$_") p_kursoro = xml.length;
           xml += val(el);
         } else {
           // tag name
@@ -109,13 +113,18 @@ var redaktilo = function() {
           // content
           if (el[2]) {
             if (el[2] instanceof Array) {
-              xml += xmlstr(el[2]);
+              const x = xmlstr(el[2]);
+              if (p_kursoro > -1) p_kursoro += xml.length;
+              xml += x;
+              
             } else {
+              if (el[2] == "$_") p_kursoro = xml.length;
               xml += val(el[2]);
             } 
           }
           // closing tag
           if ("/" != el[0].slice(-1)) {
+            //if (p_kursoro < 0) p_kursoro = xml.length;
             xml += "</" + el[0] + ">"    
           }
         }  
@@ -124,7 +133,7 @@ var redaktilo = function() {
     }
     // rekte apliku la supran algoritmon al la ŝablono donita per sia nomo...
     ([ xml_shbl[name] ]) // ni transdonas ĝin kiel unu-elementa listo 
-  )}; 
+  ),p_kursoro]}; 
 
   function Codelist(xmlTag,url) {
     this.url = url;
@@ -229,8 +238,8 @@ var redaktilo = function() {
 
     var pos = xmlarea.scrollPos();
     selText = xmlarea.selection();
-    var text = shablono(shabl,selText).replace(/\n/g,"\n"+xmlarea.indent());
-    xmlarea.selection(text);
+    var [text,p_kursoro] = shablono(shabl,selText);
+    xmlarea.selection(text.replace(/\n/g,"\n"+xmlarea.indent()),p_kursoro);
     xmlarea.scrollPos(pos)
   };
 
@@ -667,9 +676,11 @@ var redaktilo = function() {
 
           // ŝanĝu tekston al nurlege
           document.getElementById("r:xmltxt").setAttribute("readonly","readonly");
-          // ŝanĝu buton-surskribon Rezignu->Finu
+          // ŝanĝu buton-surskribon Rezignu->Finu kaj aktivigu la aliajn du 
           document.getElementById("r:rezignu").textContent = "Finu"; 
-
+          document.getElementById("r:kontrolu").setAttribute("disabled","disabled"); 
+          document.getElementById("r:konservu").setAttribute("disabled","disabled"); 
+      
           // finu redaktadon
           //hide("x:redakt_btn");
           //hide("x:rigardo_btn");
@@ -764,7 +775,7 @@ var redaktilo = function() {
     document.getElementById("r:cx")
       .addEventListener("click",function(event) {
         event.preventDefault();
-        var cx = event.target;
+        var cx = event.currentTarget;
         cx.value = 1 - cx.value; 
         document.getElementById('r:xmltxt').focus()
     });
@@ -808,8 +819,10 @@ var redaktilo = function() {
     document.getElementById("r:konservu")
       .addEventListener("click",rkonservo);
 
-    // metu buton-surskribon Rezignu
+    // metu buton-surskribon Rezignu kaj malaktivigu la aliajn du
     document.getElementById("r:rezignu").textContent = "Rezignu"; 
+    document.getElementById("r:kontrolu").removeAttribute("disabled"); 
+    document.getElementById("r:konservu").removeAttribute("disabled");       
 
     // navigi inter diversaj paneloj kun enmeto-butonoj ktp.
     var fs_t = document.getElementById("r:fs_toggle");
@@ -829,11 +842,11 @@ var redaktilo = function() {
       }
       if (b.classList.contains("help_btn"))
         b.addEventListener("click", function(event) {
-          helpo_pagho(event.target.getAttribute("value"))
+          helpo_pagho(event.currentTarget.getAttribute("value"))
         })
       else
         b.addEventListener("click",function(event) {
-          insert_xml(event.target.getAttribute("value"))
+          insert_xml(event.currentTarget.getAttribute("value"))
         });
     }
   }  

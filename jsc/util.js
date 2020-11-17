@@ -284,7 +284,7 @@ function Textarea(ta_id) {
         }
     },
     
-    Textarea.prototype.selection = function(insertion) {
+    Textarea.prototype.selection = function(insertion,p_kursoro=0) {
         //var txtarea = document.getElementById('r:xmltxt');
         var txtarea = this.txtarea;
         txtarea.focus();
@@ -300,9 +300,12 @@ function Textarea(ta_id) {
               txtarea.value.substring(0, startPos)
               + insertion
               + txtarea.value.substring(txtarea.selectionEnd, txtarea.value.length);
-            // movu la kursoron post la aldonita teksto
-            txtarea.selectionStart = startPos + insertion.length;
+            // movu la kursoron al startPost+p_kursoro
+            txtarea.selectionStart = startPos + p_kursoro;
             txtarea.selectionEnd = txtarea.selectionStart;
+            // movu la kursoron post la aldonita teksto
+            //txtarea.selectionStart = startPos + insertion.length;
+            //txtarea.selectionEnd = txtarea.selectionStart;
           }
         } else { // redonu la markitan tekston
           if (document.selection && document.selection.createRange) { // IE/Opera
