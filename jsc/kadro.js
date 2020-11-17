@@ -206,7 +206,7 @@ when_doc_ready(function() {
         //t_main.je("x:rigardo_btn","click","red_rigardo");
 
         onclick("x:cx",(event)=>{ 
-            var cx = event.target;
+            var cx = event.currentTarget;
             cx.value = 1 - cx.value; 
             document.getElementById('x:q').focus() 
         });
