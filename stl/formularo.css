@@ -81,6 +81,10 @@ button, input[type="button"], input[type="checkbox"] {
     /* font-size: 1rem;*/
 }
 
+button:disabled, input[type="button"]:disabled, input[type="checkbox"]:disabled {
+    background-color: var(--btn-dis-bgr-clr);    
+}
+
 #r\:agobutonoj button {
     padding: .1em .3em;
 }
