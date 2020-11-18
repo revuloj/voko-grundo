@@ -67,7 +67,8 @@ h2 {
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: flex-end;
-    align-items: flex-end;
+    /*align-items: flex-end;*/
+    align-items: stretch;
 
     margin: 0;
 }
