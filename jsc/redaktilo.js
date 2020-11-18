@@ -192,7 +192,7 @@ var redaktilo = function() {
     if (key == 13) {  
       var scrollPos = xmlarea.scrollPos();        
       indent = xmlarea.indent();
-      xmlarea.selection("\n"+indent);
+      xmlarea.selection("\n"+indent,-1);
       xmlarea.scrollPos(scrollPos);
       event.preventDefault();
 
@@ -200,7 +200,7 @@ var redaktilo = function() {
     } else if (key == 88 || key == 120) {   
       var cx = document.getElementById("r:cx");
       if (event.altKey) {	// shortcut alt-x  --> toggle cx
-        cx.value = 1 - cx.value;
+        cx.value = 1 - cx.value || 0;
         event.preventDefault();
       }
   
@@ -217,7 +217,7 @@ var redaktilo = function() {
 
       if (nova != "") {
         //range.text = nova;
-        xmlarea.selection(nova);
+        xmlarea.selection(nova,-1);
         
         xmlarea.scrollPos(scrollPos);
         event.preventDefault();
@@ -233,13 +233,18 @@ var redaktilo = function() {
 
 
   function insert_xml(shabl) {
-    var txtarea = document.getElementById('r:xmltxt');
-    var selText;
+    //var txtarea = document.getElementById('r:xmltxt');
+    //var selText;
 
-    var pos = xmlarea.scrollPos();
-    selText = xmlarea.selection();
+    const pos = xmlarea.scrollPos();
+    const selText = xmlarea.selection();
     var [text,p_kursoro] = shablono(shabl,selText);
-    xmlarea.selection(text.replace(/\n/g,"\n"+xmlarea.indent()),p_kursoro);
+    const indent = xmlarea.indent();
+    // KOREKTU, se $_ ne aperas en la dua linio, pli ĝuste estus
+    // addicii indent.length * (#linioj ĝis $_ -1)
+    xmlarea.selection(
+      text.replace(/\n/g,"\n"+indent),
+      p_kursoro+indent.length);
     xmlarea.scrollPos(pos)
   };
 
@@ -776,7 +781,7 @@ var redaktilo = function() {
       .addEventListener("click",function(event) {
         event.preventDefault();
         var cx = event.currentTarget;
-        cx.value = 1 - cx.value; 
+        cx.value = 1 - cx.value || 0; 
         document.getElementById('r:xmltxt').focus()
     });
 
