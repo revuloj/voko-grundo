@@ -75,9 +75,9 @@ var redaktilo = function() {
     dif: ["dif",{},"$_"]       
   }
 
-
   function shablono(name,selection) {    
     var p_kursoro = -1;
+    var p_lines = 0;
 
     //function xmlstr(jlist) {
     return [(function xmlstr(jlist) {
@@ -98,6 +98,7 @@ var redaktilo = function() {
       for (var el of jlist) {
         // string content
         if (typeof el == "string") {
+          if (p_kursoro < 0 && el.indexOf("\n")>-1) p_lines++;
           if (el == "$_") p_kursoro = xml.length;
           xml += val(el);
         } else {
@@ -133,7 +134,7 @@ var redaktilo = function() {
     }
     // rekte apliku la supran algoritmon al la ŝablono donita per sia nomo...
     ([ xml_shbl[name] ]) // ni transdonas ĝin kiel unu-elementa listo 
-  ),p_kursoro]}; 
+  ),p_kursoro,p_lines]}; 
 
   function Codelist(xmlTag,url) {
     this.url = url;
@@ -238,13 +239,13 @@ var redaktilo = function() {
 
     const pos = xmlarea.scrollPos();
     const selText = xmlarea.selection();
-    var [text,p_kursoro] = shablono(shabl,selText);
+    var [text,p_kursoro,p_lines] = shablono(shabl,selText);
     const indent = xmlarea.indent();
-    // KOREKTU, se $_ ne aperas en la dua linio, pli ĝuste estus
+    // se $_ aperas ie, ni devos
     // addicii indent.length * (#linioj ĝis $_ -1)
     xmlarea.selection(
       text.replace(/\n/g,"\n"+indent),
-      p_kursoro+indent.length);
+      p_kursoro + p_lines*indent.length);
     xmlarea.scrollPos(pos)
   };
 
