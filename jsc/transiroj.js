@@ -148,15 +148,20 @@ Transiroj.prototype.transiro = function (al,de=null,evento) {
     // gardo/ago difinita por de->al
     if (t) _transire(t);
 
-    // ago por .. -> al
-    if (a) _alvene(a);
-
-    // ATENTU: provizore ni senkondiĉe iras al la nova stato
+    // ATENTU: provizore ni senkondiĉe transiras al la nova stato
     // do fiaskinta gardo ne malhelpas tion!
     // se pluraj transiroj eblus depende de la gardo
-    // ni devus unue kontroli la gardon kaj nur poste
-    // fario ĉion ĉi supran kaj fine transiri al la nova stato
+    // (momente permesas nur unu, aliokaze avertas)
+    // ni devus unue kontroli la gardon kaj nur 
+    // se ekzias almenaŭ unu ebla eĝo iri al la nova stato
 
     // notu novan staton...    
     this.stato = al;
+
+    // en _alvene ni povas fari aferojn, kiuj bezonas jam vidi la novan staton
+
+    // ago por .. -> al
+    if (a) _alvene(a);
+
+
 }

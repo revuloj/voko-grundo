@@ -138,7 +138,11 @@ h2 {
 
 #r\:priskribo {
     display: grid;
-    grid-template-columns: auto auto;
+    grid-template-columns: auto 4fr;
+}
+#r\:priskribo input{
+    width: 20em;
+    max-width: 70%;
 }
 #r\:priskribo br {
     display: none

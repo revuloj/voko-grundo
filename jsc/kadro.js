@@ -7,6 +7,7 @@ const titolo_url = "titolo-1c.html";
 const redaktilo_url = "redaktilo-1c.html";
 const redaktmenu_url = "redaktmenu-1c.html";
 //const inx_eo_url = "/revo/inx/_eo.html";
+const index_malnova_url = "/revo/index.html" // poste index-malnova.html aŭ inx/_plena.html
 const inx_eo_url = "/revo/inx/_plena.html";
 const mx_trd_url = "/cgi-bin/mx_trd.pl"
 const http_404_url = "/revo/dlg/404.html";
@@ -40,6 +41,14 @@ when_doc_ready(function() {
 
     // dom_console();
     console.log("kadro.when_doc_ready...")
+
+    // malnova IE ne estas subtenita, iru tuj al manlnova fasado
+    // malnova Edge kun KTHML ne subtenas kelkajn HTML5-aferojn kiel
+    // summary/details - do provizore ankaŭ ĝi ricevos la malnovan paĝaron!
+    if (isIE() || isKHTMLEdge()) {
+        location.href=index_malnova_url;   
+        returnM     
+    }
 
     // sendu erarojn al #console
     if (debug) {
@@ -116,7 +125,8 @@ when_doc_ready(function() {
         hide("x:rigardo_btn"); 
         // tiu servos por reveni al la redaktilo
         // ĝis ni definitive finis redaktadon!
-        show("x:redakt_btn"); 
+        if (t_red.stato == "redaktante") 
+            show("x:redakt_btn"); 
     });
     t_main.alvene("red_rigardo",()=>{ 
         show("r:tab_trigardo",'collapsed');
@@ -131,11 +141,15 @@ when_doc_ready(function() {
         // memoru enhavon de kelkaj kampoj de la redaktilo
         redaktilo.store_preferences();
 
-        load_page("main",titolo_url); // ĉu pli bone la ĵus redaktatan artikolon - sed povus konfuzi pro malapero de ŝangoj?
-        load_page("nav",inx_eo_url);
-
         hide("x:redakt_btn");
         hide("x:rigardo_btn");
+    });
+
+    t_red.alvene("ne_redaktante",()=>{
+        // ni devos fari tion en "alvene", ĉar
+        // load_page kontrolas t_red.stato por scii ĉu montri "x:redakt_btn"
+        load_page("main",titolo_url); // ĉu pli bone la ĵus redaktatan artikolon - sed povus konfuzi pro malapero de ŝangoj?
+        load_page("nav",inx_eo_url);
     });
 
     // ni ne kreas la kadron, se ni estas en (la malnova) "frameset"
@@ -767,6 +781,9 @@ function adaptu_paghon(root_el, url) {
 
 function navigate_link(event) {
     var el = event.target.closest("a");
+
+    if (el.getAttribute("download")) return; // tion traktu la retumilo mem!
+
     var href = el? el.getAttribute("href") : null;
 
     if (el && href) {
@@ -816,8 +833,9 @@ function navigate_history(event) {
     }
 }            
 
-function load_xml(art) {
     /*
+function load_xml(art) {
+
     $("body").css("cursor", "progress");
     $.get('/revo/xml/'+art+'.xml','text')
         .done(function(data) {
@@ -836,9 +854,9 @@ function load_xml(art) {
         .always(function() {
             $("body").css("cursor", "default");
         })
-        */
+       
 }
-
+ */
 
 function serchu(event) {
     event.preventDefault();

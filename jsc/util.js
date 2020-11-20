@@ -127,6 +127,22 @@ function make_icon_button(iclass,handler,hint='') {
     return btn;
 }
 
+function isIE() {
+  ua = navigator.userAgent;
+  /* MSIE used to detect old browsers and Trident used to newer ones*/
+  var is_ie = ua.indexOf("MSIE ") > -1 || ua.indexOf("Trident/") > -1;
+  
+  return is_ie; 
+}
+
+function isKHTMLEdge() {
+  ua = navigator.userAgent;
+  /* MSIE used to detect old browsers and Trident used to newer ones*/
+  var is_ek = ua.indexOf("KHTML ") > -1 && ua.indexOf("Edge/") > -1;
+  
+  return is_ek; 
+}
+
 function isLocalLink(url) {
     if (url[0] == '#') return true;
     // necesas kompari ankaŭ la dosiernomon      
