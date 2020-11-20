@@ -349,10 +349,11 @@ var artikolo = function() {
             // forigu nun unuan ligilon "Revo"
             first_a.nextSibling.remove();
             first_a.remove();
-            // mallongigu referencon xml
+            // mallongigu referencon xml kaj aldonu "download"
             var xml = pied.querySelector("A[href^='../xml/']");
             if (xml) {
-                xml.textContent="xml"
+                xml.textContent="xml";
+                xml.setAttribute("download","download");
             }
             var hst = pied.querySelector("A[href^='../hst/']");
             var ver = hst.nextSibling;
