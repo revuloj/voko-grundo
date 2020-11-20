@@ -764,6 +764,14 @@ var redaktilo = function() {
     document.getElementById("r:xmltxt")
       .addEventListener("keypress",klavo);
 
+    document.getElementById("r:xmltxt")
+      .addEventListener("keyup",function() {
+      // aktualigu pozicion
+      const pos = xmlarea.position();
+      document.getElementById("r:position").textContent=(1+pos.line)+":"+(1+pos.pos);
+    });
+
+
     // butonoj por navigi inter drv kaj en-/elŝovo
     var nav = document.getElementById("r:nav_btn");
     nav.querySelectorAll("button").forEach(function (b) { 

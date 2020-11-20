@@ -283,6 +283,38 @@ function Textarea(ta_id) {
             return document.body.scrollTop;
         }
     },
+
+
+    Textarea.prototype.position = function() {
+      // kalkulu el la signoindekso la linion kaj la pozicion ene de la linio
+      function get_line_pos(inx,text) {
+        var lines = 0;
+        var last_pos = 0;
+        for (i=0; i<inx; i++) { 
+            if (text[i] == '\n') {
+                lines++;
+                last_pos = i;
+            }
+        }
+        pos = (lines == 0)? inx : (inx-last_pos-1);
+        return({line: lines, pos: pos})
+      }
+
+      //...
+      var pos;
+      var txtarea = this.txtarea;
+      if('selectionStart' in txtarea) {
+        pos = txtarea.selectionStart;
+      } else if('selection' in document) {
+        txtarea.focus();
+        var sel = document.selection.createRange();
+        var selLength = document.selection.createRange().text.length;
+        sel.moveStart('character', -txtarea.value.length);
+        pos = sel.text.length - selLength;
+      }
+      return get_line_pos(pos,txtarea.value);
+    }
+
     
     Textarea.prototype.selection = function(insertion,p_kursoro=0) {
         //var txtarea = document.getElementById('r:xmltxt');

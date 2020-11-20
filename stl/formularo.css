@@ -6,16 +6,31 @@
     --toggle-size: 1.79em;
 }
 
+.xmlarea {
+    flex: 1; /* consume available width */  
+    position: relative;   
+}
+
+.xmlarea .position {
+    position: absolute;
+    background-color: var(--pos-bgr-clr);
+    border-radius: 3px;
+    padding: .2em;
+    top: 0.2em;
+    right: 1em;
+    opacity: .8;
+}
+
 textarea {
     margin: 0; /*1px 0.3em;*/
-    height: 25em;
+    height: 100%;
+    width: 100%;
     min-height: 8em;
 
     background-color: var(--input-bgr-clr);
     color: var(--input-fnt-clr);
-
-    flex: 1; /* consume available width */     
 }
+
 
 #navigado fieldset {
     /*
