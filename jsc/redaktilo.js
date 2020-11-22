@@ -679,14 +679,11 @@ var redaktilo = function() {
           console.log("div id=" + konfirmo.id);
           err_list.appendChild(konfirmo);
           err_list.classList.add("konfirmo");
-
-          // ŝanĝu tekston al nurlege
-          document.getElementById("r:xmltxt").setAttribute("readonly","readonly");
-          // ŝanĝu buton-surskribon Rezignu->Finu kaj aktivigu la aliajn du 
-          document.getElementById("r:rezignu").textContent = "Finu"; 
-          document.getElementById("r:kontrolu").setAttribute("disabled","disabled"); 
-          document.getElementById("r:konservu").setAttribute("disabled","disabled"); 
       
+          // adaptu staton kaj rilatajn butonojn...
+          // tio pli bone estu en kadro.js(?)
+          t_red.transiro("sendita");
+
           // finu redaktadon
           //hide("x:redakt_btn");
           //hide("x:rigardo_btn");
@@ -743,6 +740,13 @@ var redaktilo = function() {
   }
 
   function preparu_red(params) {
+
+    function show_pos() {
+      // aktualigu pozicion
+      const pos = xmlarea.position();
+      document.getElementById("r:position").textContent=(1+pos.line)+":"+(1+pos.pos);
+    }
+
     // enlegu bezonaĵojn (listojn, XML-artikolon, preferojn)
     if (document.getElementById("r:xmltxt")) {
       restore_preferences_xml();
@@ -765,11 +769,11 @@ var redaktilo = function() {
       .addEventListener("keypress",klavo);
 
     document.getElementById("r:xmltxt")
-      .addEventListener("keyup",function() {
-      // aktualigu pozicion
-      const pos = xmlarea.position();
-      document.getElementById("r:position").textContent=(1+pos.line)+":"+(1+pos.pos);
-    });
+      .addEventListener("keyup",show_pos);
+    document.getElementById("r:xmltxt")
+      .addEventListener("focus",show_pos);
+    document.getElementById("r:xmltxt")
+      .addEventListener("click",show_pos);
 
 
     // butonoj por navigi inter drv kaj en-/elŝovo
@@ -811,6 +815,7 @@ var redaktilo = function() {
   }
 
   function preparu_menu() {
+
     // enlegu bezonaĵojn (listojn, XML-artikolon, preferojn)
     restore_preferences();
     revo_codes.lingvoj.load();
@@ -834,9 +839,9 @@ var redaktilo = function() {
       .addEventListener("click",rkonservo);
 
     // metu buton-surskribon Rezignu kaj malaktivigu la aliajn du
-    document.getElementById("r:rezignu").textContent = "Rezignu"; 
-    document.getElementById("r:kontrolu").removeAttribute("disabled"); 
-    document.getElementById("r:konservu").removeAttribute("disabled");       
+    //document.getElementById("r:rezignu").textContent = "Rezignu"; 
+    //document.getElementById("r:kontrolu").removeAttribute("disabled"); 
+    //document.getElementById("r:konservu").removeAttribute("disabled");       
 
     // navigi inter diversaj paneloj kun enmeto-butonoj ktp.
     var fs_t = document.getElementById("r:fs_toggle");

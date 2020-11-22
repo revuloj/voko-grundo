@@ -16,7 +16,7 @@ const sercho_videblaj = 7;
 // statoj kaj transiroj
 var t_nav  = new Transiroj("nav","start",["ĉefindekso","subindekso","serĉo","redaktilo"]);
 var t_main = new Transiroj("main","start",["titolo","artikolo","red_xml","red_rigardo"]);
-var t_red  = new Transiroj("red","ne_redaktante",["ne_redaktante","redaktante"]);
+var t_red  = new Transiroj("red","ne_redaktante",["ne_redaktante","redaktante","sendita"]);
 
 
 /*
@@ -95,6 +95,16 @@ when_doc_ready(function() {
         show("x:nav_start_btn");
     });
 
+    t_nav.alvene("redaktilo",()=>{ 
+        // metu buton-surskribon Rezignu kaj malaktivigu la aliajn du
+        if (t_red =="redaktante") {
+                // ĉe sendita ne jam montru, sed eble tio eĉ en povus okazi?
+            document.getElementById("r:rezignu").textContent = "Rezignu"; 
+            enable("r:kontrolu"); 
+            enable("r:konservu");           
+        }
+    });
+
     t_nav.forire("redaktilo",()=>{ 
         hide("x:rigardo_btn");
         // se ni ankoraŭ redaktas, ni bezonas butonon por reveni al la redaktilo!
@@ -151,6 +161,16 @@ when_doc_ready(function() {
         load_page("main",titolo_url); // ĉu pli bone la ĵus redaktatan artikolon - sed povus konfuzi pro malapero de ŝangoj?
         load_page("nav",inx_eo_url);
     });
+
+    t_red.alvene("sendita",()=>{
+        // ŝanĝu tekston al nurlege
+        document.getElementById("r:xmltxt").setAttribute("readonly","readonly");
+        // ŝanĝu buton-surskribon Rezignu->Finu kaj aktivigu la aliajn du 
+        document.getElementById("r:rezignu").textContent = "Finu"; 
+        disable("r:kontrolu"); 
+        disable("r:konservu"); 
+    });
+    
 
     // ni ne kreas la kadron, se ni estas en (la malnova) "frameset"
     if (! top.frames.length) {
@@ -782,7 +802,7 @@ function adaptu_paghon(root_el, url) {
 function navigate_link(event) {
     var el = event.target.closest("a");
 
-    if (el.getAttribute("download")) return; // tion traktu la retumilo mem!
+    if (el && el.getAttribute("download")) return; // tion traktu la retumilo mem!
 
     var href = el? el.getAttribute("href") : null;
 

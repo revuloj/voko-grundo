@@ -65,6 +65,17 @@ function toggle(id,cls='kasxita') {
   else console.warn("toggle: elemento "+id+" ne troviĝis.")
 }
 
+function disable(id) {
+  const el = document.getElementById(id);
+  if (el) el.setAttribute("disabled","disabled");
+  else console.warn("disable: elemento "+id+" ne troviĝis.")
+}
+
+function enable(id) {
+  const el = document.getElementById(id);
+  if (el) el.removeAttribute("disabled");
+  else console.warn("disable: elemento "+id+" ne troviĝis.")
+}
 
 // aliras helpo-paĝon
 function helpo_pagho(url) {
