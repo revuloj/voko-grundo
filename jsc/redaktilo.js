@@ -619,10 +619,13 @@ var redaktilo = function() {
       var doc = parser.parseFromString(data,"text/html");
       var rigardo = document.getElementById("r:tab_trigardo");
 
-      var article = doc.getElementsByTagName("article");
+      var article = doc.getElementsByTagName("article")[0];
       if (article) {
+        // anstataŭigu GIF per SVG  
+        fix_img_svg(article);
+
         rigardo.textContent = '';
-        rigardo.append(...article);  
+        rigardo.append(article);  
         artikolo.preparu_art();
 
         // eble tio devas esti en preparu_art?
@@ -631,7 +634,8 @@ var redaktilo = function() {
             MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
         }
       
-      } else {
+      } /*
+      else {
         // FARENDA: post kiam ĉiuj artikoloj havos HTML5-strukturon ni povos forigi tion
         var body = doc.body;
         var pied = body.querySelector("span.redakto");
@@ -640,6 +644,7 @@ var redaktilo = function() {
         rigardo.textContent = '';
         rigardo.append(...body.childNodes);  
       }
+      */
     });
   }
     

@@ -47,6 +47,37 @@ function HTTPRequest(method, url, params, onSuccess,
     request.send(data);  
 }
 
+
+// anstataŭigu GIF per SVG  
+function fix_img_svg(root_el) {
+  for (var i of root_el.getElementsByTagName("img")) {
+    var src = i.getAttribute("src");
+    //if (src.startsWith("..")) i.setAttribute("src",src.substring(1));
+
+    // aldonu klason por rerencoj
+    if ( src.endsWith('.gif') && !i.classList.length ) {
+      // referencilo
+      var src = i.getAttribute("src");
+      if (src) {
+        var nom = src.split('/').pop().split('.')[0];
+        var svg = {
+          dif: "r_dif", difino: "r_dif", 
+          sin: "r_sin", ant: "r_ant",
+          sub: "r_sub", super: "r_super",
+          prt: "r_sub", malprt: "r_super",
+          vid: "r_vid", vidu: "r_vid",
+          hom: "r_vid",
+          lst: "r_lst", listo: "r_lst",
+          ekz: "r_ekz",
+          url: "r_url"
+        }[nom];
+        if (nom) i.classList.add("ref",svg);
+      }                    
+    }                    
+  }
+}
+
+
 function show(id,cls='kasxita') {
   const el = document.getElementById(id);
   if (el) el.classList.remove(cls);

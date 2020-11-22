@@ -637,37 +637,9 @@ function load_page(trg,url,push_state=true) {
 
 function adaptu_paghon(root_el, url) {
     // adapto de atributoj img-atributoj
-    function fix_img() {
-        for (var i of root_el.getElementsByTagName("img")) {
-            var src = i.getAttribute("src");
-            //if (src.startsWith("..")) i.setAttribute("src",src.substring(1));
-
-            // aldonu klason por rerencoj
-            if (src.endsWith('.gif'))
-                if (! i.classList.length) {
-                    // referencilo
-                    var src = i.getAttribute("src");
-                    if (src) {
-                        var nom = src.split('/').pop().split('.')[0];
-                        var svg = {
-                            dif: "r_dif", difino: "r_dif", 
-                            sin: "r_sin", ant: "r_ant",
-                            sub: "r_sub", super: "r_super",
-                            prt: "r_sub", malprt: "r_super",
-                            vid: "r_vid", vidu: "r_vid",
-                            hom: "r_vid",
-                            lst: "r_lst", listo: "r_lst",
-                            ekz: "r_ekz",
-                            url: "r_url"
-                        }[nom];
-                        if (nom) i.classList.add("ref",svg);
-                    }                    
-                }                    
-        }
-    }
 
     // anstataŭigu GIF per SVG  
-    fix_img();
+    fix_img_svg(root_el);
 
     var filename = url.split('/').pop()
     // index Esperanto
