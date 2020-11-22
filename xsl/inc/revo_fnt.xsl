@@ -57,7 +57,7 @@ reguloj por la prezentado de la fontindikoj
 </xsl:template>
 
 <!-- #######################################
-la fontoreferencoj malsupre de la pagxoj 
+la fontoreferencoj malsupre de la derivaĵoj 
 ############################################ -->
 
 <xsl:template name="fontoj">
@@ -70,6 +70,16 @@ la fontoreferencoj malsupre de la pagxoj
         <xsl:call-template name="mankoj"/>
       </p>
       -->
+    </div>
+  </xsl:if>
+</xsl:template>
+
+<!-- fontindikoj ekster drv.. -->
+<xsl:template name="fontoj-art">
+  <!-- se enestas strukturitaj fontoj, prezentu ilin en propra alineo -->
+  <xsl:if test=".//fnt[bib|aut|vrk|lok and not(ancestor::drv)]"> 
+    <div class="fontoj kasxita">
+      <xsl:apply-templates select=".//fnt[aut|vrk|lok and not(ancestor::drv)]" mode="fontoj"/>
     </div>
   </xsl:if>
 </xsl:template>

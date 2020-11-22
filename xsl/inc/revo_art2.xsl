@@ -64,6 +64,9 @@ uzata kun XSLT2-transformilo
         </xsl:otherwise>
 
       </xsl:choose>
+
+      <!-- fontindikoj, kiuj ne troviĝas ene de drv, t.e. ekz-e en art/kap-->
+      <xsl:call-template name="fontoj-art"/>
     </section>
 
     <!-- prezentu tradukojn en propra alineo 
