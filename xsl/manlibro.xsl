@@ -32,10 +32,12 @@ kreita de Wolfram Diestel
   </head>
   <body>
   
-   <xsl:apply-templates select="h1"/>
-   <xsl:call-template name="enhavo"/> 
-   <xsl:apply-templates select="*[not(self::h1)]"/>
-  
+   <article>
+    <xsl:apply-templates select="h1"/>
+    <xsl:call-template name="enhavo"/> 
+    <xsl:apply-templates select="*[not(self::h1)]"/>
+   </article>
+
   </body>
   </html>
 </xsl:template>
