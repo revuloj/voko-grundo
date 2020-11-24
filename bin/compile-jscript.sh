@@ -16,7 +16,10 @@ compiler="java -jar /usr/local/share/java/closure-compiler.jar"
 # npx google-closure-compiler
 
 js_in="jsc/util.js jsc/transiroj.js jsc/artikolo.js jsc/kadro.js jsc/redaktilo.js"
+js_mn_in="jsc/malnova.js"
+
 js_out=build/jsc/revo-1c.js
+js_mn_out=build/jsc/malnova-1c.js
 opt=BUNDLE
 #opt=SIMPLE
 
@@ -28,4 +31,11 @@ ${compiler} --compilation_level ${opt} \
             --js_module_root jsc --entry_point jsc/kadro.js \
             --js_output_file ${js_out} \
             ${js_in}
+
+echo "$js_mn_out <-- $js_mn_in"
+
+${compiler} --compilation_level ${opt} \
+            --js_module_root jsc \
+            --js_output_file ${js_mn_out} \
+            ${js_mn_in}
            

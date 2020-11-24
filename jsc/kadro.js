@@ -7,7 +7,7 @@ const titolo_url = "titolo-1c.html";
 const redaktilo_url = "redaktilo-1c.html";
 const redaktmenu_url = "redaktmenu-1c.html";
 //const inx_eo_url = "/revo/inx/_eo.html";
-const index_malnova_url = "/revo/index.html" // poste index-malnova.html aŭ inx/_plena.html
+
 const inx_eo_url = "/revo/inx/_plena.html";
 const mx_trd_url = "/cgi-bin/mx_trd.pl"
 const http_404_url = "/revo/dlg/404.html";
@@ -40,15 +40,7 @@ when_doc_ready(function() {
     }
 
     // dom_console();
-    console.log("kadro.when_doc_ready...")
-
-    // malnova IE ne estas subtenita, iru tuj al manlnova fasado
-    // malnova Edge kun KTHML ne subtenas kelkajn HTML5-aferojn kiel
-    // summary/details - do provizore ankaŭ ĝi ricevos la malnovan paĝaron!
-    if (isIE() || isKHTMLEdge()) {
-        location.href=index_malnova_url;   
-        returnM     
-    }
+    console.log("kadro.when_doc_ready...");
 
     // sendu erarojn al #console
     if (debug) {
