@@ -89,11 +89,22 @@ when_doc_ready(function() {
 
     t_nav.alvene("redaktilo",()=>{ 
         // metu buton-surskribon Rezignu kaj malaktivigu la aliajn du
-        if (t_red =="redaktante") {
+        if (t_red.stato == "redaktante") {
                 // ĉe sendita ne jam montru, sed eble tio eĉ en povus okazi?
             document.getElementById("r:rezignu").textContent = "Rezignu"; 
             enable("r:kontrolu"); 
-            enable("r:konservu");           
+            enable("r:konservu");
+
+            // se ni revenas al redaktado post portempa forlaso
+            // ni devos adapti la butonon laŭ t_main
+            // ĉar ĝi ne ŝanĝiĝas kaj do ne mem kaŭzas la adapton
+            if (t_main.stato == "red_xml") {
+                hide("x:redakt_btn");
+                show("x:rigardo_btn");
+            } else if (t_main == "red_rigardo") {
+                show("x:redakt_btn");
+                hide("x:rigardo_btn");
+            }
         }
     });
 
