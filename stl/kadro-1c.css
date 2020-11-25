@@ -298,17 +298,10 @@ nav a:active {
     vertical-align: initial;
 }
 
-/*
-#x\:_eo .enhavo p:first-of-type {
-    margin-top: -.8em;
+#x\:_plena details[open]>summary {
+    border-bottom: 2px solid var(--nav-fnt-clr);
 }
-*/
 
-/*
-#x\:_eo .enhavo p:first-of-type+p {
-    display: none //kaŝu serĉon...
-}
-*/
 #x\:ser\0109o, 
 #x\:_plena h1:empty 
 {
@@ -797,6 +790,18 @@ footer {
 
 .titolmalfono footer {
     padding: .5em;
+}
+
+.titolpagho details[open]>summary {
+    border-bottom: 2px solid var(--main-fnt-clr);
+}
+
+.titolpagho summary {
+    font-weight: bold;
+}
+
+.titolpagho details p {
+    margin-left: 2em;
 }
 
 

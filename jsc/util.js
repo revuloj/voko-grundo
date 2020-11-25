@@ -1,7 +1,6 @@
 // ajax http request
 function HTTPRequest(method, url, params, onSuccess, 
-    onStart = null, onFinish = null,
-    onError = null) {
+    onStart, onFinish, onError) {  // onStart, onFinish, onError vi povas ellasi!
 
     var request = new XMLHttpRequest();
     var data = new FormData();
@@ -16,10 +15,18 @@ function HTTPRequest(method, url, params, onSuccess,
       // alpendigu aktualigilon por eventuale certigi freŝajn paĝojn
       var akt = window.localStorage.getItem("aktualigilo");
       akt = (akt && parseInt(akt)) || 0;
-      if (url.indexOf('?') > -1)
-        url += "&v="+akt
-      else
-        url += "?v="+akt
+
+      if (akt) {
+        const _url = url.split("#");
+
+        if (_url[0].indexOf('?')>-1) {
+          _url[0] += "&v="+akt
+        } else {
+          _url[0] += "?v="+akt
+        }
+
+        url = _url.join('#');
+      }
     }
 
     if (onStart) onStart();

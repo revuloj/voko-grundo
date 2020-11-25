@@ -77,7 +77,7 @@ when_doc_ready(function() {
     ////t_nav.alvene("serĉo",()=>{ const s=getParamValue("q"); serchu_q(s) },getParamValue("q"));
 
     t_nav.alvene("ĉefindekso",()=>{ 
-        if (!t_main.stato == "titolo") 
+        if (t_main.stato != "titolo") 
             show("x:titol_btn");
         hide("x:nav_start_btn");
     });
@@ -118,6 +118,11 @@ when_doc_ready(function() {
 
     t_main.alvene("titolo",()=>{ 
        hide("x:titol_btn");
+    });
+
+    t_main.forire("titolo",()=>{ 
+        if (t_nav.stato == "ĉefindekso") 
+            show("x:titol_btn");
     });
 
     // difinu agojn por transiroj al cel-statoj
@@ -278,13 +283,13 @@ when_doc_ready(function() {
 
         window
             .addEventListener('beforeunload', function() {
-                // tio vokiĝas, i.a. kiam la uzanto reŝargas la paĝon aŭ fermas la redaktilon
-                // por ebligi ŝargi freŝajn paĝojn ni altigas la version, kiu
-                // estas alpendigata al GET, tiel evitante ricevi paĝojn el la loka bufro
-                // uzante sessionStorage ni post remalfermo de la retumilo denove
+                // tio vokiĝas, i.a. kiam la uzanto reŝargas la paĝon aŭ fermas la redaktilon.
+                // Por ebligi ŝargi freŝajn paĝojn ni altigas la version, kiu
+                // estas alpendigata al GET, tiel evitante ricevi paĝojn el la loka bufro.
+                // Se ni uzus sessionStorage ni post remalfermo de la retumilo denove
                 // ricevus pli malnovajn paĝ-versiojn, do ni uzas localStorage
                 const akt = window.localStorage.getItem("aktualigilo");
-                const akt1 = ((akt && parseInt(akt)) || 0) + 1;
+                const akt1 = (((akt && parseInt(akt)) || 0) + 1) % 30000; // +1, sed rekomencu ĉe 0 post 29999
                 window.localStorage.setItem("aktualigilo",akt1);
         });
             
