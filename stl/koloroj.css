@@ -79,7 +79,7 @@
 
     --ref-fnt-clr: #600000;
 
-    --icn-fnt-clr: darkgreen; 
+    --icn-fnt-clr: black; 
     --icn-act-fnt-clr: brown;
     --icn-hov-fnt-clr: coral;
 
@@ -159,6 +159,8 @@
     --klr-fnt-clr: #775533;
     --rim-fnt-clr: skyblue;
     --ref-fnt-clr: chocolate;
+
+    --icn-fnt-clr: lightyellow; 
 
     --adm-fnt-clr: orange;
     --label-fnt-clr: orange;
