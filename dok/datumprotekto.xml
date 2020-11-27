@@ -56,6 +56,7 @@
     fermiĝo de la retumilo. La kuketo kun via retadreso nomiĝas "redaktanto". Se vi ne volas tion, 
     vi povas malŝalti kuketojn en via retumilo. En tiu kazo vi devas reelekti la opciojn kaj redoni vian
     retadreson ĉe ĉiu unuopa redakto.
+    La nova fasado antaŭvideble uzebla ekde 2021 ne plu uzos kuketojn.
     </li>
   </ul>
   </p>
@@ -63,9 +64,10 @@
 
 <li>
   <p>
-   Sur la titolpaĝo ni ofertas plentekstan serĉon per Google. Ĝi aperas kune kun vinjeto de Google.
-   Kiam via retumilo aperigas la titolpaĝon kaj ŝargas la vinjeton de Google, vi ekuzas servon de
-   Google laŭ ĝiaj kondiĉoj kaj kunsento al Google. Aparte, tiel ĉiufoje, kiam vi reprenas la Google-vinjeton
+   Sur la titolpaĝo ni ofertas plentekstan serĉon per apartaj serĉiloj kiel Google, Ecosia, DuckDuckGo. 
+   Kiam vi uzos unu el tiuj serĉiloj, vi ekuzas servon de
+   Google, Ecosia aŭ DuckDuckGo laŭ ties kondiĉoj kaj kunsento. Aparte ĉe Google,
+   tiel ĉiufoje, kiam vi reprenas la Google-vinjeton
    sendiĝas kuketoj kun enhavo identigantaj vian retumilon al Google. 
   </p>
   <p>
@@ -135,6 +137,7 @@
       If you don't want to preserve those information in cookies as described you may disable cookies in your browser.
       In this case you would need to select your options and add your email addresson the edit form after every
       form submit again.
+      The new user interface available since 2021 does not use cookies anymore.
     </li>
   </ul>
   </p>
@@ -142,9 +145,8 @@
 
 <li>
   <p>
-    On the title page we offer a plaintext serach using Google. It appears with a Google icon.
-    When your browser renders the title page, and loads this icon from the Google server, you use
-    Google according to it's privacy policies and according to your consent given to Goolge.
+    On the title page we offer a plaintext serach using Google, Ecosia and DuckDuckGo. Using them, you use
+    Google, Ecosia or DuckDuckGo according to their privacy policies and according to your consent given to them.
     In particular, this way every time the Google icon is loaded, a number of cookies identifying your browser
     is sent to Google.
   </p>
@@ -211,6 +213,7 @@
       Das Cookie mit deiner E-Mail-Adresse heißt "redaktanto". Wenn du keine Cookies möchtest, kannst du sie im
       Browser ausschalten. In diesem Fall musst du bei jeder Verwendung des Änderungsformulars die Optionen neu wählen und
       deine E-Mail-Adresse neu eingeben.
+      Die neue Benutzerfasade, die ab 2021 verfügbar sein wird, benötigt keine Cookies mehr.
     </li>
   </ul>
   </p>
@@ -218,9 +221,9 @@
 
 <li>
   <p>
-    Auf der Titelseite bieten wir eine Google-Volltextsuche an. Sie erscheint mit einem Icon von Google.
-    Sobald dein Browser die Titelseite zusammen mit diesem Icon lädt, fverwendest du den Google-Suchdienst
-    zu Googles Bedingungen und deiner Zustimmung.
+    Auf der Titelseite bieten wir eine Volltextsuche mittels Google, Ecoisa oder DuckDuckGo an. 
+    Wenn du diese verwendest, verwendest du den entsprechenden Suchdienst von Google, eosia oder DuckDuckGo
+    unter deren Bedingungen und entsprechend deiner Zustimmung.
     Insbesondere werden bei jedem Laden des Google-Icons Cookies mitgeschickt, die deinen Browser identifizieren.
   </p>
   <p>
