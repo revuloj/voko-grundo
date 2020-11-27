@@ -6,7 +6,7 @@ skalo:=1;
 picture pic;
 pic := image (
 
-    drawoptions(withcolor .3green);
+    %drawoptions(withcolor .3green);
 
     pickup pencircle scaled 12;
     draw (-50,100)--(50,100);
