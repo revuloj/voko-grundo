@@ -5,7 +5,7 @@ skalo:=1;
 
 picture pic;
 pic := image (
-    pickup pencircle scaled 12;
+    pickup pencircle scaled 13;
     draw (-35,0)--(-55,50)--(-35,100);
     draw (35,0)--(55,50)--(35,100);
     draw (-10,10)--(10,90);
