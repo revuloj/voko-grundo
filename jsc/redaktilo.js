@@ -40,6 +40,7 @@ var redaktilo = function() {
     klr_ppp: ["klr",{},"[&#x2026;]"],
     ind: ["ind",{},"$_"],
     ref_tip: ["ref",{tip:"$r:reftip",cel:""},"$_"],
+    ref_lst: ["ref",{tip:"$r:reftip",lst:"voko:",cel:""},"$_"],
     ref: ["ref",{cel:""},"$_"],
     refgrp: ["refgrp",{tip:"$r:reftip"},[
         "\n  ",["ref",{cel:""},"$_"],
@@ -52,6 +53,9 @@ var redaktilo = function() {
     uzo_fak: ["uzo",{tip:"fak"},"$r:sfak"],
     uzo_stl: ["uzo",{tip:"stl"},"$r:sstl"],
     ekz: ["ekz",{},"$_"],
+    nom: ["nom",{},"$_"],
+    nac: ["nac",{},"$_"],
+    esc: ["esc",{},"$_"],
     tld: ["tld/"],
     fnt: ["fnt",{},[
             "\n  ",["bib"],
@@ -870,7 +874,8 @@ var redaktilo = function() {
         })
       else
         b.addEventListener("click",function(event) {
-          insert_xml(event.currentTarget.getAttribute("value"))
+          const v = event.currentTarget.getAttribute("value");
+          insert_xml(v);
         });
     }
   }  
