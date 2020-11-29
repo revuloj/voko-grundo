@@ -12,12 +12,19 @@ host=retavortaro.de
 release=1c
 
 scp build/jsc/revo-${release}.js ${host}:/html/revo/jsc/
+scp build/jsc/malnova-${release}.js ${host}:/html/revo/jsc/
+
 scp build/stl/revo-${release}-min.css ${host}:/html/revo/stl/
 
 #scp jsc/revo-art-${release}.js ${host}:/html/revo/jsc/
 #
 #scp stl/artikolo-${release}.css ${host}:/html/revo/stl/
 #scp stl/piktogram-${release}.css ${host}:/html/revo/stl/
+
+
+scp build/dok/datumprotekto.html ${host}:/html/revo/dok/
+
+
 #
 #for f in xsl/inc/*
 #do
