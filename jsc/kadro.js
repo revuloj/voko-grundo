@@ -58,7 +58,8 @@ when_doc_ready(function() {
         })    
     }
 
-    restore_preferences();
+    // preferataj lingvoj
+    preferoj.restore();
 
     //// PLIBONIGU: provizore limigu Transiroj-n al memorado de la momenta stato
     //// kaj adapto de videbleco / stato de butonoj, sed rezignu pri tro komplikaj
@@ -515,16 +516,6 @@ function load_page(trg,url,push_state=true) {
             document.getElementById("r:rezignu")
                 .addEventListener("click",function() {
                     t_red.transiro("ne_redaktante");
-                /* ni faros ene de t_red...
-                // memoru enhavon de kelkaj kampoj de la redaktilo
-                redaktilo.store_preferences();
-
-                load_page("main",titolo_url); // pli bone la ĵus redaktatan artikolon!
-                load_page("nav",inx_eo_url);
-
-                hide("x:redakt_btn");
-                hide("x:rigardo_btn");
-                */
             });
         }; 
         index_spread();
@@ -876,7 +867,9 @@ function serchu(event) {
 function serchu_q(esprimo) {
 
     //console.debug("Ni serĉu:"+esprimo);
-    HTTPRequest('POST', sercho_url, {sercxata: esprimo},
+    HTTPRequestFull('POST', sercho_url, 
+        {"Accept-Language": preferoj.languages().join(',')},
+        {sercxata: esprimo},
         function(data) {
 
             // la rezulto estas listo de objektoj po lingvo kiu enhavas po unu trov-liston:
@@ -1073,11 +1066,4 @@ function redaktu(href) {
     load_page("nav",redaktmenu_url);
 }
 
-function restore_preferences() {
-    // tion ni momente povas fari nur, kiam la redaktilo
-    // jam ĉeestas, ĉar ni metas valorojn 
-    // rekte al DOM:
-    // redaktilo.restore_preferences();
-    artikolo.restore_preferences();
-}
 

@@ -1,18 +1,12 @@
 // ajax http request
-function HTTPRequest(method, url, params, onSuccess, 
+function HTTPRequestFull(method, url, headers, params, onSuccess, 
     onStart, onFinish, onError) {  // onStart, onFinish, onError vi povas ellasi!
 
     var request = new XMLHttpRequest();
     var data = new FormData();
 
-    // PLIBONIGU: momente tio funkcias nur por POST, 
-    //sed ĉe GET ni devus alpendigi tion al la URL!
-    for (let [key, value] of Object.entries(params)) {
-        data.append(key,value);
-    }
-
-    if (method.toUpperCase() == "GET") {
       // alpendigu aktualigilon por eventuale certigi freŝajn paĝojn
+    function url_v() {
       var akt = window.localStorage.getItem("aktualigilo");
       akt = (akt && parseInt(akt)) || 0;
 
@@ -29,8 +23,27 @@ function HTTPRequest(method, url, params, onSuccess,
       }
     }
 
+    // parametroj
+    // PLIBONIGU: momente tio funkcias nur por POST, 
+    // sed ĉe GET ni devus alpendigi tion al la URL!
+    for (let [key, value] of Object.entries(params)) {
+        data.append(key,value);
+    }
+
+    // alpendigu version por certigi freŝan paĝon
+    if (method.toUpperCase() == "GET") {
+      url_v();
+    }
+
     if (onStart) onStart();
     request.open(method, url , true);
+
+    // kapo-linioj
+    if (headers) {
+      for (let [key,value] of Object.entries(headers)) {
+        request.setRequestHeader(key,value);
+      }      
+    }
     
     request.onload = function() {
       if (this.status >= 200 && this.status < 400) {
@@ -52,6 +65,12 @@ function HTTPRequest(method, url, params, onSuccess,
     
     //request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
     request.send(data);  
+}
+
+function HTTPRequest(method, url, params, onSuccess, 
+  onStart, onFinish, onError) {  // onStart, onFinish, onError vi povas ellasi!
+    HTTPRequestFull(method, url, null, params, onSuccess, 
+    onStart, onFinish, onError);
 }
 
 
@@ -203,6 +222,7 @@ function getHashParts() {
     }
     return r;
 }
+
 
 // ĉu ni vere bezonos tion? parametroj estas afero de la servilo,
 // sed ni povas kaŝi ilin ankaŭ post #, vd. supre getHashParts
@@ -495,4 +515,3 @@ function Textarea(ta_id) {
       }
 
 
-   
