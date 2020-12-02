@@ -1,7 +1,7 @@
 
 const debug=false; // ni bezonas provizore aparte por vidi erarojn en iOS Webkit, kie ni ne havas "console"
 const revo_url = "reta-vortaro.de";
-const sercho_url = "/cgi-bin/sercxu-json.pl";
+const sercho_url = "/cgi-bin/sercxu-json-1c.pl";
 const hazarda_url = "/cgi-bin/hazarda_art.pl";
 const titolo_url = "titolo-1c.html";
 const redaktilo_url = "redaktilo-1c.html";
@@ -886,7 +886,7 @@ function serchu_q(esprimo) {
                     ],
                     ["dd"]
                 ]);
-                // funkcio por malkovri la reston...
+                // funkcio por malkaŝi la reston...
                 pli[0].addEventListener("click",function(event) {
                     var dl = event.target.closest("dl");
                     for (ch of dl.childNodes) {
@@ -910,10 +910,10 @@ function serchu_q(esprimo) {
                 // ĉe lng1=eo pro variaĵoj povas okazi, ke la ordo ne estas
                 // perfekta, do ni reordigu
                 var trvj = [];
-                if (lng.lng1 == "eo") {
+                if (lng.lng == "eo") {
                     trvj = lng.trovoj.sort(function(a,b) {
                         // ĉu localeCompare por eo funkcias ĉie, kio pri iOS, Windows...?
-                        return a.vrt1.localeCompare(b.vrt1,'eo');
+                        return a.eo.vrt.localeCompare(b.eo.vrt,'eo');
                     })
                 } else {
                     trvj = lng.trovoj; // lasu la ordon por aliaj lingvoj
@@ -940,25 +940,26 @@ function serchu_q(esprimo) {
                     }
                     var dt = make_elements([
                         ["dt",atr,
-                            [["a",{target: "precipa", href: t.art+".html#"+t.mrk1},t.vrt1]]
+                            [["a",{target: "precipa", href: t.art+".html#"+t.eo.mrk},t.eo.vrt]]
                         ]])[0];
                     var dd = make_elements([
+                        // ni trairu ĉiujn lingvojn, kiuj ne estas 'eo'....
                         ["dd",atr,
-                            [["a",{target: "precipa", href: t.art+".html#"+t.mrk2},t.vrt2]]
+                            [["a",{target: "precipa", href: t.art+".html#"+t.de.mrk},t.de.vrt]]
                         ]
                     ])[0];
-                    // grupigu tradukojn de samaj trov-vortojn
-                    while (trvj[n+1] && trvj[n+1].mrk1 == t.mrk1 && trvj[n+1].vrt1 == t.vrt1) {
-                        var t1 = trvj[++n];
-                        // ignorante duoblajn salto-markojn...
-                        if (t.mrk2 != t1.mrk2 || t.vrt2 != t1.vrt2) {
-                            var a = make_elements([
-                                ["br"],
-                                ["a",{target: "precipa", href: t1.art+".html#"+t1.mrk2},t1.vrt2]
-                            ]);
-                            dd.append(...a);    
-                        }
-                    }
+                    // grupigu tradukojn de samaj trov-vortoj
+                    //while (trvj[n+1] && trvj[n+1].mrk == t.eo.mrk && trvj[n+1].eo.vrt == t.vrt) {
+                    //    var t1 = trvj[++n];
+                    //    // ignorante duoblajn salto-markojn...
+                    //    if (t.en.mrk != t1.en.mrk || t.en.vrt != t1.en.vrt) {
+                    //        var a = make_elements([
+                    //            ["br"],
+                    //            ["a",{target: "precipa", href: t1.art+".html#"+t1.en.mrk},t1.en.vrt]
+                    //        ]);
+                    //        dd.append(...a);    
+                    //    }
+                    //}
                     dl.append(dt,dd);
                 }
                 div.append(dl);
