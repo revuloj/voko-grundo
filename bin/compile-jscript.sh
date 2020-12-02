@@ -40,13 +40,15 @@ ${compiler} --compilation_level ${opt} \
             ${js_mn_in}
            
 # kopiu al procezujo "araneujo", se tiu estas aktiva... 
-araneo_id=$(docker ps --filter name=araneujo_araneo -q)
-target=/usr/local/apache2/htdocs/revo/jsc
+if [[ $(command -v docker) ]]; then
+  araneo_id=$(docker ps --filter name=araneujo_araneo -q)
+  target=/usr/local/apache2/htdocs/revo/jsc
 
-if [[ ! -z "$araneo_id" ]]; then
+  if [[ ! -z "$araneo_id" ]]; then
     echo "kopiante ${js_out}, ${js_mn_out} al ${araneo_id}:${target}"
 
     docker cp ${js_out} ${araneo_id}:${target}
     docker cp ${js_mn_out} ${araneo_id}:${target}
     docker exec ${araneo_id} bash -c "chown root.root ${target}; ls -l ${target}"
+  fi
 fi
