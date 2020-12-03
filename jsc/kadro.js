@@ -938,16 +938,37 @@ function serchu_q(esprimo) {
                         }                        
                         atr = {class: "kasxita"}
                     }
+                    // eo -> pref_lng
+                    const _ll_ = lng.lng;
                     var dt = make_elements([
+                        // tradukoj oni momente ne povas ne povas rekte alsalti,
+                        // do ni provizore uzas t.eo.mrk anst. t[l].mrk
                         ["dt",atr,
-                            [["a",{target: "precipa", href: t.art+".html#"+t.eo.mrk},t.eo.vrt]]
+                            [["a",{target: "precipa", href: t.art+".html#"+t.eo.mrk},t[_ll_].vrt]]
                         ]])[0];
-                    var dd = make_elements([
+                    var dd = make_element("dd",atr);
+                    for (let l in t) {
                         // ni trairu ĉiujn lingvojn, kiuj ne estas 'eo'....
-                        ["dd",atr,
-                            [["a",{target: "precipa", href: t.art+".html#"+t.de.mrk},t.de.vrt]]
-                        ]
-                    ])[0];
+                        if (l != _ll_ && l != 'art') {
+                            // tradukoj oni momente ne povas ne povas rekte alsalti,
+                            // do ni provizore uzas t.eo.mrk anst. t[l].mrk
+                            var a;
+                            if (l == 'eo') {
+                                var a = make_elements([
+                                    ["a",{target: "precipa", href: t.art+".html#"+t.eo.mrk},
+                                        t[l].vrt
+                                    ]
+                                ]);    
+                            } else {
+                                var a = make_elements([
+                                    ["a",{target: "precipa", href: t.art+".html#"+t.eo.mrk},
+                                        [["code",{},l+":"],t[l].vrt]
+                                    ]
+                                ]);    
+                            }
+                            dd.append(...a);
+                        }
+                    };
                     // grupigu tradukojn de samaj trov-vortoj
                     //while (trvj[n+1] && trvj[n+1].mrk == t.eo.mrk && trvj[n+1].eo.vrt == t.vrt) {
                     //    var t1 = trvj[++n];

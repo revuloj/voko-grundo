@@ -618,13 +618,17 @@ nav li {
 ****************************************/
 
 #x\:trovoj dt a {
-    border-bottom: 1px dotted var(--nav-brd-clr);
+    border-bottom: 1px solid var(--nav-brd-clr);
 }
 
 #x\:trovoj dd {
-    border-left: 2px solid var(--nav-brd-clr);
+    border-left: 2px dotted var(--nav-brd-clr);
     margin-left: 5em;
     padding-left: .3em;
+}
+
+#x\:trovoj dd code {
+    color: var(--nav-code-fnt-clr);
 }
 
 
@@ -792,6 +796,10 @@ footer {
     padding: .5em;
 }
 
+.titolpagho details {
+    margin-top: .7em;
+}
+
 .titolpagho details[open]>summary {
     border-bottom: 2px solid var(--main-fnt-clr);
 }
@@ -800,9 +808,19 @@ footer {
     font-weight: bold;
 }
 
+.titolpagho summary:focus {
+    outline-style: dotted;
+    outline-width: thin;
+}
+
 .titolpagho details p {
     margin-left: 2em;
+    max-width: 30em;
+    border-left: 2px dotted var(--main-fnt-clr);
+    padding-left: .7em;
 }
+
+
 
 
 @media (prefers-color-scheme: dark) {
@@ -958,118 +976,4 @@ div.e404 {
 }
 
 
-
-/*
-.ix_literoj > label {
-    font-weight: bold;
-    text-align: right;
-    padding: .1em;
-}
-.ix_literoj > label::after {
-    content: ":\00a0"
-} 
-.ix_literoj input {
-    display: none;
-} 
-.ix_literoj input:checked + label {
-    *border-radius: 2px;*
-    padding: .1em;
-    *background: var(--list-act-bgr-clr);*
-    border-bottom: 3px solid var(--main-brd-clr);
-} 
-*/
-
-/***
-#s_artikolo {
-    margin-left: 1em;
-    margin-right: 1em;
-    font-family: serif;
-}
-
-#s_sercho {
-    flex-grow: 1;
-    text-align: center;
-    margin-top: 1em;
-}
-
-#sercho {
-    text-align: center;
-}
-
-#sercho_ek {
-    font-size: 200%;
-}
-
-#trovoj {
-    display: flex;
-    flex-wrap: wrap;
-}
-
-#trovoj table {
-    min-width: 48%;
-    padding: 1em;
-    margin: auto;
-    border-collapse: separate;
-    border-spacing: 0 0.3em;
-}
-
-#trovoj td {
-    padding: 0.5em;
-}
-
-#trovoj td:first-child {
-    background-color: var(--list-bgr-clr);
-    border-top-left-radius: 0.5em;
-    border-bottom-left-radius: 0.5em;
-    border-right: 2px solid gainsboro;
-}
-
-#trovoj td:nth-child(2) {
-    background-color: var(--list2-bg-color);
-    border-top-right-radius: 0.5em;
-    border-bottom-right-radius: 0.5em;
-}
-
-#trovoj td:nth-child(2):hover {
-    background-color: var(--list2-highlight-bg-color);
-    color: var(--highlight-color);
-}
-
-#lng, #kat {
-    width: 3em;
-}
-
-.cirklo {
-    height: 1.1em;
-    width: 1.1em;
-    font-size: 400%;
-    font-family: sans-serif;
-    font-weight: 900;
-    text-shadow: 1px 1px silver;
-    padding: 0.2em;
-    text-align: center;
-    border-radius: 50%;
-    border: 2px solid gray;
-    background-color: var(--button-bg-color);
-    background-image: radial-gradient(at 49.5% 49.5%, darkgoldenrod 20%, goldenrod 60%, khaki 80%);
-    box-shadow: 10px 10px 20px;
-    position: relative;
-}
-.cirklo.R { top: 0em; }
-.cirklo.E { z-index: 10; top: 0.6em; left: -0.2em; }
-.cirklo.V { z-index: 5; top: 0.25em; left: -0.3em; }
-.cirklo.O { top: 0.5em; left: -0.4em; }
-
-@media all and (max-width: 50em) {
-    #serchteksto { width: 70% }
-}
-@media all and (max-height: 50em) {
-    header { margin-bottom: 1.5em }
-    .cirklo { font-size: 280% }
-}
-@media all and (max-width: 30em) {
-    header { padding-left: 1.8em; margin-right: -0.4em }
-    .cirklo { font-size: 250% }
-}
-***/
 

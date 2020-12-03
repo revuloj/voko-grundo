@@ -17,6 +17,8 @@
     /* por navigado */
     --nav-fnt-clr: black;
     --nav-enh-fnt-clr: #021; /* teksto en la indekso, kiun oni ne povas alklaki */
+    --nav-code-fnt-clr: #333; 
+
     --nav-bgr-clr: #eAb530  /* #FAC540  #eAb530 goldenrod */;
     --nav-brd-clr: black;
     --nav-hov-bgr-clr: lightgoldenrodyellow;
@@ -105,6 +107,7 @@
     /* por navigado */
     --nav-fnt-clr: black;
     --nav-enh-fnt-clr: #021; /*bisque; /* teksto en la indekso, kiun oni ne povas alklaki */
+
     --nav-bgr-clr: darkorange; /* #c2590E /* #B8860B #FAC540  #eAb530 goldenrod */;
     --nav-brd-clr: ivory;
     --nav-hov-bgr-clr: palegoldenrod;
