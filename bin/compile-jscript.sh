@@ -20,6 +20,7 @@ js_mn_in="jsc/malnova.js"
 
 js_out=build/jsc/revo-1c.js
 js_mn_out=build/jsc/malnova-1c.js
+js_art=jsc/revo-art-1b.js
 opt=BUNDLE
 #opt=SIMPLE
 
@@ -45,10 +46,11 @@ if [[ $(command -v docker) ]]; then
   target=/usr/local/apache2/htdocs/revo/jsc
 
   if [[ ! -z "$araneo_id" ]]; then
-    echo "kopiante ${js_out}, ${js_mn_out} al ${araneo_id}:${target}"
+    echo "kopiante ${js_out}, ${js_mn_out}, ${js_art} al ${araneo_id}:${target}"
 
     docker cp ${js_out} ${araneo_id}:${target}
     docker cp ${js_mn_out} ${araneo_id}:${target}
+    docker cp ${js_art} ${araneo_id}:${target}
     docker exec ${araneo_id} bash -c "chown root.root ${target}; ls -l ${target}"
   fi
 fi

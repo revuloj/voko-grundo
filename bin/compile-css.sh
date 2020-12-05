@@ -49,6 +49,12 @@ do
     echo ${CSS} >>$out
 done
 
+# kopiu ankaŭ stilfolion por la artikolo, por unuope montri ĝin
+echo $(pwd)/build/stl/
+echo "  <- artikolo-1c.css"
+cp $dir/artikolo-1c.css $(pwd)/build/stl/
+
+
       
 # kopiu al procezujo "araneujo", se tiu estas aktiva... 
 if [[ $(command -v docker) ]]; then
@@ -56,9 +62,11 @@ if [[ $(command -v docker) ]]; then
   target=/usr/local/apache2/htdocs/revo/stl
 
   if [[ ! -z "$araneo_id" ]]; then
-    echo "kopiante ${out} al ${araneo_id}:${target}"
+    echo "kopiante ${out} kaj artikolo-1c.css"
+    echo "al ${araneo_id}:${target}"
 
     docker cp ${out} ${araneo_id}:${target}
+    docker cp $(pwd)/build/stl/artikolo-1c.css ${araneo_id}:${target}
     docker exec ${araneo_id} bash -c "chown root.root ${target}; ls -l ${target}"
   fi
 fi

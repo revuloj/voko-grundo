@@ -16,7 +16,7 @@ main h1 {
     color: var(--main-fnt-clr) !important;
     /*font-size: large*/
     }
-main h2 {color: var(--main-fnt-clr); 
+main h2, article h2 {color: var(--main-fnt-clr); 
     font-size: 110%; 
     background: var(--mh2-bgr-clr);
 /*    background-image: url(angulo.png);
@@ -735,6 +735,16 @@ dt.pli, .ekz.pli, a.pli {
 @media (max-height: 30em) and (min-width: 30em) {
     #alia_lng {
         columns: 3;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    article IMG.fak {
+        filter: invert(1) brightness(0.8) sepia(0.9);
+    }
+
+    article IMG[src$='gif'] {
+        filter: invert(1) brightness(0.8) sepia(0.9);
     }
 }
 
