@@ -40,7 +40,7 @@ var redaktilo = function() {
     klr_ppp: ["klr",{},"[&#x2026;]"],
     ind: ["ind",{},"$_"],
     ref_tip: ["ref",{tip:"$r:reftip",cel:""},"$_"],
-    ref_lst: ["ref",{tip:"$r:reftip",lst:"voko:",cel:""},"$_"],
+    ref_lst: ["ref",{tip:"lst",lst:"voko:",cel:""},"$_"],
     ref: ["ref",{cel:""},"$_"],
     refgrp: ["refgrp",{tip:"$r:reftip"},[
         "\n  ",["ref",{cel:""},"$_"],
