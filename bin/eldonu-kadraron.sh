@@ -15,7 +15,7 @@ release=1c
 #scp build/jsc/malnova-${release}.js ${host}:/html/revo/jsc/
 #
 #scp build/stl/revo-${release}-min.css ${host}:/html/revo/stl/
-scp build/stl/artikolo-${release}.css ${host}:/html/revo/stl/
+#scp build/stl/artikolo-${release}.css ${host}:/html/revo/stl/
 #
 ##scp jsc/revo-art-${release}.js ${host}:/html/revo/jsc/
 ##
@@ -25,6 +25,10 @@ scp build/stl/artikolo-${release}.css ${host}:/html/revo/stl/
 #
 #scp build/dok/datumprotekto.html ${host}:/html/revo/dok/
 
+#scp cfg/sercxo-google.xml ${host}:/html/revo/cfg/
+#scp cfg/sercxo-ecosia.xml ${host}:/html/revo/cfg/
+#scp cfg/sercxo-anaso.xml ${host}:/html/revo/cfg/
+scp cfg/sercxo-revo.xml ${host}:/html/revo/cfg/
 
 #
 #for f in xsl/inc/*
