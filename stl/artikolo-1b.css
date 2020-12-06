@@ -19,7 +19,8 @@ only screen and (                min-resolution: 2dppx) {
 H1 {color: #000000; font-size: large}
 H2 {color: #000000; 
     font-size: 110%; 
-    background: #E0E0A0;
+    background: #eab530;
+    border: 1px solid darkgoldenrod;
     border-top-left-radius: .7em;
     padding-left: 1ex;
     padding-top: 0.5ex;
@@ -426,10 +427,10 @@ i.ekz::before, span.ekztrd::before { content: "\00a0•\00a0" }
 
     /*border: 1px solid gray;*/
     box-shadow: 1px 1px 3px gray;
-    background-color: #E0E0A0;
+    background-color: khaki;
 
     /* border: none; */
-    border: 1px solid #E0E0A0;
+    border: 1px solid darkgoldenrod;
     border-radius: .4em;
 }
 
@@ -497,7 +498,8 @@ a.pli, a.pref {
     font-style: oblique;
     text-decoration: none;
     color: darkgreen;
-    background: #E0E0A0;
+    background: khaki;
+    border-color: darkgoldenrod;
     border-radius: .5em;
     padding: .1em .3em;
     margin-bottom: .1em;

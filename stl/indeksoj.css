@@ -39,13 +39,14 @@ A:hover B {color: red;background-color: #d5d5a5}
 
 TABLE { width: 100%}
 
-td.aktiva {background-color: #e0e0a0; 
+td.aktiva {background-color: khaki; 
   padding-left: 10px;
   border-style: solid; border-color: gray;
   border-bottom-width: 0px;
-  border-right-width: 1px;
-  border-top-width: 0px;
-  border-left-width: 0px;
+  border-right: 1px solid darkgoldenrod;
+  border-top-left-radius: 14px;
+  border-top: 1px solid darkgoldenrod;
+  border-left: 1px solid darkgoldenrod;
   background-image: url(angulo.png);
   background-repeat: no-repeat;
 }
