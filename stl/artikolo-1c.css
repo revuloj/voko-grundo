@@ -279,6 +279,18 @@ IMG {
     background: none 
 }
 
+/** tio venos post kadro.css IMG.ref kaj tiel kolizias...
+@media (prefers-color-scheme: dark) {
+    article IMG.fak {
+        filter: invert(1) brightness(0.8) sepia(0.9);
+    }
+
+    article IMG[src$='gif'] {
+        filter: invert(1) brightness(0.8) sepia(0.9);
+    }    
+}
+***/
+
 .center {
     text-align: center;
 }
@@ -745,13 +757,4 @@ dt.pli, .ekz.pli, a.pli {
     }
 }
 
-@media (prefers-color-scheme: dark) {
-    article IMG.fak {
-        filter: invert(1) brightness(0.8) sepia(0.9);
-    }
-
-    article IMG[src$='gif'] {
-        filter: invert(1) brightness(0.8) sepia(0.9);
-    }
-}
 
