@@ -15,7 +15,7 @@ compiler="java -jar /usr/local/share/java/closure-compiler.jar"
 # aŭ (post): npm install google-closure-compiler
 # npx google-closure-compiler
 
-js_in="jsc/util.js jsc/transiroj.js jsc/preferoj.js jsc/artikolo.js jsc/kadro.js jsc/redaktilo.js"
+js_in="jsc/util.js jsc/transiroj.js jsc/preferoj.js jsc/artikolo.js jsc/kadro.js jsc/voko_entities.js jsc/redaktilo.js"
 js_mn_in="jsc/malnova.js"
 
 js_out=build/jsc/revo-1c.js

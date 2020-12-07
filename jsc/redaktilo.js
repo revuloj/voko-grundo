@@ -560,6 +560,15 @@ var redaktilo = function() {
   }
 
   function rkonservo() {
+    function replace_entities(xml) {
+      for (const [key, value] of Object.entries(voko_entities)) {
+          if (value.length > 1) { // la unuojn de longeco 1 anstataŭigas vokomailx.pl ( revo::encode) 
+          }  
+      }
+      return xml;
+    }
+
+
     var art = document.getElementById("r:art").value;
     var xml = document.getElementById("r:xmltxt").value;
 
@@ -711,12 +720,20 @@ var redaktilo = function() {
 
   function load_xml(params) {
     var art = getParamValue("art",params);
+
+    function replace_entities(data) {
+        return data.replace(/&[^;]+;/g, function (ent) {
+          const key = ent.slice(1,-1);
+          return voko_entities[key];
+        }); 
+    }
+
     if (art) {
 
       HTTPRequest('GET','/revo/xml/'+art+'.xml',{},
       function(data) {
           // Success!
-          document.getElementById('r:xmltxt').value = data;
+          document.getElementById('r:xmltxt').value = replace_entities(data);
           document.getElementById("r:art").value = art;
           var titolo = document.getElementById("r:art_titolo");
           titolo.textContent = art; 
