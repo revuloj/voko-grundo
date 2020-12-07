@@ -560,14 +560,29 @@ var redaktilo = function() {
   }
 
   function rkonservo() {
+    // PLIBONIGU: estas ioma risko ke tiel oni retrovas unuon en la ŝlosilnomo de jam anstataŭigita unuo
+    // do eble estus plibone trakuri la tekston signon post signo, ignori dume xml-nomoj sed
+    // konsideru nur atributojn kaj tekstojn. Kaj se komenco de signovico identas kun unuo-valoro
+    // anstataŭigi, sed poste rigardi nur la restantan tekston...
+    // Tiam oni povus ankaŭ anstataŭigi unuojn de longeco 1 kaj forigi revo:encode en la servila flanko!
+    /* provizore ni rezignas pri tio ĉi kaj anstatŭigas en load_xml nur unuojn de longeco 1...
     function replace_entities(xml) {
+      function _repl_ent(key,value,xml) {
+        const pos = xml.indexOf(value);
+        if (pos>-1) {
+          return xml.slice(0,pos) + "&" + key + ";" + _repl_ent(key,value,xml.slice(pos+value.length));
+        } else {
+          return xml;
+        }
+      }
       for (const [key, value] of Object.entries(voko_entities)) {
-          if (value.length > 1) { // la unuojn de longeco 1 anstataŭigas vokomailx.pl ( revo::encode) 
+          if (value.length > 1) { // la unuojn de longeco 1 anstataŭigas vokomailx.pl ( revo::encode )
+            xml = _repl_ent(key,value,xml);
           }  
       }
       return xml;
     }
-
+    */
 
     var art = document.getElementById("r:art").value;
     var xml = document.getElementById("r:xmltxt").value;
@@ -722,9 +737,10 @@ var redaktilo = function() {
     var art = getParamValue("art",params);
 
     function replace_entities(data) {
-        return data.replace(/&[^;]+;/g, function (ent) {
+        return data.replace(/&[^;\s]+;/g, function (ent) {
           const key = ent.slice(1,-1);
-          return voko_entities[key];
+          const val = voko_entities[key];
+          return (val && val.length == 1)? val : ent;
         }); 
     }
 
