@@ -1,3 +1,4 @@
+
 const lingvoj_xml = "../cfg/lingvoj.xml";
 
 // difinu ĉion sub nomprefikso "preferoj"
@@ -225,4 +226,3 @@ var preferoj = function() {
     }
     
 }();
-

@@ -162,6 +162,4 @@ Transiroj.prototype.transiro = function (al,de=null,evento) {
 
     // ago por .. -> al
     if (a) _alvene(a);
-
-
 }

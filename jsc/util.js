@@ -513,5 +513,3 @@ function Textarea(ta_id) {
         } 
         txtarea.focus();
       }
-
-

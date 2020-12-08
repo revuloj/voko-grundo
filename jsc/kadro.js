@@ -1087,5 +1087,3 @@ function redaktu(href) {
     load_page("main",redaktilo_url+'?'+params);
     load_page("nav",redaktmenu_url);
 }
-
-

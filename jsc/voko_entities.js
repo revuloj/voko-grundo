@@ -1,3 +1,4 @@
+
 const voko_entities={"amp":"&amp;",
 "lt":"&lt;",
 "gt":"&gt;",
