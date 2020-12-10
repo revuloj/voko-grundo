@@ -651,6 +651,7 @@ var redaktilo = function() {
       if (article) {
         // anstataŭigu GIF per SVG  
         fix_img_svg(article);
+        fix_art_href(article);
 
         rigardo.textContent = '';
         rigardo.append(article);  

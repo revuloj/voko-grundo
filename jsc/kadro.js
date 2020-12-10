@@ -471,6 +471,9 @@ function load_page(trg,url,push_state=true) {
             h.scrollIntoView();
             history.replaceState(history.state,null,
                 location.origin+location.pathname+"#"+encodeURIComponent(hash));
+        } else if (!hash) {
+            history.replaceState(history.state,null,
+                location.origin+location.pathname);
         }
     }
 
@@ -520,10 +523,7 @@ function load_page(trg,url,push_state=true) {
         }; 
         index_spread();
 
-        // laŭbezone ankoraŭ iru al loka marko,
-        // atentu ke tio kreas ankaŭ eventon popstate(state = null)
-        // alternative oni povus shnaghi la URL per history.pushState
-        // kaj uzi scrollIntoView...
+        // laŭbezone ankoraŭ iru al loka marko
         update_hash();
     }
 
@@ -548,29 +548,35 @@ function load_page(trg,url,push_state=true) {
             artikolo.preparu_art();                      
             var s_artikolo = document.getElementById("s_artikolo");
             // refaru matematikajn formulojn, se estas
-            if (s_artikolo &&
-                typeof(MathJax) != 'undefined' && MathJax.Hub) {
+            if (s_artikolo) {
+                // aldonu ../art/ ĉe href, eble ni devus fari tion jam en adaptu_paghon
+                // ĉar tre rapida uzanto povus ankoraŭ kalki sur la nekorektitan ligon
+                // aliflanke tiel la paĝo aperas jam iomete pli frue...
+                fix_art_href(s_artikolo);
+            
+                if ( typeof(MathJax) != 'undefined' && MathJax.Hub) {
 
-                /*
-                MathJax.Hub.Register.MessageHook("Math Processing Error",function (message) {
-                    //  message[2] is the Error object that records the problem.
-                    console.error(message)
-                    });
+                    /*
+                    MathJax.Hub.Register.MessageHook("Math Processing Error",function (message) {
+                        //  message[2] is the Error object that records the problem.
+                        console.error(message)
+                        });
 
-                MathJax.Hub.Startup.signal.Interest(
-                    function (message) {console.debug("Startup: "+message)}
-                );
-                MathJax.Hub.signal.Interest(
-                    function (message) {
-                        console.debug("Hub: "+message)
-                        if (message[1] instanceof HTMLElement) {
-                            console.debug("  >>"+message[1].tagName+message[1].id)
+                    MathJax.Hub.Startup.signal.Interest(
+                        function (message) {console.debug("Startup: "+message)}
+                    );
+                    MathJax.Hub.signal.Interest(
+                        function (message) {
+                            console.debug("Hub: "+message)
+                            if (message[1] instanceof HTMLElement) {
+                                console.debug("  >>"+message[1].tagName+message[1].id)
+                            }
                         }
-                    }
-                ); 
-                */                         
-                MathJax.Hub.Config({showMathMenu: false, showMathMenuMSIE: false});                        
-                MathJax.Hub.Queue(["Typeset",MathJax.Hub,"s_artikolo"]);
+                    ); 
+                    */                         
+                    MathJax.Hub.Config({showMathMenu: false, showMathMenuMSIE: false});                        
+                    MathJax.Hub.Queue(["Typeset",MathJax.Hub,"s_artikolo"]);
+                }
             }                    
         }
         //if (url == titolo_url) hide("x:titol_btn"); 

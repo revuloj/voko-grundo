@@ -73,6 +73,18 @@ function HTTPRequest(method, url, params, onSuccess,
     onStart, onFinish, onError);
 }
 
+// aldonu ../art en relativaj URL-oj
+function fix_art_href(root_el) {
+  for (var a of root_el.getElementsByTagName("a")) {
+    var href = a.getAttribute("href");
+
+    // aldonu ../art nur se ne estas absoluta URL
+    // aŭ ĝi montras per ../ ali-loken aŭ estas ene, komencigante per #
+    if ( href && href[0] != '#' && href.indexOf('/') < 0 ) {
+      a.setAttribute("href","../art/"+href);
+    }
+  }
+}
 
 // anstataŭigu GIF per SVG  
 function fix_img_svg(root_el) {
