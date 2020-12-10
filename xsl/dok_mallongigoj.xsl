@@ -31,8 +31,7 @@
 
     <dl compact="compact">
     <xsl:for-each select="mallongigo">
-      <a name="{@mll}"/>
-      <dt><xsl:value-of select="@mll"/></dt>
+      <dt id="{@mll}"><xsl:value-of select="@mll"/></dt>
       <dd><xsl:value-of select="."/></dd>
     </xsl:for-each>
     </dl>

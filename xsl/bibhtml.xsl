@@ -51,7 +51,7 @@
 </xsl:template>
 
 <xsl:template match="vrk">
-  <dt><a name="{@mll}"></a>
+  <dt id="{@mll}">
     <xsl:choose>
       <xsl:when test="url">
         <a href="{url}" target="_new">

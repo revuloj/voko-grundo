@@ -58,9 +58,6 @@ kreita de Wolfram Diestel
 </xsl:template>
 
 <xsl:template match="h2">
-  <xsl:if test="@id">
-    <a name="{@id}"/>
-  </xsl:if>
   <xsl:copy-of select="."/>
 </xsl:template>    
 

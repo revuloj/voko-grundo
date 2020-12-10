@@ -74,8 +74,7 @@
 </xsl:template>
 
 <xsl:template match="lingvo[@kiel]">
-  <a name="{@lng}"/>
-  <h2><xsl:text>pri la lingvo </xsl:text>
+  <h2 id="{@lng}"><xsl:text>pri la lingvo </xsl:text>
     <xsl:call-template name="lingvonomo">
       <xsl:with-param name="lng" select="@lng"/>
     </xsl:call-template>
