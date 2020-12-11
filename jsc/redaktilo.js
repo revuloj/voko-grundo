@@ -1,4 +1,6 @@
 
+/* jshint esversion: 6 */
+
 // difinu ĉion sub nomprefikso "redaktilo"
 var redaktilo = function() {
 
@@ -8,7 +10,7 @@ var redaktilo = function() {
     lingvoj: new Codelist('lingvo', '/revo/cfg/lingvoj.xml'),
     fakoj: new Codelist('fako','/revo/cfg/fakoj.xml'),
     stiloj: new Codelist('stilo','/revo/cfg/stiloj.xml')
-  }
+  };
   
   var re_lng = /<(?:trd|trdgrp)\s+lng\s*=\s*"([^]*?)"\s*>/mg; 
   var re_fak = /<uzo\s+tip\s*=\s*"fak"\s*>([^]*?)</mg; 
@@ -77,7 +79,7 @@ var redaktilo = function() {
       "\n"
     ]],  
     dif: ["dif",{},"$_"]       
-  }
+  };
 
   function shablono(name,selection) {    
     var p_kursoro = -1;
@@ -92,7 +94,7 @@ var redaktilo = function() {
           selection 
           : (v[0] == "$"? 
           document.getElementById(v.substring(1)).value 
-          : v)
+          : v);
       }
       if (!jlist || !jlist[0]) {
         console.error("Nedifinita ŝablono: \""+name+"\"");
@@ -111,10 +113,10 @@ var redaktilo = function() {
           // attributes
           if (el[1]) {
             for (var atr in el[1]) {
-              xml += " " + atr + "=\"" + val(el[1][atr]) + "\""
+              xml += " " + atr + "=\"" + val(el[1][atr]) + "\"";
             }
           }
-          xml += ">"
+          xml += ">";
           // content
           if (el[2]) {
             if (el[2] instanceof Array) {
@@ -130,7 +132,7 @@ var redaktilo = function() {
           // closing tag
           if ("/" != el[0].slice(-1)) {
             //if (p_kursoro < 0) p_kursoro = xml.length;
-            xml += "</" + el[0] + ">"    
+            xml += "</" + el[0] + ">"; 
           }
         }  
       }
@@ -138,7 +140,7 @@ var redaktilo = function() {
     }
     // rekte apliku la supran algoritmon al la ŝablono donita per sia nomo...
     ([ xml_shbl[name] ]) // ni transdonas ĝin kiel unu-elementa listo 
-  ),p_kursoro,p_lines]}; 
+  ),p_kursoro,p_lines];} 
 
   function Codelist(xmlTag,url) {
     this.url = url;
@@ -148,7 +150,7 @@ var redaktilo = function() {
     this.fill = function(selection) {
       var sel = document.getElementById(selection);
     
-      for (item in this.codes) {
+      for (var item in this.codes) {
         var opt = createTElement("option",item + ' - ' + this.codes[item]);
         addAttribute(opt,"value",item);
         sel.appendChild(opt);
@@ -168,8 +170,8 @@ var redaktilo = function() {
               var parser = new DOMParser();
               var doc = parser.parseFromString(this.response,"text/xml");
         
-              for (e of doc.getElementsByTagName(self.xmlTag)) {
-                  var c = e.attributes["kodo"];
+              for (var e of doc.getElementsByTagName(self.xmlTag)) {
+                  var c = e.attributes.kodo;
                   //console.log(c);
                   codes[c.value] = e.textContent;
               } 
@@ -187,15 +189,16 @@ var redaktilo = function() {
         } 
       }
     };  
-  };
+  }
 
   function klavo(event) {
     var key = event.keyCode ? event.keyCode : event.which ? event.which : event.charCode;
     //  alert(key);
+    var scrollPos;
 
     // RET: aldonu enŝovon (spacojn) komence de nova linio
     if (key == 13) {  
-      var scrollPos = xmlarea.scrollPos();        
+      scrollPos = xmlarea.scrollPos();        
       indent = xmlarea.indent();
       xmlarea.selection("\n"+indent,-1);
       xmlarea.scrollPos(scrollPos);
@@ -212,7 +215,7 @@ var redaktilo = function() {
       if (cx.value != "1") return true;
 
       var txtarea = document.getElementById('r:xmltxt');
-      var scrollPos = xmlarea.scrollPos();
+      scrollPos = xmlarea.scrollPos();
       selText = xmlarea.selection();
 
       if (selText != "") return true;
@@ -231,10 +234,10 @@ var redaktilo = function() {
     // T aŭ t aŭ kir-t aŭ kir-T
     } else if (key == 84 || key == 116 || key == 1090 || key == 1058) {   
       if (event.altKey) {	// shortcut alt-t  --> trd
-        insert_xml("trd_lng")
+        insert_xml("trd_lng");
       }
     }
-  };
+  }
 
 
   function insert_xml(shabl) {
@@ -250,8 +253,8 @@ var redaktilo = function() {
     xmlarea.selection(
       text.replace(/\n/g,"\n"+indent),
       p_kursoro + p_lines*indent.length);
-    xmlarea.scrollPos(pos)
-  };
+    xmlarea.scrollPos(pos);
+  }
 
     
   function nextTag(tag, dir) {
@@ -289,7 +292,7 @@ var redaktilo = function() {
         if (line < 0) line = 0;
         if (line > lastline) line = lastline;
 
-        xmlarea.scrollPos(txtarea.scrollHeight * line / lastline)
+        xmlarea.scrollPos(txtarea.scrollHeight * line / lastline);
         //txtarea.scrollTop = txtarea.scrollHeight * line / lastline;   
     
     //    alert("tio baldaux funkcias. tag="+tag+" pos="+pos+" line="+line+ " lastline="+lastline);
@@ -300,7 +303,7 @@ var redaktilo = function() {
   // memoras valorojn de kelkaj kampoj en la loka memoro de la retumilo
   function store_preferences() {
     var prefs = {};
-    for (key of ['r:redaktanto','r:trdlng','r:klrtip','r:reftip','r:sxangxo','r:cx']) {
+    for (var key of ['r:redaktanto','r:trdlng','r:klrtip','r:reftip','r:sxangxo','r:cx']) {
       const el = document.getElementById(key);
       if (el) prefs[key] = el.value;
     }
@@ -312,7 +315,7 @@ var redaktilo = function() {
     var str = window.localStorage.getItem("redaktilo_preferoj");
     var prefs = (str? JSON.parse(str) : {});
     if (prefs) {
-      for (key of ['r:redaktanto','r:trdlng','r:klrtip','r:reftip','r:sxangxo']) {
+      for (var key of ['r:redaktanto','r:trdlng','r:klrtip','r:reftip','r:sxangxo']) {
         if (prefs[key]) document.getElementById(key).value = prefs[key];
       }
     }
@@ -342,7 +345,7 @@ var redaktilo = function() {
       //  document.getElementById("...").value = art.red;
       document.getElementById("r:art").value = art.nom;
       document.getElementById("r:art_titolo").textContent = art.nom; 
-    };
+    }
   }
 
   /*
@@ -372,8 +375,8 @@ var redaktilo = function() {
     var el = document.getElementById(id);
     var fs_id;
     if (! el.classList.contains('aktiva')) {
-      for (ch of el.parentElement.children) {
-        ch.classList.remove('aktiva')
+      for (var ch of el.parentElement.children) {
+        ch.classList.remove('aktiva');
         fs_id = 'r:fs_'+ch.id.substring(2);
 
         // fermu ĉiujn videblajn tabuletojn
@@ -416,8 +419,8 @@ var redaktilo = function() {
       el.appendChild(ul);
     } else {
       ul = elch[0];
-    };
-    for (e of err) {
+    }
+    for (var e of err) {
       var li = createTElement("li",e);               
       ul.appendChild(li);       
     }
@@ -426,9 +429,8 @@ var redaktilo = function() {
   function add_err_msg(msg, matches) {
     var errors = [];
 
-    for (m of matches) {
-      var m = msg+m[1];
-      errors.push(m)
+    for (var m of matches) {
+      errors.push(msg+m[1]);
     }
     if (errors.length)
       listigu_erarojn(errors);
@@ -462,9 +464,9 @@ var redaktilo = function() {
       var el = m[1];
       var mrk = m[2];
       if ( mrk.indexOf(art+'.') != 0 ) {
-        errors.push("La marko \"" + mrk + "\" (" + el + ") ne komenciĝas je la dosieronomo (" + art + ".).")
+        errors.push("La marko \"" + mrk + "\" (" + el + ") ne komenciĝas je la dosieronomo (" + art + ".).");
       } else if ( mrk.indexOf('0',art.length) < 0 ) {
-        errors.push("La marko \"" + mrk + "\" (" + el + ") ne enhavas \"0\" (por tildo).")
+        errors.push("La marko \"" + mrk + "\" (" + el + ") ne enhavas \"0\" (por tildo).");
       }
     }
     if (errors.length)
@@ -596,8 +598,8 @@ var redaktilo = function() {
     // dum kontrole ene de vokomailx as nesinkrona
     kontrolu_xml_loke(art,xml);
 
-    if (xml.startsWith("<?xml") 
-      && document.getElementById("r:eraroj").textContent == '') {
+    if (xml.startsWith("<?xml") &&
+      document.getElementById("r:eraroj").textContent == '') {
         // forsendu la redaktitan artikolon
         vokomailx("forsendo",art,xml);
         // memoru enhavon de kelkaj kampoj
@@ -610,6 +612,7 @@ var redaktilo = function() {
     var ta = document.getElementById("r:xmltxt");
     document.getElementById("r:art").value = art;
     document.getElementById("r:art_titolo").textContent = art;
+    /* jshint ignore:start */
     ta.value = 
         '<?xml version="1.0"?>\n'
       + '<!DOCTYPE vortaro SYSTEM "../dtd/vokoxml.dtd">\n'
@@ -634,6 +637,7 @@ var redaktilo = function() {
       + '</drv>\n'
       + '</art>\n'
       + '</vortaro>\n';
+    /* jshint ignore:end */
   }
 
   function vokohtmlx(xml) {
@@ -702,7 +706,7 @@ var redaktilo = function() {
         var err_list = document.getElementById("r:eraroj");
 
         //for (div of doc.body.getElementsByClassName("eraroj")) {
-        for (div of doc.body.querySelectorAll(".eraroj")) {
+        for (var div of doc.body.querySelectorAll(".eraroj")) {
           // debugging...
           console.log("div id=" + div.id);
           err_list.appendChild(div);
@@ -722,8 +726,8 @@ var redaktilo = function() {
           //hide("x:redakt_btn");
           //hide("x:rigardo_btn");
 
-        } else if (command == "nur_kontrolo" 
-          && err_list.textContent.replace(/\s+/,'') == '') {
+        } else if (command == "nur_kontrolo" &&
+          err_list.textContent.replace(/\s+/,'') == '') {
           // nur kontrolo kaj neniu eraro
           err_list.appendChild(
             document.createTextNode("Bone! Neniu eraro troviĝis."));
@@ -827,9 +831,9 @@ var redaktilo = function() {
           var n = parseInt(val.substring(0,2));
           var t = val.substring(2);
           if ( t == "d") {
-            b.addEventListener("click", function() { nextTag('<drv',n) })
+            b.addEventListener("click", function() { nextTag('<drv',n); });
           } else if (t == "i") {
-            b.addEventListener("click", function() { xmlarea.indent(n) })
+            b.addEventListener("click", function() { xmlarea.indent(n); });
           }
         }
     });
@@ -838,7 +842,7 @@ var redaktilo = function() {
         event.preventDefault();
         var cx = event.currentTarget;
         cx.value = 1 - cx.value || 0; 
-        document.getElementById('r:xmltxt').focus()
+        document.getElementById('r:xmltxt').focus();
     });
 
     // sub-paĝoj "redakti", "antaŭrigardo"
@@ -889,7 +893,7 @@ var redaktilo = function() {
     // navigi inter diversaj paneloj kun enmeto-butonoj ktp.
     var fs_t = document.getElementById("r:fs_toggle");
     fs_t.querySelectorAll("a").forEach(function (a) { 
-      a.removeAttribute("onclick") 
+      a.removeAttribute("onclick");
     });
     fs_t.addEventListener("click", function(event) {
       var a = event.target.closest("a");
@@ -898,14 +902,14 @@ var redaktilo = function() {
 
     // butonoj sur tiuj paneloj por enmeti elementojn
     var v_sets = document.getElementById("r:v_sets");
-    for (b of v_sets.querySelectorAll("button")) {
+    for (var b of v_sets.querySelectorAll("button")) {
       if (b.id == "r:create_new_art") {
         b.addEventListener("click", create_new_art);
       }
       if (b.classList.contains("help_btn"))
         b.addEventListener("click", function(event) {
-          helpo_pagho(event.currentTarget.getAttribute("value"))
-        })
+          helpo_pagho(event.currentTarget.getAttribute("value"));
+        });
       else
         b.addEventListener("click",function(event) {
           const v = event.currentTarget.getAttribute("value");
@@ -934,5 +938,5 @@ var redaktilo = function() {
     shablono: shablono,
     store_preferences: store_preferences,
     store_art: store_art
-  }
+  };
 }();

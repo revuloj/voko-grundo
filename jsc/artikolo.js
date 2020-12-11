@@ -1,3 +1,6 @@
+
+/* jshint esversion: 6 */
+
 const js_sojlo = 3; //30+3;
 const ekz_sojlo = 3;
 const sec_art = "s_artikolo";
@@ -17,8 +20,8 @@ window.addEventListener("hashchange", function() {
         // this.console.log("ni malkaŝu "+id);    
         if (trg && trg.tagName == "H2") {
             // ĉe derivaĵoj, la kaŝita div venos post h2
-            var sec = trg.closest("section"); //parentElement;    
-            var trg = sec.querySelector("div.kasxebla");
+            const sec = trg.closest("section"); //parentElement;    
+            trg = sec.querySelector("div.kasxebla");
         }
     
         //showContainingDiv(trg);
@@ -26,7 +29,7 @@ window.addEventListener("hashchange", function() {
         if (trg)
             trg.dispatchEvent(MalkashEvento);
         else
-            this.console.error("ne troviĝis saltomarko '"+id+'"')    
+            this.console.error("ne troviĝis saltomarko '"+id+'"');
     }
 });
 
@@ -46,9 +49,9 @@ var artikolo = function() {
         if (! document.getElementById(sec_art)) return;
 
         if (window.location.protocol != 'file:') {
-            top.document.title='Reta Vortaro ['
-            + document.getElementById(sec_art).getElementsByTagName("H1")[0].textContent.trim()
-            + ']';
+            top.document.title='Reta Vortaro [' +
+            document.getElementById(sec_art).getElementsByTagName("H1")[0].textContent.trim() +
+            ']';
         }
         /* aktivigu nur por longaj artikoloj... */
         var d = document.getElementsByClassName("kasxebla");
@@ -65,7 +68,7 @@ var artikolo = function() {
 
     function getPrevH2(element) {
         var prv = element.previousSibling;
-        while ( prv && prv.nodeName != "H2") { prv = prv.previousSibling }
+        while ( prv && prv.nodeName != "H2") { prv = prv.previousSibling; }
         return prv;
     }
 
@@ -112,7 +115,7 @@ var artikolo = function() {
                     // \u25be
                     h2.appendChild(make_icon_button("i_mkash",
                         null,"malkaŝu derivaĵon"));
-                    el.classList.add("kasxita") 
+                    el.classList.add("kasxita");
                 } else {
                     // "\u25b2"
                     h2.appendChild(make_icon_button("i_kash",
@@ -166,16 +169,16 @@ var artikolo = function() {
     /** kaŝu ĉiujn derivaĵojn **/
     function kashu_chiujn_drv() {
         for (var el of document.getElementsByClassName("kasxebla")) 
-            if (el.parentElement.classList.contains("drv")
-            || el.parentElement.classList.contains("notoj")) 
+            if (el.parentElement.classList.contains("drv") ||
+                el.parentElement.classList.contains("notoj")) 
                 kashu_drv(el);
     }
 
     /** malkaŝu ĉiujn derivaĵojn **/
     function malkashu_chiujn_drv() {
         for (var el of document.getElementsByClassName("kasxebla")) 
-            if (el.parentElement.classList.contains("drv")
-            || el.parentElement.classList.contains("notoj"))  
+            if (el.parentElement.classList.contains("drv") ||
+                el.parentElement.classList.contains("notoj"))  
                 malkashu_drv(el);
     }
 
@@ -206,7 +209,7 @@ var artikolo = function() {
         var div = sec.querySelector("div.kasxebla");
 
         if (div.classList.contains("kasxita")) 
-            malkashu_drv(div)
+            malkashu_drv(div);
         else 
             kashu_drv(div);
     }
@@ -266,14 +269,14 @@ var artikolo = function() {
         var div_trd = event.target.closest("DL");
         for (var id of div_trd.children) {
             id.classList.remove("kasxita");
-        };
+        }
         // kaŝu pli...
         div_trd.querySelectorAll("dt.pli, dd.pli").forEach(
             p => p.classList.add("kasxita")
         );
         div_trd.querySelectorAll("dt.pref, dd.pref").forEach(
             p => p.classList.add("kasxita")
-        ) 
+        );
     }
 
 
@@ -364,7 +367,7 @@ var artikolo = function() {
                 .replace(/\//g,'-');
             ver.remove();
             // forigu finan <br>
-            pied.querySelector("br").remove()
+            pied.querySelector("br").remove();
         }        
     }
 
@@ -372,6 +375,6 @@ var artikolo = function() {
    // eksportu publikajn funkction
    return {
         preparu_art: preparu_art
-   }
+   };
 
 }();

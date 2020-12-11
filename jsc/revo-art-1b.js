@@ -1,3 +1,6 @@
+
+/* jshint esversion: 6 */
+
 const js_sojlo = 3; //30+3;
 const sec_art = "s_artikolo";
 const lingvoj_xml = "../cfg/lingvoj.xml";
@@ -16,8 +19,8 @@ var pref_dat = Date.now();
 ///
 window.onload = function() {    
     restore_preferences();   
-    preparu_art()
-}   
+    preparu_art();
+};
 
 window.onhashchange = function() {
     //console.log("hashchange: "+window.location.hash )
@@ -31,7 +34,7 @@ window.onhashchange = function() {
     if (trg && trg.tagName == "H2") {
         // ĉe derivaĵoj, la kaŝita div venos post h2
         var sec = trg.closest("section"); //parentElement;    
-        var trg = sec.querySelector("div.kasxebla");
+        trg = sec.querySelector("div.kasxebla");
     }
 
     //showContainingDiv(trg);
@@ -39,8 +42,8 @@ window.onhashchange = function() {
     if (trg)
         trg.dispatchEvent(MalkashEvento);
     else
-        this.console.error("ne troviĝis saltomarko "+id)
-}
+        this.console.error("ne troviĝis saltomarko "+id);
+};
 
 function preparu_art() {
     // evitu preparon, se ni troviĝas en la redaktilo kaj
@@ -48,9 +51,9 @@ function preparu_art() {
     if (! document.getElementById(sec_art)) return;
 
     if (window.location.protocol != 'file:') {
-        top.document.title='Reta Vortaro ['
-        + document.getElementById(sec_art).getElementsByTagName("H1")[0].textContent.trim()
-        + ']';
+        top.document.title='Reta Vortaro [' +
+        document.getElementById(sec_art).getElementsByTagName("H1")[0].textContent.trim() +
+        ']';
     }
     /* aktivigu nur por longaj artikoloj... */
     var d = document.getElementsByClassName("kasxebla");
@@ -108,7 +111,7 @@ function preparu_kashu_sekciojn() {
                 // \u25be
                 h2.appendChild(make_icon_button("i_mkash",
                     null,"malkaŝu derivaĵon"));
-                el.classList.add("kasxita") 
+                el.classList.add("kasxita");
             } else {
                 // "\u25b2"
                 h2.appendChild(make_icon_button("i_kash",
@@ -154,16 +157,16 @@ function preparu_maletendu_sekciojn() {
 /** kaŝu ĉiujn derivaĵojn **/
 function kashu_chiujn_drv() {
     for (var el of document.getElementsByClassName("kasxebla")) 
-        if (el.parentElement.classList.contains("drv")
-        || el.parentElement.classList.contains("notoj")) 
+        if (el.parentElement.classList.contains("drv") ||
+            el.parentElement.classList.contains("notoj"))
             kashu_drv(el);
 }
 
 /** malkaŝu ĉiujn derivaĵojn **/
 function malkashu_chiujn_drv() {
     for (var el of document.getElementsByClassName("kasxebla")) 
-        if (el.parentElement.classList.contains("drv")
-        || el.parentElement.classList.contains("notoj"))  
+        if (el.parentElement.classList.contains("drv") ||
+            el.parentElement.classList.contains("notoj"))
             malkashu_drv(el);
 }
 
@@ -194,7 +197,7 @@ function kashu_malkashu_drv(el) {
     var div = sec.querySelector("div.kasxebla");
 
     if (div.classList.contains("kasxita")) 
-        malkashu_drv(div)
+        malkashu_drv(div);
     else 
         kashu_drv(div);
 }
@@ -247,7 +250,7 @@ function etendu_trd(event) {
     var div_trd = event.target.parentElement;
     for (var id of div_trd.children) {
         id.classList.remove("kasxita");
-    };
+    }
     // kaŝu pli...
     var 
     p = div_trd.querySelector(".pli"); if (p) p.classList.add("kasxita");
@@ -294,7 +297,7 @@ function make_button(label,handler,hint='') {
     btn.appendChild(document.createTextNode(label)); 
     btn.addEventListener("click",handler);
     //btn.classList.add("kashilo");
-    if (hint) btn.setAttribute("title",hint)
+    if (hint) btn.setAttribute("title",hint);
     return btn;
 }
 
@@ -303,7 +306,7 @@ function make_icon_button(iclass,handler,hint='') {
     //btn.appendChild(document.createTextNode(label)); 
     if (handler) btn.addEventListener("click",handler);
     btn.classList.add(iclass,"icon_btn");
-    if (hint) btn.setAttribute("title",hint)
+    if (hint) btn.setAttribute("title",hint);
     return btn;
 }
 
@@ -366,15 +369,15 @@ function load_pref_lng() {
         
         // kolekti la lingvojn unue, ni bezonos ordigi ilin...
         var lingvoj = {};
-        for (e of doc.getElementsByTagName("lingvo")) {
-            var c = e.attributes["kodo"];
+        for (var e of doc.getElementsByTagName("lingvo")) {
+            var c = e.attributes.kodo;
             if (c.value != "eo") {
                 var ascii = eo_ascii(e.textContent);
                 lingvoj[ascii] = {lc: c.value, ln: e.textContent};
             }
         }
 
-        for (l of Object.keys(lingvoj).sort()) {    
+        for (var l of Object.keys(lingvoj).sort()) {    
             var lc = lingvoj[l].lc;
             var ln = lingvoj[l].ln;
             var li = document.createElement("LI");
@@ -406,7 +409,7 @@ function change_pref_lng() {
     var selection = document.getElementById("preferoj")
         .querySelector('input[name="pref_lingvoj"]:checked').value.split('_');
 
-    for (ch of document.getElementById("alia_lng").childNodes) {
+    for (var ch of document.getElementById("alia_lng").childNodes) {
         var la=ch.getAttribute("data-la");
         if (la[0] < selection[0] || la[0] > selection[1]) 
             ch.classList.add("kasxita");
@@ -515,7 +518,7 @@ function add_radios(parent,name,glabel,radios,handler) {
         parent.appendChild(gl);   
     }
     var first = true;
-    for (r of radios) {
+    for (var r of radios) {
         var span = document.createElement("SPAN");
         var input = first?
             make_element("INPUT",{name: name, type: "radio", id: r.id, checked: "checked", value: r.id}) :
@@ -534,7 +537,7 @@ function add_radios(parent,name,glabel,radios,handler) {
 function make_element(name,attributes,textcontent) {
     var element = document.createElement(name);
     for (var a in attributes) {
-        element.setAttribute(a,attributes[a])
+        element.setAttribute(a,attributes[a]);
     }
     if (textcontent) element.appendChild(document.createTextNode(textcontent));
     return element;
@@ -542,7 +545,7 @@ function make_element(name,attributes,textcontent) {
 
 function getPrevH2(element) {
     var prv = element.previousSibling;
-    while ( prv && prv.nodeName != "H2") { prv = prv.previousSibling }
+    while ( prv && prv.nodeName != "H2") { prv = prv.previousSibling; }
     return prv;
 }
 
@@ -559,13 +562,13 @@ function getUrlFileName(url) {
 }
 
 function getHashParts() {
-    var h = (location.hash[0] == '#'
-        ? location.hash.substr(1) 
-        : location.hash);
+    var h = (location.hash[0] == '#' ?
+        location.hash.substr(1) :
+        location.hash);
     var r = {};
-    for (p of h.split('&')) {
+    for (var p of h.split('&')) {
         if (p.indexOf('=') < 0) {
-            r.mrk = p
+            r.mrk = p;
         } else {
             var v = p.split('=');
             r[v[0]] = v[1];

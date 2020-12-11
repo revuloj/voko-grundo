@@ -1,3 +1,5 @@
+/* jshint esversion: 6 */
+
 /*
     Ni difinos stato-transirojn "de1"->"al1", "de2"->"al1" ktp. 
     kiel strukturo, kiu korme enhavas agojn forlasajn kaj alvenajn.
@@ -60,7 +62,7 @@ Transiroj.prototype.transire = function(de,al,ago,gardo=null) {
         this.trans[al][de] = {ago: ago, grd: gardo};
     else 
         throw new TransiroEscepto("Transiro "+de+" -> "+al+" jam difinita.");   
-}
+};
 
 // difino de alveno al stato, kondiĉe ke funkcio "gardo" redonas true
 // tiam la fukcio "ago" estos procedata
@@ -69,11 +71,11 @@ Transiroj.prototype.alvene = function(al,ago) {
     if (this.stats.indexOf(al) == -1) throw TransiroEscepto("Stato \""+al+"\" ne difinita.");
     // enigu la transiran funkcion en la strukturon "trans"
     if (!this.trans[al]) this.trans[al] = {};
-    if (!this.trans[al]["__alvene__"])
-        this.trans[al]["__alvene__"] = {ago: ago};
+    if (!this.trans[al].__alvene__)
+        this.trans[al].__alvene__ = {ago: ago};
     else 
         throw new TransiroEscepto("Alveno al "+al+" jam difinita.");   
-}
+};
 
 // difino de forio de stato, kondiĉe ke funkcio "gardo" redonas true
 // tiam la fukcio "ago" estos procedata
@@ -82,14 +84,14 @@ Transiroj.prototype.forire = function(de,ago) {
     if (this.stats.indexOf(de) == -1) throw TransiroEscepto("Stato \""+de+"\" ne difinita.");
     // enigu la transiran funkcion en la strukturon "trans"
     if (!this.trans[de]) this.trans[de] = {};
-    if (!this.trans[de]["__forire__"])
-        this.trans[de]["__forire__"] = {ago: ago};
+    if (!this.trans[de].__forire__)
+        this.trans[de].__forire__ = {ago: ago};
     else 
         throw new TransiroEscepto("Foriro de "+de+" jam difinita.");   
-}
+};
 
-
-Transiroj.prototype.transiro = function (al,de=null,evento) {
+/* vi povas forlasi de kaj evento...(?) */
+Transiroj.prototype.transiro = function (al,de,evento) {
     // PLIBONIGU:
     // restrukturu ĉi-funkcion
     // 1. eltrovu eĝon al nova stato konsiderante eblajn gardojn
@@ -101,7 +103,7 @@ Transiroj.prototype.transiro = function (al,de=null,evento) {
 
     function _forire(d) {
         // ago difinita por de->...
-        const t = d["__forire__"];
+        const t = d.__forire__;
         if (t && t.ago) {
             console.debug(n+": foriro de "+de);
             // faru transiran agon
@@ -111,7 +113,7 @@ Transiroj.prototype.transiro = function (al,de=null,evento) {
 
     function _alvene(a) {
         // ago difinita por ...->al
-        const t = a["__alvene__"];
+        const t = a.__alvene__;
         if (t && t.ago) {
             console.debug(n+": alveno al "+al);
             // faru transiran agon
@@ -162,4 +164,4 @@ Transiroj.prototype.transiro = function (al,de=null,evento) {
 
     // ago por .. -> al
     if (a) _alvene(a);
-}
+};

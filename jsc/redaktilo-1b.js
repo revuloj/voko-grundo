@@ -1,9 +1,11 @@
 
+/* jshint esversion: 6 */
+
 var revo_codes = {
   lingvoj: new Codelist('lingvo', '/revo/cfg/lingvoj.xml'),
   fakoj: new Codelist('fako','/revo/cfg/fakoj.xml'),
   stiloj: new Codelist('stilo','/revo/cfg/stiloj.xml')
-}
+};
 
 var re_lng = /<(?:trd|trdgrp)\s+lng\s*=\s*"([^]*?)"\s*>/mg; 
 var re_fak = /<uzo\s+tip\s*=\s*"fak"\s*>([^]*?)</mg; 
@@ -24,7 +26,7 @@ function Codelist(xmlTag,url) {
   this.fill = function(selection) {
     var sel = document.getElementById(selection);
   
-    for (item in this.codes) {
+    for (var item in this.codes) {
       var opt = createTElement("option",item + ' - ' + this.codes[item]);
       addAttribute(opt,"value",item);
       sel.appendChild(opt);
@@ -44,8 +46,8 @@ function Codelist(xmlTag,url) {
         parser = new DOMParser();
         doc = parser.parseFromString(this.response,"text/xml");
   
-        for (e of doc.getElementsByTagName(self.xmlTag)) {
-            var c = e.attributes["kodo"];
+        for (var e of doc.getElementsByTagName(self.xmlTag)) {
+            var c = e.attributes.kodo;
             //console.log(c);
             codes[c.value] = e.textContent;
         } 
@@ -109,15 +111,16 @@ function get_ta() {
 function str_indent() {
      var txtarea = document.getElementById('r:xmltxt');
      var indent = 0;
+     var linestart;
      if (document.selection  && document.selection.createRange) { // IE/Opera
        var range = document.selection.createRange();
        range.moveStart('character', - 200); 
        var selText = range.text;
-       var linestart = selText.lastIndexOf("\n");
+       linestart = selText.lastIndexOf("\n");
        while (selText.charCodeAt(linestart+1+indent) == 32) {indent++;}
      } else if (txtarea.selectionStart || txtarea.selectionStart == '0') { // Mozilla
        var startPos = txtarea.selectionStart;
-       var linestart = txtarea.value.substring(0, startPos).lastIndexOf("\n");
+       linestart = txtarea.value.substring(0, startPos).lastIndexOf("\n");
        while (txtarea.value.substring(0, startPos).charCodeAt(linestart+1+indent) == 32) {indent++;}
      }
      return (str_repeat(" ", indent));
@@ -162,20 +165,27 @@ function cxigi(b, key) {
    
 function klavo(event) {
      var key = event.keyCode ? event.keyCode : event.which ? event.which : event.charCode;
-   //  alert(key);
+     var txtarea;
+     var winScroll, textScroll;
+     var range;
+     var selText, startPos, endPos;
+     var before, nova;
+
+     //  alert(key);
      if (key == 13) {
-       var txtarea = document.getElementById('r:xmltxt');
-       var selText, isSample = false;
+       txtarea = document.getElementById('r:xmltxt');
+       var isSample = false;
    
        if (document.selection  && document.selection.createRange) { // IE/Opera
          //save window scroll position
-         if (document.documentElement && document.documentElement.scrollTop)
-       var winScroll = document.documentElement.scrollTop
-         else if (document.body)
-       var winScroll = document.body.scrollTop;
+        if (document.documentElement && document.documentElement.scrollTop)
+          winScroll = document.documentElement.scrollTop;
+        else if (document.body)
+          winScroll = document.body.scrollTop;
+
          //get current selection  
          txtarea.focus();
-         var range = document.selection.createRange();
+         range = document.selection.createRange();
          selText = range.text;
    
          range.text = "\n" + str_indent();
@@ -183,21 +193,23 @@ function klavo(event) {
          range.select();   
          //restore window scroll position
          if (document.documentElement && document.documentElement.scrollTop)
-       document.documentElement.scrollTop = winScroll
+            document.documentElement.scrollTop = winScroll;
          else if (document.body)
-       document.body.scrollTop = winScroll;
+            document.body.scrollTop = winScroll;
+
          return false;
+
        } else if (txtarea.selectionStart || txtarea.selectionStart == '0') { // Mozilla
          //save textarea scroll position
-         var textScroll = txtarea.scrollTop;
+         textScroll = txtarea.scrollTop;
          //get current selection
          txtarea.focus();
-         var startPos = txtarea.selectionStart;
-         var endPos = txtarea.selectionEnd;
+         startPos = txtarea.selectionStart;
+         endPos = txtarea.selectionEnd;
          var tmpstr = "\n" + str_indent();
-         txtarea.value = txtarea.value.substring(0, startPos)
-               + tmpstr
-               + txtarea.value.substring(endPos, txtarea.value.length);
+         txtarea.value = txtarea.value.substring(0, startPos) +
+               tmpstr +
+               txtarea.value.substring(endPos, txtarea.value.length);
          txtarea.selectionStart = startPos + tmpstr.length;
          txtarea.selectionEnd = txtarea.selectionStart;
          //restore textarea scroll position
@@ -211,37 +223,37 @@ function klavo(event) {
        }
    
        if (!document.f.cx.checked) return true;
-       var txtarea = document.getElementById('r:xmltxt');
+       txtarea = document.getElementById('r:xmltxt');
        if (document.selection  && document.selection.createRange) { // IE/Opera
          //save window scroll position
          if (document.documentElement && document.documentElement.scrollTop)
-       var winScroll = document.documentElement.scrollTop
+           winScroll = document.documentElement.scrollTop;
          else if (document.body)
-       var winScroll = document.body.scrollTop;
+           winScroll = document.body.scrollTop;
          //get current selection  
          txtarea.focus();
-         var range = document.selection.createRange();
-         var selText = range.text;
+         range = document.selection.createRange();
+         selText = range.text;
          if (selText != "") return true;
          range.moveStart('character', - 1); 
-         var before = range.text;
-         var nova = cxigi(before, key);
+         before = range.text;
+         nova = cxigi(before, key);
          if (nova != "") {
            range.text = nova;
            return false;
          }
        } else if (txtarea.selectionStart || txtarea.selectionStart == '0') { // Mozilla
-         var startPos = txtarea.selectionStart;
-         var endPos = txtarea.selectionEnd;
+         startPos = txtarea.selectionStart;
+         endPos = txtarea.selectionEnd;
          if (startPos != endPos || startPos == 0) { return true; }
-         var before = txtarea.value.substring(startPos - 1, startPos);
-         var nova = cxigi(before, key);
+         before = txtarea.value.substring(startPos - 1, startPos);
+         nova = cxigi(before, key);
          if (nova != "") {
        //save textarea scroll position
-       var textScroll = txtarea.scrollTop;
-       txtarea.value = txtarea.value.substring(0, startPos - 1)
-           + nova
-           + txtarea.value.substring(endPos, txtarea.value.length);
+       textScroll = txtarea.scrollTop;
+       txtarea.value = txtarea.value.substring(0, startPos - 1) +
+           nova +
+           txtarea.value.substring(endPos, txtarea.value.length);
        txtarea.selectionStart = startPos + nova.length - 1;
        txtarea.selectionEnd = txtarea.selectionStart;
        //restore textarea scroll position
@@ -258,9 +270,9 @@ function klavo(event) {
    
 function insertTags2(tagOpen, tagAttr, tagEndOpen, tagClose, sampleText) {
      if (tagAttr == "") {
-       insertTags(tagOpen, tagEndOpen+tagClose, sampleText)
+       insertTags(tagOpen, tagEndOpen+tagClose, sampleText);
      } else {
-       insertTags(tagOpen+tagAttr+tagEndOpen, tagClose, sampleText)
+       insertTags(tagOpen+tagAttr+tagEndOpen, tagClose, sampleText);
      }
 }
    
@@ -293,9 +305,9 @@ function indent(offset) {
         nt = selText.replace(/\n/g, "\n  ");
       else 
         nt = selText.replace(/\n  /g, "\n");
-      txtarea.value = txtarea.value.substring(0, startPos)
-            + nt
-            + txtarea.value.substring(endPos, txtarea.value.length);
+      txtarea.value = txtarea.value.substring(0, startPos) +
+            nt +
+            txtarea.value.substring(endPos, txtarea.value.length);
       txtarea.selectionStart = startPos+1;
       txtarea.selectionEnd = startPos + nt.length+1;
 
@@ -310,13 +322,14 @@ function indent(offset) {
 function insertTags(tagOpen, tagClose, sampleText) {
   var txtarea = document.getElementById('r:xmltxt');
   var selText, isSample=false;
+  var winScroll;
 
   if (document.selection && document.selection.createRange) { // IE/Opera
     //save window scroll position
     if (document.documentElement && document.documentElement.scrollTop)
-      var winScroll = document.documentElement.scrollTop
+      winScroll = document.documentElement.scrollTop;
     else if (document.body)
-      var winScroll = document.body.scrollTop;
+      winScroll = document.body.scrollTop;
 
     //get current selection  
     txtarea.focus();
@@ -338,7 +351,7 @@ function insertTags(tagOpen, tagClose, sampleText) {
 
     //restore window scroll position
   if (document.documentElement && document.documentElement.scrollTop)
-      document.documentElement.scrollTop = winScroll
+      document.documentElement.scrollTop = winScroll;
   else if (document.body)
     document.body.scrollTop = winScroll;
 
@@ -355,9 +368,9 @@ function insertTags(tagOpen, tagClose, sampleText) {
 
     //insert tags
     checkSelectedText();
-    txtarea.value = txtarea.value.substring(0, startPos)
-            + tagOpen + selText + tagClose
-            + txtarea.value.substring(endPos, txtarea.value.length);
+    txtarea.value = txtarea.value.substring(0, startPos) +
+            tagOpen + selText + tagClose +
+            txtarea.value.substring(endPos, txtarea.value.length);
 
     //set new selection
     if (isSample) {
@@ -378,7 +391,7 @@ function checkSelectedText(){
       isSample = true;
     } else if (selText.charAt(selText.length - 1) == ' ') { //exclude ending space char
       selText = selText.substring(0, selText.length - 1);
-      tagClose += ' '
+      tagClose += ' ';
     } 
   }
 }
@@ -423,7 +436,7 @@ function helpo_pagho(url) {
 // memoras valorojn de kelkaj kampoj en la loka memoro de la retumilo
 function store_preferences() {
   var prefs = {};
-  for (key of ['r:redaktanto','r:trdlng','r:klrtip','r:reftip','r:sxangxo','r:cx']) {
+  for (var key of ['r:redaktanto','r:trdlng','r:klrtip','r:reftip','r:sxangxo','r:cx']) {
     prefs[key] = document.getElementById(key).value;
   }
   window.localStorage.setItem("redaktilo_preferoj",JSON.stringify(prefs));  
@@ -434,7 +447,7 @@ function restore_preferences() {
   var str = window.localStorage.getItem("redaktilo_preferoj");
   var prefs = (str? JSON.parse(str) : null);
   if (prefs) {
-    for (key of ['r:redaktanto','r:trdlng','r:klrtip','r:reftip','r:sxangxo','r:cx']) {
+    for (var key of ['r:redaktanto','r:trdlng','r:klrtip','r:reftip','r:sxangxo','r:cx']) {
       document.getElementById(key).value = prefs[key];
     }
   }
@@ -444,8 +457,8 @@ function tab_toggle(id) {
   var el = document.getElementById(id);
   var tab_id;
   if (! el.classList.contains('aktiva')) {
-    for (ch of el.parentElement.children) {
-      ch.classList.remove('aktiva')
+    for (var ch of el.parentElement.children) {
+      ch.classList.remove('aktiva');
       tab_id = 'r:tab_'+ch.id.substring(2);
       document.getElementById(tab_id).classList.add('collapsed');
     }
@@ -466,8 +479,8 @@ function fs_toggle(id) {
   var el = document.getElementById(id);
   var fs_id;
   if (! el.classList.contains('aktiva')) {
-    for (ch of el.parentElement.children) {
-      ch.classList.remove('aktiva')
+    for (var ch of el.parentElement.children) {
+      ch.classList.remove('aktiva');
       fs_id = 'r:fs_'+ch.id.substring(2);
 
       // fermu ĉiujn videblajn tabuletojn
@@ -510,8 +523,8 @@ function listigu_erarojn(err) {
     el.appendChild(ul);
   } else {
     ul = elch[0];
-  };
-  for (e of err) {
+  }
+  for (var e of err) {
     var li = createTElement("li",e);               
     ul.appendChild(li);       
   }
@@ -520,9 +533,8 @@ function listigu_erarojn(err) {
 function add_err_msg(msg, matches) {
   var errors = [];
 
-  for (m of matches) {
-    var m = msg+m[1];
-    errors.push(m)
+  for (var m of matches) {
+    errors.push(msg+m[1]);
   }
   if (errors.length)
     listigu_erarojn(errors);
@@ -556,9 +568,9 @@ function kontrolu_mrk(art) {
     var el = m[1];
     var mrk = m[2];
     if ( mrk.indexOf(art+'.') != 0 ) {
-      errors.push("La marko \"" + mrk + "\" (" + el + ") ne komenciĝas je la dosieronomo (" + art + ".).")
+      errors.push("La marko \"" + mrk + "\" (" + el + ") ne komenciĝas je la dosieronomo (" + art + ".).");
     } else if ( mrk.indexOf('0',art.length) < 0 ) {
-      errors.push("La marko \"" + mrk + "\" (" + el + ") ne enhavas \"0\" (por tildo).")
+      errors.push("La marko \"" + mrk + "\" (" + el + ") ne enhavas \"0\" (por tildo).");
     }
   }
   if (errors.length)
@@ -640,6 +652,7 @@ function create_new_art() {
   var ta = document.getElementById("r:xmltxt");
   document.getElementById("r:art").value = art;
   document.getElementById("r:art_titolo").textContent = art;
+  /* jshint ignore:start */
   ta.value = 
       '<?xml version="1.0"?>\n'
     + '<!DOCTYPE vortaro SYSTEM "../dtd/vokoxml.dtd">\n'
@@ -664,6 +677,7 @@ function create_new_art() {
     + '</drv>\n'
     + '</art>\n'
     + '</vortaro>\n';
+    /* jshint ignore:end */
 }
    
 function vokomailx(command,art,xml) {
@@ -695,13 +709,13 @@ function vokomailx(command,art,xml) {
       var err_list = document.getElementById("r:eraroj");
       var rigardo = document.getElementById("r:tab_trigardo");
 
-      for (div of doc.getElementsByClassName("eraroj")) {
+      for (var div of doc.getElementsByClassName("eraroj")) {
         // debugging...
         console.log("div id=" + div.id);
         err_list.appendChild(div);
       }
 
-      var html = doc.getElementById("html_rigardo")
+      var html = doc.getElementById("html_rigardo");
       var pied = html.querySelector("span.redakto");
       if (pied) html.removeChild(pied);
       rigardo.textContent = '';
@@ -796,4 +810,4 @@ ready(function() {
   revo_codes.fakoj.load("r:sfak");
   revo_codes.stiloj.load("r:sstl");
   load_xml(); // se doniĝis ?art=xxx ni fone ŝargas tiun artikolon
-})
+});

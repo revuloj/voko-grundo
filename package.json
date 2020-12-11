@@ -1,0 +1,32 @@
+{
+    "name": "voko-grundo",
+    "version": "1.4.0",
+    "license": "GPL 2.0",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/revuloj/voko-grundo.git"
+    },
+    "devDependencies": {
+        "jshint": "latest",
+        "cssmin": "latest",
+        "google-closure-compiler": "latest"
+    },
+    "scripts": {
+        "env": "env",
+        "css_src": "stl/normalize.css stl/koloroj.css stl/piktogram-1c.css stl/formularo.css stl/kadro-1c.css stl/artikolo-1c.css stl/redaktilo-1c.css",
+        "jsc_src": "jsc/util.js jsc/transiroj.js jsc/preferoj.js jsc/artikolo.js jsc/kadro.js jsc/voko_entities.js jsc/redaktilo.js",
+        "lint": "jshint jsc/**.js",
+        "//build:css": "bin/compile-css.sh",
+        "build:css": "cat stl/normalize.css stl/koloroj.css stl/piktogram-1c.css stl/formularo.css stl/kadro-1c.css stl/artikolo-1c.css stl/redaktilo-1c.css | cssmin > build/stl/revo-1d-min.css",
+        "build:dok": "bin/compile-dok.sh",
+        "//build:js": "bin/compile-jscript.sh",
+        "// build:js": "uglifyjs jsc/util.js -o build/jsc/revo-1d-min.js",
+        "build:js": "google-closure-compiler --compilation_level SIMPLE --js_module_root jsc --entry_point jsc/kadro.js --js_output_file build/jsc/revo-1d-min.js jsc/util.js jsc/transiroj.js jsc/preferoj.js jsc/artikolo.js jsc/kadro.js jsc/voko_entities.js jsc/redaktilo.js",
+        "//prebuild:js": "npm run lint",
+        "build": "npm run build:css && npm run build:css && npm run build:js"
+    },
+    "scriptsComments": {
+        "build": "Kompilas CSS, JS kaj DOK al dosierujo build/",
+        "build:js": "pri google-closure-compiler vd. https://www.npmjs.com/package/google-closure-compiler"
+    }
+}

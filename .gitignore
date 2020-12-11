@@ -6,4 +6,4 @@ smb/*.svg
 smb/*.log
 smb/*.png
 
-stl/*.afm
+node_modules
