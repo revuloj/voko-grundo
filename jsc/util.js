@@ -1,3 +1,6 @@
+
+/* jshint esversion: 6 */
+
 // ajax http request
 function HTTPRequestFull(method, url, headers, params, onSuccess, 
     onStart, onFinish, onError) {  // onStart, onFinish, onError vi povas ellasi!
@@ -14,9 +17,9 @@ function HTTPRequestFull(method, url, headers, params, onSuccess,
         const _url = url.split("#");
 
         if (_url[0].indexOf('?')>-1) {
-          _url[0] += "&v="+akt
+          _url[0] += "&v="+akt;
         } else {
-          _url[0] += "?v="+akt
+          _url[0] += "?v="+akt;
         }
 
         url = _url.join('#');
@@ -52,9 +55,9 @@ function HTTPRequestFull(method, url, headers, params, onSuccess,
           // post konektiĝo okazis eraro
           console.error('Eraro dum ŝargo de ' + url);  
           if (onError) onError(request);
-        };
+      }
       if (onFinish) onFinish();
-    }
+    };
     
     request.onerror = function() {
       // konekteraro
@@ -88,14 +91,16 @@ function fix_art_href(root_el) {
 
 // anstataŭigu GIF per SVG  
 function fix_img_svg(root_el) {
+  var src;
+
   for (var i of root_el.getElementsByTagName("img")) {
-    var src = i.getAttribute("src");
+    src = i.getAttribute("src");
     //if (src.startsWith("..")) i.setAttribute("src",src.substring(1));
 
     // aldonu klason por rerencoj
     if ( src.endsWith('.gif') && !i.classList.length ) {
       // referencilo
-      var src = i.getAttribute("src");
+      src = i.getAttribute("src");
       if (src) {
         var nom = src.split('/').pop().split('.')[0];
         var svg = {
@@ -119,31 +124,31 @@ function fix_img_svg(root_el) {
 function show(id,cls='kasxita') {
   const el = document.getElementById(id);
   if (el) el.classList.remove(cls);
-  else console.warn("show: elemento "+id+" ne troviĝis.")
+  else console.warn("show: elemento "+id+" ne troviĝis.");
 }
 
 function hide(id,cls='kasxita') {
   const el = document.getElementById(id);
   if (el) el.classList.add(cls);
-  else console.warn("hide: elemento "+id+" ne troviĝis.")
+  else console.warn("hide: elemento "+id+" ne troviĝis.");
 }
 
 function toggle(id,cls='kasxita') {
   const el = document.getElementById(id);
   if (el) el.classList.toggle(cls);
-  else console.warn("toggle: elemento "+id+" ne troviĝis.")
+  else console.warn("toggle: elemento "+id+" ne troviĝis.");
 }
 
 function disable(id) {
   const el = document.getElementById(id);
   if (el) el.setAttribute("disabled","disabled");
-  else console.warn("disable: elemento "+id+" ne troviĝis.")
+  else console.warn("disable: elemento "+id+" ne troviĝis.");
 }
 
 function enable(id) {
   const el = document.getElementById(id);
   if (el) el.removeAttribute("disabled");
-  else console.warn("disable: elemento "+id+" ne troviĝis.")
+  else console.warn("disable: elemento "+id+" ne troviĝis.");
 }
 
 // aliras helpo-paĝon
@@ -156,14 +161,14 @@ function when_doc_ready(onready_fn) {
     if (document.readyState != 'loading'){
       onready_fn();
     } else {
-      document.addEventListener('DOMContentLoaded',  onready_fn)
+      document.addEventListener('DOMContentLoaded',  onready_fn);
     }
 }
 
 function make_element(name,attributes,textcontent) {
     var element = document.createElement(name);
     for (var a in attributes) {
-        element.setAttribute(a,attributes[a])
+        element.setAttribute(a,attributes[a]);
     }
     if (textcontent) element.appendChild(document.createTextNode(textcontent));
     return element;
@@ -184,7 +189,7 @@ function make_elements(jlist) {
             element=make_element(el[0],el[1],el[2]);
         }
       } //else
-      dlist.push(element)
+      dlist.push(element);
     } // for
     return dlist;
 }
@@ -194,7 +199,7 @@ function make_button(label,handler,hint='') {
     btn.appendChild(document.createTextNode(label)); 
     btn.addEventListener("click",handler);
     //btn.classList.add("kashilo");
-    if (hint) btn.setAttribute("title",hint)
+    if (hint) btn.setAttribute("title",hint);
     return btn;
 }
 
@@ -203,7 +208,7 @@ function make_icon_button(iclass,handler,hint='') {
     //btn.appendChild(document.createTextNode(label)); 
     if (handler) btn.addEventListener("click",handler);
     btn.classList.add(iclass,"icon_btn");
-    if (hint) btn.setAttribute("title",hint)
+    if (hint) btn.setAttribute("title",hint);
     return btn;
 }
 
@@ -220,13 +225,13 @@ function getUrlFileName(url) {
 }
 
 function getHashParts() {
-    var h = (location.hash[0] == '#'
-        ? location.hash.substr(1) 
-        : location.hash);
+    var h = (location.hash[0] == '#' ?
+        location.hash.substr(1) :
+        location.hash);
     var r = {};
-    for (p of h.split('&')) {
+    for (var p of h.split('&')) {
         if (p.indexOf('=') < 0) {
-            r.mrk = p
+            r.mrk = p;
         } else {
             var v = p.split('=');
             r[v[0]] = v[1];
@@ -351,7 +356,7 @@ function Textarea(ta_id) {
           if (typeof txtarea.scrollTop == "number")  // Mozilla & Co
             txtarea.scrollTop = pos;
           else if (document.documentElement && document.documentElement.scrollTop)
-            document.documentElement.scrollTop = pos
+            document.documentElement.scrollTop = pos;
           else if (document.body)
             document.body.scrollTop = pos;
         } else {
@@ -359,7 +364,7 @@ function Textarea(ta_id) {
           if (txtarea.scrollTop)  // Mozilla
             return txtarea.scrollTop;
           else if (document.documentElement && document.documentElement.scrollTop)
-            return document.documentElement.scrollTop
+            return document.documentElement.scrollTop;
           else /*if (document.body)*/
             return document.body.scrollTop;
         }
@@ -378,7 +383,7 @@ function Textarea(ta_id) {
             }
         }
         pos = (lines == 0)? inx : (inx-last_pos-1);
-        return({line: lines, pos: pos})
+        return({line: lines, pos: pos});
       }
 
       //...
@@ -394,25 +399,27 @@ function Textarea(ta_id) {
         pos = sel.text.length - selLength;
       }
       return get_line_pos(pos,txtarea.value);
-    }
+    };
 
     
     Textarea.prototype.selection = function(insertion,p_kursoro=0) {
         //var txtarea = document.getElementById('r:xmltxt');
         var txtarea = this.txtarea;
+        var range;
+        var startPos;
         txtarea.focus();
     
         if (typeof insertion == "string") { // enmetu tekston ĉe la markita loko
           if (document.selection && document.selection.createRange) { // IE/Opera
-            var range = document.selection.createRange();
+            range = document.selection.createRange();
             range.text = insertion;  
             range.select();   
           } else {
-            var startPos = txtarea.selectionStart
+            startPos = txtarea.selectionStart;
             txtarea.value = 
-              txtarea.value.substring(0, startPos)
-              + insertion
-              + txtarea.value.substring(txtarea.selectionEnd, txtarea.value.length);
+              txtarea.value.substring(0, startPos) +
+              insertion +
+              txtarea.value.substring(txtarea.selectionEnd, txtarea.value.length);
             if (p_kursoro>-1) {
               // movu la kursoron al startPost+p_kursoro
               txtarea.selectionStart = startPos + p_kursoro;
@@ -425,10 +432,10 @@ function Textarea(ta_id) {
           }
         } else { // redonu la markitan tekston
           if (document.selection && document.selection.createRange) { // IE/Opera
-            var range = document.selection.createRange();
+            range = document.selection.createRange();
             return range.text;  
           } else { // Mozilla
-            var startPos = txtarea.selectionStart;
+            startPos = txtarea.selectionStart;
             var endPos = txtarea.selectionEnd;
             return txtarea.value.substring(startPos, endPos); 
           }
@@ -438,8 +445,10 @@ function Textarea(ta_id) {
     Textarea.prototype.indent = function(indent) {
         //var txtarea = document.getElementById('r:xmltxt');
         var txtarea = this.txtarea;
+        var selText;
+        var startPos;
+
         if (typeof indent == "number") { // enŝovu
-          var selText;
       
           if (document.selection  && document.selection.createRange) { // IE/Opera
             alert("enŝovado por malnova retumilo IE aŭ Opera ne funkcias.");
@@ -450,7 +459,7 @@ function Textarea(ta_id) {
       
             //get current selection
             txtarea.focus();
-            var startPos = txtarea.selectionStart;
+            startPos = txtarea.selectionStart;
             //if (startPos > 0) {
             //  startPos--;
             //}
@@ -481,15 +490,17 @@ function Textarea(ta_id) {
           } 
         } else { // eltrovu la nunan enŝovon
           indent = 0;
+          var linestart;
+
           if (document.selection  && document.selection.createRange) { // IE/Opera
             var range = document.selection.createRange();
             range.moveStart('character', - 200); 
-            var selText = range.text;
-            var linestart = selText.lastIndexOf("\n");
+            selText = range.text;
+            linestart = selText.lastIndexOf("\n");
             while (selText.charCodeAt(linestart+1+indent) == 32) {indent++;}
           } else if (txtarea.selectionStart || txtarea.selectionStart == '0') { // Mozilla
-            var startPos = txtarea.selectionStart;
-            var linestart = txtarea.value.substring(0, startPos).lastIndexOf("\n");
+            startPos = txtarea.selectionStart;
+            linestart = txtarea.value.substring(0, startPos).lastIndexOf("\n");
             while (txtarea.value.substring(0, startPos).charCodeAt(linestart+1+indent) == 32) {indent++;}
           }
           return (str_repeat(" ", indent));  
@@ -507,7 +518,7 @@ function Textarea(ta_id) {
         } else {
           var startPos = txtarea.selectionStart;
           txtarea.setSelectionRange(startPos-1,startPos);
-          return txtarea.value.substring(startPos - 1, startPos)
+          return txtarea.value.substring(startPos - 1, startPos);
         }
     },
 
@@ -524,4 +535,4 @@ function Textarea(ta_id) {
             range.select(); 
         } 
         txtarea.focus();
-      }
+      };

@@ -1,4 +1,5 @@
 
+/* jshint esversion: 6 */
 const voko_entities={"amp":"&amp;",
 "lt":"&lt;",
 "gt":"&gt;",
@@ -654,4 +655,4 @@ const voko_entities={"amp":"&amp;",
 "a_fatha_A":"َا",
 "a_kasra_y":"ِي",
 "a_damma_w":"ُو",
-}
+};

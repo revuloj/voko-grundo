@@ -1,4 +1,6 @@
 
+/* jshint esversion: 6 */
+
 const debug=false; // ni bezonas provizore aparte por vidi erarojn en iOS Webkit, kie ni ne havas "console"
 const revo_url = "reta-vortaro.de";
 const sercho_url = "/cgi-bin/sercxu-json-1c.pl";
@@ -9,7 +11,7 @@ const redaktmenu_url = "redaktmenu-1c.html";
 //const inx_eo_url = "/revo/inx/_eo.html";
 
 const inx_eo_url = "/revo/inx/_plena.html";
-const mx_trd_url = "/cgi-bin/mx_trd.pl"
+const mx_trd_url = "/cgi-bin/mx_trd.pl";
 const http_404_url = "/revo/dlg/404.html";
 const sercho_videblaj = 7;
 
@@ -49,13 +51,13 @@ when_doc_ready(function() {
             const c = document.getElementById("console");
             if (c) {
               const tn = document.createTextNode(
-                event.filename+"@"
-                +event.lineno+": "
-                +event.message);
+                event.filename + "@" +
+                event.lineno + ": " +
+                event.message);
               const br = document.createElement("br");
               c.append(tn,br);
             }
-        })    
+        });  
     }
 
     // preferataj lingvoj
@@ -203,7 +205,7 @@ when_doc_ready(function() {
 
         //onclick("x:titol_btn",()=>{ load_page("main",titolo_url) });
         onclick("x:titol_btn",()=>{ 
-            load_page("main",titolo_url)
+            load_page("main",titolo_url);
             //t_main.transiro("titolo") 
         });
         //t_main.je("x:titol_btn","click","titolo")
@@ -212,7 +214,7 @@ when_doc_ready(function() {
         onclick("x:nav_srch_btn",(event)=>{ 
             serchu(event);
             // transiro aŭ lanĉu la serĉon aŭ evtl. sekvu ĝin...
-        })
+        });
         //t_nav.je("x:nav_srch_btn","click","serĉo");
 
         /*
@@ -245,13 +247,13 @@ when_doc_ready(function() {
             redaktilo.rantaurigardo();
         });
         */
-        onclick("x:rigardo_btn",()=>{ t_main.transiro("red_rigardo") });
+        onclick("x:rigardo_btn",()=>{ t_main.transiro("red_rigardo"); });
         //t_main.je("x:rigardo_btn","click","red_rigardo");
 
         onclick("x:cx",(event)=>{ 
             var cx = event.currentTarget;
             cx.value = 1 - cx.value; 
-            document.getElementById('x:q').focus() 
+            document.getElementById('x:q').focus();
         });
 
         
@@ -265,7 +267,7 @@ when_doc_ready(function() {
         
         //t_nav.je("x:q","keydown","serĉo");
 
-        var query = document.getElementById("x:q");
+        //var query = document.getElementById("x:q");
         query.addEventListener("keyup",function(event){
             //console.debug("which: "+event.which+" code:"+event.code + " key: "+ event.key);
             if (event.key == "x" || event.key == "Shift") { // x-klavo
@@ -273,7 +275,7 @@ when_doc_ready(function() {
                     var s = event.target.value;
                     var s1 = ascii_eo(s);
                     if (s != s1)
-                        event.target.value = s1
+                        event.target.value = s1;
                 }
             }
         });
@@ -357,9 +359,9 @@ function enkadrigu() {
 function nav_toggle() {
     var menu = document.getElementById("navigado");
     if (menu.style.display == "") {
-        menu.style.display = "block"
+        menu.style.display = "block";
     } else {
-        menu.style.display = ""
+        menu.style.display = "";
     }
 }
 
@@ -385,20 +387,20 @@ function ref_target(a_el) {
     if (href.startsWith('#')) {
         return "int";
     } else if (
-        href.startsWith('http://') && href.substring('http://'.length-1,revo_url.length) != revo_url
-        || href.startsWith('https://') && href.substring('https://'.length-1,revo_url.length) != revo_url
+        href.startsWith('http://') && href.substring('http://'.length-1,revo_url.length) != revo_url ||
+        href.startsWith('https://') && href.substring('https://'.length-1,revo_url.length) != revo_url
         ) {
         return "ext";
     } else if (href.indexOf("/cgi-bin/vokomail.pl")>=0) {
         return "red"; // redakti...
     } else if (trg == "precipa") {
-        return "main"
+        return "main";
     } else if (trg == "indekso") {
-        return "nav"
+        return "nav";
     } else if (!trg) {
         var cnt = a_el.closest("nav,main");
         if (cnt) return cnt.tagName.toLowerCase(); 
-    };
+    }
 }
 
 /* En la kazoj ref_target = main | nav, ni adaptos la originajn URL-ojn por Ajax:
@@ -412,7 +414,7 @@ function normalize_href(target, href) {
     // ĉu estas fidinde uzi "target" tie ĉi aŭ ĉu ni uzu "source"?
     const prefix = { main: "art/", nav: "inx/"};
     if (href.endsWith('titolo.html')) {
-        return '/revo/dlg/'+titolo_url
+        return '/revo/dlg/'+titolo_url;
     } else if (href.startsWith('../')) {
         return '/revo/' + href.substr(3);
     } else if (href.startsWith('tz_') || href.startsWith('vx_')) {
@@ -431,14 +433,14 @@ function normalize_href(target, href) {
 function start_wait() {
     var s_btn = document.getElementById('x:revo_icon');
     if (s_btn) s_btn.classList.add('revo_icon_run');
-    var s_btn = document.getElementById('w:revo_icon');
+    s_btn = document.getElementById('w:revo_icon');
     if (s_btn) s_btn.classList.add('revo_icon_run');
 }
 
 function stop_wait(btn_id) {
     var s_btn = document.getElementById('x:revo_icon');
     if (s_btn) s_btn.classList.remove('revo_icon_run');
-    var s_btn = document.getElementById('w:revo_icon');
+    s_btn = document.getElementById('w:revo_icon');
     if (s_btn) s_btn.classList.remove('revo_icon_run');
 }
 
@@ -461,8 +463,9 @@ function index_home_btn(parent) {
 
 function load_page(trg,url,push_state=true) {
     function update_hash() {
+        var hash;
         if (url.indexOf('#') > -1) {
-            var hash = url.split('#').pop();
+            hash = url.split('#').pop();
         } else {
             hash = '';
         }
@@ -479,9 +482,10 @@ function load_page(trg,url,push_state=true) {
 
     function load_page_nav(doc,nav) {
         nav.textContent= '';
+        var filename;
         var table = doc.querySelector("table"); 
         try {
-            var filename = url.split('/').pop().split('.')[0];
+            filename = url.split('/').pop().split('.')[0];
             table.id = "x:"+filename;
             adaptu_paghon(table,url);    
 
@@ -520,7 +524,7 @@ function load_page(trg,url,push_state=true) {
                 .addEventListener("click",function() {
                     t_red.transiro("ne_redaktante");
             });
-        }; 
+        } 
         index_spread();
 
         // laŭbezone ankoraŭ iru al loka marko
@@ -610,8 +614,8 @@ function load_page(trg,url,push_state=true) {
                 //img_svg_bg(); // anst. fakvinjetojn, se estas la fak-indekso - ni testos en la funkcio mem!
             } else if (main && trg == "main") {
                 // se redaktado ne jam estas finita, sekurigu la artikolon
-                if (t_red.stato == "redaktante" 
-                    && (t_main.stato == "red_xml" || t_main.stato == "red_rigardo"))
+                if (t_red.stato == "redaktante" &&
+                   (t_main.stato == "red_xml" || t_main.stato == "red_rigardo"))
                     redaktilo.store_art();
 
                 // PLIBONIGU: difinu load_page_main kiel ago de transiro(?()
@@ -646,7 +650,7 @@ function adaptu_paghon(root_el, url) {
     // anstataŭigu GIF per SVG  
     fix_img_svg(root_el);
 
-    var filename = url.split('/').pop()
+    var filename = url.split('/').pop();
     // index Esperanto
     if ( filename.startsWith('_eo.') ) {
         for (var n of root_el.querySelectorAll(".kls_nom")) {
@@ -655,30 +659,30 @@ function adaptu_paghon(root_el, url) {
 
                 n.addEventListener("click", function(event) {
                     event.target.classList.toggle("maletendita");
-                })    
+                });   
             }
         }
     }
     // index "ktp.
     else if ( filename.startsWith('_ktp.') ) {
         // hazarda artikolo
-        const hazarda = root_el.querySelector("p[id='x:Iu_ajn_artikolo'] a")
-            || root_el.querySelector("a[href*='hazarda_art.pl'");
+        const hazarda = root_el.querySelector("p[id='x:Iu_ajn_artikolo'] a") ||
+                        root_el.querySelector("a[href*='hazarda_art.pl'");
         hazarda.addEventListener("click", function(event) {
             event.preventDefault();
             hazarda_art();
             event.stopPropagation(); // ne voku navigate_link!
-        })        
+        });       
     }
     else if ( filename.startsWith('_plena.') ) {
         // hazarda artikolo
-        const hazarda = root_el.querySelector("p[id='x:Iu_ajn_artikolo'] a")
-            || root_el.querySelector("a[href*='hazarda_art.pl'");
+        const hazarda = root_el.querySelector("p[id='x:Iu_ajn_artikolo'] a") ||
+                        root_el.querySelector("a[href*='hazarda_art.pl'");
         hazarda.addEventListener("click", function(event) {
             event.preventDefault();
             hazarda_art();
             event.stopPropagation(); // ne voku navigate_link!
-        })        
+        });      
     }
     else if ( filename.startsWith('mx_trd.') ) {
         var a;
@@ -691,7 +695,7 @@ function adaptu_paghon(root_el, url) {
         }
     }
     else if ( filename.startsWith('tz_') ) {
-        root_el.querySelector("tr").classList.add("menuo")
+        root_el.querySelector("tr").classList.add("menuo");
     }
     // serĉilo en titol- kaj serĉo-paĝoj
     else if ( filename.startsWith('titolo') ) {
@@ -715,7 +719,7 @@ function adaptu_paghon(root_el, url) {
                     var s = event.target.value;
                     var s1 = ascii_eo(s);
                     if (s != s1)
-                        event.target.value = s1
+                        event.target.value = s1;
                 }
             }
         });
@@ -724,27 +728,27 @@ function adaptu_paghon(root_el, url) {
             event.preventDefault();
             var cx = event.target;
             cx.value = 1 - cx.value; 
-            document.getElementById('w:q').focus()
-        })
+            document.getElementById('w:q').focus();
+        });
 
         s_form.querySelector("button[value='revo']")
             .addEventListener("click", function(event) {
                 event.preventDefault();
-                serchu(event)
+                serchu(event);
             });
 
         s_form.querySelector("button[value='ecosia']")
             .addEventListener("click", function(event) {
                 event.preventDefault();
-                var q = document.getElementById('w:q').value
-                location.href = 'https://www.ecosia.org/search?q='+encodeURIComponent(q+' site:reta-vortaro.de')
+                var q = document.getElementById('w:q').value;
+                location.href = 'https://www.ecosia.org/search?q='+encodeURIComponent(q+' site:reta-vortaro.de');
             });
 
         s_form.querySelector("button[value='anaso']")
             .addEventListener("click", function(event) {
                 event.preventDefault();
-                var q = document.getElementById('w:q').value
-                location.href = 'https://duckduckgo.com?q='+encodeURIComponent(q+' site:reta-vortaro.de')
+                var q = document.getElementById('w:q').value;
+                location.href = 'https://duckduckgo.com?q='+encodeURIComponent(q+' site:reta-vortaro.de');
         });
 
         /*
@@ -760,7 +764,7 @@ function adaptu_paghon(root_el, url) {
         hazarda.addEventListener("click", function(event) {
             event.preventDefault();
             hazarda_art();
-        })
+        });
     } 
 }
 
@@ -784,7 +788,7 @@ function navigate_link(event) {
     var href = el? el.getAttribute("href") : null;
 
     if (el && href) {
-        var href = el.getAttribute("href");
+        href = el.getAttribute("href");
         var target = ref_target(el);
     
         if (href && target && target != "int") {
@@ -795,7 +799,7 @@ function navigate_link(event) {
 
             // redaktilo
             } else if (target == "red") {
-                redaktu(href)
+                redaktu(href);
 
             // paĝo en la ĉefa parto (main)
             } else if (target == "main") {
@@ -861,7 +865,7 @@ function serchu(event) {
         .querySelector('input[name=q]');
     var esprimo = serch_in.value;
     if (esprimo.indexOf('%') < 0 && esprimo.indexOf('_') < 0 && esprimo.length >= 3)
-        esprimo += '%' // serĉu laŭ vortkomenco, se ne jam enestas jokeroj, kaj
+        esprimo += '%'; // serĉu laŭ vortkomenco, se ne jam enestas jokeroj, kaj
                         // almenaŭ 3 literoj
 
     // evitu ŝanĝi .search, ĉar tio refreŝigas la paĝon nevolite: 
@@ -895,12 +899,12 @@ function serchu_q(esprimo) {
                 // funkcio por malkaŝi la reston...
                 pli[0].addEventListener("click",function(event) {
                     var dl = event.target.closest("dl");
-                    for (ch of dl.childNodes) {
-                        ch.classList.remove("kasxita")
+                    for (var ch of dl.childNodes) {
+                        ch.classList.remove("kasxita");
                     }
                     event.target.closest("dt").classList.add("kasxita");
                     var p = dl.parentElement.querySelector("p");
-                    if (p) p.classList.remove("kasxita")
+                    if (p) p.classList.remove("kasxita");
                 });
                 return pli;
             }
@@ -920,7 +924,7 @@ function serchu_q(esprimo) {
                     trvj = lng.trovoj.sort(function(a,b) {
                         // ĉu localeCompare por eo funkcias ĉie, kio pri iOS, Windows...?
                         return a.eo.vrt.localeCompare(b.eo.vrt,'eo');
-                    })
+                    });
                 } else {
                     trvj = lng.trovoj; // lasu la ordon por aliaj lingvoj
                 }
@@ -942,7 +946,7 @@ function serchu_q(esprimo) {
                             var pli = make_pli(trvj.length - sercho_videblaj);
                             dl.append(...pli);
                         }                        
-                        atr = {class: "kasxita"}
+                        atr = {class: "kasxita"};
                     }
                     // eo -> pref_lng
                     const _ll_ = lng.lng;
@@ -960,13 +964,13 @@ function serchu_q(esprimo) {
                             // do ni provizore uzas t.eo.mrk anst. t[l].mrk
                             var a;
                             if (l == 'eo') {
-                                var a = make_elements([
+                                a = make_elements([
                                     ["a",{target: "precipa", href: t.art+".html#"+t.eo.mrk},
                                         t[l].vrt
                                     ]
                                 ]);    
                             } else {
-                                var a = make_elements([
+                                a = make_elements([
                                     ["a",{target: "precipa", href: t.art+".html#"+t.eo.mrk},
                                         [["code",{},l+":"],t[l].vrt]
                                     ]
@@ -974,7 +978,7 @@ function serchu_q(esprimo) {
                             }
                             dd.append(...a);
                         }
-                    };
+                    }
                     // grupigu tradukojn de samaj trov-vortoj
                     //while (trvj[n+1] && trvj[n+1].mrk == t.eo.mrk && trvj[n+1].eo.vrt == t.vrt) {
                     //    var t1 = trvj[++n];
