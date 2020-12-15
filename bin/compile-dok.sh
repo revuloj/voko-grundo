@@ -1,9 +1,25 @@
 #!/bin/bash
 
-dokdir=$(pwd)/build/dok
-src=dok/datumprotekto.xml
-# poste anst. finaĵojn por ĉiu src-dosiero
-out=datumprotekto.html
-xsl=xsl/manlibro.xsl
+srcdir=dok
+outdir=$(pwd)/build/dok
 
-xsltproc $xsl ${src} > ${dokdir}/${out} 
+dok_xsl=xsl/manlibro.xsl
+bib_xsl=xsl/bibhtml.xsl
+
+#src=(\
+#    datumprotekto.xml
+#)
+#
+#for f in "${src[@]}"; 
+#do
+#    NAME=$(basename "$f")
+#    out="${NAME%.xml}"
+#    out="${outdir}/${out}.html"
+#    echo "${out} <- ${NAME}"
+#    xsltproc $dok_xsl ${srcdir}/${NAME} > ${out} 
+#done
+
+NAME="datumprotekto.xml"
+echo "$outdir/${NAME}..."
+xsltproc $dok_xsl ${srcdir}/${NAME} > "$outdir/${NAME}"
+
