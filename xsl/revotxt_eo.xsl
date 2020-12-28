@@ -124,6 +124,7 @@ name="redcgi">/cgi-bin/vokomail.pl?art=</xsl:variable -->
 
 <xsl:template name="tradukoj"/>
 <xsl:template name="fontoj"/>
+<xsl:template name="fontoj-art"/>
 
 <xsl:template match="frm|nom|nac|esc">
   &#x29fc;<xsl:apply-templates/>&#x29fd;
