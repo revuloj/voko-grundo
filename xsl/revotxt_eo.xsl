@@ -121,6 +121,7 @@ name="redcgi">/cgi-bin/vokomail.pl?art=</xsl:variable -->
   <xsl:value-of 
       select="substring-before(substring-after(@mrk,',v'),'revo')"/>]
 </xsl:template>
+<xsl:template name="redakto"/>
 
 <xsl:template name="tradukoj"/>
 <xsl:template name="fontoj"/>
