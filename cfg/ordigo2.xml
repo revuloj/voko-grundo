@@ -158,6 +158,41 @@
  <l name="ja">&#x044f;&#x042f;</l>
 </lingvo>
 
+
+<!-- tibeta -->
+<lingvo lng="bo">
+ <l name="k">&#x0F40;</l>
+ <l name="kh">&#x0F41;</l>
+ <l name="g">&#x0F42;</l>
+ <l name="ng">&#x0F44;</l>
+ <l name="c">&#x0F45;</l>
+ <l name="ch">&#x0F46;</l>
+ <l name="j">&#x0F47;</l>
+ <l name="ny">&#x0F49;</l>
+ <l name="t">&#x0F4F;</l>
+ <l name="th">&#x0F50;</l>
+ <l name="d">&#x0F51;</l>
+ <l name="n">&#x0F53;</l>
+ <l name="p">&#x0F54;</l>
+ <l name="ph">&#x0F55;</l>
+ <l name="b">&#x0F56;</l>
+ <l name="m">&#x0F58;</l>
+ <l name="ts">&#x0F59;</l>
+ <l name="tx">&#x0F5A;</l>
+ <l name="dz">&#x0F5B;</l>
+ <l name="w">&#x0F5D;</l>
+ <l name="zh">&#x0F5E;</l>
+ <l name="z">&#x0F5F;</l>
+ <l name="x">&#x0F60;</l>
+ <l name="y">&#x0F61;</l>
+ <l name="r">&#x0F62;</l>
+ <l name="l">&#x0F63;</l>
+ <l name="sh">&#x0F64;</l>
+ <l name="s">&#x0F66;</l>
+ <l name="h">&#x0F67;</l>
+ <l name="a">&#x0F68;</l>
+</lingvo>
+
 <!-- bretona -->
 <lingvo lng="br" kreu-regulojn="jes" klaso="de.steloj.respiro.BretonCollator">
  <l name="a">a,A</l>
