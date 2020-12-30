@@ -82,22 +82,30 @@ class="net.sf.saxon.sort.CodepointCollator"/ -->
       <xsl:variable name="trdoj" select="."/>
 
       <xsl:for-each select="document($ordigo)/ordigo/lingvo[string(@lng)=$ordlng]/l">
+        <!-- $n indikos kiom da signoj de la vortkomenco ni komparos por tiu
+        litergrupo, tio estas aŭ donita en la difino de cfg/ordigo2.xml per @n
+        aŭ 1, se @n mankas/estas malplena -->
         <xsl:variable name="n" select="number(substring(concat(@n,'1'),1,1))"/>
 
-        <!-- la sekva solvas la problemon 
-             ekz. en la hispana kaj kimra, 
-             kie ordighas "Ll" en alian grupon ol "L", 
-             sed vortoj komencighantaj je "Ll" 
+        <!-- la sekva solvas la problemon ekz. en la hispana kaj kimra, 
+             kie ordighas "Ll" en alian grupon ol "L", sed vortoj komencighantaj je "Ll" 
              ne aperu ankau sub "L" -->
 
         <xsl:variable name="minus" select="../l[@name=current()/@minus]"/> 
+        <!-- longeco ne de la litergrupo kies nomo egalas al @minus de la momenta litergrupo
+          ni bezonas por kompari la ĝustan nombron la literoj -->
         <xsl:variable name="nminus"
            select="number(substring(concat(../l[@name=current()/@minus]/@n,'1'),1,1))"/>     
 
         <xsl:call-template name="trd-litero">
-           <xsl:with-param name="trdoj" select="$trdoj/v[contains(current(),
-		substring(translate(t,$ignorendaj,''),1,$n)) 
-             and not(contains($minus,substring(t,1,$nminus)))]"/>
+           <!-- foriginte el la traduko la ignorendajn signojn
+                ni komparas la unuajn $n kun la difinitaj liter-grupoj el cfg/ordigo2.xml
+                krom se la vorto komenciĝas per la signovico donitaj en "minus".
+                Ekz-e la ĉaptiro "c" en la kimra ne enhavu la vortojn kun "ch en la komenco " -->
+           <xsl:with-param name="trdoj" 
+            select="$trdoj/v[contains(current(),
+		          substring(translate(t,$ignorendaj,''),1,$n)) 
+              and not(contains($minus,substring(t,1,$nminus)))]"/>
            <xsl:with-param name="ordlng" select="$ordlng"/>
            <xsl:with-param name="lit-name" select="@name"/>
            <xsl:with-param name="lit-min" select="substring(.,1,$n)"/>
