@@ -12,10 +12,10 @@ host=retavortaro.de
 release=1c
 
 # adaptoj de malnovaj...
-scp stl/artikolo-1b.css ${host}:/html/revo/stl/
-scp stl/indeksoj.css ${host}:/html/revo/stl/
+#scp stl/artikolo-1b.css ${host}:/html/revo/stl/
+#scp stl/indeksoj.css ${host}:/html/revo/stl/
 
-#scp build/jsc/revo-${release}.js ${host}:/html/revo/jsc/
+# scp build/jsc/revo-${release}.js ${host}:/html/revo/jsc/
 #scp build/jsc/malnova-${release}.js ${host}:/html/revo/jsc/
 #
 #scp build/stl/revo-${release}-min.css ${host}:/html/revo/stl/
@@ -33,6 +33,7 @@ scp stl/indeksoj.css ${host}:/html/revo/stl/
 #scp cfg/sercxo-ecosia.xml ${host}:/html/revo/cfg/
 #scp cfg/sercxo-anaso.xml ${host}:/html/revo/cfg/
 #scp cfg/sercxo-revo.xml ${host}:/html/revo/cfg/
+
 
 #
 #for f in xsl/inc/*

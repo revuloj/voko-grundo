@@ -1,6 +1,17 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 version="1.0">
 
+
+<!-- (c) 2002-2020 che Wolfram Diestel
+
+  iam uzita por transformi ordigo2.xml al /inx_ordigo2.inc - ordigreguloj por XSL
+  vd. voko-formiko/ant/indeksoj.xml 
+
+  Sed intertempe ni uzas Javo-klasojn por ordigado de apartaj lingvoj.
+  La malnova maniero ne plu estas preferata/subtenata de Saxon-transformilo.
+
+-->                
+
 <xsl:output method="text" encoding="utf-8"/>
 
 <xsl:template match="/">

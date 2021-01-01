@@ -158,7 +158,60 @@
  <l name="ja">&#x044f;&#x042f;</l>
 </lingvo>
 
-<!-- bretona -->
+
+<!-- tibeta 
+
+propre oni ordigas la tibetan laŭ-silabe kaj ne laŭ-litere,
+vd. la tabelon https://web.archive.org/web/20160428223852/https://developer.mimer.com/charts/tibetan.htm
+
+Provizore ni alporksimiĝas al tiu ordigo konsiderante ĉiam la unuajn du literojn
+de vorto. Tio evidente ignoras (maloftajn) kazojn, kie la unuaj du literoj
+ne decidas, sed la tria aŭ kvara, kie enordiĝu la vorto.
+
+T.e.: F56 F62 X, 0F56 0F63 X, F56 F66 X
+
+Unicode tibeta: https://de.wikipedia.org/wiki/Unicodeblock_Tibetisch
+
+-->
+<lingvo lng="bo">
+ <l name="k" n="2">&#x0F40; ,&#x0F88;&#x0F90;,&#x0F51;&#x0F40;,&#x0F56;&#x0F40;,&#x0F62;&#x0F90;,&#x0F63;&#x0F90;,&#x0F66;&#x0F90;</l>
+ <l name="kh" n="2">&#x0F41; ,&#x0F88;&#x0F91;,&#x0F58;&#x0F41;,&#x0F60;&#x0F41;</l>
+ <l name="g" n="2">&#x0F42; ,&#x0F51;&#x0F42;,&#x0F56;&#x0F42;,&#x0F58;&#x0F42;,&#x0F60;&#x0F42;,&#x0F62;&#x0F92;,&#x0F63;&#x0F92;,&#x0F66;&#x0F92;</l>
+ <l name="ng" n="2">&#x0F44; ,&#x0F51;&#x0F44;,&#x0F58;&#x0F44;,&#x0F62;&#x0F94;,&#x0F63;&#x0F94;,&#x0F66;&#x0F94;</l>
+ <l name="c" n="2">&#x0F45; ,&#x0F42;&#x0F45;,&#x0F56;&#x0F45;,&#x0F63;&#x0F95;,&#x0F56;&#x0F63;</l>
+ <l name="ch" n="2">&#x0F46; ,&#x0F58;&#x0F46;,&#x0F60;&#x0F46;</l>
+ <l name="j" n="2">&#x0F47; ,&#x0F58;&#x0F47;,&#x0F60;&#x0F47;,&#x0F62;&#x0F97;,&#x0F63;&#x0F97;</l>
+ <l name="ny" n="2">&#x0F49; ,&#x0F8B;&#x0F99;,&#x0F42;&#x0F49;,&#x0F58;&#x0F49;,&#x0F62;&#x0F99;,&#x0F66;&#x0F99;</l>
+ <l name="t" n="2">&#x0F4F; ,&#x0F4A;&#x0F0B;,&#x0F42;&#x0F4F;,&#x0F56;&#x0F4F;,&#x0F62;&#x0F9F;,&#x0F63;&#x0F9F;,&#x0F66;&#x0F9F;</l>
+ <l name="th" n="2">&#x0F50; ,&#x0F4B;&#x0F0B;,&#x0F58;&#x0F50;,&#x0F60;&#x0F50;</l>
+ <l name="d" n="2">&#x0F51; ,&#x0F4C;&#x0F0B;,&#x0F42;&#x0F51;,&#x0F56;&#x0F51;,&#x0F58;&#x0F51;,&#x0F60;&#x0F51;,&#x0F62;&#x0FA1;,&#x0F63;&#x0FA1;,&#x0F66;&#x0FA1;</l>
+ <l name="n" n="2">&#x0F53; ,&#x0F4E;&#x0F0B;,&#x0F42;&#x0F53;,&#x0F58;&#x0F53;,&#x0F62;&#x0FA3;,&#x0F66;&#x0FA3;</l>
+ <l name="p" n="2">&#x0F54; ,&#x0F89;&#x0FA4;,&#x0F51;&#x0F54;,&#x0F63;&#x0FA4;,&#x0F66;&#x0FA4;</l>
+ <l name="ph" n="2">&#x0F55; ,&#x0F89;&#x0FA5;,&#x0F60;&#x0F55;</l>
+ <l name="b" n="2">&#x0F56; ,&#x0F51;&#x0F56;,&#x0F60;&#x0F56;,&#x0F62;&#x0FA6;,&#x0F63;&#x0FA6;,&#x0F66;&#x0FA6;</l>
+ <!-- la supre referencita tabelo enordigas
+   silabojn kun supersignoj &#x0F7E;&#x0F82;&#x0F83; ankaŭ al litero &#x0F58;
+   sed ŝajne tion oni bezonus nur por sanskrito, sed ne specife por tibeta lingvo...
+   Se subteni tion ni devusaldoni ĉiujn 2-literajn kombinojn - ne estas klare kiuj
+   el la supre referencita tabelo -->
+ <l name="m" n="2">&#x0F58; ,&#x0F51;&#x0F58;,&#x0F62;&#x0FA8;,&#x0F66;&#x0FA8;</l>
+ <l name="ts" n="2">&#x0F59; ,&#x0F42;&#x0F59;,&#x0F56;&#x0F59;,&#x0F62;&#x0FA9;,&#x0F66;&#x0FA9;</l>
+ <l name="tx" n="2">&#x0F5A; ,&#x0F58;&#x0F5A;,&#x0F60;&#x0F5A;</l>
+ <l name="dz" n="2">&#x0F5B; ,&#x0F58;&#x0F5B;,&#x0F60;&#x0F5B;,&#x0F62;&#x0FAB;</l>
+ <l name="w" n="2">&#x0F5D; ,&#x0F5D;&#x0F0B;</l>
+ <l name="zh" n="2">&#x0F5E; ,&#x0F42;&#x0F5E;,&#x0F56;&#x0F5E;</l>
+ <l name="z" n="2">&#x0F5F; ,&#x0F42;&#x0F5F;,&#x0F56;&#x0F5F;</l>
+ <l name="x" n="2">&#x0F60; ,&#x0F60;&#x0F0B;</l>
+ <l name="y" n="2">&#x0F61; ,&#x0F42;&#x0F61;</l>
+ <l name="r" n="2">&#x0F62; ,&#x0F6A;&#x0F0B;</l>
+ <l name="l" n="2">&#x0F63; ,&#x0F63;&#x0F0B;</l>
+ <l name="sh" n="2">&#x0F64; ,&#x0F65;&#x0F0B;,&#x0F42;&#x0F64;,&#x0F56;&#x0F64;</l>
+ <l name="s" n="2">&#x0F66; ,&#x0F42;&#x0F66;,&#x0F56;&#x0F66;</l>
+ <l name="h" n="2">&#x0F67; ,&#x0F63;&#x0FB7;</l>
+ <l name="a" n="2">&#x0F68; ,&#x0F68;&#x0F0B;</l>
+</lingvo>
+
+<!--  n="2"bretona -->
 <lingvo lng="br" kreu-regulojn="jes" klaso="de.steloj.respiro.BretonCollator">
  <l name="a">a,A</l>
  <l name="b">b,B</l>
