@@ -13,9 +13,11 @@
                 version="1.0" -->
 
 
-<!-- (c) 2002 che Wolfram Diestel
+<!-- (c) 2002-2020 che Wolfram Diestel
 
-  transformi ordigo.xml al informoj pri alfabetoj kaj ordigado
+  transformi ordigo2.xml al informoj pri alfabetoj kaj ordigado
+  vd. voko-formiko/ant/medio.xml:med-dok kaj
+  revuloj.github.io/_temoj/ordigo
 
 -->
 
