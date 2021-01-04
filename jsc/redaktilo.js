@@ -32,7 +32,7 @@ var redaktilo = function() {
     trd_lng: ["trd",{lng:"$r:trdlng"},"$_"],
     trdgrp: ["trdgrp",{lng:"$r:trdlng"},[
         "\n  ",["trd",{},"$_"],
-        "\n  ",["trd"],
+        ",\n  ",["trd"],
         "\n"
       ]],
     klr: ["klr",{},"$_"],
@@ -46,7 +46,7 @@ var redaktilo = function() {
     ref: ["ref",{cel:""},"$_"],
     refgrp: ["refgrp",{tip:"$r:reftip"},[
         "\n  ",["ref",{cel:""},"$_"],
-        "\n  ",["ref",{cel:""}],
+        ",\n  ",["ref",{cel:""}],
         "\n"
       ]],
     rim: ["rim",{},"$_"],
