@@ -168,7 +168,7 @@ Provizore ni alproksimiĝas al tiu ordigo konsiderante ĉiam la unuajn du litero
 de vorto. Tio evidente ignoras (maloftajn) kazojn, kie la unuaj du literoj
 ne decidas, sed la tria aŭ kvara, kie enordiĝu la vorto.
 
-T.e.: F56 F62 X, 0F56 0F63 X, F56 F66 X
+T.e.: F56 F62 X, 0F56 0F63 X, F56 F66 X, F51 F44 X
 
 Unicode tibeta: https://de.wikipedia.org/wiki/Unicodeblock_Tibetisch
 
@@ -177,7 +177,7 @@ Unicode tibeta: https://de.wikipedia.org/wiki/Unicodeblock_Tibetisch
  <l name="k" n="2">&#x0F40; ,&#x0F40;&#x0F0B;,&#x0F88;&#x0F90;,&#x0F51;&#x0F40;,&#x0F56;&#x0F40;,&#x0F62;&#x0F90;,&#x0F63;&#x0F90;,&#x0F66;&#x0F90;</l>
  <l name="kh" n="2">&#x0F41; ,&#x0F41;&#x0F0B;,&#x0F88;&#x0F91;,&#x0F58;&#x0F41;,&#x0F60;&#x0F41;</l>
  <l name="g" n="2">&#x0F42; ,&#x0F42;&#x0F0B;,&#x0F51;&#x0F42;,&#x0F56;&#x0F42;,&#x0F58;&#x0F42;,&#x0F60;&#x0F42;,&#x0F62;&#x0F92;,&#x0F63;&#x0F92;,&#x0F66;&#x0F92;</l>
- <l name="ng" n="2">&#x0F44; ,&#x0F44;&#x0F0B;,&#x0F51;&#x0F44;,&#x0F58;&#x0F44;,&#x0F62;&#x0F94;,&#x0F63;&#x0F94;,&#x0F66;&#x0F94;</l>
+ <l name="ng" n="2">&#x0F44; ,&#x0F44;&#x0F0B;,&#x0F58;&#x0F44;,&#x0F62;&#x0F94;,&#x0F63;&#x0F94;,&#x0F66;&#x0F94;</l>
  <l name="c" n="2">&#x0F45; ,&#x0F45;&#x0F0B;,&#x0F42;&#x0F45;,&#x0F56;&#x0F45;,&#x0F63;&#x0F95;,&#x0F56;&#x0F63;</l>
  <l name="ch" n="2">&#x0F46; ,&#x0F46;&#x0F0B;,&#x0F58;&#x0F46;,&#x0F60;&#x0F46;</l>
  <l name="j" n="2">&#x0F47; ,&#x0F47;&#x0F0B;,&#x0F58;&#x0F47;,&#x0F60;&#x0F47;,&#x0F62;&#x0F97;,&#x0F63;&#x0F97;</l>
@@ -188,7 +188,7 @@ Unicode tibeta: https://de.wikipedia.org/wiki/Unicodeblock_Tibetisch
  <l name="n" n="2">&#x0F53; ,&#x0F53;&#x0F0B;,&#x0F4E;&#x0F0B;,&#x0F42;&#x0F53;,&#x0F58;&#x0F53;,&#x0F62;&#x0FA3;,&#x0F66;&#x0FA3;</l>
  <l name="p" n="2">&#x0F54; ,&#x0F54;&#x0F0B;,&#x0F89;&#x0FA4;,&#x0F51;&#x0F54;,&#x0F63;&#x0FA4;,&#x0F66;&#x0FA4;</l>
  <l name="ph" n="2">&#x0F55; ,&#x0F55;&#x0F0B;,&#x0F89;&#x0FA5;,&#x0F60;&#x0F55;</l>
- <l name="b" n="2">&#x0F56; ,&#x0F56;&#x0F0B;,&#x0F51;&#x0F56;,&#x0F60;&#x0F56;,&#x0F62;&#x0FA6;,&#x0F63;&#x0FA6;,&#x0F66;&#x0FA6;</l>
+ <l name="b" n="2">&#x0F56; ,&#x0F56;&#x0F0B;,&#x0F51;&#x0F56;,&#x0F60;&#x0F56;,&#x0F62;&#x0FA6;,&#x0F63;&#x0FA6;,&#x0F66;&#x0FA6;,&#x0F56;&#x0FB1;</l>
  <!-- la supre referencita tabelo enordigas
    silabojn kun supersignoj &#x0F7E;&#x0F82;&#x0F83; ankaŭ al litero &#x0F58;
    sed ŝajne tion oni bezonus nur por sanskrito, sed ne specife por tibeta lingvo...
@@ -203,8 +203,8 @@ Unicode tibeta: https://de.wikipedia.org/wiki/Unicodeblock_Tibetisch
  <l name="z" n="2">&#x0F5F; ,&#x0F5F;&#x0F0B;,&#x0F42;&#x0F5F;,&#x0F56;&#x0F5F;</l>
  <l name="x" n="2">&#x0F60; ,&#x0F60;&#x0F0B;</l>
  <l name="y" n="2">&#x0F61; ,&#x0F61;&#x0F0B;,&#x0F42;&#x0F61;</l>
- <l name="r" n="2">&#x0F62; ,&#x0F62;&#x0F0B;,&#x0F6A;&#x0F0B;</l>
- <l name="l" n="2">&#x0F63; ,&#x0F63;&#x0F0B;</l>
+ <l name="r" n="2">&#x0F62; ,&#x0F62;&#x0F0B;,&#x0F6A;&#x0F0B;,&#x0F62;&#x0FB3;</l>
+ <l name="l" n="2">&#x0F63; ,&#x0F63;&#x0F0B;,&#x0F63;&#x0F74;</l>
  <l name="sh" n="2">&#x0F64; ,&#x0F64;&#x0F0B;,&#x0F65;&#x0F0B;,&#x0F42;&#x0F64;,&#x0F56;&#x0F64;</l>
  <l name="s" n="2">&#x0F66; ,&#x0F66;&#x0F0B;,&#x0F42;&#x0F66;,&#x0F56;&#x0F66;</l>
  <l name="h" n="2">&#x0F67; ,&#x0F67;&#x0F0B;,&#x0F63;&#x0FB7;</l>
