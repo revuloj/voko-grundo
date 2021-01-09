@@ -38,8 +38,27 @@
     <xsl:sequence select="$lng/l[1]/@name"/ -->
 
     <!-- dua alproksimiĝo: trovu la unuan literon, 
-    kie iu grupo koincidas kun la komenco de la silabo -->
-    <xsl:sequence select="$lng/l/g[starts-with($silabo,.)][1]/../@name"/>
+    kie iu grupo koincidas kun la komenco de la silabo 
+    <xsl:sequence select="$lng/l/g[starts-with($silabo,.)][1]/../@name"/>-->
+
+    <!-- tria alproksimiĝo: same, sed unue kolektu ĉiujn literojn kaj nur fine redonu la unuan
+    <xsl:variable name="literoj">
+      <xsl:sequence select="$lng/l/g[starts-with($silabo,.)]/.."/>
+    </xsl:variable>
+    <xsl:message select="$literoj/l"/>
+    <xsl:sequence select="$literoj/l[1]/@name"/> -->
+
+    <!-- kvara alproksimiĝo: kolektu ĉiujn literojn kaj ordigu laŭ longeco
+         prenu la plej longan kiel unuan elementon -->
+    <xsl:variable name="literoj">
+      <xsl:for-each select="$lng/l/g[starts-with($silabo,.)]">
+        <xsl:sort select="string-length()" order="descending" data-type="number"/>
+        <xsl:sequence select=".."/>
+      </xsl:for-each>
+    </xsl:variable>
+    <xsl:message select="string-join($literoj/l/@name,',')"/>
+    <xsl:sequence select="$literoj/l[1]/@name"/> 
+
 </xsl:function>
 
 <xsl:template match="vortoj">
@@ -58,7 +77,7 @@ Atendata rezulto:
 k:[kaa; ka.ja; gka; gka.ja]
 g:[]
 c:[ca.ga; caua.kaa]
-j:[]
+j:[gcj.kaa]
 -----------------------------
 </xsl:text>
 
