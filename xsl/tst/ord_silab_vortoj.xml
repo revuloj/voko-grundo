@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+
+<!-- 
+    Traktu per:
+
+    saxonb-xslt -s:ord_silab_vortoj.xml -xsl:ord_silab_prov.xsl
+-->
+
+<vortoj>
+    <t>kaa</t>
+    <t>ka.ja</t>
+    <t>gka</t>
+    <t>gka.ja</t>
+    <t>ca.ga</t>
+    <t>caua.kaa</t>
+</vortoj>
