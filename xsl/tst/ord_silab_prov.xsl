@@ -27,12 +27,15 @@
     <!--xsl:message select="'lingvo: ',$lingvo"/ -->
     <xsl:variable name="lng" select="$ord/lingvo[@lng=$lingvo]"/>
 
-    <!-- la silabiga signo -->
-    <xsl:variable name="s" select="$lng/@silab"/>     
+    <!-- NOTO: Ĉar la silabiga signo fakte ne aperas en la litergrupoj <g>..</g>,
+         ni povas ŝpari la eltranĉon de la unua silabo kaj tuj kompari kun la tuta
+         vorto(komenco)
 
-    <!-- la unua (aŭ sola) silabo de la vorto -->
+    - - la unua (aŭ sola) silabo de la vorto - -
+    <xsl:variable name="s" select="$lng/@silab"/>     
     <xsl:variable name="silabo" select="substring-before(concat($vorto,$s),$s)"/>
     <xsl:message select="'silabo: ',$silabo"/>
+    -->
 
     <!-- unua alproksimiĝo: ĉiam redonu la unua literon 
     <xsl:sequence select="$lng/l[1]/@name"/ -->
@@ -51,7 +54,7 @@
     <!-- kvara alproksimiĝo: kolektu ĉiujn literojn kaj ordigu laŭ longeco
          prenu la plej longan kiel unuan elementon -->
     <xsl:variable name="literoj">
-      <xsl:for-each select="$lng/l/g[starts-with($silabo,.)]">
+      <xsl:for-each select="$lng/l/g[starts-with($vorto,.)]">
         <xsl:sort select="string-length()" order="descending" data-type="number"/>
         <xsl:sequence select=".."/>
       </xsl:for-each>
@@ -95,8 +98,5 @@ j:[gcj.kaa]
   <xsl:apply-templates/>
   <xsl:text>; </xsl:text>
 </xsl:template>
-
-
-
 
 </xsl:transform>
