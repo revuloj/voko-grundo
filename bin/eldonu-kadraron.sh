@@ -8,33 +8,34 @@
 # + ControlPersist 2m
 # http://blogs.perl.org/users/smylers/2011/08/ssh-productivity-tips.html
 
-host=retavortaro.de
+#host=retavortaro.de
+# aldonu en /etc/hosts!
+host=revo
 release=1c
+revo=${host}:www/revo
+files=${host}:files
 
-# adaptoj de malnovaj...
-#scp stl/artikolo-1b.css ${host}:/html/revo/stl/
-#scp stl/indeksoj.css ${host}:/html/revo/stl/
+# poste la plusendan index.html ni havu ankaŭ rekte sub /revo...
+#scp -r build/* ${revo}/
 
-# scp build/jsc/revo-${release}.js ${host}:/html/revo/jsc/
-#scp build/jsc/malnova-${release}.js ${host}:/html/revo/jsc/
-#
-#scp build/stl/revo-${release}-min.css ${host}:/html/revo/stl/
-#scp build/stl/artikolo-${release}.css ${host}:/html/revo/stl/
-#
-##scp jsc/revo-art-${release}.js ${host}:/html/revo/jsc/
-##
-##scp stl/artikolo-${release}.css ${host}:/html/revo/stl/
-##scp stl/piktogram-${release}.css ${host}:/html/revo/stl/
+## scp -r cfg/*.xml ${revo}/cfg/
+
+scp dtd/*.dtd ${revo}/dtd/
+
+scp -r xsl ${files}/
+
+
+#  malnovaj...
+## scp stl/artikolo.css ${revo}/stl/
+## scp stl/indeksoj.css ${revo}/stl/
+
+# scp build/* ${host}:/html/revo/
 #
 #
 #scp build/dok/datumprotekto.html ${host}:/html/revo/dok/
 
-#scp cfg/sercxo-google.xml ${host}:/html/revo/cfg/
-#scp cfg/sercxo-ecosia.xml ${host}:/html/revo/cfg/
-#scp cfg/sercxo-anaso.xml ${host}:/html/revo/cfg/
-#scp cfg/sercxo-revo.xml ${host}:/html/revo/cfg/
 
-
+# tion eble ankaŭ kopiu al build/xsl...
 #
 #for f in xsl/inc/*
 #do

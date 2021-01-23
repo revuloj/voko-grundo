@@ -9,12 +9,8 @@
 # http://blogs.perl.org/users/smylers/2011/08/ssh-productivity-tips.html
 
 #host=retavortaro.de
+# aldonu en /etc/hosts!
 host=revo
 revo=${host}:www/revo
 
-scp $* ${revo}/art/
-
-#for a in $*
-#do
-#  scp "$a" ${host}:/html/revo/art/
-#done
+scp $* ${revo}/xml/

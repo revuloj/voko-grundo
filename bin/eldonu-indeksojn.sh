@@ -8,9 +8,9 @@
 # + ControlPersist 2m
 # http://blogs.perl.org/users/smylers/2011/08/ssh-productivity-tips.html
 
-host=retavortaro.de
+#host=retavortaro.de
+# aldonu en /etc/hosts!
+host=revo
+revo=${host}:www/revo
 
-for a in $*
-do
-  scp "$a" ${host}:/html/revo/inx/
-done
+scp $* ${revo}/inx/
