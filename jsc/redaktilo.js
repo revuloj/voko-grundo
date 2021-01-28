@@ -5,6 +5,7 @@
 var redaktilo = function() {
 
   var xmlarea = null;
+  var redakto = 'redakto'; // 'aldono' por nova artikolo
 
   var revo_codes = {
     lingvoj: new Codelist('lingvo', '/revo/cfg/lingvoj.xml'),
@@ -612,6 +613,9 @@ var redaktilo = function() {
     var ta = document.getElementById("r:xmltxt");
     document.getElementById("r:art").value = art;
     document.getElementById("r:art_titolo").textContent = art;
+    redakto = 'aldono';
+    var shg = document.getElementById("r:sxangxo");
+    shg.value = art; shg.setAttribute("readonly","readonly");
     /* jshint ignore:start */
     ta.value = 
         '<?xml version="1.0"?>\n'
@@ -685,6 +689,7 @@ var redaktilo = function() {
 
     var red = document.getElementById("r:redaktanto").value;
     var sxg = document.getElementById("r:sxangxo").value;
+    var nova = (redakto == 'aldono')? 1:0;
 
     // console.log("vokomailx art:"+art);
     // console.log("vokomailx red:"+red);
@@ -696,6 +701,7 @@ var redaktilo = function() {
         art: art,
         redaktanto: red,
         sxangxo: sxg,
+        nova: nova,
         command: command
       },
       function (data) {
@@ -807,6 +813,8 @@ var redaktilo = function() {
       load_xml(params); // se doniĝis ?art=xxx ni fone ŝargas tiun artikolon
     }
 
+    redakto = 'redakto'; // gravas post antaŭa aldono!
+
     /******************
      *  preparu aktivajn elmentoj / eventojn
      *  **************/
@@ -885,6 +893,10 @@ var redaktilo = function() {
     document.getElementById("r:konservu")
       .addEventListener("click",rkonservo);
 
+    // remetu ŝanĝo-kampon en difinitan staton (necesa post aldono de nova artikolo)
+    var shg = document.getElementById("r:sxangxo");
+    shg.removeAttribute("readonly");
+
     // metu buton-surskribon Rezignu kaj malaktivigu la aliajn du
     //document.getElementById("r:rezignu").textContent = "Rezignu"; 
     //document.getElementById("r:kontrolu").removeAttribute("disabled"); 
@@ -903,18 +915,22 @@ var redaktilo = function() {
     // butonoj sur tiuj paneloj por enmeti elementojn
     var v_sets = document.getElementById("r:v_sets");
     for (var b of v_sets.querySelectorAll("button")) {
-      if (b.id == "r:create_new_art") {
+
+      if (b.id == "r:create_new_art") { // [kreu]
         b.addEventListener("click", create_new_art);
-      }
-      if (b.classList.contains("help_btn"))
+
+      } else if (b.classList.contains("help_btn")) { // (?) (<>)
         b.addEventListener("click", function(event) {
           helpo_pagho(event.currentTarget.getAttribute("value"));
         });
-      else
+
+      } else { // ŝablon-butonoj
         b.addEventListener("click",function(event) {
           const v = event.currentTarget.getAttribute("value");
           insert_xml(v);
         });
+      }
+
     }
   }  
 
