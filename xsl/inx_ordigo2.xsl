@@ -63,7 +63,7 @@ class="net.sf.saxon.sort.CodepointCollator"/ -->
   </xsl:if>
 
   <!-- Chu problemo: tio enkludas ankau <i>...</i> kiuj tiel ne aparas sub la ĵokero-litero "?" 
-       aliflanke en taja lingvo tio estas ghuse uzata por ne havi vortojn komencighantajn
+       aliflanke en taja lingvo tio estas ghuste uzata por ne havi vortojn komencighantajn
        per vokalo en du indeksoj -->
   <xsl:variable name="chiuj_literoj"
       select="translate(normalize-space(document($ordigo)/ordigo/lingvo[@lng=$ordlng]),' ','')"/>
@@ -123,7 +123,7 @@ class="net.sf.saxon.sort.CodepointCollator"/ -->
         <xsl:call-template name="trd-litero">
            <xsl:with-param name="trdoj"
               select="$trdoj/v[not(contains($chiuj_literoj,
-		substring(translate(t,$ignorendaj,''),1,1)))]"/>
+		            substring(translate(t,$ignorendaj,''),1,1)))]"/>
            <xsl:with-param name="ordlng" select="$ordlng"/>
            <xsl:with-param name="lit-name" select="'0'"/>
            <xsl:with-param name="lit-min" select="'?'"/>
