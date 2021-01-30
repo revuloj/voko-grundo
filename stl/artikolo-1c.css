@@ -327,6 +327,22 @@ IMG.tez {
     border-radius: 20%; 
     border: 2px outset transparent
 }
+
+IMG[alt='Vikipedio'] {
+    /* forŝovu flanken la originan bildon por
+    montri anstataŭe la SVG-fonon el piktogram.css */
+    position: relative;
+    overflow: hidden;
+    width: 16px;
+    height: 12px;
+    padding: 16px 12px 0 0;
+    margin-left: 6px;
+    margin-right: 6px;
+    box-sizing: border-box;
+    background: url('/revo/smb/i_wiki.svg') no-repeat;	
+    background-size: contain;
+    border-bottom: 1px solid;
+}
      
 /* 
     tezaŭrobildoj funkcias simile al butono, do eble ni uzu la klason "btn" anstataŭe... 
