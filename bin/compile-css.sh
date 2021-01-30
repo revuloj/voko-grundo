@@ -6,6 +6,10 @@ svgdir=$(pwd)/build/smb
 dir=stl
 out=$(pwd)/build/stl/revo-1c-min.css
 
+# Wiki-SVG ni provizore donas rekte en artikolo-1x.css
+#cp smb/i_wiki.svg ${svgdir}
+
+# kunigu SVG-grafikojn en CSS-dosiero
 bin/svg2css.sh ${svgdir}/[ir]_*.svg > ${dir}/piktogram-1c.css 
 
 # files=$*
