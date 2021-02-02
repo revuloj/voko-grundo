@@ -29,6 +29,7 @@
 
 FROM ubuntu as builder
 
+# por stabila versio de nodejs, uzu anstatataŭe: setup_14.x
 RUN apt-get update && apt-get install -y curl \
  && curl -sL https://deb.nodesource.com/setup_15.x | bash - \
  && apt-get install -y nodejs 
