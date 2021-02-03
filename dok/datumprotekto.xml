@@ -16,22 +16,14 @@
 
 <ol>
 <li>
-  <p>La trafiko inter retumilo kaj retservo ne estas ĉifrita, do ĉiu sistemo intere povus
+  <p>La trafiko inter retumilo kaj retservo estas ĉifrita, do ĉiu sistemo intere ne povas
   protokoli la faritajn serĉojn kaj la legitajn paĝojn. 
-  Krome, se vi redaktas paĝojn, viaj ŝanĝoj, viaj preferoj en la redaktilo kaj 
-  via retadreso estas sendataj neĉifrite. 
+  Krome, se vi redaktas paĝojn, viaj ŝanĝoj en la redaktilo kaj 
+  via retadreso estas sendataj ĉifrite. 
   </p>
   <p>
-  Ĉar unuflanke ĉifrado malrapidigas la legadon de la retpaĝoj kaj aliflanke tio estas informoj aŭ publike legeblaj 
-  (paĝoj de la vortaro, versio-historio de redaktoj) aŭ protokoleblaj alimaniere ankaŭ
-  (retadreso same uzate en ordinara retpoŝto, kiu estas nur okaze ĉifrita survoje), ni konsideras 
-  la riskon oferti nian publikan servon neĉifrite ne aparte granda.
-  </p>
-  <p>
-  Tamen, se vi volas certigi, ke neniu eksciu, kion vi serĉas, legas kaj redaktas en Reta Vortaro,
-  sola maniero aktuale estas uzado de anonima retumado ofertita de kelkaj kroziloj por legado 
-  kaj rezigno pri redaktado en la retejo retavortaro.de. Alternativa redaktilo kun ĉifrita komunikado estas
-  cetere disponigata ĉe la adreso <a href="http://revaj.steloj.de">http://revaj.steloj.de</a>.
+  Viaj <em>preferoj</em> de lingvoj kaj redaktado estas memorataj loke en via redaktilo. 
+  Tiuj informoj ne estas transsendataj al la servilo.
   </p>
 </li>
 
@@ -50,29 +42,17 @@
     la versio-kontrolo de artikoloj. Via nomo do aperas en la historio de artikol-ŝanĝoj
     kaj ankaŭ en la listoj de lastaj ŝanĝoj.
     </li>
-    <li>
-    La redakto-preferoj (t.e. elektitaj opcioj en la redakto-formularo) kaj la retpoŝtadreso estas 
-    konservitaj en kuketoj kaj tiu kuketo poste kunsendiĝas kun ĉiu paĝolego de reta-vortaro.de ĝis 
-    fermiĝo de la retumilo. La kuketo kun via retadreso nomiĝas "redaktanto". Se vi ne volas tion, 
-    vi povas malŝalti kuketojn en via retumilo. En tiu kazo vi devas reelekti la opciojn kaj redoni vian
-    retadreson ĉe ĉiu unuopa redakto.
-    La nova fasado antaŭvideble uzebla ekde 2021 ne plu uzos kuketojn.
-    </li>
   </ul>
   </p>
 </li>
 
 <li>
   <p>
-   Sur la titolpaĝo ni ofertas plentekstan serĉon per apartaj serĉiloj kiel Google, Ecosia, DuckDuckGo. 
+   Sur la titolpaĝo ni ofertas plentekstan serĉon per apartaj serĉiloj kiel Ecosia, DuckDuckGo. 
    Kiam vi uzos unu el tiuj serĉiloj, vi ekuzas servon de
-   Google, Ecosia aŭ DuckDuckGo laŭ ties kondiĉoj kaj kunsento. Aparte ĉe Google,
-   tiel ĉiufoje, kiam vi reprenas la Google-vinjeton
-   sendiĝas kuketoj kun enhavo identigantaj vian retumilon al Google. 
-  </p>
-  <p>
-    Vi povas ekscii pli pri kiel Google uzas viajn datumojn ĉe:
-    <a href="https://www.google.com/intl/eo/policies/privacy/">https://www.google.com/intl/eo/policies/privacy/</a>.
+   Ecosia aŭ DuckDuckGo laŭ ties kondiĉoj kaj kunsento. 
+   Ni ne plu ofertas Google-serĉon. La du nomitaj serĉiloj laŭ nia scio pli bone protektas
+   viajn personajn informojn ol Google. Pri detaloj bv. informiĝi sur la paĝo de tiuj serĉiloj.
   </p>
 </li>
 
@@ -93,24 +73,14 @@
 
 <ol>
 <li>
-  <p>The traffic between your browser and the web service is currently not encrypted. This means in principle
-  every system between the two is able to log the requested pages.
-  Furthermore, when doing editing of Revo articles, your changes, choosen options on the editing form and your #
-  email address are sent unencrypted.
+  <p>The traffic between your browser and the web service is encrypted. This means 
+  no system in between is able to log the requested pages.
+  Furthermore, when doing editing of Revo articles, your changes, and your 
+  email address are sent encrypted to the service.
   </p>
   <p>
-    Encrypting would slow down the page loading performance a bit, on the other hand what is transfered
-    is public information (dictionary pages, article version history) or could be logged
-    otherwise (email addresses are also sent using normal email and enrypted only occasionally).
-    So we consider the risk offering a public service not enrypted not particularly high.
-  </p>
-  <p>
-    Anyway, if you want to ensure, that no one can find out what you are reading and editing in
-    Reta Vortaro, the only current option is to use the anonymous browsing mode offered by some web browsers,
-    and resign on editing at retavortaro.de using the web form.
-    Alternatively you may use for editing the editor served at
-    <a href="http://revaj.steloj.de">http://revaj.steloj.de</a> which encrypts the traffic between
-    the browser and the eb service.
+  Your <em>preferences</em> of chosen languages and editing defaults are stored locally in you browser.
+  These particular information are not sent to the server.
   </p>
 </li>
 
@@ -121,23 +91,13 @@
   Those information we use in the following way:
 
   <ul>
-    <li>The email address we use to sign article edits sent to the editor service via the web form.
+    <li>We use the email address to sign article edits sent to the editor service via the web form.
     When sending edits by email, of cause your email address is also included in the sender
     header of the message.
     </li>
     <li>
-      We add your name (not the email address) to your changes maintained by the version control system.
+      We add your name (but not the email address) to your changes maintained by the version control system.
       Thus your name appears in the articles version history and also in the list of recent changes.
-    </li>
-    <li>
-      Your preferences (i.e. the options you choose on the editing form) and the email address are
-      preserved in cookies in your browser and is sent with every subsequent page request towards
-      reta-vortaro.de until you close your browser application.
-      The cookie is called "redaktanto".
-      If you don't want to preserve those information in cookies as described you may disable cookies in your browser.
-      In this case you would need to select your options and add your email addresson the edit form after every
-      form submit again.
-      The new user interface available since 2021 does not use cookies anymore.
     </li>
   </ul>
   </p>
@@ -145,14 +105,10 @@
 
 <li>
   <p>
-    On the title page we offer a plaintext serach using Google, Ecosia and DuckDuckGo. Using them, you use
-    Google, Ecosia or DuckDuckGo according to their privacy policies and according to your consent given to them.
-    In particular, this way every time the Google icon is loaded, a number of cookies identifying your browser
-    is sent to Google.
-  </p>
-  <p>
-    You may read more about how Google is using your data at:
-    <a href="https://www.google.com/intl/en/policies/privacy/">https://www.google.com/intl/en/policies/privacy/</a>.
+    On the title page we offer a plaintext search using Ecosia and DuckDuckGo. You use the
+    Ecosia or DuckDuckGo search function according to their privacy policies and according to your consent given to them.
+    We do not offer Google search anymore. As far as it is known to us, the two mentioned search engine
+    better protect your privacy and don't use your personal information as extensively as Google.
   </p>
 </li>
 
@@ -171,24 +127,14 @@
 
 <ol>
 <li>
-  <p>Auf dem Weg zwischen Browser und Webserver werden die Daten nicht verschlüsselt.
-  Also kann prinzipiell jedes zwischengeschaltete System deine Seitenabrufe und Suchanfragen protokollieren.
-  Wenn du darüberhinaus Artikel bearbeitest, werden deine Einstellungen auf dem Bearbeitungsformular sowie
-  deine E-Mail-Adresse unverschlüsselt übertragen.
+  <p>Auf dem Weg zwischen Browser und Webserver werden die Daten verschlüsselt.
+  Also kann prinzipiell kein zwischengeschaltete System deine Seitenabrufe und Suchanfragen protokollieren.
+  Wenn du darüberhinaus Artikel bearbeitest, werden deine Änderungen sowie
+  deine E-Mail-Adresse verschlüsselt übertragen.
   </p>
   <p>
-    Da Verschlüsselung einerseits etwas Geschwindigkeit kostet und anderseits die übertragenen Informationen entweder öffentlich
-    (Wörterbuchseiten, Versionshistorie der Artikeländerungen) oder auch anderweitig protokollierbar sind (die E-Mail-Adresse wird
-    auch bei normalem Gebrauch von E-Mail gewöhnlich unverschlüsselt übertragen), erachten wir das Risiko, unseren Dienst
-    unverschlüsselt anzubieten, eher gering.
-  </p>
-  <p>
-    Wenn du trotzdem verhindern möchtest, dass niemand erfährt, was du im Reta Vortaro suchst, liest und
-    und änderst, ist aktuell die einzige Möglichkeit, für das Lesen den anonymen Browsermodus zu verwenden, den einige
-    Browser anbieten und auf das Redigieren zu verzichten.
-    Ein alternativer Artikeleditor wird übrigens über die Seite
-    <a href="http://revaj.steloj.de">http://revaj.steloj.de</a> zur Verfügung gestellt. Hier werden Informationen zwischen
-    Browser und Server verschlüsselt übertragen.
+    Deine <em>Einstellungen</em> in der Sprachauswahl und Editorvoreinstellungen werden lokal in
+    deinem Browser gespeichert. Diese werden nicht an den Server übertragen.
   </p>
 </li>
 
@@ -197,7 +143,6 @@
     Wir führen ein Register der Redakteure mit ihrem jeweiligen vollen Namen und E-Mail-Adresse in einer passwortgeschützten Datenbank.
     Diese benutzen wir um die Annahme von Änderungen, die per E-Mail oder den Artikeleditor eingereicht werden, zu regeln.
     Wir verwenden diese Information im Detail wie folgt:
-
   <ul>
     <li>
       Mit der E-Mail-Adresse werden Änderungen an Artikeln beim Einreichen über das Webformular unterschrieben.
@@ -207,34 +152,23 @@
       Mit deinem Namen (jedoch nicht der E-Mail-Adresse) werden die Artikeländerungen in der Versionskontrolle markiert.
       Dein Name erscheint also in der Änderungshistorie der Artikel und auch in der Liste der letzten Änderungen.
     </li>
-    <li>
-      Die Einstellungen im Webformular und die benutzte E-Mail-Adresse werden in Cookies browserseitig gespeichert
-      und bei nachfolgenden Seitenabfragen an den Server reta-vortaro.de geschickt, solange bis der Browser geschlossen wird.
-      Das Cookie mit deiner E-Mail-Adresse heißt "redaktanto". Wenn du keine Cookies möchtest, kannst du sie im
-      Browser ausschalten. In diesem Fall musst du bei jeder Verwendung des Änderungsformulars die Optionen neu wählen und
-      deine E-Mail-Adresse neu eingeben.
-      Die neue Benutzerfasade, die ab 2021 verfügbar sein wird, benötigt keine Cookies mehr.
-    </li>
   </ul>
   </p>
 </li>
 
 <li>
   <p>
-    Auf der Titelseite bieten wir eine Volltextsuche mittels Google, Ecoisa oder DuckDuckGo an. 
-    Wenn du diese verwendest, verwendest du den entsprechenden Suchdienst von Google, eosia oder DuckDuckGo
+    Auf der Titelseite bieten wir eine Volltextsuche mittels Ecosia oder DuckDuckGo an. 
+    Wenn du diese verwendest, verwendest du den entsprechenden Suchdienst von Ecosia oder DuckDuckGo
     unter deren Bedingungen und entsprechend deiner Zustimmung.
-    Insbesondere werden bei jedem Laden des Google-Icons Cookies mitgeschickt, die deinen Browser identifizieren.
-  </p>
-  <p>
-    Du kannst mehr über die Verwendung deiner Daten bei Google auf dieser Seite erfahren:
-    <a href="https://www.google.com/intl/de/policies/privacy/">https://www.google.com/intl/de/policies/privacy/</a>.
+    Wir bieten keine Google-Suche mehr an, da nach unserem Wissen die beiden genannten Suchdienste
+    einen besseren Schutz privater Informationen gewähren.
   </p>
 </li>
 
 <li>
   Zu statistischen Zwecken protokolliert der Webserver die Absende-IP-Adresse zusammen mit der
-  URL der aufgerufenen Seite.
+  URL der jeweils aufgerufenen Seite.
 </li>
 </ol>
 </article>
