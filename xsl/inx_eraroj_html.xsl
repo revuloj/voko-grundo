@@ -39,8 +39,8 @@
             <p>
               Konsideru ankaŭ pliajn trovaĵojn en la listo <a href="relax_eraroj.html">neregulaĵoj 
               trovitaj per RelaxNG</a> kaj la rezultojn de la 
-              <a target="_new" href="http://h1838790.stratoserver.net/revokontrolo/">vortokontrolo</a>
-              kun <a target="_new" href="http://h1838790.stratoserver.net/revokontrolo/klarigoj.html">klarigoj</a>
+              <a target="_new" href="https://revaj.steloj.de/revokontrolo/">vortokontrolo</a>
+              kun <a target="_new" href="https://revaj.steloj.de/revokontrolo/klarigoj.html">klarigoj</a>
               pri enhava analizo de la vortaro.
             </p>
             <xsl:variable name="n-sen-ekz"><xsl:value-of select="count(//art/ero[@tip='dos-sen-ekz'])"/></xsl:variable>
