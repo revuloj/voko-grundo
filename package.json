@@ -23,7 +23,7 @@
         "// build:js": "uglifyjs jsc/util.js -o build/jsc/revo-1d-min.js",
         "build:js": "google-closure-compiler --compilation_level SIMPLE --js_module_root jsc --entry_point jsc/kadro.js --js_output_file build/jsc/revo-1d-min.js jsc/util.js jsc/transiroj.js jsc/preferoj.js jsc/artikolo.js jsc/kadro.js jsc/voko_entities.js jsc/redaktilo.js",
         "//prebuild:js": "npm run lint",
-        "build": "npm run build:css && npm run build:css && npm run build:js"
+        "build": "npm run build:css && npm run build:dok && npm run build:js"
     },
     "scriptsComments": {
         "build": "Kompilas CSS, JS kaj DOK al dosierujo build/",

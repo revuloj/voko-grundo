@@ -13,13 +13,13 @@ bib_xsl=xsl/bibhtml.xsl
 #for f in "${src[@]}"; 
 #do
 #    NAME=$(basename "$f")
-#    out="${NAME%.xml}"
-#    out="${outdir}/${out}.html"
 #    echo "${out} <- ${NAME}"
 #    xsltproc $dok_xsl ${srcdir}/${NAME} > ${out} 
 #done
 
 NAME="datumprotekto.xml"
 echo "$outdir/${NAME}..."
-xsltproc $dok_xsl ${srcdir}/${NAME} > "$outdir/${NAME}"
+out="${NAME%.xml}"
+out="${outdir}/${out}.html"
+xsltproc $dok_xsl ${srcdir}/${NAME} > "${out}"
 
