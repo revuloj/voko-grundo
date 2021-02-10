@@ -4,24 +4,24 @@
 svgdir=$(pwd)/build/smb
 #stldir=$(pwd)/build/stl
 dir=stl
-out=$(pwd)/build/stl/revo-1c-min.css
+out=$(pwd)/build/stl/revo-1d-min.css
 
 # Wiki-SVG ni provizore donas rekte en artikolo-1x.css
 #cp smb/i_wiki.svg ${svgdir}
 
 # kunigu SVG-grafikojn en CSS-dosiero
-bin/svg2css.sh ${svgdir}/[ir]_*.svg > ${dir}/piktogram-1c.css 
+bin/svg2css.sh ${svgdir}/[ir]_*.svg > ${dir}/piktogram-1d.css 
 
 # files=$*
 
 files=(\
   $dir/normalize.css \
   $dir/koloroj.css \
-  $dir/piktogram-1c.css \
+  $dir/piktogram-1d.css \
   $dir/formularo.css \
-  $dir/kadro-1c.css \
-  $dir/artikolo-1c.css \
-  $dir/redaktilo-1c.css)
+  $dir/kadro-1d.css \
+  $dir/artikolo-1d.css \
+  $dir/redaktilo-1d.css)
 #files=($dir/revo-1c.css)
 
 # malgrandigas CSS-dosieron per
@@ -70,7 +70,7 @@ if [[ $(command -v docker) ]]; then
     echo "al ${araneo_id}:${target}"
 
     docker cp ${out} ${araneo_id}:${target}
-    docker cp $(pwd)/build/stl/artikolo-1c.css ${araneo_id}:${target}
+    docker cp $(pwd)/build/stl/artikolo-1d.css ${araneo_id}:${target}
     docker exec ${araneo_id} bash -c "chown root.root ${target}; ls -l ${target}"
   fi
 fi

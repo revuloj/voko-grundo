@@ -22,6 +22,7 @@ echo "FILES: ${files[@]}"
 # sed nun rsvg-convert fuŝas kaj mpost-PNG denove funkcias!
 #RSVG=rsvg-convert
 
+mkdir -p ${builddir}
 cd ${builddir}
 
 for file in "${files[@]}"
@@ -35,5 +36,8 @@ do
     #echo ${RSVG} -w 100 -h 100 -o ${png} ${svg}
     #${RSVG} -w 100 -h 100 -o ${png} ${svg}
 done
+
+echo "PWD: "$(pwd)
+ls -l *.svg
 
 cd ${thisdir}

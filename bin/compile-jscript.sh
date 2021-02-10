@@ -18,8 +18,8 @@ compiler="java -jar /usr/local/share/java/closure-compiler.jar"
 js_in="jsc/util.js jsc/transiroj.js jsc/preferoj.js jsc/artikolo.js jsc/kadro.js jsc/voko_entities.js jsc/redaktilo.js"
 js_mn_in="jsc/malnova.js"
 
-js_out=build/jsc/revo-1c.js
-js_mn_out=build/jsc/malnova-1c.js
+js_out=build/jsc/revo-1d.js
+js_mn_out=build/jsc/malnova-1d.js
 js_art=jsc/revo-art-1b.js
 opt=BUNDLE
 #opt=SIMPLE

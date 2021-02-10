@@ -14,16 +14,21 @@
 #######################################################
 # staĝo 1: Ni bezonas TeX kaj metapost por konverti simbolojn al png
 #######################################################
-#FROM silkeh/latex:small as metapost
-#LABEL Author=<diestel@steloj.de>
-#
-#ARG VG_BRANCH=master
-#
-#COPY mp2png.sh .
+FROM silkeh/latex:small as metapost
+LABEL Author=<diestel@steloj.de>
+
+ARG VG_BRANCH=master
+
+# ni bezonas almenaŭ bin/mp2png_svg.sh kaj smb/
+
+WORKDIR /
+COPY bin/mp2png_svg.sh /bin/
+COPY smb/ /smb/
+
 #RUN apk --update add curl unzip librsvg --no-cache && rm -f /var/cache/apk/* 
 #RUN curl -LO https://github.com/revuloj/voko-grundo/archive/${VG_BRANCH}.zip \
 #    && unzip ${VG_BRANCH}.zip voko-grundo-${VG_BRANCH}/smb/*.mp
-#RUN cd voko-grundo-${VG_BRANCH} && ../mp2png.sh # && cd ${HOME}
+RUN bin/mp2png_svg.sh
 
 # staĝo 2: nodejs: kompilu CSS kaj JS
 
@@ -36,6 +41,7 @@ RUN apt-get update && apt-get install -y curl xsltproc \
 
 WORKDIR /usr/app
 COPY ./ /usr/app
+COPY --from=metapost /build/ /usr/app/build/
 RUN npm install && npm run build
 
 # staĝo 3 kopiu nur la kreitajn rezultojn al nova malplena ujo
