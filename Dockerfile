@@ -37,12 +37,12 @@ FROM ubuntu as builder
 # por stabila versio de nodejs, uzu anstatataŭe: setup_14.x
 RUN apt-get update && apt-get install -y curl xsltproc \
  && curl -sL https://deb.nodesource.com/setup_15.x | bash - \
- && apt-get install -y nodejs 
+ && apt-get install -y nodejs
 
 WORKDIR /usr/app
 COPY ./ /usr/app
 COPY --from=metapost /build/ /usr/app/build/
-RUN npm install && npm run build
+RUN npm install -g npm@next && npm ci && npm run build
 
 # staĝo 3 kopiu nur la kreitajn rezultojn al nova malplena ujo
 FROM scratch
