@@ -6,6 +6,8 @@ var redaktilo = function() {
 
   var xmlarea = null;
   var redakto = 'redakto'; // 'aldono' por nova artikolo
+  const cgi_vokomailx = '/cgi-bin/vokomailx4.pl';
+  const cgi_vokohtmlx = '/cgi-bin/vokohtmlx.pl';
 
   var revo_codes = {
     lingvoj: new Codelist('lingvo', '/revo/cfg/lingvoj.xml'),
@@ -645,7 +647,7 @@ var redaktilo = function() {
   }
 
   function vokohtmlx(xml) {
-    HTTPRequest('POST','/cgi-bin/vokohtmlx.pl',
+    HTTPRequest('POST',cgi_vokohtmlx,
     {
       xmlTxt: xml
     },
@@ -695,7 +697,7 @@ var redaktilo = function() {
     // console.log("vokomailx red:"+red);
     // console.log("vokomailx sxg:"+sxg);
 
-    HTTPRequest('POST','/cgi-bin/vokomailx.pl',
+    HTTPRequest('POST',cgi_vokomailx,
       {
         xmlTxt: xml,
         art: art,
