@@ -6,7 +6,7 @@ var redaktilo = function() {
 
   var xmlarea = null;
   var redakto = 'redakto'; // 'aldono' por nova artikolo
-  const cgi_vokomailx = '/cgi-bin/vokomailx4.pl';
+  const cgi_vokomailx = '/cgi-bin/vokosubmx.pl';
   const cgi_vokohtmlx = '/cgi-bin/vokohtmlx.pl';
 
   var revo_codes = {
