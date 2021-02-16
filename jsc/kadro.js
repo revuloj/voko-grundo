@@ -83,6 +83,7 @@ when_doc_ready(function() {
         if (t_main.stato != "titolo") 
             show("x:titol_btn");
         hide("x:nav_start_btn");
+        redaktilo.submetoj_stato();
     });
 
     t_nav.forire("ĉefindekso",()=>{ 

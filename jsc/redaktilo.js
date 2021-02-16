@@ -8,6 +8,7 @@ var redaktilo = function() {
   var redakto = 'redakto'; // 'aldono' por nova artikolo
   const cgi_vokomailx = '/cgi-bin/vokosubmx.pl';
   const cgi_vokohtmlx = '/cgi-bin/vokohtmlx.pl';
+  const cgi_vokosubm_json = '/cgi-bin/vokosubm-json.pl';
 
   var revo_codes = {
     lingvoj: new Codelist('lingvo', '/revo/cfg/lingvoj.xml'),
@@ -321,6 +322,14 @@ var redaktilo = function() {
       for (var key of ['r:redaktanto','r:trdlng','r:klrtip','r:reftip','r:sxangxo']) {
         if (prefs[key]) document.getElementById(key).value = prefs[key];
       }
+    }
+  }
+
+  function get_preference(key) {
+    var str = window.localStorage.getItem("redaktilo_preferoj");
+    var prefs = (str? JSON.parse(str) : {});
+    if (prefs) {
+        return prefs[key];
     }
   }
 
@@ -686,6 +695,25 @@ var redaktilo = function() {
       */
     });
   }
+
+  function submetoj_stato() {
+    const red = get_preference('r:redaktanto');
+    if (!red) return;
+
+    HTTPRequest('POST',cgi_vokosubm_json,
+    {
+      email: red
+    },
+    function (data) {
+      // Success!
+      if (data) {
+        var json = JSON.parse(data);
+        for (subm of json) {
+          console.info("id:"+subm.id+" art:"+subm.fname+" stato:"+subm.state);
+        }  
+      }
+    });
+  }
     
   function vokomailx(command,art,xml) {
 
@@ -951,6 +979,7 @@ var redaktilo = function() {
   return {
     preparu_red: preparu_red,
     preparu_menu: preparu_menu,
+    submetoj_stato: submetoj_stato,
     klavo: klavo,
     rantaurigardo: rantaurigardo,
     shablono: shablono,
