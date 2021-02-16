@@ -696,7 +696,7 @@ var redaktilo = function() {
     });
   }
 
-  function submetoj_stato() {
+  function submetoj_stato(subm_callback) {
     const red = get_preference('r:redaktanto');
     if (!red) return;
 
@@ -708,9 +708,10 @@ var redaktilo = function() {
       // Success!
       if (data) {
         var json = JSON.parse(data);
-        for (subm of json) {
-          console.info("id:"+subm.id+" art:"+subm.fname+" stato:"+subm.state);
-        }  
+        //for (subm of json) {
+        //  console.info("id:"+subm.id+" art:"+subm.fname+" stato:"+subm.state);
+        //}  
+        subm_callback(json);
       }
     });
   }

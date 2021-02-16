@@ -83,7 +83,7 @@ when_doc_ready(function() {
         if (t_main.stato != "titolo") 
             show("x:titol_btn");
         hide("x:nav_start_btn");
-        redaktilo.submetoj_stato();
+        redaktilo.submetoj_stato(montru_submeto_staton);
     });
 
     t_nav.forire("ĉefindekso",()=>{ 
@@ -1097,4 +1097,23 @@ function redaktu(href) {
     
     load_page("main",redaktilo_url+'?'+params);
     load_page("nav",redaktmenu_url);
+}
+
+function montru_submeto_staton(sj) {
+    if (sj) {
+        console.debug("submetoj: "+sj.length);
+        const nv = document.getElementById("navigado");
+        const ds = make_elements([
+            ["details",{id: "submetoj"},
+                [
+                    ["summary",{},"viaj submetoj"]
+                ]
+            ]
+        ])[0];
+        for (s of sj) {
+            var info = make_element("p",{},s.fname+s.state+s.time);
+            ds.append(info);
+        }
+        nv.append(ds);
+    }   
 }
