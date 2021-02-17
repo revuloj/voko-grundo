@@ -194,6 +194,10 @@ nav::-moz-scrollbar-corner { /* FF ne funkcias, sed uzas body-backround-color...
     background-color: var(--nav-bgr-clr);
 }
 
+nav a:link, nav a:visited {
+    color: inherit;
+}
+
 nav a:focus {
     outline: 2px dotted var(--nav-act-bgr-clr) !important;
     background-color: inherit;
@@ -298,7 +302,8 @@ nav a:active {
     vertical-align: initial;
 }
 
-#x\:_plena details[open]>summary {
+#x\:_plena details[open]>summary,
+#submetoj[open]>summary {
     border-bottom: 2px solid var(--nav-fnt-clr);
 }
 
@@ -820,8 +825,6 @@ footer {
     border-left: 2px dotted var(--main-fnt-clr);
     padding-left: .7em;
 }
-
-
 
 
 @media (prefers-color-scheme: dark) {

@@ -11,18 +11,20 @@
 #host=retavortaro.de
 # aldonu en /etc/hosts!
 host=revo
-release=1c
+release=1d
 revo=${host}:www/revo
 files=${host}:files
 
 # poste la plusendan index.html ni havu ankaŭ rekte sub /revo...
 #scp -r build/* ${revo}/
 
+scp -r build/jsc/revo-${release}-min.js ${revo}/jsc
+scp -r build/stl/revo-${release}-min.css ${revo}/stl
+
 ## scp -r cfg/*.xml ${revo}/cfg/
 
-scp dtd/*.dtd ${revo}/dtd/
-
-scp -r xsl ${files}/
+#scp dtd/*.dtd ${revo}/dtd/
+#scp -r xsl ${files}/
 
 
 #  malnovaj...

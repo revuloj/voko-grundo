@@ -1100,19 +1100,47 @@ function redaktu(href) {
 }
 
 function montru_submeto_staton(sj) {
+    const stat = {
+        'nov': '\u23f2\ufe0e', 'trakt': '\u23f2\ufe0e', 
+        'erar': '\u26a0\ufe0e', 'arkiv': '\u2713\ufe0e'};
+    function decode_result(r) {
+        function b64DecodeUnicode(str) {
+            // Going backwards: from bytestream, to percent-encoding, to original string.
+            return decodeURIComponent(atob(str).split('').map(function(c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join(''));
+        };
+        if (r) {
+            return b64DecodeUnicode(r.split(':').slice(-1))
+        } else {
+            return '';
+        }
+    }
+    
     if (sj) {
         console.debug("submetoj: "+sj.length);
         const nv = document.getElementById("navigado");
         const ds = make_elements([
             ["details",{id: "submetoj"},
                 [
-                    ["summary",{},"viaj submetoj"]
+                    ["summary",{},[
+                        ["strong",{},"viaj submetoj"]
+                    ]]
                 ]
             ]
         ])[0];
         for (s of sj) {
-            var info = make_element("p",{},s.fname+s.state+s.time);
-            ds.append(info);
+            var info = make_elements([
+                ["details",{},[
+                    ["summary",{},[
+                        (stat[s.state]||'--')," ",s.time.substr(0,16)," ",
+                        ["a",{href: '/revo/art/'+s.fname+'.html', target: 'precipa'},s.fname]                        
+                    ]],
+                    ["i",{},s.desc],["br",{},''],
+                    decode_result(s.result)
+                ]]
+            ]);
+            ds.append(...info);
         }
         nv.append(ds);
     }   
