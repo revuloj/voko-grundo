@@ -261,7 +261,8 @@ nav a:active {
     color: var(--nav-fnt-clr);
 }
 
-#navigado .enhavo {
+#navigado .enhavo,
+#submetoj {
     max-width: var(--nav-enh-width);
     font-family: sans-serif;
     line-height: 150%;

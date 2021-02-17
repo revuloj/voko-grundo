@@ -980,6 +980,7 @@ var redaktilo = function() {
   return {
     preparu_red: preparu_red,
     preparu_menu: preparu_menu,
+    get_preference: get_preference,
     submetoj_stato: submetoj_stato,
     klavo: klavo,
     rantaurigardo: rantaurigardo,

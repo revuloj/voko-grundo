@@ -83,7 +83,7 @@ when_doc_ready(function() {
         if (t_main.stato != "titolo") 
             show("x:titol_btn");
         hide("x:nav_start_btn");
-        redaktilo.submetoj_stato(montru_submeto_staton);
+        // viaj_submetoj(); -- ĉe renovigado tio venus tro frue kaj reforiĝus....
     });
 
     t_nav.forire("ĉefindekso",()=>{ 
@@ -525,7 +525,9 @@ function load_page(trg,url,push_state=true) {
                 .addEventListener("click",function() {
                     t_red.transiro("ne_redaktante");
             });
-        } 
+        } else if (filename.startsWith("_plena")) {
+            viaj_submetoj();
+        }
         index_spread();
 
         // laŭbezone ankoraŭ iru al loka marko
@@ -652,7 +654,7 @@ function adaptu_paghon(root_el, url) {
     fix_img_svg(root_el);
 
     var filename = url.split('/').pop();
-    // index Esperanto
+    // index Esperanto. Atentu! Ni nun uzas _plena. (vd. malsupre)
     if ( filename.startsWith('_eo.') ) {
         for (var n of root_el.querySelectorAll(".kls_nom")) {
             if (n.tagName != "summary") {
@@ -1099,6 +1101,28 @@ function redaktu(href) {
     load_page("nav",redaktmenu_url);
 }
 
+function viaj_submetoj() {
+    if (redaktilo.get_preference("r:redaktanto")) {
+        console.debug("+viaj submetoj");
+        const nv = document.getElementById("navigado");
+        const ds = make_elements([
+            ["details",{id: "submetoj"},
+                [
+                    ["summary",{},[
+                        ["strong",{},"viaj submetoj"]
+                    ],'...']
+                ]
+            ]
+        ]);
+        nv.append(...ds);
+        ds[0].addEventListener("toggle", function(event) {
+            if (event.target.hasAttribute("open")) {
+                redaktilo.submetoj_stato(montru_submeto_staton);
+            }
+        })
+    }    
+}
+
 function montru_submeto_staton(sj) {
     const stat = {
         'nov': '\u23f2\ufe0e', 'trakt': '\u23f2\ufe0e', 
@@ -1118,17 +1142,12 @@ function montru_submeto_staton(sj) {
     }
     
     if (sj) {
-        console.debug("submetoj: "+sj.length);
-        const nv = document.getElementById("navigado");
-        const ds = make_elements([
-            ["details",{id: "submetoj"},
-                [
-                    ["summary",{},[
-                        ["strong",{},"viaj submetoj"]
-                    ]]
-                ]
-            ]
-        ])[0];
+        const ds = document.getElementById("submetoj");
+        // forigu antaŭajn...
+        for (ch of ds.querySelectorAll("details")) {
+            ds.removeChild(ch);
+        }
+        // enŝovu novan staton....
         for (s of sj) {
             var info = make_elements([
                 ["details",{},[
@@ -1143,6 +1162,5 @@ function montru_submeto_staton(sj) {
             ]);
             ds.append(...info);
         }
-        nv.append(ds);
     }   
 }
