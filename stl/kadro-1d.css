@@ -307,6 +307,11 @@ nav a:active {
     border-bottom: 2px solid var(--nav-fnt-clr);
 }
 
+.s_stato {
+    width: 1em;
+    display: inline-block;
+}
+
 #x\:ser\0109o, 
 #x\:_plena h1:empty 
 {

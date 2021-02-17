@@ -1133,7 +1133,8 @@ function montru_submeto_staton(sj) {
             var info = make_elements([
                 ["details",{},[
                     ["summary",{},[
-                        (stat[s.state]||'--')," ",s.time.substr(0,16)," ",
+                        ["span",{class:'s_stato'},(stat[s.state]||'--')],
+                        " ",s.time.substr(0,16)," ",
                         ["a",{href: '/revo/art/'+s.fname+'.html', target: 'precipa'},s.fname]                        
                     ]],
                     ["i",{},s.desc],["br",{},''],
