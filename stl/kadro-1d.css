@@ -308,6 +308,12 @@ nav a:active {
     border-bottom: 2px solid var(--nav-fnt-clr);
 }
 
+#submetoj details div {
+    margin-left: .2em;
+    padding-left: .7em;
+    border-left: 2px solid var(--nav-fnt-clr);
+}
+
 .s_stato {
     width: 1em;
     display: inline-block;

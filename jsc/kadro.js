@@ -1135,7 +1135,7 @@ function montru_submeto_staton(sj) {
             }).join(''));
         };
         if (r) {
-            return b64DecodeUnicode(r.split(':').slice(-1))
+            return b64DecodeUnicode(r.split(':').slice(-1)).replace('[m ','[');
         } else {
             return '';
         }
@@ -1156,8 +1156,10 @@ function montru_submeto_staton(sj) {
                         " ",s.time.substr(0,16)," ",
                         ["a",{href: '/revo/art/'+s.fname+'.html', target: 'precipa'},s.fname]                        
                     ]],
-                    ["i",{},s.desc],["br",{},''],
-                    decode_result(s.result)
+                    ["div",{},[
+                        ["i",{},s.desc],["br",{},''],
+                        decode_result(s.result)    
+                    ]]
                 ]]
             ]);
             ds.append(...info);
