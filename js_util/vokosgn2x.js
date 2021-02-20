@@ -4,37 +4,40 @@ const fs = require("fs");
 const sgndtd = 'dtd/vokosgn.dtd';
 const perldir = 'build/cgi/perllib/revo';
 const pmout = 'voko_entities.pm';
+const jsdir = 'build/jsc';
+const jsout = 'voko_entities.js';
 
 //const re_entity = /<!ENTITY\s+([:alpha:]+)\s+"(&#x?[0-9a-fA-F]+)">/mg;
-const re_entity = /<!ENTITY\s+([\w]+)\s+"&(#x?)([0-9a-fA-F]+);"/mg;
+const re_entity = /<!ENTITY\s+([\w-\.]+)\s+"&(#x?)([0-9a-fA-F]+);"/mg;
 
+console.log("<- "+sgndtd+"...");
 fs.readFile(sgndtd,(error,data) => {
     if (error) { throw error;}
     //console.log(data.toString());
-    const pmstr = dtd2pm(data.toString());
+    const entities = dtd_entities(data.toString());
+
+    write_js(entities);
 
     fs.mkdir(perldir, {recursive: true, mode: '0755'}, function(err) {
         if (err) throw err;
-
-        fs.writeFile(perldir+'/'+pmout, pmstr, function (err) {
-            if (err) throw err;
-            console.log('Konservita al '+perldir+'/'+pmout);
-        }); 
+        write_pm(entities);
     });
+
 });
 
-function dtd2pm(dtdStr) {
+function dtd_entities(dtdStr) {
 
     //fs.writeFile(perlout, 'Hello content!', function (err) {
     //    if (err) throw err;
     //    console.log('Saved!');
     //  }); 
-    var result = 'package voko_entities; $voko_entities = (\n';
+    //var result = 'package voko_entities; $voko_entities = (\n';
+    var entities = [];
     var m = re_entity.exec(dtdStr);
     //return re_entity.exec(dtdStr);
     while (m !== null) {
         //console.log(m.index+": "+m[0]+"; 1:"+m[1]+"; 2:"+m[2]+"; 3:"+m[3]);
-        console.info(m[2]+m[3] + " => " + m[1]);
+        //console.info(m[2]+m[3] + " => " + m[1]);
 
         var chr;
         if (m[2] == '#x') {
@@ -46,13 +49,62 @@ function dtd2pm(dtdStr) {
         }
 
         const code = chr.charCodeAt(0);
-        if ( code > 255 && (code < 0x2000 || code > 0x202F)) {
-            result +=  "'" + chr + "' => '" + m[1] + "',\n";
+        if ( code > 127 && code < 0x200a 
+            || code > 0x200f && code < 0x202a 
+            || code > 0x202f) {
+            //result +=  "'" + chr + "' => '" + m[1] + "',\n";
+            entities.push([m[1],chr])
         }
 
         m = re_entity.exec(dtdStr);
     }
 
-    return result + ("'%' => '%');\nreturn 1;");
+    return entities; //result + ("'%' => '%');\n1;");
+}
+
+function write_pm(entities) {
+    const pmfile = perldir+'/'+pmout;
+    console.log("-> "+pmfile+"...");
+
+    fs.open(pmfile,'w','0644',(error,fd) => {
+        if (error) { throw error; }
+    
+        fs.writeSync(fd,
+            'package voko_entities;\n' +
+            '$voko_entities = (\n');
+
+        
+        for (let [nam,ent] of entities) {
+            fs.writeSync(fd,
+                "'" + ent + "'=>'" + nam + "',\n");
+        }
+        fs.writeSync(fd,"'__%'=>'__%');\n");
+        fs.closeSync(fd);
+    });
+};
+
+function write_js(entities) {
+    const jsfile = jsdir+'/'+jsout;
+    console.log("-> "+jsfile+"...");
+
+    fs.open(jsfile,'w','0644',(error,fd) => {
+        if (error) { throw error; }
+    
+        fs.writeSync(fd,
+            '/* jshint esversion: 6 */\n' +
+            'const voko_entities={\n' +
+            '"amp":"&amp;",\n' +
+            '"lt":"&lt;",\n' +
+            '"gt":"&gt;",\n' +
+            '"apos":"&apos;",\n' +
+            '"quot":"&quot;",\n');
+        
+        for (let [nam,ent] of entities) {
+            fs.writeSync(fd,
+                '"'+nam+'":"'+ent+'",\n');
+        }
+        fs.writeSync(fd,'"__%":"__%"}\n');
+        fs.closeSync(fd);
+    });
 }
 
