@@ -70,8 +70,9 @@ function write_pm(entities) {
         if (error) { throw error; }
     
         fs.writeSync(fd,
-            'package voko_entities;\n' +
-            '$voko_entities = (\n');
+            'package revo::voko_entities; use utf8;\n' +
+            'sub entities { return \\%voko_entities; }\n' +
+            '%voko_entities = (\n');
 
         
         for (let [nam,ent] of entities) {
