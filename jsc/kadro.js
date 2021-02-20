@@ -1023,8 +1023,8 @@ function serchu_q(esprimo) {
             // debug Unicode issues...
             //console.debug("data: "+data);
             //console.debug("stng: "+JSON.stringify(json));
-
-            var inx_enh = document.getElementById("navigado").querySelector(".enhavo");
+            const nav = document.getElementById("navigado");
+            var inx_enh = nav.querySelector(".enhavo");
 
             //var s_form = serch_frm(esprimo);
             //var submit = s_form[0].querySelector("input[type='submit']");
@@ -1055,6 +1055,10 @@ function serchu_q(esprimo) {
             inx_enh.textContent = "";
             //inx_enh.append(...s_form,trovoj);
             inx_enh.append(trovoj);
+            // forigu ankaŭ eventualan "viaj submetoj", ĝi estu nur en ĉefindekso por
+            // eviti konfuzojn
+            const subm =nav.querySelector("#submetoj");
+            if (subm) nav.removeChild(subm);
         },
         start_wait,
         stop_wait 
