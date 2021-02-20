@@ -278,6 +278,17 @@ when_doc_ready(function() {
                     if (s != s1)
                         event.target.value = s1;
                 }
+            // keycode fix for older Android Chrome 
+            } else if ((event.keyCode == 0 || event.keyCode == 229) 
+                && document.getElementById("x:cx").value == "1") {
+                var s = event.target.value;
+                var key = s.charAt(s.length-1);
+                //alert("Android dbg: "+event.keyCode+ "s: "+s+" kcd: "+kCd);
+                if (key == "x" || key == "X") {
+                    var s1 = ascii_eo(s);
+                    if (s != s1)
+                        event.target.value = s1;    
+                }
             }
         });
     
@@ -723,6 +734,18 @@ function adaptu_paghon(root_el, url) {
                     var s1 = ascii_eo(s);
                     if (s != s1)
                         event.target.value = s1;
+                }
+            }
+            // keycode fix for older Android Chrome 
+            else if ((event.keyCode == 0 || event.keyCode == 229) 
+                && document.getElementById("w:cx").value == "1") {
+                var s = event.target.value;
+                var key = s.charAt(s.length-1);
+                //alert("Android dbg: "+event.keyCode+ "s: "+s+" kcd: "+kCd);
+                if (key == "x" || key == "X") {
+                    var s1 = ascii_eo(s);
+                    if (s != s1)
+                        event.target.value = s1;    
                 }
             }
         });
