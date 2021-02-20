@@ -7,9 +7,9 @@
         "url": "https://github.com/revuloj/voko-grundo.git"
     },
     "devDependencies": {
-        "jshint": "latest",
         "cssmin": "latest",
-        "google-closure-compiler": "latest"
+        "google-closure-compiler": "latest",
+        "jshint": "latest"
     },
     "scripts": {
         "env": "env",
@@ -24,6 +24,7 @@
         "// build:js": "uglifyjs jsc/util.js -o build/jsc/revo-1d-min.js",
         "build:js": "google-closure-compiler --compilation_level SIMPLE --js_module_root jsc --entry_point jsc/kadro.js --js_output_file build/jsc/revo-1d-min.js jsc/util.js jsc/transiroj.js jsc/preferoj.js jsc/artikolo.js jsc/kadro.js jsc/voko_entities.js jsc/redaktilo.js",
         "//prebuild:js": "npm run lint",
+        "build:entities": "node js_util/vokosgn2x.js",
         "build": "npm run build:svg && npm run build:css && npm run build:dok && npm run build:js"
     },
     "scriptsComments": {
