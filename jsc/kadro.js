@@ -1144,7 +1144,7 @@ function viaj_submetoj() {
         nv.append(...ds);
         ds[0].addEventListener("toggle", function(event) {
             if (event.target.hasAttribute("open")) {
-                redaktilo.submetoj_stato(montru_submeto_staton);
+                redaktilo.submetoj_stato(montru_submeto_staton,start_wait,stop_wait);
             }
         })
     }    

@@ -699,7 +699,7 @@ var redaktilo = function() {
     });
   }
 
-  function submetoj_stato(subm_callback) {
+  function submetoj_stato(subm_callback,onstart,onstop) {
     const red = get_preference('r:redaktanto');
     if (!red) return;
 
@@ -716,7 +716,9 @@ var redaktilo = function() {
         //}  
         subm_callback(json);
       }
-    });
+    },
+    onstart,
+    onstop);
   }
     
   function vokomailx(command,art,xml) {
