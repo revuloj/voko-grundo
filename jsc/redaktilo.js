@@ -16,15 +16,18 @@ var redaktilo = function() {
     stiloj: new Codelist('stilo','/revo/cfg/stiloj.xml')
   };
   
-  var re_lng = /<(?:trd|trdgrp)\s+lng\s*=\s*"([^]*?)"\s*>/mg; 
-  var re_fak = /<uzo\s+tip\s*=\s*"fak"\s*>([^]*?)</mg; 
-  var re_stl = /<uzo\s+tip\s*=\s*"stl"\s*>([^]*?)</mg; 
-  var re_mrk = /<(drv|snc) mrk="([^]*?)">/mg;
+  const re_lng = /<(?:trd|trdgrp)\s+lng\s*=\s*"([^]*?)"\s*>/mg; 
+  const re_fak = /<uzo\s+tip\s*=\s*"fak"\s*>([^]*?)</mg; 
+  const re_stl = /<uzo\s+tip\s*=\s*"stl"\s*>([^]*?)</mg; 
+  const re_mrk = /<(drv|snc) mrk="([^]*?)">/mg;
 
-  var re_trdgrp = /<trdgrp\s+lng\s*=\s*"[^"]+"\s*>[^]*?<\/trdgrp/mg;	
-  var re_trd = /<trd\s+lng\s*=\s*"[^"]+"\s*>[^]*?<\/trd/mg;	
-  var re_ref = /<ref([^g>]*)>([^]*?)<\/ref/mg;
-  var re_refcel = /cel\s*=\s*"([^"]+?)"/m;
+  const re_trdgrp = /<trdgrp\s+lng\s*=\s*"[^"]+"\s*>[^]*?<\/trdgrp/mg;	
+  const re_trd = /<trd\s+lng\s*=\s*"[^"]+"\s*>[^]*?<\/trd/mg;	
+  const re_ref = /<ref([^g>]*)>([^]*?)<\/ref/mg;
+  const re_refcel = /cel\s*=\s*"([^"]+?)"/m;
+
+  const re_hex = /^#x[\da-f]+$/;
+  const re_dec = /^#\d\d+$/;
 
   const xml_shbl = {
     // la XML-ŝablonoj, el kiuj ni elektos laŭ nomo...
@@ -781,8 +784,14 @@ var redaktilo = function() {
     function replace_entities(data) {
         return data.replace(/&[^;\s]+;/g, function (ent) {
           const key = ent.slice(1,-1);
-          const val = voko_entities[key];
-          return (val && val.length == 1)? val : ent;
+          if (key.match(re_hex)) {
+            return String.fromCharCode(parseInt(key.substring(2),16));
+          } else if (key.match(re_dec)) {
+            return String.fromCharCode(parseInt(key.substring(1)));
+          } else {
+            const val = voko_entities[key];
+            return (val && val.length == 1)? val : ent;
+          }
         }); 
     }
 
