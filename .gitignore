@@ -1,9 +1,9 @@
 *~
 tmp/
 build/
+# nun en build:
+#smb/*.svg
+#smb/*.log
+#smb/*.png
 
-smb/*.svg
-smb/*.log
-smb/*.png
-
-stl/*.afm
+node_modules/
