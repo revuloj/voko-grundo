@@ -296,17 +296,11 @@ when_doc_ready(function() {
         //document.getElementById("navigado")
             .addEventListener("click",navigate_link);
 
+        // tio vokiĝas, i.a. kiam la uzanto reŝargas la paĝon aŭ fermas la redaktilon.
         window
-            .addEventListener('beforeunload', function() {
-                // tio vokiĝas, i.a. kiam la uzanto reŝargas la paĝon aŭ fermas la redaktilon.
-                // Por ebligi ŝargi freŝajn paĝojn ni altigas la version, kiu
-                // estas alpendigata al GET, tiel evitante ricevi paĝojn el la loka bufro.
-                // Se ni uzus sessionStorage ni post remalfermo de la retumilo denove
-                // ricevus pli malnovajn paĝ-versiojn, do ni uzas localStorage
-                const akt = window.localStorage.getItem("aktualigilo");
-                const akt1 = (((akt && parseInt(akt)) || 0) + 1) % 30000; // +1, sed rekomencu ĉe 0 post 29999
-                window.localStorage.setItem("aktualigilo",akt1);
-        });
+            .addEventListener('beforeunload', aktualigilo);
+        window // por iOS...:
+            .addEventListener('pagehide', aktualigilo);
             
         window
             .addEventListener('popstate', navigate_history);    
@@ -317,6 +311,16 @@ when_doc_ready(function() {
 
     }
 });
+
+function aktualigilo() {
+    // Por ebligi ŝargi freŝajn paĝojn ni altigas la version, kiu
+    // estas alpendigata al GET, tiel evitante ricevi paĝojn el la loka bufro.
+    // Se ni uzus sessionStorage ni post remalfermo de la retumilo denove
+    // ricevus pli malnovajn paĝ-versiojn, do ni uzas localStorage
+    const akt = window.localStorage.getItem("aktualigilo");
+    const akt1 = (((akt && parseInt(akt)) || 0) + 1) % 30000; // +1, sed rekomencu ĉe 0 post 29999
+    window.localStorage.setItem("aktualigilo",akt1);
+}
 
 function index_toggle() {
     document.getElementById("navigado").classList.toggle("eble_kasxita");
@@ -1145,6 +1149,8 @@ function viaj_submetoj() {
         ds[0].addEventListener("toggle", function(event) {
             if (event.target.hasAttribute("open")) {
                 redaktilo.submetoj_stato(montru_submeto_staton,start_wait,stop_wait);
+                aktualigilo(); // altigu aktualigilon por eventuale vidi la redaktitan artikolon
+                                // anstataŭ la bufritan!
             }
         })
     }    
