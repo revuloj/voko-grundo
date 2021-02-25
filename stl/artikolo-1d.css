@@ -212,24 +212,6 @@ A.ref:hover { color: var(--main-act-fnt-clr) !important}
 h1 sup.fntref { font-size: .6em }
 h2 sup.fntref { font-size: .8em }
 
-.fnturl { /* bridu tro longajn URL-ojn...
-    Iom ĝenas, ke tio funkcias nur kun inline-block, sed
-    tiel la fnt-teksto ne plu komplete fluas kaj la sekvanta komo
-    povas aperi kun sufiĉe da spaco antaŭe.
-
-    Verŝajne tion ni povus kontentige solvi nur mallongigante la URL-on
-    jam en la XSL-transformo
-     */
-    vertical-align: top;
-    max-width: 22.5em;
-    display: inline-block;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    text-indent: 0;
-    /* se la fnt-teksto enhavas spacojn, ni povas
-    ĝin rompi, sed tro longajn URL-ojn ni fortranĉas:
-    white-space: nowrap;*/
-}
 /* fontindikaj piednotoj */
 .fontoj {
     color: var(--fnt-fnt-clr); 
@@ -774,7 +756,29 @@ dt.pli, .ekz.pli, a.pli {
 @media (max-width: 30em) {
     #alia_lng {
         columns: 1;
-    }   
+    }
+
+    .fnturl { /* bridu tro longajn URL-ojn...
+        Iom ĝenas, ke tio funkcias nur kun inline-block, sed
+        tiel la fnt-teksto ne plu komplete fluas kaj la sekvanta komo
+        povas aperi kun sufiĉe da spaco antaŭe.
+
+        Ankaŭ ĝenas, ke ĝi trafas ne nur senspacajn URL-ojn sed ankaŭ
+        pli longajn titolojn, kiujn ja eblas linirompi.
+
+        Verŝajne tion ni povus kontentige solvi nur mallongigante la URL-on
+        jam en la XSL-transformo
+        */
+        vertical-align: top;
+        max-width: 22.5em;
+        display: inline-block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        text-indent: 0;
+        /* se la fnt-teksto enhavas spacojn, ni povas
+        ĝin rompi, sed tro longajn URL-ojn ni fortranĉas:
+        white-space: nowrap;*/
+    }
 }
 
 @media (max-height: 30em) and (min-width: 30em) {
