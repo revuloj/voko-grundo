@@ -27,20 +27,21 @@
         "prebuild:css": "mkdir -p build/stl",
         "//build:css": "bin/compile-css.sh",
         "build:svg": "bin/svg2css.sh build/smb/[ir]_*.svg > build/stl/piktogram-1d.css",
-        "build:css": "cat stl/normalize.css stl/koloroj.css build/stl/piktogram-1d.css stl/formularo.css stl/kadro-1d.css stl/artikolo-1d.css stl/redaktilo-1d.css | cssmin > build/stl/revo-1d-min.css",
+        "build:css": "npm run build:svg && cat stl/normalize.css stl/koloroj.css build/stl/piktogram-1d.css stl/formularo.css stl/kadro-1d.css stl/artikolo-1d.css stl/redaktilo-1d.css | cssmin > build/stl/revo-1d-min.css",
         "build:dok": "bin/compile-dok.sh",
         "//build:js": "bin/compile-jscript.sh",
         "// build:js": "uglifyjs jsc/util.js -o build/jsc/revo-1d-min.js",
         "build:js": "google-closure-compiler --compilation_level SIMPLE --js_module_root jsc --entry_point jsc/kadro.js --js_output_file build/jsc/revo-1d-min.js jsc/util.js jsc/transiroj.js jsc/preferoj.js jsc/artikolo.js jsc/kadro.js build/jsc/voko_entities.js jsc/redaktilo.js",
         "//prebuild:js": "npm run lint",
         "build:codec": "node js_util/vokosgn2x.js",
-        "build": "npm run build:svg && npm run build:css && npm run build:dok && npm run build:codec && npm run build:js",
+        "build": "npm run build:css && npm run build:dok && npm run build:codec && npm run build:js",
         "publish:araneo:js": "araneo_id=$(docker ps --filter name=araneujo_araneo -q) && docker cp build/jsc ${araneo_id}:$npm_package_config_araneo_target",
         "publish:araneo:css": "araneo_id=$(docker ps --filter name=araneujo_araneo -q) && docker cp build/stl ${araneo_id}:$npm_package_config_araneo_target",
         "publish:araneo": "npm run publish:araneo:js && npm run publish:araneo:css"
     },
     "scriptsComments": {
         "build": "Kompilas CSS, JS kaj DOK al dosierujo build/",
-        "build:js": "pri google-closure-compiler vd. https://www.npmjs.com/package/google-closure-compiler"
+        "build:js": "pri google-closure-compiler vd. https://www.npmjs.com/package/google-closure-compiler",
+        "build:svg": "kunigas piktogramojn el unuopaj SVG-dosieroj. Ne uzante docker build vi antaŭe voku bin/mp2png_svg.sh"
     }
 }
