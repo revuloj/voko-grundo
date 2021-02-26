@@ -62,6 +62,13 @@ function dtd_entities(dtdStr) {
     return entities; //result + ("'%' => '%');\n1;");
 }
 
+/*
+    - kreas Perlan mapon de signo al signonomo uzotan kun voko-araneo/cgi/perllib/revo/encodex.pm
+    - Por enkodado estus bone ankaŭ aldoni la XML-unuojn el vokomll.dtd kaj vokourl.dtd - supozeble en
+      aparta mapo, kiu aplikiĝu per anstataŭigado s/../../g 
+      -> momente ni faros tion nur en la Prologa redaktilo (voko-svn/swi, voko-cetonio), kie per loaddtd.pl ni kreas voko_entities.pl
+
+*/
 function write_pm(entities) {
     const pmfile = perldir+'/'+pmout;
     console.log("-> "+pmfile+"...");
@@ -84,6 +91,9 @@ function write_pm(entities) {
     });
 };
 
+/*
+- kreas JS-mapon de signonomo al signo uzotan kun redaktilo.js:load_xml()
+*/
 function write_js(entities) {
     const jsfile = jsdir+'/'+jsout;
     console.log("-> "+jsfile+"...");
