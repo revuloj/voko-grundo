@@ -9,104 +9,134 @@
 #
 # uzante XML::LibXML ĝi provas eviti la problemon kun pli frua
 # merge_trd_cs.pl kiu akcidente forigis partojn de kelkaj artikoloj
+#
+# donu lingvokodon kaj CSV por tradukoj en la unua kaj dua argumentoj
+# donu artikolojn adaptendajn en la cetero (uzante ĵokerojn):
+#
+#  perl merge_trd_xml.pl he tmp/hebrea_a.csv a*.xml
 
 use XML::LibXML;
 # https://metacpan.org/pod/XML::LibXML
+use Text::CSV qw( csv );
 
 use utf8;
 binmode(STDOUT, "encoding(UTF-8)");
 
 $debug = 1;
 
-$artikolo = 'tmp/abel.xml';
-$artout = $artikolo.".out";
-$lingvo = 'zz';
-%tradukoj = (
-    'abelo' => 'ee-ape, ee-abeille',
-    'abelujo' => 'ee-apur, ee-apora',
-    'abelreĝino' => 'ee-rein'
-);
-
-# load XML
-# DTD devas troviĝi relative al la XML-pado: ../dtd/*.dtd
-# alternative oni devus deklari ext_ent_handler
-# kiel klarigita en https://metacpan.org/pod/distribution/XML-LibXML/lib/XML/LibXML/Parser.pod#Parser-Options
-my $doc = XML::LibXML->load_xml(location => $artikolo, expand_entities=>0, keep_blanks=>1);
-#open my $fh, '<', $test_art;
-#binmode $fh; # drop all PerlIO layers possibly created by a use open pragma
-#my $doc = XML::LibXML->load_xml(IO => $fh, validation=>0, expand_entities=>0, keep_blanks=>1);
-
-# nun ni povas uzi $doc (DOM) kiel klarigita en
-# https://metacpan.org/pod/distribution/XML-LibXML/lib/XML/LibXML/Document.pod
-# https://metacpan.org/pod/distribution/XML-LibXML/lib/XML/LibXML/Node.pod
-# https://metacpan.org/pod/distribution/libxml-enno/lib/XML/DOM/NamedNodeMap.pod
-
-# trovu radikojn (inkluzive de var-iaĵoj)
-my %radikoj;
-my @rad = $doc->findnodes('//rad');
-for my $rad (@rad) {
-    $radikoj->{var_key($rad)} = $rad->textContent();
-    print var_key($rad).": ".$rad->textContent()."\n" if ($debug);
+unless ($#ARGV>1) {
+    print "\n=> Certigu, ke vi troviĝas en la dosierujo kie enestas la artikoloj al kiuj\n";
+    print "vi volas aldoni tradukojn el CSV-dosero. Poste voku tiel:\n";
+    print "   perl merge_trd_xml.pl <lingvokodo> <csv-dosiero> <art>*.xml...\n\n" ;
+    exit 1;
 }
-    
-# trovu kapojn de derivaĵoj kaj anstataŭigu tildojn
-my %drvmap;
-for my $d ($doc->findnodes('//drv')) {
-    extract_kap($d);
+
+$lingvo = shift @ARGV;
+$csvfile = shift @ARGV;
+@artikoloj = @ARGV;
+
+#$artikolo = 'tmp/abel.xml';
+#$artout = $artikolo.".out";
+#%tradukoj = (
+#    'abelo' => 'ee-ape, ee-abeille',
+#    'abelujo' => 'ee-apur, ee-apora',
+#    'abelreĝino' => 'ee-rein'
+#);
+
+my $tradukoj = read_csv($csvfile);
+
+#print $tradukoj->{abako};
+#print $tradukoj->{absciso};
+#exit 1;
+
+for $art (@artikoloj) {
+    process_art($art);
 }
-print "drv: ".join(';',keys(%drvmap))."\n" if ($debug);
 
-# Nun ni scias la kapvortojn kaj derivaĵojn kaj povas aldoni tradukojn.
-# Laŭ kapvortoj ni rigardu ĉu estas tradukoj kaj se jes ni iru al drv
-# kaj provos aldoni la tradukon inter la aliaj lingvoj laŭalfabete
-for my $k (keys(%drvmap)) {
-    print "kap: $k...\n" if ($debug);
-    my $t = %tradukoj{$k};
-    my $te;
+sub process_art {
+    my $artikolo = shift;
 
-    if ($t) {
-        print "- trd: $t\n" if ($debug);
+    # load XML
+    # DTD devas troviĝi relative al la XML-pado: ../dtd/*.dtd
+    # alternative oni devus deklari ext_ent_handler
+    # kiel klarigita en https://metacpan.org/pod/distribution/XML-LibXML/lib/XML/LibXML/Parser.pod#Parser-Options
+    my $doc = XML::LibXML->load_xml(location => $artikolo, expand_entities=>0, keep_blanks=>1);
+    #open my $fh, '<', $test_art;
+    #binmode $fh; # drop all PerlIO layers possibly created by a use open pragma
+    #my $doc = XML::LibXML->load_xml(IO => $fh, validation=>0, expand_entities=>0, keep_blanks=>1);
 
-        # kreu <trd> aŭ <trdgrp>
-        my @t = split(/\s*,\s*/,$t);
-        my $te, $nl;
-        if ($#t < 1) {
-            $te = make_trd($t);            
-        } else {
-            $te = make_trdgrp(@t);
-        }
-        $nl = XML::LibXML::Text->new("\n  ");
+    # nun ni povas uzi $doc (DOM) kiel klarigita en
+    # https://metacpan.org/pod/distribution/XML-LibXML/lib/XML/LibXML/Document.pod
+    # https://metacpan.org/pod/distribution/XML-LibXML/lib/XML/LibXML/Node.pod
+    # https://metacpan.org/pod/distribution/libxml-enno/lib/XML/DOM/NamedNodeMap.pod
 
-        my $drv = %drvmap{$k};
-        my $inserted = 0;
-        for $ch ($drv->childNodes()) {
-            if ($ch->nodeName eq 'trd') {
-                my $l = attr($ch,'lng');
+    # trovu radikojn (inkluzive de var-iaĵoj)
+    my %radikoj;
+    my @rad = $doc->findnodes('//rad');
+    for my $rad (@rad) {
+        $radikoj->{var_key($rad)} = $rad->textContent();
+        print var_key($rad).": ".$rad->textContent()."\n" if ($debug);
+    }
+        
+    # trovu kapojn de derivaĵoj kaj anstataŭigu tildojn
+    my %drvmap;
+    for my $d ($doc->findnodes('//drv')) {
+        extract_kap($d);
+    }
+    print "drv: ".join(';',keys(%drvmap))."\n" if ($debug);
 
-                if ($l gt $lingvo) {
-                    # aldonu novajn tradukojn antaŭ la nuna
-                    $drv->insertBefore($te,$ch);
-                    $drv->insertBefore($nl,$ch);
-                    $inserted = 1;
+    # Nun ni scias la kapvortojn kaj derivaĵojn kaj povas aldoni tradukojn.
+    # Laŭ kapvortoj ni rigardu ĉu estas tradukoj kaj se jes ni iru al drv
+    # kaj provos aldoni la tradukon inter la aliaj lingvoj laŭalfabete
+    for my $k (keys(%drvmap)) {
+        print "kap: $k...\n" if ($debug);
+        my $t = %tradukoj{$k};
+        my $te;
 
-                    print "+ $te\n...\n" if ($debug);
-                    last;
-                }                
-                print "  $ch\n" if ($debug);
+        if ($t) {
+            print "- trd: $t\n" if ($debug);
+
+            # kreu <trd> aŭ <trdgrp>
+            my @t = split(/\s*,\s*/,$t);
+            my $te, $nl;
+            if ($#t < 1) {
+                $te = make_trd($t);            
+            } else {
+                $te = make_trdgrp(@t);
+            }
+            $nl = XML::LibXML::Text->new("\n  ");
+
+            my $drv = %drvmap{$k};
+            my $inserted = 0;
+            for $ch ($drv->childNodes()) {
+                if ($ch->nodeName eq 'trd') {
+                    my $l = attr($ch,'lng');
+
+                    if ($l gt $lingvo) {
+                        # aldonu novajn tradukojn antaŭ la nuna
+                        $drv->insertBefore($te,$ch);
+                        $drv->insertBefore($nl,$ch);
+                        $inserted = 1;
+
+                        print "+ $te\n...\n" if ($debug);
+                        last;
+                    }                
+                    print "  $ch\n" if ($debug);
+                }
+            }
+            if (! $inserted) {
+                # aldonu fine, se ne jam antaŭe troviĝis loko por enŝovi
+                $drv->appendText("  ");
+                $drv->appendChild($te);
+                $drv->appendText("\n");
             }
         }
-        if (! $inserted) {
-            # aldonu fine, se ne jam antaŭe troviĝis loko por enŝovi
-            $drv->appendText("  ");
-            $drv->appendChild($te);
-            $drv->appendText("\n");
-        }
     }
-}
 
-open OUT, ">", $artout || die "Ne povas skribi al $artout: $!\n";
-print OUT $doc;
-close OUT;
+    open OUT, ">", $artout || die "Ne povas skribi al $artout: $!\n";
+    print OUT $doc;
+    close OUT;
+}    
 
 ############ helpaj funkcioj.... #############
 
@@ -196,11 +226,19 @@ sub extract_kap {
     return $res;
 }
 
-#print $doc;
+sub read_csv {
+	my ($csvfile) = @_;
+    my $parser = Text::CSV->new ({ auto_diag => 1 });
+    
+    open $CSV,"<:encoding(utf8)",$csvfile or die "Ne povis malfermi CSV '$csvfile': $!\n";
 
-#my $doc = XML::LibXML::Document->new('1.0','utf-8');
+    my $recs = $parser->getline_all($CSV);
+    close $CSV;
 
-#my $element = $doc->createElement($name);
-#$element->appendText($text);
-#$xml_fragment = $element->toString(); # returns a character string
-#$xml_document = $doc->toString(); # returns a byte string
+    my $tradukoj;
+    for $r (@$recs) {
+        $tradukoj->{$r->[0]} = $r->[1];
+    }
+
+    return $tradukoj;
+}
