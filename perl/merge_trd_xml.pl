@@ -23,6 +23,7 @@ use utf8;
 binmode(STDOUT, "encoding(UTF-8)");
 
 $debug = 1;
+$reverse = 1; # skribo de dekstre maldekstren (ekz-e hebrea)
 
 unless ($#ARGV>1) {
     print "\n=> Certigu, ke vi troviĝas en la dosierujo kie enestas la artikoloj al kiuj\n";
@@ -49,12 +50,15 @@ my %radikoj;
 my %drvmap;
 my $doc;
 
-if ($debug) {
-    print "abako: ",$tradukoj->{abako},"\n";
-    print "absciso: ",$tradukoj->{absciso},"\n";
-}
+#if ($debug) {
+#    print "abako: ",$tradukoj->{abako},"\n";
+#    print "absciso: ",$tradukoj->{absciso},"\n";
+#}
 #exit 1;
 
+my $trd_xpath = XML::LibXML::XPathExpression
+    ->new(".//trd[\@lng='$lingvo']|.//trdgrp[\@lng='$lingvo']");
+ 
 for $art (@artikoloj) {
     process_art($art);
 }
@@ -64,6 +68,8 @@ sub process_art {
     # ni reskribas ĉion al la sama artikolo, kiam ni
     # uzas git-versiadon!
     my $artout = $artikolo; #.".out";
+
+    print "### ",uc($artikolo)," ###\n";
 
     %radikoj = ();
     %drvmap = ();
@@ -106,40 +112,56 @@ sub process_art {
         if ($t) {
             print "- trd: $t\n" if ($debug);
 
-            # kreu <trd> aŭ <trdgrp>
-            my @t = split(/\s*,\s*/,$t);
-            my $te, $nl;
-            if ($#t < 1) {
-                $te = make_trd($t);            
-            } else {
-                $te = make_trdgrp(@t);
-            }
-            $nl = XML::LibXML::Text->new("\n  ");
-
             my $drv = %drvmap{$k};
             my $inserted = 0;
-            for $ch ($drv->childNodes()) {
-                if ($ch->nodeName eq 'trd') {
-                    my $l = attr($ch,'lng');
 
-                    if ($l gt $lingvo) {
-                        # aldonu novajn tradukojn antaŭ la nuna
-                        $drv->insertBefore($te,$ch);
-                        $drv->insertBefore($nl,$ch);
-                        $inserted = 1;
+            # unue ni kontrolu ĉu en la derivaĵo jam estas tradukoj de tiu lingvo
+            # se jes ni ne tuŝos ĝin.
+            my $trd_en_drv = $drv->find($trd_xpath);
+            
+            if ($trd_en_drv) {
 
-                        print "+ $te\n...\n" if ($debug);
-                        last;
-                    }                
-                    print "  $ch\n" if ($debug);
+                # se jam enestas tradukoj ni ne aldonas...
+                # mensogu, ke ni aldonis...
+                $inserted = 1;
+                print "!!! jam enestas trd '$lingvo' !!!\n" if ($debug);
+
+            } else {
+                # ne enestas jam tradukoj serĉu kie enŝovi la novan tradukon
+
+                # kreu <trd> aŭ <trdgrp>
+                my @t = split(/\s*,\s*/,$t);
+                my $te, $nl;
+                if ($#t < 1) {
+                    $te = make_trd($t);            
+                } else {
+                    $te = make_trdgrp(@t);
                 }
-            }
-            if (! $inserted) {
-                # aldonu fine, se ne jam antaŭe troviĝis loko por enŝovi
-                $drv->appendText("  ");
-                $drv->appendChild($te);
-                $drv->appendText("\n");
-            }
+                $nl = XML::LibXML::Text->new("\n  ");
+
+                for $ch ($drv->childNodes()) {
+                    if ($ch->nodeName eq 'trd' || $ch->nodeName eq 'trdgrp') {
+                        my $l = attr($ch,'lng');
+
+                        if ($l gt $lingvo) {
+                            # aldonu novajn tradukojn antaŭ la nuna
+                            $drv->insertBefore($te,$ch);
+                            $drv->insertBefore($nl,$ch);
+                            $inserted = 1;
+
+                            print "+ $te\n...\n" if ($debug);
+                            last;
+                        }                
+                        print "  $ch\n" if ($debug);
+                    }
+                } # for
+                if (! $inserted) {
+                    # aldonu fine, se ne jam antaŭe troviĝis loko por enŝovi
+                    $drv->appendText("  ");
+                    $drv->appendChild($te);
+                    $drv->appendText("\n");
+                }
+            } # else
         }
     }
 
@@ -251,7 +273,11 @@ sub read_csv {
 
     my $tradukoj;
     for $r (@$recs) {
-        $tradukoj->{$r->[0]} = $r->[1];
+        unless ($reverse) {
+            $tradukoj->{$r->[0]} = $r->[1];
+        } else {
+            $tradukoj->{$r->[0]} = reverse($r->[1]);
+        }
     }
 
     return $tradukoj;
