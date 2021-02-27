@@ -45,8 +45,14 @@ $csvfile = shift @ARGV;
 
 my $tradukoj = read_csv($csvfile);
 
-#print $tradukoj->{abako};
-#print $tradukoj->{absciso};
+my %radikoj;
+my %drvmap;
+my $doc;
+
+if ($debug) {
+    print "abako: ",$tradukoj->{abako},"\n";
+    print "absciso: ",$tradukoj->{absciso},"\n";
+}
 #exit 1;
 
 for $art (@artikoloj) {
@@ -55,12 +61,18 @@ for $art (@artikoloj) {
 
 sub process_art {
     my $artikolo = shift;
+    # ni reskribas ĉion al la sama artikolo, kiam ni
+    # uzas git-versiadon!
+    my $artout = $artikolo; #.".out";
+
+    %radikoj = ();
+    %drvmap = ();
 
     # load XML
     # DTD devas troviĝi relative al la XML-pado: ../dtd/*.dtd
     # alternative oni devus deklari ext_ent_handler
     # kiel klarigita en https://metacpan.org/pod/distribution/XML-LibXML/lib/XML/LibXML/Parser.pod#Parser-Options
-    my $doc = XML::LibXML->load_xml(location => $artikolo, expand_entities=>0, keep_blanks=>1);
+    $doc = XML::LibXML->load_xml(location => $artikolo, expand_entities=>0, keep_blanks=>1);
     #open my $fh, '<', $test_art;
     #binmode $fh; # drop all PerlIO layers possibly created by a use open pragma
     #my $doc = XML::LibXML->load_xml(IO => $fh, validation=>0, expand_entities=>0, keep_blanks=>1);
@@ -71,7 +83,6 @@ sub process_art {
     # https://metacpan.org/pod/distribution/libxml-enno/lib/XML/DOM/NamedNodeMap.pod
 
     # trovu radikojn (inkluzive de var-iaĵoj)
-    my %radikoj;
     my @rad = $doc->findnodes('//rad');
     for my $rad (@rad) {
         $radikoj->{var_key($rad)} = $rad->textContent();
@@ -79,7 +90,6 @@ sub process_art {
     }
         
     # trovu kapojn de derivaĵoj kaj anstataŭigu tildojn
-    my %drvmap;
     for my $d ($doc->findnodes('//drv')) {
         extract_kap($d);
     }
@@ -87,10 +97,10 @@ sub process_art {
 
     # Nun ni scias la kapvortojn kaj derivaĵojn kaj povas aldoni tradukojn.
     # Laŭ kapvortoj ni rigardu ĉu estas tradukoj kaj se jes ni iru al drv
-    # kaj provos aldoni la tradukon inter la aliaj lingvoj laŭalfabete
+    # kaj provos aldoni la tradukojn inter la aliaj lingvoj laŭalfabete
     for my $k (keys(%drvmap)) {
-        print "kap: $k...\n" if ($debug);
-        my $t = %tradukoj{$k};
+        print "kap: |$k|...\n" if ($debug);
+        my $t = $tradukoj->{$k};
         my $te;
 
         if ($t) {
@@ -133,7 +143,7 @@ sub process_art {
         }
     }
 
-    open OUT, ">", $artout || die "Ne povas skribi al $artout: $!\n";
+    open OUT, ">", $artout || die "Ne povas skribi al '$artout': $!\n";
     print OUT $doc;
     close OUT;
 }    
@@ -205,13 +215,16 @@ sub extract_kap {
     print "kap: ".$kap if ($debug);
 
     for my $ch ($kap->childNodes()) {
+        # se la ido estas tildo, ni anstataŭigu per la koncerna radiko / variaĵo
         if ($ch->nodeName eq 'tld') {            
-            print $radikoj->{var_key($ch)}."\n" if ($debug); 
+            print "\n".$radikoj->{var_key($ch)}."\n" if ($debug); 
             $res .= $radikoj->{var_key($ch)}
+        # se temas pri variaĵo ni rikure vokas extract_kap por trakti ĝin
         } elsif ($ch->nodeName eq 'var') {
             my $var = extract_kap($ch);
             # registru la derivaĵon ($node) sub la nomo $var
             $drvmap{$var} = $node;
+        # tekstojn kaj literunuojn ni kolektas kiel tekstenhavo
         } elsif ($ch->nodeType eq XML_TEXT_NODE || $ch->nodeType eq XML_ENTITY_REF_NODE) {
             print $ch."\n" if ($debug);
             my $cnt = $ch->textContent();
@@ -222,6 +235,7 @@ sub extract_kap {
         }
     };
     # registru la derivaĵon ($node) sub la kapvorto $res
+    $res =~ s/^\s+|\s+$//sg;
     $drvmap{$res} = $node if ($node->nodeName() eq 'drv');
     return $res;
 }
