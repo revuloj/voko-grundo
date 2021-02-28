@@ -23,8 +23,7 @@ use utf8;
 binmode(STDOUT, "encoding(UTF-8)");
 
 $debug = 1;
-$reverse = 1; # skribo de dekstre maldekstren (ekz-e hebrea)
-
+$reverse = 0; # skribo de dekstre maldekstren (ekz-e hebrea)
 unless ($#ARGV>1) {
     print "\n=> Certigu, ke vi troviĝas en la dosierujo kie enestas la artikoloj al kiuj\n";
     print "vi volas aldoni tradukojn el CSV-dosero. Poste voku tiel:\n";
@@ -68,6 +67,7 @@ sub process_art {
     # ni reskribas ĉion al la sama artikolo, kiam ni
     # uzas git-versiadon!
     my $artout = $artikolo; #.".out";
+    my $modified = 0;
 
     print "### ",uc($artikolo)," ###\n";
 
@@ -87,6 +87,14 @@ sub process_art {
     # https://metacpan.org/pod/distribution/XML-LibXML/lib/XML/LibXML/Document.pod
     # https://metacpan.org/pod/distribution/XML-LibXML/lib/XML/LibXML/Node.pod
     # https://metacpan.org/pod/distribution/libxml-enno/lib/XML/DOM/NamedNodeMap.pod
+
+    # trovu art@mrk kaj altigu la version...
+    my $art_mrk = $doc->findnodes('//art/@mrk')->[0];
+    print ("nuna id: ".$art_mrk->value()."\n") if ($debug);
+    my $new_id = incr_ver($art_mrk->value());
+    $art_mrk->setValue($new_id);
+    print ("nova id: ".$art_mrk->value()."\n") if ($debug);
+    ### $modified=1; goto WRITE;
 
     # trovu radikojn (inkluzive de var-iaĵoj)
     my @rad = $doc->findnodes('//rad');
@@ -114,6 +122,7 @@ sub process_art {
 
             my $drv = %drvmap{$k};
             my $inserted = 0;
+            my $ignore = 0;
 
             # unue ni kontrolu ĉu en la derivaĵo jam estas tradukoj de tiu lingvo
             # se jes ni ne tuŝos ĝin.
@@ -122,8 +131,7 @@ sub process_art {
             if ($trd_en_drv) {
 
                 # se jam enestas tradukoj ni ne aldonas...
-                # mensogu, ke ni aldonis...
-                $inserted = 1;
+                $ignore = 1;
                 print "!!! jam enestas trd '$lingvo' !!!\n" if ($debug);
 
             } else {
@@ -148,6 +156,7 @@ sub process_art {
                             $drv->insertBefore($te,$ch);
                             $drv->insertBefore($nl,$ch);
                             $inserted = 1;
+                            $modified = 1;
 
                             print "+ $te\n...\n" if ($debug);
                             last;
@@ -155,19 +164,25 @@ sub process_art {
                         print "  $ch\n" if ($debug);
                     }
                 } # for
-                if (! $inserted) {
+                if (! $inserted && ! $ignore) {
                     # aldonu fine, se ne jam antaŭe troviĝis loko por enŝovi
                     $drv->appendText("  ");
                     $drv->appendChild($te);
                     $drv->appendText("\n");
+                    $modified = 1;
                 }
             } # else
         }
     }
 
-    open OUT, ">", $artout || die "Ne povas skribi al '$artout': $!\n";
-    print OUT $doc;
-    close OUT;
+    # nur skribu, se ni efektive aldonis tradukojn, ĉar
+    # ankaŭ ŝanĝiĝas iom linirompado kaj kodado de unikodaj literoj en la XML
+WRITE:    
+    if ($modified) {
+        open OUT, ">", $artout || die "Ne povas skribi al '$artout': $!\n";
+        print OUT $doc;
+        close OUT;
+    }
 }    
 
 ############ helpaj funkcioj.... #############
@@ -281,4 +296,29 @@ sub read_csv {
     }
 
     return $tradukoj;
+}
+
+
+# La version ni eltrovos kaj altigos je unu kaj reskribas en la artikolon
+# krome la artikolo piede enhavas komenton kun $Log$ por protokoli la lastajn ŝanĝoj
+# ni aldonos supre la novan version kaj evt-e mallongigas la komenton
+sub incr_ver {
+	my ($id_mrk) = @_;
+
+	# $Id: test.xml,v 1.51 2019/12/01 16:57:36 afido Exp $
+	$id_mrk =~ m/\$Id:\s+([^\.]+)\.xml,v\s+(\d)\.(\d+)\s+(?:\d\d\d\d\/\d\d\/\d\d\s+\d\d:\d\d:\d\d)(.*?)\$/s;	
+	my $ver = id_incr($2,$3);
+	my $id = '$Id: '.$1.'.xml,v '.$ver.$4.'$';
+	$id_mrk =~ s/\$Id:[^\$]+\$/$id/;
+	#$art =~ s/\$Log[^\$]*\$(.*?)-->/log_incr($1,$ver,$shangh_file)/se;
+
+	return $id_mrk;
+}
+
+# altigi la version je .1 kaj alpendigi la aktualan daton 
+sub id_incr {
+	my ($major,$minor) = @_;
+	my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = gmtime(time);
+	my $now = sprintf("%04d/%02d/%02d %02d:%02d:%02d", $year+1900, $mon+1, $mday, $hour, $min, $sec);
+	return "$major.". ( ++$minor )." $now";
 }
