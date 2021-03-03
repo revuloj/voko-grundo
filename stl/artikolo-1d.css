@@ -211,15 +211,7 @@ A.ref:hover { color: var(--main-act-fnt-clr) !important}
 .fntref { font-style: normal; font-stretch: extra-condensed }
 h1 sup.fntref { font-size: .6em }
 h2 sup.fntref { font-size: .8em }
-.fnturl { /* bridu tro longajn URL-ojn... */
-    display: inline-block;
-    vertical-align: bottom;
-    max-width: 22.5em;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    text-indent: 0;
-    /*white-space: nowrap;*/
-}
+
 /* fontindikaj piednotoj */
 .fontoj {
     color: var(--fnt-fnt-clr); 
@@ -326,6 +318,22 @@ IMG.tez {
     vertical-align: bottom;
     border-radius: 20%; 
     border: 2px outset transparent
+}
+
+IMG[alt='Vikipedio'] {
+    /* forŝovu flanken la originan bildon por
+    montri anstataŭe la SVG-fonon el piktogram.css */
+    position: relative;
+    overflow: hidden;
+    width: 16px;
+    height: 12px;
+    padding: 16px 12px 0 0;
+    margin-left: 6px;
+    margin-right: 6px;
+    box-sizing: border-box;
+    background: url('/revo/smb/i_wiki.svg') no-repeat;	
+    background-size: contain;
+    border-bottom: 1px solid;
 }
      
 /* 
@@ -748,7 +756,29 @@ dt.pli, .ekz.pli, a.pli {
 @media (max-width: 30em) {
     #alia_lng {
         columns: 1;
-    }   
+    }
+
+    .fnturl { /* bridu tro longajn URL-ojn...
+        Iom ĝenas, ke tio funkcias nur kun inline-block, sed
+        tiel la fnt-teksto ne plu komplete fluas kaj la sekvanta komo
+        povas aperi kun sufiĉe da spaco antaŭe.
+
+        Ankaŭ ĝenas, ke ĝi trafas ne nur senspacajn URL-ojn sed ankaŭ
+        pli longajn titolojn, kiujn ja eblas linirompi.
+
+        Verŝajne tion ni povus kontentige solvi nur mallongigante la URL-on
+        jam en la XSL-transformo
+        */
+        vertical-align: top;
+        max-width: 22.5em;
+        display: inline-block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        text-indent: 0;
+        /* se la fnt-teksto enhavas spacojn, ni povas
+        ĝin rompi, sed tro longajn URL-ojn ni fortranĉas:
+        white-space: nowrap;*/
+    }
 }
 
 @media (max-height: 30em) and (min-width: 30em) {

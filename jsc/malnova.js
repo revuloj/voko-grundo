@@ -1,4 +1,4 @@
-const index_malnova_url = "/revo/index-malnova.html" // poste index-malnova.html aŭ inx/_plena.html
+var index_malnova_url = "/revo/index-malnova.html"; // poste index-malnova.html aŭ inx/_plena.html
 
 function isIE() {
     ua = navigator.userAgent;

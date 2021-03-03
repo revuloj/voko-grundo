@@ -1,4 +1,6 @@
 
+/* jshint esversion: 6 */
+
 const lingvoj_xml = "../cfg/lingvoj.xml";
 
 // difinu ĉion sub nomprefikso "preferoj"
@@ -21,15 +23,15 @@ var preferoj = function() {
             
             // kolekti la lingvojn unue, ni bezonos ordigi ilin...
             var _lingvoj = {};
-            for (e of doc.getElementsByTagName("lingvo")) {
-                var c = e.attributes["kodo"];
+            for (var e of doc.getElementsByTagName("lingvo")) {
+                var c = e.attributes.kodo;
                 if (c.value != "eo") {
                     var ascii = eo_ascii(e.textContent);
                     _lingvoj[ascii] = {lc: c.value, ln: e.textContent};
                 }
             }
 
-            for (l of Object.keys(_lingvoj).sort()) {    
+            for (var l of Object.keys(_lingvoj).sort()) {    
                 var lc = _lingvoj[l].lc;
                 var ln = _lingvoj[l].ln;
                 var li = document.createElement("LI");
@@ -61,7 +63,7 @@ var preferoj = function() {
         var selection = document.getElementById("preferoj")
             .querySelector('input[name="pref_lingvoj"]:checked').value.split('_');
 
-        for (ch of document.getElementById("alia_lng").childNodes) {
+        for (var ch of document.getElementById("alia_lng").childNodes) {
             var la=ch.getAttribute("data-la");
             if (la[0] < selection[0] || la[0] > selection[1]) 
                 ch.classList.add("kasxita");
@@ -170,7 +172,7 @@ var preferoj = function() {
             parent.appendChild(gl);   
         }
         var first = true;
-        for (r of radios) {
+        for (var r of radios) {
             var span = document.createElement("SPAN");
             var input = first?
                 make_element("INPUT",{name: name, type: "radio", id: r.id, checked: "checked", value: r.id}) :
@@ -223,6 +225,6 @@ var preferoj = function() {
         dialog: dialog,
         languages: languages,
         date: date
-    }
+    };
     
 }();

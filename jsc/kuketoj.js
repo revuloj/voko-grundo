@@ -11,8 +11,8 @@ function checkCookieConsent() {
 }
 
 function setCookieConsent() {
-    var CookieDate = new Date;
-    var ExpireDate = new Date; ExpireDate.setFullYear(CookieDate.getFullYear() + 50);
+    var CookieDate = new Date();
+    var ExpireDate = new Date(); ExpireDate.setFullYear(CookieDate.getFullYear() + 50);
     document.cookie = 'revo-konsento=jes+' + CookieDate.toISOString() +'; expires=' + ExpireDate.toUTCString() + '; path=/;';
     document.getElementById('kuketoaverto').style.display = 'none'; 
 }    
