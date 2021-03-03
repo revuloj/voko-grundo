@@ -22,7 +22,7 @@ use Text::CSV qw( csv );
 use utf8;
 binmode(STDOUT, "encoding(UTF-8)");
 
-$debug = 1;
+$debug = 0;
 $reverse = 0; # skribo de dekstre maldekstren (ekz-e hebrea)
 unless ($#ARGV>1) {
     print "\n=> Certigu, ke vi troviĝas en la dosierujo kie enestas la artikoloj al kiuj\n";
