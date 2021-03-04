@@ -1,0 +1,106 @@
+name: procesumo voko-grundo
+# https://github.com/actions/starter-workflows/blob/master/ci/docker-push.yml
+
+on:
+  push:
+    # Publish `master` as Docker `latest` image.
+    branches:
+      - master
+
+    # Publish `v1.2.3` tags as releases.
+    tags:
+      - v*
+      - stabila
+
+  # Run tests for any PRs.
+  pull_request:
+
+env:
+  # image name.
+  IMAGE_NAME: voko-grundo
+#  IMAGE_ENTRY: afido
+#  IMAGE_TEST: med-medio
+  ORGANIZATION: revuloj
+
+jobs:
+  # Run tests.
+  # See also https://docs.docker.com/docker-hub/builds/automated-testing/
+  testo:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Ricevi la aktualan kodon
+        uses: actions/checkout@v1
+
+#      - name: Run tests
+#        run: |
+#          if [ -f docker-compose.test.yml ]; then
+#            docker-compose --file docker-compose.test.yml build
+#            docker-compose --file docker-compose.test.yml run sut
+#          else
+#            docker build . --file Dockerfile
+#          fi
+      - name: Kreo de ${{ env.IMAGE_NAME }}
+        run: |
+           docker build . --file Dockerfile --tag $IMAGE_NAME
+
+      #- name: Testoj de ${{ env.IMAGE_NAME }}
+      #  run: |
+      #    docker run $IMAGE_NAME bash -c "perl -MMIME::Entity -MAuthen::SASL::Perl -MIO::Socket::SSL -e1"
+
+      - name: Arĥivo de ${{ env.IMAGE_NAME }}
+        run: |
+           docker image save -o ${IMAGE_NAME}.tar ${IMAGE_NAME}
+
+      - name: Konservo de ${{ env.IMAGE_NAME }} por la sekvonta tasko
+        uses: actions/upload-artifact@v1
+        with:
+          name: ${{ env.IMAGE_NAME }}
+          path: ${{ env.IMAGE_NAME }}.tar
+
+  # Push image to GitHub Package Registry.
+  # See also https://docs.docker.com/docker-hub/builds/
+  sendo:
+    # Ensure test job passes before pushing image.
+    needs: testo
+
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+
+    steps:
+
+      - name: Reakiro de ${{ env.IMAGE_NAME }}
+        uses: actions/download-artifact@v1
+        with:
+          name: ${{ env.IMAGE_NAME }}
+          path: image
+
+#      - uses: actions/checkout@v1
+#
+#      - name: Build image
+#        run: docker build . --file Dockerfile --tag $IMAGE_NAME
+
+      - name: Saluto al docker.pkg.github.com
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
+
+      - name: Puŝo de ${{ env.IMAGE_NAME }}
+        run: |
+          docker image load -i image/${IMAGE_NAME}.tar
+
+          # ĉu eblus ankau nur /revuloj/ ($ORGANIZATION) ?
+          IMAGE_ID=docker.pkg.github.com/${{ github.repository }}/$IMAGE_NAME
+
+          # Strip git ref prefix from version
+          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+
+          # Strip "v" prefix from tag name
+          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
+
+          # Use Docker `latest` tag convention
+          [ "$VERSION" == "master" ] && VERSION=latest
+
+          echo IMAGE_ID=$IMAGE_ID
+          echo VERSION=$VERSION
+
+          docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
+          docker push $IMAGE_ID:$VERSION
