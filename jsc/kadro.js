@@ -10,6 +10,7 @@ const redaktilo_url = "redaktilo-1d.html";
 const redaktmenu_url = "redaktmenu-1d.html";
 //const inx_eo_url = "/revo/inx/_eo.html";
 
+const art_path = "../art/";
 const inx_eo_url = "/revo/inx/_plena.html";
 const mx_trd_url = "/cgi-bin/mx_trd.pl";
 const http_404_url = "/revo/dlg/404.html";
@@ -984,7 +985,7 @@ function serchu_q(esprimo) {
                         // tradukoj oni momente ne povas ne povas rekte alsalti,
                         // do ni provizore uzas t.eo.mrk anst. t[l].mrk
                         ["dt",atr,
-                            [["a",{target: "precipa", href: t.art+".html#"+t.eo.mrk},t[_ll_].vrt]]
+                            [["a",{target: "precipa", href: art_path+t.art+".html#"+t.eo.mrk},t[_ll_].vrt]]
                         ]])[0];
                     var dd = make_element("dd",atr);
                     for (let l in t) {
@@ -995,13 +996,13 @@ function serchu_q(esprimo) {
                             var a;
                             if (l == 'eo') {
                                 a = make_elements([
-                                    ["a",{target: "precipa", href: t.art+".html#"+t.eo.mrk},
+                                    ["a",{target: "precipa", href: art_path+t.art+".html#"+t.eo.mrk},
                                         t[l].vrt
                                     ]
                                 ]);    
                             } else {
                                 a = make_elements([
-                                    ["a",{target: "precipa", href: t.art+".html#"+t.eo.mrk},
+                                    ["a",{target: "precipa", href: art_path+t.art+".html#"+t.eo.mrk},
                                         [["code",{},l+":"],t[l].vrt]
                                     ]
                                 ]);    
