@@ -2,6 +2,8 @@
 
 #set -x
 
+ver=1e
+
 # 1. closure-compiler:
 # https://github.com/google/closure-compiler ...
 # necesas nun mvn aŭ npx por ruli ĝin:
@@ -18,8 +20,8 @@ compiler="java -jar /usr/local/share/java/closure-compiler.jar"
 js_in="jsc/util.js jsc/transiroj.js jsc/preferoj.js jsc/artikolo.js jsc/kadro.js jsc/voko_entities.js jsc/redaktilo.js"
 js_mn_in="jsc/malnova.js"
 
-js_out=build/jsc/revo-1d.js
-js_mn_out=build/jsc/malnova-1d.js
+js_out=build/jsc/revo-${ver}.js
+js_mn_out=build/jsc/malnova-${ver}.js
 js_art=jsc/revo-art-1b.js
 opt=BUNDLE
 #opt=SIMPLE

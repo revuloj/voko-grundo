@@ -17,7 +17,7 @@
 FROM silkeh/latex:small as metapost
 LABEL Author=<diestel@steloj.de>
 
-ARG VG_BRANCH=master
+#ARG VG_BRANCH=master
 
 # ni bezonas almenaŭ bin/mp2png_svg.sh kaj smb/
 

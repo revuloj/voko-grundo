@@ -4,7 +4,8 @@
 svgdir=$(pwd)/build/smb
 #stldir=$(pwd)/build/stl
 dir=stl
-out=$(pwd)/build/stl/revo-1d-min.css
+ver=1e
+out=$(pwd)/build/stl/revo-${ver}-min.css
 
 # Wiki-SVG ni provizore donas rekte en artikolo-1x.css
 #cp smb/i_wiki.svg ${svgdir}
@@ -17,11 +18,11 @@ bin/svg2css.sh ${svgdir}/[ir]_*.svg > ${dir}/piktogram-1d.css
 files=(\
   $dir/normalize.css \
   $dir/koloroj.css \
-  $dir/piktogram-1d.css \
+  $dir/piktogram-${ver}.css \
   $dir/formularo.css \
-  $dir/kadro-1d.css \
-  $dir/artikolo-1d.css \
-  $dir/redaktilo-1d.css)
+  $dir/kadro-${ver}.css \
+  $dir/artikolo-${ver}.css \
+  $dir/redaktilo-${ver}.css)
 #files=($dir/revo-1c.css)
 
 # malgrandigas CSS-dosieron per
@@ -55,8 +56,8 @@ done
 
 # kopiu ankaŭ stilfolion por la artikolo, por unuope montri ĝin
 echo $(pwd)/build/stl/
-echo "  <- artikolo-1c.css"
-cp $dir/artikolo-1c.css $(pwd)/build/stl/
+echo "  <- artikolo-${ver}.css"
+cp $dir/artikolo-${ver}.css $(pwd)/build/stl/
 
 
       
@@ -66,11 +67,11 @@ if [[ $(command -v docker) ]]; then
   target=/usr/local/apache2/htdocs/revo/stl
 
   if [[ ! -z "$araneo_id" ]]; then
-    echo "kopiante ${out} kaj artikolo-1c.css"
+    echo "kopiante ${out} kaj artikolo-${ver}.css"
     echo "al ${araneo_id}:${target}"
 
     docker cp ${out} ${araneo_id}:${target}
-    docker cp $(pwd)/build/stl/artikolo-1d.css ${araneo_id}:${target}
+    docker cp $(pwd)/build/stl/artikolo-${ver}.css ${araneo_id}:${target}
     docker exec ${araneo_id} bash -c "chown root.root ${target}; ls -l ${target}"
   fi
 fi
