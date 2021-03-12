@@ -5,11 +5,12 @@
   xmlns:saxon="http://saxon.sf.net/"
   version="2.0"
   extension-element-prefixes="saxon" 
+  xmlns:voko="http://reta-vortaro.de/"
 >
 
 
-<!-- (c) 2006-2012 che Wolfram Diestel
-     licenco GPL 2.0
+<!-- (c) 2006-2021 ĉe Wolfram Diestel
+     laŭ pemesilo GPL 2.0
 -->
 
 <xsl:param name="verbose" select="'false'"/>
@@ -23,7 +24,45 @@ class="net.sf.saxon.sort.CodepointCollator"/ -->
 
 <xsl:include href="inc/inx_ordigo2.inc"/>
 
-<xsl:variable name="ordigo">../cfg/ordigo2.xml</xsl:variable>
+<xsl:variable name="ordigo2">../cfg/ordigo2.xml</xsl:variable>
+<xsl:variable name="ord" select="document($ordigo2)/ordigo"/>
+
+
+
+<!-- funkcio por laŭsilaba ordigo. Ĝi trovas 
+     la plej longan litergrupon egala al la vortkomenco -->
+<xsl:function name="voko:max-prefix">
+    <xsl:param name="vorto"/> 
+    <xsl:param name="lingvo"/> 
+
+    <!-- la ordigdifinoj por la lingvo -->
+    <!--xsl:message select="'lingvo: ',$lingvo"/ -->
+    <xsl:variable name="lng" select="$ord/lingvo[@lng=$lingvo]"/>
+
+    <!-- NOTO: Ĉar la silabiga signo fakte ne aperas en la litergrupoj <g>..</g>,
+         ni povas ŝpari la eltranĉon de la unua silabo kaj tuj kompari kun la tuta
+         vorto(komenco)
+
+    - - la unua (aŭ sola) silabo de la vorto - -
+    <xsl:variable name="s" select="$lng/@silab"/>     
+    <xsl:variable name="silabo" select="substring-before(concat($vorto,$s),$s)"/>
+    <xsl:message select="'silabo: ',$silabo"/>
+    -->
+
+    <!-- kolektu ĉiujn litergrupojn kaj ordigu laŭ longeco
+         prenu la plej longan kiel unuan elementon kaj rezulte redonu ĝin -->
+    <xsl:variable name="literoj">
+      <xsl:for-each select="$lng/l/g[starts-with($vorto,.)]">
+        <xsl:sort select="string-length()" order="descending" data-type="number"/>
+        <xsl:sequence select=".."/>
+      </xsl:for-each>
+    </xsl:variable>
+    <xsl:message select="string-join($literoj/l/@name,',')"/>
+    <xsl:sequence select="$literoj/l[1]/@name"/> 
+
+</xsl:function>
+
+
 
 <xsl:template match="/">
   <indekso>
@@ -32,7 +71,10 @@ class="net.sf.saxon.sort.CodepointCollator"/ -->
 </xsl:template>
 
 
+<!-- ORDIGO DE TRD-OJ -->
+
 <xsl:template match="trd-oj">
+
   <xsl:if test="$verbose='true'">
     <xsl:message>progreso: traktas lingvon "<xsl:value-of
          select="@lng"/>"...</xsl:message>
@@ -40,7 +82,7 @@ class="net.sf.saxon.sort.CodepointCollator"/ -->
 
   <!-- lau reguloj de kiu lingvo ordigi? -->
   <xsl:variable name="ordlng_1" 
-     select="document($ordigo)/ordigo/lingvo[string(@lng)=string(current()/@lng)]"/>
+     select="$ord/lingvo[string(@lng)=string(current()/@lng)]"/>
 
   <!-- xsl:variable name="ordlng" select="($ordlng_1|@lng)[1]"/ -->
 
@@ -62,75 +104,100 @@ class="net.sf.saxon.sort.CodepointCollator"/ -->
     <xsl:message>DBG: ordigi lau lingvo: "<xsl:value-of select="$ordlng"/>"...</xsl:message>
   </xsl:if>
 
-  <!-- Chu problemo: tio enkludas ankau <i>...</i> kiuj tiel ne aparas sub la ĵokero-litero "?" 
-       aliflanke en taja lingvo tio estas ghuste uzata por ne havi vortojn komencighantajn
-       per vokalo en du indeksoj -->
-  <xsl:variable name="chiuj_literoj"
-      select="translate(normalize-space(document($ordigo)/ordigo/lingvo[@lng=$ordlng]),' ','')"/>
+  <!-- ni ordigas aŭ laŭ fikslonga prefikso aŭ la maksimume longa (t.e. silaba ordigo) -->
+  <xsl_choose>
+    <xsl:when test="$ordlng[@silab]">
 
-  <xsl:variable name="ignorendaj" select="concat('-(',document($ordigo)/ordigo/lingvo[@lng=$ordlng]/@ignorendaj)"/>
+      <!-- 
+          Laŭsilaba, t.e. maksimumlonge prefiksa ordigo (tibeta)....
 
+          Alelektu al ĉiu litero la vortojn, por kiu voko:max-prefix() redonas ĝuste tiun 
+      -->
+      <trd-oj lng="{@lng}" n="{@n}" p="{@p}">
+        <xsl:for-each select="$ordlng/l">
+          <xsl:apply-templates select="v/t[voko:max-prefix(.,$ordlng/@lng)=current()/@name]"/>
+        </xsl:fore-each>
+      </trd-oj>
+    </xsl:when>
 
-  <xsl:if test="$debug='true'">
-    <xsl:message>DBG: literoj: "<xsl:value-of select="$chiuj_literoj"/>"...</xsl:message>
-  </xsl:if>
+    <xsl:otherwise>
 
+      <!-- 
+          Ordinara laŭlitera, t.e. fikslonge prefiksa ordigo....
 
-  <xsl:if test="string-length($chiuj_literoj) > 0">
-  
-    <trd-oj lng="{@lng}" n="{@n}" p="{@p}">
-      <xsl:variable name="trdoj" select="."/>
+          Ĉu problemo: tio enkludas ankau <i>...</i> kiuj tiel ne aparas sub la ĵokero-litero "?" 
+          aliflanke en taja lingvo tio estas ghuste uzata por ne havi vortojn komencighantajn
+          per vokalo en du indeksoj -->
+      <xsl:variable name="chiuj_literoj"
+          select="translate(normalize-space($ord/lingvo[@lng=$ordlng]),' ','')"/>
 
-      <xsl:for-each select="document($ordigo)/ordigo/lingvo[string(@lng)=$ordlng]/l">
-        <!-- $n indikos kiom da signoj de la vortkomenco ni komparos por tiu
-        litergrupo, tio estas aŭ donita en la difino de cfg/ordigo2.xml per @n
-        aŭ 1, se @n mankas/estas malplena -->
-        <xsl:variable name="n" select="number(substring(concat(@n,'1'),1,1))"/>
-
-        <!-- la sekva solvas la problemon ekz. en la hispana kaj kimra, 
-             kie ordighas "Ll" en alian grupon ol "L", sed vortoj komencighantaj je "Ll" 
-             ne aperu ankau sub "L" -->
-
-        <xsl:variable name="minus" select="../l[@name=current()/@minus]"/> 
-        <!-- longeco ne de la litergrupo kies nomo egalas al @minus de la momenta litergrupo
-          ni bezonas por kompari la ĝustan nombron la literoj -->
-        <xsl:variable name="nminus"
-           select="number(substring(concat(../l[@name=current()/@minus]/@n,'1'),1,1))"/>     
-
-        <xsl:call-template name="trd-litero">
-           <!-- foriginte el la traduko la ignorendajn signojn
-                ni komparas la unuajn $n kun la difinitaj liter-grupoj el cfg/ordigo2.xml
-                krom se la vorto komenciĝas per la signovico donitaj en "minus".
-                Ekz-e la ĉaptiro "c" en la kimra ne enhavu la vortojn kun "ch en la komenco " -->
-           <xsl:with-param name="trdoj" 
-            select="$trdoj/v[contains(current(),
-		          substring(translate(t,$ignorendaj,''),1,$n)) 
-              and not(contains($minus,substring(t,1,$nminus)))]"/>
-           <xsl:with-param name="ordlng" select="$ordlng"/>
-           <xsl:with-param name="lit-name" select="@name"/>
-           <xsl:with-param name="lit-min" select="substring(.,1,$n)"/>
-        </xsl:call-template>
-
-      </xsl:for-each>
-
-      <!-- traktu chiujn erojn, kiuj ne komencighas 
-           per iu litero el la ordigoreguloj, 
-          (FIXME: problemo povus esti, ke ghi ne kaptus 
-           ekz. en la bretona vortojn kiel "cabdefg", 
-           char "c" jam aperas en la grupoj "ch" kaj "c'h") -->
+      <xsl:variable name="ignorendaj" select="concat('-(',$ord/lingvo[@lng=$ordlng]/@ignorendaj)"/>
 
 
-        <xsl:call-template name="trd-litero">
-           <xsl:with-param name="trdoj"
-              select="$trdoj/v[not(contains($chiuj_literoj,
-		            substring(translate(t,$ignorendaj,''),1,1)))]"/>
-           <xsl:with-param name="ordlng" select="$ordlng"/>
-           <xsl:with-param name="lit-name" select="'0'"/>
-           <xsl:with-param name="lit-min" select="'?'"/>
-        </xsl:call-template>
+      <xsl:if test="$debug='true'">
+        <xsl:message>DBG: literoj: "<xsl:value-of select="$chiuj_literoj"/>"...</xsl:message>
+      </xsl:if>
 
-    </trd-oj>
-  </xsl:if>
+
+      <xsl:if test="string-length($chiuj_literoj) > 0">
+      
+        <trd-oj lng="{@lng}" n="{@n}" p="{@p}">
+          <xsl:variable name="trdoj" select="."/>
+
+          <xsl:for-each select="$ord/lingvo[string(@lng)=$ordlng]/l">
+            <!-- $n indikos kiom da signoj de la vortkomenco ni komparos por tiu
+            litergrupo, tio estas aŭ donita en la difino de cfg/ordigo2.xml per @n
+            aŭ 1, se @n mankas/estas malplena -->
+            <xsl:variable name="n" select="number(substring(concat(@n,'1'),1,1))"/>
+
+            <!-- la sekva solvas la problemon ekz. en la hispana kaj kimra, 
+                kie ordighas "Ll" en alian grupon ol "L", sed vortoj komencighantaj je "Ll" 
+                ne aperu ankau sub "L" -->
+
+            <xsl:variable name="minus" select="../l[@name=current()/@minus]"/> 
+            <!-- longeco ne de la litergrupo kies nomo egalas al @minus de la momenta litergrupo
+              ni bezonas por kompari la ĝustan nombron la literoj -->
+            <xsl:variable name="nminus"
+              select="number(substring(concat(../l[@name=current()/@minus]/@n,'1'),1,1))"/>     
+
+            <xsl:call-template name="trd-litero">
+              <!-- foriginte el la traduko la ignorendajn signojn
+                    ni komparas la unuajn $n kun la difinitaj liter-grupoj el cfg/ordigo2.xml
+                    krom se la vorto komenciĝas per la signovico donitaj en "minus".
+                    Ekz-e la ĉaptiro "c" en la kimra ne enhavu la vortojn kun "ch en la komenco " -->
+              <xsl:with-param name="trdoj" 
+                select="$trdoj/v[contains(current(),
+                  substring(translate(t,$ignorendaj,''),1,$n)) 
+                  and not(contains($minus,substring(t,1,$nminus)))]"/>
+              <xsl:with-param name="ordlng" select="$ordlng"/>
+              <xsl:with-param name="lit-name" select="@name"/>
+              <xsl:with-param name="lit-min" select="substring(.,1,$n)"/>
+            </xsl:call-template>
+
+          </xsl:for-each>
+
+          <!-- traktu chiujn erojn, kiuj ne komencighas 
+              per iu litero el la ordigoreguloj, 
+              (FIXME: problemo povus esti, ke ghi ne kaptus 
+              ekz. en la bretona vortojn kiel "cabdefg", 
+              char "c" jam aperas en la grupoj "ch" kaj "c'h") -->
+
+
+            <xsl:call-template name="trd-litero">
+              <xsl:with-param name="trdoj"
+                  select="$trdoj/v[not(contains($chiuj_literoj,
+                    substring(translate(t,$ignorendaj,''),1,1)))]"/>
+              <xsl:with-param name="ordlng" select="$ordlng"/>
+              <xsl:with-param name="lit-name" select="'0'"/>
+              <xsl:with-param name="lit-min" select="'?'"/>
+            </xsl:call-template>
+
+        </trd-oj>
+      </xsl:if>
+
+    </xsl:otherwise>
+  </xsl:choose>
+
 </xsl:template>
 
 
@@ -141,7 +208,7 @@ class="net.sf.saxon.sort.CodepointCollator"/ -->
 
 <xsl:template match="kap-oj">
   <xsl:variable name="chiuj_literoj"
-     select="translate(normalize-space(document($ordigo)/ordigo/lingvo[@lng='eo']),' ','')"/>
+     select="translate(normalize-space($ord/lingvo[@lng='eo']),' ','')"/>
  
   <xsl:variable name="kapoj" select="."/>
  
@@ -150,7 +217,7 @@ class="net.sf.saxon.sort.CodepointCollator"/ -->
     <kap-oj lng="{@lng}">
       <xsl:apply-templates select="$kapoj/tez[v]"/>
 
-      <xsl:for-each select="document($ordigo)/ordigo/lingvo[@lng='eo']/l">
+      <xsl:for-each select="$ord/lingvo[@lng='eo']/l">
 
         <litero name="{@name}" min="{substring(.,1,1)}">
           <xsl:for-each 
@@ -180,7 +247,7 @@ class="net.sf.saxon.sort.CodepointCollator"/ -->
     <!-- inversa indekso -->
 
     <inv lng="{@lng}">
-      <xsl:for-each select="document($ordigo)/ordigo/lingvo[@lng='eo']/l">
+      <xsl:for-each select="$ord/lingvo[@lng='eo']/l">
 
         <litero name="{@name}" min="{substring(.,1,1)}">
           <xsl:for-each select="$kapoj/v[r and
