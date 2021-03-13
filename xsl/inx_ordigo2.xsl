@@ -82,31 +82,11 @@ class="net.sf.saxon.sort.CodepointCollator"/ -->
 
   <!-- lau reguloj de kiu lingvo ordigi? -->
   <xsl:variable name="ordlng_1" 
-     select="$ord/lingvo[string(@lng)=string(current()/@lng)]"/>
-
-  <!-- xsl:variable name="ordlng" select="($ordlng_1|@lng)[1]"/ -->
-
-  <xsl:variable name="ordlng">
-    <xsl:choose>
-      <xsl:when test="$ordlng_1/@kiel">
-         <xsl:value-of select="$ordlng_1/@kiel"/>
-      </xsl:when>
-      <xsl:when test="$ordlng_1">
-        <xsl:value-of select="@lng"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="'la'"/> <!-- se ne aperas en ordigo.xml, uzu latinajn regulojn -->
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-      
-  <xsl:if test="$debug='true'">
-    <xsl:message>DBG: ordigi lau lingvo: "<xsl:value-of select="$ordlng"/>"...</xsl:message>
-  </xsl:if>
+     select="$ord/lingvo[string(@lng)=string(current()/@lng)]"/>     
 
   <!-- ni ordigas aŭ laŭ fikslonga prefikso aŭ la maksimume longa (t.e. silaba ordigo) -->
-  <xsl_choose>
-    <xsl:when test="$ordlng[@silab]">
+  <xsl:choose>
+    <xsl:when test="$ordlng_1/@silab">
 
       <!-- 
           Laŭsilaba, t.e. maksimumlonge prefiksa ordigo (tibeta)....
@@ -114,8 +94,8 @@ class="net.sf.saxon.sort.CodepointCollator"/ -->
           Alelektu al ĉiu litero la vortojn, por kiu voko:max-prefix() redonas ĝuste tiun 
       -->
       <trd-oj lng="{@lng}" n="{@n}" p="{@p}">
-        <xsl:for-each select="$ordlng/l">
-          <xsl:apply-templates select="v/t[voko:max-prefix(.,$ordlng/@lng)=current()/@name]"/>
+        <xsl:for-each select="$ordlng_1/l">
+          <xsl:apply-templates select="v/t[voko:max-prefix(.,$ordlng_1/@lng)=current()/@name]"/>
         </xsl:for-each>
       </trd-oj>
     </xsl:when>
@@ -128,6 +108,27 @@ class="net.sf.saxon.sort.CodepointCollator"/ -->
           Ĉu problemo: tio enkludas ankau <i>...</i> kiuj tiel ne aparas sub la ĵokero-litero "?" 
           aliflanke en taja lingvo tio estas ghuste uzata por ne havi vortojn komencighantajn
           per vokalo en du indeksoj -->
+
+      <!-- xsl:variable name="ordlng" select="($ordlng_1|@lng)[1]"/ -->
+
+      <xsl:variable name="ordlng">
+        <xsl:choose>
+          <xsl:when test="$ordlng_1/@kiel">
+            <xsl:value-of select="$ordlng_1/@kiel"/>
+          </xsl:when>
+          <xsl:when test="$ordlng_1">
+            <xsl:value-of select="@lng"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="'la'"/> <!-- se ne aperas en ordigo.xml, uzu latinajn regulojn -->
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:variable>
+          
+      <xsl:if test="$debug='true'">
+        <xsl:message>DBG: ordigi lau lingvo: "<xsl:value-of select="$ordlng"/>"...</xsl:message>
+      </xsl:if>
+
       <xsl:variable name="chiuj_literoj"
           select="translate(normalize-space($ord/lingvo[@lng=$ordlng]),' ','')"/>
 
