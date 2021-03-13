@@ -25,7 +25,7 @@ while(<IN>) {
         # kun, kiam ni kolektis tutan artikolon, ni normaligas ĝin
         # forigante duoblajn spacojn...
         $art =~ s/\s+/ /g;
-        # aldonante linirompjan ĉe XML-strukturiloj samtempe forigante ĉirkaŭajn spacojn
+        # aldonante linirompojn ĉe XML-strukturiloj samtempe forigante ĉirkaŭajn spacojn
         $art =~ s/ *<(def|sr|)> */\n\n<$1>/g;
 	    $art =~ s/ *<(\/def)> */<$1>\n/g;
 	    $art =~ s/ *<(\/ar)> */<$1>\n\n/g;
