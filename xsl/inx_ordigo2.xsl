@@ -28,7 +28,6 @@ class="net.sf.saxon.sort.CodepointCollator"/ -->
 <xsl:variable name="ord" select="document($ordigo2)/ordigo"/>
 
 
-
 <!-- funkcio por laŭsilaba ordigo. Ĝi trovas 
      la plej longan litergrupon egala al la vortkomenco -->
 <xsl:function name="voko:max-prefix">
@@ -93,6 +92,11 @@ class="net.sf.saxon.sort.CodepointCollator"/ -->
 
           Alelektu al ĉiu litero la vortojn, por kiu voko:max-prefix() redonas ĝuste tiun 
       -->
+
+      <xsl:if test="$debug='true'">
+        <xsl:message>DBG: ordigi silabe, lingvo: "<xsl:value-of select="$ordlng_1/@lng"/>"...</xsl:message>
+      </xsl:if>
+
       <trd-oj lng="{@lng}" n="{@n}" p="{@p}">
         <xsl:for-each select="$ordlng_1/l">
           <xsl:apply-templates select="v/t[voko:max-prefix(.,$ordlng_1/@lng)=current()/@name]"/>
