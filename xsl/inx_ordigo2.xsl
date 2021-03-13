@@ -116,7 +116,7 @@ class="net.sf.saxon.sort.CodepointCollator"/ -->
       <trd-oj lng="{@lng}" n="{@n}" p="{@p}">
         <xsl:for-each select="$ordlng/l">
           <xsl:apply-templates select="v/t[voko:max-prefix(.,$ordlng/@lng)=current()/@name]"/>
-        </xsl:fore-each>
+        </xsl:for-each>
       </trd-oj>
     </xsl:when>
 
