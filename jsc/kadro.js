@@ -989,7 +989,7 @@ function serchu_q(esprimo) {
                         ]])[0];
                     // dum redakto ni aldonas transprenan butonon por kreado de referncoj
                     if (t_red.stato == "redaktante") {
-                        const ref_btn = make_element("button",{},"referenco");
+                        const ref_btn = make_element("button",{class: "icon_btn r_vid", title:"transprenu kiel referenco"});
                         dt.append(ref_btn);
                     }
                     // trovitaj tradukoj de tiu e-a vorto
@@ -997,8 +997,8 @@ function serchu_q(esprimo) {
                     for (let l in t) {
                         // ni trairu ĉiujn lingvojn, kiuj ne estas 'eo'....
                         if (l != _ll_ && l != 'art') {
-                            // tradukoj oni momente ne povas ne povas rekte alsalti,
-                            // do ni provizore uzas t.eo.mrk anst. t[l].mrk
+                            // tradukojn oni momente ne povas rekte alsalti,
+                            // do ni provizore uzas t.eo.mrk anstataŭ t[l].mrk
                             var a;
                             if (l == 'eo') {
                                 a = make_elements([
@@ -1010,7 +1010,7 @@ function serchu_q(esprimo) {
                                 a = make_elements([
                                     ["a",{target: "precipa", href: art_path+t.art+".html#"+t.eo.mrk},
                                         [["code",{},l+":"],t[l].vrt]
-                                    ]
+                                    ],["br"]
                                 ]);    
                             }
                             dd.append(...a);
@@ -1069,8 +1069,11 @@ function serchu_q(esprimo) {
             if (! json.length) {
                 trovoj.append(nofindings());
 
-            // se troviĝis ekzakte unu, iru tuj al tiu paĝo
-            } else if (json.length == 1 && json[0].trovoj.length == 1) {
+            // se troviĝis ekzakte unu kaj ni ne redaktas, iru tuj al tiu paĝo
+            } else if (
+              json.length == 1 && json[0].trovoj.length == 1 && 
+              t_red.stato != "redaktante") {
+
                 var t = json[0].trovoj[0];
                 load_page("main","/revo/art/"+t.art+".html#"+t.mrk1);
             }

@@ -128,7 +128,8 @@ nav {
     margin: 0 .1em;
 }
 
-#navbar button.icon_btn {
+#navbar button.icon_btn,
+#x\:trovoj button.icon_btn {
     height: 1.7em;
     width: 1.7em;
     border-radius: 3px;
@@ -142,6 +143,13 @@ nav {
     
     border-width: 0;
     box-shadow: 1px 1px 3px black;
+}
+
+#x\:trovoj button.icon_btn {
+    float: right;
+    height: 1.3em;
+    width: 1.6em;
+    background-position-y: -.15em;
 }
 
 #navbar>div {
