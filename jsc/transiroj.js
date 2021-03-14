@@ -2,7 +2,7 @@
 
 /*
     Ni difinos stato-transirojn "de1"->"al1", "de2"->"al1" ktp. 
-    kiel strukturo, kiu korme enhavas agojn forlasajn kaj alvenajn.
+    kiel strukturo, kiu aldone enhavas agojn forlasajn kaj alvenajn.
     Transiroj krome povas esti protektataj per gardo-kondiĉo.
 
     { al1: { 
@@ -31,8 +31,8 @@
     Ĉar ni serĉos statojn dum transiro per statoj "_de_"+"_al_" aŭ "_al_",
     ni uzas _al_ kiel unua-ranga ŝlosilo kaj _de_ kiel dua-ranga.
 
-    Ni uzas du sendependajn stato-mæsinojn por respeguli la staton
-    de la sub-poaĝoj "nav" - navigado kaj "main" - ĉefa kadro, kie aperas titolüaĝo, artikoloj, redaktilo
+    Ni uzas sendependajn stato-maŝinojn por respeguli la staton
+    de la sub-paĝoj "nav" - navigado kaj "main" - ĉefa kadro, "red" - redaktilo
 
 */
 
