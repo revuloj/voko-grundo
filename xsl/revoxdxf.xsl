@@ -478,15 +478,37 @@ inx_kodigo.inc (saxon) -->
 </xsl:template -->
 
 <xsl:template match="kap">
+
   <xsl:apply-templates select="text()|rad|tld"/>
 <!-- kauzas problemojn en Easy XDXF Dict: ??? -->
+
+  <xsl:for-each select="(ofc|//art/kap/ofc)[1]">
+    <opt><xsl:text>[</xsl:text>
+    <xsl:value-of select="."/>
+    <xsl:text>]</xsl:text></opt>
+  </xsl:for-each>
+
   <xsl:if test="ofc|fnt|var">
     <opt>
-     <xsl:apply-templates select="ofc|fnt|var"/>
+     <xsl:apply-templates select="fnt|var"/>
     </opt>
   </xsl:if>
 
 </xsl:template>
+
+
+<xsl:template match="var/kap">
+    <xsl:apply-templates select="text()|rad|tld"/>
+    <!-- kauzas problemojn en Easy XDXF Dict: ??? -->
+    <xsl:if test="ofc|fnt|var">
+      <xsl:apply-templates select="ofc|fnt|var"/>
+    </xsl:if>
+</xsl:template>
+
+<xsl:template match="kap/text()">
+  <xsl:value-of select="translate(.,',','')"/>
+</xsl:template>
+
 
 <xsl:template match="uzo">
   <xsl:value-of select="."/>

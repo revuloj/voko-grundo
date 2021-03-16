@@ -26,7 +26,7 @@ reguloj por XDXF universala vortar-intershangha formato
           <abbr_def><abbr_k>ntr.</abbr_k> <abbr_v>netransitiva verbo</abbr_v></abbr_def>
         </abbreviations>
         <file_version>002</file_version>
-        <creation_date>2020-09-01</creation_date>
+        <creation_date>2021</creation_date>
     </meta_info>
     <lexicon>
       <xsl:copy-of select="*"/>
