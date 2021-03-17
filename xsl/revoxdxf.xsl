@@ -111,7 +111,7 @@ name="redcgi">/cgi-bin/vokomail.pl?art=</xsl:variable -->
              <xsl:if test="refgrp|ref">
                <sr>
                  <xsl:apply-templates select="refgrp|ref"/>
-               </sr>
+               </sr><br/>
              </xsl:if>
              <xsl:apply-templates select="trdgrp|trd"/>
            </def>
@@ -132,7 +132,7 @@ name="redcgi">/cgi-bin/vokomail.pl?art=</xsl:variable -->
     <xsl:if test="refgrp|ref">
       <sr>
         <xsl:apply-templates select="refgrp|ref"/>
-      </sr>
+      </sr><br/>
     </xsl:if>
     <xsl:apply-templates select="trdgrp|trd"/>
   </def>
@@ -148,7 +148,7 @@ name="redcgi">/cgi-bin/vokomail.pl?art=</xsl:variable -->
     <xsl:if test="refgrp|ref">
       <sr>
         <xsl:apply-templates select="refgrp|ref"/>
-      </sr>
+      </sr><br/>
     </xsl:if>
     <xsl:apply-templates select="trdgrp|trd"/>
   </def>
@@ -393,7 +393,10 @@ inx_kodigo.inc (saxon) -->
       <xsl:value-of select="'hpn'"/>
     </xsl:when>
     <xsl:when test="$tip='prt'">
-      <xsl:value-of select="'ent'"/>
+      <xsl:value-of select="'mer'"/>
+    </xsl:when>
+    <xsl:when test="$tip='malprt'">
+      <xsl:value-of select="'hol'"/>
     </xsl:when>
     <xsl:when test="$tip='hom'">
       <xsl:value-of select="'par'"/>
@@ -477,23 +480,35 @@ inx_kodigo.inc (saxon) -->
   <xsl:call-template name="redakto"/>
 </xsl:template -->
 
-<xsl:template match="kap">
+<xsl:template match="drv[1]/kap">
 
   <xsl:apply-templates select="text()|rad|tld"/>
-<!-- kauzas problemojn en Easy XDXF Dict: ??? -->
 
+  <!-- la unua derivaĵo montras la oficilecon de la radiko (art/kap),
+       kiam ne enestas aparta drv/kap/ofc -->
+
+  <!-- kauzas problemojn en Easy XDXF Dict: ??? -->
   <xsl:for-each select="(ofc|//art/kap/ofc)[1]">
     <opt><xsl:text>[</xsl:text>
     <xsl:value-of select="."/>
     <xsl:text>]</xsl:text></opt>
   </xsl:for-each>
-
-  <xsl:if test="ofc|fnt|var">
+  <xsl:if test="fnt|var">
     <opt>
-     <xsl:apply-templates select="fnt|var"/>
+      <xsl:apply-templates select="fnt|var"/>
     </opt>
   </xsl:if>
+</xsl:template>
 
+
+<xsl:template match="drv[position()>1]/kap">
+  <xsl:apply-templates select="text()|rad|tld"/>
+  <!-- kauzas problemojn en Easy XDXF Dict: ??? -->
+  <xsl:if test="ofc|fnt|var">
+    <opt>
+    <xsl:apply-templates select="ofc|fnt|var"/>
+    </opt>
+  </xsl:if>
 </xsl:template>
 
 
@@ -535,15 +550,3 @@ inx_kodigo.inc (saxon) -->
 
 
 </xsl:stylesheet>
-
-
-
-
-
-
-
-
-
-
-
-
