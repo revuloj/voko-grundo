@@ -101,9 +101,7 @@ name="redcgi">/cgi-bin/vokomail.pl?art=</xsl:variable -->
 
 <xsl:template match="drv">
   <ar>
-     <k>
-       <xsl:apply-templates select="kap"/>
-     </k>
+     <xsl:apply-templates select="kap"/>
      <xsl:choose>
          <xsl:when test="not(snc|subdrv)">
            <def>
@@ -127,6 +125,7 @@ name="redcgi">/cgi-bin/vokomail.pl?art=</xsl:variable -->
 <xsl:template match="subdrv">
   <def>
     <xsl:number from="drv|subart" level="any" count="subdrv" format="A."/>
+    <xsl:text> </xsl:text>
     <xsl:apply-templates select="uzo|dif|ekz"/>
     <xsl:apply-templates select="snc"/>
     <xsl:if test="refgrp|ref">
@@ -143,6 +142,7 @@ name="redcgi">/cgi-bin/vokomail.pl?art=</xsl:variable -->
     <xsl:if test="count(ancestor::node()[self::drv or self::subart][1]//snc)>1 
       and not(ancestor::node()[self::subdrv])">
       <xsl:number from="drv|subart" level="any" count="snc" format="1."/>
+      <xsl:text> </xsl:text>
     </xsl:if>
     <xsl:apply-templates select="uzo|dif|ekz"/>
     <xsl:if test="refgrp|ref">
@@ -481,43 +481,52 @@ inx_kodigo.inc (saxon) -->
 </xsl:template -->
 
 <xsl:template match="drv[1]/kap">
+  <k>
+    <xsl:apply-templates select="text()|rad|tld"/>
 
-  <xsl:apply-templates select="text()|rad|tld"/>
+    <!-- la unua derivaĵo montras la oficilecon de la radiko (art/kap),
+        kiam ne enestas aparta drv/kap/ofc -->
 
-  <!-- la unua derivaĵo montras la oficilecon de la radiko (art/kap),
-       kiam ne enestas aparta drv/kap/ofc -->
-
-  <!-- kauzas problemojn en Easy XDXF Dict: ??? -->
-  <xsl:for-each select="(ofc|//art/kap/ofc)[1]">
-    <opt><xsl:text>[</xsl:text>
-    <xsl:value-of select="."/>
-    <xsl:text>]</xsl:text></opt>
-  </xsl:for-each>
-  <xsl:if test="fnt|var">
-    <opt>
-      <xsl:apply-templates select="fnt|var"/>
-    </opt>
-  </xsl:if>
+    <!-- kauzas problemojn en Easy XDXF Dict: ??? -->
+    <xsl:for-each select="(ofc|//art/kap/ofc)[1]">
+      <opt><xsl:text>[</xsl:text>
+      <xsl:value-of select="."/>
+      <xsl:text>]</xsl:text></opt>
+    </xsl:for-each>
+    <xsl:if test="fnt">
+      <opt>
+        <xsl:apply-templates select="fnt"/>
+      </opt>
+    </xsl:if>
+  </k>
+  <xsl:apply-templates select="var/kap"/>
 </xsl:template>
 
 
 <xsl:template match="drv[position()>1]/kap">
-  <xsl:apply-templates select="text()|rad|tld"/>
-  <!-- kauzas problemojn en Easy XDXF Dict: ??? -->
-  <xsl:if test="ofc|fnt|var">
-    <opt>
-    <xsl:apply-templates select="ofc|fnt|var"/>
-    </opt>
-  </xsl:if>
+  <k>
+    <xsl:apply-templates select="text()|rad|tld"/>
+    <!-- kauzas problemojn en Easy XDXF Dict: ??? -->
+    <xsl:if test="ofc|fnt">
+      <opt>
+      <xsl:apply-templates select="ofc|fnt"/>
+      </opt>
+    </xsl:if>
+  </k>
+  <xsl:apply-templates select="var/kap"/>
 </xsl:template>
 
 
 <xsl:template match="var/kap">
+  <k>
     <xsl:apply-templates select="text()|rad|tld"/>
     <!-- kauzas problemojn en Easy XDXF Dict: ??? -->
-    <xsl:if test="ofc|fnt|var">
-      <xsl:apply-templates select="ofc|fnt|var"/>
+    <xsl:if test="ofc|fnt">
+      <opt>
+        <xsl:apply-templates select="ofc|fnt"/>
+      </opt>
     </xsl:if>
+  </k>
 </xsl:template>
 
 <xsl:template match="kap/text()">
