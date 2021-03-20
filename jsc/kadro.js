@@ -1,13 +1,14 @@
 
 /* jshint esversion: 6 */
 
+const version="1e";
 const debug=false; // ni bezonas provizore aparte por vidi erarojn en iOS Webkit, kie ni ne havas "console"
 const revo_url = "reta-vortaro.de";
-const sercho_url = "/cgi-bin/sercxu-json-1d.pl";
+const sercho_url = "/cgi-bin/sercxu-json-"+version+".pl";
 const hazarda_url = "/cgi-bin/hazarda_art.pl";
-const titolo_url = "titolo-1d.html";
-const redaktilo_url = "redaktilo-1d.html";
-const redaktmenu_url = "redaktmenu-1d.html";
+const titolo_url = "titolo-"+version+".html";
+const redaktilo_url = "redaktilo-"+version+".html";
+const redaktmenu_url = "redaktmenu-"+version+".html";
 //const inx_eo_url = "/revo/inx/_eo.html";
 
 const art_path = "../art/";
