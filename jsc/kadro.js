@@ -1044,17 +1044,6 @@ function serchu_q(esprimo) {
                 }
                 div.append(dl);
 
-                // aldonu la reagon por ref-enmetaj butonoj
-                if (t_red.stato == "redaktante") {
-                    onclick("x:trovoj",(event)=>{                         
-                        // kiun ref-mrk ni uzu - depende de kiu butono premita
-                        const refmrk = event.target;
-                        // revenu de trovlisto al redakto-menuo
-                        load_page("nav",redaktmenu_url,
-                            () => document.getElementById("r:refmrk").value = refmrk);        
-                    });                   
-                }        
-
                 // atentigo pri limo
                 if (lng.max == lng.trovoj.length) {
                     const noto = make_element("p",{class: "kasxita"},"noto: por trovi ankoraŭ pli, bv. precizigu la serĉon!");
@@ -1107,6 +1096,19 @@ function serchu_q(esprimo) {
                 trovoj.append(findings(lng));
             }
 
+            // aldonu la reagon por ref-enmetaj butonoj
+            if (t_red.stato == "redaktante") {
+                for (btn of trovoj.querySelectorAll("button.r_vid")) {
+                    btn.addEventListener("click",(event)=>{                         
+                        // kiun ref-mrk ni uzu - depende de kiu butono premita
+                        const refmrk = event.target.value;
+                        // revenu de trovlisto al redakto-menuo
+                        load_page("nav",redaktmenu_url,true,
+                            () => document.getElementById("r:refmrk").value = refmrk);        
+                    });
+                }           
+            }        
+
             // montru butonon por reveni al ĉefa indekso
             //index_home_btn(trovoj.children[0]);
             //show("x:nav_start_btn");
@@ -1117,7 +1119,7 @@ function serchu_q(esprimo) {
             inx_enh.append(trovoj);
             // forigu ankaŭ eventualan "viaj submetoj", ĝi estu nur en ĉefindekso por
             // eviti konfuzojn
-            const subm =nav.querySelector("#submetoj");
+            const subm = nav.querySelector("#submetoj");
             if (subm) nav.removeChild(subm);
         },
         start_wait,
