@@ -22,6 +22,20 @@ var t_main = new Transiroj("main","start",["titolo","artikolo","red_xml","red_ri
 var t_red  = new Transiroj("red","ne_redaktante",["ne_redaktante","redaktante","sendita"]);
 
 
+// helpofunkcio, por instali klak-reagojn
+function onclick(id,reaction) {
+    var nb;
+    if (nb = document.getElementById(id)) {
+        nb.addEventListener("click", function(event) {
+            event.preventDefault();
+            if (debug) console.debug("clicked: "+id);
+            reaction(event);
+            //event.stopPropagation();
+        });
+    }
+}
+
+
 /*
     navigado laŭ a href=... estas traktata per navigate_link()...
 */
@@ -29,18 +43,6 @@ var t_red  = new Transiroj("red","ne_redaktante",["ne_redaktante","redaktante","
 // instalu farendaĵojn por prepari la paĝon: evento-reagoj...
 when_doc_ready(function() { 
 
-    // helpofunkcio, por instali klak-reagojn
-    function onclick(id,reaction) {
-        var nb;
-        if (nb = document.getElementById(id)) {
-            nb.addEventListener("click", function(event) {
-                event.preventDefault();
-                if (debug) console.debug("clicked: "+id);
-                reaction(event);
-                //event.stopPropagation();
-            });
-        }
-    }
 
     // dom_console();
     console.log("kadro.when_doc_ready...");
@@ -478,7 +480,7 @@ function index_home_btn(parent) {
 }
 */
 
-function load_page(trg,url,push_state=true) {
+function load_page(trg,url,push_state=true,whenLoaded) {
     function update_hash() {
         var hash;
         if (url.indexOf('#') > -1) {
@@ -654,7 +656,10 @@ function load_page(trg,url,push_state=true) {
                 console.debug("=======> al:"+JSON.stringify(hstate));
                 // provizore ne ŝanĝu la URL de la paĝo
                 history.pushState(hstate,null,null);
-            }   
+            }  
+            
+            // faru, kion poste faru donita kiel argumento
+            if (whenLoaded) whenLoaded();
     },  
     start_wait,
     stop_wait,
@@ -987,11 +992,17 @@ function serchu_q(esprimo) {
                         ["dt",atr,
                             [["a",{target: "precipa", href: art_path+t.art+".html#"+t.eo.mrk},t[_ll_].vrt]]
                         ]])[0];
+
                     // dum redakto ni aldonas transprenan butonon por kreado de referncoj
                     if (t_red.stato == "redaktante") {
-                        const ref_btn = make_element("button",{class: "icon_btn r_vid", title:"transprenu kiel referenco"});
+                        const ref_btn = make_element("button",{
+                            class: "icon_btn r_vid", 
+                            value: t.eo.mrk,
+                            title:"transprenu kiel referenco"
+                        });
                         dt.append(ref_btn);
                     }
+
                     // trovitaj tradukoj de tiu e-a vorto
                     var dd = make_element("dd",atr);
                     for (let l in t) {
@@ -1031,6 +1042,17 @@ function serchu_q(esprimo) {
                     dl.append(dt,dd);
                 }
                 div.append(dl);
+
+                // aldonu la reagon por ref-enmetaj butonoj
+                if (t_red.stato == "redaktante") {
+                    onclick("x:trovoj",(event)=>{                         
+                        // kiun ref-mrk ni uzu - depende de kiu butono premita
+                        const refmrk = event.target;
+                        // revenu de trovlisto al redakto-menuo
+                        load_page("nav",redaktmenu_url,
+                            () => document.getElementById("r:refmrk").value = refmrk);        
+                    });                   
+                }        
 
                 // atentigo pri limo
                 if (lng.max == lng.trovoj.length) {
