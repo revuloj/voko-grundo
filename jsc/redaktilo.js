@@ -994,6 +994,7 @@ var redaktilo = function() {
     get_preference: get_preference,
     submetoj_stato: submetoj_stato,
     klavo: klavo,
+    fs_toggle: fs_toggle,
     rantaurigardo: rantaurigardo,
     shablono: shablono,
     store_preferences: store_preferences,

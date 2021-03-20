@@ -1104,7 +1104,10 @@ function serchu_q(esprimo) {
                         const refmrk = event.target.value;
                         // revenu de trovlisto al redakto-menuo
                         load_page("nav",redaktmenu_url,true,
-                            () => document.getElementById("r:refmrk").value = refmrk);        
+                            () => {
+                                document.getElementById("r:refmrk").value = refmrk;
+                                redaktilo.fs_toggle("r:ref");
+                            });        
                     });
                 }           
             }        
