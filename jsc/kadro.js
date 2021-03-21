@@ -901,14 +901,16 @@ function serchu(event) {
     var serch_in = event.target.closest("form")
         .querySelector('input[name=q]');
     var esprimo = serch_in.value;
-    if (esprimo.indexOf('%') < 0 && esprimo.indexOf('_') < 0 && esprimo.length >= 3)
+    if (esprimo) {
+        if (esprimo.indexOf('%') < 0 && esprimo.indexOf('_') < 0 && esprimo.length >= 3)
         esprimo += '%'; // serĉu laŭ vortkomenco, se ne jam enestas jokeroj, kaj
                         // almenaŭ 3 literoj
 
-    // evitu ŝanĝi .search, ĉar tio refreŝigas la paĝon nevolite: 
-    // location.search = "?q="+encodeURIComponent(esprimo);
-    history.pushState(history.state,null,location.origin+location.pathname+"?q="+encodeURIComponent(esprimo));
-    serchu_q(esprimo);
+        // evitu ŝanĝi .search, ĉar tio refreŝigas la paĝon nevolite: 
+        // location.search = "?q="+encodeURIComponent(esprimo);
+        history.pushState(history.state,null,location.origin+location.pathname+"?q="+encodeURIComponent(esprimo));
+        serchu_q(esprimo);
+    }
 }
 
 function serchu_q(esprimo) {
