@@ -996,7 +996,7 @@ function serchu_q(esprimo) {
                             [["a",{target: "precipa", href: art_path+t.art+".html#"+t.eo.mrk},t[_ll_].vrt]]
                         ]])[0];
 
-                    // dum redakto ni aldonas transprenan butonon por kreado de referncoj
+                    // dum redakto ni aldonas transprenan butonon por kreado de referencoj
                     if (t_red.stato == "redaktante") {
                         const ref_btn = make_element("button",{
                             class: "icon_btn r_vid", 
@@ -1005,6 +1005,7 @@ function serchu_q(esprimo) {
                         });
                         dt.append(ref_btn);
                     }
+
 
                     // trovitaj tradukoj de tiu e-a vorto
                     var dd = make_element("dd",atr);
