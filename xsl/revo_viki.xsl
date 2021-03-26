@@ -20,7 +20,8 @@ voku ekz-e:
 
 -->
 
-<xsl:variable name="viki_xml" select="'../tmp/vikilst.xml'"/>
+<!--xsl:variable name="viki_xml" select="'../tmp/vikilst.xml'"/-->
+<xsl:param name="viki_xml"/>
 <xsl:variable name="viki" select="document($viki_xml)/viki"/>
 <xsl:variable name="root" select="/"/>
 
@@ -41,7 +42,7 @@ voku ekz-e:
     <!--xsl:message select="concat('|',lower-case($vorto),'|')"/-->
     <xsl:for-each select="$root"> <!-- kunteksto devas esti la dokumento de la indekso! -->
         <xsl:for-each select="key('rindekso',translate(lower-case($viki),'_',' '))">
-            <xsl:message select="concat('v:',$viki,'--r:',@mrk,'')"/>
+            <!--xsl:message select="concat('v:',$viki,'==r:',@mrk,'')"/ -->
             <r v="{$viki}" r="{@mrk}"/>
         </xsl:for-each>
     </xsl:for-each>
