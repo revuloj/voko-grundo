@@ -20,20 +20,32 @@ voku ekz-e:
 
 -->
 
-<xsl:variable name="viki_xml" select="'../tmp/vikilist.xml'"/>
+<xsl:variable name="viki_xml" select="'../tmp/vikilst.xml'"/>
 <xsl:variable name="viki" select="document($viki_xml)/viki"/>
+<xsl:variable name="root" select="/"/>
+
+<xsl:key name="rindekso" match="indekso/kap-oj[@lng='eo']/v[@mrk!='']" use="lower-case(k)"/>
 
 <xsl:template match="/">
     <vikiref>
-        <xsl:apply-templates select="indekso/kap-oj[@lng='eo']/v"/>
+        <xsl:for-each select="$viki//v">
+            <xsl:call-template name="join">
+                <xsl:with-param name="viki" select="."/>
+            </xsl:call-template>
+        </xsl:for-each>
     </vikiref>
 </xsl:template>
 
-<xsl:template match="v">
-    <xsl:variable name="mrk" select="@mrk"/>
-    <xsl:for-each select="$viki/v[lower-case(.)=lower-case(current()/k)]">
-        <r v="{.}" r="{$mrk}"/>
+<xsl:template name="join">
+    <xsl:param name="viki"/>
+    <!--xsl:message select="concat('|',lower-case($vorto),'|')"/-->
+    <xsl:for-each select="$root"> <!-- kunteksto devas esti la dokumento de la indekso! -->
+        <xsl:for-each select="key('rindekso',translate(lower-case($viki),'_',' '))">
+            <xsl:message select="concat('v:',$viki,'--r:',@mrk,'')"/>
+            <r v="{$viki}" r="{@mrk}"/>
+        </xsl:for-each>
     </xsl:for-each>
 </xsl:template>
+
 
 </xsl:transform>
