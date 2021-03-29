@@ -674,10 +674,17 @@
                     <xsl:for-each select="document($lingvoj)/lingvoj/lingvo[@kodo=current()/@lng]">
                       <td><xsl:value-of select="."/><xsl:text>: </xsl:text></td>
                     </xsl:for-each>
-                    <td align="right"><xsl:value-of select="@n"/></td>
-                    <td align="right"><xsl:text>~</xsl:text>
+                    <td align="right"><xsl:value-of select="@n"/></td>                    
+                    <td align="right">
+                    <!--<xsl:text>~</xsl:text>
                       <xsl:value-of select="round(@p * 1000 div $trd-snc) div 10"/>
                       <xsl:text>%</xsl:text>
+                    -->
+                      <meter max="100" low="33" high="67" optimum="100"
+                        value="{round(@p * 1000 div $trd-snc) div 10}">
+                        <xsl:text>~</xsl:text>
+                        <xsl:value-of select="round(@p * 1000 div $trd-snc) div 10"/>
+                      </meter>
                     </td>
                   </tr>
                 </xsl:for-each>
