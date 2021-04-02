@@ -389,30 +389,37 @@ var artikolo = function() {
                 function kreu_ref_div(mrk, first_drv = false) {
                     var refs = [];
                     // viki-referenco
+                    var vj = [];
                     for (r of json.viki) {
                         if (r.m == mrk || 
-                            (first_drv && r.m == mrk.substring(0,mrk.indexOf('.')))) {
+                            (first_drv && r.m == mrk.substring(0,mrk.indexOf('.')))) {                            
                             const v = make_elements([
-                                ['img',{ 
-                                    src: '../smb/i_wiki.svg', 
-                                    alt: 'Vikipedio',
-                                    title: 'al Vikipedio' }],
-                                ['a',{ href: vikipedio_url+r.v },r.v],['br']
+                                ['a',{ href: vikipedio_url+r.v },r.v],', '
                             ]);
-                            refs.push(...v); 
+                            vj.push(...v); 
                         }
+                    }
+                    
+                    if (vj.length) {
+                        vj.splice(vj.length-1,1,make_element("br")); // anstataŭigu lastan komon per <br/>
+                        const img = make_element('img',{  
+                            src: '../smb/i_wiki.svg', 
+                            alt: 'Vikipedio',
+                            title: 'al Vikipedio' 
+                        });
+                        refs.push(img,...vj); 
                     }
 
                     // tezaŭro-referencoj, reordigitaj laŭ ref-tip
                     const tez = group_by("tip", json.tez.filter(
-                        r => ( r.fnt.m == mrk || (first_drv && r.fnt.m == mrk.substring(0,mrk.indexOf('.'))) ) 
+                        r => ( r.fnt.m.startsWith(mrk) || (first_drv && r.fnt.m == mrk.substring(0,mrk.indexOf('.'))) ) 
                     ));
                     for (const [tip,rj] of Object.entries(tez)) {
                         const img = make_element('img',{ 
                             src: '../smb/' + tip + '.gif', 
                             class: "ref " + ref_tip_class(tip), 
                             alt: tip });
-                        const aj = [];
+                        var aj = [];
 
                         for (r of rj) {
                             const cel = r.cel;
@@ -425,9 +432,10 @@ var artikolo = function() {
                             }  
                             aj.push(...a);
                         }
-                        if (aj.length)
+                        if (aj.length) {
                             aj.splice(aj.length-1,1,make_element("br")); // anstataŭigu lastan komon per <br/>
                             refs.push(img,...aj); 
+                        }
                     }
 
                     // nestigu ĉiujn trovitajn referencojn den div
