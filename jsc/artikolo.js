@@ -414,26 +414,38 @@ var artikolo = function() {
                     const tez = group_by("tip", json.tez.filter(
                         r => ( r.fnt.m.startsWith(mrk) || (first_drv && r.fnt.m == mrk.substring(0,mrk.indexOf('.'))) ) 
                     ));
+
+                    // KOREKTU: montru en taŭga ordo: sin | ant | super,malprt | sub,prt | vid... (hom?)
                     for (const [tip,rj] of Object.entries(tez)) {
-                        const img = make_element('img',{ 
-                            src: '../smb/' + tip + '.gif', 
-                            class: "ref " + ref_tip_class(tip), 
-                            alt: tip });
+
                         var aj = [];
+                        var pas = {}; // ni memoras la celojn, ĉar pro la distingo drv/snc ni havus duoblaĵojn
 
                         for (r of rj) {
                             const cel = r.cel;
-                            const a = make_elements([                                
-                                ['a',{ href: mrk_art_url(cel.m) },cel.k],', '
-                            ]);
-                            if (cel.n) {
-                                const s = make_element("sup",{},cel.n);
-                                a.splice(a.length-1,0,s);
-                            }  
-                            aj.push(...a);
+
+                            // KOREKTU: tio ankoraŭ ne bone funkcias: nur komparante .m
+                            // ni havos ŝajnajn duoblaĵojn (drv/snc1) kaj komparante .k/.n
+                            // ni eble maltrafas homonimon... do verŝajne ni devos kompari
+                            // .m kaj .k kaj .n (?)
+                            if (! (pas[cel.k] && pas[cel.k] == cel.n) ) {
+                                pas[cel.k] = cel.n;  // memoru
+                                const a = make_elements([                                
+                                    ['a',{ href: mrk_art_url(cel.m) },cel.k],', '
+                                ]);
+                                if (cel.n) {
+                                    const s = make_element("sup",{},cel.n);
+                                    a.splice(a.length-1,0,s);
+                                }  
+                                aj.push(...a);    
+                            }
                         }
                         if (aj.length) {
                             aj.splice(aj.length-1,1,make_element("br")); // anstataŭigu lastan komon per <br/>
+                            const img = make_element('img',{ 
+                                src: '../smb/' + tip + '.gif', 
+                                class: "ref " + ref_tip_class(tip), 
+                                alt: tip });
                             refs.push(img,...aj); 
                         }
                     }
@@ -459,6 +471,10 @@ var artikolo = function() {
                         const sec = h2.closest("section");
                         const dk = sec.querySelector("div.kasxebla");
                         dk.prepend(div);
+                        // aldonu simbolon en h2
+                        const btn = make_element('button', { 
+                            class: "r_tez icon_btn" });                        
+                        h2.append(btn);
                     }
                 }
             }
