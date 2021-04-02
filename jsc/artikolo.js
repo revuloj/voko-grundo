@@ -4,6 +4,9 @@
 const js_sojlo = 3; //30+3;
 const ekz_sojlo = 3;
 const sec_art = "s_artikolo";
+const vokoref_url = "/cgi-bin/vokoref-json.pl";
+const vikipedio_url = "https://eo.wikipedia.org/wiki/";
+const art_path = "../art/";
 
 //const KashEvento = new Event("kashu", {bubbles: true});
 const MalkashEvento = new Event("malkashu", {bubbles: true});
@@ -43,10 +46,15 @@ var artikolo = function() {
         //enkadrigu();
     });
 
-    function preparu_art() {
+    function preparu_art(url) {
         // evitu preparon, se ni troviĝas en la redaktilo kaj
         // la artikolo ne ĉeestas!
         if (! document.getElementById(sec_art)) return;
+
+        // ŝargu fone la referencojn de Vikipedio kaj tezaŭro
+        const fn = getUrlFileName(url);
+        const artikolo = fn.substring(0,fn.lastIndexOf('.'));
+        referencoj(artikolo);
 
         if (window.location.protocol != 'file:') {
             top.document.title='Reta Vortaro [' +
@@ -369,6 +377,70 @@ var artikolo = function() {
             // forigu finan <br>
             pied.querySelector("br").remove();
         }        
+    }
+
+    function referencoj(artikolo) {
+        HTTPRequestFull('POST', vokoref_url, {}, {art: artikolo},
+            function(data) {
+                function mrk_art_url(mrk) {
+                    const fn = mrk.substring(0,mrk.indexOf('.'));
+                    return art_path + fn + '.html#' + mrk;
+                }
+                function kreu_ref_div(mrk, first_drv = false) {
+                    var refs = [];
+                    // viki-referenco
+                    for (r of json.viki) {
+                        if (r.m == mrk || 
+                            (first_drv && r.m == mrk.substring(0,mrk.indexOf('.')))) {
+                            const v = make_elements([
+                                'W:',['a',{ href: vikipedio_url+r.v },r.v],['br']
+                            ]);
+                            refs.push(...v); 
+                        }
+                    }
+                    // tezaŭro-referencoj
+                    for (r of json.tez) {
+                        const fnt = r.fnt;
+                        if (fnt.m == mrk || 
+                            (first_drv && fnt.m == mrk.substring(0,mrk.indexOf('.')))) {
+                            const cel = r.cel;
+                            const a = make_elements([
+                                ['img',{ 
+                                    src: '../smb/' + r.tip + '.gif', 
+                                    class: "ref r_" + r.tip, 
+                                    alt: r.tip }],
+                                ['a',{ href: mrk_art_url(cel.m) },cel.k],['br']
+                            ]);
+                            if (cel.n) {
+                                const s = make_element("sup",{},cel.n);
+                                a.splice(1,0,s);
+                            }
+                            refs.push(...a); 
+                        }
+                    }
+                    if (refs.length) {
+                        const div = make_element("div");
+                        div.append(...refs);
+                        return div;
+                    }
+                }
+
+                if (! data) return;                 
+                var json = JSON.parse(data);
+
+                // trakuru la derivaĵojn kaj alordigu la referencojn kun sama mrk-o
+                // en la unua drv aldonu ankaŭ referencojn celantaj al la artikolo (sen '.')
+                const art = document.getElementById(sec_art);
+                for (h2 of art.querySelectorAll('h2[id]')) {
+                    const div = kreu_ref_div(h2.id);
+                    if (div) {
+                        const sec = h2.closest("section");
+                        const dk = sec.querySelector("div.kasxebla");
+                        dk.prepend(div);
+                    }
+                }
+            }
+        );
     }
 
 

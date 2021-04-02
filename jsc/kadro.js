@@ -11,7 +11,6 @@ const redaktilo_url = "redaktilo-"+version+".html";
 const redaktmenu_url = "redaktmenu-"+version+".html";
 //const inx_eo_url = "/revo/inx/_eo.html";
 
-const art_path = "../art/";
 const inx_eo_url = "/revo/inx/_plena.html";
 const mx_trd_url = "/cgi-bin/mx_trd.pl";
 const http_404_url = "/revo/dlg/404.html";
@@ -571,7 +570,7 @@ function load_page(trg,url,push_state=true,whenLoaded) {
             // laŭbezone ankoraŭ iru al loka marko
             update_hash();
 
-            artikolo.preparu_art();                      
+            artikolo.preparu_art(url);                      
             var s_artikolo = document.getElementById("s_artikolo");
             // refaru matematikajn formulojn, se estas
             if (s_artikolo) {
