@@ -76,6 +76,22 @@ function HTTPRequest(method, url, params, onSuccess,
     onStart, onFinish, onError);
 }
 
+// reordigas liston de objektoj havantaj komunan ŝlosilkampon
+// al objekto de listoj de objektoj uzante la valorojn de la ŝlosilkampo
+// kiel ŝlosilo (indekso) de tiu objekto.
+// se mankas la ŝlosilkampo tiu listero estas ellasata
+function group_by(key, array) {
+  var grouped = {}
+  for (var el of array) {
+    const v = el[key]
+    if (v) {
+      if (! grouped[v] ) grouped[v] = [];
+      grouped[v].push(el);      
+    }
+  }
+  return grouped;
+}
+
 // aldonu ../art en relativaj URL-oj
 function fix_art_href(root_el) {
   for (var a of root_el.getElementsByTagName("a")) {

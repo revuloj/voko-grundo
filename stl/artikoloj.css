@@ -104,6 +104,13 @@ div.fontoj {
     border-top: 1px solid var(--main-brd-clr); 
 }
 
+div.tezauro {
+    /* provizore... */
+    background-color: lightsalmon;
+    margin-top: -1em;
+    padding: .3em;
+}
+
 section.admin {
     margin-top: 1em;
 }

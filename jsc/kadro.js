@@ -1005,7 +1005,6 @@ function serchu_q(esprimo) {
                         dt.append(ref_btn);
                     }
 
-
                     // trovitaj tradukoj de tiu e-a vorto
                     var dd = make_element("dd",atr);
                     for (let l in t) {

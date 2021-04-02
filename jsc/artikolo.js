@@ -402,26 +402,35 @@ var artikolo = function() {
                             refs.push(...v); 
                         }
                     }
-                    // tezaŭro-referencoj
-                    for (r of json.tez) {
-                        const fnt = r.fnt;
-                        if (fnt.m == mrk || 
-                            (first_drv && fnt.m == mrk.substring(0,mrk.indexOf('.')))) {
+
+                    // tezaŭro-referencoj, reordigitaj laŭ ref-tip
+                    const tez = group_by("tip", json.tez.filter(
+                        r => ( r.fnt.m == mrk || (first_drv && r.fnt.m == mrk.substring(0,mrk.indexOf('.'))) ) 
+                    ));
+                    for (const [tip,rj] of Object.entries(tez)) {
+                        const img = make_element('img',{ 
+                            src: '../smb/' + tip + '.gif', 
+                            class: "ref " + ref_tip_class(tip), 
+                            alt: tip });
+                        const aj = [];
+
+                        for (r of rj) {
                             const cel = r.cel;
-                            const a = make_elements([
-                                ['img',{ 
-                                    src: '../smb/' + r.tip + '.gif', 
-                                    class: "ref " + ref_tip_class(r.tip), 
-                                    alt: r.tip }],
-                                ['a',{ href: mrk_art_url(cel.m) },cel.k],['br']
+                            const a = make_elements([                                
+                                ['a',{ href: mrk_art_url(cel.m) },cel.k],', '
                             ]);
                             if (cel.n) {
                                 const s = make_element("sup",{},cel.n);
                                 a.splice(a.length-1,0,s);
-                            }
-                            refs.push(...a); 
+                            }  
+                            aj.push(...a);
                         }
+                        if (aj.length)
+                            aj.splice(aj.length-1,1,make_element("br")); // anstataŭigu lastan komon per <br/>
+                            refs.push(img,...aj); 
                     }
+
+                    // nestigu ĉiujn trovitajn referencojn den div
                     if (refs.length) {
                         const div = make_element("div", { class: 'tezauro' });
                         div.append(...refs);
@@ -435,8 +444,9 @@ var artikolo = function() {
                 // trakuru la derivaĵojn kaj alordigu la referencojn kun sama mrk-o
                 // en la unua drv aldonu ankaŭ referencojn celantaj al la artikolo (sen '.')
                 const art = document.getElementById(sec_art);
+                var first = true;
                 for (h2 of art.querySelectorAll('h2[id]')) {
-                    const div = kreu_ref_div(h2.id);
+                    const div = kreu_ref_div(h2.id,first); first = false;
                     if (div) {
                         const sec = h2.closest("section");
                         const dk = sec.querySelector("div.kasxebla");
