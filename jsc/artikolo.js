@@ -393,7 +393,11 @@ var artikolo = function() {
                         if (r.m == mrk || 
                             (first_drv && r.m == mrk.substring(0,mrk.indexOf('.')))) {
                             const v = make_elements([
-                                'W:',['a',{ href: vikipedio_url+r.v },r.v],['br']
+                                ['img',{ 
+                                    src: '../smb/i_wiki.svg', 
+                                    alt: 'Vikipedio',
+                                    title: 'al Vikipedio' }],
+                                ['a',{ href: vikipedio_url+r.v },r.v],['br']
                             ]);
                             refs.push(...v); 
                         }
@@ -407,19 +411,19 @@ var artikolo = function() {
                             const a = make_elements([
                                 ['img',{ 
                                     src: '../smb/' + r.tip + '.gif', 
-                                    class: "ref r_" + r.tip, 
+                                    class: "ref " + ref_tip_class(r.tip), 
                                     alt: r.tip }],
                                 ['a',{ href: mrk_art_url(cel.m) },cel.k],['br']
                             ]);
                             if (cel.n) {
                                 const s = make_element("sup",{},cel.n);
-                                a.splice(1,0,s);
+                                a.splice(a.length-1,0,s);
                             }
                             refs.push(...a); 
                         }
                     }
                     if (refs.length) {
-                        const div = make_element("div");
+                        const div = make_element("div", { class: 'tezauro' });
                         div.append(...refs);
                         return div;
                     }
