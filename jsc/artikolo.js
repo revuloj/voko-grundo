@@ -416,7 +416,8 @@ var artikolo = function() {
 
                     // tezaŭro-referencoj, reordigitaj laŭ ref-tip
                     const tez = group_by("tip", json.tez.filter(
-                        r => ( r.fnt.m.startsWith(mrk) || (first_drv && r.fnt.m == mrk.substring(0,mrk.indexOf('.'))) ) 
+                        r => ( r.fnt.m == mrk || r.fnt.m.startsWith(mrk+'.') || 
+                            (first_drv && r.fnt.m == mrk.substring(0,mrk.indexOf('.'))) ) 
                     ));
 
                     // KOREKTU: montru en taŭga ordo: sin | ant | super,malprt | sub,prt | vid... (hom?)
