@@ -25,6 +25,7 @@
         "lint": "jshint jsc/**.js",
         "prebuild": "mkdir -p build",
         "prebuild:css": "mkdir -p build/stl",
+        "//prebuild:svg": "bin/mp2png_svg.sh",
         "build:svg": "bin/svg2css.sh build/smb/[ir]_*.svg > build/stl/piktogramoj.css",
         "build:css": "npm run build:svg && cat stl/normalize.css stl/koloroj.css build/stl/piktogramoj.css stl/formularo.css stl/kadro.css stl/artikoloj.css stl/redaktilo.css | cssmin > build/stl/revo-1e-min.css",
         "//build:css": "bin/compile-css.sh",

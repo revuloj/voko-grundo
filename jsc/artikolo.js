@@ -485,7 +485,7 @@ var artikolo = function() {
                         dk.prepend(div);
                         // aldonu simbolon en h2
                         const btn = make_element('button', { 
-                            class: "r_tez icon_btn" });                        
+                            class: "i_tez icon_btn" });                        
                         h2.append(btn);
                     }
                 }
