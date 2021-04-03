@@ -405,7 +405,9 @@ var artikolo = function() {
                         const p = make_elements([
                             ['p',{},[
                                 ['img',{  
+                                    //src: '../smb/i_wiki.svg', 
                                     src: '../smb/i_wiki.svg', 
+                                    class: 'i_wiki',
                                     alt: 'Vikipedio',
                                     title: 'al Vikipedio'}]
                                 ]]
@@ -438,11 +440,14 @@ var artikolo = function() {
                             if (! (pas[cel.k] && pas[cel.k] == (cel.n||-1)) ) {
                                 pas[cel.k] = cel.n || -1;  // memoru
                                 const a = make_elements([
-                                    ['a',{ href: mrk_art_url(cel.m) },cel.k],', '
+                                    ['a',{ 
+                                        href: mrk_art_url(cel.m),
+                                        class: "ref"
+                                    },cel.k],', '
                                 ]);
                                 if (cel.n) {
                                     const s = make_element("sup",{},cel.n);
-                                    a.splice(a.length-1,0,s);
+                                    a[0].append(s);
                                 }  
                                 aj.push(...a);    
                             }

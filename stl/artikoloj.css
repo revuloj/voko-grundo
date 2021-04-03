@@ -208,6 +208,13 @@ A.ref {color: var(--ref-fnt-clr) !important}
 A.ref:active, 
 A.ref:hover { color: var(--main-act-fnt-clr) !important}
 
+A.ref sup {
+    font-style: italic;
+    /* tio ŝajne ne malŝaltas substrekon, ni povus ankoraŭ kontroli la ordon 
+    de la stildifinoj aŭ movi sup ekster a? */
+    text-decoration: none !important;
+}
+
 /* klarigo */
 .klr {font-style: normal}
 
@@ -345,9 +352,10 @@ IMG[alt='Vikipedio'] {
     margin-left: 6px;
     margin-right: 6px;
     box-sizing: border-box;
-    background: url('/revo/smb/i_wiki.svg') no-repeat;	
+    /*background: url('/revo/smb/i_wiki.svg') no-repeat;
     background-size: contain;
-    border-bottom: 1px solid;
+    border-bottom: 1px solid;*/
+    margin-bottom: -.1em;
 }
      
 /* 
