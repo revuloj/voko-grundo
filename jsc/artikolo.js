@@ -402,12 +402,16 @@ var artikolo = function() {
                     
                     if (vj.length) {
                         vj.splice(vj.length-1,1,make_element("br")); // anstataŭigu lastan komon per <br/>
-                        const img = make_element('img',{  
-                            src: '../smb/i_wiki.svg', 
-                            alt: 'Vikipedio',
-                            title: 'al Vikipedio' 
-                        });
-                        refs.push(img,...vj); 
+                        const p = make_elements([
+                            ['p',{},[
+                                ['img',{  
+                                    src: '../smb/i_wiki.svg', 
+                                    alt: 'Vikipedio',
+                                    title: 'al Vikipedio'}]
+                                ]]
+                        ]);
+                        p[0].append(...vj);
+                        refs.push(...p); 
                     }
 
                     // tezaŭro-referencoj, reordigitaj laŭ ref-tip
@@ -424,13 +428,13 @@ var artikolo = function() {
                         for (r of rj) {
                             const cel = r.cel;
 
-                            // KOREKTU: tio ankoraŭ ne bone funkcias: nur komparante .m
-                            // ni havos ŝajnajn duoblaĵojn (drv/snc1) kaj komparante .k/.n
-                            // ni eble maltrafas homonimon... do verŝajne ni devos kompari
-                            // .m kaj .k kaj .n (?)
-                            if (! (pas[cel.k] && pas[cel.k] == cel.n) ) {
-                                pas[cel.k] = cel.n;  // memoru
-                                const a = make_elements([                                
+                            // NOTO: tio povus neintencite kaŝi homonimojn, se ni referencas al pluraj
+                            // sed eble tio okazas tiel rare, ke ni povos ignori tion?
+                            // Alie ni devus ankaŭ kompari .m kaj montri distingilon por homonimoj
+                            // en la prezento
+                            if (! (pas[cel.k] && pas[cel.k] == (cel.n||-1)) ) {
+                                pas[cel.k] = cel.n || -1;  // memoru
+                                const a = make_elements([
                                     ['a',{ href: mrk_art_url(cel.m) },cel.k],', '
                                 ]);
                                 if (cel.n) {
@@ -442,11 +446,16 @@ var artikolo = function() {
                         }
                         if (aj.length) {
                             aj.splice(aj.length-1,1,make_element("br")); // anstataŭigu lastan komon per <br/>
-                            const img = make_element('img',{ 
-                                src: '../smb/' + tip + '.gif', 
-                                class: "ref " + ref_tip_class(tip), 
-                                alt: tip });
-                            refs.push(img,...aj); 
+                            const p = make_elements([
+                                ['p',{},[
+                                    ['img',{ 
+                                        src: '../smb/' + tip + '.gif', 
+                                        class: "ref " + ref_tip_class(tip), 
+                                        alt: tip }]
+                                ]]
+                            ]);
+                            p[0].append(...aj);
+                            refs.push(...p); 
                         }
                     }
 

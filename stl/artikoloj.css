@@ -106,10 +106,19 @@ div.fontoj {
 
 div.tezauro {
     /* provizore... */
-    background-color: lightsalmon;
+    /* background-color: lightsalmon; */
+    border: 2px dotted var(--main-brd-clr);
+    border-top: 0;
     margin-top: -1em;
     padding: .3em;
     width: 100%;
+}
+
+div.tezauro p {
+    margin: 0;
+    /* 16px (img) + 2*6 (margin) */
+    padding-left: 28px;
+    text-indent: -28px;
 }
 
 section.admin {
