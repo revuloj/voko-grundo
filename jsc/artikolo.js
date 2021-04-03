@@ -421,7 +421,9 @@ var artikolo = function() {
                     ));
 
                     // KOREKTU: montru en taŭga ordo: sin | ant | super,malprt | sub,prt | vid... (hom?)
-                    for (const [tip,rj] of Object.entries(tez)) {
+                    for (tip of ['dif','sin','ant','hom','super','malprt','sub','ekz','prt','vid']) {
+                        const rj = tez[tip];
+                        if (!rj) continue;
 
                         var aj = [];
                         var pas = {}; // ni memoras la celojn, ĉar pro la distingo drv/snc ni havus duoblaĵojn
