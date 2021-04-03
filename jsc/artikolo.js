@@ -485,8 +485,10 @@ var artikolo = function() {
                         dk.prepend(div);
                         // aldonu simbolon en h2
                         const btn = make_element('button', { 
-                            class: "i_tez icon_btn" });                        
+                            class: "i_tez" });                        
                         h2.append(btn);
+                        // enŝovu antaŭ la unua h2-butono (tio devus esti la kaŝbutono!)
+                        //h2.insertBefore(btn,h2.querySelector('button'));
                     }
                 }
             }

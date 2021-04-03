@@ -670,6 +670,40 @@ H2 .icon_btn:focus {
     border: none;
 }
 
+H2 .i_tez,
+H2 .i_mtez {
+    /* ni jen provas etendi la altecon
+    al la tuta titolo... por eviti mispremojn! 
+    ĝeneas padding-top, padding-bottom de la parenca H2 */
+
+    /*
+    position: relative;
+    float: none;
+    */
+    float: right;
+
+    margin-top: -.3em;
+    margin-bottom: -.5em;
+    margin-left: .5em;
+    /*padding: .1em;*/
+    /*float: none;*/
+    width: 2.5em;
+    height: 1.8em;
+    vertical-align: middle;
+    /*height: 1.9em;*/
+    background-position: center .5em;
+    background-size: 1.2em;
+    /* margin: 0; */
+    /* padding: 0; */
+    border: 0;
+    box-shadow: none;
+    border-radius: 0;
+    /*
+    border-left: 2px dotted var(--main-brd-clr);
+    border-right: 2px dotted var(--main-brd-clr);
+    */
+}
+
 dt.pli, .ekz.pli, a.pli {
     font-style: normal;
     color: var(--label-fnt-clr);
