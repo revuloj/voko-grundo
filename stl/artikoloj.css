@@ -600,6 +600,16 @@ span.ekztrd::before {
     flex-direction: column;
 }
 
+a.tez-ref {
+    /* kaŝu malnovajn tezaŭro-ligilojn */
+    display: none;
+}
+
+h2 a[href^="http://eo.wikipedia.org"] {
+    /* kaŝu malnovajn Vikipedio-ligilojn */
+    display: none;
+}
+
 /* pro Safari-eraro en frameset
    subtenante la malnovan fasadon.... */
 body>#kash_btn {
