@@ -343,10 +343,14 @@ var artikolo = function() {
         //var art = document.getElementById(sec_art);
         var art = document.getElementsByTagName("article")[0];
 
+
         var div=make_element("DIV",{id: "tez_btn"});
         div.appendChild(make_icon_button("i_tez",()=>{tezauro(artikolo)},"montru la tezaŭron"));
-        div.appendChild(make_icon_button("i_mtez kasxita",tezauro_kashu,"kaŝu la tezaŭron"));
-        art.appendChild(div);        
+        div.appendChild(make_icon_button("i_mtez kasxita",tezauro_kashu,"kaŝu la tezaŭron"));    
+        art.appendChild(div);
+
+        // se la nuna staton de la tezaŭro estu videbla, ni tuj ŝargu ĝin
+        if (preferoj.seanco.tez_videbla) tezauro(artikolo);
 
         div=make_element("DIV",{id: "kash_btn"});
         div.appendChild(make_icon_button("i_kash_ch",kashu_chiujn_drv,"kaŝu ĉiujn derivaĵojn"));
@@ -388,6 +392,7 @@ var artikolo = function() {
     function tezauro(artikolo) {
 
         function toggle_tez_btn() {
+            preferoj.seanco.tez_videbla = true;
             // interŝanĝu la videblecon de la tez-butonoj
             const tez_btn = document.getElementById("tez_btn");
             tez_btn.querySelector('.i_tez').classList.add('kasxita');
@@ -534,6 +539,8 @@ var artikolo = function() {
         for (var t of art.querySelectorAll('div.tezauro')) {
             t.classList.add('kasxita');
         }
+        preferoj.seanco.tez_videbla = false;
+
         const tez_btn = document.getElementById("tez_btn");
         tez_btn.querySelector('.i_mtez').classList.add('kasxita');
         tez_btn.querySelector('.i_tez').classList.remove('kasxita');
