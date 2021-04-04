@@ -345,7 +345,7 @@ var artikolo = function() {
 
         var div=make_element("DIV",{id: "tez_btn"});
         div.appendChild(make_icon_button("i_tez",()=>{tezauro(artikolo)},"montru la tezaŭron"));
-        div.appendChild(make_icon_button("i_mtez",tezauro_kashu,"kaŝu la tezaŭron"));
+        div.appendChild(make_icon_button("i_mtez kasxita",tezauro_kashu,"kaŝu la tezaŭron"));
         art.appendChild(div);        
 
         div=make_element("DIV",{id: "kash_btn"});
@@ -386,6 +386,14 @@ var artikolo = function() {
     }
 
     function tezauro(artikolo) {
+
+        function toggle_tez_btn() {
+            // interŝanĝu la videblecon de la tez-butonoj
+            const tez_btn = document.getElementById("tez_btn");
+            tez_btn.querySelector('.i_tez').classList.add('kasxita');
+            tez_btn.querySelector('.i_mtez').classList.remove('kasxita');        
+        }
+
         // ni ne bezonas ŝargi la tezaŭron, se ĝi jam ŝarĝiĝis antaŭe, sed nur montri...
         const art = document.getElementById(sec_art);
         var t_exists = false;
@@ -393,7 +401,10 @@ var artikolo = function() {
             t_exists = true;
             t.classList.remove('kasxita');
         }
-        if (t_exists) return;
+        if (t_exists) {
+            toggle_tez_btn();
+            return;
+        }
                 
         // se la tezaŭro ankoraŭ ne ŝarĝiĝis ni devos fari tion nun
         HTTPRequestFull('POST', vokoref_url, {}, {art: artikolo},
@@ -410,7 +421,7 @@ var artikolo = function() {
                         if (r.m == mrk || 
                             (first_drv && r.m == mrk.substring(0,mrk.indexOf('.')))) {                            
                             const v = make_elements([
-                                ['a',{ href: vikipedio_url+r.v },r.v],', '
+                                ['a',{ href: vikipedio_url+r.v }, r.v.replace(/_/g,' ')],', '
                             ]);
                             vj.push(...v); 
                         }
@@ -438,13 +449,15 @@ var artikolo = function() {
                             (first_drv && r.fnt.m == mrk.substring(0,mrk.indexOf('.'))) ) 
                     ));
 
+                    var pas = {}; // ni memoras la celojn, ĉar pro la distingo drv/snc ni havus duoblaĵojn
+                                  // kaj ankaŭ pro inversaj dif/sin, sin/vid...
+
                     // KOREKTU: montru en taŭga ordo: sin | ant | super,malprt | sub,prt | vid... (hom?)
                     for (tip of ['dif','sin','ant','hom','super','malprt','sub','ekz','prt','vid']) {
                         const rj = tez[tip];
                         if (!rj) continue;
 
                         var aj = [];
-                        var pas = {}; // ni memoras la celojn, ĉar pro la distingo drv/snc ni havus duoblaĵojn
 
                         for (r of rj) {
                             const cel = r.cel;
@@ -508,9 +521,10 @@ var artikolo = function() {
                         //const btn = make_element('button', { 
                         //    class: "i_tez" });                        
                         //h2.append(btn);
-
                     }
                 }
+
+                toggle_tez_btn();
             }
         );        
     }
@@ -520,6 +534,9 @@ var artikolo = function() {
         for (var t of art.querySelectorAll('div.tezauro')) {
             t.classList.add('kasxita');
         }
+        const tez_btn = document.getElementById("tez_btn");
+        tez_btn.querySelector('.i_mtez').classList.add('kasxita');
+        tez_btn.querySelector('.i_tez').classList.remove('kasxita');
     }
 
 

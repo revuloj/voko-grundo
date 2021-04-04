@@ -637,7 +637,8 @@ article BUTTON {
 }
 
 article BUTTON:hover, 
-#kash_btn BUTTON:hover {
+#kash_btn BUTTON:hover,
+#tez_btn BUTTON:hover {
     background-color: var(--btn-hov-bgr-clr);
     color: var(--btn-hov-fnt-clr);
     border: 1px solid var(--btn-hov-brd-clr);

@@ -228,7 +228,7 @@ function make_icon_button(iclass,handler,hint='') {
     var btn = document.createElement("BUTTON");
     //btn.appendChild(document.createTextNode(label)); 
     if (handler) btn.addEventListener("click",handler);
-    btn.classList.add(iclass,"icon_btn");
+    btn.classList.add(...iclass.split(' '),"icon_btn");
     if (hint) btn.setAttribute("title",hint);
     return btn;
 }

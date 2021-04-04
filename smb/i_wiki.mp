@@ -9,7 +9,7 @@ pic := image (
    picture V;
 
     V := image(
-        pickup pencircle scaled 10;
+        pickup pencircle scaled 12;
         draw (0,70)--(30,0)--(60,70);
     );
 
