@@ -54,7 +54,7 @@ var artikolo = function() {
         // ŝargu fone la referencojn de Vikipedio kaj tezaŭro
         const fn = getUrlFileName(url);
         const artikolo = fn.substring(0,fn.lastIndexOf('.'));
-        referencoj(artikolo);
+        //referencoj(artikolo);
 
         if (window.location.protocol != 'file:') {
             top.document.title='Reta Vortaro [' +
@@ -63,14 +63,14 @@ var artikolo = function() {
         }
         /* aktivigu nur por longaj artikoloj... */
         var d = document.getElementsByClassName("kasxebla");
-        //if (d.length > js_sojlo) {
-            preparu_kashu_sekciojn();
-            preparu_malkashu_fontojn();
-            preparu_maletendu_sekciojn();
-            kashu_malkashu_butonoj();
-            piedlinio_modifo();
-            //interna_navigado();
-            //etendu_ekzemplojn();   
+         //if (d.length > js_sojlo) {
+        preparu_kashu_sekciojn();
+        preparu_malkashu_fontojn();
+        preparu_maletendu_sekciojn();
+        kashu_malkashu_butonoj(artikolo);
+        piedlinio_modifo();
+        //interna_navigado();
+        //etendu_ekzemplojn();   
         //}
     }
 
@@ -338,11 +338,17 @@ var artikolo = function() {
         return span;
     }*/
 
-    function kashu_malkashu_butonoj() {
+    function kashu_malkashu_butonoj(artikolo) {
         // aldonu kasho/malkasho-butonojn  
         //var art = document.getElementById(sec_art);
         var art = document.getElementsByTagName("article")[0];
-        var div=make_element("DIV",{id: "kash_btn"});
+
+        var div=make_element("DIV",{id: "tez_btn"});
+        div.appendChild(make_icon_button("i_tez",()=>{tezauro(artikolo)},"montru la tezaŭron"));
+        div.appendChild(make_icon_button("i_mtez",tezauro_kashu,"kaŝu la tezaŭron"));
+        art.appendChild(div);        
+
+        div=make_element("DIV",{id: "kash_btn"});
         div.appendChild(make_icon_button("i_kash_ch",kashu_chiujn_drv,"kaŝu ĉiujn derivaĵojn"));
         div.appendChild(make_icon_button("i_mkash_ch",malkashu_chiujn_drv,"malkaŝu ĉiujn derivaĵojn"));
         //h1.appendChild(make_button(icon_opcioj,preferoj_dlg,"agordu viajn preferatajn lingvojn"));
@@ -379,7 +385,17 @@ var artikolo = function() {
         }        
     }
 
-    function referencoj(artikolo) {
+    function tezauro(artikolo) {
+        // ni ne bezonas ŝargi la tezaŭron, se ĝi jam ŝarĝiĝis antaŭe, sed nur montri...
+        const art = document.getElementById(sec_art);
+        var t_exists = false;
+        for (var t of art.querySelectorAll('div.tezauro')) {
+            t_exists = true;
+            t.classList.remove('kasxita');
+        }
+        if (t_exists) return;
+                
+        // se la tezaŭro ankoraŭ ne ŝarĝiĝis ni devos fari tion nun
         HTTPRequestFull('POST', vokoref_url, {}, {art: artikolo},
             function(data) {
                 function mrk_art_url(mrk) {
@@ -489,15 +505,21 @@ var artikolo = function() {
                         const dk = sec.querySelector("div.kasxebla");
                         dk.prepend(div);
                         // aldonu simbolon en h2
-                        const btn = make_element('button', { 
-                            class: "i_tez" });                        
-                        h2.append(btn);
-                        // enŝovu antaŭ la unua h2-butono (tio devus esti la kaŝbutono!)
-                        //h2.insertBefore(btn,h2.querySelector('button'));
+                        //const btn = make_element('button', { 
+                        //    class: "i_tez" });                        
+                        //h2.append(btn);
+
                     }
                 }
             }
-        );
+        );        
+    }
+
+    function tezauro_kashu() {
+        const art = document.getElementById(sec_art);
+        for (var t of art.querySelectorAll('div.tezauro')) {
+            t.classList.add('kasxita');
+        }
     }
 
 

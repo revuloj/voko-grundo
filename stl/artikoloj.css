@@ -590,14 +590,25 @@ span.ekztrd::before {
     flex-direction: column;
 }
 
+#tez_btn {
+    position: fixed;
+    right: .75em;
+    /*bottom: 50%;
+    margin-bottom: -1rem;*/
+    top: .7em;
+    display: flex;
+    flex-direction: column;
+}
+
 /* pro Safari-eraro en frameset
    subtenante la malnovan fasadon.... */
-body>#kash_btn{
+body>#kash_btn {
     position: absolute;
     top: 80vh;
 }
 
-#kash_btn BUTTON {
+#kash_btn BUTTON,
+#tez_btn BUTTON {
     height: 2rem;
     width: 1.5rem;
     margin: .3em .2em;
