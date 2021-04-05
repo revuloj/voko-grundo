@@ -423,15 +423,24 @@ var artikolo = function() {
                 }
                 function kreu_ref_div(mrk, first_drv = false) {
                     var refs = [];
-                    // viki-referenco
+
+                    // viki-referencoj
+                    var pas = {}; // ni memoras la unuopajn, ĉar ni povas havi duoblaĵojn pro art/drv-mrk
+                                  // kaj pri minuklaj/majusklaj alinomoj de Viki-titoloj (internaj referencoj de V.)
+
                     var vj = [];
                     for (r of json.viki) {
                         if (r.m == mrk || 
                             (first_drv && r.m == mrk.substring(0,mrk.indexOf('.')))) {                            
-                            const v = make_elements([
-                                ['a',{ href: vikipedio_url+r.v }, r.v.replace(/_/g,' ')],', '
-                            ]);
-                            vj.push(...v); 
+
+                            if (! pas[r.v.toLowerCase()] ) {
+                                pas[r.v.toLowerCase()] = true;  // memoru
+
+                                const v = make_elements([
+                                    ['a',{ href: vikipedio_url+r.v }, r.v.replace(/_/g,' ')],', '
+                                ]);
+                                vj.push(...v); 
+                            }
                         }
                     }
                     
@@ -457,7 +466,7 @@ var artikolo = function() {
                             (first_drv && r.fnt.m == mrk.substring(0,mrk.indexOf('.'))) ) 
                     ));
 
-                    var pas = {}; // ni memoras la celojn, ĉar pro la distingo drv/snc ni havus duoblaĵojn
+                    pas = {}; // ni memoras la celojn, ĉar pro la distingo drv/snc ni havus duoblaĵojn
                                   // kaj ankaŭ pro inversaj dif/sin, sin/vid...
 
                     // KOREKTU: montru en taŭga ordo: sin | ant | super,malprt | sub,prt | vid... (hom?)
