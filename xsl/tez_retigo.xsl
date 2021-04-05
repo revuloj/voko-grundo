@@ -390,12 +390,13 @@
 <xsl:template name="lst">
   <lst>
     <xsl:for-each select="ref[@tip='lst']">
-<!--       <r c="{@cel}"/> -->
-       <r l="{@lst}" v="{@val}"/>
+      <r l="{@lst}" v="{@val}" c="{@cel}"/>
     </xsl:for-each>
-<!--    <xsl:for-each select="key('retro',@mrk)[@tip='ekz']">
+<!--
+    <xsl:for-each select="key('retro',@mrk)[@tip='ekz']">
        <r c="{ancestor-or-self::node()[@mrk][1]/@mrk}"/> 
-    </xsl:for-each> -->
+    </xsl:for-each>
+-->        
   </lst>
 </xsl:template>
 
@@ -403,12 +404,13 @@
 <xsl:template name="lst2">
   <lst>
     <xsl:for-each select=".//ref[@tip='lst']">
-<!--       <r c="{@cel}"/> -->
-       <r l="{@lst}" v="{@val}"/>
+      <r l="{@lst}" v="{@val}" c="{@cel}"/>
     </xsl:for-each>
-<!--    <xsl:for-each select="key('retro',@mrk)[@tip='ekz']|key('retro',snc/@mrk)[@tip='ekz']">
+<!--    
+    <xsl:for-each select="key('retro',@mrk)[@tip='ekz']|key('retro',snc/@mrk)[@tip='ekz']">
        <r c="{ancestor-or-self::node()[@mrk][1]/@mrk}"/>
-    </xsl:for-each> -->
+    </xsl:for-each>
+    -->
   </lst>
 </xsl:template>
 
