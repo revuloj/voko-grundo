@@ -18,9 +18,9 @@
 <xsl:output method="text" encoding="utf-8"/>
 
 <xsl:template match="/">
-  <xsl:text>{ </xsl:text>
+  <xsl:text>{"</xsl:text>
   <xsl:apply-templates select="//art/@mrk"/>
-  <xsl:text>:[
+  <xsl:text>":[
 </xsl:text>
   <xsl:apply-templates select="//ref"/>
   <xsl:text>null]}
