@@ -55,7 +55,7 @@ var artikolo = function() {
         var artikolo = null;
         if (url) {
             const fn = getUrlFileName(url);
-            const artikolo = fn.substring(0,fn.lastIndexOf('.'));   
+            artikolo = fn.substring(0,fn.lastIndexOf('.'));   
         } 
         //referencoj(artikolo);
 
