@@ -48,11 +48,11 @@ var redaktilo = function() {
     klr_tip: ["klr",{tip:"$r:klrtip"},["(","$_",")"]],
     klr_ppp: ["klr",{},"[&#x2026;]"],
     ind: ["ind",{},"$_"],
-    ref_tip: ["ref",{tip:"$r:reftip",cel:""},"$_"],
-    ref_lst: ["ref",{tip:"lst",lst:"voko:",cel:""},"$_"],
-    ref: ["ref",{cel:""},"$_"],
+    ref_tip: ["ref",{tip:"$r:reftip",cel:"$r:refmrk"},"$_"],
+    ref_lst: ["ref",{tip:"lst",lst:"voko:",cel:"$r:refmrk"},"$_"],
+    ref: ["ref",{cel:"$r:refmrk"},"$_"],
     refgrp: ["refgrp",{tip:"$r:reftip"},[
-        "\n  ",["ref",{cel:""},"$_"],
+        "\n  ",["ref",{cel:"$r:refmrk"},"$_"],
         ",\n  ",["ref",{cel:""}],
         "\n"
       ]],
