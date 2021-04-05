@@ -418,6 +418,9 @@ var artikolo = function() {
                     const fn = mrk.substring(0,mrk.indexOf('.'));
                     return art_path + fn + '.html#' + mrk;
                 }
+                function tip_fixed(tip) {
+                    return ({sup: 'super', mal: 'malprt'}[tip] || tip);
+                }
                 function kreu_ref_div(mrk, first_drv = false) {
                     var refs = [];
                     // viki-referenco
@@ -458,7 +461,7 @@ var artikolo = function() {
                                   // kaj ankaŭ pro inversaj dif/sin, sin/vid...
 
                     // KOREKTU: montru en taŭga ordo: sin | ant | super,malprt | sub,prt | vid... (hom?)
-                    for (tip of ['dif','sin','ant','hom','super','malprt','sub','ekz','prt','vid']) {
+                    for (tip of ['dif','sin','ant','hom','sup','mal','sub','ekz','prt','vid']) {
                         const rj = tez[tip];
                         if (!rj) continue;
 
@@ -491,9 +494,9 @@ var artikolo = function() {
                             const p = make_elements([
                                 ['p',{},[
                                     ['img',{ 
-                                        src: '../smb/' + tip + '.gif', 
+                                        src: '../smb/' + tip_fixed(tip) + '.gif', 
                                         class: "ref " + ref_tip_class(tip), 
-                                        alt: tip }]
+                                        alt: tip_fixed(tip) }]
                                 ]]
                             ]);
                             p[0].append(...aj);

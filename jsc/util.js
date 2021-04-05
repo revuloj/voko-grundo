@@ -112,7 +112,7 @@ function ref_tip_class(tip) {
     dif: "r_dif", difino: "r_dif", 
     sin: "r_sin", ant: "r_ant",
     sub: "r_sub", prt: "r_sub", 
-    super: "r_super", malprt: "r_super",
+    super: "r_super", malprt: "r_super", mal: "r_super",
     vid: "r_vid", vidu: "r_vid",
     hom: "r_vid",
     lst: "r_lst", listo: "r_lst",
