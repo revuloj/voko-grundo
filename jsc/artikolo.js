@@ -52,8 +52,11 @@ var artikolo = function() {
         if (! document.getElementById(sec_art)) return;
 
         // ŝargu fone la referencojn de Vikipedio kaj tezaŭro
-        const fn = getUrlFileName(url);
-        const artikolo = fn.substring(0,fn.lastIndexOf('.'));
+        var artikolo = null;
+        if (url) {
+            const fn = getUrlFileName(url);
+            const artikolo = fn.substring(0,fn.lastIndexOf('.'));   
+        } 
         //referencoj(artikolo);
 
         if (window.location.protocol != 'file:') {
@@ -390,6 +393,7 @@ var artikolo = function() {
     }
 
     function tezauro(artikolo) {
+        if (!artikolo) return;
 
         function toggle_tez_btn() {
             preferoj.seanco.tez_videbla = true;
