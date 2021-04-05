@@ -794,6 +794,9 @@ dt.pli, .ekz.pli, a.pli {
         margin-left: 0.5em;
         margin-block-start: -1.2em;
     }
+    #tez_btn {
+        top: 3.7em;
+    }
 }
 
 @media (min-width: 30em) {
