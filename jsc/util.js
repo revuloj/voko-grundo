@@ -116,7 +116,7 @@ function ref_tip_class(tip) {
     vid: "r_vid", vidu: "r_vid",
     hom: "r_vid",
     lst: "r_lst", listo: "r_lst",
-    ekz: "r_ekz",
+    ekz: "r_sub",
     url: "r_url"
   }[tip]
 }
