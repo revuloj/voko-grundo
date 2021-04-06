@@ -23,7 +23,7 @@
   <xsl:text>":[
 </xsl:text>
   <xsl:apply-templates select="//ref"/>
-  <xsl:text>null]}
+  <xsl:text>]}
 </xsl:text>
 </xsl:template>
 
@@ -40,13 +40,16 @@
       <xsl:text>","</xsl:text>
       <xsl:value-of select="substring-after(@lst,'voko:')"/>
     </xsl:if>
-  <xsl:text>"],
+  <xsl:text>"]</xsl:text>
+  <xsl:if test="following::ref">
+    <xsl:text>,
 </xsl:text>
+  </xsl:if>
 </xsl:template>
 
 <xsl:template match="@mrk">
   <xsl:variable name="art" select="substring-after(substring-before(//art/@mrk,'.xml'),'Id: ')"/>
-  <xsl:value-of select="substring-after(.,concat($art,'.'))"/>
+  <xsl:value-of select="substring-after(.,$art)"/>
 </xsl:template>
 
 <xsl:template match="art/@mrk">
