@@ -677,7 +677,9 @@ var redaktilo = function() {
 
         rigardo.textContent = '';
         rigardo.append(article);  
-        artikolo.preparu_art();
+
+        const art = redakto=='redakto'? document.getElementById("r:art").value:null;
+        artikolo.preparu_art(art);
 
         // eble tio devas esti en preparu_art?
         // refaru matematikajn formulojn, se estas

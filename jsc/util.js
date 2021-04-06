@@ -111,13 +111,13 @@ function ref_tip_class(tip) {
   return {
     dif: "r_dif", difino: "r_dif", 
     sin: "r_sin", ant: "r_ant",
-    sub: "r_sub", prt: "r_sub", 
-    super: "r_super", malprt: "r_super", mal: "r_super",
+    sub: "r_sub", prt: "r_prt", 
+    super: "r_super", 
+    malprt: "r_malprt", mal: "r_malprt",
     vid: "r_vid", vidu: "r_vid",
-    hom: "r_vid",
+    hom: "r_hom",
     lst: "r_lst", listo: "r_lst",
-    ekz: "r_sub",
-    url: "r_url"
+    ekz: "r_ekz", url: "r_url"
   }[tip]
 }
 

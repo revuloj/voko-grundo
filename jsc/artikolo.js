@@ -40,23 +40,19 @@ window.addEventListener("hashchange", function() {
 
 var artikolo = function() {
 
+    // tio vokiĝas ĉe izolita prezento de la artikolo
+    // kio fakte momente ne okazas, ĉar artikoloj referencas plu al v1b
     when_doc_ready(function() {
         console.log("artikolo.when_doc_ready...:" + location.href);
         preparu_art();
         //enkadrigu();
     });
 
-    function preparu_art(url) {
+    function preparu_art(artikolo) {
         // evitu preparon, se ni troviĝas en la redaktilo kaj
         // la artikolo ne ĉeestas!
         if (! document.getElementById(sec_art)) return;
 
-        // ŝargu fone la referencojn de Vikipedio kaj tezaŭro
-        var artikolo = null;
-        if (url) {
-            const fn = getUrlFileName(url);
-            artikolo = fn.substring(0,fn.lastIndexOf('.'));   
-        } 
         //referencoj(artikolo);
 
         if (window.location.protocol != 'file:') {

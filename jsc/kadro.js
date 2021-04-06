@@ -570,7 +570,10 @@ function load_page(trg,url,push_state=true,whenLoaded) {
             // laŭbezone ankoraŭ iru al loka marko
             update_hash();
 
-            artikolo.preparu_art(url);                      
+            const fn = getUrlFileName(url);
+            const art = fn.substring(0,fn.lastIndexOf('.'));   
+            artikolo.preparu_art(art);                      
+            
             var s_artikolo = document.getElementById("s_artikolo");
             // refaru matematikajn formulojn, se estas
             if (s_artikolo) {
