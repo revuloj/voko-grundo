@@ -79,15 +79,15 @@ function HTTPRequest(method, url, params, onSuccess,
 // reordigas liston de objektoj havantaj komunan ŝlosilkampon
 // al objekto de listoj de objektoj uzante la valorojn de la ŝlosilkampo
 // kiel ŝlosilo (indekso) de tiu objekto.
-// se mankas la ŝlosilkampo tiu listero estas ellasata
+// se mankas la ŝlosilkampo tiu listero estas aldonata al "<_sen_>"
 function group_by(key, array) {
   var grouped = {}
   for (var el of array) {
-    const v = el[key]
-    if (v) {
+    const v = el[key] || '<_sen_>';
+    //if (v) {
       if (! grouped[v] ) grouped[v] = [];
       grouped[v].push(el);      
-    }
+    //}
   }
   return grouped;
 }
