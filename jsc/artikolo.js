@@ -461,13 +461,19 @@ var artikolo = function() {
 
                     // tezaŭro-referencoj, reordigitaj laŭ ref-tip
                     const tez = group_by("tip", json.tez.filter(
-                        r => ( r.mrk == mrk || r.mrk.startsWith(mrk+'.') || 
-                            (first_drv && r.mrk == mrk.substring(0,mrk.indexOf('.'))) ) 
+                        r => ( (r.mrk == mrk || r.mrk.startsWith(mrk+'.') ||   // referenco el tiu ĉi derv (mrk)
+                            (first_drv && r.mrk == mrk.substring(0,mrk.indexOf('.'))) ) // en la unua drv ni 
+                                                              // inkluzivas nespecif. ref. alartikolaj
+                            && !r.cel.m.startsWith(mrk+'.') ) // ni ekskluzivu referencojn al si mem!
                     ));
 
                     // listo-referencojn ni aldonos al super...
                     if (tez.lst) {
-                        tez.super = (tez.super? tez.super.concat(tez.lst): tez.lst);
+                        tez.super = (tez.super? tez.super.concat(tez.lst) : tez.lst);
+                    }
+                    // sentipajn referencojn ni aldonos al vid...
+                    if (tez['<_sen_>']) {
+                        tez.vid = (tez.vid? tez.vid.concat(tez['<_sen_>']) : tez['<_sen_>']);
                     }
 
                     pas = {}; // ni memoras la celojn, ĉar pro la distingo drv/snc ni havus duoblaĵojn
@@ -487,7 +493,8 @@ var artikolo = function() {
                             // sed eble tio okazas tiel rare, ke ni povos ignori tion?
                             // Alie ni devus ankaŭ kompari .m kaj montri distingilon por homonimoj
                             // en la prezento
-                            if (! (pas[cel.k] && pas[cel.k] == (cel.n||-1)) ) {
+                            if (! (pas[cel.k] && pas[cel.k] == (cel.n||-1)) )// jam antaŭe donita...
+                            {
                                 pas[cel.k] = cel.n || -1;  // memoru
                                 const a = make_elements([
                                     ['a',{ 
