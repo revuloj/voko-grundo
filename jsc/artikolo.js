@@ -53,7 +53,9 @@ var artikolo = function() {
         // la artikolo ne ĉeestas!
         if (! document.getElementById(sec_art)) return;
 
-        //referencoj(artikolo);
+        // se la nuna staton de la tezaŭro estu videbla, ni tuj ŝargu ĝin... ĝi
+        // kio ja povas daŭri sekundon...
+        if (preferoj.seanco.tez_videbla) tezauro(artikolo);
 
         if (window.location.protocol != 'file:') {
             top.document.title='Reta Vortaro [' +
@@ -348,9 +350,6 @@ var artikolo = function() {
         div.appendChild(make_icon_button("i_mtez kasxita",tezauro_kashu,"kaŝu la tezaŭron"));    
         art.appendChild(div);
 
-        // se la nuna staton de la tezaŭro estu videbla, ni tuj ŝargu ĝin
-        if (preferoj.seanco.tez_videbla) tezauro(artikolo);
-
         div=make_element("DIV",{id: "kash_btn"});
         div.appendChild(make_icon_button("i_kash_ch",kashu_chiujn_drv,"kaŝu ĉiujn derivaĵojn"));
         div.appendChild(make_icon_button("i_mkash_ch",malkashu_chiujn_drv,"malkaŝu ĉiujn derivaĵojn"));
@@ -462,15 +461,20 @@ var artikolo = function() {
 
                     // tezaŭro-referencoj, reordigitaj laŭ ref-tip
                     const tez = group_by("tip", json.tez.filter(
-                        r => ( r.fnt.m == mrk || r.fnt.m.startsWith(mrk+'.') || 
-                            (first_drv && r.fnt.m == mrk.substring(0,mrk.indexOf('.'))) ) 
+                        r => ( r.mrk == mrk || r.mrk.startsWith(mrk+'.') || 
+                            (first_drv && r.mrk == mrk.substring(0,mrk.indexOf('.'))) ) 
                     ));
+
+                    // listo-referencojn ni aldonos al super...
+                    if (tez.lst) {
+                        tez.super = (tez.super? tez.super.concat(tez.lst): tez.lst);
+                    }
 
                     pas = {}; // ni memoras la celojn, ĉar pro la distingo drv/snc ni havus duoblaĵojn
                                   // kaj ankaŭ pro inversaj dif/sin, sin/vid...
 
-                    // KOREKTU: montru en taŭga ordo: sin | ant | super,malprt | sub,prt | vid... (hom?)
-                    for (tip of ['dif','sin','ant','hom','sup','mal','sub','ekz','prt','vid']) {
+                    // montru referencojn en taŭga ordo... 
+                    for (tip of ['dif','sin','ant','hom','super','malprt','sub','ekz','prt','vid']) {
                         const rj = tez[tip];
                         if (!rj) continue;
 
