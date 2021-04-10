@@ -60,7 +60,7 @@
 <xsl:template match="drv/kap">
   <xsl:variable name="kap"><xsl:apply-templates select="text()|tld"/></xsl:variable>
   <xsl:text>["</xsl:text>
-  <xsl:value-of select="translate(normalize-space($kap),'/,','')"/>
+  <xsl:value-of select="normalize-space(translate($kap,'/,',''))"/>
   <xsl:text>","</xsl:text>
   <xsl:apply-templates select="ancestor::drv/@mrk"/>
   <xsl:text>"]</xsl:text>
