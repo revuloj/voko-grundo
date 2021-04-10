@@ -104,7 +104,7 @@ aperi kiel ref@cel, t.e. referencitaj de iu ajn artikolo
     <xsl:text>","</xsl:text>
     <xsl:call-template name="snc-num"/>
     <xsl:text>"]</xsl:text>
-    <xsl:if test="following::*[@mrk and not(self::drv)]">
+    <xsl:if test="descendant::*[@mrk and not(self::drv)]|following::*[@mrk and not(self::drv)]">
       <xsl:text>,
 </xsl:text>     
     </xsl:if>   
