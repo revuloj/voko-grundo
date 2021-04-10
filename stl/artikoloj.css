@@ -216,6 +216,15 @@ A.ref sup {
     text-decoration: none !important;
 }
 
+.tezauro A.ref {
+    text-decoration: none !important;
+}
+
+.tezauro A.ref:hover {
+    text-decoration: underline !important;
+}
+
+
 /* klarigo */
 .klr {font-style: normal}
 
