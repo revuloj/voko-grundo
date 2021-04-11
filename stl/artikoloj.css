@@ -216,6 +216,22 @@ A.ref sup {
     text-decoration: none !important;
 }
 
+/* tio ne bone funkcias...*/
+@keyframes tezauro_h {
+    /*
+    0% {height: 0}
+    100% {height: auto}
+    */
+    0% {opacity: 0;}
+    100% {opacity: 1;}
+}
+
+div.tezauro {
+    /*transition: height 2s; */
+    animation: tezauro_h 1s 1;
+}    
+
+
 .tezauro A.ref {
     text-decoration: none !important;
 }

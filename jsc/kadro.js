@@ -2,7 +2,7 @@
 /* jshint esversion: 6 */
 
 const version="1e";
-const debug=false; // ni bezonas provizore aparte por vidi erarojn en iOS Webkit, kie ni ne havas "console"
+const debug=false; //true; // ni bezonas provizore aparte por vidi erarojn en iOS Webkit, kie ni ne havas "console"
 const revo_url = "reta-vortaro.de";
 const sercho_url = "/cgi-bin/sercxu-json-"+version+".pl";
 const hazarda_url = "/cgi-bin/hazarda_art.pl";
@@ -47,7 +47,7 @@ when_doc_ready(function() {
     // dom_console();
     console.log("kadro.when_doc_ready...");
 
-    // sendu erarojn al #console
+    // sendu erarojn al aside#console - ŝaltu supre debug=true!
     if (debug) {
         window.addEventListener("error", function(event) {
             // message,filename,lineno,error.message,error.stack
