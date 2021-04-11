@@ -121,6 +121,35 @@ function ref_tip_class(tip) {
   }[tip]
 }
 
+function ref_tip_alt(tip) {
+  return {
+    dif: "=", difino: "=", 
+    sin: "SIN:", ant: "ANT:",
+    sub: "SUB:", prt: "PRT:", 
+    super: "SUP:", 
+    malprt: "TUT:", mal: "TUT:",
+    vid: "VD:", vidu: "VD:",
+    hom: "HOM:",
+    lst: "LST:", listo: "LST:",
+    ekz: "EKZ:", url: "URL:"
+  }[tip]
+}
+
+function ref_tip_title(tip) {
+  return {
+    dif: "difino ĉe", difino: "difino ĉe", 
+    sin: "sinonimo", ant: "antonimo",
+    sub: "subnocio", prt: "parto", 
+    super: "supernocio", 
+    malprt: "parto de", mal: "TUT:",
+    vid: "vidu", vidu: "vidu",
+    hom: "homonimo",
+    lst: "listo", listo: "listo",
+    ekz: "ekzemplo", url: "retpaĝo"
+  }[tip]
+}
+
+
 // anstataŭigu GIF per SVG  
 function fix_img_svg(root_el) {
   var src;

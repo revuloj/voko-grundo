@@ -516,7 +516,8 @@ var artikolo = function() {
                                     ['img',{ 
                                         src: '../smb/' + tip_fixed(tip) + '.gif', 
                                         class: "ref " + ref_tip_class(tip), 
-                                        alt: tip_fixed(tip) }]
+                                        title: ref_tip_title(tip_fixed(tip)),
+                                        alt: ref_tip_alt(tip_fixed(tip)) }]
                                 ]]
                             ]);
                             p[0].append(...aj);
