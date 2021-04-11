@@ -222,13 +222,19 @@ A.ref sup {
     0% {height: 0}
     100% {height: auto}
     */
-    0% {opacity: 0;}
-    100% {opacity: 1;}
+    0% {
+        transform: scaleY(0);    
+        transform-origin: top;
+        /*transition: transform 0.26s ease;*/
+        /* opacity: 0; color: var(--main-bgr-clr)*/}
+    100% {
+        transform: scaleY(1);
+        /*opacity: 1; /*color: var(--ref-fnt-clr)*/}
 }
 
 div.tezauro {
     /*transition: height 2s; */
-    animation: tezauro_h 1s 1;
+    animation: tezauro_h .7s 1;
 }    
 
 
