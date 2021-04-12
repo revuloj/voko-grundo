@@ -194,10 +194,10 @@ uzata kun XSLT1-transformilo
 
     <xsl:number format="A."/>
 
-    <!-- tezauroligo -->
+    <!-- tezauroligo 
     <xsl:comment>[[
       ref="<xsl:value-of select="ancestor::drv/@mrk"/><xsl:number format="A"/>"
-    ]]</xsl:comment>
+    ]]</xsl:comment> -->
 
   </dt>
 
@@ -230,10 +230,10 @@ uzata kun XSLT1-transformilo
     <xsl:apply-templates/>
     <xsl:apply-templates select="../mlg"/>
 
-    <!-- tezauroligo -->
+    <!-- tezauroligo 
     <xsl:comment>[[
       ref="<xsl:value-of select="ancestor::drv/@mrk"/>"
-    ]]</xsl:comment>
+    ]]</xsl:comment> -->
   </h2>  
 </xsl:template>
 
@@ -274,6 +274,9 @@ uzata kun XSLT1-transformilo
 
       <xsl:when test="count(ancestor::node()[self::drv or self::subart][1]//snc)>1">
         <xsl:number from="drv|subart" level="any" count="snc" format="1."/>
+
+
+    <!-- tezauroligo 
         <xsl:choose>
 
           <xsl:when test="@mrk">			       
@@ -287,7 +290,8 @@ uzata kun XSLT1-transformilo
             ]]</xsl:comment>
 
           </xsl:otherwise>
-        </xsl:choose>
+        </xsl:choose> -->
+
       </xsl:when>
 
     </xsl:choose>
@@ -336,6 +340,7 @@ uzata kun XSLT1-transformilo
        </xsl:otherwise>
     </xsl:choose>
 
+    <!-- tezauroligo 
     <xsl:choose>
       <xsl:when test="@mrk">			       
         <xsl:comment>[[ref="<xsl:value-of select="@mrk"/>"]]</xsl:comment>
@@ -348,7 +353,7 @@ uzata kun XSLT1-transformilo
         ]]</xsl:comment>
       </xsl:otherwise>
 
-    </xsl:choose>
+    </xsl:choose> -->
   </dt>
   <dd>
   <xsl:apply-templates/>
