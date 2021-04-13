@@ -360,16 +360,14 @@ uzata kun XSLT1-transformilo
   </dd>
 </xsl:template>
 
-
+<!--
 <xsl:template name="tezauro">
   <xsl:if test="@tez">
     &#xa0;<a href="{@tez}" class="tez-ref" target="indekso" title="al la teza&#x016d;ro">&#x219D;</a>
-<!--    
-      <img src="../smb/tezauro.png" class="tez" alt="TEZ" 
-           title="al la teza&#x016d;ro" border="0"/>
-    </a> -->
+
   </xsl:if>
 </xsl:template>
+-->
 
 <xsl:template match="text()">
   <xsl:value-of select="."/>
