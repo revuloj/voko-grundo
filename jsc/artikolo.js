@@ -533,13 +533,18 @@ var artikolo = function() {
                     }
                 }
 
-                if (! data) return;                 
-                var json = JSON.parse(data);
+                if (! data) return;   
 
                 // trakuru la derivaĵojn kaj alordigu la referencojn kun sama mrk-o
                 // en la unua drv aldonu ankaŭ referencojn celantaj al la artikolo (sen '.')
                 const art = document.getElementById(sec_art);
+                // ĉe duobla klako povas okazi, ke ni dufoje ŝargas la tezaŭon,
+                // do se ĝi jam ĉeestas, ni transsaltas la reston...
+                if (art.querySelector('div.tezauro')) return;
+                
+                var json = JSON.parse(data);
                 var first = true;
+
                 for (h2 of art.querySelectorAll('h2[id]')) {
                     const div = kreu_ref_div(h2.id,first); first = false;
                     if (div) {
