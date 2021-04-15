@@ -76,6 +76,22 @@ function HTTPRequest(method, url, params, onSuccess,
     onStart, onFinish, onError);
 }
 
+// reordigas liston de objektoj havantaj komunan ŝlosilkampon
+// al objekto de listoj de objektoj uzante la valorojn de la ŝlosilkampo
+// kiel ŝlosilo (indekso) de tiu objekto.
+// se mankas la ŝlosilkampo tiu listero estas aldonata al "<_sen_>"
+function group_by(key, array) {
+  var grouped = {}
+  for (var el of array) {
+    const v = el[key] || '<_sen_>';
+    //if (v) {
+      if (! grouped[v] ) grouped[v] = [];
+      grouped[v].push(el);      
+    //}
+  }
+  return grouped;
+}
+
 // aldonu ../art en relativaj URL-oj
 function fix_art_href(root_el) {
   for (var a of root_el.getElementsByTagName("a")) {
@@ -88,6 +104,51 @@ function fix_art_href(root_el) {
     }
   }
 }
+
+// ni ne havas por ĉiu referenctipo apartan vinjeton
+// kaj ni nun uzas SVG-fonon per CSS anstataŭ GIF-bildeton
+function ref_tip_class(tip) {
+  return {
+    dif: "r_dif", difino: "r_dif", 
+    sin: "r_sin", ant: "r_ant",
+    sub: "r_sub", prt: "r_prt", 
+    super: "r_super", 
+    malprt: "r_malprt", mal: "r_malprt",
+    vid: "r_vid", vidu: "r_vid",
+    hom: "r_hom",
+    lst: "r_lst", listo: "r_lst",
+    ekz: "r_ekz", url: "r_url"
+  }[tip]
+}
+
+function ref_tip_alt(tip) {
+  return {
+    dif: "=", difino: "=", 
+    sin: "SIN:", ant: "ANT:",
+    sub: "SUB:", prt: "PRT:", 
+    super: "SUP:", 
+    malprt: "TUT:", mal: "TUT:",
+    vid: "VD:", vidu: "VD:",
+    hom: "HOM:",
+    lst: "LST:", listo: "LST:",
+    ekz: "EKZ:", url: "URL:"
+  }[tip]
+}
+
+function ref_tip_title(tip) {
+  return {
+    dif: "difino ĉe", difino: "difino ĉe", 
+    sin: "sinonimo", ant: "antonimo",
+    sub: "subnocio", prt: "parto", 
+    super: "supernocio", 
+    malprt: "parto de", mal: "TUT:",
+    vid: "vidu", vidu: "vidu",
+    hom: "homonimo",
+    lst: "listo", listo: "listo",
+    ekz: "ekzemplo", url: "retpaĝo"
+  }[tip]
+}
+
 
 // anstataŭigu GIF per SVG  
 function fix_img_svg(root_el) {
@@ -102,19 +163,8 @@ function fix_img_svg(root_el) {
       // referencilo
       src = i.getAttribute("src");
       if (src) {
-        var nom = src.split('/').pop().split('.')[0];
-        var svg = {
-          dif: "r_dif", difino: "r_dif", 
-          sin: "r_sin", ant: "r_ant",
-          sub: "r_sub", super: "r_super",
-          prt: "r_sub", malprt: "r_super",
-          vid: "r_vid", vidu: "r_vid",
-          hom: "r_vid",
-          lst: "r_lst", listo: "r_lst",
-          ekz: "r_ekz",
-          url: "r_url"
-        }[nom];
-        if (nom) i.classList.add("ref",svg);
+        const nom = src.split('/').pop().split('.')[0];
+        if (nom) i.classList.add("ref",ref_tip_class(nom));
       }                    
     }                    
   }
@@ -207,7 +257,7 @@ function make_icon_button(iclass,handler,hint='') {
     var btn = document.createElement("BUTTON");
     //btn.appendChild(document.createTextNode(label)); 
     if (handler) btn.addEventListener("click",handler);
-    btn.classList.add(iclass,"icon_btn");
+    btn.classList.add(...iclass.split(' '),"icon_btn");
     if (hint) btn.setAttribute("title",hint);
     return btn;
 }

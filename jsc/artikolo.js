@@ -4,6 +4,9 @@
 const js_sojlo = 3; //30+3;
 const ekz_sojlo = 3;
 const sec_art = "s_artikolo";
+const vokoref_url = "/cgi-bin/vokoref-json.pl";
+const vikipedio_url = "https://eo.wikipedia.org/wiki/";
+const art_path = "../art/";
 
 //const KashEvento = new Event("kashu", {bubbles: true});
 const MalkashEvento = new Event("malkashu", {bubbles: true});
@@ -37,16 +40,22 @@ window.addEventListener("hashchange", function() {
 
 var artikolo = function() {
 
+    // tio vokiĝas ĉe izolita prezento de la artikolo
+    // kio fakte momente ne okazas, ĉar artikoloj referencas plu al v1b
     when_doc_ready(function() {
         console.log("artikolo.when_doc_ready...:" + location.href);
         preparu_art();
         //enkadrigu();
     });
 
-    function preparu_art() {
+    function preparu_art(artikolo) {
         // evitu preparon, se ni troviĝas en la redaktilo kaj
         // la artikolo ne ĉeestas!
         if (! document.getElementById(sec_art)) return;
+
+        // se la nuna staton de la tezaŭro estu videbla, ni tuj ŝargu ĝin... ĝi
+        // kio ja povas daŭri sekundon...
+        if (preferoj.seanco.tez_videbla) tezauro(artikolo);
 
         if (window.location.protocol != 'file:') {
             top.document.title='Reta Vortaro [' +
@@ -55,14 +64,14 @@ var artikolo = function() {
         }
         /* aktivigu nur por longaj artikoloj... */
         var d = document.getElementsByClassName("kasxebla");
-        //if (d.length > js_sojlo) {
-            preparu_kashu_sekciojn();
-            preparu_malkashu_fontojn();
-            preparu_maletendu_sekciojn();
-            kashu_malkashu_butonoj();
-            piedlinio_modifo();
-            //interna_navigado();
-            //etendu_ekzemplojn();   
+         //if (d.length > js_sojlo) {
+        preparu_kashu_sekciojn();
+        preparu_malkashu_fontojn();
+        preparu_maletendu_sekciojn();
+        kashu_malkashu_butonoj(artikolo);
+        piedlinio_modifo();
+        //interna_navigado();
+        //etendu_ekzemplojn();   
         //}
     }
 
@@ -330,11 +339,18 @@ var artikolo = function() {
         return span;
     }*/
 
-    function kashu_malkashu_butonoj() {
+    function kashu_malkashu_butonoj(artikolo) {
         // aldonu kasho/malkasho-butonojn  
         //var art = document.getElementById(sec_art);
         var art = document.getElementsByTagName("article")[0];
-        var div=make_element("DIV",{id: "kash_btn"});
+
+
+        var div=make_element("DIV",{id: "tez_btn"});
+        div.appendChild(make_icon_button("i_tez",()=>{tezauro(artikolo)},"montru la tezaŭron"));
+        div.appendChild(make_icon_button("i_mtez kasxita",tezauro_kashu,"kaŝu la tezaŭron"));    
+        art.appendChild(div);
+
+        div=make_element("DIV",{id: "kash_btn"});
         div.appendChild(make_icon_button("i_kash_ch",kashu_chiujn_drv,"kaŝu ĉiujn derivaĵojn"));
         div.appendChild(make_icon_button("i_mkash_ch",malkashu_chiujn_drv,"malkaŝu ĉiujn derivaĵojn"));
         //h1.appendChild(make_button(icon_opcioj,preferoj_dlg,"agordu viajn preferatajn lingvojn"));
@@ -369,6 +385,194 @@ var artikolo = function() {
             // forigu finan <br>
             pied.querySelector("br").remove();
         }        
+    }
+
+    function tezauro(artikolo) {
+        if (!artikolo) return;
+
+        function toggle_tez_btn() {
+            preferoj.seanco.tez_videbla = true;
+            // interŝanĝu la videblecon de la tez-butonoj
+            const tez_btn = document.getElementById("tez_btn");
+            tez_btn.querySelector('.i_tez').classList.add('kasxita');
+            tez_btn.querySelector('.i_mtez').classList.remove('kasxita');        
+        }
+
+        // ni ne bezonas ŝargi la tezaŭron, se ĝi jam ŝarĝiĝis antaŭe, sed nur montri...
+        const art = document.getElementById(sec_art);
+        var t_exists = false;
+        for (var t of art.querySelectorAll('div.tezauro')) {
+            t_exists = true;
+            t.classList.remove('kasxita');
+        }
+        if (t_exists) {
+            toggle_tez_btn();
+            return;
+        }
+                
+        // se la tezaŭro ankoraŭ ne ŝarĝiĝis ni devos fari tion nun
+        HTTPRequestFull('POST', vokoref_url, {}, {art: artikolo},
+            function(data) {
+                function mrk_art_url(mrk) {
+                    const fn = mrk.substring(0,mrk.indexOf('.'));
+                    return art_path + fn + '.html#' + mrk;
+                }
+                function tip_fixed(tip) {
+                    return ({sup: 'super', mal: 'malprt'}[tip] || tip);
+                }
+                function kreu_ref_div(mrk, first_drv = false) {
+                    var refs = [];
+
+                    // viki-referencoj
+                    var pas = {}; // ni memoras la unuopajn, ĉar ni povas havi duoblaĵojn pro art/drv-mrk
+                                  // kaj pri minuklaj/majusklaj alinomoj de Viki-titoloj (internaj referencoj de V.)
+
+                    var vj = [];
+                    for (r of json.viki) {
+                        if (r.m == mrk || 
+                            (first_drv && r.m == mrk.substring(0,mrk.indexOf('.')))) {                            
+
+                            if (! pas[r.v.toLowerCase()] ) {
+                                pas[r.v.toLowerCase()] = true;  // memoru
+
+                                const v = make_elements([
+                                    ['a',{ href: vikipedio_url+r.v }, r.v.replace(/_/g,' ')],', '
+                                ]);
+                                vj.push(...v); 
+                            }
+                        }
+                    }
+                    
+                    if (vj.length) {
+                        vj.splice(vj.length-1,1,make_element("br")); // anstataŭigu lastan komon per <br/>
+                        const p = make_elements([
+                            ['p',{},[
+                                ['img',{  
+                                    //src: '../smb/i_wiki.svg', 
+                                    src: '../smb/i_wiki.svg', 
+                                    class: 'i_wiki',
+                                    alt: 'Vikipedio',
+                                    title: 'al Vikipedio'}]
+                                ]]
+                        ]);
+                        p[0].append(...vj);
+                        refs.push(...p); 
+                    }
+
+                    // tezaŭro-referencoj, reordigitaj laŭ ref-tip
+                    const tez = group_by("tip", json.tez.filter(
+                        r => ( (r.mrk == mrk || r.mrk.startsWith(mrk+'.') ||   // referenco el tiu ĉi derv (mrk)
+                            (first_drv && r.mrk == mrk.substring(0,mrk.indexOf('.'))) ) // en la unua drv ni 
+                                                              // inkluzivas nespecif. ref. alartikolaj
+                            && !r.cel.m.startsWith(mrk+'.') ) // ni ekskluzivu referencojn al si mem!
+                    ));
+
+                    // listo-referencojn ni aldonos al super...
+                    if (tez.lst) {
+                        tez.super = (tez.super? tez.super.concat(tez.lst) : tez.lst);
+                    }
+                    // sentipajn referencojn ni aldonos al vid...
+                    if (tez['<_sen_>']) {
+                        tez.vid = (tez.vid? tez.vid.concat(tez['<_sen_>']) : tez['<_sen_>']);
+                    }
+
+                    pas = {}; // ni memoras la celojn, ĉar pro la distingo drv/snc ni havus duoblaĵojn
+                                  // kaj ankaŭ pro inversaj dif/sin, sin/vid...
+
+                    // montru referencojn en taŭga ordo... 
+                    for (tip of ['dif','sin','ant','hom','super','malprt','sub','ekz','prt','vid']) {
+                        const rj = tez[tip];
+                        if (!rj) continue;
+
+                        var aj = [];
+
+                        for (r of rj) {
+                            const cel = r.cel;
+
+                            // NOTO: tio povus neintencite kaŝi homonimojn, se ni referencas al pluraj
+                            // sed eble tio okazas tiel rare, ke ni povos ignori tion?
+                            // Alie ni devus ankaŭ kompari .m kaj montri distingilon por homonimoj
+                            // en la prezento
+                            if (! (pas[cel.k] && pas[cel.k] == (cel.n||-1)) )// jam antaŭe donita...
+                            {
+                                pas[cel.k] = cel.n || -1;  // memoru
+                                const a = make_elements([
+                                    ['a',{ 
+                                        href: mrk_art_url(cel.m),
+                                        class: "ref"
+                                    },cel.k],', '
+                                ]);
+                                if (cel.n) {
+                                    const s = make_element("sup",{},cel.n);
+                                    a[0].append(s);
+                                }  
+                                aj.push(...a);    
+                            }
+                        }
+                        if (aj.length) {
+                            aj.splice(aj.length-1,1,make_element("br")); // anstataŭigu lastan komon per <br/>
+                            const p = make_elements([
+                                ['p',{},[
+                                    ['img',{ 
+                                        src: '../smb/' + tip_fixed(tip) + '.gif', 
+                                        class: "ref " + ref_tip_class(tip), 
+                                        title: ref_tip_title(tip_fixed(tip)),
+                                        alt: ref_tip_alt(tip_fixed(tip)) }]
+                                ]]
+                            ]);
+                            p[0].append(...aj);
+                            refs.push(...p); 
+                        }
+                    }
+
+                    // nestigu ĉiujn trovitajn referencojn den div
+                    if (refs.length) {
+                        const div = make_element("div", { class: 'tezauro' });
+                        div.append(...refs);
+                        return div;
+                    }
+                }
+
+                if (! data) return;   
+
+                // trakuru la derivaĵojn kaj alordigu la referencojn kun sama mrk-o
+                // en la unua drv aldonu ankaŭ referencojn celantaj al la artikolo (sen '.')
+                const art = document.getElementById(sec_art);
+                // ĉe duobla klako povas okazi, ke ni dufoje ŝargas la tezaŭon,
+                // do se ĝi jam ĉeestas, ni transsaltas la reston...
+                if (art.querySelector('div.tezauro')) return;
+                
+                var json = JSON.parse(data);
+                var first = true;
+
+                for (h2 of art.querySelectorAll('h2[id]')) {
+                    const div = kreu_ref_div(h2.id,first); first = false;
+                    if (div) {
+                        const sec = h2.closest("section");
+                        const dk = sec.querySelector("div.kasxebla");
+                        dk.prepend(div);
+                        // aldonu simbolon en h2
+                        //const btn = make_element('button', { 
+                        //    class: "i_tez" });                        
+                        //h2.append(btn);
+                    }
+                }
+
+                toggle_tez_btn();
+            }
+        );        
+    }
+
+    function tezauro_kashu() {
+        const art = document.getElementById(sec_art);
+        for (var t of art.querySelectorAll('div.tezauro')) {
+            t.classList.add('kasxita');
+        }
+        preferoj.seanco.tez_videbla = false;
+
+        const tez_btn = document.getElementById("tez_btn");
+        tez_btn.querySelector('.i_mtez').classList.add('kasxita');
+        tez_btn.querySelector('.i_tez').classList.remove('kasxita');
     }
 
 

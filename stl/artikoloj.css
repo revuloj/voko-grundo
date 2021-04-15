@@ -104,6 +104,24 @@ div.fontoj {
     border-top: 1px solid var(--main-brd-clr); 
 }
 
+div.tezauro {
+    /* provizore... */
+    /* background-color: lightsalmon; */
+    border: 2px dotted var(--main-brd-clr);
+    border-top: 0;
+    margin-top: -1em;
+    margin-bottom: .3em;
+    padding: .3em;
+    width: 100%;
+}
+
+div.tezauro p {
+    margin: 0;
+    /* 16px (img) + 2*6 (margin) */
+    padding-left: 28px;
+    text-indent: -28px;
+}
+
 section.admin {
     margin-top: 1em;
 }
@@ -190,6 +208,44 @@ div.rim { margin-top: .3em; }
 A.ref {color: var(--ref-fnt-clr) !important}
 A.ref:active, 
 A.ref:hover { color: var(--main-act-fnt-clr) !important}
+
+A.ref sup {
+    font-style: italic;
+    /* tio ŝajne ne malŝaltas substrekon, ni povus ankoraŭ kontroli la ordon 
+    de la stildifinoj aŭ movi sup ekster a? */
+    text-decoration: none !important;
+}
+
+/* tio ne bone funkcias...*/
+@keyframes tezauro_h {
+    /*
+    0% {height: 0}
+    100% {height: auto}
+    */
+    0% {
+        transform: scaleY(0);    
+        transform-origin: top;
+        /*transition: transform 0.26s ease;*/
+        /* opacity: 0; color: var(--main-bgr-clr)*/}
+    100% {
+        transform: scaleY(1);
+        /*opacity: 1; /*color: var(--ref-fnt-clr)*/}
+}
+
+div.tezauro {
+    /*transition: height 2s; */
+    animation: tezauro_h .7s 1;
+}    
+
+
+.tezauro A.ref {
+    text-decoration: none !important;
+}
+
+.tezauro A.ref:hover {
+    text-decoration: underline !important;
+}
+
 
 /* klarigo */
 .klr {font-style: normal}
@@ -328,9 +384,10 @@ IMG[alt='Vikipedio'] {
     margin-left: 6px;
     margin-right: 6px;
     box-sizing: border-box;
-    background: url('/revo/smb/i_wiki.svg') no-repeat;	
+    /*background: url('/revo/smb/i_wiki.svg') no-repeat;
     background-size: contain;
-    border-bottom: 1px solid;
+    border-bottom: 1px solid;*/
+    margin-bottom: -.1em;
 }
      
 /* 
@@ -565,14 +622,35 @@ span.ekztrd::before {
     flex-direction: column;
 }
 
+#tez_btn {
+    position: fixed;
+    right: .75em;
+    /*bottom: 50%;
+    margin-bottom: -1rem;*/
+    top: .7em;
+    display: flex;
+    flex-direction: column;
+}
+
+a.tez-ref {
+    /* kaŝu malnovajn tezaŭro-ligilojn */
+    display: none;
+}
+
+h2 a[href^="http://eo.wikipedia.org"] {
+    /* kaŝu malnovajn Vikipedio-ligilojn */
+    display: none;
+}
+
 /* pro Safari-eraro en frameset
    subtenante la malnovan fasadon.... */
-body>#kash_btn{
+body>#kash_btn {
     position: absolute;
     top: 80vh;
 }
 
-#kash_btn BUTTON {
+#kash_btn BUTTON,
+#tez_btn BUTTON {
     height: 2rem;
     width: 1.5rem;
     margin: .3em .2em;
@@ -601,7 +679,8 @@ article BUTTON {
 }
 
 article BUTTON:hover, 
-#kash_btn BUTTON:hover {
+#kash_btn BUTTON:hover,
+#tez_btn BUTTON:hover {
     background-color: var(--btn-hov-bgr-clr);
     color: var(--btn-hov-fnt-clr);
     border: 1px solid var(--btn-hov-brd-clr);
@@ -651,6 +730,40 @@ H2 .icon_btn:hover,
 H2 .icon_btn:active, 
 H2 .icon_btn:focus {
     border: none;
+}
+
+H2 .i_tez,
+H2 .i_mtez {
+    /* ni jen provas etendi la altecon
+    al la tuta titolo... por eviti mispremojn! 
+    ĝeneas padding-top, padding-bottom de la parenca H2 */
+
+    /*
+    position: relative;
+    float: none;
+    */
+    float: right;
+
+    margin-top: -.3em;
+    margin-bottom: -.5em;
+    margin-left: .5em;
+    /*padding: .1em;*/
+    /*float: none;*/
+    width: 2.5em;
+    height: 1.8em;
+    vertical-align: middle;
+    /*height: 1.9em;*/
+    background-position: center .5em;
+    background-size: 1.2em;
+    /* margin: 0; */
+    /* padding: 0; */
+    border: 0;
+    box-shadow: none;
+    border-radius: 0;
+    /*
+    border-left: 2px dotted var(--main-brd-clr);
+    border-right: 2px dotted var(--main-brd-clr);
+    */
 }
 
 dt.pli, .ekz.pli, a.pli {
@@ -711,6 +824,9 @@ dt.pli, .ekz.pli, a.pli {
     .art > DL > DD {
         margin-left: 0.5em;
         margin-block-start: -1.2em;
+    }
+    #tez_btn {
+        top: 3.7em;
     }
 }
 

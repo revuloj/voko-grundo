@@ -152,6 +152,21 @@ nav {
     background-position-y: -.15em;
 }
 
+#x\:statistiko meter {
+    margin-left: .3em;
+    /* interpreto de alteco tro varias inter Chrome kaj FF
+    height: .6em;
+    vertical-align: middle;*/
+}
+
+@supports (-moz-appearance:none) {
+    #x\:statistiko meter {
+        height: .8rem;
+        vertical-align: middle;
+        border: 1px solid var(--nav-fnt-clr);
+    }
+}
+
 #navbar>div {
     margin-top: .1em;
 }
@@ -701,6 +716,7 @@ nav li {
 #console:empty{
     display: none
 }
+
 
 /***************************************
    Precipa paĝo

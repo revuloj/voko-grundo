@@ -287,6 +287,15 @@
   </xsl:if>
 </xsl:template>
 
+<xsl:template match="hom">
+  <xsl:if test="r">
+    <h3 class="griza">homonimoj</h3>
+    <xsl:call-template name="refs">
+       <xsl:with-param name="smb" select="'hom.gif'"/>
+       <xsl:with-param name="alt" select="'&#x2192;'"/>
+    </xsl:call-template>
+  </xsl:if>
+</xsl:template>
 
 <xsl:template match="super">
   <xsl:if test="r">

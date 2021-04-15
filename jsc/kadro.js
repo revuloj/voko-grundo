@@ -2,7 +2,7 @@
 /* jshint esversion: 6 */
 
 const version="1e";
-const debug=false; // ni bezonas provizore aparte por vidi erarojn en iOS Webkit, kie ni ne havas "console"
+const debug=false; //true; // ni bezonas provizore aparte por vidi erarojn en iOS Webkit, kie ni ne havas "console"
 const revo_url = "reta-vortaro.de";
 const sercho_url = "/cgi-bin/sercxu-json-"+version+".pl";
 const hazarda_url = "/cgi-bin/hazarda_art.pl";
@@ -11,7 +11,6 @@ const redaktilo_url = "redaktilo-"+version+".html";
 const redaktmenu_url = "redaktmenu-"+version+".html";
 //const inx_eo_url = "/revo/inx/_eo.html";
 
-const art_path = "../art/";
 const inx_eo_url = "/revo/inx/_plena.html";
 const mx_trd_url = "/cgi-bin/mx_trd.pl";
 const http_404_url = "/revo/dlg/404.html";
@@ -48,7 +47,7 @@ when_doc_ready(function() {
     // dom_console();
     console.log("kadro.when_doc_ready...");
 
-    // sendu erarojn al #console
+    // sendu erarojn al aside#console - ŝaltu supre debug=true!
     if (debug) {
         window.addEventListener("error", function(event) {
             // message,filename,lineno,error.message,error.stack
@@ -571,7 +570,10 @@ function load_page(trg,url,push_state=true,whenLoaded) {
             // laŭbezone ankoraŭ iru al loka marko
             update_hash();
 
-            artikolo.preparu_art();                      
+            const fn = getUrlFileName(url);
+            const art = fn.substring(0,fn.lastIndexOf('.'));   
+            artikolo.preparu_art(art);                      
+            
             var s_artikolo = document.getElementById("s_artikolo");
             // refaru matematikajn formulojn, se estas
             if (s_artikolo) {
@@ -1005,7 +1007,6 @@ function serchu_q(esprimo) {
                         });
                         dt.append(ref_btn);
                     }
-
 
                     // trovitaj tradukoj de tiu e-a vorto
                     var dd = make_element("dd",atr);
