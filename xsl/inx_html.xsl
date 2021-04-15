@@ -184,7 +184,7 @@
   </p>
 </xsl:template>
 
-
+<!--
 <xsl:template match="TEZAURO">
   <xsl:for-each select="$root//kap-oj/tez">
     <xsl:call-template name="tezauro"/>
@@ -198,7 +198,7 @@
        style="font-weight: bold"><xsl:apply-templates/></a><br/>
   </xsl:for-each>
 </xsl:template>
-
+-->
 
 <xsl:template match="LISTOJ">
   <xsl:for-each select="document($klasoj)/klasoj/kls">
@@ -706,14 +706,17 @@
            <!-- fakindekso -->
            <xsl:when test="self::fako">
 
+<!--
              <xsl:for-each select="tez">
                <h2>&#x0109;efaj nocioj</h2>
                <p>
                  <xsl:call-template name="tezauro"/>
                </p>
              </xsl:for-each>
-
+-->
+<!--
              <h2>nocioj alfabete</h2>
+-->             
              <xsl:apply-templates select="v"/>
            </xsl:when>
 
