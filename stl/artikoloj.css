@@ -404,6 +404,7 @@ A IMG.tez:hover {background-color:  var(--btn-hov-bgr-clr); border: 2px outset v
 A IMG.tez:active {background-color:  var(--btn-act-bgr-clr); border: 2px inset var(--btn-act-brd-clr)}
 */
 
+/*
 A.tez-ref { 
     text-decoration: none; 
     color: var(--icn-fnt-clr); 
@@ -427,6 +428,7 @@ A.tez-ref:hover {
     background-color: var(--icn-hov-bgr-clr); 
     color: var(--icn-hov-fnt-clr)
 }
+*/
 
 
 IMG.viki { 
