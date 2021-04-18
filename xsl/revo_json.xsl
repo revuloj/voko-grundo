@@ -227,7 +227,7 @@ aperi kiel ref@cel, t.e. referencitaj de iu ajn artikolo
         <xsl:value-of select="mll"/>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:value-of select="normalize-space(text())"/>
+        <xsl:value-of select="normalize-space(translate(text(),'&quot;','&#x7f;'))"/>
       </xsl:otherwise>
     </xsl:choose>
     <!-- ni aldonas trd nur se ĝi enhavas klr aŭ mll kaj do distingiĝas de la kapvorto -->
@@ -258,7 +258,7 @@ aperi kiel ref@cel, t.e. referencitaj de iu ajn artikolo
       <xsl:value-of select="."/>
     </xsl:for-each>
   </xsl:variable>
-  <xsl:value-of select="normalize-space($str)"/>
+  <xsl:value-of select="normalize-space(translate($str,'&quot;','&#x7f;'))"/>
 </xsl:template>
 
 <xsl:template match="mll">
