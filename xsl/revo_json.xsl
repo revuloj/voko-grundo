@@ -221,13 +221,19 @@ aperi kiel ref@cel, t.e. referencitaj de iu ajn artikolo
     <!-- la indeksenda kapvorto: ni devas ekskluzive distingi inter ind, mll kaj text...-->
     <xsl:choose>
       <xsl:when test="ind">
-        <xsl:value-of select="normalize-space(translate(ind,'&quot;','&#x7f;'))"/>
+        <xsl:call-template name="normalize">
+          <xsl:with-param name="str" value="ind"/>
+        </xsl:call-template>
       </xsl:when>
       <xsl:when test="mll">
-        <xsl:value-of select="normalize-space(translate(mll,'&quot;','&#x7f;'))"/>
+        <xsl:call-template name="normalize">
+          <xsl:with-param name="str" value="mll"/>
+        </xsl:call-template>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:value-of select="normalize-space(translate(text(),'&quot;','&#x7f;'))"/>
+        <xsl:call-template name="normalize">
+          <xsl:with-param name="str" value="text()"/>
+        </xsl:call-template>
       </xsl:otherwise>
     </xsl:choose>
     <!-- ni aldonas trd nur se ĝi enhavas klr aŭ mll kaj do distingiĝas de la kapvorto -->
@@ -253,22 +259,31 @@ aperi kiel ref@cel, t.e. referencitaj de iu ajn artikolo
 
 <xsl:template name="trd-join">
   <!-- kuni ĉion al signoĉeno kaj pote normigi spacojn en XSL 1.0 estas iom malsimpla... -->
-  <xsl:variable name="str">
-    <xsl:for-each select="text()|ind|klr">
-      <xsl:value-of select="."/>
-    </xsl:for-each>
-  </xsl:variable>
-  <xsl:value-of select="normalize-space(translate($str,'&quot;','&#x7f;'))"/>
+  <xsl:call-template name="normalize">
+    <xsl:with-param name="str">
+      <xsl:for-each select="text()|ind|klr">
+        <xsl:value-of select="."/>
+      </xsl:for-each>
+    </xsl:with-param>
+  </xsl:call-template>
 </xsl:template>
 
 <xsl:template match="mll">
   <xsl:if test="@tip='fin' or @tip='mez'">
     <xsl:text>…</xsl:text>
   </xsl:if>
-  <xsl:value-of select="normalize-space(translate(.,'&quot;','&#x7f;'))"/>
+  <xsl:call-template name="normalize">
+    <xsl:with-param name="str" value="."/>
+  </xsl:call-template>
   <xsl:if test="@tip='kom' or @tip='mez'">
     <xsl:text>…</xsl:text>
   </xsl:if>
+</xsl:template>
+
+<xsl:template name="normalize">
+  <xsl:param name="str"/>
+  <!-- hebreaj tradukoj enhavas citilojn kaj falantajn oblikvojn -->
+  <xsl:value-of select="normalize-space(translate(.,'&quot;\','&#x7f;¦'))"/>
 </xsl:template>
 
 </xsl:stylesheet>
