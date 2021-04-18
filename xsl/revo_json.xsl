@@ -224,7 +224,7 @@ aperi kiel ref@cel, t.e. referencitaj de iu ajn artikolo
         <xsl:value-of select="normalize-space(ind)"/>
       </xsl:when>
       <xsl:when test="mll">
-        <xsl:apply-templates select="mll"/>
+        <xsl:value-of select="mll"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="normalize-space(text())"/>
@@ -265,7 +265,7 @@ aperi kiel ref@cel, t.e. referencitaj de iu ajn artikolo
   <xsl:if test="@tip='fin' or @tip='mez'">
     <xsl:text>…</xsl:text>
   </xsl:if>
-  <xsl:apply-templates select="."/>
+  <xsl:value-of select="."/>
   <xsl:if test="@tip='kom' or @tip='mez'">
     <xsl:text>…</xsl:text>
   </xsl:if>
