@@ -221,10 +221,10 @@ aperi kiel ref@cel, t.e. referencitaj de iu ajn artikolo
     <!-- la indeksenda kapvorto: ni devas ekskluzive distingi inter ind, mll kaj text...-->
     <xsl:choose>
       <xsl:when test="ind">
-        <xsl:value-of select="normalize-space(ind)"/>
+        <xsl:value-of select="normalize-space(translate(ind,'&quot;','&#x7f;'))"/>
       </xsl:when>
       <xsl:when test="mll">
-        <xsl:value-of select="mll"/>
+        <xsl:value-of select="normalize-space(translate(mll,'&quot;','&#x7f;'))"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="normalize-space(translate(text(),'&quot;','&#x7f;'))"/>
@@ -265,7 +265,7 @@ aperi kiel ref@cel, t.e. referencitaj de iu ajn artikolo
   <xsl:if test="@tip='fin' or @tip='mez'">
     <xsl:text>…</xsl:text>
   </xsl:if>
-  <xsl:value-of select="."/>
+  <xsl:value-of select="normalize-space(translate(.,'&quot;','&#x7f;'))"/>
   <xsl:if test="@tip='kom' or @tip='mez'">
     <xsl:text>…</xsl:text>
   </xsl:if>
