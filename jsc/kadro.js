@@ -1,7 +1,7 @@
 
 /* jshint esversion: 6 */
 
-const version="1e";
+const version="1f";
 const debug=false; //true; // ni bezonas provizore aparte por vidi erarojn en iOS Webkit, kie ni ne havas "console"
 const revo_url = "reta-vortaro.de";
 const sercho_url = "/cgi-bin/sercxu-json-"+version+".pl";
