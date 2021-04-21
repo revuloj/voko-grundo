@@ -45,7 +45,7 @@
 </xsl:template>
 
 <!-- kolekti la kapvortojn de drv 
-================================= -->
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
 <xsl:template name="drv-kap">
   <xsl:text>"kap":[
@@ -96,7 +96,7 @@
 </xsl:template>
 
 
-<!-- kolekti la elementojn kun @mrk, kiuj do povas 
+<!-- kolekti la elementojn kun @mrk (krom drv), kiuj do povas 
 aperi kiel ref@cel, t.e. referencitaj de iu ajn artikolo 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
