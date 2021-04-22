@@ -4,8 +4,9 @@
 const version="1f";
 const debug=false; //true; // ni bezonas provizore aparte por vidi erarojn en iOS Webkit, kie ni ne havas "console"
 const revo_url = "reta-vortaro.de";
+const art_prefix = "/revo/art/";
 const sercho_url = "/cgi-bin/sercxu-json-"+version+".pl";
-const hazarda_url = "/cgi-bin/hazarda_art.pl";
+//const hazarda_url = "/cgi-bin/hazarda_art.pl";
 const titolo_url = "titolo-"+version+".html";
 const redaktilo_url = "redaktilo-"+version+".html";
 const redaktmenu_url = "redaktmenu-"+version+".html";
@@ -992,7 +993,7 @@ function serchu_q(esprimo) {
                     // eo -> pref_lng
                     const _ll_ = lng.lng;
                     var dt = make_elements([
-                        // tradukoj oni momente ne povas ne povas rekte alsalti,
+                        // tradukojn oni momente ne povas ne povas rekte alsalti,
                         // do ni provizore uzas t.eo.mrk anst. t[l].mrk
                         ["dt",atr,
                             [["a",{target: "precipa", href: art_path+t.art+".html#"+t.eo.mrk},t[_ll_].vrt]]
@@ -1094,6 +1095,14 @@ function serchu_q(esprimo) {
                 load_page("main","/revo/art/"+t.art+".html#"+t.mrk1);
             }
 
+            // ordigu laŭ drv-mrk (1a kampo)...
+            const eo = group_by(0,json.eo);
+            console.log(eo); 
+
+            // ordigu laŭ lingvo (4a kampo)
+            const trd = group_by(3,json.trd);
+            console.log(trd); return;
+
             // montru la trovojn de la serĉo
             for (var lng of json) {
                 //console.debug("TRD:"+lng.lng1+"-"+lng.lng2);
@@ -1152,13 +1161,12 @@ function serchu_q(esprimo) {
 
 function hazarda_art() {
 
-    HTTPRequest('POST', hazarda_url, {senkadroj: "1"},
+    HTTPRequest('POST', sercho_url, {sercxata: "!iu ajn!"},
         function(data) {
-            // Success!
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(data,"text/html");     
-            const a = doc.querySelector("a[target='precipa']");
-            const href = a.getAttribute("href");
+            // sukceso!
+            var json = JSON.parse(data);
+            const mrk = json.hazarda[0];
+            const href = art_prefix+mrk.split('.')[0]+'.html#'+mrk;
             if (href) load_page("main",href);
         }, 
         start_wait,

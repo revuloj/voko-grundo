@@ -76,10 +76,12 @@ function HTTPRequest(method, url, params, onSuccess,
     onStart, onFinish, onError);
 }
 
-// reordigas liston de objektoj havantaj komunan ŝlosilkampon
+// Reordigas liston de objektoj havantaj komunan ŝlosilkampon
 // al objekto de listoj de objektoj uzante la valorojn de la ŝlosilkampo
 // kiel ŝlosilo (indekso) de tiu objekto.
-// se mankas la ŝlosilkampo tiu listero estas aldonata al "<_sen_>"
+// Se mankas la ŝlosilkampo tiu listero estas aldonata al "<_sen_>".
+// Tio ankaŭ funkcia por listo de listoj, kiel ŝlosilo (key) tiam vi donu la
+// numeron de la kolumno laŭ kiu ordigi: group_by(0,listo_de_listoj)
 function group_by(key, array) {
   var grouped = {}
   for (var el of array) {
