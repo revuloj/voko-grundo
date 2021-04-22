@@ -222,17 +222,17 @@ aperi kiel ref@cel, t.e. referencitaj de iu ajn artikolo
     <xsl:choose>
       <xsl:when test="ind">
         <xsl:call-template name="normalize">
-          <xsl:with-param name="str" value="ind"/>
+          <xsl:with-param name="str" select="ind"/>
         </xsl:call-template>
       </xsl:when>
       <xsl:when test="mll">
         <xsl:call-template name="normalize">
-          <xsl:with-param name="str" value="mll"/>
+          <xsl:with-param name="str" select="mll"/>
         </xsl:call-template>
       </xsl:when>
       <xsl:otherwise>
         <xsl:call-template name="normalize">
-          <xsl:with-param name="str" value="text()"/>
+          <xsl:with-param name="str" select="text()"/>
         </xsl:call-template>
       </xsl:otherwise>
     </xsl:choose>
@@ -273,7 +273,7 @@ aperi kiel ref@cel, t.e. referencitaj de iu ajn artikolo
     <xsl:text>…</xsl:text>
   </xsl:if>
   <xsl:call-template name="normalize">
-    <xsl:with-param name="str" value="."/>
+    <xsl:with-param name="str" select="."/>
   </xsl:call-template>
   <xsl:if test="@tip='kom' or @tip='mez'">
     <xsl:text>…</xsl:text>
@@ -283,7 +283,7 @@ aperi kiel ref@cel, t.e. referencitaj de iu ajn artikolo
 <xsl:template name="normalize">
   <xsl:param name="str"/>
   <!-- hebreaj tradukoj enhavas citilojn kaj falantajn oblikvojn -->
-  <xsl:value-of select="normalize-space(translate(.,'&quot;\','&#x7f;¦'))"/>
+  <xsl:value-of select="normalize-space(translate($str,'&quot;\','&#x7f;¦'))"/>
 </xsl:template>
 
 </xsl:stylesheet>
