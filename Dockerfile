@@ -34,9 +34,9 @@ RUN bin/mp2png_svg.sh
 
 FROM ubuntu as builder
 
-# por stabila versio de nodejs, uzu anstatataŭe: setup_14.x
+# vd: https://github.com/nodesource/distributions
 RUN apt-get update && apt-get install -y curl xsltproc \
- && curl -sL https://deb.nodesource.com/setup_15.x | bash - \
+ && curl -sL https://deb.nodesource.com/setup_16.x | bash -E - \
  && apt-get install -y nodejs
 
 WORKDIR /usr/app
