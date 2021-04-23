@@ -94,6 +94,11 @@ function group_by(key, array) {
   return grouped;
 }
 
+// transformu markon al href por artikolo
+function art_href(mrk) {
+  return art_prefix + mrk.split('.')[0] + '.html#' + mrk;
+}
+
 // aldonu ../art en relativaj URL-oj
 function fix_art_href(root_el) {
   for (var a of root_el.getElementsByTagName("a")) {

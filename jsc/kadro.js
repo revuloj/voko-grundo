@@ -918,11 +918,8 @@ function serchu(event) {
 
 function serchu_q(esprimo) {
 
-    //console.debug("Ni serĉu:"+esprimo);
-    HTTPRequestFull('POST', sercho_url, 
-        {"Accept-Language": preferoj.languages().join(',')},
-        {sercxata: esprimo},
-        function(data) {
+    const srch = new Sercho();
+    srch.serchu(esprimo, function() {
 
             // la rezulto estas listo de objektoj po lingvo kiu enhavas po unu trov-liston:
             // [
@@ -954,23 +951,14 @@ function serchu_q(esprimo) {
             function findings(lng) {
                 var div = make_elements([
                     ["div",{},
-                        [["h1",{},lng.titolo || "["+lng.lng1+"]"]]
+                        [["h1",{},lng]]
                     ]
                 ])[0];
                 var dl = make_element("dl");
 
-                // ĉe lng1=eo pro variaĵoj povas okazi, ke la ordo ne estas
-                // perfekta, do ni reordigu
-                var trvj = [];
-                if (lng.lng == "eo") {
-                    trvj = lng.trovoj.sort(function(a,b) {
-                        // ĉu localeCompare por eo funkcias ĉie, kio pri iOS, Windows...?
-                        return a.eo.vrt.localeCompare(b.eo.vrt,'eo');
-                    });
-                } else {
-                    trvj = lng.trovoj; // lasu la ordon por aliaj lingvoj
-                }
-
+                // ĉe lng=eo ni ordigu                
+                const trvj = srch.trovoj(lng);
+                console.log(trvj);
                 // nun ankoraŭ ni kungrupigas erojn kun sama "vrt1"
                 //trvj = trvj.reduce((r, a) => {
                 //    console.debug("a", a);
@@ -990,70 +978,75 @@ function serchu_q(esprimo) {
                         }                        
                         atr = {class: "kasxita"};
                     }
+
                     // eo -> pref_lng
-                    const _ll_ = lng.lng;
-                    var dt = make_elements([
-                        // tradukojn oni momente ne povas ne povas rekte alsalti,
-                        // do ni provizore uzas t.eo.mrk anst. t[l].mrk
-                        ["dt",atr,
-                            [["a",{target: "precipa", href: art_path+t.art+".html#"+t.eo.mrk},t[_ll_].vrt]]
-                        ]])[0];
 
-                    // dum redakto ni aldonas transprenan butonon por kreado de referencoj
-                    if (t_red.stato == "redaktante") {
-                        const ref_btn = make_element("button",{
-                            class: "icon_btn r_vid", 
-                            value: t.eo.mrk,
-                            title:"transprenu kiel referenco"
-                        });
-                        dt.append(ref_btn);
-                    }
+                    // la liston de trovoj/tradukoj por la sama kapvorto
+                    // [mrk,kap,lng,ind,trd] - ni grupigu nun laŭ mrk - ĉar povas enesti homnimoj!
+                    const tg = group_by(0,dict[t]); 
+                  
+                    // ideale ni havas nur unu grupon, sed ĉe homonimoj plurajn,
+                    // por ĉiu ni montras eron dt/dd en la navigilo
+                    for (mrk in tg) {
+                        const href = art_path + mrk.split('.')[0] + '.html#' + mrk;
+                        const dt = make_elements([
+                            // tradukojn oni momente ne povas ne povas rekte alsalti,
+                            // do ni provizore uzas t.eo.mrk anst. t[l].mrk
+                            ["dt",atr,
+                                [["a",{target: "precipa", href: href}, t]]
+                            ]])[0];
 
-                    // trovitaj tradukoj de tiu e-a vorto
-                    var dd = make_element("dd",atr);
-                    for (let l in t) {
-                        // ni trairu ĉiujn lingvojn, kiuj ne estas 'eo'....
-                        if (l != _ll_ && l != 'art') {
-                            // tradukojn oni momente ne povas rekte alsalti,
-                            // do ni provizore uzas t.eo.mrk anstataŭ t[l].mrk
+                        // dum redakto ni aldonas transprenan butonon por kreado de referencoj
+                        if (t_red.stato == "redaktante") {
+                            const ref_btn = make_element("button",{
+                                class: "icon_btn r_vid", 
+                                value: mrk,
+                                title:"transprenu kiel referenco"
+                            });
+                            dt.append(ref_btn);
+                        }                            
+
+                        // trovitaj tradukoj de tiu e-a vorto
+                        const dd = make_element("dd",atr);
+
+                        // ni grupigu la tradukojn laŭ lingvo
+                        const trdj = group_by(2,tg[mrk]);
+
+                        for (let l in trdj) { // ni trairu ĉiujn lingvojn....
+                            // e = [_,_,lng,ind,trd]
+                            const str = trdj[l].map((e) => e[4]||e[3]).join(', ');
+
+
                             var a;
-                            if (l == 'eo') {
-                                a = make_elements([
-                                    ["a",{target: "precipa", href: art_path+t.art+".html#"+t.eo.mrk},
-                                        t[l].vrt
-                                    ]
-                                ]);    
-                            } else {
-                                a = make_elements([
-                                    ["a",{target: "precipa", href: art_path+t.art+".html#"+t.eo.mrk},
-                                        [["code",{},l+":"],t[l].vrt]
+                            //if (l == 'eo') {
+                            //    a = make_elements([
+                            //        ["a",{target: "precipa", href: art_path+t.art+".html#"+t.eo.mrk},
+                            //            t[l].vrt
+                            //        ]
+                            //    ]);    
+                            //} else {                                
+
+                            // tradukojn oni momente ne povas rekte alsalti,
+                            // do ni (provizore?) uzas href (el drv-mrk) 
+                            a = make_elements([
+                                    ["a",{target: "precipa", href: href},
+                                        [["code",{}, l + ":"], str]
                                     ],["br"]
                                 ]);    
-                            }
-                            dd.append(...a);
-                        }
-                    }
-                    // grupigu tradukojn de samaj trov-vortoj
-                    //while (trvj[n+1] && trvj[n+1].mrk == t.eo.mrk && trvj[n+1].eo.vrt == t.vrt) {
-                    //    var t1 = trvj[++n];
-                    //    // ignorante duoblajn salto-markojn...
-                    //    if (t.en.mrk != t1.en.mrk || t.en.vrt != t1.en.vrt) {
-                    //        var a = make_elements([
-                    //            ["br"],
-                    //            ["a",{target: "precipa", href: t1.art+".html#"+t1.en.mrk},t1.en.vrt]
-                    //        ]);
-                    //        dd.append(...a);    
-                    //    }
-                    //}
-                    dl.append(dt,dd);
+                            //}
+                            dd.append(...a);                            
+                        } // for l ...
+                        dl.append(dt,dd);
+                    } // for mrk
+
                 }
                 div.append(dl);
 
                 // atentigo pri limo
-                if (lng.max == lng.trovoj.length) {
-                    const noto = make_element("p",{class: "kasxita"},"noto: por trovi ankoraŭ pli, bv. precizigu la serĉon!");
-                    div.append(noto);
-                }
+                //if (lng.max == lng.trovoj.length) {
+                //    const noto = make_element("p",{class: "kasxita"},"noto: por trovi ankoraŭ pli, bv. precizigu la serĉon!");
+                //    div.append(noto);
+                //}
                 return div;
             }
 
@@ -1065,49 +1058,32 @@ function serchu_q(esprimo) {
                 ])[0];
             }
 
-            //console.debug("Ni trovis: "+data);
-
             index_spread();
-
-            var json = JSON.parse(data);
-
-            // debug Unicode issues...
-            //console.debug("data: "+data);
-            //console.debug("stng: "+JSON.stringify(json));
             const nav = document.getElementById("navigado");
-            var inx_enh = nav.querySelector(".enhavo");
-
-            //var s_form = serch_frm(esprimo);
-            //var submit = s_form[0].querySelector("input[type='submit']");
-            //submit.addEventListener("click",serchu);
-            var trovoj = make_element("div",{id: "x:trovoj"},"");
+            const inx_enh = nav.querySelector(".enhavo");
+            const trovoj = make_element("div",{id: "x:trovoj"},"");
 
             // se nenio troviĝis...
-            if (! json.length) {
+            if (! srch.malplena() ) {
                 trovoj.append(nofindings());
 
             // se troviĝis ekzakte unu kaj ni ne redaktas, iru tuj al tiu paĝo
-            } else if (
-              json.length == 1 && json[0].trovoj.length == 1 && 
-              t_red.stato != "redaktante") {
-
+            } else if ( srch.sola() && t_red.stato != "redaktante" ) {
                 var t = json[0].trovoj[0];
-                load_page("main","/revo/art/"+t.art+".html#"+t.mrk1);
+                load_page("main",srch.unua().href);
             }
 
-            // ordigu laŭ drv-mrk (1a kampo)...
-            const eo = group_by(0,json.eo);
-            console.log(eo); 
+            trovoj.append(findings('eo'));
 
             // ordigu laŭ lingvo (4a kampo)
-            const trd = group_by(3,json.trd);
-            console.log(trd); return;
-
-            // montru la trovojn de la serĉo
-            for (var lng of json) {
-                //console.debug("TRD:"+lng.lng1+"-"+lng.lng2);
-                trovoj.append(findings(lng));
-            }
+            //const trd = group_by(3,json.trd);
+            //console.log(trd); return;
+//
+            //// montru la trovojn de la serĉo
+            //for (var lng of json) {
+            //    //console.debug("TRD:"+lng.lng1+"-"+lng.lng2);
+            //    trovoj.append(findings(lng));
+            //}
 
             // aldonu la reagon por ref-enmetaj butonoj
             if (t_red.stato == "redaktante") {
