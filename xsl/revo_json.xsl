@@ -237,7 +237,7 @@ aperi kiel ref@cel, t.e. referencitaj de iu ajn artikolo
       </xsl:otherwise>
     </xsl:choose>
     <!-- ni aldonas trd nur se ĝi enhavas klr aŭ mll kaj do distingiĝas de la kapvorto -->
-    <xsl:if test="klr|mll">
+    <xsl:if test="klr|mll|ind">
       <xsl:text>","</xsl:text>
       <!-- la traduko inkl. klr..., sed sen ofc -->
       <xsl:choose>
