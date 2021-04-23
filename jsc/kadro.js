@@ -979,66 +979,40 @@ function serchu_q(esprimo) {
                         atr = {class: "kasxita"};
                     }
 
-                    // eo -> pref_lng
+                    const dt = make_elements([
+                        // tradukojn oni momente ne povas ne povas rekte alsalti,
+                        // do ni provizore uzas t.eo.mrk anst. t[l].mrk
+                        ["dt",atr,
+                            [["a",{target: "precipa", href: t.h}, t.v]]
+                        ]])[0];
 
-                    // la liston de trovoj/tradukoj por la sama kapvorto
-                    // [mrk,kap,lng,ind,trd] - ni grupigu nun laŭ mrk - ĉar povas enesti homnimoj!
-                    const tg = group_by(0,dict[t]); 
-                  
-                    // ideale ni havas nur unu grupon, sed ĉe homonimoj plurajn,
-                    // por ĉiu ni montras eron dt/dd en la navigilo
-                    for (mrk in tg) {
-                        const href = art_path + mrk.split('.')[0] + '.html#' + mrk;
-                        const dt = make_elements([
-                            // tradukojn oni momente ne povas ne povas rekte alsalti,
-                            // do ni provizore uzas t.eo.mrk anst. t[l].mrk
-                            ["dt",atr,
-                                [["a",{target: "precipa", href: href}, t]]
-                            ]])[0];
+                    // dum redakto ni aldonas transprenan butonon por kreado de referencoj
+                    if (t_red.stato == "redaktante") {
+                        const ref_btn = make_element("button",{
+                            class: "icon_btn r_vid", 
+                            value: mrk,
+                            title:"transprenu kiel referenco"
+                        });
+                        dt.append(ref_btn);
+                    }                            
 
-                        // dum redakto ni aldonas transprenan butonon por kreado de referencoj
-                        if (t_red.stato == "redaktante") {
-                            const ref_btn = make_element("button",{
-                                class: "icon_btn r_vid", 
-                                value: mrk,
-                                title:"transprenu kiel referenco"
-                            });
-                            dt.append(ref_btn);
-                        }                            
-
-                        // trovitaj tradukoj de tiu e-a vorto
-                        const dd = make_element("dd",atr);
-
-                        // ni grupigu la tradukojn laŭ lingvo
-                        const trdj = group_by(2,tg[mrk]);
-
-                        for (let l in trdj) { // ni trairu ĉiujn lingvojn....
-                            // e = [_,_,lng,ind,trd]
-                            const str = trdj[l].map((e) => e[4]||e[3]).join(', ');
-
-
-                            var a;
-                            //if (l == 'eo') {
-                            //    a = make_elements([
-                            //        ["a",{target: "precipa", href: art_path+t.art+".html#"+t.eo.mrk},
-                            //            t[l].vrt
-                            //        ]
-                            //    ]);    
-                            //} else {                                
-
-                            // tradukojn oni momente ne povas rekte alsalti,
-                            // do ni (provizore?) uzas href (el drv-mrk) 
-                            a = make_elements([
-                                    ["a",{target: "precipa", href: href},
-                                        [["code",{}, l + ":"], str]
-                                    ],["br"]
-                                ]);    
-                            //}
-                            dd.append(...a);                            
-                        } // for l ...
-                        dl.append(dt,dd);
-                    } // for mrk
-
+                    // trovitaj tradukoj de tiu e-a vorto
+                    const dd = make_element("dd",atr);
+                    for (let l of t.t) { // ni trairu ĉiujn lingvojn....
+                        // tradukojn oni momente ne povas rekte alsalti,
+                        // do ni (provizore?) uzas href (el drv-mrk) 
+                        // PLIBONIGU: do ni ne bezonas liston de unulingvaj tradukoj,
+                        // sed povos kunigi ĉion en unu objekto!
+                        const [lng,trd] = Object.entries(l)[0];
+                        const a = make_elements([
+                                ["a",{target: "precipa", href: t.h},
+                                    [["code",{}, lng + ":"], trd]
+                                ],["br"]
+                            ]);    
+                        //}
+                        dd.append(...a);                            
+                    } // for l ...
+                    dl.append(dt,dd);
                 }
                 div.append(dl);
 

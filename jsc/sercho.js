@@ -44,12 +44,12 @@ Sercho.prototype.trovoj = function(lng) {
         // ni jam grupigis laŭ kapvortoj, sed
         // la liston de trovoj/tradukoj por la sama kapvorto: [mrk,kap,lng,ind,trd] 
         // ...ni ankoraŭ grupigu laŭ mrk - ĉar povas enesti homnimoj!
-        return Object.keys(this.eo).map(
-            (kap) => {
-                const grouped = group_by(0,this.eo[kap]);
-                Object.keys(grouped).map(mrk=>trovo_eo(kap,mrk,grouped[mrk]))
-            }                
-        ).sort(function(a,b) {
+        var trvj = [];
+        for (let [kap,eroj] of Object.entries(this.eo)) {
+            const grouped = group_by(0,eroj);
+            trvj.push(...Object.keys(grouped).map(mrk=>trovo_eo(kap,mrk,grouped[mrk])));
+        };
+        return trvj.sort(function(a,b) {
             // ĉu localeCompare por eo funkcias ĉie, kio pri iOS, Windows...?
             return a.v.localeCompare(b.v,'eo');
         });
