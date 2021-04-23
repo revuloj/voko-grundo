@@ -47,5 +47,6 @@ RUN npm install -g npm@next && npm ci && npm run build
 # staĝo 3 kopiu nur la kreitajn rezultojn al nova malplena ujo
 FROM scratch
 COPY --from=builder /usr/app/build/ build/
+COPY xsl/ build/xsl/
 
 
