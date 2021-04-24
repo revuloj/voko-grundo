@@ -360,18 +360,6 @@ var redaktilo = function() {
     }
   }
 
-  function createTElement(name,text) {
-    var el = document.createElement(name);
-    var tx= document.createTextNode(text);
-    el.appendChild(tx); return el;
-  }
-
-  function addAttribute(node,name,value) {
-    var att = document.createAttribute(name);
-    att.value = value;
-    node.setAttributeNode(att);    
-  }
-
   function listigu_erarojn(err) {
     var el = document.getElementById("r:eraroj");
     var elch = el.children;
@@ -383,7 +371,7 @@ var redaktilo = function() {
       ul = elch[0];
     }
     for (var e of err) {
-      var li = createTElement("li",e);               
+      var li = make_element("li",{},e); //createTElement("li",e);               
       ul.appendChild(li);       
     }
   }

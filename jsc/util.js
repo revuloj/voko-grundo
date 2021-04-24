@@ -250,6 +250,19 @@ function make_elements(jlist) {
     } // for
     return dlist;
 }
+/*
+function createTElement(name,text) {
+  var el = document.createElement(name);
+  var tx= document.createTextNode(text);
+  el.appendChild(tx); return el;
+}
+
+function addAttribute(node,name,value) {
+  var att = document.createAttribute(name);
+  att.value = value;
+  node.setAttributeNode(att);    
+}
+*/
 
 function make_button(label,handler,hint='') {
     var btn = document.createElement("BUTTON");
@@ -414,8 +427,9 @@ function Codelist(xmlTag,url) {
     var sel = document.getElementById(selection);
   
     for (var item in this.codes) {
-      var opt = createTElement("option",item + ' - ' + this.codes[item]);
-      addAttribute(opt,"value",item);
+      //var opt = createTElement("option",item + ' - ' + this.codes[item]);
+      //addAttribute(opt,"value",item);
+      const opt = make_element("option",{value: item},item + ' - ' + this.codes[item]);
       sel.appendChild(opt);
     }
   };

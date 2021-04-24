@@ -114,7 +114,11 @@ Sercho.prototype.malplena = function() {
 }
 
 Sercho.prototype.sola = function() {
-    return ( Object.keys(this.eo).length + Object.keys(this.trd).length == 1 );
+    return ( Object.keys(this.eo).length === 1 
+             && Object.keys(this.trd).length === 0 
+          || Object.keys(this.eo).length === 0 
+             && Object.keys(this.trd).length === 1 
+             && this.trd[Object.keys(this.trd)[0]].lenght === 1 );
 }
 
 Sercho.prototype.unua = function() {
@@ -122,7 +126,7 @@ Sercho.prototype.unua = function() {
     if ( this.eo ) {
         u = Object.keys(this.eo)[0]
     } else if ( this.trd ) {
-        u = Object.keys(this.trd)[0]        
+        u = this.trd[Object.keys(this.trd)[0]][0]        
     }
     return { href: art_href(u[MRK]) }        
 }

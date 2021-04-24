@@ -119,7 +119,7 @@ var preferoj = function() {
     }
 
 
-    function dialog() {
+    function dialog(sePreta) {
         var pref = document.getElementById("pref_dlg");
         var inx = [['a','b'],['c','g'],['h','j'],['k','l'],['m','o'],['p','s'],['t','z']];
 
@@ -135,7 +135,8 @@ var preferoj = function() {
                 document.getElementById("pref_dlg").classList.add("kasxita");
                 store();
                 // adaptu la rigardon, t.e. trd-listojn
-                preparu_maletendu_sekciojn();            
+                //preparu_maletendu_sekciojn();
+                sePreta();
             },"fermu preferojn");
             close.setAttribute("id","pref_dlg_close");
 

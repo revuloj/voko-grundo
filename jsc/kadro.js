@@ -1058,7 +1058,6 @@ function serchu_q(esprimo) {
 
             // se troviĝis ekzakte unu kaj ni ne redaktas, iru tuj al tiu paĝo
             } else if ( srch.sola() && t_red.stato != "redaktante" ) {
-                var t = json[0].trovoj[0];
                 load_page("main",srch.unua().href);
             }
 
