@@ -279,17 +279,31 @@ aperi kiel ref@cel, t.e. referencitaj de iu ajn artikolo
     <xsl:text>…</xsl:text>
   </xsl:if>
   <xsl:call-template name="normalize">
-    <xsl:with-param name="str" select="."/>
+    <!--xsl:with-param name="str" select="."/-->
+    <xsl:with-param name="str">
+      <xsl:apply-templates/>
+    </xsl:with-param>
   </xsl:call-template>
   <xsl:if test="@tip='kom' or @tip='mez'">
     <xsl:text>…</xsl:text>
   </xsl:if>
 </xsl:template>
 
+<xsl:template match="mll/ind">
+  <xsl:apply-templates/>
+</xsl:template>
+
 <xsl:template match="ekz/ind|bld/ind">
   <xsl:call-template name="normalize">
     <xsl:with-param name="str">
-      <xsl:apply-templates select="tld|mll|text()"/>
+      <xsl:choose>
+        <xsl:when test="mll">
+          <xsl:apply-templates select="mll"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:apply-templates select="tld|text()"/>
+        </xsl:otherwise>
+      </xsl:choose>
     </xsl:with-param>
   </xsl:call-template>
 </xsl:template>
