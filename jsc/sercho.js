@@ -1,5 +1,14 @@
 // sendu vorton al la serĉ-CGI kaj redonu la rezultojn grupigite kaj porciumite
 
+// La rezultoj riceviĝas en la formo [mrk,kap,lng,ind,trd] kaj estas
+// rearanĝitaj konvene por la prezentado
+const MRK=0;
+const KAP=1;
+const LNG=2;
+const IND=3;
+const TRD=4;
+
+
 function Sercho(kion) {
     //komence malplena
     this.eo = [];
@@ -14,11 +23,11 @@ Sercho.prototype.serchu = function(esprimo,onSuccess) {
         function(data) {
             var json = JSON.parse(data);
             self.eo = json.eo ? 
-                group_by(1,json.eo)
-                : undefined; // ordigu laŭ kapvorto (1 - 2a kampo)
+                group_by(KAP,json.eo)
+                : undefined; // ordigu laŭ kapvorto
             self.trd = json.trd ? 
-                group_by(3,json.trd) 
-                : undefined; // ordigu laŭ lng (3 - 4a kampo)
+                group_by(LNG,json.trd) 
+                : undefined; // ordigu laŭ lingvo
             onSuccess.call(self);
         }
     );    
@@ -36,12 +45,12 @@ Sercho.prototype.trovoj = function(lng) {
         // grupigu la tradukojn laŭ lingvo kaj kunigi ĉiuj de
         // sama lingvo per komoj...
         const t_l = Object.entries(
-            group_by(2,trdj)) // grupigu laŭ lingvo (tria kampo)
+            group_by(LNG,trdj)) // grupigu tradukojn laŭ lingvo 
             .reduce( (obj,[lng,list]) => {
                 obj[lng] = 
                     // ĉenigu ĉiujn tradukojn de unu lingvo, se estas trd (lasta kampo)
                     // uzu tiun, ĉar ĝi estas pli longa ol ind, enhavante klarigojn ks.
-                    list.map((e) => e[4]||e[3]) 
+                    list.map((e) => e[TRD]||e[IND]) 
                     .join(', ');
                 return obj;
             }, {} );
@@ -57,8 +66,8 @@ Sercho.prototype.trovoj = function(lng) {
         // list transformu al paroj {k: <kapvorto>, h: href}
         const e_l = eroj.map((ero) =>
             { return {
-                k: ero[1], 
-                h: art_href(ero[0])
+                k: ero[KAP], 
+                h: art_href(ero[MRK])
             } }
         );
         return {
@@ -71,10 +80,10 @@ Sercho.prototype.trovoj = function(lng) {
     var trvj = [];
     if (lng == 'eo') {
         // ni jam grupigis laŭ kapvortoj, sed
-        // la liston de trovoj/tradukoj por la sama kapvorto: [mrk,kap,lng,ind,trd] 
-        // ...ni ankoraŭ grupigu laŭ mrk - ĉar povas enesti homnimoj!
+        // la liston de trovoj/tradukoj por la sama kapvorto
+        // ...ni ankoraŭ grupigu laŭ mrk - ĉar povas enesti homonimoj!
         for (let [kap,eroj] of Object.entries(this.eo)) {
-            const grouped = group_by(0,eroj);
+            const grouped = group_by(MRK,eroj);
             trvj.push(...Object.keys(grouped)
                 .map( mrk => trovo_eo(kap,mrk,grouped[mrk]) ));
         };
@@ -85,7 +94,7 @@ Sercho.prototype.trovoj = function(lng) {
         // la liston de trovoj/tradukoj por 
         // la elektita lingvo: [mrk,kap,num,lng,ind,trd] 
         // ...ni ankoraŭ grupigu laŭ ind
-        const grouped = group_by(4,this.trd[lng]); // ni grupigas laŭ 'ind' (5a kampo)
+        const grouped = group_by(IND,this.trd[lng]); // ni grupigas laŭ 'ind'
         return Object.keys(grouped)
             .sort(new Intl.Collator(lng).compare)
             .map( ind => trovo_trd(ind,grouped[ind]) );
@@ -112,5 +121,5 @@ Sercho.prototype.unua = function() {
     } else if ( this.trd ) {
         u = Object.keys(this.trd)[0]        
     }
-    return { href: art_href(u[0]) }        
+    return { href: art_href(u[MRK]) }        
 }
