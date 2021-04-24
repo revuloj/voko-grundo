@@ -2,11 +2,12 @@
 
 // La rezultoj riceviĝas en la formo [mrk,kap,lng,ind,trd] kaj estas
 // rearanĝitaj konvene por la prezentado
-const MRK=0;
-const KAP=1;
-const LNG=2;
-const IND=3;
-const TRD=4;
+const MRK=0; // drv@mrk
+const KAP=1; // kapvorto, t.e. drv/kap, ankaŭ variaĵoj
+const LNG=2; // lingvokodo
+const IND=3; // indeksita parto de trd: ind aŭ mll aŭ text()
+const TRD=4; // kompleta kun klr ktp
+const EKZ=5; // ekz/ind aŭ bld/ind
 
 
 function Sercho(kion) {
@@ -66,7 +67,7 @@ Sercho.prototype.trovoj = function(lng) {
         // list transformu al paroj {k: <kapvorto>, h: href}
         const e_l = eroj.map((ero) =>
             { return {
-                k: ero[KAP], 
+                k: ero[EKZ] || ero[KAP], 
                 h: art_href(ero[MRK])
             } }
         );

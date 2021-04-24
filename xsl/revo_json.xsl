@@ -287,17 +287,11 @@ aperi kiel ref@cel, t.e. referencitaj de iu ajn artikolo
 </xsl:template>
 
 <xsl:template match="ekz/ind|bld/ind">
-  <xsl:apply-templates select="tld|mll|text()"/>
-<!-- <tld> ne funkcias tiel..., se ene de <ind> ie
-      okazus " aŭ \ ni devus  meti la anstataŭigon en proprajn <template>-difinojn, ĉu!?
   <xsl:call-template name="normalize">
     <xsl:with-param name="str">
-      <xsl:for-each select="tld|mll|text()">
-        <xsl:value-of select="."/>
-      </xsl:for-each>
+      <xsl:apply-templates select="tld|mll|text()"/>
     </xsl:with-param>
   </xsl:call-template>
-  -->
 </xsl:template>
 
 <xsl:template name="normalize">

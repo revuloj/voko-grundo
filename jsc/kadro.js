@@ -979,12 +979,18 @@ function serchu_q(esprimo) {
                         atr = {class: "kasxita"};
                     }
 
-                    const dt = make_elements([
+
+                    const dt = make_element("dt",atr);
+
+                    if ( lng == 'eo' ) {
                         // tradukojn oni momente ne povas ne povas rekte alsalti,
                         // do ni provizore uzas t.eo.mrk anst. t[l].mrk
-                        ["dt",atr,
-                            [["a",{target: "precipa", href: t.h}, t.v]]
-                        ]])[0];
+                        const a = make_element("a",{target: "precipa", href: t.h}, t.v);
+                        dt.append(a);
+
+                    } else {
+                        dt.append(t.v);
+                    }
 
                     // dum redakto ni aldonas transprenan butonon por kreado de referencoj
                     if ( lng == 'eo' && t_red.stato == "redaktante") {
