@@ -13,8 +13,12 @@ Sercho.prototype.serchu = function(esprimo,onSuccess) {
         {sercxata: esprimo},
         function(data) {
             var json = JSON.parse(data);
-            self.eo = json.eo ? group_by(1,json.eo) : undefined; // ordigu laŭ kapvorto (1 - 2a kampo)
-            self.trd = json.trd ? group_by(3,json.trd) : undefined; // ordigu laŭ ind (3 - 4a kampo)
+            self.eo = json.eo ? 
+                group_by(1,json.eo)
+                : undefined; // ordigu laŭ kapvorto (1 - 2a kampo)
+            self.trd = json.trd ? 
+                group_by(3,json.trd) 
+                : undefined; // ordigu laŭ lng (3 - 4a kampo)
             onSuccess.call(self);
         }
     );    
@@ -26,6 +30,8 @@ Sercho.prototype.serchu = function(esprimo,onSuccess) {
 // de la formo {de: "trdj", en: "trdj"...}
 // por aliaj lingvoj estas nur signaro kun esperanta traduko, do ne objekto
 Sercho.prototype.trovoj = function(lng) {
+
+    // strukturas unu e-an trovon kun unika kap-mrk
     function trovo_eo(kap,mrk,trdj) {
         // grupigu la tradukojn laŭ lingvo kaj kunigi ĉiuj de
         // sama lingvo per komoj...
@@ -45,20 +51,50 @@ Sercho.prototype.trovoj = function(lng) {
             t: t_l
         }
     }
+
+    // strukturas unu ne-e-an trovon kun unika ind-mrk
+    function trovo_trd(ind,eroj) {
+        // list transformu al paroj {k: <kapvorto>, h: href}
+        const e_l = eroj.map((ero) =>
+            { return {
+                k: ero[1], 
+                h: art_href(ero[0])
+            } }
+        );
+        return {
+            v: ind,
+            t: e_l
+        }
+    }
+
+
+    var trvj = [];
     if (lng == 'eo') {
         // ni jam grupigis laŭ kapvortoj, sed
         // la liston de trovoj/tradukoj por la sama kapvorto: [mrk,kap,lng,ind,trd] 
         // ...ni ankoraŭ grupigu laŭ mrk - ĉar povas enesti homnimoj!
-        var trvj = [];
         for (let [kap,eroj] of Object.entries(this.eo)) {
             const grouped = group_by(0,eroj);
-            trvj.push(...Object.keys(grouped).map(mrk=>trovo_eo(kap,mrk,grouped[mrk])));
+            trvj.push(...Object.keys(grouped)
+                .map( mrk => trovo_eo(kap,mrk,grouped[mrk]) ));
         };
-        return trvj.sort(function(a,b) {
-            // ĉu localeCompare por eo funkcias ĉie, kio pri iOS, Windows...?
-            return a.v.localeCompare(b.v,'eo');
-        });
+        return trvj.sort((a,b) =>
+            a.v.localeCompare(b.v,'eo'));
+
+    } else {
+        // la liston de trovoj/tradukoj por 
+        // la elektita lingvo: [mrk,kap,num,lng,ind,trd] 
+        // ...ni ankoraŭ grupigu laŭ ind
+        const grouped = group_by(4,this.trd[lng]); // ni grupigas laŭ 'ind' (5a kampo)
+        return Object.keys(grouped)
+            .sort(new Intl.Collator(lng).compare)
+            .map( ind => trovo_trd(ind,grouped[ind]) );
     }
+}
+
+// en kiuj lingvoj (krom eo) ni trovis ion?
+Sercho.prototype.lingvoj = function() {
+    return ( Object.keys(this.trd) );
 }
 
 Sercho.prototype.malplena = function() {

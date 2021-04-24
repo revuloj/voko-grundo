@@ -958,14 +958,7 @@ function serchu_q(esprimo) {
 
                 // ĉe lng=eo ni ordigu                
                 const trvj = srch.trovoj(lng);
-                console.log(trvj);
-                // nun ankoraŭ ni kungrupigas erojn kun sama "vrt1"
-                //trvj = trvj.reduce((r, a) => {
-                //    console.debug("a", a);
-                //    console.debug('r', r);
-                //    r[a.vrt1] = [...r[a.vrt1] || [], a];
-                //    return r;
-                //}, {});
+                // console.log(trvj);
 
                 var atr = {};
                 for (var n=0; n<trvj.length; n++) {
@@ -987,7 +980,7 @@ function serchu_q(esprimo) {
                         ]])[0];
 
                     // dum redakto ni aldonas transprenan butonon por kreado de referencoj
-                    if (t_red.stato == "redaktante") {
+                    if ( lng == 'eo' && t_red.stato == "redaktante") {
                         const ref_btn = make_element("button",{
                             class: "icon_btn r_vid", 
                             value: mrk,
@@ -996,21 +989,31 @@ function serchu_q(esprimo) {
                         dt.append(ref_btn);
                     }                            
 
-                    // trovitaj tradukoj de tiu e-a vorto
                     const dd = make_element("dd",atr);
-                    for ( let [lng,trd] of Object.entries(t.t) ) { // ni trairu ĉiujn lingvojn....
-                        // tradukojn oni momente ne povas rekte alsalti,
-                        // do ni (provizore?) uzas href (el drv-mrk) 
-                        // PLIBONIGU: do ni ne bezonas liston de unulingvaj tradukoj,
-                        // sed povos kunigi ĉion en unu objekto!
-                        const a = make_elements([
-                                ["a",{target: "precipa", href: t.h},
-                                    [["code",{}, lng + ":"], trd]
+   
+                    if ( lng == 'eo' ) {
+                        // trovitaj tradukoj de tiu e-a vorto
+                        for ( let [lng,trd] of Object.entries(t.t) ) { // ni trairu ĉiujn lingvojn....
+                            // tradukojn oni momente ne povas rekte alsalti,
+                            // do ni (provizore?) uzas href (el drv-mrk) 
+                            const a = make_elements([
+                                    ["a",{target: "precipa", href: t.h},
+                                        [["code",{}, lng + ":"], trd]
+                                    ],["br"]
+                                ]);    
+                            dd.append(...a);
+                        } // for lng,trd ...
+                    } else {
+                        // trovitaj esperantaj tradukoj de tiu nacilingva vorto
+                        for ( e of t.t ) {
+                            const a = make_elements([
+                                ["a",{target: "precipa", href: e.h},
+                                    e.k
                                 ],["br"]
                             ]);    
-                        //}
-                        dd.append(...a);                            
-                    } // for l ...
+                            dd.append(...a);
+                        } // for e
+                    }
                     dl.append(dt,dd);
                 }
                 div.append(dl);
@@ -1047,6 +1050,9 @@ function serchu_q(esprimo) {
             }
 
             trovoj.append(findings('eo'));
+            for (let lng of srch.lingvoj()) {
+                trovoj.append(findings(lng));
+            }
 
             // ordigu laŭ lingvo (4a kampo)
             //const trd = group_by(3,json.trd);
@@ -1059,7 +1065,7 @@ function serchu_q(esprimo) {
             //}
 
             // aldonu la reagon por ref-enmetaj butonoj
-            if (t_red.stato == "redaktante") {
+            if ( t_red.stato == "redaktante") {
                 for (btn of trovoj.querySelectorAll("button.r_vid")) {
                     btn.addEventListener("click",(event)=>{                         
                         // kiun ref-mrk ni uzu - depende de kiu butono premita
