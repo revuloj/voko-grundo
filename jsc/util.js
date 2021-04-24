@@ -402,6 +402,58 @@ function dom_console() {
 }
 */
 
+// listoj lingvoj, fakoj, stiloj de Revo
+// por montri elektilojn en la redaktilo kaj traduki lingvojn en la
+// serĉilo
+function Codelist(xmlTag,url) {
+  this.url = url;
+  this.xmlTag = xmlTag;
+  this.codes = {};
+
+  this.fill = function(selection) {
+    var sel = document.getElementById(selection);
+  
+    for (var item in this.codes) {
+      var opt = createTElement("option",item + ' - ' + this.codes[item]);
+      addAttribute(opt,"value",item);
+      sel.appendChild(opt);
+    }
+  };
+
+  this.load = function(selection) {
+    var self = this;
+
+    // unuafoje ŝargu la tutan liston el XML-dosiero
+    if (! self.codes.keys) {
+      var codes = {};
+
+      HTTPRequest('GET', this.url, {},
+        function() {
+            // Success!
+            var parser = new DOMParser();
+            var doc = parser.parseFromString(this.response,"text/xml");
+      
+            for (var e of doc.getElementsByTagName(self.xmlTag)) {
+                var c = e.attributes.kodo;
+                //console.log(c);
+                codes[c.value] = e.textContent;
+            } 
+            self.codes = codes;
+
+            if (selection) {
+              self.fill.call(self,selection);
+            } 
+        });
+
+    // se ni jam ŝargis iam antaŭw, ni eble nur devas plenigi la videbalan elektilon
+    } else {
+      if (selection) {
+        self.fill.call(self,selection);
+      } 
+    }
+  };  
+}
+
 function Textarea(ta_id) {
     this.txtarea = document.getElementById(ta_id);
 }

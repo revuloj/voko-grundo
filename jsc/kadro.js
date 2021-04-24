@@ -18,10 +18,17 @@ const http_404_url = "/revo/dlg/404.html";
 const sercho_videblaj = 7;
 
 // statoj kaj transiroj
-var t_nav  = new Transiroj("nav","start",["ĉefindekso","subindekso","serĉo","redaktilo"]);
-var t_main = new Transiroj("main","start",["titolo","artikolo","red_xml","red_rigardo"]);
-var t_red  = new Transiroj("red","ne_redaktante",["ne_redaktante","redaktante","sendita"]);
+const t_nav  = new Transiroj("nav","start",["ĉefindekso","subindekso","serĉo","redaktilo"]);
+const t_main = new Transiroj("main","start",["titolo","artikolo","red_xml","red_rigardo"]);
+const t_red  = new Transiroj("red","ne_redaktante",["ne_redaktante","redaktante","sendita"]);
 
+const revo_codes = {
+    lingvoj: new Codelist('lingvo', '/revo/cfg/lingvoj.xml'),
+    fakoj: new Codelist('fako','/revo/cfg/fakoj.xml'),
+    stiloj: new Codelist('stilo','/revo/cfg/stiloj.xml')
+};
+revo_codes.lingvoj.load();
+  
 
 // helpofunkcio, por instali klak-reagojn
 function onclick(id,reaction) {
@@ -951,7 +958,7 @@ function serchu_q(esprimo) {
             function findings(lng) {
                 var div = make_elements([
                     ["div",{},
-                        [["h1",{},lng]]
+                        [["h1",{}, revo_codes.lingvoj.codes[lng]||lng ]]
                     ]
                 ])[0];
                 var dl = make_element("dl");
@@ -1040,7 +1047,7 @@ function serchu_q(esprimo) {
             const trovoj = make_element("div",{id: "x:trovoj"},"");
 
             // se nenio troviĝis...
-            if (! srch.malplena() ) {
+            if ( srch.malplena() ) {
                 trovoj.append(nofindings());
 
             // se troviĝis ekzakte unu kaj ni ne redaktas, iru tuj al tiu paĝo
@@ -1049,36 +1056,29 @@ function serchu_q(esprimo) {
                 load_page("main",srch.unua().href);
             }
 
-            trovoj.append(findings('eo'));
-            for (let lng of srch.lingvoj()) {
-                trovoj.append(findings(lng));
+            if ( !srch.malplena() ) {
+                trovoj.append(findings('eo'));
+                for (let lng of srch.lingvoj()) {
+                    trovoj.append(findings(lng));
+                }    
+
+                // aldonu la reagon por ref-enmetaj butonoj
+                if ( t_red.stato == "redaktante") {
+                    for (btn of trovoj.querySelectorAll("button.r_vid")) {
+                        btn.addEventListener("click",(event)=>{                         
+                            // kiun ref-mrk ni uzu - depende de kiu butono premita
+                            const refmrk = event.target.value;
+                            // revenu de trovlisto al redakto-menuo
+                            load_page("nav",redaktmenu_url,true,
+                                () => {
+                                    document.getElementById("r:refmrk").value = refmrk;
+                                    redaktilo.fs_toggle("r:ref");
+                                });        
+                        });
+                    }           
+                }     
             }
-
-            // ordigu laŭ lingvo (4a kampo)
-            //const trd = group_by(3,json.trd);
-            //console.log(trd); return;
-//
-            //// montru la trovojn de la serĉo
-            //for (var lng of json) {
-            //    //console.debug("TRD:"+lng.lng1+"-"+lng.lng2);
-            //    trovoj.append(findings(lng));
-            //}
-
-            // aldonu la reagon por ref-enmetaj butonoj
-            if ( t_red.stato == "redaktante") {
-                for (btn of trovoj.querySelectorAll("button.r_vid")) {
-                    btn.addEventListener("click",(event)=>{                         
-                        // kiun ref-mrk ni uzu - depende de kiu butono premita
-                        const refmrk = event.target.value;
-                        // revenu de trovlisto al redakto-menuo
-                        load_page("nav",redaktmenu_url,true,
-                            () => {
-                                document.getElementById("r:refmrk").value = refmrk;
-                                redaktilo.fs_toggle("r:ref");
-                            });        
-                    });
-                }           
-            }        
+   
 
             // montru butonon por reveni al ĉefa indekso
             //index_home_btn(trovoj.children[0]);

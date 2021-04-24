@@ -62,7 +62,7 @@ Sercho.prototype.trovoj = function(lng) {
     }
 
     // strukturas unu ne-e-an trovon kun unika ind-mrk
-    function trovo_trd(ind,eroj) {
+    function trovo_trd(trd,eroj) {
         // list transformu al paroj {k: <kapvorto>, h: href}
         const e_l = eroj.map((ero) =>
             { return {
@@ -71,12 +71,12 @@ Sercho.prototype.trovoj = function(lng) {
             } }
         );
         return {
-            v: ind,
+            v: trd,
             t: e_l
         }
     }
 
-
+    // komenco de .trovoj()...
     var trvj = [];
     if (lng == 'eo') {
         // ni jam grupigis laŭ kapvortoj, sed
@@ -93,11 +93,13 @@ Sercho.prototype.trovoj = function(lng) {
     } else {
         // la liston de trovoj/tradukoj por 
         // la elektita lingvo: [mrk,kap,num,lng,ind,trd] 
-        // ...ni ankoraŭ grupigu laŭ ind
-        const grouped = group_by(IND,this.trd[lng]); // ni grupigas laŭ 'ind'
+        // ...ni grupigos laŭ trd, sed devos plenigi ĝin per ind, kie ĝi mankas
+        const trvj = this.trd[lng];
+        for (t of trvj) { if (! t[TRD]) t[TRD] = t[IND] };
+        const grouped = group_by(TRD,trvj); // ni grupigas laŭ 'ind'
         return Object.keys(grouped)
             .sort(new Intl.Collator(lng).compare)
-            .map( ind => trovo_trd(ind,grouped[ind]) );
+            .map( trd => trovo_trd(trd,grouped[trd]) );
     }
 }
 
@@ -107,7 +109,7 @@ Sercho.prototype.lingvoj = function() {
 }
 
 Sercho.prototype.malplena = function() {
-    return ( !this.eo && !this.trd );
+    return ( Object.keys(this.eo).length === 0 && Object.keys(this.trd).length === 0 );
 }
 
 Sercho.prototype.sola = function() {
