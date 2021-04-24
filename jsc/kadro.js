@@ -998,12 +998,11 @@ function serchu_q(esprimo) {
 
                     // trovitaj tradukoj de tiu e-a vorto
                     const dd = make_element("dd",atr);
-                    for (let l of t.t) { // ni trairu ĉiujn lingvojn....
+                    for ( let [lng,trd] of Object.entries(t.t) ) { // ni trairu ĉiujn lingvojn....
                         // tradukojn oni momente ne povas rekte alsalti,
                         // do ni (provizore?) uzas href (el drv-mrk) 
                         // PLIBONIGU: do ni ne bezonas liston de unulingvaj tradukoj,
                         // sed povos kunigi ĉion en unu objekto!
-                        const [lng,trd] = Object.entries(l)[0];
                         const a = make_elements([
                                 ["a",{target: "precipa", href: t.h},
                                     [["code",{}, lng + ":"], trd]

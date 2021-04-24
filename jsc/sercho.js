@@ -22,18 +22,23 @@ Sercho.prototype.serchu = function(esprimo,onSuccess) {
 
 
 // redoni la trovojn de unu lingvo kiel listo de objektoj
-// {v - vorto, h - href, t - <trdj>} - lng = eo <trdj> estas listo de {lng,str}
-// por aliaj lingvoj estas nur str (t.e. esperanta traduko)
+// {v - vorto, h - href, t - <trdj>} - lng = eo <trdj> estas objekto 
+// de la formo {de: "trdj", en: "trdj"...}
+// por aliaj lingvoj estas nur signaro kun esperanta traduko, do ne objekto
 Sercho.prototype.trovoj = function(lng) {
     function trovo_eo(kap,mrk,trdj) {
         // grupigu la tradukojn laŭ lingvo kaj kunigi ĉiuj de
         // sama lingvo per komoj...
-        const t_l = Object.entries(group_by(2,trdj)).map( 
-            ([lng,list]) => {
-                const ero = {}
-                ero[lng] = list.map((e) => e[4]||e[3]).join(', ');
-                return ero;
-            });
+        const t_l = Object.entries(
+            group_by(2,trdj)) // grupigu laŭ lingvo (tria kampo)
+            .reduce( (obj,[lng,list]) => {
+                obj[lng] = 
+                    // ĉenigu ĉiujn tradukojn de unu lingvo, se estas trd (lasta kampo)
+                    // uzu tiun, ĉar ĝi estas pli longa ol ind, enhavante klarigojn ks.
+                    list.map((e) => e[4]||e[3]) 
+                    .join(', ');
+                return obj;
+            }, {} );
         return {
             v: kap,
             h: art_href(mrk),
