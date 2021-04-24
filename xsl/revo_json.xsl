@@ -251,9 +251,9 @@ aperi kiel ref@cel, t.e. referencitaj de iu ajn artikolo
       </xsl:otherwise-->
     </xsl:choose>
     <!-- se temas pri traduko en ekzemplo aŭ bildo ni aldonu la ind-parton de la ekz-o -->
-    <xsl:if test="parent::bld|parent::ekz">
+    <xsl:if test="ancestor::bld|ancestor::ekz">
       <xsl:text>","</xsl:text>
-      <xsl:apply-templates select="../ind"/>
+      <xsl:apply-templates select="(ancestor::bld|ancestor::ekz)/ind"/>
     </xsl:if>
 
   <xsl:text>"]</xsl:text>
