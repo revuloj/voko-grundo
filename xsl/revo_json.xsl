@@ -18,7 +18,7 @@
 -->
 
 <xsl:output method="text" encoding="utf-8"/>
-<xsl:strip-space elements="kap"/>
+<xsl:strip-space elements="kap ind"/>
 
 <!-- la kadra strukturo de la artikolo - ties dosiernomo kiel ŝlosilo -->
 
@@ -237,17 +237,23 @@ aperi kiel ref@cel, t.e. referencitaj de iu ajn artikolo
       </xsl:otherwise>
     </xsl:choose>
     <!-- ni aldonas trd nur se ĝi enhavas klr aŭ mll kaj do distingiĝas de la kapvorto -->
-    <xsl:if test="klr|mll|ind">
+    <xsl:text>","</xsl:text>
+    <!-- la traduko inkl. klr..., sed sen ofc -->
+    <xsl:choose>
+      <xsl:when test="mll">
+        <xsl:apply-templates select="mll"/>
+      </xsl:when>
+      <xsl:when test="ind|klr">
+        <xsl:call-template name="trd-join"/>
+      </xsl:when>
+      <!--xsl:otherwise>
+        <xsl:text></xsl:text>
+      </xsl:otherwise-->
+    </xsl:choose>
+    <!-- se temas pri traduko en ekzemplo aŭ bildo ni aldonu la ind-parton de la ekz-o -->
+    <xsl:if test="parent::bld|parent::ekz">
       <xsl:text>","</xsl:text>
-      <!-- la traduko inkl. klr..., sed sen ofc -->
-      <xsl:choose>
-        <xsl:when test="mll">
-          <xsl:apply-templates select="mll"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:call-template name="trd-join"/>
-        </xsl:otherwise>
-      </xsl:choose>
+      <xsl:apply-templates select="../ind"/>
     </xsl:if>
 
   <xsl:text>"]</xsl:text>
@@ -278,6 +284,20 @@ aperi kiel ref@cel, t.e. referencitaj de iu ajn artikolo
   <xsl:if test="@tip='kom' or @tip='mez'">
     <xsl:text>…</xsl:text>
   </xsl:if>
+</xsl:template>
+
+<xsl:template match="ekz/ind|bld/ind">
+  <xsl:apply-templates select="tld|mll|text()"/>
+<!-- <tld> ne funkcias tiel..., se ene de <ind> ie
+      okazus " aŭ \ ni devus  meti la anstataŭigon en proprajn <template>-difinojn, ĉu!?
+  <xsl:call-template name="normalize">
+    <xsl:with-param name="str">
+      <xsl:for-each select="tld|mll|text()">
+        <xsl:value-of select="."/>
+      </xsl:for-each>
+    </xsl:with-param>
+  </xsl:call-template>
+  -->
 </xsl:template>
 
 <xsl:template name="normalize">
