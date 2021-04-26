@@ -43,10 +43,11 @@ Sercho.prototype.trovoj = function(lng) {
 
     // strukturas unu e-an trovon kun unika kap-mrk
     function trovo_eo(kap,mrk,trdj) {
-        // grupigu la tradukojn laŭ lingvo kaj kunigi ĉiuj de
+        // grupigu la tradukojn laŭ lingvo kaj kunigi ĉiujn de
         // sama lingvo per komoj...
         const t_l = Object.entries(
-            group_by(LNG,trdj)) // grupigu tradukojn laŭ lingvo 
+            group_by(LNG,trdj)) // grupigu tradukojn laŭ lingvo            
+            .filter( ([lng,list]) => { return lng != '<_sen_>' } )
             .reduce( (obj,[lng,list]) => {
                 obj[lng] = 
                     // ĉenigu ĉiujn tradukojn de unu lingvo, se estas trd (lasta kampo)
