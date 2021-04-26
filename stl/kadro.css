@@ -652,7 +652,7 @@ nav li {
    Serĉrezultoj
 ****************************************/
 
-#x\:trovoj dt a {
+#x\:trovoj dt {
     border-bottom: 1px solid var(--nav-brd-clr);
 }
 
