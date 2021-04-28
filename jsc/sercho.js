@@ -9,6 +9,7 @@ const IND=3; // indeksita parto de trd: ind aŭ mll aŭ text()
 const TRD=4; // kompleta kun klr ktp
 const EKZ=5; // ekz/ind aŭ bld/ind
 
+const e_regex = /[\.\^\$\[\(\|+\?{\\]/;
 
 function Sercho(kion) {
     //komence malplena
@@ -18,6 +19,15 @@ function Sercho(kion) {
 
 Sercho.prototype.serchu = function(esprimo,onSuccess) {
     const self = this;
+
+    if ( esprimo.indexOf('%') < 0 
+        && esprimo.indexOf('_') < 0 
+        && esprimo.length >= 3
+        && ! esprimo.match(e_regex) ) {
+        esprimo += '%'; // serĉu laŭ vortkomenco, se ne jam enestas jokeroj, kaj
+        // almenaŭ 3 literoj
+    }        
+
     HTTPRequestFull('POST', sercho_url, 
         {"Accept-Language": preferoj.languages().join(',')},
         {sercxata: esprimo},
@@ -119,15 +129,10 @@ Sercho.prototype.sola = function() {
              && Object.keys(this.trd).length === 0 
           || Object.keys(this.eo).length === 0 
              && Object.keys(this.trd).length === 1 
-             && this.trd[Object.keys(this.trd)[0]].lenght === 1 );
+             && Object.values(this.trd)[0].length === 1 );
 }
 
 Sercho.prototype.unua = function() {
-    var u;
-    if ( this.eo ) {
-        u = Object.keys(this.eo)[0]
-    } else if ( this.trd ) {
-        u = this.trd[Object.keys(this.trd)[0]][0]        
-    }
-    return { href: art_href(u[MRK]) }        
+    var u = Object.values(this.eo)[0] || Object.values(this.trd)[0];
+    return { href: art_href(u[0][MRK]) }        
 }
