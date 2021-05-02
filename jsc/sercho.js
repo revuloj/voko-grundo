@@ -17,7 +17,7 @@ function Sercho(kion) {
     this.trd = []; 
 }
 
-Sercho.prototype.serchu = function(esprimo,onSuccess) {
+Sercho.prototype.serchu = function(esprimo,onSuccess,onStart,onStop) {
     const self = this;
 
     if ( esprimo.indexOf('%') < 0 
@@ -40,7 +40,9 @@ Sercho.prototype.serchu = function(esprimo,onSuccess) {
                 group_by(LNG,json.trd) 
                 : undefined; // ordigu laŭ lingvo
             onSuccess.call(self);
-        }
+        },
+        onStart,
+        onStop    
     );    
 };
 
