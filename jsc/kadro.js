@@ -992,7 +992,7 @@ function serchu_q(esprimo) {
                     if ( lng == 'eo' && t_red.stato == "redaktante") {
                         const ref_btn = make_element("button",{
                             class: "icon_btn r_vid", 
-                            value: mrk,
+                            value: t.h.split('#')[1], // mrk
                             title:"transprenu kiel referenco"
                         });
                         dt.append(ref_btn);
