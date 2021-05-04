@@ -34,11 +34,11 @@ Sercho.prototype.serchu = function(esprimo,onSuccess,onStart,onStop) {
         function(data) {
             var json = JSON.parse(data);
             self.eo = json.eo ? 
-                group_by(KAP,json.eo)
-                : undefined; // ordigu laŭ kapvorto
+                group_by(KAP,json.eo) // ordigu laŭ kapvorto
+                : undefined;
             self.trd = json.trd ? 
-                group_by(LNG,json.trd) 
-                : undefined; // ordigu laŭ lingvo
+                group_by(LNG,json.trd) // ordigu laŭ lingvo
+                : undefined; 
             onSuccess.call(self);
         },
         onStart,
@@ -123,7 +123,8 @@ Sercho.prototype.lingvoj = function() {
 }
 
 Sercho.prototype.malplena = function() {
-    return ( Object.keys(this.eo).length === 0 && Object.keys(this.trd).length === 0 );
+    return ( (!this.eo || Object.keys(this.eo).length === 0) 
+        && (!this.trd || Object.keys(this.trd).length === 0) );
 }
 
 Sercho.prototype.sola = function() {
