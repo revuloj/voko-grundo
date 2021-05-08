@@ -30,19 +30,23 @@
         <tr>
           <td colspan="{$inx_paghoj}" class="enhavo">
             <h1><xsl:text>eraroraporto</xsl:text></h1>
-	    <p>
-              Jen troviĝas listo de eraroj, kiujn la kontrolo per la dokumenttipdifino (DTD) ne trovas, 
+	          <details>
+              <summary>Jen troviĝas listo de eraroj, ...</summary> kiujn la kontrolo per la dokumenttipdifino (DTD) ne trovas, 
               sed kiuj tamen estas korektendaj: Precipe neregule formitaj markoj, kaj sencelaj referencoj. 
               Tio povas esti mistajpoj, sed ankaŭ ekzemple aldonita referenco al vorto, kiu ankoraŭ mankas
               en la vortaro kaj do estas aldonenda.
-	    </p>
-            <p>
-              Konsideru ankaŭ pliajn trovaĵojn en la listo <a href="relax_eraroj.html">neregulaĵoj 
+	          </details>
+            <details>
+              <summary>Konsideru ankaŭ pliajn trovaĵojn ...</summary> en la listo <a href="relax_eraroj.html">neregulaĵoj 
               trovitaj per RelaxNG</a> kaj la rezultojn de la 
               <a target="_new" href="https://revaj.steloj.de/revokontrolo/">vortokontrolo</a>
               kun <a target="_new" href="https://revaj.steloj.de/revokontrolo/klarigoj.html">klarigoj</a>
               pri enhava analizo de la vortaro.
-            </p>
+            </details>
+            <details id="mrk_sintakso">
+              <summary>Malkongruaj markoj:</summary>
+              (neniuj trovitaj)
+            </details>
             <xsl:variable name="n-sen-ekz"><xsl:value-of select="count(//art/ero[@tip='dos-sen-ekz'])"/></xsl:variable>
             <xsl:if test="$n-sen-ekz &gt; 600">
                 <p>
