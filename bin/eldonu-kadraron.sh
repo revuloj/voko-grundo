@@ -18,7 +18,7 @@ files=${host}:files
 # poste la plusendan index.html ni havu ankaŭ rekte sub /revo...
 #scp -r build/* ${revo}/
 
-#scp -r build/jsc/revo-${release}-min.js ${revo}/jsc
+scp -r build/jsc/revo-${release}-min.js ${revo}/jsc
 #scp -r build/stl/revo-${release}-min.css ${revo}/stl
 
 ## scp -r cfg/*.xml ${revo}/cfg/

@@ -14,6 +14,7 @@ const redaktmenu_url = "redaktmenu-"+version+".html";
 
 const inx_eo_url = "/revo/inx/_plena.html";
 const mx_trd_url = "/cgi-bin/mx_trd.pl";
+const mrk_eraro_url = "/cgi-bin/mrk_eraroj.pl";
 const http_404_url = "/revo/dlg/404.html";
 const sercho_videblaj = 7;
 
@@ -50,7 +51,6 @@ function onclick(id,reaction) {
 
 // instalu farendaĵojn por prepari la paĝon: evento-reagoj...
 when_doc_ready(function() { 
-
 
     // dom_console();
     console.log("kadro.when_doc_ready...");
@@ -476,18 +476,6 @@ function load_error(request) {
         load_page("main",http_404_url);
 }
 
-/*
-function index_home_btn(parent) {
-    // aldonu butonon por reveni al ĉefa indekso
-    const ibtn = make_icon_button("i_start",()=>{load_page("nav",inx_eo_url)})
-    ibtn.setAttribute("title","al la enira indekso")
-    if (parent.children && parent.children[0].tagName != "A")
-        parent.children[0].prepend(ibtn);   
-    else
-        parent.prepend(ibtn); 
-}
-*/
-
 function load_page(trg,url,push_state=true,whenLoaded) {
     function update_hash() {
         var hash;
@@ -526,17 +514,6 @@ function load_page(trg,url,push_state=true,whenLoaded) {
             }
             const enh = table.querySelector(".enhavo");
             enh.removeAttribute("colspan");
-            // aldonu butonon por reveni al ĉefa indekso
-            /*
-            if (! filename.startsWith("_plena") ) {
-                show("x:nav_start_btn");
-                hide("x:titol_btn"); // ne montru ambaŭ samtempe por ŝpari spacon!
-            } else {
-                hide("x:nav_start_btn");
-                if (! document.getElementsByTagName("main")[0].id.startsWith("w:titolo") )
-                    show("x:titol_btn"); // montru nur se ne jam montriĝas titolpaĝo!
-            }
-            */
 
         } catch(error) {
             console.error(error);
@@ -553,6 +530,8 @@ function load_page(trg,url,push_state=true,whenLoaded) {
             });
         } else if (filename.startsWith("_plena")) {
             viaj_submetoj();
+        } else if (filename == "eraroj") {
+            mrk_eraroj();
         }
         index_spread();
 
@@ -881,30 +860,6 @@ function navigate_history(event) {
     }
 }            
 
-    /*
-function load_xml(art) {
-
-    $("body").css("cursor", "progress");
-    $.get('/revo/xml/'+art+'.xml','text')
-        .done(function(data) {
-                $("#rxmltxt").val(data);
-        })
-        .fail (function(xhr, textStatus, errorThrown) {
-            console.error(xhr.status + " " + xhr.statusText);                
-            if (xhr.status == 404) {
-                var msg = "Pardonu, la dosiero ne troviĝis sur la servilo: ";
-                alert( msg );
-            } else {
-                var msg = "Pardonu, okazis netandita eraro: ";
-                alert( msg + xhr.status + " " + xhr.statusText + xhr.responseText);
-            }
-        })
-        .always(function() {
-            $("body").css("cursor", "default");
-        })
-       
-}
- */
 
 function serchu(event) {
     event.preventDefault();
@@ -1098,8 +1053,6 @@ function serchu_q(esprimo) {
         stop_wait 
     );
 
-
-
     /*
     
     $.getJSON("/cgi-bin/sercxu-json.pl",
@@ -1129,6 +1082,53 @@ function hazarda_art() {
         stop_wait 
     );
 }
+
+function mrk_eraroj() {
+    HTTPRequest('POST', mrk_eraro_url, {x:1}, // ni sendu ion per POST por ĉiam havi aktualan liston
+        function(data) {
+            var json = JSON.parse(data);
+            const listo = document.getElementById("mrk_sintakso");
+            listo.textContent= '';
+
+            const sum = make_element("summary",{},"Nekongruaj markoj");
+            listo.append(sum);
+            // tri- kaj plipartaj drv@mrk
+            if (json.drv) {
+                const e1 = make_element("p",{},"Markoj de derivaĵoj havu nur du partojn, t.e. "
+                + "enhavu nur unu punkton:");
+                const ul = make_element("ul");
+                listo.append(e1,ul);
+
+                for (let m of json.drv) {
+                    let li = make_elements([
+                        ['li',{},
+                            [['a',{href: art_href(m[0]), target: 'precipa'}, m[1]+' ['+m[0]+']']]
+                        ]
+                    ])
+                    ul.append(...li);
+                };
+            }
+            // mrk nekongruaj kun drv@mrk
+            if (json.drv) {
+                const e2 = make_element("p",{},"Markoj de sencoj, rimarkoj ktp. kongruu kun la "
+                    + "marko de la enhavatna derivaĵo, ĝia prefikso estu la sama:");
+                const ul = make_element("ul");
+                listo.append(e2,ul);
+                for (let m of json.snc) {
+                    let li = make_elements([
+                        ['li',{},
+                            [['a',{href: art_href(m[0]), target: 'precipa'}, m[1]+' ['+m[0]+']']]
+                        ]
+                    ]);
+                    ul.append(...li);
+                }
+            }
+        },
+        start_wait,
+        stop_wait 
+    );    
+}
+
 
 function redaktu(href) {
     const params = href.split('?')[1];
