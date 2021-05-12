@@ -9,13 +9,7 @@ var redaktilo = function() {
   const cgi_vokomailx = '/cgi-bin/vokosubmx.pl';
   const cgi_vokohtmlx = '/cgi-bin/vokohtmlx.pl';
   const cgi_vokosubm_json = '/cgi-bin/vokosubm-json.pl';
-
-  var revo_codes = {
-    lingvoj: new Codelist('lingvo', '/revo/cfg/lingvoj.xml'),
-    fakoj: new Codelist('fako','/revo/cfg/fakoj.xml'),
-    stiloj: new Codelist('stilo','/revo/cfg/stiloj.xml')
-  };
-  
+ 
   const re_lng = /<(?:trd|trdgrp)\s+lng\s*=\s*"([^]*?)"\s*>/mg; 
   const re_fak = /<uzo\s+tip\s*=\s*"fak"\s*>([^]*?)</mg; 
   const re_stl = /<uzo\s+tip\s*=\s*"stl"\s*>([^]*?)</mg; 
@@ -149,54 +143,7 @@ var redaktilo = function() {
     ([ xml_shbl[name] ]) // ni transdonas ĝin kiel unu-elementa listo 
   ),p_kursoro,p_lines];} 
 
-  function Codelist(xmlTag,url) {
-    this.url = url;
-    this.xmlTag = xmlTag;
-    this.codes = {};
 
-    this.fill = function(selection) {
-      var sel = document.getElementById(selection);
-    
-      for (var item in this.codes) {
-        var opt = createTElement("option",item + ' - ' + this.codes[item]);
-        addAttribute(opt,"value",item);
-        sel.appendChild(opt);
-      }
-    };
-
-    this.load = function(selection) {
-      var self = this;
-
-      // unuafoje ŝargu la tutan liston el XML-dosiero
-      if (! self.codes.keys) {
-        var codes = {};
-
-        HTTPRequest('GET', this.url, {},
-          function() {
-              // Success!
-              var parser = new DOMParser();
-              var doc = parser.parseFromString(this.response,"text/xml");
-        
-              for (var e of doc.getElementsByTagName(self.xmlTag)) {
-                  var c = e.attributes.kodo;
-                  //console.log(c);
-                  codes[c.value] = e.textContent;
-              } 
-              self.codes = codes;
-  
-              if (selection) {
-                self.fill.call(self,selection);
-              } 
-          });
-
-      // se ni jam ŝargis iam antaŭw, ni eble nur devas plenigi la videbalan elektilon
-      } else {
-        if (selection) {
-          self.fill.call(self,selection);
-        } 
-      }
-    };  
-  }
 
   function klavo(event) {
     var key = event.keyCode ? event.keyCode : event.which ? event.which : event.charCode;
@@ -413,18 +360,6 @@ var redaktilo = function() {
     }
   }
 
-  function createTElement(name,text) {
-    var el = document.createElement(name);
-    var tx= document.createTextNode(text);
-    el.appendChild(tx); return el;
-  }
-
-  function addAttribute(node,name,value) {
-    var att = document.createAttribute(name);
-    att.value = value;
-    node.setAttributeNode(att);    
-  }
-
   function listigu_erarojn(err) {
     var el = document.getElementById("r:eraroj");
     var elch = el.children;
@@ -436,7 +371,7 @@ var redaktilo = function() {
       ul = elch[0];
     }
     for (var e of err) {
-      var li = createTElement("li",e);               
+      var li = make_element("li",{},e); //createTElement("li",e);               
       ul.appendChild(li);       
     }
   }
@@ -917,7 +852,6 @@ var redaktilo = function() {
 
     // enlegu bezonaĵojn (listojn, XML-artikolon, preferojn)
     restore_preferences();
-    revo_codes.lingvoj.load();
     revo_codes.fakoj.load("r:sfak");
     revo_codes.stiloj.load("r:sstl");
 

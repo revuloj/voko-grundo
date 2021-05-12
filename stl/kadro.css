@@ -347,6 +347,10 @@ nav a:active {
     width: 100%
 }
 
+#x\:trovoj dt a {
+    display: inline;
+}
+
 #x\:_lng br, #x\:_plena br {
     display: none;
 }
@@ -652,7 +656,7 @@ nav li {
    Serĉrezultoj
 ****************************************/
 
-#x\:trovoj dt a {
+#x\:trovoj dt {
     border-bottom: 1px solid var(--nav-brd-clr);
 }
 

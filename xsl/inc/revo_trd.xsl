@@ -267,11 +267,11 @@ montru tie, cxar ili estas esenca parto de tiuj -->
 
 <xsl:template match="ind/mll" mode="kaptrd">
   <xsl:if test="@tip='fin' or @tip='mez'">
-    <xsl:text>...</xsl:text>
+    <xsl:text>…</xsl:text>
   </xsl:if>
   <xsl:apply-templates mode="kaptrd"/>
   <xsl:if test="@tip='kom' or @tip='mez'">
-    <xsl:text>...</xsl:text>
+    <xsl:text>…</xsl:text>
   </xsl:if>
 </xsl:template>
 

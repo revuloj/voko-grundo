@@ -76,10 +76,12 @@ function HTTPRequest(method, url, params, onSuccess,
     onStart, onFinish, onError);
 }
 
-// reordigas liston de objektoj havantaj komunan ŝlosilkampon
+// Reordigas liston de objektoj havantaj komunan ŝlosilkampon
 // al objekto de listoj de objektoj uzante la valorojn de la ŝlosilkampo
 // kiel ŝlosilo (indekso) de tiu objekto.
-// se mankas la ŝlosilkampo tiu listero estas aldonata al "<_sen_>"
+// Se mankas la ŝlosilkampo tiu listero estas aldonata al "<_sen_>".
+// Tio ankaŭ funkcia por listo de listoj, kiel ŝlosilo (key) tiam vi donu la
+// numeron de la kolumno laŭ kiu ordigi: group_by(0,listo_de_listoj)
 function group_by(key, array) {
   var grouped = {}
   for (var el of array) {
@@ -90,6 +92,11 @@ function group_by(key, array) {
     //}
   }
   return grouped;
+}
+
+// transformu markon al href por artikolo
+function art_href(mrk) {
+  return art_prefix + mrk.split('.')[0] + '.html#' + mrk;
 }
 
 // aldonu ../art en relativaj URL-oj
@@ -243,6 +250,19 @@ function make_elements(jlist) {
     } // for
     return dlist;
 }
+/*
+function createTElement(name,text) {
+  var el = document.createElement(name);
+  var tx= document.createTextNode(text);
+  el.appendChild(tx); return el;
+}
+
+function addAttribute(node,name,value) {
+  var att = document.createAttribute(name);
+  att.value = value;
+  node.setAttributeNode(att);    
+}
+*/
 
 function make_button(label,handler,hint='') {
     var btn = document.createElement("BUTTON");
@@ -394,6 +414,59 @@ function dom_console() {
   }
 }
 */
+
+// listoj lingvoj, fakoj, stiloj de Revo
+// por montri elektilojn en la redaktilo kaj traduki lingvojn en la
+// serĉilo
+function Codelist(xmlTag,url) {
+  this.url = url;
+  this.xmlTag = xmlTag;
+  this.codes = {};
+
+  this.fill = function(selection) {
+    var sel = document.getElementById(selection);
+  
+    for (var item in this.codes) {
+      //var opt = createTElement("option",item + ' - ' + this.codes[item]);
+      //addAttribute(opt,"value",item);
+      const opt = make_element("option",{value: item},item + ' - ' + this.codes[item]);
+      sel.appendChild(opt);
+    }
+  };
+
+  this.load = function(selection) {
+    var self = this;
+
+    // unuafoje ŝargu la tutan liston el XML-dosiero
+    if (! self.codes.keys) {
+      var codes = {};
+
+      HTTPRequest('GET', this.url, {},
+        function() {
+            // Success!
+            var parser = new DOMParser();
+            var doc = parser.parseFromString(this.response,"text/xml");
+      
+            for (var e of doc.getElementsByTagName(self.xmlTag)) {
+                var c = e.attributes.kodo;
+                //console.log(c);
+                codes[c.value] = e.textContent;
+            } 
+            self.codes = codes;
+
+            if (selection) {
+              self.fill.call(self,selection);
+            } 
+        });
+
+    // se ni jam ŝargis iam antaŭw, ni eble nur devas plenigi la videbalan elektilon
+    } else {
+      if (selection) {
+        self.fill.call(self,selection);
+      } 
+    }
+  };  
+}
 
 function Textarea(ta_id) {
     this.txtarea = document.getElementById(ta_id);

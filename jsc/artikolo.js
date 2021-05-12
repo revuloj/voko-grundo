@@ -154,7 +154,7 @@ var artikolo = function() {
         }
     }
 
-    /* kelkajn sekciojn kiel ekzemploj, tradukoj, rimarkoj ni maletendas, poo eviti troan amplekson.
+    /* kelkajn sekciojn kiel ekzemploj, tradukoj, rimarkoj ni maletendas, por eviti troan amplekson.
     Ili ricevas eblecon por reetendi ilin per "pli..." */
     function preparu_maletendu_sekciojn() {
         var d = document.getElementsByClassName("etendebla");
@@ -267,7 +267,8 @@ var artikolo = function() {
                     ],
                     ["DD", {class: "pref"}]
                 ]);
-                pref[0].addEventListener("click",preferoj.dialog);
+                pref[0].addEventListener("click",() =>
+                    preferoj.dialog(preparu_maletendu_sekciojn));
                 element.append(...pref);
             }
         }
@@ -363,7 +364,8 @@ var artikolo = function() {
             var first_a = pied.querySelector("A");
             if (first_a) {
                 var pref = make_element("A",{class: "redakto", href: "#", title: "agordu preferatajn lingvojn"},"preferoj");
-                pref.addEventListener("click",preferoj.dialog);
+                pref.addEventListener("click", () =>
+                    preferoj.dialog(preparu_maletendu_sekciojn));
                 first_a.insertAdjacentElement("afterend",pref);
                 first_a.insertAdjacentText("afterend"," | ");      
             }
