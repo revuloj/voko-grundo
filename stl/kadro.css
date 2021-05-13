@@ -670,6 +670,10 @@ nav li {
     color: var(--nav-code-fnt-clr);
 }
 
+#x\:trovoj *[lang='bo'] {
+    font-size: 150%;
+}
+
 
 /***************************************
    Supermetitaj dialogoj

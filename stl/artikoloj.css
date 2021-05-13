@@ -169,6 +169,10 @@ dl.tradukoj dd {
     margin-left: 0.5em;
 }
 
+dl.tradukoj span[lang='bo'] {
+    font-size: 150%;
+}
+
 dl.tradukoj .lng {
     color: var(--label-fnt-clr); 
     /* margin-right: 0.5em;*/

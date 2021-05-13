@@ -914,7 +914,6 @@ function serchu_q(esprimo) {
                 ])[0];
                 var dl = make_element("dl");
 
-                // ĉe lng=eo ni ordigu                
                 const trvj = srch.trovoj(lng);
                 // console.log(trvj);
 
@@ -930,7 +929,6 @@ function serchu_q(esprimo) {
                         atr = {class: "kasxita"};
                     }
 
-
                     const dt = make_element("dt",atr);
 
                     if ( lng == 'eo' ) {
@@ -938,9 +936,9 @@ function serchu_q(esprimo) {
                         // do ni provizore uzas t.eo.mrk anst. t[l].mrk
                         const a = make_element("a",{target: "precipa", href: t.h}, t.v);
                         dt.append(a);
-
                     } else {
-                        dt.append(t.v);
+                        const s = make_element("span",{lang: lng}, t.v);
+                        dt.append(s);
                     }
 
                     // dum redakto ni aldonas transprenan butonon por kreado de referencoj
@@ -957,12 +955,12 @@ function serchu_q(esprimo) {
    
                     if ( lng == 'eo' ) {
                         // trovitaj tradukoj de tiu e-a vorto
-                        for ( let [lng,trd] of Object.entries(t.t) ) { // ni trairu ĉiujn lingvojn....
+                        for ( let [l,trd] of Object.entries(t.t) ) { // ni trairu ĉiujn lingvojn....
                             // tradukojn oni momente ne povas rekte alsalti,
                             // do ni (provizore?) uzas href (el drv-mrk) 
                             const a = make_elements([
                                     ["a",{target: "precipa", href: t.h},
-                                        [["code",{}, lng + ":"], trd]
+                                        [["code",{}, l + ":"],["span",{lang: l}, trd]]
                                     ],["br"]
                                 ]);    
                             dd.append(...a);
