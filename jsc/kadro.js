@@ -1,7 +1,7 @@
 
 /* jshint esversion: 6 */
 
-const version="1f";
+const version="1g";
 const debug=false; //true; // ni bezonas provizore aparte por vidi erarojn en iOS Webkit, kie ni ne havas "console"
 const revo_url = "reta-vortaro.de";
 const art_prefix = "/revo/art/";
