@@ -8,26 +8,34 @@
 
 
 <!-- 
-  Kolektante la referencojn ene de artikolo:
+  Kolektante la kapvortojn, markojn, referencojn kaj tradukojn ene de artikolo:
   - metas art-mrk kiel ŝlosilon
   - forigas art-mrk kiel prefikso de mrk-oj
   - forigas prefikson "voko:" de listoj
-  - uzas nur la unuajn 3 literojn de tipo, ĉar tiel aspektas aktuale la tabelo...
+  
+  La rezulto estas JSON-dosiero per kiu ni plenigas kaj aktualigas la
+  datumbazon por la serĉo, redakta kontrolo kaj tezaŭro.
 -->
 
 <xsl:output method="text" encoding="utf-8"/>
-<xsl:strip-space elements="kap"/>
+<xsl:strip-space elements="kap ind"/>
 
 <!-- la kadra strukturo de la artikolo - ties dosiernomo kiel ŝlosilo -->
 
 <xsl:template match="/">
   <xsl:text>{"</xsl:text>
+  <!-- la nuda nomo de la artikolo -->
   <xsl:apply-templates select="//art/@mrk"/>
   <xsl:text>":{
-</xsl:text>
+"id":"</xsl:text>
+  <!-- la tuta artikolmarko, kun dosiernomo, eldono kaj dato -->
+  <xsl:value-of select="//art/@mrk"/>
+<xsl:text>",
+</xsl:text>  
   <xsl:call-template name="drv-kap"/>
   <xsl:call-template name="snc-mrk"/>
   <xsl:call-template name="ref"/>
+  <xsl:call-template name="trd"/>
   <xsl:text>}}
 </xsl:text>
 </xsl:template>
@@ -36,9 +44,8 @@
   <xsl:value-of select="substring-after(substring-before(.,'.xml'),'Id: ')"/>
 </xsl:template>
 
-
 <!-- kolekti la kapvortojn de drv 
-================================= -->
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
 <xsl:template name="drv-kap">
   <xsl:text>"kap":[
@@ -89,9 +96,9 @@
 </xsl:template>
 
 
-<!-- kolekti la elementojn kun @mrk, kiuj do povas 
+<!-- kolekti la elementojn kun @mrk (krom drv), kiuj do povas 
 aperi kiel ref@cel, t.e. referencitaj de iu ajn artikolo 
-======================================================== -->
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
 <xsl:template name="snc-mrk">
   <xsl:text>"mrk":[
@@ -124,13 +131,14 @@ aperi kiel ref@cel, t.e. referencitaj de iu ajn artikolo
 
 
 <!-- kolekti ĉiujn referencojn...
-======================================================== -->
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
 <xsl:template name="ref">
   <xsl:text>"ref":[
 </xsl:text>
   <xsl:apply-templates select=".//ref"/>
-  <xsl:text>]</xsl:text>
+  <xsl:text>],
+</xsl:text>
 </xsl:template>
 
 
@@ -188,6 +196,122 @@ aperi kiel ref@cel, t.e. referencitaj de iu ajn artikolo
   <xsl:message terminate="no">
     AVERTO: Nekaptita elemento (apply sen select?): <xsl:value-of select="name()"/>
   </xsl:message>
+</xsl:template>
+
+
+<!-- kolekti la tradukojn
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+<xsl:template name="trd">
+  <xsl:text>"trd":[
+</xsl:text>
+  <xsl:apply-templates select=".//trd"/>
+  <xsl:text>]</xsl:text>
+</xsl:template>
+
+
+<xsl:template match="trd">
+  <xsl:variable name="lng" select="ancestor-or-self::*[@lng][1]/@lng"/>
+  <xsl:text>["</xsl:text>
+
+    <xsl:apply-templates select="ancestor::*[@mrk][1]/@mrk"/>
+    <xsl:text>","</xsl:text>
+    <xsl:value-of select="$lng"/>
+    <xsl:text>","</xsl:text>
+    <!-- la indeksenda kapvorto: ni devas ekskluzive distingi inter ind, mll kaj text...-->
+    <xsl:choose>
+      <xsl:when test="ind">
+        <xsl:call-template name="normalize">
+          <xsl:with-param name="str" select="ind"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:when test="mll">
+        <xsl:call-template name="normalize">
+          <xsl:with-param name="str" select="mll"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="normalize">
+          <xsl:with-param name="str" select="text()"/>
+        </xsl:call-template>
+      </xsl:otherwise>
+    </xsl:choose>
+    <!-- ni aldonas trd nur se ĝi enhavas klr aŭ mll kaj do distingiĝas de la kapvorto -->
+    <xsl:text>","</xsl:text>
+    <!-- la traduko inkl. klr..., sed sen ofc -->
+    <xsl:choose>
+      <xsl:when test="mll">
+        <xsl:apply-templates select="mll"/>
+      </xsl:when>
+      <xsl:when test="ind|klr">
+        <xsl:call-template name="trd-join"/>
+      </xsl:when>
+      <!--xsl:otherwise>
+        <xsl:text></xsl:text>
+      </xsl:otherwise-->
+    </xsl:choose>
+    <!-- se temas pri traduko en ekzemplo aŭ bildo ni aldonu la ind-parton de la ekz-o -->
+    <xsl:if test="ancestor::bld|ancestor::ekz">
+      <xsl:text>","</xsl:text>
+      <xsl:apply-templates select="(ancestor::bld|ancestor::ekz)/ind"/>
+    </xsl:if>
+
+  <xsl:text>"]</xsl:text>
+  <xsl:if test="following::trd">
+    <xsl:text>,
+</xsl:text>
+  </xsl:if>
+</xsl:template>
+
+<xsl:template name="trd-join">
+  <!-- kuni ĉion al signoĉeno kaj pote normigi spacojn en XSL 1.0 estas iom malsimpla... -->
+  <xsl:call-template name="normalize">
+    <xsl:with-param name="str">
+      <xsl:for-each select="text()|ind|klr">
+        <xsl:value-of select="."/>
+      </xsl:for-each>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="mll">
+  <xsl:if test="@tip='fin' or @tip='mez'">
+    <xsl:text>…</xsl:text>
+  </xsl:if>
+  <xsl:call-template name="normalize">
+    <!--xsl:with-param name="str" select="."/-->
+    <xsl:with-param name="str">
+      <xsl:apply-templates/>
+    </xsl:with-param>
+  </xsl:call-template>
+  <xsl:if test="@tip='kom' or @tip='mez'">
+    <xsl:text>…</xsl:text>
+  </xsl:if>
+</xsl:template>
+
+<xsl:template match="mll/ind">
+  <xsl:apply-templates/>
+</xsl:template>
+
+<xsl:template match="ekz/ind|bld/ind">
+  <xsl:call-template name="normalize">
+    <xsl:with-param name="str">
+      <xsl:choose>
+        <xsl:when test="mll">
+          <xsl:apply-templates select="mll"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:apply-templates select="tld|text()"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:with-param>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template name="normalize">
+  <xsl:param name="str"/>
+  <!-- hebreaj tradukoj enhavas citilojn kaj falantajn oblikvojn -->
+  <xsl:value-of select="normalize-space(translate($str,'&quot;\','&#x7f;¦'))"/>
 </xsl:template>
 
 </xsl:stylesheet>

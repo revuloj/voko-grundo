@@ -320,7 +320,7 @@ sama lingvo.
 	lng CDATA #REQUIRED
 >
 
-<!-- [trd] Traduko kosistas el traduka vorto aŭ frazo
+<!-- [trd] Traduko konsistas el traduka vorto aŭ frazo
 kaj klarigoj, poste povos sekvi aliaj elementoj.
 -->
 <!ELEMENT trd (#PCDATA|klr|ind|mll|ofc|baz)*>

@@ -76,6 +76,29 @@ function HTTPRequest(method, url, params, onSuccess,
     onStart, onFinish, onError);
 }
 
+// Reordigas liston de objektoj havantaj komunan ŝlosilkampon
+// al objekto de listoj de objektoj uzante la valorojn de la ŝlosilkampo
+// kiel ŝlosilo (indekso) de tiu objekto.
+// Se mankas la ŝlosilkampo tiu listero estas aldonata al "<_sen_>".
+// Tio ankaŭ funkcia por listo de listoj, kiel ŝlosilo (key) tiam vi donu la
+// numeron de la kolumno laŭ kiu ordigi: group_by(0,listo_de_listoj)
+function group_by(key, array) {
+  var grouped = {}
+  for (var el of array) {
+    const v = el[key] || '<_sen_>';
+    //if (v) {
+      if (! grouped[v] ) grouped[v] = [];
+      grouped[v].push(el);      
+    //}
+  }
+  return grouped;
+}
+
+// transformu markon al href por artikolo
+function art_href(mrk) {
+  return art_prefix + mrk.split('.')[0] + '.html#' + mrk;
+}
+
 // aldonu ../art en relativaj URL-oj
 function fix_art_href(root_el) {
   for (var a of root_el.getElementsByTagName("a")) {
@@ -88,6 +111,51 @@ function fix_art_href(root_el) {
     }
   }
 }
+
+// ni ne havas por ĉiu referenctipo apartan vinjeton
+// kaj ni nun uzas SVG-fonon per CSS anstataŭ GIF-bildeton
+function ref_tip_class(tip) {
+  return {
+    dif: "r_dif", difino: "r_dif", 
+    sin: "r_sin", ant: "r_ant",
+    sub: "r_sub", prt: "r_prt", 
+    super: "r_super", 
+    malprt: "r_malprt", mal: "r_malprt",
+    vid: "r_vid", vidu: "r_vid",
+    hom: "r_hom",
+    lst: "r_lst", listo: "r_lst",
+    ekz: "r_ekz", url: "r_url"
+  }[tip]
+}
+
+function ref_tip_alt(tip) {
+  return {
+    dif: "=", difino: "=", 
+    sin: "SIN:", ant: "ANT:",
+    sub: "SUB:", prt: "PRT:", 
+    super: "SUP:", 
+    malprt: "TUT:", mal: "TUT:",
+    vid: "VD:", vidu: "VD:",
+    hom: "HOM:",
+    lst: "LST:", listo: "LST:",
+    ekz: "EKZ:", url: "URL:"
+  }[tip]
+}
+
+function ref_tip_title(tip) {
+  return {
+    dif: "difino ĉe", difino: "difino ĉe", 
+    sin: "sinonimo", ant: "antonimo",
+    sub: "subnocio", prt: "parto", 
+    super: "supernocio", 
+    malprt: "parto de", mal: "TUT:",
+    vid: "vidu", vidu: "vidu",
+    hom: "homonimo",
+    lst: "listo", listo: "listo",
+    ekz: "ekzemplo", url: "retpaĝo"
+  }[tip]
+}
+
 
 // anstataŭigu GIF per SVG  
 function fix_img_svg(root_el) {
@@ -102,19 +170,8 @@ function fix_img_svg(root_el) {
       // referencilo
       src = i.getAttribute("src");
       if (src) {
-        var nom = src.split('/').pop().split('.')[0];
-        var svg = {
-          dif: "r_dif", difino: "r_dif", 
-          sin: "r_sin", ant: "r_ant",
-          sub: "r_sub", super: "r_super",
-          prt: "r_sub", malprt: "r_super",
-          vid: "r_vid", vidu: "r_vid",
-          hom: "r_vid",
-          lst: "r_lst", listo: "r_lst",
-          ekz: "r_ekz",
-          url: "r_url"
-        }[nom];
-        if (nom) i.classList.add("ref",svg);
+        const nom = src.split('/').pop().split('.')[0];
+        if (nom) i.classList.add("ref",ref_tip_class(nom));
       }                    
     }                    
   }
@@ -193,6 +250,19 @@ function make_elements(jlist) {
     } // for
     return dlist;
 }
+/*
+function createTElement(name,text) {
+  var el = document.createElement(name);
+  var tx= document.createTextNode(text);
+  el.appendChild(tx); return el;
+}
+
+function addAttribute(node,name,value) {
+  var att = document.createAttribute(name);
+  att.value = value;
+  node.setAttributeNode(att);    
+}
+*/
 
 function make_button(label,handler,hint='') {
     var btn = document.createElement("BUTTON");
@@ -207,7 +277,7 @@ function make_icon_button(iclass,handler,hint='') {
     var btn = document.createElement("BUTTON");
     //btn.appendChild(document.createTextNode(label)); 
     if (handler) btn.addEventListener("click",handler);
-    btn.classList.add(iclass,"icon_btn");
+    btn.classList.add(...iclass.split(' '),"icon_btn");
     if (hint) btn.setAttribute("title",hint);
     return btn;
 }
@@ -344,6 +414,59 @@ function dom_console() {
   }
 }
 */
+
+// listoj lingvoj, fakoj, stiloj de Revo
+// por montri elektilojn en la redaktilo kaj traduki lingvojn en la
+// serĉilo
+function Codelist(xmlTag,url) {
+  this.url = url;
+  this.xmlTag = xmlTag;
+  this.codes = {};
+
+  this.fill = function(selection) {
+    var sel = document.getElementById(selection);
+  
+    for (var item in this.codes) {
+      //var opt = createTElement("option",item + ' - ' + this.codes[item]);
+      //addAttribute(opt,"value",item);
+      const opt = make_element("option",{value: item},item + ' - ' + this.codes[item]);
+      sel.appendChild(opt);
+    }
+  };
+
+  this.load = function(selection) {
+    var self = this;
+
+    // unuafoje ŝargu la tutan liston el XML-dosiero
+    if (! self.codes.keys) {
+      var codes = {};
+
+      HTTPRequest('GET', this.url, {},
+        function() {
+            // Success!
+            var parser = new DOMParser();
+            var doc = parser.parseFromString(this.response,"text/xml");
+      
+            for (var e of doc.getElementsByTagName(self.xmlTag)) {
+                var c = e.attributes.kodo;
+                //console.log(c);
+                codes[c.value] = e.textContent;
+            } 
+            self.codes = codes;
+
+            if (selection) {
+              self.fill.call(self,selection);
+            } 
+        });
+
+    // se ni jam ŝargis iam antaŭw, ni eble nur devas plenigi la videbalan elektilon
+    } else {
+      if (selection) {
+        self.fill.call(self,selection);
+      } 
+    }
+  };  
+}
 
 function Textarea(ta_id) {
     this.txtarea = document.getElementById(ta_id);

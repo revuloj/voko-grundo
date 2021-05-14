@@ -11,7 +11,7 @@
 #host=retavortaro.de
 # aldonu en /etc/hosts!
 host=revo
-release=1d
+release=1f
 revo=${host}:www/revo
 files=${host}:files
 
@@ -19,7 +19,7 @@ files=${host}:files
 #scp -r build/* ${revo}/
 
 scp -r build/jsc/revo-${release}-min.js ${revo}/jsc
-scp -r build/stl/revo-${release}-min.css ${revo}/stl
+#scp -r build/stl/revo-${release}-min.css ${revo}/stl
 
 ## scp -r cfg/*.xml ${revo}/cfg/
 

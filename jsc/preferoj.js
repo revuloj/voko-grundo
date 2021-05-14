@@ -7,6 +7,7 @@ const lingvoj_xml = "../cfg/lingvoj.xml";
 var preferoj = function() {  
     
     var lingvoj = [];
+    var seanco = {};
     var dato = Date.now();
     
     function load_pref_lng() {
@@ -118,7 +119,7 @@ var preferoj = function() {
     }
 
 
-    function dialog() {
+    function dialog(sePreta) {
         var pref = document.getElementById("pref_dlg");
         var inx = [['a','b'],['c','g'],['h','j'],['k','l'],['m','o'],['p','s'],['t','z']];
 
@@ -134,7 +135,8 @@ var preferoj = function() {
                 document.getElementById("pref_dlg").classList.add("kasxita");
                 store();
                 // adaptu la rigardon, t.e. trd-listojn
-                preparu_maletendu_sekciojn();            
+                //preparu_maletendu_sekciojn();
+                sePreta();
             },"fermu preferojn");
             close.setAttribute("id","pref_dlg_close");
 
@@ -199,6 +201,7 @@ var preferoj = function() {
         }
     }
 
+
     // reprenas memorigitajn valorojn de preferoj el la loka memoro de la retumilo
     function restore() {
         var str = window.localStorage.getItem("revo_preferoj");            
@@ -207,6 +210,17 @@ var preferoj = function() {
         var nav_lng = navigator.languages || [navigator.language];
         lingvoj = (prefs && prefs["w:preflng"])? prefs["w:preflng"] : nav_lng.slice();
         dato = (prefs && prefs["w:prefdat"])? prefs["w:prefdat"] : Date.now();
+    }
+
+    // memoras staton de la seanco - forgesota kiam la seanco finiĝas/retumilo fermiĝas
+    function storeSession() {
+        window.sessionStorage.setItem("revo_seanco",JSON.stringify(seanco));     
+    }
+
+    // reprenas memorigitajn valorojn de seanco el la seanco-memoro de la retumilo
+    function restoreSession() {
+        var str = window.sessionStorage.getItem("revo_seanco");            
+        seanco = (str? JSON.parse(str) : null);
     }
 
     function languages() {
@@ -218,13 +232,14 @@ var preferoj = function() {
         return dato;
     }
 
-    // eksportu publikajn funkction
+    // eksportu publikajn funkciojn / variablojn
     return {
         //store: store,
         restore: restore,
         dialog: dialog,
         languages: languages,
-        date: date
+        date: date,
+        seanco: seanco
     };
     
 }();

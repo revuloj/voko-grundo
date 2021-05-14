@@ -260,6 +260,7 @@ A IMG.tez:focus {background-color:  #c0c090; border: 2px outset gray}
 A IMG.tez:hover {background-color:  #c0c090; border: 2px outset gray}
 A IMG.tez:active {background-color:  #a0a070; border: 2px inset gray}
 
+/*
 A.tez-ref { text-decoration: none; baseline-shift: super; color: darkgreen; font-weight: normal; padding: 0.1em; border-radius: 40%}
 A.tez-ref:visited { background-color: transparent; color: darkgreen}
 A.tez-ref:focus {background-color:  #c0c090; color: brown}
@@ -271,6 +272,17 @@ IMG.viki { height: 1.2em; vertical-align: bottom;
 A IMG.viki:focus {background-color:  #c0c090; border: 2px outset gray}
 A IMG.viki:hover {background-color:  #c0c090; border: 2px outset gray}
 A IMG.viki:active {background-color:  #a0a070; border: 2px inset gray}
+*/
+
+a.tez-ref {
+    /* kaŝu malnovajn tezaŭro-ligilojn */
+    display: none;
+}
+
+h2 a[href^="http://eo.wikipedia.org"] {
+    /* kaŝu malnovajn Vikipedio-ligilojn */
+    display: none;
+}
 
 .piedlinio {color: #104040; text-align: center}
 .kuketoaverto { position: fixed; bottom: 0px; left: 5%; width: 90%; min-height:7em;

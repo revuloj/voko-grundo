@@ -152,6 +152,21 @@ nav {
     background-position-y: -.15em;
 }
 
+#x\:statistiko meter {
+    margin-left: .3em;
+    /* interpreto de alteco tro varias inter Chrome kaj FF
+    height: .6em;
+    vertical-align: middle;*/
+}
+
+@supports (-moz-appearance:none) {
+    #x\:statistiko meter {
+        height: .8rem;
+        vertical-align: middle;
+        border: 1px solid var(--nav-fnt-clr);
+    }
+}
+
 #navbar>div {
     margin-top: .1em;
 }
@@ -330,6 +345,10 @@ nav a:active {
 #x\:_lng p>a, #x\:_plena .enhavo a {
     display: block;
     width: 100%
+}
+
+#x\:trovoj dt a {
+    display: inline;
 }
 
 #x\:_lng br, #x\:_plena br {
@@ -637,7 +656,7 @@ nav li {
    Serĉrezultoj
 ****************************************/
 
-#x\:trovoj dt a {
+#x\:trovoj dt {
     border-bottom: 1px solid var(--nav-brd-clr);
 }
 
@@ -701,6 +720,7 @@ nav li {
 #console:empty{
     display: none
 }
+
 
 /***************************************
    Precipa paĝo
