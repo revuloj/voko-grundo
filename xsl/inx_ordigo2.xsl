@@ -56,7 +56,7 @@ class="net.sf.saxon.sort.CodepointCollator"/ -->
         <xsl:sequence select=".."/>
       </xsl:for-each>
     </xsl:variable>
-    <xsl:message select="string-join($literoj/l/@name,',')"/>
+    <!--xsl:message select="string-join($literoj/l/@name,',')"/-->
     <xsl:sequence select="$literoj/l[1]/@name"/> 
 
 </xsl:function>
@@ -97,13 +97,22 @@ class="net.sf.saxon.sort.CodepointCollator"/ -->
         <xsl:message>DBG: ordigi silabe, lingvo: "<xsl:value-of select="$ordlng_1/@lng"/>"...</xsl:message>
       </xsl:if>
 
-      <xsl:variable name="trdj" select="."/>
+      <xsl:variable name="trdoj" select="."/>
 
       <trd-oj lng="{@lng}" n="{@n}" p="{@p}">
         <xsl:for-each select="$ordlng_1/l">
-          <litero name="{@name}" min="{g[1]}">
-          <xsl:apply-templates select="$trdj/v/t[voko:max-prefix(.,$ordlng_1/@lng)=current()/@name]"/>
-          </litero>
+
+            <xsl:call-template name="trd-litero">
+              <!-- foriginte el la traduko la ignorendajn signojn
+                    ni komparas la unuajn $n kun la difinitaj liter-grupoj el cfg/ordigo2.xml
+                    krom se la vorto komenciĝas per la signovico donitaj en "minus".
+                    Ekz-e la ĉaptiro "c" en la kimra ne enhavu la vortojn kun "ch en la komenco " -->
+              <xsl:with-param name="trdoj" 
+                select="$trdoj/v[voko:max-prefix(t,$ordlng_1/@lng)=current()/@name]"/>
+              <xsl:with-param name="ordlng" select="$ordlng_1"/>
+              <xsl:with-param name="lit-name" select="@name"/>
+              <xsl:with-param name="lit-min" select="g[1]"/>
+            </xsl:call-template>
         </xsl:for-each>
       </trd-oj>
     </xsl:when>
