@@ -97,9 +97,13 @@ class="net.sf.saxon.sort.CodepointCollator"/ -->
         <xsl:message>DBG: ordigi silabe, lingvo: "<xsl:value-of select="$ordlng_1/@lng"/>"...</xsl:message>
       </xsl:if>
 
+      <xsl:variable name="trdj" select="."/>
+
       <trd-oj lng="{@lng}" n="{@n}" p="{@p}">
         <xsl:for-each select="$ordlng_1/l">
-          <xsl:apply-templates select="v/t[voko:max-prefix(.,$ordlng_1/@lng)=current()/@name]"/>
+          <litero name="{@name}" min="{g[1]}">
+          <xsl:apply-templates select="$trdj/v/t[voko:max-prefix(.,$ordlng_1/@lng)=current()/@name]"/>
+          </litero>
         </xsl:for-each>
       </trd-oj>
     </xsl:when>
