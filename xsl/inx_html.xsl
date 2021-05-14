@@ -807,22 +807,23 @@
 <xsl:template match="trd-oj/litero/v">
 
   <!-- Cxu temas pri araba, persa aux hebrea traduko? -->
+  <xsl:variable name="lng" select="../../@lng"/>
   <xsl:variable name="trd-rtl" 
-                select="../../@lng = 'ar' or
-                        ../../@lng = 'fa' or
-                        ../../@lng = 'he'"/>
+                select="$lng = 'ar' or
+                        $lng = 'fa' or
+                        $lng = 'he'"/>
 
   <xsl:choose>
 
     <!-- se key('trd-oj') enhavas nur unu tian eron montru kiel "t: k" -->
-    <xsl:when test="count(key('trd-oj',concat(../../@lng,'-',../@name,'-',t)))=1">
+    <xsl:when test="count(key('trd-oj',concat($lng,'-',../@name,'-',t)))=1">
 
       <xsl:choose>
         <xsl:when test="t1">
-          <xsl:apply-templates select="t1"/><xsl:text>: </xsl:text>
+          <span lang="{$lng}"><xsl:apply-templates select="t1"/></span><xsl:text>: </xsl:text>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:apply-templates select="t"/><xsl:text>: </xsl:text>
+          <span lang="{$lng}"><xsl:apply-templates select="t"/></span><xsl:text>: </xsl:text>
         </xsl:otherwise>
       </xsl:choose>
 
@@ -848,11 +849,11 @@
     </xsl:when>
 
     <!-- aliokaze montru kiel "t: k, k, ...; t1: k; t1: k; ... " au simile --> 
-    <xsl:when test="count(.|key('trd-oj',concat(../../@lng,'-',../@name,'-',t))[1])=1">
+    <xsl:when test="count(.|key('trd-oj',concat($lng,'-',../@name,'-',t))[1])=1">
 
-      <xsl:apply-templates select="t"/><xsl:text>: </xsl:text>
+      <span lang="{$lng}"><xsl:apply-templates select="t"/></span><xsl:text>: </xsl:text>
      
-      <xsl:for-each select="key('trd-oj',concat(../../@lng,'-',../@name,'-',t))[not(t1)]">
+      <xsl:for-each select="key('trd-oj',concat($lng,'-',../@name,'-',t))[not(t1)]">
         <xsl:sort lang="eo" select="k"/> 
      
         <xsl:if test="not(following-sibling::v[k=current()/k and t=current()/t and not(t1)])">
@@ -878,11 +879,11 @@
       </xsl:for-each>
       <br/>
 
-      <xsl:for-each select="key('trd-oj',concat(../../@lng,'-',../@name,'-',t))[t1]">
+      <xsl:for-each select="key('trd-oj',concat($lng,'-',../@name,'-',t))[t1]">
         <xsl:sort lang="eo" select="k"/> 
 
         <xsl:text>&#xa0;&#xa0;&#xa0;</xsl:text>
-        <xsl:apply-templates select="t1"/><xsl:text>: </xsl:text>
+        <span lang="{$lng}"><xsl:apply-templates select="t1"/></span><xsl:text>: </xsl:text>
         <a target="precipa">
           <xsl:if test="$trd-rtl">
             <xsl:attribute name="dir">ltr</xsl:attribute>
