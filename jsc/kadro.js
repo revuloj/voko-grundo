@@ -696,7 +696,19 @@ function adaptu_paghon(root_el, url) {
             event.preventDefault();
             hazarda_art();
             event.stopPropagation(); // ne voku navigate_link!
-        });      
+        });
+        // en la lingva indekso metu preferatajn lingvojn supren
+        const lingvoj = root_el.querySelector("a[href^='lx_la_']").closest('details');
+        const p = lingvoj.querySelector('p');
+        var jam = [];
+        for (let l of preferoj.languages()) {
+            let l_ = l.split(/-/)[0];
+            if (jam.indexOf(l_)<0) { // evitu duoblaĵojn!
+                let a = lingvoj.querySelector("a[href^='lx_"+l_+"_']");
+                if (a) p.prepend(a.cloneNode(true));
+                jam.push(l_);
+            }
+        }
     }
     else if ( filename.startsWith('mx_trd.') ) {
         var a;

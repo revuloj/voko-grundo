@@ -299,8 +299,18 @@ nav a:active {
     margin-bottom: 0;
 }
 
+#navigado .enhavo details>p {
+    margin-top: 0;
+}
+
 #navigado .enhavo *[lang='bo'] {
-    font-size: 150%
+    font-size: 150% !important;
+    line-height: 120%;
+    vertical-align: text-top;
+}
+
+#navigado .enhavo details a[href^='lx_la_'] {
+    border-bottom: 1px dotted var(--nav-brd-clr);
 }
 
 #navigado .icon_btn {
@@ -674,9 +684,12 @@ nav li {
     color: var(--nav-code-fnt-clr);
 }
 
+/* jam per .enhavo *[lang='bo']
 #x\:trovoj *[lang='bo'] {
     font-size: 150%;
+    vertical-align: text-top;
 }
+*/
 
 
 /***************************************
