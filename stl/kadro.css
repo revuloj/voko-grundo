@@ -299,6 +299,10 @@ nav a:active {
     margin-bottom: 0;
 }
 
+#navigado .enhavo *[lang='bo'] {
+    font-size: 150%
+}
+
 #navigado .icon_btn {
     /*
     float: left; 
