@@ -605,7 +605,7 @@
                  <xsl:with-param name="pref" select="$pref"/>
               </xsl:call-template>
 
-              <h1>
+              <h1 lang="{current()/../@lng}">
                 <xsl:choose>
                    <xsl:when test="parent::node()[self::inv]">
                      <xsl:text>inversa </xsl:text>
@@ -1032,7 +1032,7 @@
 <!-- <xsl:message><xsl:value-of select="$context/@lng"/></xsl:message> -->
 
   <xsl:variable name="lng" select="string($context/@lng)"/>
-  <span class="literoj">
+  <span class="literoj" lang="{$lng}">
     <xsl:for-each select="$context/litero[v]">
 
       <xsl:choose>
