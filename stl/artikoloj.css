@@ -171,6 +171,8 @@ dl.tradukoj dd {
 
 dl.tradukoj span[lang='bo'] {
     font-size: 150%;
+    line-height: 120%;
+    vertical-align: text-top;
 }
 
 dl.tradukoj .lng {
