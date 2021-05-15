@@ -14,6 +14,7 @@ const redaktmenu_url = "redaktmenu-"+version+".html";
 
 const inx_eo_url = "/revo/inx/_plena.html";
 const mx_trd_url = "/cgi-bin/mx_trd.pl";
+const nombroj_url = "/cgi-bin/nombroj.pl";
 const mrk_eraro_url = "/cgi-bin/mrk_eraroj.pl";
 const http_404_url = "/revo/dlg/404.html";
 const sercho_videblaj = 7;
@@ -133,6 +134,7 @@ when_doc_ready(function() {
 
     t_main.alvene("titolo",()=>{ 
        hide("x:titol_btn");
+       nombroj();
     });
 
     t_main.forire("titolo",()=>{ 
@@ -1087,6 +1089,26 @@ function hazarda_art() {
             const mrk = json.hazarda[0];
             const href = art_prefix+mrk.split('.')[0]+'.html#'+mrk;
             if (href) load_page("main",href);
+        }, 
+        start_wait,
+        stop_wait 
+    );
+}
+
+function nombroj() {
+
+    HTTPRequest('POST', nombroj_url, {x:0}, // sen parametroj POST ne funkcius, sed GET eble ne estus aktuala!
+        function(data) {
+            // sukceso!
+            var json = JSON.parse(data);
+            console.log(json);
+            const n = document.getElementById('t:nombroj');
+            if (n && json) {
+                // {"trd":[412630],"kap":[31291]}
+                const trd = json.trd[0];
+                const kap = json.kap[0];
+                n.prepend('Ni nun provizas '+kap+' kapvortojn kun '+trd+' tradukoj. ');
+            }
         }, 
         start_wait,
         stop_wait 
