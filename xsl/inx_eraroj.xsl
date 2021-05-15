@@ -62,7 +62,7 @@
     </xsl:otherwise>
   </xsl:choose>
 
-  <xsl:if test="not(//ekz or (//*[uzo[text()='ARK'] and uzo[text()='RAR']]))">
+  <xsl:if test="not(//ekz or //ofc or (//*[uzo[text()='ARK'] and uzo[text()='RAR']]))">
       <ero  kie="art" mrk="{$mrk}" tip="dos-sen-ekz"/>
   </xsl:if>
 
