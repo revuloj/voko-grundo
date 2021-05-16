@@ -309,6 +309,12 @@ nav a:active {
     vertical-align: text-top;
 }
 
+#navigado .enhavo *[lang='zh'] {
+    font-size: 120% !important;
+    /*line-height: 120%;
+    vertical-align: text-top;*/
+}
+
 #navigado .enhavo details a[href^='lx_la_'] {
     border-bottom: 1px dotted var(--nav-brd-clr);
 }
