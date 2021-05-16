@@ -1042,7 +1042,7 @@
           </b><xsl:text> </xsl:text>
         </xsl:when>
         <xsl:otherwise>
-          <a href="{$pref}{@name}.html">
+          <a href="../inx/{$pref}{@name}.html">
             <xsl:value-of select="@min"/>
           </a><xsl:text> </xsl:text>
         </xsl:otherwise>
