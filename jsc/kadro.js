@@ -1122,10 +1122,10 @@ function mrk_eraroj() {
             const listo = document.getElementById("mrk_sintakso");
             listo.textContent= '';
 
-            const sum = make_element("summary",{},"Nekongruaj markoj");
+            const sum = make_element("summary",{},"Nekongruaj markoj / referencoj");
             listo.append(sum);
             // tri- kaj plipartaj drv@mrk
-            if (json.drv) {
+            if (json.drv && json.drv.length) {
                 const e1 = make_element("p",{},"Markoj de derivaĵoj havu nur du partojn, t.e. "
                 + "enhavu nur unu punkton:");
                 const ul = make_element("ul");
@@ -1141,7 +1141,7 @@ function mrk_eraroj() {
                 };
             }
             // mrk nekongruaj kun drv@mrk
-            if (json.drv) {
+            if (json.snc && json.snc.length) {
                 const e2 = make_element("p",{},"Markoj de sencoj, rimarkoj ktp. kongruu kun la "
                     + "marko de la enhavatna derivaĵo, ĝia prefikso estu la sama:");
                 const ul = make_element("ul");
@@ -1155,6 +1155,21 @@ function mrk_eraroj() {
                     ul.append(...li);
                 }
             }
+            // homonimoj sen ref-hom
+            if (json.hom && json.hom.length) {
+                const e2 = make_element("p",{},"Homonimoj, kiuj ne havas referencon de la tipo 'hom' aŭ duoblaj derivaĵoj:");
+                const ul = make_element("ul");
+                listo.append(e2,ul);
+                for (let m of json.hom) {
+                    let li = make_elements([
+                        ['li',{},
+                            [['a',{href: art_href(m[1]), target: 'precipa'}, m[0]+' [de '+m[1]+' al '+m[2]+']']]
+                        ]
+                    ]);
+                    ul.append(...li);
+                }
+            }
+
         },
         start_wait,
         stop_wait 
