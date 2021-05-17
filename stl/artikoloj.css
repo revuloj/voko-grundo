@@ -95,7 +95,9 @@ div.drv-enh dd, div.subart-enh dd {
     margin-top: .5em;
 }
 
-div.drv-enh dl span, div.subart-enh dl span {
+div.drv-enh dl span, 
+div.subart-enh dl span,
+div.subart-enh dl>div {
     grid-column: 1 / span 2;
 }
 
