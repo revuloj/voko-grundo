@@ -611,6 +611,11 @@ nav li {
     border-bottom: 3px solid var(--nav-act-brd-clr);
 }
 
+.literoj[lang='bo'] .elektita {
+    border: 2px dotted var(--nav-act-brd-clr);
+    padding: .2em;
+}
+
 /*
 #navigado li, #navigado li>a, #navigado p>a {
     display: block;
