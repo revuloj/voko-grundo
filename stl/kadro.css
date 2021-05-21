@@ -628,6 +628,10 @@ nav li {
     width: 100%
 }
 
+#mrk_sintakso li>a {
+    display: inline;
+}
+
 /***
 #navigado li, li>a, p>a {
     display: block;

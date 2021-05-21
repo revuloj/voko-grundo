@@ -1162,9 +1162,11 @@ function mrk_eraroj() {
                 listo.append(e2,ul);
                 for (let m of json.hom) {
                     let li = make_elements([
-                        ['li',{},
-                            [['a',{href: art_href(m[1]), target: 'precipa'}, m[0]+' [de '+m[1]+' al '+m[2]+']']]
-                        ]
+                        ['li',{},[
+                            ['a',{href: art_href(m[1]), target: 'precipa'}, m[0]],' [',
+                            ['a',{href:  art_href(m[1]), target: 'precipa'}, 'de '+m[1]],' ',
+                            ['a',{href:  art_href(m[2]), target: 'precipa'}, 'al '+m[2]],']'
+                        ]]
                     ]);
                     ul.append(...li);
                 }
