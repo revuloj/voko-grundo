@@ -1,7 +1,7 @@
 
 /* jshint esversion: 6 */
 
-const version="1f";
+const version="1g";
 const debug=false; //true; // ni bezonas provizore aparte por vidi erarojn en iOS Webkit, kie ni ne havas "console"
 const revo_url = "reta-vortaro.de";
 const art_prefix = "/revo/art/";
@@ -14,6 +14,7 @@ const redaktmenu_url = "redaktmenu-"+version+".html";
 
 const inx_eo_url = "/revo/inx/_plena.html";
 const mx_trd_url = "/cgi-bin/mx_trd.pl";
+const nombroj_url = "/cgi-bin/nombroj.pl";
 const mrk_eraro_url = "/cgi-bin/mrk_eraroj.pl";
 const http_404_url = "/revo/dlg/404.html";
 const sercho_videblaj = 7;
@@ -133,6 +134,7 @@ when_doc_ready(function() {
 
     t_main.alvene("titolo",()=>{ 
        hide("x:titol_btn");
+       nombroj();
     });
 
     t_main.forire("titolo",()=>{ 
@@ -696,7 +698,19 @@ function adaptu_paghon(root_el, url) {
             event.preventDefault();
             hazarda_art();
             event.stopPropagation(); // ne voku navigate_link!
-        });      
+        });
+        // en la lingva indekso metu preferatajn lingvojn supren
+        const lingvoj = root_el.querySelector("a[href^='lx_la_']").closest('details');
+        const p = lingvoj.querySelector('p');
+        var jam = [];
+        for (let l of preferoj.languages()) {
+            let l_ = l.split(/-/)[0];
+            if (jam.indexOf(l_)<0) { // evitu duoblaĵojn!
+                let a = lingvoj.querySelector("a[href^='lx_"+l_+"_']");
+                if (a) p.prepend(a.cloneNode(true));
+                jam.push(l_);
+            }
+        }
     }
     else if ( filename.startsWith('mx_trd.') ) {
         var a;
@@ -914,7 +928,6 @@ function serchu_q(esprimo) {
                 ])[0];
                 var dl = make_element("dl");
 
-                // ĉe lng=eo ni ordigu                
                 const trvj = srch.trovoj(lng);
                 // console.log(trvj);
 
@@ -930,7 +943,6 @@ function serchu_q(esprimo) {
                         atr = {class: "kasxita"};
                     }
 
-
                     const dt = make_element("dt",atr);
 
                     if ( lng == 'eo' ) {
@@ -938,9 +950,9 @@ function serchu_q(esprimo) {
                         // do ni provizore uzas t.eo.mrk anst. t[l].mrk
                         const a = make_element("a",{target: "precipa", href: t.h}, t.v);
                         dt.append(a);
-
                     } else {
-                        dt.append(t.v);
+                        const s = make_element("span",{lang: lng}, t.v);
+                        dt.append(s);
                     }
 
                     // dum redakto ni aldonas transprenan butonon por kreado de referencoj
@@ -957,12 +969,12 @@ function serchu_q(esprimo) {
    
                     if ( lng == 'eo' ) {
                         // trovitaj tradukoj de tiu e-a vorto
-                        for ( let [lng,trd] of Object.entries(t.t) ) { // ni trairu ĉiujn lingvojn....
+                        for ( let [l,trd] of Object.entries(t.t) ) { // ni trairu ĉiujn lingvojn....
                             // tradukojn oni momente ne povas rekte alsalti,
                             // do ni (provizore?) uzas href (el drv-mrk) 
                             const a = make_elements([
                                     ["a",{target: "precipa", href: t.h},
-                                        [["code",{}, lng + ":"], trd]
+                                        [["code",{}, l + ":"],["span",{lang: l}, trd]]
                                     ],["br"]
                                 ]);    
                             dd.append(...a);
@@ -1083,6 +1095,26 @@ function hazarda_art() {
     );
 }
 
+function nombroj() {
+
+    HTTPRequest('POST', nombroj_url, {x:0}, // sen parametroj POST ne funkcius, sed GET eble ne estus aktuala!
+        function(data) {
+            // sukceso!
+            var json = JSON.parse(data);
+            console.log(json);
+            const n = document.getElementById('t:nombroj');
+            if (n && json) {
+                // {"trd":[412630],"kap":[31291]}
+                const trd = json.trd[0];
+                const kap = json.kap[0];
+                n.prepend('Ni nun provizas '+kap+' kapvortojn kun '+trd+' tradukoj. ');
+            }
+        }, 
+        start_wait,
+        stop_wait 
+    );
+}
+
 function mrk_eraroj() {
     HTTPRequest('POST', mrk_eraro_url, {x:1}, // ni sendu ion per POST por ĉiam havi aktualan liston
         function(data) {
@@ -1090,10 +1122,10 @@ function mrk_eraroj() {
             const listo = document.getElementById("mrk_sintakso");
             listo.textContent= '';
 
-            const sum = make_element("summary",{},"Nekongruaj markoj");
+            const sum = make_element("summary",{},"Nekongruaj markoj / referencoj");
             listo.append(sum);
             // tri- kaj plipartaj drv@mrk
-            if (json.drv) {
+            if (json.drv && json.drv.length) {
                 const e1 = make_element("p",{},"Markoj de derivaĵoj havu nur du partojn, t.e. "
                 + "enhavu nur unu punkton:");
                 const ul = make_element("ul");
@@ -1109,7 +1141,7 @@ function mrk_eraroj() {
                 };
             }
             // mrk nekongruaj kun drv@mrk
-            if (json.drv) {
+            if (json.snc && json.snc.length) {
                 const e2 = make_element("p",{},"Markoj de sencoj, rimarkoj ktp. kongruu kun la "
                     + "marko de la enhavatna derivaĵo, ĝia prefikso estu la sama:");
                 const ul = make_element("ul");
@@ -1123,6 +1155,23 @@ function mrk_eraroj() {
                     ul.append(...li);
                 }
             }
+            // homonimoj sen ref-hom
+            if (json.hom && json.hom.length) {
+                const e2 = make_element("p",{},"Homonimoj, kiuj ne havas referencon de la tipo 'hom' aŭ duoblaj derivaĵoj:");
+                const ul = make_element("ul");
+                listo.append(e2,ul);
+                for (let m of json.hom) {
+                    let li = make_elements([
+                        ['li',{},[
+                            ['a',{href: art_href(m[1]), target: 'precipa'}, m[0]],' [',
+                            ['a',{href:  art_href(m[1]), target: 'precipa'}, 'de '+m[1]],' ',
+                            ['a',{href:  art_href(m[2]), target: 'precipa'}, 'al '+m[2]],']'
+                        ]]
+                    ]);
+                    ul.append(...li);
+                }
+            }
+
         },
         start_wait,
         stop_wait 

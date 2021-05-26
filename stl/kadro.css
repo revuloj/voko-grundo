@@ -299,6 +299,26 @@ nav a:active {
     margin-bottom: 0;
 }
 
+#navigado .enhavo details>p {
+    margin-top: 0;
+}
+
+#navigado .enhavo *[lang='bo'] {
+    font-size: 150% !important;
+    line-height: 120%;
+    vertical-align: text-top;
+}
+
+#navigado .enhavo *[lang='zh'] {
+    font-size: 120% !important;
+    /*line-height: 120%;
+    vertical-align: text-top;*/
+}
+
+#navigado .enhavo details a[href^='lx_la_'] {
+    border-bottom: 1px dotted var(--nav-brd-clr);
+}
+
 #navigado .icon_btn {
     /*
     float: left; 
@@ -591,6 +611,11 @@ nav li {
     border-bottom: 3px solid var(--nav-act-brd-clr);
 }
 
+.literoj[lang='bo'] .elektita {
+    border: 2px dotted var(--nav-act-brd-clr);
+    padding: .2em;
+}
+
 /*
 #navigado li, #navigado li>a, #navigado p>a {
     display: block;
@@ -601,6 +626,10 @@ nav li {
 #navigado li>a {
     display: inline-block;
     width: 100%
+}
+
+#mrk_sintakso li>a {
+    display: inline;
 }
 
 /***
@@ -669,6 +698,13 @@ nav li {
 #x\:trovoj dd code {
     color: var(--nav-code-fnt-clr);
 }
+
+/* jam per .enhavo *[lang='bo']
+#x\:trovoj *[lang='bo'] {
+    font-size: 150%;
+    vertical-align: text-top;
+}
+*/
 
 
 /***************************************
