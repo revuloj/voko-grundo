@@ -1143,7 +1143,7 @@ function mrk_eraroj() {
             // mrk nekongruaj kun drv@mrk
             if (json.snc && json.snc.length) {
                 const e2 = make_element("p",{},"Markoj de sencoj, rimarkoj ktp. kongruu kun la "
-                    + "marko de la enhavatna derivaĵo, ĝia prefikso estu la sama:");
+                    + "marko de la enhavanta derivaĵo, ĝia prefikso estu la sama:");
                 const ul = make_element("ul");
                 listo.append(e2,ul);
                 for (let m of json.snc) {
