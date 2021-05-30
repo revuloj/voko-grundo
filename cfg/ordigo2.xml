@@ -1374,6 +1374,60 @@ longan litergrupon egalan al la vortkomenco.
  <l name="z">zZ&#x017e;</l>
 </lingvo>
 
+<!-- nepala -->
+<lingvo lng="ne">
+ <l name="om">ॐ</l>
+ <l name="a">अ</l> 
+ <l name="aa">आ</l> 
+ <l name="i">इ</l> 
+ <l name="ii">ई</l> 
+ <l name="u">उ</l> 
+ <l name="uu">ऊ</l> 
+ <l name="ri">ऋ</l> 
+ <l name="li">ऌ</l> 
+ <l name="ex">ऍ</l> 
+ <l name="e">ए</l> 
+ <l name="ai">ऐ</l> 
+ <l name="ox">ऑ</l> 
+ <l name="o">ओ</l> 
+ <l name="au">औ</l> 
+ <l name="k">क</l> 
+ <l name="kh">ख</l> 
+ <l name="g">ग</l> 
+ <l name="gh">घ</l> 
+ <l name="nn">ङ</l> 
+ <l name="c">च</l> 
+ <l name="ch">छ</l> 
+ <l name="j">ज</l> 
+ <l name="jh">झ</l> 
+ <l name="ng">ञ</l> 
+ <l name="T">ट</l> 
+ <l name="Th">ठ</l> 
+ <l name="D">ड</l> 
+ <l name="Dh">ढ</l> 
+ <l name="N">ण</l> 
+ <l name="t">त</l> 
+ <l name="th">थ</l> 
+ <l name="d">द</l> 
+ <l name="dh">ध</l> 
+ <l name="n">न</l> 
+ <l name="p">प</l> 
+ <l name="ph">फ</l> 
+ <l name="b">ब</l> 
+ <l name="bh">भ</l> 
+ <l name="m">म</l> 
+ <l name="y">य</l> 
+ <l name="r">र</l> 
+ <l name="l">ल</l> 
+ <l name="L">ळ</l> 
+ <l name="v">व</l> 
+ <l name="ss">श</l> 
+ <l name="S">ष</l> 
+ <l name="s">स</l> 
+ <l name="h">ह</l> 
+ <l name="x">ऽ</l>
+</lingvo>
+
 <!-- norvega -->
 <lingvo lng="no">
  <l name="a">aA</l>
