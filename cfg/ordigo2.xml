@@ -126,6 +126,48 @@
  <l name="z">&#x0647;</l>
 </lingvo>
 
+<!-- armena -->
+<lingvo lng="hy">
+ <l name="a">աԱ</l>
+ <l name="b">բԲ</l>
+ <l name="g">գԳ</l>
+ <l name="d">դԴ</l>
+ <l name="e">եԵ</l>
+ <l name="z">զԶ</l>
+ <l name="eh">էԷ</l>
+ <l name="u">ըԸ</l>
+ <l name="th">թԹ</l>
+ <l name="zh">ժԺ</l>
+ <l name="i">իԻ</l>
+ <l name="l">լԼ</l>
+ <l name="c">խԽ</l>
+ <l name="tz">ծԾ</l>
+ <l name="k">կԿ</l>
+ <l name="h">հՀ</l>
+ <l name="dz">ձՁ</l>
+ <l name="gl">ղՂ</l>
+ <l name="cj">ճՃ</l>
+ <l name="m">մՄ</l>
+ <l name="y">յՅ</l>
+ <l name="n">նՆ</l>
+ <l name="sh">շՇ</l>
+ <l name="o">ոՈ</l>
+ <l name="ch">չՉ</l>
+ <l name="p">պՊ</l>
+ <l name="j">ջՋ</l>
+ <l name="rr">ռՌ</l>
+ <l name="s">սՍ</l>
+ <l name="v">վՎ</l>
+ <l name="t">տՏ</l>
+ <l name="r">րՐ</l>
+ <l name="c">ցՑ</l>
+ <l name="w">ւՒ</l>
+ <l name="ph">փՓ</l>
+ <l name="q">քՔ</l>
+ <l name="oh">օՕ</l>
+ <l name="f">ֆՖ</l>
+</lingvo>
+
 <!-- belorusa -->
 <lingvo lng="be">
  <l name="a">&#x0430;&#x0410;</l>
