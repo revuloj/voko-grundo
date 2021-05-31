@@ -57,6 +57,45 @@
  <l name="z">z,Z</l>
 </lingvo>
 
+<!-- amhara -->
+<lingvo lng="am"> 
+ <l name="h">ሀሁሂሃሄህሆ</l>
+ <l name="l">ለሉሊላሌልሎሏ</l>
+ <l name="hh">ሐሑሒሓሔሕሖሗ</l>
+ <l name="m">መሙሚማሜምሞሟ</l>
+ <l name="sx">ሠሡሢሣሤሥሦሧ</l>
+ <l name="r">ረሩሪራሬርሮሯ</l>
+ <l name="s">ሰሱሲሳሴስሶሷ</l>
+ <l name="sy">ሸሹሺሻሼሽሾሿ</l>
+ <l name="q">ቀቁቂቃቄቅቆቈቊቋቌቍ</l>
+ <l name="b">በቡቢባቤብቦቧ</l>
+ <l name="v">ቨቩቪቫቬቭቮቯ</l>
+ <l name="t">ተቱቲታቴትቶቷ</l>
+ <l name="cy">ቸቹቺቻቼችቾቿ</l>
+ <l name="hx">ኀኁኂኃኄኅኆኈኊኋኌኍ</l>
+ <l name="n">ነኑኒናኔንኖኗ</l>
+ <l name="ny">ኘኙኚኛኜኝኞኟ</l>
+ <l name="al">አኡኢኣኤእኦኧ</l>
+ <l name="k">ከኩኪካኬክኮኰኲኳኴኵ</l>
+ <l name="x">ኸኹኺኻኼኽኾዀዂዃዄዅ</l>
+ <l name="w">ወዉዊዋዌውዎ</l>
+ <l name="ar">ዐዑዒዓዔዕዖ</l>
+ <l name="z">ዘዙዚዛዜዝዞዟ</l>
+ <l name="zy">ዠዡዢዣዤዥዦዧ</l>
+ <l name="y">የዩዪያዬይዮ</l>
+ <l name="d">ደዱዲዳዴድዶዷ</l>
+ <l name="gy">ጀጁጂጃጄጅጆጇ</l>
+ <l name="g">ገጉጊጋጌግጎጐጒጓጔጕ</l>
+ <l name="tt">ጠጡጢጣጤጥጦጧ</l>
+ <l name="cv">ጨጩጪጫጬጭጮጯ</l>
+ <l name="pp">ጰጱጲጳጴጵጶጷ</l>
+ <l name="ss">ጸጹጺጻጼጽጾጿ</l>
+ <l name="sz">ፀፁፂፃፄፅፆ</l>
+ <l name="f">ፈፉፊፋፌፍፎፏ</l>
+ <l name="p">ፐፑፒፓፔፕፖፗ</l>
+</lingvo>
+
+
 <!-- araba -->
 <lingvo lng="ar"> 
  <l name="a">&#x0627;&#x0623;&#x0625;&#x0622;&#x0671;&#x0621;</l>
