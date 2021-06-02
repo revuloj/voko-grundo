@@ -126,7 +126,8 @@
  <l name="z">&#x0647;</l>
 </lingvo>
 
-<!-- armena -->
+<!-- armena 
+https://en.wikibooks.org/wiki/Armenian/Alphabet -->
 <lingvo lng="hy">
  <l name="a">աԱ</l>
  <l name="b">բԲ</l>
@@ -140,7 +141,7 @@
  <l name="zh">ժԺ</l>
  <l name="i">իԻ</l>
  <l name="l">լԼ</l>
- <l name="c">խԽ</l>
+ <l name="x">խԽ</l>
  <l name="tz">ծԾ</l>
  <l name="k">կԿ</l>
  <l name="h">հՀ</l>
@@ -201,6 +202,65 @@
  <l name="e">&#x044d;&#x042d;</l>
  <l name="ju">&#x044e;&#x042e;</l>
  <l name="ja">&#x044f;&#x042f;</l>
+</lingvo>
+
+<!-- bengala 
+https://www.ijcaonline.org/research/volume126/number11/shabnam-2015-ijca-906224.pdf -->
+<lingvo lng="bn">
+ <!-- vokaloj: ĉu ili havu apartajn grupojn
+      aŭ subordiĝu sub konsonantojn? -->
+ <l name="oa">&#x0985;</l> <!-- অ -->
+ <l name="a">&#x0986;</l> <!-- আ -->
+ <l name="i">&#x0987;</l> <!-- ই -->
+ <l name="ii">&#x0988;</l> <!-- ঈ -->
+ <l name="u">&#x0989;</l> <!-- উ -->
+ <l name="uu">&#x098A;</l> <!-- ঊ -->
+ <l name="ri">&#x098B;</l> <!-- ঋ -->
+ <l name="e">&#x098F;</l> <!-- এ -->
+ <l name="oi">&#x0990;</l> <!-- ঐ -->
+ <l name="o">&#x0993;</l> <!-- ও -->
+ <l name="ou">&#x0994;</l> <!-- ঔ -->
+
+ <!-- konsonantoj -->
+ <l name="k">&#x0995;</l> <!-- ক -->
+ <l name="kh">&#x0996;</l> <!-- খ -->
+ <l name="g">&#x0997;</l> <!-- গ -->
+ <l name="gh">&#x0998;</l> <!-- ঘ -->
+ <l name="ng">&#x0999;</l> <!-- ঙ -->
+ <l name="ch">&#x099A;</l> <!-- চ -->
+ <l name="cx">&#x099B;</l> <!-- ছ -->
+ <l name="jy">&#x099C;</l> <!-- জ -->
+ <l name="jh">&#x099D;</l> <!-- ঝ -->
+ <l name="nj">&#x099E;</l> <!-- ঞ -->
+ <l name="T">&#x099F;</l> <!-- ট -->
+ <l name="Th">&#x09A0;</l> <!-- ঠ -->
+ <l name="D">&#x09A1;</l> <!-- ড -->
+ <l name="Dh">&#x09A2;</l> <!-- ঢ -->
+ <l name="N">&#x09A3;</l> <!-- র্ -->
+ <l name="t">&#x09A4;</l> <!-- ত -->
+ <l name="th">&#x09A5;</l> <!-- থ -->
+ <l name="d">&#x09A6;</l> <!-- দ -->
+ <l name="dh">&#x09A7;</l> <!-- ধ -->
+ <l name="n">&#x09A8;</l> <!-- ন -->
+ <l name="p">&#x09AA;</l> <!-- প -->
+ <l name="ph">&#x09AB;</l> <!-- ফ -->
+ <l name="b">&#x09AC;</l> <!-- ব -->
+ <l name="bh">&#x09AD;</l> <!-- ভ -->
+ <l name="m">&#x09AE;</l> <!-- ম -->
+ <l name="j">&#x09AF;</l> <!-- য -->
+ <l name="r">&#x09B0;</l> <!-- র -->
+ <l name="l">&#x09B2;</l> <!-- ল -->
+ <l name="sh">&#x09B6;</l> <!-- শ -->
+ <l name="S">&#x09B7;</l> <!-- ষ -->
+ <l name="s">&#x09B8;</l> <!-- স -->
+ <l name="h">&#x09B9;</l> <!-- হ -->
+ <l name="R">&#x09DC;</l> <!-- ড় -->
+ <l name="Rh">&#x09DD;</l> <!-- ঢ় -->
+ <l name="y">&#x09DF;</l> <!-- য় -->
+ <!-- <l name="tx">&#x09CE;</l>  ৎ -->
+ <!-- <l name="Nx">&#x0982;</l>  ংাং -->
+ <!-- <l name="hx">&#x0983;</l>  xং  -->
+ <!-- <l name="nx">&#x0981;</l>  xং -->
 </lingvo>
 
 <!-- bulgara -->
