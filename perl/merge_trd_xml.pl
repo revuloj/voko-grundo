@@ -3,7 +3,7 @@
 # (c) 2021 Wolfram Diestel
 # laŭ GPL 2.0
 #
-# enmetas la tradukojn el tekstdosiero
+# enmetas la tradukojn el tekstdosiero (CSV: eo;<lng>)
 # en la artikolojn ( nur por unufoja uzo :)
 # la artikoloj estu en la aktuala dosierujo
 #
@@ -279,7 +279,7 @@ sub extract_kap {
 
 sub read_csv {
 	my ($csvfile) = @_;
-    my $parser = Text::CSV->new ({ auto_diag => 1 });
+    my $parser = Text::CSV->new ({ auto_diag => 1, sep_char => ";" });
     
     open $CSV,"<:encoding(utf8)",$csvfile or die "Ne povis malfermi CSV '$csvfile': $!\n";
 
