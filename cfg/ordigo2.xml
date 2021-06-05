@@ -57,6 +57,45 @@
  <l name="z">z,Z</l>
 </lingvo>
 
+<!-- amhara -->
+<lingvo lng="am"> 
+ <l name="h">ሀሁሂሃሄህሆ</l>
+ <l name="l">ለሉሊላሌልሎሏ</l>
+ <l name="hh">ሐሑሒሓሔሕሖሗ</l>
+ <l name="m">መሙሚማሜምሞሟ</l>
+ <l name="sx">ሠሡሢሣሤሥሦሧ</l>
+ <l name="r">ረሩሪራሬርሮሯ</l>
+ <l name="s">ሰሱሲሳሴስሶሷ</l>
+ <l name="sy">ሸሹሺሻሼሽሾሿ</l>
+ <l name="q">ቀቁቂቃቄቅቆቈቊቋቌቍ</l>
+ <l name="b">በቡቢባቤብቦቧ</l>
+ <l name="v">ቨቩቪቫቬቭቮቯ</l>
+ <l name="t">ተቱቲታቴትቶቷ</l>
+ <l name="cy">ቸቹቺቻቼችቾቿ</l>
+ <l name="hx">ኀኁኂኃኄኅኆኈኊኋኌኍ</l>
+ <l name="n">ነኑኒናኔንኖኗ</l>
+ <l name="ny">ኘኙኚኛኜኝኞኟ</l>
+ <l name="al">አኡኢኣኤእኦኧ</l>
+ <l name="k">ከኩኪካኬክኮኰኲኳኴኵ</l>
+ <l name="x">ኸኹኺኻኼኽኾዀዂዃዄዅ</l>
+ <l name="w">ወዉዊዋዌውዎ</l>
+ <l name="ar">ዐዑዒዓዔዕዖ</l>
+ <l name="z">ዘዙዚዛዜዝዞዟ</l>
+ <l name="zy">ዠዡዢዣዤዥዦዧ</l>
+ <l name="y">የዩዪያዬይዮ</l>
+ <l name="d">ደዱዲዳዴድዶዷ</l>
+ <l name="gy">ጀጁጂጃጄጅጆጇ</l>
+ <l name="g">ገጉጊጋጌግጎጐጒጓጔጕ</l>
+ <l name="tt">ጠጡጢጣጤጥጦጧ</l>
+ <l name="cv">ጨጩጪጫጬጭጮጯ</l>
+ <l name="pp">ጰጱጲጳጴጵጶጷ</l>
+ <l name="ss">ጸጹጺጻጼጽጾጿ</l>
+ <l name="sz">ፀፁፂፃፄፅፆ</l>
+ <l name="f">ፈፉፊፋፌፍፎፏ</l>
+ <l name="p">ፐፑፒፓፔፕፖፗ</l>
+</lingvo>
+
+
 <!-- araba -->
 <lingvo lng="ar"> 
  <l name="a">&#x0627;&#x0623;&#x0625;&#x0622;&#x0671;&#x0621;</l>
@@ -85,6 +124,49 @@
  <l name="x">&#x0645;</l>
  <l name="y">&#x0646;</l>
  <l name="z">&#x0647;</l>
+</lingvo>
+
+<!-- armena 
+https://en.wikibooks.org/wiki/Armenian/Alphabet -->
+<lingvo lng="hy">
+ <l name="a">աԱ</l>
+ <l name="b">բԲ</l>
+ <l name="g">գԳ</l>
+ <l name="d">դԴ</l>
+ <l name="e">եԵ</l>
+ <l name="z">զԶ</l>
+ <l name="eh">էԷ</l>
+ <l name="u">ըԸ</l>
+ <l name="th">թԹ</l>
+ <l name="zh">ժԺ</l>
+ <l name="i">իԻ</l>
+ <l name="l">լԼ</l>
+ <l name="x">խԽ</l>
+ <l name="tz">ծԾ</l>
+ <l name="k">կԿ</l>
+ <l name="h">հՀ</l>
+ <l name="dz">ձՁ</l>
+ <l name="gl">ղՂ</l>
+ <l name="cj">ճՃ</l>
+ <l name="m">մՄ</l>
+ <l name="y">յՅ</l>
+ <l name="n">նՆ</l>
+ <l name="sh">շՇ</l>
+ <l name="o">ոՈ</l>
+ <l name="ch">չՉ</l>
+ <l name="p">պՊ</l>
+ <l name="j">ջՋ</l>
+ <l name="rr">ռՌ</l>
+ <l name="s">սՍ</l>
+ <l name="v">վՎ</l>
+ <l name="t">տՏ</l>
+ <l name="r">րՐ</l>
+ <l name="c">ցՑ</l>
+ <l name="w">ւՒ</l>
+ <l name="ph">փՓ</l>
+ <l name="q">քՔ</l>
+ <l name="oh">օՕ</l>
+ <l name="f">ֆՖ</l>
 </lingvo>
 
 <!-- belorusa -->
@@ -120,6 +202,65 @@
  <l name="e">&#x044d;&#x042d;</l>
  <l name="ju">&#x044e;&#x042e;</l>
  <l name="ja">&#x044f;&#x042f;</l>
+</lingvo>
+
+<!-- bengala 
+https://www.ijcaonline.org/research/volume126/number11/shabnam-2015-ijca-906224.pdf -->
+<lingvo lng="bn">
+ <!-- vokaloj: ĉu ili havu apartajn grupojn
+      aŭ subordiĝu sub konsonantojn? -->
+ <l name="oa">&#x0985;</l> <!-- অ -->
+ <l name="a">&#x0986;</l> <!-- আ -->
+ <l name="i">&#x0987;</l> <!-- ই -->
+ <l name="ii">&#x0988;</l> <!-- ঈ -->
+ <l name="u">&#x0989;</l> <!-- উ -->
+ <l name="uu">&#x098A;</l> <!-- ঊ -->
+ <l name="ri">&#x098B;</l> <!-- ঋ -->
+ <l name="e">&#x098F;</l> <!-- এ -->
+ <l name="oi">&#x0990;</l> <!-- ঐ -->
+ <l name="o">&#x0993;</l> <!-- ও -->
+ <l name="ou">&#x0994;</l> <!-- ঔ -->
+
+ <!-- konsonantoj -->
+ <l name="k">&#x0995;</l> <!-- ক -->
+ <l name="kh">&#x0996;</l> <!-- খ -->
+ <l name="g">&#x0997;</l> <!-- গ -->
+ <l name="gh">&#x0998;</l> <!-- ঘ -->
+ <l name="ng">&#x0999;</l> <!-- ঙ -->
+ <l name="ch">&#x099A;</l> <!-- চ -->
+ <l name="cx">&#x099B;</l> <!-- ছ -->
+ <l name="jy">&#x099C;</l> <!-- জ -->
+ <l name="jh">&#x099D;</l> <!-- ঝ -->
+ <l name="nj">&#x099E;</l> <!-- ঞ -->
+ <l name="T">&#x099F;</l> <!-- ট -->
+ <l name="Th">&#x09A0;</l> <!-- ঠ -->
+ <l name="D">&#x09A1;</l> <!-- ড -->
+ <l name="Dh">&#x09A2;</l> <!-- ঢ -->
+ <l name="N">&#x09A3;</l> <!-- র্ -->
+ <l name="t">&#x09A4;</l> <!-- ত -->
+ <l name="th">&#x09A5;</l> <!-- থ -->
+ <l name="d">&#x09A6;</l> <!-- দ -->
+ <l name="dh">&#x09A7;</l> <!-- ধ -->
+ <l name="n">&#x09A8;</l> <!-- ন -->
+ <l name="p">&#x09AA;</l> <!-- প -->
+ <l name="ph">&#x09AB;</l> <!-- ফ -->
+ <l name="b">&#x09AC;</l> <!-- ব -->
+ <l name="bh">&#x09AD;</l> <!-- ভ -->
+ <l name="m">&#x09AE;</l> <!-- ম -->
+ <l name="j">&#x09AF;</l> <!-- য -->
+ <l name="r">&#x09B0;</l> <!-- র -->
+ <l name="l">&#x09B2;</l> <!-- ল -->
+ <l name="sh">&#x09B6;</l> <!-- শ -->
+ <l name="S">&#x09B7;</l> <!-- ষ -->
+ <l name="s">&#x09B8;</l> <!-- স -->
+ <l name="h">&#x09B9;</l> <!-- হ -->
+ <l name="R">&#x09DC;</l> <!-- ড় -->
+ <l name="Rh">&#x09DD;</l> <!-- ঢ় -->
+ <l name="y">&#x09DF;</l> <!-- য় -->
+ <!-- <l name="tx">&#x09CE;</l>  ৎ -->
+ <!-- <l name="Nx">&#x0982;</l>  ংাং -->
+ <!-- <l name="hx">&#x0983;</l>  xং  -->
+ <!-- <l name="nx">&#x0981;</l>  xং -->
 </lingvo>
 
 <!-- bulgara -->
@@ -1372,6 +1513,60 @@ longan litergrupon egalan al la vortkomenco.
  <l name="x">xX</l>
  <l name="y">yY</l>
  <l name="z">zZ&#x017e;</l>
+</lingvo>
+
+<!-- nepala -->
+<lingvo lng="ne">
+ <l name="om">ॐ</l>
+ <l name="a">अ</l> 
+ <l name="aa">आ</l> 
+ <l name="i">इ</l> 
+ <l name="ii">ई</l> 
+ <l name="u">उ</l> 
+ <l name="uu">ऊ</l> 
+ <l name="ri">ऋ</l> 
+ <l name="li">ऌ</l> 
+ <l name="ex">ऍ</l> 
+ <l name="e">ए</l> 
+ <l name="ai">ऐ</l> 
+ <l name="ox">ऑ</l> 
+ <l name="o">ओ</l> 
+ <l name="au">औ</l> 
+ <l name="k">क</l> 
+ <l name="kh">ख</l> 
+ <l name="g">ग</l> 
+ <l name="gh">घ</l> 
+ <l name="nn">ङ</l> 
+ <l name="c">च</l> 
+ <l name="ch">छ</l> 
+ <l name="j">ज</l> 
+ <l name="jh">झ</l> 
+ <l name="ng">ञ</l> 
+ <l name="T">ट</l> 
+ <l name="Th">ठ</l> 
+ <l name="D">ड</l> 
+ <l name="Dh">ढ</l> 
+ <l name="N">ण</l> 
+ <l name="t">त</l> 
+ <l name="th">थ</l> 
+ <l name="d">द</l> 
+ <l name="dh">ध</l> 
+ <l name="n">न</l> 
+ <l name="p">प</l> 
+ <l name="ph">फ</l> 
+ <l name="b">ब</l> 
+ <l name="bh">भ</l> 
+ <l name="m">म</l> 
+ <l name="y">य</l> 
+ <l name="r">र</l> 
+ <l name="l">ल</l> 
+ <l name="L">ळ</l> 
+ <l name="v">व</l> 
+ <l name="ss">श</l> 
+ <l name="S">ष</l> 
+ <l name="s">स</l> 
+ <l name="h">ह</l> 
+ <l name="x">ऽ</l>
 </lingvo>
 
 <!-- norvega -->
