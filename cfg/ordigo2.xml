@@ -1156,6 +1156,7 @@ longan litergrupon egalan al la vortkomenco.
  </lingvo>
 
 
+
 <!-- franca -->
 <lingvo lng="fr">
  <l name="a">aAàÀâÂ&#x00c6;&#x00e6;</l>
@@ -1236,6 +1237,10 @@ longan litergrupon egalan al la vortkomenco.
  <l name="sh">&#x05e9;</l>
  <l name="th">&#x05ea;</l>
 </lingvo>
+
+<!-- hinda -->
+<lingvo lng="hi" kiel="ne"/>
+
 
 <!-- hungara -->
 <lingvo lng="hu">
@@ -1513,6 +1518,11 @@ longan litergrupon egalan al la vortkomenco.
  <l name="x">xX</l>
  <l name="y">yY</l>
  <l name="z">zZ&#x017e;</l>
+</lingvo>
+
+<!-- marata -->
+<lingvo lng="mr" kiel="ne">
+<!-- अ आ इ ई उ ऊ ऋ ऌ ऍ ए ऐ ऑ ओ औ क ख ग घ ङ च छ ज झ ञ ट ठ ड ढ ण त थ द ध न प फ ब भ म य र ऱ ल व श ष स ह ळ ऴ क्ष ज्ञ -->
 </lingvo>
 
 <!-- nepala -->
