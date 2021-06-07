@@ -309,6 +309,12 @@ Unikodo tibeta: https://de.wikipedia.org/wiki/Unicodeblock_Tibetisch
 Per atributo @silab ni donas silabigan signon, sed la algoritmo fakte 
 ne bezonas ĝin. Per voko:max-prefix en inx_ordigo2.xsl ni simple serĉas la plej
 longan litergrupon egalan al la vortkomenco.
+
+Vortaroj: 
+http://www.eng-tib.com/
+https://dictionary.christian-steinert.de/
+http://www.thlib.org/reference/dictionaries/tibetan-dictionary/translate.php
+
 -->
 <lingvo lng="bo" silab="&#x0F0B;">
 <l name="ka">
@@ -1156,6 +1162,7 @@ longan litergrupon egalan al la vortkomenco.
  </lingvo>
 
 
+
 <!-- franca -->
 <lingvo lng="fr">
  <l name="a">aAàÀâÂ&#x00c6;&#x00e6;</l>
@@ -1211,6 +1218,58 @@ longan litergrupon egalan al la vortkomenco.
 <!-- malnovgreka -->
 <lingvo lng="grc" kiel="el"/>
 
+<!-- guĝarata -->
+<lingvo lng="gu">
+ <l name="a">અ</l>
+ <l name="aa">આ</l>
+ <l name="i">ઇ</l>
+ <l name="ii">ઈ</l>
+ <l name="u">ઉ</l>
+ <l name="uu">ઊ</l>
+ <l name="ru">ઋ</l>
+ <!-- l name="">ઌ</l -->
+ <l name="ae">ઍ</l>
+ <l name="e">એ</l>
+ <l name="ai">ઐ</l>
+ <l name="oe">ઑ</l>
+ <l name="o">ઓ</l>
+ <l name="au">ઔ</l>
+ <l name="k">ક</l>
+ <l name="kh">ખ</l>
+ <l name="g">ગ</l>
+ <l name="gh">ઘ</l>
+ <l name="ng">ઙ</l>
+ <l name="c">ચ</l>
+ <l name="ch">છ</l>
+ <l name="j">જ</l>
+ <l name="jh">ઝ</l>
+ <l name="nj">ઞ</l>
+ <l name="T">ટ</l>
+ <l name="Th">ઠ</l>
+ <l name="D">ડ</l>
+ <l name="Dh">ઢ</l>
+ <l name="N">ણ</l>
+ <l name="t">ત</l>
+ <l name="th">થ</l>
+ <l name="d">દ</l>
+ <l name="dh">ધ</l>
+ <l name="n">ન</l>
+ <l name="p">પ</l>
+ <l name="ph">ફ</l>
+ <l name="b">બ</l>
+ <l name="bh">ભ</l>
+ <l name="m">મ</l>
+ <l name="y">ય</l>
+ <l name="r">ર</l>
+ <l name="l">લ</l>
+ <l name="">ળ</l>
+ <l name="v">વ</l>
+ <l name="sx">શ</l>
+ <l name="S">ષ</l>
+ <l name="s">સ</l>
+ <!-- l name="">હ</l -->
+</lingvo>
+
 <!-- hebrea -->
 <lingvo lng="he">
  <l name="a">&#x05d0;</l>
@@ -1236,6 +1295,10 @@ longan litergrupon egalan al la vortkomenco.
  <l name="sh">&#x05e9;</l>
  <l name="th">&#x05ea;</l>
 </lingvo>
+
+<!-- hinda -->
+<lingvo lng="hi" kiel="ne"/>
+
 
 <!-- hungara -->
 <lingvo lng="hu">
@@ -1515,6 +1578,55 @@ longan litergrupon egalan al la vortkomenco.
  <l name="z">zZ&#x017e;</l>
 </lingvo>
 
+<!-- mongola
+http://www.cjvlang.com/Writing/writmongol/tradmononsite.html -->
+<!-- supre malsupren verŝajne ne funkcios bone en Revo, do prefere ni uzu la cirilan skribon! -->
+<lingvo lng="mn" kiel="ru"/>
+
+<!-- marata -->
+<lingvo lng="mr" kiel="ne">
+<!-- अ आ इ ई उ ऊ ऋ ऌ ऍ ए ऐ ऑ ओ औ क ख ग घ ङ च छ ज झ ञ ट ठ ड ढ ण त थ द ध न प फ ब भ म य र ऱ ल व श ष स ह ळ ऴ क्ष ज्ञ -->
+</lingvo>
+
+<!-- birma 
+https://download.mimer.com/pub/developer/charts/MyanmarCollation.pdf -->
+<lingvo lng="my">
+ <l name="k">&#x1000;</l> <!-- က -->
+ <l name="kh">&#x1001;</l> <!-- ခ -->
+ <l name="g">&#x1002;</l> <!-- ဂ -->
+ <l name="gg">&#x1003;</l> <!-- ဃ -->
+ <l name="ng">&#x1004;</l> <!-- င -->
+ <l name="s">&#x1005;</l> <!-- စ -->
+ <l name="sh">&#x1006;</l> <!-- ဆ -->
+ <l name="z">&#x1007;</l> <!-- ဇ -->
+ <l name="zz">&#x1008;</l> <!-- ဈ -->
+ <l name="zg">&#x1009;</l> <!-- ဉ -->
+ <l name="Zg">&#x100A;</l> <!-- ည -->
+ <l name="t">&#x100B;</l> <!-- ဋ -->
+ <l name="th">&#x100C;</l> <!-- ဌ -->
+ <l name="d">&#x100D;</l> <!-- ဍ -->
+ <l name="dd">&#x100E;</l> <!-- ဎ -->
+ <l name="n">&#x100F;</l> <!-- ဏ -->
+ <l name="T">&#x1010;</l> <!-- တ -->
+ <l name="Th">&#x1011;</l> <!-- ထ -->
+ <l name="D">&#x1012;</l> <!-- ဒ -->
+ <l name="Dh">&#x1013;</l> <!-- ဓ -->
+ <l name="N">&#x1014;</l> <!-- န -->
+ <l name="p">&#x1015;</l> <!-- ပ -->
+ <l name="ph">&#x1016;</l> <!-- ဖ -->
+ <l name="b">&#x1017;</l> <!-- ဗ -->
+ <l name="bb">&#x1018;</l> <!-- ဘ -->
+ <l name="m">&#x1019;</l> <!-- မ -->
+ <l name="j">&#x101A;</l> <!-- ယ -->
+ <l name="J">&#x101B;</l> <!-- ရ -->
+ <l name="l">&#x101C;</l> <!-- လ -->
+ <l name="w">&#x101D;</l> <!-- ဝ -->
+ <l name="tt">&#x101E;</l> <!-- သ -->
+ <l name="h">&#x101F;</l> <!-- ဟ -->
+ <l name="ll">&#x1020;</l> <!-- ဠ -->
+ <l name="x">&#x1021;</l> <!-- အ -->
+</lingvo>
+
 <!-- nepala -->
 <lingvo lng="ne">
  <l name="om">ॐ</l>
@@ -1646,6 +1758,44 @@ longan litergrupon egalan al la vortkomenco.
  <l name="e">&#x044d;&#x042d;</l>
  <l name="ju">&#x044e;&#x042e;</l>
  <l name="ja">&#x044f;&#x042f;</l>
+</lingvo>
+
+<!-- panĝaba (alfabeto Gurmukhi)
+https://en.wikipedia.org/wiki/Gurmukhi
+ -->
+<lingvo lng="pa">
+    <l name="a">ਅ</l>
+	<l name="b">ਬ</l>
+	<l name="bh">ਭ</l>
+	<l name="g">ਗ</l>
+	<l name="dh">ਧ</l>
+	<l name="Dh">ਢ</l>
+	<l name="e">ੲ</l>
+	<l name="v">ਵ</l>
+	<l name="d">ਦ</l>
+	<l name="D">ਡ</l>
+	<l name="h">ਹ</l>
+	<l name="gh">ਘ</l>
+	<l name="th">ਥ</l>
+	<l name="Th">ਠ</l>
+	<l name="y">ਯ</l>
+	<l name="k">ਕ</l>
+	<l name="c">ਚ</l>
+	<l name="l">ਲ</l>
+	<l name="m">ਮ</l>
+	<l name="n">ਨ</l>
+	<l name="N">ਣ</l>
+	<l name="sx">ਸ਼</l>
+	<l name="o">ੳ</l>
+	<l name="p">ਪ</l>
+	<l name="ph">ਫ</l>
+	<l name="s">ਸ</l>
+	<l name="kh">ਖ</l>
+	<l name="ch">ਛ</l>
+	<l name="r">ਰ</l>
+	<l name="S">ਖ</l>
+	<l name="t">ਤ</l>
+	<l name="T">ਟ</l>
 </lingvo>
 
 <!-- pola -->
@@ -1854,6 +2004,62 @@ longan litergrupon egalan al la vortkomenco.
  <l name="oe">öÖ</l>
 </lingvo>
 
+<!-- telugua 
+https://en.wikipedia.org/wiki/Telugu_script -->
+<lingvo lng="te">
+ <l name="a">అ</l>
+ <l name="aa">ఆ</l>
+ <l name="i">ఇ</l>
+ <l name="ii">ఈ</l>
+ <l name="u">ఉ</l>
+ <l name="uu">ఊ</l>
+ <l name="ro">ఋ</l>
+ <l name="Ro">ౠ</l>
+ <l name="lo">ఌ</l>
+ <l name="Lo">ౡ</l>
+ <l name="e">ఎ</l>
+ <l name="ee">ఏ</l>
+ <l name="ai">ఐ</l>
+ <l name="o">ఒ</l>
+ <l name="oo">ఓ</l>
+ <l name="au">ఔ</l>
+ <l name="k">క</l>
+ <l name="kh">ఖ</l>
+ <l name="g">గ</l>
+ <l name="gh">ఘ</l>
+ <l name="ng">ఙ</l>
+ <l name="c">చ</l>
+ <l name="ch">ఛ</l>
+ <l name="j">జ</l>
+ <l name="jh">ఝ</l>
+ <l name="nj">ఞ</l>
+ <l name="T">ట</l>
+ <l name="Th">ఠ</l>
+ <l name="D">డ</l>
+ <l name="Dh">ఢ</l>
+ <l name="N">ణ</l>
+ <l name="t">త</l>
+ <l name="th">థ</l>
+ <l name="d">ద</l>
+ <l name="dh">ధ</l>
+ <l name="n">న</l>
+ <l name="p">ప</l>
+ <l name="ph">ఫ</l>
+ <l name="b">బ</l>
+ <l name="bh">భ</l>
+ <l name="m">మ</l>
+ <l name="y">య</l>
+ <l name="r">ర</l>
+ <l name="l">ఱ</l>
+ <l name="v">ల</l>
+ <l name="ll">వ</l>
+ <l name="sx">శ</l>
+ <l name="sy">ష</l>
+ <l name="s">స</l>
+ <l name="h">హ</l>
+ <l name="rr">ళ</l>
+</lingvo>
+
 <!-- taja -->
 <lingvo lng="th" ignorendaj="เแโใไ">
  <l name="ko_kai">ก</l>
@@ -1983,6 +2189,89 @@ longan litergrupon egalan al la vortkomenco.
  <l name="ja">&#x044f;&#x042f;</l>
 </lingvo>
 
+<!-- urdua 
+https://en.wikipedia.org/wiki/Urdu_alphabet
+-->
+<lingvo lng="ur">
+<l name="a">أآ</l>
+<l name="b">ببھ</l>
+<l name="p">پھ</l>
+<l name="t">تھ</l>
+<l name="tt">ٹٹھ</l>
+<l name="ss">ث</l>
+<l name="j">ججھ</l>
+<l name="c">چچھ</l>
+<l name="hh">ح</l>
+<l name="kh">خ</l>
+<l name="d">ددھ</l>
+<l name="dd">ڈڈھ</l>
+<l name="zz">ذ</l>
+<l name="r">ررھ</l>
+<l name="rr">ڑڑھ</l>
+<l name="z">ز</l>
+<l name="zh">ژ</l>
+<l name="s">س</l>
+<l name="sh">ش</l>
+<l name="sx">ص</l>
+<l name="zx">ض</l>
+<l name="ty">ط</l>
+<l name="zy">ظ</l>
+<l name="x">ع</l>
+<l name="gh">غ</l>
+<l name="f">ف</l>
+<l name="q">ق</l>
+<l name="k">ککھ</l>
+<l name="g">گگھ</l>
+<l name="l">للھ</l>
+<l name="m">ممھ</l>
+<l name="n">ننھ</l>
+<l name="nn">ںںھ</l>
+<l name="v">وؤوھ</l>
+<l name="hx">ہۂ</l>
+<l name="h">ھ</l>
+<l name="ta">ۃ</l>
+<l name="yy">ء</l>
+<l name="y">ی</l>
+<l name="yi">ئ</l>
+</lingvo>
+
+<!-- vjetnama
+http://vietunicode.sourceforge.net/charset/v3.htm -->
+<lingvo lng="vi">
+ <l name="a">&#x0061;&#x0041;&#x00E0;&#x00C0;&#x1EA3;&#x1EA2;&#x00E3;&#x00C3;&#x00E1;&#x00C1;&#x1EA1;&#x1EA0;</l>
+ <l name="au">&#x0103;&#x0102;&#x1EB1;&#x1EB0;&#x1EB3;&#x1EB2;&#x1EB5;&#x1EB4;&#x1EAF;&#x1EAE;&#x1EB7;&#x1EB6;</l>
+ <l name="ax">&#x00E2;&#x00C2;&#x1EA7;&#x1EA6;&#x1EA9;&#x1EA8;&#x1EAB;&#x1EAA;&#x1EA5;&#x1EA4;&#x1EAD;&#x1EAC;</l>
+ <l name="b">&#x0062;&#x0042;</l>
+ <l name="c">&#x0063;&#x0043;</l>
+ <l name="d">&#x0064;&#x0044;</l>
+ <l name="dl">&#x0111;&#x0110;</l>
+ <l name="e">&#x0065;&#x0045;&#x00E8;&#x00C8;&#x1EBB;&#x1EBA;&#x1EBD;&#x1EBC;&#x00E9;&#x00C9;&#x1EB9;&#x1EB8;</l>
+ <l name="ex">&#x00EA;&#x00CA;&#x1EC1;&#x1EC0;&#x1EC3;&#x1EC2;&#x1EC5;&#x1EC4;&#x1EBF;&#x1EBE;&#x1EC7;&#x1EC6;</l>
+ <l name="f">&#x0066;&#x0046;</l>
+ <l name="g">&#x0067;&#x0047;</l>
+ <l name="h">&#x0068;&#x0048;</l> 
+ <l name="i">&#x0069;&#x0049;&#x00EC;&#x00CC;&#x1EC9;&#x1EC8;&#x0129;&#x0128;&#x00ED;&#x00CD;&#x1ECB;&#x1ECA;</l>
+ <l name="j">&#x004A;&#x006A;</l>
+ <l name="k">&#x006B;&#x004B;</l>
+ <l name="l">&#x006C;&#x004C;</l>
+ <l name="m">&#x006D;&#x004D;</l>
+ <l name="n">&#x006E;&#x004E;</l>
+ <l name="o">&#x006F;&#x004F;&#x00F2;&#x00D2;&#x1ECF;&#x1ECE;&#x00F5;&#x00D5;&#x00F3;&#x00D3;&#x1ECD;&#x1ECC;</l>
+ <l name="ox">&#x00F4;&#x00D4;&#x1ED3;&#x1ED2;&#x1ED5;&#x1ED4;&#x1ED7;&#x1ED6;&#x1ED1;&#x1ED0;&#x1ED9;&#x1ED8;</l>
+ <l name="ou">&#x01A1;&#x01A0;&#x1EDD;&#x1EDC;&#x1EDF;&#x1EDE;&#x1EE1;&#x1EE0;&#x1EDB;&#x1EDA;&#x1EE3;&#x1EE2;</l> 
+ <l name="p">&#x0070;&#x0050;</l>
+ <l name="q">&#x0071;&#x0051;</l>
+ <l name="r">&#x0072;&#x0052;</l>
+ <l name="s">&#x0073;&#x0053;</l>
+ <l name="t">&#x0074;&#x0054;</l>
+ <l name="u">&#x0075;&#x0055;&#x00F9;&#x00D9;&#x1EE7;&#x1EE6;&#x0169;&#x0168;&#x00FA;&#x00DA;&#x1EE5;&#x1EE4;</l>
+ <l name="uu">&#x01B0;&#x01AF;&#x1EEB;&#x1EEA;&#x1EED;&#x1EEC;&#x1EEF;&#x1EEE;&#x1EE9;&#x1EE8;&#x1EF1;&#x1EF0;</l>
+ <l name="v">&#x0076;&#x0056;</l>
+ <l name="w">&#x0077;&#x0057;</l>
+ <l name="x">&#x0078;&#x0058;</l>
+ <l name="y">&#x0079;&#x0059;&#x1EF3;&#x1EF2;&#x1EF7;&#x1EF6;&#x1EF9;&#x1EF8;&#x00FD;&#x00DD;&#x1EF5;&#x1EF4;</l>
+ <l name="z">&#x007A;&#x005A;</l>
+</lingvo>
 
 </ordigo>
 
