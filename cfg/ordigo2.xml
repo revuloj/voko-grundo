@@ -309,6 +309,12 @@ Unikodo tibeta: https://de.wikipedia.org/wiki/Unicodeblock_Tibetisch
 Per atributo @silab ni donas silabigan signon, sed la algoritmo fakte 
 ne bezonas ĝin. Per voko:max-prefix en inx_ordigo2.xsl ni simple serĉas la plej
 longan litergrupon egalan al la vortkomenco.
+
+Vortaroj: 
+http://www.eng-tib.com/
+https://dictionary.christian-steinert.de/
+http://www.thlib.org/reference/dictionaries/tibetan-dictionary/translate.php
+
 -->
 <lingvo lng="bo" silab="&#x0F0B;">
 <l name="ka">
@@ -1212,6 +1218,58 @@ longan litergrupon egalan al la vortkomenco.
 <!-- malnovgreka -->
 <lingvo lng="grc" kiel="el"/>
 
+<!-- guĝarata -->
+<lingvo lng="gu">
+ <l name="a">અ</l>
+ <l name="aa">આ</l>
+ <l name="i">ઇ</l>
+ <l name="ii">ઈ</l>
+ <l name="u">ઉ</l>
+ <l name="uu">ઊ</l>
+ <l name="ru">ઋ</l>
+ <!-- l name="">ઌ</l -->
+ <l name="ae">ઍ</l>
+ <l name="e">એ</l>
+ <l name="ai">ઐ</l>
+ <l name="oe">ઑ</l>
+ <l name="o">ઓ</l>
+ <l name="au">ઔ</l>
+ <l name="k">ક</l>
+ <l name="kh">ખ</l>
+ <l name="g">ગ</l>
+ <l name="gh">ઘ</l>
+ <l name="ng">ઙ</l>
+ <l name="c">ચ</l>
+ <l name="ch">છ</l>
+ <l name="j">જ</l>
+ <l name="jh">ઝ</l>
+ <l name="nj">ઞ</l>
+ <l name="T">ટ</l>
+ <l name="Th">ઠ</l>
+ <l name="D">ડ</l>
+ <l name="Dh">ઢ</l>
+ <l name="N">ણ</l>
+ <l name="t">ત</l>
+ <l name="th">થ</l>
+ <l name="d">દ</l>
+ <l name="dh">ધ</l>
+ <l name="n">ન</l>
+ <l name="p">પ</l>
+ <l name="ph">ફ</l>
+ <l name="b">બ</l>
+ <l name="bh">ભ</l>
+ <l name="m">મ</l>
+ <l name="y">ય</l>
+ <l name="r">ર</l>
+ <l name="l">લ</l>
+ <l name="">ળ</l>
+ <l name="v">વ</l>
+ <l name="sx">શ</l>
+ <l name="S">ષ</l>
+ <l name="s">સ</l>
+ <!-- l name="">હ</l -->
+</lingvo>
+
 <!-- hebrea -->
 <lingvo lng="he">
  <l name="a">&#x05d0;</l>
@@ -1520,9 +1578,53 @@ longan litergrupon egalan al la vortkomenco.
  <l name="z">zZ&#x017e;</l>
 </lingvo>
 
+<!-- mongola
+http://www.cjvlang.com/Writing/writmongol/tradmononsite.html -->
+<!-- supre malsupren verŝajne ne funkcios bone en Revo, do prefere ni uzu la cirilan skribon! -->
+<lingvo lng="mn" kiel="ru"/>
+
 <!-- marata -->
 <lingvo lng="mr" kiel="ne">
 <!-- अ आ इ ई उ ऊ ऋ ऌ ऍ ए ऐ ऑ ओ औ क ख ग घ ङ च छ ज झ ञ ट ठ ड ढ ण त थ द ध न प फ ब भ म य र ऱ ल व श ष स ह ळ ऴ क्ष ज्ञ -->
+</lingvo>
+
+<!-- birma 
+https://download.mimer.com/pub/developer/charts/MyanmarCollation.pdf -->
+<lingvo lng="my">
+ <l name="k">&#x1000;</l> <!-- က -->
+ <l name="kh">&#x1001;</l> <!-- ခ -->
+ <l name="g">&#x1002;</l> <!-- ဂ -->
+ <l name="gg">&#x1003;</l> <!-- ဃ -->
+ <l name="ng">&#x1004;</l> <!-- င -->
+ <l name="s">&#x1005;</l> <!-- စ -->
+ <l name="sh">&#x1006;</l> <!-- ဆ -->
+ <l name="z">&#x1007;</l> <!-- ဇ -->
+ <l name="zz">&#x1008;</l> <!-- ဈ -->
+ <l name="zg">&#x1009;</l> <!-- ဉ -->
+ <l name="Zg">&#x100A;</l> <!-- ည -->
+ <l name="t">&#x100B;</l> <!-- ဋ -->
+ <l name="th">&#x100C;</l> <!-- ဌ -->
+ <l name="d">&#x100D;</l> <!-- ဍ -->
+ <l name="dd">&#x100E;</l> <!-- ဎ -->
+ <l name="n">&#x100F;</l> <!-- ဏ -->
+ <l name="T">&#x1010;</l> <!-- တ -->
+ <l name="Th">&#x1011;</l> <!-- ထ -->
+ <l name="D">&#x1012;</l> <!-- ဒ -->
+ <l name="Dh">&#x1013;</l> <!-- ဓ -->
+ <l name="N">&#x1014;</l> <!-- န -->
+ <l name="p">&#x1015;</l> <!-- ပ -->
+ <l name="ph">&#x1016;</l> <!-- ဖ -->
+ <l name="b">&#x1017;</l> <!-- ဗ -->
+ <l name="bb">&#x1018;</l> <!-- ဘ -->
+ <l name="m">&#x1019;</l> <!-- မ -->
+ <l name="j">&#x101A;</l> <!-- ယ -->
+ <l name="J">&#x101B;</l> <!-- ရ -->
+ <l name="l">&#x101C;</l> <!-- လ -->
+ <l name="w">&#x101D;</l> <!-- ဝ -->
+ <l name="tt">&#x101E;</l> <!-- သ -->
+ <l name="h">&#x101F;</l> <!-- ဟ -->
+ <l name="ll">&#x1020;</l> <!-- ဠ -->
+ <l name="x">&#x1021;</l> <!-- အ -->
 </lingvo>
 
 <!-- nepala -->
