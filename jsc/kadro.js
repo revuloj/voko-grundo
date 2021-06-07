@@ -6,6 +6,7 @@ const debug=false; //true; // ni bezonas provizore aparte por vidi erarojn en iO
 const revo_url = "reta-vortaro.de";
 const art_prefix = "/revo/art/";
 const sercho_url = "/cgi-bin/sercxu-json-"+version+".pl";
+const trad_uwn_url = "/cgi-bin/traduku-uwn.pl";
 //const hazarda_url = "/cgi-bin/hazarda_art.pl";
 const titolo_url = "titolo-"+version+".html";
 const redaktilo_url = "redaktilo-"+version+".html";
@@ -1176,6 +1177,18 @@ function mrk_eraroj() {
         start_wait,
         stop_wait 
     );    
+}
+
+
+function tradukoj(sercho) {
+    HTTPRequest('POST', trad_uwn_url, {sercho: sercho}, 
+        function(data) {
+            var json = JSON.parse(data);
+            console.debug(json);
+        },
+        start_wait,
+        stop_wait
+    );
 }
 
 
