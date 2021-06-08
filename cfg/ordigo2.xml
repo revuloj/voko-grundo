@@ -727,7 +727,7 @@ http://www.thlib.org/reference/dictionaries/tibetan-dictionary/translate.php
 </l>
 </lingvo>
 
-<!--  n="2"bretona -->
+<!--  bretona -->
 <lingvo lng="br" kreu-regulojn="jes" klaso="de.steloj.respiro.BretonCollator">
  <l name="a">a,A</l>
  <l name="b">b,B</l>
@@ -1454,6 +1454,45 @@ http://www.thlib.org/reference/dictionaries/tibetan-dictionary/translate.php
  <l name="wo">&#x3092;</l>
  <l name="n">&#x3093;</l>
  <l name="vu">&#x3094;</l>
+</lingvo>
+
+<!-- kartvela (mkhedruli)
+https://en.wikipedia.org/wiki/Georgian_scripts#Mkhedruli
+-->
+<lingvo lng="ka">
+ <l name="a">ა</l>
+ <l name="b">ბ</l>
+ <l name="g">გ</l>
+ <l name="d">დ</l>
+ <l name="e">ე</l>
+ <l name="v">ვ</l>
+ <l name="z">ზ</l>
+ <l name="t">თ</l>
+ <l name="i">ი</l>
+ <l name="kk">კ</l>
+ <l name="l">ლ</l>
+ <l name="m">მ</l>
+ <l name="n">ნ</l>
+ <l name="o">ო</l>
+ <l name="pp">პ</l>
+ <l name="zh">ჟ</l>
+ <l name="r">რ</l>
+ <l name="s">ს</l>
+ <l name="tt">ტ</l>
+ <l name="u">უ</l>
+ <l name="p">ფ</l>
+ <l name="k">ქ</l>
+ <l name="gh">ღ</l>
+ <l name="qq">ყ</l>
+ <l name="sh">შ</l>
+ <l name="ch">ჩ</l>
+ <l name="ts">ც</l>
+ <l name="dz">ძ</l>
+ <l name="tz">წ</l>
+ <l name="cz">ჭ</l>
+ <l name="kh">ხ</l>
+ <l name="j">ჯ</l>
+ <l name="h">ჰ</l>
 </lingvo>
 
 <!-- kekĉia -->
