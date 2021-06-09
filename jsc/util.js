@@ -282,6 +282,23 @@ function make_icon_button(iclass,handler,hint='') {
     return btn;
 }
 
+function make_dl(obj,dt_callback,dd_callback) {
+  const dl = make_element("dl");
+  for (const [key, value] of Object.entries(obj)) {
+    const dt = make_element('dt',dt_callback? dt_callback(key) : key);
+    const dd = make_element('dd',dd_callback? dd_callback(value) : value);
+    dl.append(dt,dd);
+  }
+  return dl;
+}
+
+function make_details(sum,det,sum_callback,det_callback) {
+  const details = make_element("details");
+  const summary = make_element('summary',sum_callback? sum_callback(sum) : sum);
+  det_callback? det_callback(details,det) : details.append(det);  
+  return details;
+}
+
 function isLocalLink(url) {
     if (url[0] == '#') return true;
     // necesas kompari ankaŭ la dosiernomon      
