@@ -1180,11 +1180,40 @@ function mrk_eraroj() {
 }
 
 
-function tradukoj(sercho) {
-    HTTPRequest('POST', trad_uwn_url, {sercho: sercho}, 
+function traduku(event,artikolo) {
+    event.preventDefault();
+
+    HTTPRequest('POST', trad_uwn_url, {art: artikolo}, 
         function(data) {
-            var json = JSON.parse(data);
-            console.debug(json);
+            const json = JSON.parse(data);
+            const s_art = document.getElementById('s_artikolo');
+            if (json) {
+                for (let t in json) {
+                    const tv = json[t];
+                    const details = make_details(tv.trd.eo||t,null,function(d){
+                        if (tv.dif) { // esp-a difino
+                            const pe = make_elements([
+                                ['p',{},[
+                                    ['em',{},'eo: '],
+                                    ...tv.dif
+                                ]]
+                            ]);
+                            d.append(...pe);
+                        };
+                        if (tv.dsc) { // angla difino
+                            const pa = make_elements([
+                                ['p',{},[
+                                    ['em',{},'en: '],
+                                    tv.dsc
+                                ]]
+                            ]);
+                            d.append(...pa);
+                        };
+                        d.append(make_dl(tv.trd));
+                    });
+                    s_art.append(details);
+                }    
+            }
         },
         start_wait,
         stop_wait

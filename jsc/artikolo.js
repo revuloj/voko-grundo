@@ -65,7 +65,7 @@ var artikolo = function() {
         /* aktivigu nur por longaj artikoloj... */
         var d = document.getElementsByClassName("kasxebla");
          //if (d.length > js_sojlo) {
-        piedlinio_modifo();
+        piedlinio_modifo(artikolo);
         preparu_kashu_sekciojn();
         preparu_malkashu_fontojn();
         preparu_maletendu_sekciojn();
@@ -358,7 +358,7 @@ var artikolo = function() {
         art.appendChild(div);
     }
 
-    function piedlinio_modifo() {
+    function piedlinio_modifo(artikolo) {
         var pied = document.body.getElementsByTagName("FOOTER")[0];
         if (pied) { // en la redeaktilo eble jam foriĝis...
             var first_a = pied.querySelector("A");
@@ -390,7 +390,7 @@ var artikolo = function() {
             const trd =  pied.querySelector("A[href^='http://kono.be']");
             trd.setAttribute("href","#");
             trd.setAttribute("title","trovu kaj aldonu pliajn tradukojn");
-            trd.addEventListener("click",traduku);
+            trd.addEventListener("click",(event)=>{traduku(event,artikolo)});
         }        
     }
 
