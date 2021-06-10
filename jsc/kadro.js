@@ -1179,7 +1179,6 @@ function mrk_eraroj() {
     );    
 }
 
-
 function traduku(event,artikolo) {
     event.preventDefault();
 
@@ -1209,7 +1208,10 @@ function traduku(event,artikolo) {
                             ]);
                             d.append(...pa);
                         };
-                        d.append(make_dl(tv.trd));
+                        d.append(make_dl(tv.trd, function(lng) {
+                            const ln = revo_codes.lingvoj.codes[lng];
+                            return (ln? ln : '-') +' ['+lng+']';
+                        }));
                     });
                     s_art.append(details);
                 }    
@@ -1219,7 +1221,6 @@ function traduku(event,artikolo) {
         stop_wait
     );
 }
-
 
 function redaktu(href) {
     const params = href.split('?')[1];
