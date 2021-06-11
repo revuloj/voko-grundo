@@ -310,28 +310,6 @@ var redaktilo = function() {
     }
   }
 
-  /*
-  function tab_toggle(id) {
-    var el = document.getElementById(id);
-    var tab_id;
-    if (! el.classList.contains('aktiva')) {
-      for (ch of el.parentElement.children) {
-        ch.classList.remove('aktiva')
-        tab_id = 'r:tab_'+ch.id.substring(2);
-        document.getElementById(tab_id).classList.add('collapsed');
-      }
-      el.classList.add('aktiva');
-      tab_id = 'r:tab_'+el.id.substring(2);
-      document.getElementById(tab_id).classList.remove('collapsed');
-    }
-    // ni ankaŭ devas kaŝi la butonojn super la redakto-tabulo por la antaŭrigardo...
-    if (id == "r:txmltxt") {
-      document.getElementById("r:nav_btn").classList.remove('collapsed');
-    } else {
-      document.getElementById("r:nav_btn").classList.add('collapsed');
-    }
-  }
-  */
 
   function fs_toggle(id) {
     var el = document.getElementById(id);

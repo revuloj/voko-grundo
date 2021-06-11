@@ -23,7 +23,7 @@ const sercho_videblaj = 7;
 // statoj kaj transiroj
 const t_nav  = new Transiroj("nav","start",["ĉefindekso","subindekso","serĉo","redaktilo"]);
 const t_main = new Transiroj("main","start",["titolo","artikolo","red_xml","red_rigardo"]);
-const t_red  = new Transiroj("red","ne_redaktante",["ne_redaktante","redaktante","sendita"]);
+const t_red  = new Transiroj("red","ne_redaktante",["ne_redaktante","redaktante","tradukante","sendita"]);
 
 const revo_codes = {
     lingvoj: new Codelist('lingvo', '/revo/cfg/lingvoj.xml'),
@@ -179,6 +179,12 @@ when_doc_ready(function() {
 
         hide("x:redakt_btn");
         hide("x:rigardo_btn");
+    });
+
+    t_red.alvene("tradukante",()=>{
+        show("r:tab_tradukoj",'collapsed');
+        // tion ni faru verŝajne pli bone en forire("redaktante"), ĉu?
+        hide("r:tab_txmltxt",'collapsed');
     });
 
     t_red.alvene("ne_redaktante",()=>{
@@ -1179,13 +1185,11 @@ function mrk_eraroj() {
     );    
 }
 
-function traduku(event,artikolo) {
-    event.preventDefault();
-
+function trad_uwn(artikolo) {
     HTTPRequest('POST', trad_uwn_url, {art: artikolo}, 
         function(data) {
             const json = JSON.parse(data);
-            const s_art = document.getElementById('s_artikolo');
+            const s_trd = document.getElementById('r:trd_elekto');
             if (json) {
                 for (let t in json) {
                     const tv = json[t];
@@ -1213,13 +1217,24 @@ function traduku(event,artikolo) {
                             return (ln? ln : '-') +' ['+lng+']';
                         }));
                     });
-                    s_art.append(details);
-                }    
+                    s_trd.append(details);
+                };
+                t_red.transiro("tradukante");    
             }
         },
         start_wait,
         stop_wait
     );
+}t_red.transiro("redaktante");
+
+function traduku(event,artikolo) {
+    event.preventDefault();
+
+    //const params = href.split('?')[1];
+    //const art = getParamValue("art",params);    
+    load_page("main",redaktilo_url+'?'+artikolo,
+        false, () => trad_uwn(artikolo));
+    load_page("nav",redaktmenu_url);
 }
 
 function redaktu(href) {
