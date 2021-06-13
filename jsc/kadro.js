@@ -5,6 +5,7 @@ const version="1h";
 const debug=false; //true; // ni bezonas provizore aparte por vidi erarojn en iOS Webkit, kie ni ne havas "console"
 const revo_url = "reta-vortaro.de";
 const art_prefix = "/revo/art/";
+const tez_prefix = "/revo/tez/";
 const sercho_url = "/cgi-bin/sercxu-json-"+version+".pl";
 const trad_uwn_url = "/cgi-bin/traduku-uwn.pl";
 //const hazarda_url = "/cgi-bin/hazarda_art.pl";
@@ -1186,6 +1187,22 @@ function mrk_eraroj() {
 }
 
 function trad_uwn(artikolo) {
+    HTTPRequest('POST', tez_prefix+artikolo+'.json', {x: 1}, 
+        function(data) {
+            const json = JSON.parse(data);
+            if (json) {
+                const s_snc = document.getElementById('r:trd_sencoj');
+                const tez = Object.values(json)[0];
+                const l_kap = make_list(tez.kap,'div');
+                const l_snc = make_list(tez.mrk,'div');
+                s_snc.append(l_kap,l_snc);
+            }
+        },
+        start_wait,
+        stop_wait
+    );
+
+
     HTTPRequest('POST', trad_uwn_url, {art: artikolo}, 
         function(data) {
             const json = JSON.parse(data);
