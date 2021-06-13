@@ -1193,7 +1193,9 @@ function trad_uwn(artikolo) {
             if (json) {
                 const s_snc = document.getElementById('r:trd_sencoj');
                 const tez = Object.values(json)[0];
-                const l_kap = make_list(tez.kap,'div');
+                const l_kap = make_list(tez.kap,'div',{},function(ero) {
+                    return make_element('span',{},ero[0]);
+                });
                 const l_snc = make_list(tez.mrk,'div');
                 s_snc.append(l_kap,l_snc);
             }

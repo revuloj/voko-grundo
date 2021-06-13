@@ -282,12 +282,12 @@ function make_icon_button(iclass,handler,hint='') {
     return btn;
 }
 
-function make_list(list,listtype = 'ul',attrlist) {
+function make_list(list,listtype = 'ul',attrlist,listero_cb) {
   const elmtype = (listtype == 'ul' || listtype == 'ol')? 'li' : 'span';
   const container = make_element(listtype,attrlist);
-  for (e of list) {
-    let li = make_element(elmtype,{},e);
-    container.append(e);
+  for (e of list) {    
+    let li = (listero_cb? listero_cb(e) : make_element(elmtype,{},e));
+    container.append(li);
   }
   return container;
 }
