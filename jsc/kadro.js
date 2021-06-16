@@ -1189,15 +1189,20 @@ function mrk_eraroj() {
 function trad_uwn(artikolo) {
     HTTPRequest('POST', tez_prefix+artikolo+'.json', {x: 1}, 
         function(data) {
-            const json = JSON.parse(data);
+            const json = JSON.parse(data); 
             if (json) {
                 const s_snc = document.getElementById('r:trd_sencoj');
                 const tez = Object.values(json)[0];
-                const l_kap = make_list(tez.kap,'div',{},function(ero) {
-                    return make_element('span',{},ero[0]);
+                const l_kap = make_list(tez.kap,'div',{},function(k) {
+                    return make_details(
+                        k[0],
+                        tez.mrk.filter(m => m[0].startsWith(k[1]+'.')),
+                        (det,lst) => det.append(make_list(lst,'ul'))
+                    ) // sum,det,det_callback,sum_callback 
+                    //return make_element('span',{},ero[0]);
                 });
-                const l_snc = make_list(tez.mrk,'div');
-                s_snc.append(l_kap,l_snc);
+                //const l_snc = make_list(tez.mrk,'div');
+                s_snc.append(l_kap);
             }
         },
         start_wait,
@@ -1244,7 +1249,7 @@ function trad_uwn(artikolo) {
         start_wait,
         stop_wait
     );
-}t_red.transiro("redaktante");
+}
 
 function traduku(event,artikolo) {
     event.preventDefault();
