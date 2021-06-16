@@ -648,7 +648,23 @@
               <table>
                 <xsl:for-each select="ero[@s='kap']">
                   <tr>
-                    <td><xsl:value-of select="@t"/><xsl:text>: </xsl:text></td>
+                    <td>
+                      <xsl:choose>
+                        <xsl:when test="@t='derivaĵoj'">
+                          <a href="kap_a.html"><xsl:value-of select="@t"/></a>
+                        </xsl:when>
+                        <xsl:when test="@t='bildoj'">
+                          <a href="bildoj.html"><xsl:value-of select="@t"/></a>
+                        </xsl:when>
+                        <xsl:when test="@t='mallongigoj'">
+                          <a href="mallong.html"><xsl:value-of select="@t"/></a>
+                        </xsl:when>
+                        <xsl:otherwise>
+                          <xsl:value-of select="@t"/>
+                        </xsl:otherwise>
+                      </xsl:choose>
+                      <xsl:text>: </xsl:text>
+                    </td>
                     <td align="right"><xsl:value-of select="@n"/></td>
                   </tr>
                 </xsl:for-each>
@@ -670,9 +686,15 @@
                 <xsl:for-each select="../trd-oj">
                   <xsl:sort select="@n" data-type="number" order="descending"/>
                   <xsl:sort select="@lng"/>
+                  <xsl:variable name="index_start" select="concat('lx_',@lng,'_',litero[v][1]/@name,'.html')"/>
                   <tr>
                     <xsl:for-each select="document($lingvoj)/lingvoj/lingvo[@kodo=current()/@lng]">
-                      <td><xsl:value-of select="."/><xsl:text>: </xsl:text></td>
+                      <td>
+                       <a href="{$index_start}">
+                        <xsl:value-of select="."/>
+                       </a>
+                       <xsl:text>: </xsl:text>
+                      </td>
                     </xsl:for-each>
                     <td align="right"><xsl:value-of select="@n"/></td>                    
                     <td align="right">
@@ -700,7 +722,14 @@
                   <tr>
                     <xsl:for-each select="document($fakoj)/fakoj/fako[@kodo=current()/@fak]">
                       <td><img src="{@vinjeto}" class="fak" alt="{@fak}" border="0" align="middle"/></td>
-                      <td><xsl:value-of select="."/><xsl:text>: </xsl:text></td>
+                      <td>
+                        <a>
+                          <xsl:attribute name="href">
+                            <xsl:value-of select="concat('fx_',@kodo,'.html')"/>
+                          </xsl:attribute>
+                          <xsl:value-of select="."/>
+                        </a>
+                      <xsl:text>: </xsl:text></td>
                     </xsl:for-each>
                     <td align="right"><xsl:value-of select="@n"/></td>
                   </tr>
