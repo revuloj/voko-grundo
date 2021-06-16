@@ -22,6 +22,10 @@
       sed nun ne plu uzata prefere al Javo-klaso
   <r> (replace) - anstataŭigo de litergrupoj samvalidaj kiel alia litero, 
       ekz. "ae" anstataŭ "ä" en la germana, same por Saxon, sed ne plu uzata nun
+
+
+  Referencoj:
+  - ordigo de aziaj skriboj: https://www.researchgate.net/publication/242638651_A_Study_on_Collation_of_Languages_from_Developing_Asia/download
 -->
 
 <ordigo>
@@ -2043,6 +2047,62 @@ https://en.wikipedia.org/wiki/Gurmukhi
  <l name="oe">öÖ</l>
 </lingvo>
 
+<!-- tamila -->
+<lingvo lng="ta">
+ <!-- sendependaj vokaloj -->
+ <l name="a">&#x0B85;</l> <!-- அ -->
+ <l name="aa">&#x0B86;</l> <!-- ஆ -->
+ <l name="i">&#x0B87;</l>  <!-- இ -->
+ <l name="ii">&#x0B88;</l>  <!-- ஈ -->
+ <l name="u">&#x0B89;</l>  <!-- உ -->
+ <l name="uu">&#x0B8A;</l>  <!-- ஊ -->
+ <l name="e">&#x0B8E;</l>  <!-- எ -->
+ <l name="ee">&#x0B8F;</l>  <!-- ஏ -->
+ <l name="ai">&#x0B90;</l>  <!-- ஐ -->
+ <l name="o">&#x0B92;</l>  <!-- ஒ -->
+ <l name="oo">&#x0B93;</l>  <!-- ஓ -->
+ <l name="au">&#x0B94;</l>  <!-- ஔ -->
+ <!-- konsonantoj -->
+ <l name="k">&#x0B95;</l>   <!-- க -->
+ <l name="ng">&#x0B99;</l>   <!-- ங -->
+ <l name="c">&#x0B9A;</l>   <!-- ச -->
+ <l name="ny">&#x0B9E;</l>   <!-- ஞ -->
+ <l name="tt">&#x0B9F;</l>   <!-- ட -->
+ <l name="nn">&#x0BA3;</l>   <!-- ண -->
+ <l name="t">&#x0BA4;</l>   <!-- த -->
+ <l name="n">&#x0BA8;</l>   <!-- ந -->
+ <l name="p">&#x0BAA;</l>   <!-- ப -->
+ <l name="m">&#x0BAE;</l>   <!-- ம -->
+ <l name="y">&#x0BAF;</l>   <!-- ய -->
+ <l name="r">&#x0BB0;</l>   <!-- ர -->
+ <l name="l">&#x0BB2;</l>   <!-- ல -->
+ <l name="v">&#x0BB5;</l>   <!-- வ -->
+ <l name="lx">&#x0BB4;</l>   <!-- ழ -->
+ <l name="ll">&#x0BB3;</l>   <!-- ள -->
+ <l name="rr">&#x0BB1;</l>   <!-- ற -->
+ <l name="nx">&#x0BA9;</l>   <!-- ன -->
+ <l name="j">&#x0B9C;</l>   <!-- ஜ -->
+ <l name="s">&#x0BB8;</l>  <!-- ஸ -->
+ <l name="ss">&#x0BB7;</l>   <!-- ஷ -->
+ <l name="h">&#x0BB9;</l>   <!-- ஹ -->
+ <l name="ks">&#x0B95;</l>   <!-- கஷ -->
+ <l name="sh">&#x0BB6;</l>   <!-- oo -->
+
+<!-- dependaj vokaloj -->
+ <l name="ax">&#x0BBE;</l> <!-- ◌ா -->
+ <l name="ix">&#x0BBF;</l>  <!-- ◌ி -->
+ <l name="iy">&#x0BC0;</l>  <!-- ◌ீ -->
+ <l name="ux">&#x0BC1;</l>  <!-- ◌ு -->
+ <l name="uy">&#x0BC2;</l> <!-- ◌ூ -->
+ <l name="ex">&#x0BC6;</l> <!--  ெ◌ -->
+ <l name="ey">&#x0BC7;</l> <!--  ே◌ -->
+ <l name="ay">&#x0BC8;</l> <!--  ை◌ -->
+ <l name="ox">&#x0BCA;</l> <!--  ெ◌ா -->
+ <l name="oz">&#x0BCB;</l> <!--  ே◌ா -->
+ <l name="aw">&#x0BCC;</l> <!-- ◌ௗ -->
+ <l name="x">&#x0BD7;</l> <!-- ◌ௗ -->
+</lingvo>
+
 <!-- telugua 
 https://en.wikipedia.org/wiki/Telugu_script -->
 <lingvo lng="te">
@@ -2311,6 +2371,9 @@ http://vietunicode.sourceforge.net/charset/v3.htm -->
  <l name="y">&#x0079;&#x0059;&#x1EF3;&#x1EF2;&#x1EF7;&#x1EF6;&#x1EF9;&#x1EF8;&#x00FD;&#x00DD;&#x1EF5;&#x1EF4;</l>
  <l name="z">&#x007A;&#x005A;</l>
 </lingvo>
+
+<!-- jida -->
+<lingvo lng="yi" kiel="he"/>
 
 </ordigo>
 
