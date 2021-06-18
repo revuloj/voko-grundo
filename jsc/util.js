@@ -304,7 +304,13 @@ function make_dl(obj,dt_callback,dd_callback) {
 
 function make_details(sum,det,det_callback,sum_callback) {
   const details = make_element("details");
-  details.append(make_element('summary',{},sum_callback? sum_callback(sum) : sum));
+  if (sum_callback) {
+    const summary = make_element('summary'); 
+    sum_callback(summary,sum);
+    details.append(summary);
+  } else {
+    details.append(make_element('summary',{},sum));
+  }
   det_callback? det_callback(details,det) : details.append(det);  
   return details;
 }

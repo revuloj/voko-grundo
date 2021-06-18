@@ -1193,14 +1193,39 @@ function trad_uwn(artikolo) {
             if (json) {
                 const s_snc = document.getElementById('r:trd_sencoj');
                 const tez = Object.values(json)[0];
-                const l_kap = make_list(tez.kap,'div',{},function(k) {
-                    return make_details(
-                        k[0],
-                        tez.mrk.filter(m => m[0].startsWith(k[1]+'.')),
-                        (det,lst) => det.append(make_list(lst,'ul'))
-                    ) // sum,det,det_callback,sum_callback 
-                    //return make_element('span',{},ero[0]);
-                });
+                // kreu liston de kapvortoj
+                const l_kap = make_list(tez.kap,'div',{},
+                    // ĉiu kapvorto estas malfaldebla aperigonta sencojn kaj tradukojn...
+                    function(k) {
+                        return make_details(
+                            k[0],
+                            tez.mrk.filter(m => m[0].startsWith(k[1]+'.')),
+                            (det,lst) => {
+                                det.append(make_list(lst,'ul',{},
+                                    // KOREKTU: se snc ne havas @mrk la senco kaj tradukoj ne aperas!
+                                    (snc) => {
+                                        const li = make_element('li',{},snc);
+                                        // aldonu tradukojn de tiu senco...
+                                        const trdj = tez.trd.filter(t => t[0] = snc[0]);
+                                        li.append(make_list(trdj,'ul',{},
+                                            (trd) => {
+                                                return make_element('li',{},trd[1]+': '+trd[2]); 
+                                            }
+                                        ));
+                                        return li;
+                                    }
+                                ))
+                            },
+                            (sum,txt) => { 
+                                const btns = make_elements([
+                                    ['button',{},'serĉu'],
+                                    ['button',{},'elektu']
+                                ]);
+                                sum.append(txt,...btns);
+                            }
+                        ) // sum,det,det_callback,sum_callback 
+                        //return make_element('span',{},ero[0]);
+                    });
                 //const l_snc = make_list(tez.mrk,'div');
                 s_snc.append(l_kap);
             }
