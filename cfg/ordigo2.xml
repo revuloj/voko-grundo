@@ -1531,6 +1531,57 @@ https://en.wikipedia.org/wiki/Georgian_scripts#Mkhedruli
  <l name="sl">&#x02bc;</l>
 </lingvo>
 
+
+<!-- kazaĥa -->
+<lingvo lng="kk" kiel="ru"/>
+<!-- kirgiza -->
+<lingvo lng="ky" kiel="ru"/>
+
+<!-- korea 
+temas pri silaboj kiuj havas ĉiu partan Unikodon, do estus
+pli bone se ni povus doni intervalojn anst. nomi ĉiun kombineblan
+silabon...
+-->
+<lingvo lng="ko">
+ <l name="k">ㄱㄲ가간갈감갑값강같개객거건검것겨결경계고곤곧골곰곱공과관광교구국군궁귀규그금기긴길깊까꼬꽃꽤꿈끝</l>
+ <l name="n">ㄴ나날남낮내냄너넣네넥년노녹논농높누눈뉴느늙닌</l>
+ <l name="t">ㄷㄸ다단달답당대댄더던덮도돈돌동두둥뒤드듣등디딜따때떠또뜨</l>
+ <l name="l">ㄹ라레로롤루를리링</l>
+ <l name="m">ㅁ마만많말머먹먼멋멜면명모목몸무문물미</l>
+ <l name="p">ㅂㅃ바박반발밝밤방배백밴범법벨벽변별병보복봄봉봐부북분블비빛빠빨빵</l>
+ <l name="s">ㅅㅆ사산살삼상새색생서선설섬성세섹센셀소속손쇼수숫숲쉘스슬승시식신실싸쌍쓰씨</l>
+ <l name="nj">ㅇ아악안앉알앞액앱야얇양어언얼에엔여역연열염영예오옥온올와완왕왼요용우운웁웃원월위유육은음응의이인일읽입있</l>
+ <l name="ts">ㅈㅉ자작잔잘잠잡장재저적전젊점접젓정제조종좋좌주죽준중즐증지직질집짧</l>
+ <l name="cx">ㅊ차착참창책천철첫청초총최추충측치친침</l>
+ <l name="kh">ㅋ카칸캐캠컷코쿼크큰클키</l>
+ <l name="th">ㅌ타터테텔토톤톱통튜트특팀편포폭표푸풍플피필</l>
+ <l name="ph">ㅍ파판팔패페</l>
+ <l name="h">ㅎ하학한함항해행현형호혼홈홋화확회효후휠흐흥흰히힘</l>
+ <!-- vokaloj:
+ <l name="a">ㅏ</l> 
+ <l name="ae">ㅐ</l> 
+ <l name="ya">ㅑ</l> 
+ <l name="yae">ㅒ</l> 
+ <l name="eo">ㅓ</l> 
+ <l name="e">ㅔ</l> 
+ <l name="yeo">ㅕ</l> 
+ <l name="ye">ㅖ</l> 
+ <l name="o">ㅗ</l> 
+ <l name="wa">ㅘ</l> 
+ <l name="wae">ㅙ</l> 
+ <l name="oe">ㅚ</l> 
+ <l name="yo">ㅛ</l> 
+ <l name="u">ㅜ</l> 
+ <l name="wo">ㅝ</l> 
+ <l name="we">ㅞ</l> 
+ <l name="wi">ㅟ</l> 
+ <l name="yu">ㅠ</l> 
+ <l name="eu">ㅡ</l> 
+ <l name="ui">ㅢ</l> 
+ <l name="i">ㅣ</l>
+ -->
+</lingvo>
+
 <!-- latino -->
 <lingvo lng="la">
  <l name="a">aAáÁàÀäÄ</l>
@@ -1620,6 +1671,9 @@ https://en.wikipedia.org/wiki/Georgian_scripts#Mkhedruli
  <l name="y">yY</l>
  <l name="z">zZ&#x017e;</l>
 </lingvo>
+
+<!-- makedona -->
+<lingvo lng="mk" kiel="ru"/>
 
 <!-- mongola
 http://www.cjvlang.com/Writing/writmongol/tradmononsite.html -->
@@ -1947,6 +2001,78 @@ https://en.wikipedia.org/wiki/Gurmukhi
  <l name="ja">&#x044f;&#x042f;</l>
 </lingvo>
 
+
+<!-- sinda
+...havas plurajn skribsistemojn, sed la plej uzata estas perso-araba (farsa)
+   https://en.wikipedia.org/wiki/Sindhi_language
+
+   provizore ni uzas la samajn regulojn kiel por la persa - kontrolenda!
+ -->
+<lingvo lng="sd" kiel="fa"/>
+
+<!-- sinhala -->
+<lingvo lng="si">
+ <l name="a">අ</l> <!-- 0d85 -->	
+ <l name="aa">ආ</l> 	
+ <l name="ae">ඇ</l> 	
+ <l name="ax">ඈ</l> 	
+ <l name="i">ඉ</l> 	
+ <l name="ii">ඊ</l> 	
+ <l name="u">උ</l> 	
+ <l name="uu">ඌ</l> 	
+ <l name="rr">ඍ</l> <!-- 0d8d -->	
+ <l name="rx">ඎ</l> 	
+ <l name="ll">ඏ</l>	
+ <l name="lx">ඐ</l> 	
+ <l name="e">එ</l> 	<!-- 0d91 -->
+ <l name="ee">ඒ</l> 	
+ <l name="ai">ඓ</l> 	
+ <l name="o">ඔ</l> 	
+ <l name="oo">ඕ</l> 	
+ <l name="au">ඖ</l> <!-- 0d96 -->
+ <l name="k">ක</l> 	<!-- 0d9a -->
+ <l name="kh">ඛ</l> 	
+ <l name="g">ග</l> 	
+ <l name="gh">ඝ</l> 	
+ <l name="nnj">ඞ</l> 	
+ <l name="ng">ඟ</l>
+ <l name="c">ච</l> <!-- 0da0 -->	
+ <l name="ch">ඡ</l> 	
+ <l name="j">ජ</l> 	
+ <l name="jh">ඣ</l> 	
+ <l name="nj">ඤ</l> 	
+ <l name="jn">ඥ</l> 	
+ <l name="njj">ඦ</l> 	
+ <l name="tt">ට</l> 	
+ <l name="tth">ඨ</l> 	
+ <l name="dd">ඩ</l> 	
+ <l name="ddh">ඪ</l> <!-- 0daa -->	
+ <l name="nn">ණ</l> 	
+ <l name="ndd">ඬ</l> 	
+ <l name="t">ත</l> 	
+ <l name="th">ථ</l> 	
+ <l name="d">ද</l>
+ <l name="dh">ධ</l> <!-- 0db0 -->	
+ <l name="n">න</l> 	
+ <l name="nd">ඳ</l> <!-- 0db3 -->		
+ <l name="p">ප</l> 	
+ <l name="ph">ඵ</l> 	
+ <l name="b">බ</l> 	
+ <l name="bh">භ</l> 
+ <l name="m">ම</l> 	
+ <l name="mb">ඹ</l> 	
+ <l name="y">ය</l> 	
+ <l name="r">ර</l> 	
+ <l name="l">ල</l> <!-- 0dbd -->			
+ <l name="v">ව</l> <!-- 0dc0 -->		
+ <l name="sx">ශ</l> 	
+ <l name="ss">ෂ</l> 	
+ <l name="s">ස</l> 	
+ <l name="h">හ</l> 	
+ <l name="ll">ළ</l> 	
+ <l name="f">ෆ</l> 
+</lingvo>
+
 <!-- slovaka -->
 <lingvo lng="sk">
  <l name="a">aAáÁ</l>
@@ -2159,6 +2285,9 @@ https://en.wikipedia.org/wiki/Telugu_script -->
  <l name="rr">ళ</l>
 </lingvo>
 
+<!-- taĝika -->
+<lingvo lng="tg" kiel="ru"/>
+
 <!-- taja -->
 <lingvo lng="th" ignorendaj="เแโใไ">
  <l name="ko_kai">ก</l>
@@ -2250,6 +2379,9 @@ https://en.wikipedia.org/wiki/Telugu_script -->
  <l name="y">Yy</l>
  <l name="z">Zz</l>
 </lingvo>
+
+<!-- tatara -->
+<lingvo lng="tt" kiel="ru"/>
 
 <!-- ukrajna -->
 <lingvo lng="uk">
