@@ -22,6 +22,10 @@
       sed nun ne plu uzata prefere al Javo-klaso
   <r> (replace) - anstataŭigo de litergrupoj samvalidaj kiel alia litero, 
       ekz. "ae" anstataŭ "ä" en la germana, same por Saxon, sed ne plu uzata nun
+
+
+  Referencoj:
+  - ordigo de aziaj skriboj: https://www.researchgate.net/publication/242638651_A_Study_on_Collation_of_Languages_from_Developing_Asia/download
 -->
 
 <ordigo>
@@ -727,7 +731,7 @@ http://www.thlib.org/reference/dictionaries/tibetan-dictionary/translate.php
 </l>
 </lingvo>
 
-<!--  n="2"bretona -->
+<!--  bretona -->
 <lingvo lng="br" kreu-regulojn="jes" klaso="de.steloj.respiro.BretonCollator">
  <l name="a">a,A</l>
  <l name="b">b,B</l>
@@ -1456,6 +1460,45 @@ http://www.thlib.org/reference/dictionaries/tibetan-dictionary/translate.php
  <l name="vu">&#x3094;</l>
 </lingvo>
 
+<!-- kartvela (mkhedruli)
+https://en.wikipedia.org/wiki/Georgian_scripts#Mkhedruli
+-->
+<lingvo lng="ka">
+ <l name="a">ა</l>
+ <l name="b">ბ</l>
+ <l name="g">გ</l>
+ <l name="d">დ</l>
+ <l name="e">ე</l>
+ <l name="v">ვ</l>
+ <l name="z">ზ</l>
+ <l name="t">თ</l>
+ <l name="i">ი</l>
+ <l name="kk">კ</l>
+ <l name="l">ლ</l>
+ <l name="m">მ</l>
+ <l name="n">ნ</l>
+ <l name="o">ო</l>
+ <l name="pp">პ</l>
+ <l name="zh">ჟ</l>
+ <l name="r">რ</l>
+ <l name="s">ს</l>
+ <l name="tt">ტ</l>
+ <l name="u">უ</l>
+ <l name="p">ფ</l>
+ <l name="k">ქ</l>
+ <l name="gh">ღ</l>
+ <l name="qq">ყ</l>
+ <l name="sh">შ</l>
+ <l name="ch">ჩ</l>
+ <l name="ts">ც</l>
+ <l name="dz">ძ</l>
+ <l name="tz">წ</l>
+ <l name="cz">ჭ</l>
+ <l name="kh">ხ</l>
+ <l name="j">ჯ</l>
+ <l name="h">ჰ</l>
+</lingvo>
+
 <!-- kekĉia -->
 <lingvo lng="kek">
  <l name="a">aA</l>
@@ -1488,6 +1531,112 @@ http://www.thlib.org/reference/dictionaries/tibetan-dictionary/translate.php
  <l name="sl">&#x02bc;</l>
 </lingvo>
 
+<!-- kanara (en: Kannada)
+https://en.wikipedia.org/wiki/Kannada_(Unicode_block)
+https://en.wikipedia.org/wiki/Kannada#Writing_system
+-->
+<lingvo lng="kn">
+ <l name="a">ಅ</l> 	
+ <l name="aa">ಆ</l> 	
+ <l name="i">ಇ</l> 	
+ <l name="ii">ಈ</l> 	
+ <l name="u">ಉ</l> 	
+ <l name="uu">ಊ</l> 
+ <l name="x">ಋ</l> 	
+ <l name="xx">ಌ</l> 	
+ <l name="e">ಎ</l> 	
+ <l name="ee">ಏ</l> 	
+ <l name="ex">ಐ</l> 	<!-- U+0C90 -->
+ <l name="o">ಒ</l> 	
+ <l name="oo">ಓ</l> 	
+ <l name="ox">ಔ</l> 	
+ <l name="k">ಕ</l> 	
+ <l name="kh">ಖ</l> 	
+ <l name="g">ಗ</l> 	
+ <l name="gh">ಘ</l> 	
+ <l name="nz">ಙ</l> 	
+ <l name="ts">ಚ</l> 	
+ <l name="tsh">ಛ</l> 	
+ <l name="dz">ಜ</l> 	
+ <l name="dzh">ಝ</l> 	
+ <l name="ny">ಞ</l> 	
+ <l name="ty">ಟ</l>
+ <l name="tyh">ಠ</l> 	<!-- U+0CA0 -->
+ <l name="dy">ಡ</l> 	
+ <l name="dyh">ಢ</l> 	
+ <l name="nx">ಣ</l> 	
+ <l name="tx">ತ</l> 	
+ <l name="txh">ಥ</l> 	
+ <l name="dx">ದ</l> 	
+ <l name="dxh">ಧ</l> 	
+ <l name="n">ನ</l> 	
+ <l name="p">ಪ</l> 	
+ <l name="ph">ಫ</l> 	
+ <l name="b">ಬ</l> 	
+ <l name="bh">ಭ</l> 	
+ <l name="m">ಮ</l> 	
+ <l name="j">ಯ</l>	
+ <l name="r">ರ</l> 	<!-- U+0CB0 -->
+ <l name="rx">ಱ</l> 	
+ <l name="l">ಲ</l> 	
+ <l name="lx">ಳ</l> 	
+ <l name="v">ವ</l> 	
+ <l name="sy">ಶ</l> 	
+ <l name="sx">ಷ</l> 	
+ <l name="s">ಸ</l> 	
+ <l name="h">ಹ</l>
+</lingvo>
+
+<!-- kazaĥa -->
+<lingvo lng="kk" kiel="ru"/>
+<!-- kirgiza -->
+<lingvo lng="ky" kiel="ru"/>
+
+<!-- korea 
+temas pri silaboj kiuj havas ĉiu partan Unikodon, do estus
+pli bone se ni povus doni intervalojn anst. nomi ĉiun kombineblan
+silabon...
+-->
+<lingvo lng="ko">
+ <l name="k">ㄱㄲ가간갈감갑값강같개객거건검것겨결경계고곤곧골곰곱공과관광교구국군궁귀규그금기긴길깊까꼬꽃꽤꿈끝</l>
+ <l name="n">ㄴ나날남낮내냄너넣네넥년노녹논농높누눈뉴느늙닌</l>
+ <l name="t">ㄷㄸ다단달답당대댄더던덮도돈돌동두둥뒤드듣등디딜따때떠또뜨</l>
+ <l name="l">ㄹ라레로롤루를리링</l>
+ <l name="m">ㅁ마만많말머먹먼멋멜면명모목몸무문물미</l>
+ <l name="p">ㅂㅃ바박반발밝밤방배백밴범법벨벽변별병보복봄봉봐부북분블비빛빠빨빵</l>
+ <l name="s">ㅅㅆ사산살삼상새색생서선설섬성세섹센셀소속손쇼수숫숲쉘스슬승시식신실싸쌍쓰씨</l>
+ <l name="nj">ㅇ아악안앉알앞액앱야얇양어언얼에엔여역연열염영예오옥온올와완왕왼요용우운웁웃원월위유육은음응의이인일읽입있</l>
+ <l name="ts">ㅈㅉ자작잔잘잠잡장재저적전젊점접젓정제조종좋좌주죽준중즐증지직질집짧</l>
+ <l name="cx">ㅊ차착참창책천철첫청초총최추충측치친침</l>
+ <l name="kh">ㅋ카칸캐캠컷코쿼크큰클키</l>
+ <l name="th">ㅌ타터테텔토톤톱통튜트특팀편포폭표푸풍플피필</l>
+ <l name="ph">ㅍ파판팔패페</l>
+ <l name="h">ㅎ하학한함항해행현형호혼홈홋화확회효후휠흐흥흰히힘</l>
+ <!-- vokaloj:
+ <l name="a">ㅏ</l> 
+ <l name="ae">ㅐ</l> 
+ <l name="ya">ㅑ</l> 
+ <l name="yae">ㅒ</l> 
+ <l name="eo">ㅓ</l> 
+ <l name="e">ㅔ</l> 
+ <l name="yeo">ㅕ</l> 
+ <l name="ye">ㅖ</l> 
+ <l name="o">ㅗ</l> 
+ <l name="wa">ㅘ</l> 
+ <l name="wae">ㅙ</l> 
+ <l name="oe">ㅚ</l> 
+ <l name="yo">ㅛ</l> 
+ <l name="u">ㅜ</l> 
+ <l name="wo">ㅝ</l> 
+ <l name="we">ㅞ</l> 
+ <l name="wi">ㅟ</l> 
+ <l name="yu">ㅠ</l> 
+ <l name="eu">ㅡ</l> 
+ <l name="ui">ㅢ</l> 
+ <l name="i">ㅣ</l>
+ -->
+</lingvo>
+
 <!-- latino -->
 <lingvo lng="la">
  <l name="a">aAáÁàÀäÄ</l>
@@ -1516,6 +1665,73 @@ http://www.thlib.org/reference/dictionaries/tibetan-dictionary/translate.php
  <l name="x">xX</l>
  <l name="y">yY</l>
  <l name="z">zZ</l>
+</lingvo>
+
+<!-- laŭa (en: Lao) 
+https://r12a.github.io/scripts/lao/
+-->
+<lingvo lng="lo">
+ <l name="a">ະ</l>
+ <l name="aa">າ</l>
+ <!--
+ <l name="i"></l>
+ <l name="ii"></l>
+ <l name="ia"></l>
+ <l name="v"></l>
+ <l name="vv"></l>
+ <l name="ua"></l>
+ <l name="u"></l>
+ <l name="uu"></l>
+ <l name="Ua"></l>
+ <l name="e"></l>
+ -->
+ <l name="ee">ເ</l>
+ <!--
+ <l name="ae"></l>
+ -->
+ <l name="aE">ແ</l>
+ <!--
+ <l name="o"></l>
+ -->
+ <l name="oo">ໂ</l>
+ <!--
+ <l name="ox"></l>
+ <l name="oy"></l>
+ <l name="eu"></l>
+ <l name="eU"></l>
+ -->
+ <l name="ai">ໃໄ</l>
+ <!--
+ <l name="ao"></l>
+ <l name="am"></l>
+ -->
+ <l name="k">ກ</l>
+ <l name="kh">ຂ</l>
+ <l name="kH">ຄ</l>
+ <l name="ng">ງ</l>
+ <l name="ch">ຈ</l>
+ <l name="s">ສ</l>
+ <l name="x">ຊ</l>
+ <l name="ny">ຍ</l>
+ <l name="d">ດ</l>
+ <l name="t">ຕ</l>
+ <l name="th">ຖ</l>
+ <l name="tH">ທ</l>
+ <l name="n">ນ</l>
+ <l name="b">ບ</l>
+ <l name="p">ປ</l>
+ <l name="ph">ຜ</l>
+ <l name="f">ຝ</l>
+ <l name="pH">ພ</l>
+ <l name="ff">ຟ</l>
+ <l name="m">ມ</l>
+ <l name="j">ຢ</l>
+ <l name="r">ຣ</l>
+ <l name="l">ລ</l>
+ <l name="w">ວ</l>
+ <l name="h">ຫ</l>
+ <l name="aw">ອ</l>
+ <l name="hh">ຮ</l>
 </lingvo>
 
 <!-- litova -->
@@ -1577,6 +1793,9 @@ http://www.thlib.org/reference/dictionaries/tibetan-dictionary/translate.php
  <l name="y">yY</l>
  <l name="z">zZ&#x017e;</l>
 </lingvo>
+
+<!-- makedona -->
+<lingvo lng="mk" kiel="ru"/>
 
 <!-- mongola
 http://www.cjvlang.com/Writing/writmongol/tradmononsite.html -->
@@ -1904,6 +2123,78 @@ https://en.wikipedia.org/wiki/Gurmukhi
  <l name="ja">&#x044f;&#x042f;</l>
 </lingvo>
 
+
+<!-- sinda
+...havas plurajn skribsistemojn, sed la plej uzata estas perso-araba (farsa)
+   https://en.wikipedia.org/wiki/Sindhi_language
+
+   provizore ni uzas la samajn regulojn kiel por la persa - kontrolenda!
+ -->
+<lingvo lng="sd" kiel="fa"/>
+
+<!-- sinhala -->
+<lingvo lng="si">
+ <l name="a">අ</l> <!-- 0d85 -->	
+ <l name="aa">ආ</l> 	
+ <l name="ae">ඇ</l> 	
+ <l name="ax">ඈ</l> 	
+ <l name="i">ඉ</l> 	
+ <l name="ii">ඊ</l> 	
+ <l name="u">උ</l> 	
+ <l name="uu">ඌ</l> 	
+ <l name="rr">ඍ</l> <!-- 0d8d -->	
+ <l name="rx">ඎ</l> 	
+ <l name="ll">ඏ</l>	
+ <l name="lx">ඐ</l> 	
+ <l name="e">එ</l> 	<!-- 0d91 -->
+ <l name="ee">ඒ</l> 	
+ <l name="ai">ඓ</l> 	
+ <l name="o">ඔ</l> 	
+ <l name="oo">ඕ</l> 	
+ <l name="au">ඖ</l> <!-- 0d96 -->
+ <l name="k">ක</l> 	<!-- 0d9a -->
+ <l name="kh">ඛ</l> 	
+ <l name="g">ග</l> 	
+ <l name="gh">ඝ</l> 	
+ <l name="nnj">ඞ</l> 	
+ <l name="ng">ඟ</l>
+ <l name="c">ච</l> <!-- 0da0 -->	
+ <l name="ch">ඡ</l> 	
+ <l name="j">ජ</l> 	
+ <l name="jh">ඣ</l> 	
+ <l name="nj">ඤ</l> 	
+ <l name="jn">ඥ</l> 	
+ <l name="njj">ඦ</l> 	
+ <l name="tt">ට</l> 	
+ <l name="tth">ඨ</l> 	
+ <l name="dd">ඩ</l> 	
+ <l name="ddh">ඪ</l> <!-- 0daa -->	
+ <l name="nn">ණ</l> 	
+ <l name="ndd">ඬ</l> 	
+ <l name="t">ත</l> 	
+ <l name="th">ථ</l> 	
+ <l name="d">ද</l>
+ <l name="dh">ධ</l> <!-- 0db0 -->	
+ <l name="n">න</l> 	
+ <l name="nd">ඳ</l> <!-- 0db3 -->		
+ <l name="p">ප</l> 	
+ <l name="ph">ඵ</l> 	
+ <l name="b">බ</l> 	
+ <l name="bh">භ</l> 
+ <l name="m">ම</l> 	
+ <l name="mb">ඹ</l> 	
+ <l name="y">ය</l> 	
+ <l name="r">ර</l> 	
+ <l name="l">ල</l> <!-- 0dbd -->			
+ <l name="v">ව</l> <!-- 0dc0 -->		
+ <l name="sx">ශ</l> 	
+ <l name="ss">ෂ</l> 	
+ <l name="s">ස</l> 	
+ <l name="h">හ</l> 	
+ <l name="ll">ළ</l> 	
+ <l name="f">ෆ</l> 
+</lingvo>
+
 <!-- slovaka -->
 <lingvo lng="sk">
  <l name="a">aAáÁ</l>
@@ -2004,6 +2295,62 @@ https://en.wikipedia.org/wiki/Gurmukhi
  <l name="oe">öÖ</l>
 </lingvo>
 
+<!-- tamila -->
+<lingvo lng="ta">
+ <!-- sendependaj vokaloj -->
+ <l name="a">&#x0B85;</l> <!-- அ -->
+ <l name="aa">&#x0B86;</l> <!-- ஆ -->
+ <l name="i">&#x0B87;</l>  <!-- இ -->
+ <l name="ii">&#x0B88;</l>  <!-- ஈ -->
+ <l name="u">&#x0B89;</l>  <!-- உ -->
+ <l name="uu">&#x0B8A;</l>  <!-- ஊ -->
+ <l name="e">&#x0B8E;</l>  <!-- எ -->
+ <l name="ee">&#x0B8F;</l>  <!-- ஏ -->
+ <l name="ai">&#x0B90;</l>  <!-- ஐ -->
+ <l name="o">&#x0B92;</l>  <!-- ஒ -->
+ <l name="oo">&#x0B93;</l>  <!-- ஓ -->
+ <l name="au">&#x0B94;</l>  <!-- ஔ -->
+ <!-- konsonantoj -->
+ <l name="k">&#x0B95;</l>   <!-- க -->
+ <l name="ng">&#x0B99;</l>   <!-- ங -->
+ <l name="c">&#x0B9A;</l>   <!-- ச -->
+ <l name="ny">&#x0B9E;</l>   <!-- ஞ -->
+ <l name="tt">&#x0B9F;</l>   <!-- ட -->
+ <l name="nn">&#x0BA3;</l>   <!-- ண -->
+ <l name="t">&#x0BA4;</l>   <!-- த -->
+ <l name="n">&#x0BA8;</l>   <!-- ந -->
+ <l name="p">&#x0BAA;</l>   <!-- ப -->
+ <l name="m">&#x0BAE;</l>   <!-- ம -->
+ <l name="y">&#x0BAF;</l>   <!-- ய -->
+ <l name="r">&#x0BB0;</l>   <!-- ர -->
+ <l name="l">&#x0BB2;</l>   <!-- ல -->
+ <l name="v">&#x0BB5;</l>   <!-- வ -->
+ <l name="lx">&#x0BB4;</l>   <!-- ழ -->
+ <l name="ll">&#x0BB3;</l>   <!-- ள -->
+ <l name="rr">&#x0BB1;</l>   <!-- ற -->
+ <l name="nx">&#x0BA9;</l>   <!-- ன -->
+ <l name="j">&#x0B9C;</l>   <!-- ஜ -->
+ <l name="s">&#x0BB8;</l>  <!-- ஸ -->
+ <l name="ss">&#x0BB7;</l>   <!-- ஷ -->
+ <l name="h">&#x0BB9;</l>   <!-- ஹ -->
+ <l name="ks">&#x0B95;</l>   <!-- கஷ -->
+ <l name="sh">&#x0BB6;</l>   <!-- oo -->
+
+<!-- dependaj vokaloj -->
+ <l name="ax">&#x0BBE;</l> <!-- ◌ா -->
+ <l name="ix">&#x0BBF;</l>  <!-- ◌ி -->
+ <l name="iy">&#x0BC0;</l>  <!-- ◌ீ -->
+ <l name="ux">&#x0BC1;</l>  <!-- ◌ு -->
+ <l name="uy">&#x0BC2;</l> <!-- ◌ூ -->
+ <l name="ex">&#x0BC6;</l> <!--  ெ◌ -->
+ <l name="ey">&#x0BC7;</l> <!--  ே◌ -->
+ <l name="ay">&#x0BC8;</l> <!--  ை◌ -->
+ <l name="ox">&#x0BCA;</l> <!--  ெ◌ா -->
+ <l name="oz">&#x0BCB;</l> <!--  ே◌ா -->
+ <l name="aw">&#x0BCC;</l> <!-- ◌ௗ -->
+ <l name="x">&#x0BD7;</l> <!-- ◌ௗ -->
+</lingvo>
+
 <!-- telugua 
 https://en.wikipedia.org/wiki/Telugu_script -->
 <lingvo lng="te">
@@ -2059,6 +2406,9 @@ https://en.wikipedia.org/wiki/Telugu_script -->
  <l name="h">హ</l>
  <l name="rr">ళ</l>
 </lingvo>
+
+<!-- taĝika -->
+<lingvo lng="tg" kiel="ru"/>
 
 <!-- taja -->
 <lingvo lng="th" ignorendaj="เแโใไ">
@@ -2151,6 +2501,9 @@ https://en.wikipedia.org/wiki/Telugu_script -->
  <l name="y">Yy</l>
  <l name="z">Zz</l>
 </lingvo>
+
+<!-- tatara -->
+<lingvo lng="tt" kiel="ru"/>
 
 <!-- ukrajna -->
 <lingvo lng="uk">
@@ -2272,6 +2625,9 @@ http://vietunicode.sourceforge.net/charset/v3.htm -->
  <l name="y">&#x0079;&#x0059;&#x1EF3;&#x1EF2;&#x1EF7;&#x1EF6;&#x1EF9;&#x1EF8;&#x00FD;&#x00DD;&#x1EF5;&#x1EF4;</l>
  <l name="z">&#x007A;&#x005A;</l>
 </lingvo>
+
+<!-- jida -->
+<lingvo lng="yi" kiel="he"/>
 
 </ordigo>
 
