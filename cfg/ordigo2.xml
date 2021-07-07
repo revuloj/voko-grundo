@@ -1531,6 +1531,61 @@ https://en.wikipedia.org/wiki/Georgian_scripts#Mkhedruli
  <l name="sl">&#x02bc;</l>
 </lingvo>
 
+<!-- kanara (en: Kannada)
+https://en.wikipedia.org/wiki/Kannada_(Unicode_block)
+https://en.wikipedia.org/wiki/Kannada#Writing_system
+-->
+<lingvo lng="kn">
+ <l name="a">ಅ</l> 	
+ <l name="aa">ಆ</l> 	
+ <l name="i">ಇ</l> 	
+ <l name="ii">ಈ</l> 	
+ <l name="u">ಉ</l> 	
+ <l name="uu">ಊ</l> 
+ <l name="x">ಋ</l> 	
+ <l name="xx">ಌ</l> 	
+ <l name="e">ಎ</l> 	
+ <l name="ee">ಏ</l> 	
+ <l name="ex">ಐ</l> 	<!-- U+0C90 -->
+ <l name="o">ಒ</l> 	
+ <l name="oo">ಓ</l> 	
+ <l name="ox">ಔ</l> 	
+ <l name="k">ಕ</l> 	
+ <l name="kh">ಖ</l> 	
+ <l name="g">ಗ</l> 	
+ <l name="gh">ಘ</l> 	
+ <l name="nz">ಙ</l> 	
+ <l name="ts">ಚ</l> 	
+ <l name="tsh">ಛ</l> 	
+ <l name="dz">ಜ</l> 	
+ <l name="dzh">ಝ</l> 	
+ <l name="ny">ಞ</l> 	
+ <l name="ty">ಟ</l>
+ <l name="tyh">ಠ</l> 	<!-- U+0CA0 -->
+ <l name="dy">ಡ</l> 	
+ <l name="dyh">ಢ</l> 	
+ <l name="nx">ಣ</l> 	
+ <l name="tx">ತ</l> 	
+ <l name="txh">ಥ</l> 	
+ <l name="dx">ದ</l> 	
+ <l name="dxh">ಧ</l> 	
+ <l name="n">ನ</l> 	
+ <l name="p">ಪ</l> 	
+ <l name="ph">ಫ</l> 	
+ <l name="b">ಬ</l> 	
+ <l name="bh">ಭ</l> 	
+ <l name="m">ಮ</l> 	
+ <l name="j">ಯ</l>	
+ <l name="r">ರ</l> 	<!-- U+0CB0 -->
+ <l name="rx">ಱ</l> 	
+ <l name="l">ಲ</l> 	
+ <l name="lx">ಳ</l> 	
+ <l name="v">ವ</l> 	
+ <l name="sy">ಶ</l> 	
+ <l name="sx">ಷ</l> 	
+ <l name="s">ಸ</l> 	
+ <l name="h">ಹ</l>
+</lingvo>
 
 <!-- kazaĥa -->
 <lingvo lng="kk" kiel="ru"/>
@@ -1610,6 +1665,73 @@ silabon...
  <l name="x">xX</l>
  <l name="y">yY</l>
  <l name="z">zZ</l>
+</lingvo>
+
+<!-- laŭa (en: Lao) 
+https://r12a.github.io/scripts/lao/
+-->
+<lingvo lng="lo">
+ <l name="a">ະ</l>
+ <l name="aa">າ</l>
+ <!--
+ <l name="i"></l>
+ <l name="ii"></l>
+ <l name="ia"></l>
+ <l name="v"></l>
+ <l name="vv"></l>
+ <l name="ua"></l>
+ <l name="u"></l>
+ <l name="uu"></l>
+ <l name="Ua"></l>
+ <l name="e"></l>
+ -->
+ <l name="ee">ເ</l>
+ <!--
+ <l name="ae"></l>
+ -->
+ <l name="aE">ແ</l>
+ <!--
+ <l name="o"></l>
+ -->
+ <l name="oo">ໂ</l>
+ <!--
+ <l name="ox"></l>
+ <l name="oy"></l>
+ <l name="eu"></l>
+ <l name="eU"></l>
+ -->
+ <l name="ai">ໃໄ</l>
+ <!--
+ <l name="ao"></l>
+ <l name="am"></l>
+ -->
+ <l name="k">ກ</l>
+ <l name="kh">ຂ</l>
+ <l name="kH">ຄ</l>
+ <l name="ng">ງ</l>
+ <l name="ch">ຈ</l>
+ <l name="s">ສ</l>
+ <l name="x">ຊ</l>
+ <l name="ny">ຍ</l>
+ <l name="d">ດ</l>
+ <l name="t">ຕ</l>
+ <l name="th">ຖ</l>
+ <l name="tH">ທ</l>
+ <l name="n">ນ</l>
+ <l name="b">ບ</l>
+ <l name="p">ປ</l>
+ <l name="ph">ຜ</l>
+ <l name="f">ຝ</l>
+ <l name="pH">ພ</l>
+ <l name="ff">ຟ</l>
+ <l name="m">ມ</l>
+ <l name="j">ຢ</l>
+ <l name="r">ຣ</l>
+ <l name="l">ລ</l>
+ <l name="w">ວ</l>
+ <l name="h">ຫ</l>
+ <l name="aw">ອ</l>
+ <l name="hh">ຮ</l>
 </lingvo>
 
 <!-- litova -->
