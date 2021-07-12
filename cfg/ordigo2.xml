@@ -1266,7 +1266,7 @@ http://www.thlib.org/reference/dictionaries/tibetan-dictionary/translate.php
  <l name="y">ય</l>
  <l name="r">ર</l>
  <l name="l">લ</l>
- <l name="">ળ</l>
+ <l name="x">ળ</l>
  <l name="v">વ</l>
  <l name="sx">શ</l>
  <l name="S">ષ</l>
@@ -1529,6 +1529,61 @@ https://en.wikipedia.org/wiki/Georgian_scripts#Mkhedruli
  <l name="x">xX</l>
  <l name="y">yY</l>
  <l name="sl">&#x02bc;</l>
+</lingvo>
+
+<!-- kmera 
+https://de.wikipedia.org/wiki/Khmer-Schrift
+-->
+<lingvo lng="km">
+ <l name="k">ក</l> 	<!-- 1780 -->
+ <l name="kh">ខ</l> 	
+ <l name="K">គ</l> 	
+ <l name="Kh">ឃ</l> 	
+ <l name="ng">ង</l> 	
+ <l name="c">ច</l> 	
+ <l name="ch">ឆ</l> 	
+ <l name="C">ជ</l> 	
+ <l name="Ch">ឈ</l> 	
+ <l name="nh">ញ</l> 	
+ <l name="d">ដ</l> 	
+ <l name="th">ឋ</l> 	
+ <l name="D">ឌ</l> 	
+ <l name="Th">ឍ</l> 	
+ <l name="n">ណ</l> 	
+ <l name="t">ត</l>
+ <l name="tH">ថ</l> <!-- 1790 -->
+ <l name="T">ទ</l> 	
+ <l name="TH">ធ</l> 	
+ <l name="N">ន</l> 	
+ <l name="b">ប</l> 	
+ <l name="ph">ផ</l> 	
+ <l name="P">ព</l> 	
+ <l name="Ph">ភ</l> 	
+ <l name="M">ម</l> 	
+ <l name="Y">យ</l> 	
+ <l name="R">រ</l> 	
+ <l name="L">ល</l> 	
+ <l name="V">វ</l> 	
+ <l name="sh">ឝ</l> 	
+ <l name="ss">ឞ</l> 	
+ <l name="s">ស</l>
+ <l name="h">ហ</l> 	<!-- 17A0 -->
+ <l name="l">ឡ</l> 	
+ <l name="q">អឣឤ</l> 	
+ <l name="ex">ឥ</l> 	
+ <l name="ei">ឦ</l> 	
+ <l name="ox">ឧ</l> 	
+ <l name="u">ឨ</l> 	
+ <l name="o">ឩ</l> 	
+ <l name="ov">ឪ</l> 	
+ <l name="ro">ឫ</l> 	
+ <l name="re">ឬ</l> 	
+ <l name="lo">ឭ</l> 	
+ <l name="le">ឮ</l> 	
+ <l name="e">ឯ</l>
+ <l name="ai">ឰ</l> <!-- 17B0 -->
+ <l name="ou">ឱឲ</l> 	
+ <l name="au">ឳ</l>
 </lingvo>
 
 <!-- kanara (en: Kannada)
@@ -1797,6 +1852,64 @@ https://r12a.github.io/scripts/lao/
 <!-- makedona -->
 <lingvo lng="mk" kiel="ru"/>
 
+<!-- malajalama 
+https://en.wikipedia.org/wiki/Malayalam_script
+-->
+<lingvo lng="ml">
+ <l name="a">അ</l> 	
+ <l name="aa">ആ</l> 	
+ <l name="i">ഇ</l> 	
+ <l name="ii">ഈ</l> 	
+ <l name="u">ഉ</l> 	
+ <l name="uu">ഊ</l> 	
+ <l name="ro">ഋ</l> 	
+ <l name="lo">ഌ</l> 		
+ <l name="e">എ</l> 	
+ <l name="ee">ഏ</l> <!-- U+0D1x --> 	
+ <l name="ai">ഐ</l> 		
+ <l name="o">ഒ</l> 	
+ <l name="oo">ഓ</l> 	
+ <l name="au">ഔ</l> 	
+ <l name="k">ക</l> 	
+ <l name="kh">ഖ</l> 	
+ <l name="g">ഗ</l> 	
+ <l name="gh">ഘ</l> 	
+ <l name="nx">ങ</l> 	
+ <l name="c">ച</l> 	
+ <l name="ch">ഛ</l> 	
+ <l name="j">ജ</l> 	
+ <l name="jh">ഝ</l> 	
+ <l name="nj">ഞ</l> 	
+ <l name="tt">ട</l>
+ <l name="tth">ഠ</l>  <!-- U+0D2x --> 	
+ <l name="dd">ഡ</l> 	
+ <l name="ddh">ഢ</l> 	
+ <l name="nn">ണ</l> 	
+ <l name="t">ത</l> 	
+ <l name="th">ഥ</l> 	
+ <l name="d">ദ</l> 	
+ <l name="dh">ധ</l> 	
+ <l name="n">ന</l> 	
+ <l name="N">ഩ</l> 	
+ <l name="p">പ</l> 	
+ <l name="ph">ഫ</l> 	
+ <l name="b">ബ</l> 	
+ <l name="bh">ഭ</l> 	
+ <l name="m">മ</l> 	
+ <l name="y">യ</l>	
+ <l name="r">ര</l> 	<!-- U+0D3x -->
+ <l name="rr">റ</l> 	
+ <l name="l">ല</l> 	
+ <l name="ll">ള</l> 	
+ <l name="zh">ഴ</l> 	
+ <l name="v">വ</l> 	
+ <l name="sh">ശ</l> 	
+ <l name="ss">ഷ</l> 	
+ <l name="s">സ</l> 	
+ <l name="h">ഹ</l> 	
+ <l name="ttt">ഺ</l> 
+</lingvo>
+
 <!-- mongola
 http://www.cjvlang.com/Writing/writmongol/tradmononsite.html -->
 <!-- supre malsupren verŝajne ne funkcios bone en Revo, do prefere ni uzu la cirilan skribon! -->
@@ -2055,6 +2168,105 @@ https://en.wikipedia.org/wiki/Gurmukhi
  <l name="zx">&#x017a;&#x0179;</l>
  <l name="zy">&#x017c;&#x017b;</l>
 </lingvo>
+
+<!-- paŝtua
+https://en.wikipedia.org/wiki/Pashto_alphabet
+https://de.wikipedia.org/wiki/Paschtunische_Schrift
+
+... kiel la persa skribo, sed kun aldonaj literoj!
+-->
+<lingvo lng="ps" klaso="de.steloj.respiro.PersianCollator">
+ <l name="spaceto" n="3">' '</l>
+ <l name="cif_0">&#x06F0;,&#x0660;</l>
+ <l name="cif_1">&#x06F1;,&#x0661;</l>
+ <l name="cif_2">&#x06F2;,&#x0662;</l>
+ <l name="cif_3">&#x06F3;,&#x0663;</l>
+ <l name="cif_4">&#x06F4;,&#x0664;</l>
+ <l name="cif_5">&#x06F5;,&#x0665;</l>
+ <l name="cif_6">&#x06F6;,&#x0666;</l>
+ <l name="cif_7">&#x06F7;,&#x0667;</l>
+ <l name="cif_8">&#x06F8;,&#x0668;</l>
+ <l name="cif_9">&#x06F9;,&#x0669;</l>
+ <l name="alef_madde">&#x0622;</l>
+ <l name="alef">&#x0627;,&#x0671;</l>
+ <l name="hamze">&#x0621;,&#x0623;,&#x0625;,&#x0624;,&#x0626;</l>
+ <l name="be">&#x0628;</l>
+ <l name="pe">&#x067e;</l>
+ <l name="te">&#x062a;</l>
+ <l name="tte">&#x067c;</l> <!-- ps -->
+ <l name="se">&#x062b;</l>
+ <l name="jim">&#x062c;</l>
+ <l name="che">&#x0686;</l>
+ <l name="dze">&#x0681;</l> <!-- ps -->
+ <l name="tse">&#x0685;</l> <!-- ps -->
+ <l name="ha">&#x0686;#x062d;</l>
+ <l name="khe">&#x062e;</l>
+ <l name="dal">&#x062f;</l>
+ <l name="ddal">&#x0689;</l> <!-- ps -->
+ <l name="zal">&#x0630;</l>
+ <l name="re">&#x0631;</l>
+ <l name="rre">&#x0693;</l> <!-- ps -->
+ <l name="ze">&#x0632;</l>
+ <l name="zhe">&#x0698;</l>
+ <l name="ge">&#x0696;</l> <!-- ps -->
+ <l name="sin">&#x0633;</l>
+ <l name="shin">&#x0634;</l>
+ <l name="xin">&#x069a;</l> <!-- ps -->
+ <l name="sad">&#x0635;</l>
+ <l name="zad">&#x0636;</l>
+ <l name="ta">&#x0637;</l>
+ <l name="za">&#x0638;</l>
+ <l name="ayn">&#x0639;</l>
+ <l name="ghayn">&#x063a;</l>
+ <l name="fe">&#x0641;</l>
+ <l name="qaf">&#x0642;</l>
+ <l name="kaf">&#x06a9;,&#x0643;</l>
+ <l name="ge">&#x06af;</l>
+ <l name="lam">&#x0644;</l>
+ <l name="mim">&#x0645;</l>
+ <l name="nun">&#x0646;</l>
+ <l name="nur">&#x06bc;</l> <!-- ps -->
+ <l name="ve">&#x0648;</l>
+ <l name="he">&#x0647;,&#x0629;</l>
+ <l name="ye">&#x06CC;,&#x0649;,&#x064A;</l>
+
+ <r>&#x0622; = &#x0627;&#x0653;</r>
+ <r>&#x0623; = &#x0627;&#x0654;</r>
+ <r>&#x0624; = &#x0648;&#x0654;</r>
+ <r>&#x0625; = &#x0627;&#x0655;</r>
+ <r>&#x0626; = &#x064A;&#x0654;</r>
+
+ <!-- ignorendaj literoj -->
+ <i>'!'</i>
+ <i>'.'</i>
+ <i>':'</i>
+ <i>'('</i>
+ <i>')'</i>
+ <i>'['</i>
+ <i>']'</i>
+ <i>&#x2026;</i> <!-- "ellipsis"       -->
+ <i>&#x060C;</i> <!-- "a_komo"         -->
+ <i>&#x061B;</i> <!-- "a_punktokomo"   -->
+ <i>&#x061F;</i> <!-- "a_demando"      -->
+ <i>&#x0640;</i> <!-- "a_tatwil"       -->
+
+ <i>&#x200C;</i> <!-- "zwnj"           -->
+ <i>&#x200D;</i> <!-- "zwj"            -->
+ <i>&#x064E;</i> <!-- "a_fatha"        -->
+ <i>&#x0650;</i> <!-- "a_kasra"        -->
+ <i>&#x064F;</i> <!-- "a_damma"        -->
+ <i>&#x064B;</i> <!-- "a_fathatan"     -->
+ <i>&#x064D;</i> <!-- "a_kasratan"     -->
+ <i>&#x064C;</i> <!-- "a_dammatan"     -->
+ <i>&#x0651;</i> <!-- "a_shadda"       -->
+ <i>&#x0652;</i> <!-- "a_sukun"        -->
+ <i>&#x0653;</i> <!-- "a_madda_sure"   -->
+ <i>&#x0654;</i> <!-- "a_hamza_sure"   -->
+ <i>&#x0655;</i> <!-- "a_hamza_sube"   -->
+ <i>&#x0670;</i> <!-- "a_A_sure"       -->
+ <i>&#x0656;</i> <!-- "a_A_sube"       -->
+ </lingvo>
+
 
 <!-- portugala -->
 <lingvo lng="pt">
