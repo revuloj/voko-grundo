@@ -338,6 +338,10 @@ var redaktilo = function() {
     }
   }
 
+  /*************************************************************************
+    FUNKCIOJ POR KONTROLADO, ANTAŬRIGARDO KAJ SUBMETO DE REDAKTITA ARTIKOLO
+  **************************************************************************/
+
   function listigu_erarojn(err) {
     var el = document.getElementById("r:eraroj");
     var elch = el.children;
@@ -535,41 +539,7 @@ var redaktilo = function() {
       }
   }
 
-  function create_new_art() {
-    var art = document.getElementById("r:nova_art").value;
-    var ta = document.getElementById("r:xmltxt");
-    document.getElementById("r:art").value = art;
-    document.getElementById("r:art_titolo").textContent = art;
-    redakto = 'aldono';
-    var shg = document.getElementById("r:sxangxo");
-    shg.value = art; shg.setAttribute("readonly","readonly");
-    /* jshint ignore:start */
-    ta.value = 
-        '<?xml version="1.0"?>\n'
-      + '<!DOCTYPE vortaro SYSTEM "../dtd/vokoxml.dtd">\n'
-      + '<vortaro>\n'
-      + '<art mrk="\$Id\$">\n'
-      + '<kap>\n'
-      + '    <rad>' + art + '</rad>/o <fnt><bib>FNT</bib></fnt>\n'
-      + '</kap>\n'
-      + '<drv mrk="' + art + '.0o">\n'
-      + '  <kap><tld/>o</kap>\n'
-      + '  <snc mrk="' + art + '.0o.SNC">\n'
-      + '    <uzo tip="fak"></uzo>\n'
-      + '    <dif>\n'
-      + '      <tld/>o estas:\n'
-      + '      <ekz>\n'
-      + '        ...\n'
-      + '        <fnt><bib></bib>, <lok></lok></fnt>\n'
-      + '      </ekz>\n'
-      + '    </dif>\n'
-      + '  </snc>\n'
-      + '  <trd lng=""></trd>\n'
-      + '</drv>\n'
-      + '</art>\n'
-      + '</vortaro>\n';
-    /* jshint ignore:end */
-  }
+  
 
   function vokohtmlx(xml) {
     HTTPRequest('POST',cgi_vokohtmlx,
@@ -614,28 +584,7 @@ var redaktilo = function() {
     });
   }
 
-  function submetoj_stato(subm_callback,onstart,onstop) {
-    const red = get_preference('r:redaktanto');
-    if (!red) return;
 
-    HTTPRequest('POST',cgi_vokosubm_json,
-    {
-      email: red
-    },
-    function (data) {
-      // Success!
-      if (data) {
-        var json = JSON.parse(data);
-        //for (subm of json) {
-        //  console.info("id:"+subm.id+" art:"+subm.fname+" stato:"+subm.state);
-        //}  
-        subm_callback(json);
-      }
-    },
-    onstart,
-    onstop);
-  }
-    
   function vokomailx(command,art,xml) {
 
     var red = document.getElementById("r:redaktanto").value;
@@ -695,6 +644,76 @@ var redaktilo = function() {
       });
   }
 
+
+  // submetitaj redaktoj estas en datumbazo, la stato indikas ĉu ili
+  // jam estas traktitaj de la redaktoservo kaj ĉu sukcese aŭ kun eraro
+  // CGI-skripto redonas la liston de submetoj kun stato de la personaj redaktoj
+  function submetoj_stato(subm_callback,onstart,onstop) {
+    const red = get_preference('r:redaktanto');
+    if (!red) return;
+
+    HTTPRequest('POST',cgi_vokosubm_json,
+    {
+      email: red
+    },
+    function (data) {
+      // Success!
+      if (data) {
+        var json = JSON.parse(data);
+        //for (subm of json) {
+        //  console.info("id:"+subm.id+" art:"+subm.fname+" stato:"+subm.state);
+        //}  
+        subm_callback(json);
+      }
+    },
+    onstart,
+    onstop);
+  }
+    
+
+  /*********************************************************
+    FUNKCIOJ POR EKREDAKTO DE ARTIKOLO
+  **********************************************************/
+
+    // kreu novan artikolon per la sekva ŝablono
+    function create_new_art() {
+      var art = document.getElementById("r:nova_art").value;
+      var ta = document.getElementById("r:xmltxt");
+      document.getElementById("r:art").value = art;
+      document.getElementById("r:art_titolo").textContent = art;
+      redakto = 'aldono';
+      var shg = document.getElementById("r:sxangxo");
+      shg.value = art; shg.setAttribute("readonly","readonly");
+      /* jshint ignore:start */
+      ta.value = 
+          '<?xml version="1.0"?>\n'
+        + '<!DOCTYPE vortaro SYSTEM "../dtd/vokoxml.dtd">\n'
+        + '<vortaro>\n'
+        + '<art mrk="\$Id\$">\n'
+        + '<kap>\n'
+        + '    <rad>' + art + '</rad>/o <fnt><bib>FNT</bib></fnt>\n'
+        + '</kap>\n'
+        + '<drv mrk="' + art + '.0o">\n'
+        + '  <kap><tld/>o</kap>\n'
+        + '  <snc mrk="' + art + '.0o.SNC">\n'
+        + '    <uzo tip="fak"></uzo>\n'
+        + '    <dif>\n'
+        + '      <tld/>o estas:\n'
+        + '      <ekz>\n'
+        + '        ...\n'
+        + '        <fnt><bib></bib>, <lok></lok></fnt>\n'
+        + '      </ekz>\n'
+        + '    </dif>\n'
+        + '  </snc>\n'
+        + '  <trd lng=""></trd>\n'
+        + '</drv>\n'
+        + '</art>\n'
+        + '</vortaro>\n';
+      /* jshint ignore:end */
+    }
+
+
+  // ŝargu XML-artikolon por redaktado per HTTP-GET
   function load_xml(params) {
     var art = getParamValue("art",params);
 
@@ -717,12 +736,15 @@ var redaktilo = function() {
       HTTPRequest('GET','/revo/xml/'+art+'.xml',{},
       function(data) {
           // Success!
-          document.getElementById('r:xmltxt').value = replace_entities(data);
+          const ent_exp = replace_entities(data)
+          document.getElementById('r:xmltxt').value = ent_exp;
           document.getElementById("r:art").value = art;
           var titolo = document.getElementById("r:art_titolo");
           titolo.textContent = art; 
           titolo.setAttribute("href","/revo/art/"+art+".html");
-          xmlarea.resetCursor();     
+          xmlarea.resetCursor();   
+          
+          art_outline(ent_exp);
         });
     } else {
       // se ne estas donita artikolo kiel parametro, ni provu legi
@@ -731,6 +753,47 @@ var redaktilo = function() {
     }
   }
 
+
+  // ekstraktas strukturon de art/subart/drv/subdrv/snc/subsnc el la artikolo
+  function art_outline(xml) {
+    const indents = {
+      art: "", subart: " ", drv: "  ", subdrv: "   ", snc: "    ", subsnc: "     "
+    }
+    function el_id(el) {
+      if (el.nodeName == 'drv') {
+        const kap = el.querySelector('kap');
+        if (kap) {
+          var tx = '';
+          for (c of kap.childNodes) {
+            if (c.nodeName == 'tld') {
+              tx += '~'
+            } else if (c.nodeType == 3) {
+              tx += c.nodeValue.replace(/\s+/,' ');
+            }
+          }
+          return ':'+tx.trim();
+        }
+      } else {
+        const mrk_el = el.attributes.mrk;
+        if (mrk_el) {
+          const mrk = mrk_el.nodeValue;
+          return (el.nodeName != 'art'? 
+            mrk.substring(mrk.lastIndexOf('.')) 
+            : mrk.slice(mrk.indexOf(':'),-20))
+        } else {
+          return '';
+        }
+      }
+    }
+ 
+    var parser = new DOMParser();
+    var doc = parser.parseFromString(xml,"text/xml");
+    for (var el of doc.querySelectorAll('art,subart,drv,subdrv,snc,subsnc')) {
+      console.log(indents[el.nodeName]+el.nodeName + el_id(el));
+    }
+  }
+
+  // metu elekton kaj fokuson ĝuste por ekredakto
   function sf(pos, line, lastline) {
     document.getElementById("r:xmltxt").focus();
     var txtarea = document.getElementById('r:xmltxt');
@@ -749,6 +812,8 @@ var redaktilo = function() {
     }
   }
 
+  // preparu la redaktilon en la dekstra kadro: preferojn kaj XML-tekston, 
+  // alligu evento-traktilojn
   function preparu_red(params) {
 
     function show_pos() {
@@ -826,6 +891,8 @@ var redaktilo = function() {
     */
   }
 
+  // preparu la redaktilo-elementojn en la naviga kadro: elekto-listojn (fakoj, stiloj...),
+  // evento-traktiloj
   function preparu_menu() {
 
     // enlegu bezonaĵojn (listojn, XML-artikolon, preferojn)
