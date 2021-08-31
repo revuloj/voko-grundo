@@ -13,6 +13,7 @@ var redaktilo = function() {
   const cgi_vokosubm_json = '/cgi-bin/vokosubm-json.pl';
  
   const re_stru = /\s*<((?:sub)?(?:art|drv|snc))/g;
+  const re_stru_mrk = /mrk\s*=\s*"([^>"]*?)"/g;
 
   const re_lng = /<(?:trd|trdgrp)\s+lng\s*=\s*"([^]*?)"\s*>/mg; 
   const re_fak = /<uzo\s+tip\s*=\s*"fak"\s*>([^]*?)</mg; 
@@ -750,7 +751,7 @@ var redaktilo = function() {
           */
           xmlarea.resetCursor();   
           
-          art_outline(ent_exp);
+          art_strukturo(ent_exp);
         });
     } else {
       // se ne estas donita artikolo kiel parametro, ni provu legi
@@ -761,17 +762,17 @@ var redaktilo = function() {
 
 
   // ekstraktas strukturon de art/subart/drv/subdrv/snc/subsnc el la artikolo
-  function art_outline(xml) {
+  function art_strukturo(xml) {
     const indents = {
-      art: "", subart: "\00a0", drv: "\u22ef ", subdrv: "\u22ef\u22ef ", 
+      art: "", subart: "\u00a0", drv: "\u22ef ", subdrv: "\u22ef\u22ef ", 
       snc: "\u22ef\u22ef\u22ef ", subsnc: "\u22ef\u22ef\u22ef\u22ef "
     }
-    
-    /*
-    function el_id(el) {
-      if (el.nodeName == 'drv') {
-        const kap = el.querySelector('kap');
+        
+    function el_id(elm,de,ghis) {
+      if (elm == 'drv') {
+        const kap = '' //el.querySelector('kap');        
         if (kap) {
+          /*
           var tx = '';
           for (c of kap.childNodes) {
             if (c.nodeName == 'tld') {
@@ -781,20 +782,23 @@ var redaktilo = function() {
             }
           }
           return ':'+tx.trim();
+          */
+         return 'art'
         }
       } else {
-        const mrk_el = el.attributes.mrk;
-        if (mrk_el) {
-          const mrk = mrk_el.nodeValue;
-          return (el.nodeName != 'art'? 
-            ':' + mrk.substring(mrk.indexOf('.')+1).replace('0','~') 
-            : mrk.slice(mrk.indexOf(':'),-20))
+        re_stru_mrk.lastIndex = de;
+        const mrk = re_stru_mrk.exec(xml);
+        if (mrk && mrk.index < ghis) {          
+          return (elm != 'art'? 
+            ':' + mrk[1].substring(mrk[1].indexOf('.')+1).replace('0','~') 
+            : mrk[1].slice(mrk[1].indexOf(':'),-20))
         } else {
           return '';
         }
       }
     }
  
+    /*
     var parser = new DOMParser();
     var doc = parser.parseFromString(xml,"text/xml");
     const sel_stru = document.getElementById('r:art_strukturo');
@@ -813,7 +817,8 @@ var redaktilo = function() {
       // trovu la finon
       var fino = xml.indexOf('</'+m[1],m.index);
       fino = xml.indexOf('>',fino);
-      console.log(m.index + '-' + fino + ': ' + m[1]);
+      const id = el_id(m[1],m.index,fino);
+      console.log(m.index + '-' + fino + ': ' + m[1] + '@' +  id);
     }
   }
 
