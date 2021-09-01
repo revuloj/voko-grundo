@@ -6,14 +6,23 @@ var redaktilo = function() {
 
   var xmlarea = null;  
   var redakto = 'redakto'; // 'aldono' por nova artikolo
+  var xmlteksto = '';
   var strukturo = [];
 
   const cgi_vokomailx = '/cgi-bin/vokosubmx.pl';
   const cgi_vokohtmlx = '/cgi-bin/vokohtmlx.pl';
   const cgi_vokosubm_json = '/cgi-bin/vokosubm-json.pl';
  
-  const re_stru = /\s*<((?:sub)?(?:art|drv|snc))/g;
-  const re_stru_mrk = /mrk\s*=\s*"([^>"]*?)"/g;
+  const re_stru = {
+    _elm: /\s*<((?:sub)?(?:art|drv|snc))/g,
+    _mrk: /mrk\s*=\s*"([^>"]*?)"/g,
+    _kap: /<kap>([^]*)<\/kap>/,
+    _var: /<var>[^]*<\/var>/g,
+    _ofc: /<ofc>[^]*<\/ofc>/g,
+    _fnt: /<fnt>[^]*<\/fnt>/g,
+    _tl1: /<tld\s+lit="(.)"[^>]*>/g,
+    _tl2: /<tld[^>]*>/g
+  }
 
   const re_lng = /<(?:trd|trdgrp)\s+lng\s*=\s*"([^]*?)"\s*>/mg; 
   const re_fak = /<uzo\s+tip\s*=\s*"fak"\s*>([^]*?)</mg; 
@@ -741,8 +750,8 @@ var redaktilo = function() {
       HTTPRequest('GET','/revo/xml/'+art+'.xml',{},
       function(data) {
           // Success!
-          const ent_exp = replace_entities(data)
-          document.getElementById('r:xmltxt').value = ent_exp;
+          xmlteksto = replace_entities(data)
+          document.getElementById('r:xmltxt').value = xmlteksto;
           document.getElementById("r:art").value = art;
           /*
           var titolo = document.getElementById("r:art_titolo");
@@ -751,7 +760,7 @@ var redaktilo = function() {
           */
           xmlarea.resetCursor();   
           
-          art_strukturo(ent_exp);
+          art_strukturo();
         });
     } else {
       // se ne estas donita artikolo kiel parametro, ni provu legi
@@ -762,7 +771,7 @@ var redaktilo = function() {
 
 
   // ekstraktas strukturon de art/subart/drv/subdrv/snc/subsnc el la artikolo
-  function art_strukturo(xml) {
+  function art_strukturo() {
     const indents = {
       art: "", subart: "\u00a0", drv: "\u22ef ", subdrv: "\u22ef\u22ef ", 
       snc: "\u22ef\u22ef\u22ef ", subsnc: "\u22ef\u22ef\u22ef\u22ef "
@@ -770,30 +779,34 @@ var redaktilo = function() {
         
     function el_id(elm,de,ghis) {
       if (elm == 'drv') {
-        const kap = '' //el.querySelector('kap');        
-        if (kap) {
-          /*
-          var tx = '';
-          for (c of kap.childNodes) {
-            if (c.nodeName == 'tld') {
-              tx += '~'
-            } else if (c.nodeType == 3) {
-              tx += c.nodeValue.replace(/\s+/,' ');
-            }
-          }
-          return ':'+tx.trim();
-          */
-         return 'art'
+        // find kap
+        const drv = xmlteksto.substring(de,ghis);
+        const mk = drv.match(re_stru._kap); 
+        //re_stru._kap.lastIndex = de;
+        if (mk) {
+          const kap = mk[1]
+          .replace(re_stru._var,'')
+          .replace(re_stru._ofc,'')
+          .replace(re_stru._fnt,'')
+          .replace(re_stru._tl1,'$1~')
+          .replace(re_stru._tl2,'~')
+          .replace(/\s+/,' ')
+          .replace(',',',..')
+          .trim();  // [^] = [.\r\n]
+
+          return elm+' '+kap;
         }
       } else {
-        re_stru_mrk.lastIndex = de;
-        const mrk = re_stru_mrk.exec(xml);
+        re_stru._mrk.lastIndex = de;
+        const mrk = re_stru._mrk.exec(xmlteksto);
         if (mrk && mrk.index < ghis) {          
           return (elm != 'art'? 
-            ':' + mrk[1].substring(mrk[1].indexOf('.')+1).replace('0','~') 
-            : mrk[1].slice(mrk[1].indexOf(':'),-20))
+            elm+' ' 
+              + mrk[1].substring(mrk[1].indexOf('.')+1)
+                .replace('0','~') 
+            : mrk[1].slice(mrk[1].indexOf(':')+2,-20))
         } else {
-          return '';
+          return elm;
         }
       }
     }
@@ -813,17 +826,23 @@ var redaktilo = function() {
     }
     */
 
-    while (m = re_stru.exec(xml)) {
+    const sel_stru = document.getElementById('r:art_strukturo');
+    while (m = re_stru._elm.exec(xmlteksto)) {
       // trovu la finon
-      var fino = xml.indexOf('</'+m[1],m.index);
-      fino = xml.indexOf('>',fino);
-      const id = el_id(m[1],m.index,fino);
-      console.log(m.index + '-' + fino + ': ' + m[1] + '@' +  id);
+      const elm = m[1];
+      const fin = xmlteksto.indexOf('>',xmlteksto.indexOf('</'+m[1], m.index+5));
+      //fino = xml.indexOf('>',fino);
+      //const id = el_id(m[1], m.index+5, fino);
+      const item = indents[elm] + el_id(elm, m.index+5, fin);
+      console.log(m.index + '-' + fin + ': ' + item);
+      strukturo.push([m.index+1, fin+1, item]);
+      sel_stru.append(make_element('option',{value: strukturo.length-1},item));
     }
   }
 
   // elektas parton de la XML-teksto por redakti nur tiun
   function strukturelekto(event) {
+    /*
     function xml2string(node) {
       if (typeof(XMLSerializer) !== 'undefined') {
          var serializer = new XMLSerializer();
@@ -831,11 +850,12 @@ var redaktilo = function() {
       } else if (node.xml) {
          return node.xml;
       }
-    }
+    }*/
 
     const val = event.target.value;
     if (val && strukturo[val]) {
-      document.getElementById('r:xmltxt').value = xml2string(strukturo[val]);
+      sec = strukturo[val];
+      document.getElementById('r:xmltxt').value = xmlteksto.slice(sec[0],sec[1]);
     }
   }
 
