@@ -6,23 +6,11 @@ var redaktilo = function() {
 
   var xmlarea = null;  
   var redakto = 'redakto'; // 'aldono' por nova artikolo
-  var xmlteksto = '';
-  var strukturo = [];
 
   const cgi_vokomailx = '/cgi-bin/vokosubmx.pl';
   const cgi_vokohtmlx = '/cgi-bin/vokohtmlx.pl';
   const cgi_vokosubm_json = '/cgi-bin/vokosubm-json.pl';
- 
-  const re_stru = {
-    _elm: /\s*<((?:sub)?(?:art|drv|snc))/g,
-    _mrk: /mrk\s*=\s*"([^>"]*?)"/g,
-    _kap: /<kap>([^]*)<\/kap>/,
-    _var: /<var>[^]*<\/var>/g,
-    _ofc: /<ofc>[^]*<\/ofc>/g,
-    _fnt: /<fnt>[^]*<\/fnt>/g,
-    _tl1: /<tld\s+lit="(.)"[^>]*>/g,
-    _tl2: /<tld[^>]*>/g
-  }
+
 
   const re_lng = /<(?:trd|trdgrp)\s+lng\s*=\s*"([^]*?)"\s*>/mg; 
   const re_fak = /<uzo\s+tip\s*=\s*"fak"\s*>([^]*?)</mg; 
@@ -750,17 +738,26 @@ var redaktilo = function() {
       HTTPRequest('GET','/revo/xml/'+art+'.xml',{},
       function(data) {
           // Success!
-          xmlteksto = replace_entities(data)
-          document.getElementById('r:xmltxt').value = xmlteksto;
+          const xmlteksto = replace_entities(data)
           document.getElementById("r:art").value = art;
           /*
           var titolo = document.getElementById("r:art_titolo");
           titolo.textContent = art; 
           titolo.setAttribute("href","/revo/art/"+art+".html");
           */
+
+          xmlarea.setText(xmlteksto);
+          // plenigu la liston de sub-tekstoj (strukturo)
+          const sel_stru = document.getElementById("r:art_strukturo");
+          for (i in xmlarea.strukturo) {
+            const item = xmlarea.strukturo[i].id;
+            sel_stru.append(make_element('option',{value: i},item));
+          }
+          /*
+          document.getElementById('r:xmltxt').value = xmlteksto;
           xmlarea.resetCursor();   
-          
-          art_strukturo();
+          xmlarea.strukturo();
+          */
         });
     } else {
       // se ne estas donita artikolo kiel parametro, ni provu legi
@@ -769,93 +766,17 @@ var redaktilo = function() {
     }
   }
 
-
-  // ekstraktas strukturon de art/subart/drv/subdrv/snc/subsnc el la artikolo
-  function art_strukturo() {
-    const indents = {
-      art: "", subart: "\u00a0", drv: "\u22ef ", subdrv: "\u22ef\u22ef ", 
-      snc: "\u22ef\u22ef\u22ef ", subsnc: "\u22ef\u22ef\u22ef\u22ef "
-    }
-        
-    function el_id(elm,de,ghis) {
-      if (elm == 'drv') {
-        // find kap
-        const drv = xmlteksto.substring(de,ghis);
-        const mk = drv.match(re_stru._kap); 
-        //re_stru._kap.lastIndex = de;
-        if (mk) {
-          const kap = mk[1]
-          .replace(re_stru._var,'')
-          .replace(re_stru._ofc,'')
-          .replace(re_stru._fnt,'')
-          .replace(re_stru._tl1,'$1~')
-          .replace(re_stru._tl2,'~')
-          .replace(/\s+/,' ')
-          .replace(',',',..')
-          .trim();  // [^] = [.\r\n]
-
-          return elm+' '+kap;
-        }
-      } else {
-        re_stru._mrk.lastIndex = de;
-        const mrk = re_stru._mrk.exec(xmlteksto);
-        if (mrk && mrk.index < ghis) {          
-          return (elm != 'art'? 
-            elm+' ' 
-              + mrk[1].substring(mrk[1].indexOf('.')+1)
-                .replace('0','~') 
-            : mrk[1].slice(mrk[1].indexOf(':')+2,-20))
-        } else {
-          return elm;
-        }
-      }
-    }
- 
-    /*
-    var parser = new DOMParser();
-    var doc = parser.parseFromString(xml,"text/xml");
-    const sel_stru = document.getElementById('r:art_strukturo');
-
-    // kreu struktur-liston...
-    strukturo = [];
-    for (var el of doc.querySelectorAll('art,subart,drv,subdrv,snc,subsnc')) {
-      const item = indents[el.nodeName]+el.nodeName + el_id(el);
-      console.log(item);
-      sel_stru.append(make_element('option',{value: strukturo.length},item));
-      strukturo.push(el);
-    }
-    */
-
-    const sel_stru = document.getElementById('r:art_strukturo');
-    while (m = re_stru._elm.exec(xmlteksto)) {
-      // trovu la finon
-      const elm = m[1];
-      const fin = xmlteksto.indexOf('>',xmlteksto.indexOf('</'+m[1], m.index+5));
-      //fino = xml.indexOf('>',fino);
-      //const id = el_id(m[1], m.index+5, fino);
-      const item = indents[elm] + el_id(elm, m.index+5, fin);
-      console.log(m.index + '-' + fin + ': ' + item);
-      strukturo.push([m.index+1, fin+1, item]);
-      sel_stru.append(make_element('option',{value: strukturo.length-1},item));
-    }
-  }
-
   // elektas parton de la XML-teksto por redakti nur tiun
-  function strukturelekto(event) {
-    /*
-    function xml2string(node) {
-      if (typeof(XMLSerializer) !== 'undefined') {
-         var serializer = new XMLSerializer();
-         return serializer.serializeToString(node);
-      } else if (node.xml) {
-         return node.xml;
-      }
-    }*/
-
+  function struktur_elekto(event) {
     const val = event.target.value;
-    if (val && strukturo[val]) {
-      sec = strukturo[val];
-      document.getElementById('r:xmltxt').value = xmlteksto.slice(sec[0],sec[1]);
+    xmlarea.changeSubtext(val);
+    // eble la strukturo ŝanĝigis pro aldonita drv, snc, sintakseraro...
+    // do replenigu la elektoliston!
+    const sel_stru = document.getElementById("r:art_strukturo");
+    sel_stru.textContent = '';
+    for (i in xmlarea.strukturo) {
+      const item = xmlarea.strukturo[i].id;
+      sel_stru.append(make_element('option',{value: i},item));
     }
   }
 
@@ -897,7 +818,7 @@ var redaktilo = function() {
       // ŝanĝu tekston al nurlege
       document.getElementById("r:xmltxt").removeAttribute("readonly");
 
-      xmlarea = new Textarea("r:xmltxt");
+      xmlarea = new Xmlarea("r:xmltxt");
       load_xml(params); // se doniĝis ?art=xxx ni fone ŝargas tiun artikolon
     }
 
@@ -920,7 +841,7 @@ var redaktilo = function() {
 
     // strukturlisto
     document.getElementById('r:art_strukturo')
-      .addEventListener("change",strukturelekto);
+      .addEventListener("change",struktur_elekto);
 
     // butonoj por navigi inter drv kaj en-/elŝovo
     var nav = document.getElementById("r:nav_btn");
