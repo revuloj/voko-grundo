@@ -87,6 +87,8 @@ Xmlarea.prototype.structure = function() {
   //const sel_stru = this.structure_selection;
   this.strukturo = [];
   while (m = re_stru._elm.exec(xmlteksto)) {
+    // kiom da linioj antaŭ tio?
+    const lines = count_char(xmlteksto,'\n',0,m.index);
     // trovu la finon
     const elm = m[1];
     var fin = xmlteksto.indexOf('</'+m[1], m.index+5);
@@ -98,7 +100,7 @@ Xmlarea.prototype.structure = function() {
     //const id = el_id(m[1], m.index+5, fino);
     const item = this.indents[elm] + el_id(elm, m.index+5, fin);
     //console.log(m.index + '-' + fin + ': ' + item);
-    this.strukturo.push({de: m.index, al: fin, id: item});
+    this.strukturo.push({de: m.index, al: fin, id: item, ln: lines});
     //sel_stru.append(make_element('option',{value: strukturo.length-1},item));
   }
 }
@@ -106,6 +108,8 @@ Xmlarea.prototype.structure = function() {
 // elektas parton de la XML-teksto por redakti nur tiun
 //  laŭbezone sekurigas la nune redaktatan parton...
 Xmlarea.prototype.changeSubtext = function(n) {
+  // al kiu subteksto ni ŝanĝu?
+  const subt = this.strukturo[n];
 
   // ni unue sekurigu la aktuale redaktatan parton...
   if (this.xml_elekto) {
@@ -118,9 +122,18 @@ Xmlarea.prototype.changeSubtext = function(n) {
   }
 
   // nun ni montras la celatan XML-parton por redaktado
-  if (n && this.strukturo[n]) {
-    this.xml_elekto = this.strukturo[n];
+  if (subt) {
+    // ni trovu la celatan subtekston per ĝia nomo, ĉar eble la numeroj ŝanĝiĝis...
+    for (e of this.strukturo) {
+      if (e.id == subt.id) {
+        this.xml_elekto = e;
+        break;
+      }
+    }
     this.txtarea.value = this.xmlteksto.slice(this.xml_elekto.de,this.xml_elekto.al);
+    // iru al la komenco!
+    this.resetCursor();
+    this.scrollPos(0);
   }
 }
 
@@ -145,7 +158,9 @@ Xmlarea.prototype.scrollPos =  function(pos) {
   }
 },
 
-  Xmlarea.prototype.position = function() {
+Xmlarea.prototype.position = function() {
+  const loff = this.xml_elekto? this.xml_elekto.ln : 0;
+
   // kalkulu el la signoindekso la linion kaj la pozicion ene de la linio
   function get_line_pos(inx,text) {
     var lines = 0;
@@ -157,7 +172,7 @@ Xmlarea.prototype.scrollPos =  function(pos) {
         }
     }
     pos = (lines == 0)? inx : (inx-last_pos-1);
-    return({line: lines, pos: pos});
+    return({line: loff+lines, pos: pos});
   }
 
   //...
@@ -296,6 +311,7 @@ Xmlarea.prototype.charBefore = function() {
   }
 },
 
+// iru al la komenco de la redaktejo kaj fokusu ĝin.
 Xmlarea.prototype.resetCursor = function() { 
   var txtarea = this.txtarea;
   if (txtarea.setSelectionRange) { 

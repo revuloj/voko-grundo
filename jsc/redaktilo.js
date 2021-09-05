@@ -775,6 +775,7 @@ var redaktilo = function() {
     // tio renovigas la strukturon pro eblaj intertempaj snc-/drv-aldonoj ks...
     // do ni poste rekreos ĝin kaj devos ankaŭ marki la elektitan laŭ _item_
     xmlarea.changeSubtext(val);
+    show_pos();
     // eble la strukturo ŝanĝigis pro aldonita drv, snc, sintakseraro...
     // do replenigu la elektoliston!
     const sel_stru = document.getElementById("r:art_strukturo");
@@ -808,15 +809,15 @@ var redaktilo = function() {
     }
   }
 
+  function show_pos() {
+    // aktualigu pozicion
+    const pos = xmlarea.position();
+    document.getElementById("r:position").textContent=(1+pos.line)+":"+(1+pos.pos);
+  }
+
   // preparu la redaktilon en la dekstra kadro: preferojn kaj XML-tekston, 
   // alligu evento-traktilojn
   function preparu_red(params) {
-
-    function show_pos() {
-      // aktualigu pozicion
-      const pos = xmlarea.position();
-      document.getElementById("r:position").textContent=(1+pos.line)+":"+(1+pos.pos);
-    }
 
     // enlegu bezonaĵojn (listojn, XML-artikolon, preferojn)
     if (document.getElementById("r:xmltxt")) {

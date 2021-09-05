@@ -365,6 +365,16 @@ function str_repeat(rStr, rNum) {
     }
     return nStr;
 } 
+
+function count_char(str,chr,from,to) {
+  var nc = 0;
+  const f = from||0;
+  const t = to||str.length;
+  for (var i = f; i<t; i++) {
+    if (str[i] == chr) nc++
+  }
+  return nc;
+}
   
 
 function eo_ascii(str) {
