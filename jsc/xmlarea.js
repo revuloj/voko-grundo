@@ -6,7 +6,8 @@ function Xmlarea(ta_id) {
     this.strukturo = []; // la listo de subtekstoj [komenco,fino,nomo]
 
     this.re_stru = {
-      _elm: /\s*<((?:sub)?(?:art|drv|snc))/g,
+      _elm: /[ \t]*<((?:sub)?(?:art|drv|snc))/g,
+      _eoe: />[ \t]*\n/g,
       _mrk: /mrk\s*=\s*"([^>"]*?)"/g,
       _kap: /<kap>([^]*)<\/kap>/,
       _var: /<var>[^]*<\/var>/g,
@@ -88,12 +89,16 @@ Xmlarea.prototype.structure = function() {
   while (m = re_stru._elm.exec(xmlteksto)) {
     // trovu la finon
     const elm = m[1];
-    const fin = xmlteksto.indexOf('>',xmlteksto.indexOf('</'+m[1], m.index+5));
+    var fin = xmlteksto.indexOf('</'+m[1], m.index+5);
+    // trovu >..\n?
+    re_stru._eoe.lastIndex = fin;
+    const eoe = re_stru._eoe.exec(xmlteksto);
+    if (eoe && eoe.index) fin = eoe.index + eoe[0].length;
     //fino = xml.indexOf('>',fino);
     //const id = el_id(m[1], m.index+5, fino);
     const item = this.indents[elm] + el_id(elm, m.index+5, fin);
-    console.log(m.index + '-' + fin + ': ' + item);
-    this.strukturo.push({de: m.index+1, al: fin+1, id: item});
+    //console.log(m.index + '-' + fin + ': ' + item);
+    this.strukturo.push({de: m.index, al: fin, id: item});
     //sel_stru.append(make_element('option',{value: strukturo.length-1},item));
   }
 }
