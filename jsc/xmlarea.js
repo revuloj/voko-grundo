@@ -1,9 +1,11 @@
-function Xmlarea(ta_id) {
+function Xmlarea(ta_id, onAddSub) {
     this.txtarea = document.getElementById(ta_id);
     //this.structure_selection = document.getElementById(struc_sel);
     this.xmlteksto = ''; // la tuta teksto
     this.xml_elekto = undefined; // aktuale redaktata subteksto
     this.strukturo = []; // la listo de subtekstoj [komenco,fino,nomo]
+    this.onaddsub = onAddSub;
+    this.synced = true;
 
     this.re_stru = {
       _elm: /[ \t]*<((?:sub)?(?:art|drv|snc))/g,
@@ -31,7 +33,7 @@ Xmlarea.prototype.setText = function(xml) {
 }
 
 // ekstraktas strukturon de art/subart/drv/subdrv/snc/subsnc el la artikolo
-Xmlarea.prototype.structure = function() {
+Xmlarea.prototype.structure = function(selected = undefined) {
   const re_stru = this.re_stru;
   const xmlteksto = this.xmlteksto;
 
@@ -87,8 +89,9 @@ Xmlarea.prototype.structure = function() {
   //const sel_stru = this.structure_selection;
   this.strukturo = [];
   while (m = re_stru._elm.exec(xmlteksto)) {
+    var subt = {de: m.index};
     // kiom da linioj antaŭ tio?
-    const lines = count_char(xmlteksto,'\n',0,m.index);
+    subt.ln = count_char(xmlteksto,'\n',0,m.index);
     // trovu la finon
     const elm = m[1];
     var fin = xmlteksto.indexOf('</'+m[1], m.index+5);
@@ -96,13 +99,34 @@ Xmlarea.prototype.structure = function() {
     re_stru._eoe.lastIndex = fin;
     const eoe = re_stru._eoe.exec(xmlteksto);
     if (eoe && eoe.index) fin = eoe.index + eoe[0].length;
+    subt.al = fin;
     //fino = xml.indexOf('>',fino);
     //const id = el_id(m[1], m.index+5, fino);
-    const item = this.indents[elm] + el_id(elm, m.index+5, fin);
+    subt.id = this.indents[elm] + el_id(elm, m.index+5, fin);
     //console.log(m.index + '-' + fin + ': ' + item);
-    this.strukturo.push({de: m.index, al: fin, id: item, ln: lines});
+    if (this.onaddsub) this.onaddsub(subt,this.strukturo.length,subt.id == selected);
+    this.strukturo.push(subt);
     //sel_stru.append(make_element('option',{value: strukturo.length-1},item));
   }
+}
+
+// aktualigas la tekstbufron per la redaktata subteksto kaj
+// la struktur-liston
+Xmlarea.prototype.sync = function(select = undefined) {
+  if (this.xml_elekto) {
+    this.xmlteksto = 
+      this.xmlteksto.slice(0, this.xml_elekto.de) 
+      + this.txtarea.value 
+      + this.xmlteksto.slice( this.xml_elekto.al);
+    // rekalkulu la strukturon pro ŝovitaj pozicioj...
+    this.structure(select);
+    this.synced = true;
+  }
+}
+
+Xmlarea.prototype.syncedXml = function() {
+  if (! this.synced) this.sync(this.xml_elekto.id); 
+  return this.xmlteksto;
 }
 
 // elektas parton de la XML-teksto por redakti nur tiun
@@ -110,17 +134,9 @@ Xmlarea.prototype.structure = function() {
 Xmlarea.prototype.changeSubtext = function(n) {
   // al kiu subteksto ni ŝanĝu?
   const subt = this.strukturo[n];
-
   // ni unue sekurigu la aktuale redaktatan parton...
-  if (this.xml_elekto) {
-    this.xmlteksto = 
-      this.xmlteksto.slice(0, this.xml_elekto.de) 
-      + this.txtarea.value 
-      + this.xmlteksto.slice( this.xml_elekto.al);
-    // rekalkulu la strukturon pro ŝovitaj pozicioj...
-    this.structure();
-  }
-
+  this.sync(subt.id); // ni transdonas ankaŭ la elektotan id por navigi tien en la elekto-listo
+  
   // nun ni montras la celatan XML-parton por redaktado
   if (subt) {
     // ni trovu la celatan subtekston per ĝia nomo, ĉar eble la numeroj ŝanĝiĝis...

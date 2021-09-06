@@ -170,7 +170,7 @@ var redaktilo = function() {
   
       if (cx.value != "1") return true;
 
-      var txtarea = document.getElementById('r:xmltxt');
+      //var txtarea = document.getElementById('r:xmltxt');
       scrollPos = xmlarea.scrollPos();
       selText = xmlarea.selection();
 
@@ -294,7 +294,7 @@ var redaktilo = function() {
   // sekurigi la XML-tekston al loka retumila memoro
   function store_art() {
     window.localStorage.setItem("red_artikolo",JSON.stringify({
-      'xml': document.getElementById("r:xmltxt").value,
+      'xml': xmlarea.syncedXml(), //document.getElementById("r:xmltxt").value,
       'nom': document.getElementById("r:art").value
       //'red': nova/redakti...
     }));
@@ -305,7 +305,7 @@ var redaktilo = function() {
     var str = window.localStorage.getItem("red_artikolo");
     var art = (str? JSON.parse(str) : null);
     if (art) {
-      document.getElementById("r:xmltxt").value = art.xml;
+      xmlarea.setText(art.xml); // document.getElementById("r:xmltxt").value = art.xml;
       //  document.getElementById("...").value = art.red;
       document.getElementById("r:art").value = art.nom;
       document.getElementById("r:art_titolo").textContent = art.nom; 
@@ -371,7 +371,7 @@ var redaktilo = function() {
   }
 
   function kontrolu_kodojn(clist,regex) {
-    var xml = document.getElementById("r:xmltxt").value;
+    var xml = xmlarea.syncedXml(); //document.getElementById("r:xmltxt").value;
     var m; var invalid = [];
     var list = revo_codes[clist];
 
@@ -390,7 +390,7 @@ var redaktilo = function() {
   }
 
   function kontrolu_mrk(art) {
-    var xml = document.getElementById("r:xmltxt").value;
+    var xml = xmlarea.syncedXml(); // document.getElementById("r:xmltxt").value;
     var m; 
     var errors = [];
     
@@ -409,7 +409,7 @@ var redaktilo = function() {
 
   // trovu tradukojn sen lingvo
   function kontrolu_trd() {
-    var xml = document.getElementById("r:xmltxt").value;
+    var xml = xmlarea.syncedXml(); //document.getElementById("r:xmltxt").value;
     var m; re_t2 = /(<trd.*?<\/trd>)/g;
     var errors = [];
     
@@ -424,7 +424,7 @@ var redaktilo = function() {
   }
 
   function kontrolu_ref() {
-    var xml = document.getElementById("r:xmltxt").value;
+    var xml = xmlarea.syncedXml(); //document.getElementById("r:xmltxt").value;
     var m; 
     var errors = [];
     
@@ -457,8 +457,8 @@ var redaktilo = function() {
 
   function rantaurigardo() {
     var eraroj = document.getElementById("r:eraroj");
-    var art = document.getElementById("r:art").value;
-    var xml = document.getElementById("r:xmltxt").value;
+    const art = document.getElementById("r:art").value;
+    const xml = xmlarea.syncedXml();
 
     // eblas, ke en "nav" montriĝas indekso, ĉar la uzanto foiris de la redaktado tie
     // ni testas do antaŭ kontroli erarojn
@@ -482,8 +482,8 @@ var redaktilo = function() {
   // kontrolo sen antaurigardo
   function rkontrolo() {
     var eraroj = document.getElementById("r:eraroj");
-    var art = document.getElementById("r:art").value;
-    var xml = document.getElementById("r:xmltxt").value;
+    const art = document.getElementById("r:art").value;
+    const xml = xmlarea.syncedXml();
 
     eraroj.textContent='';
     eraroj.classList.remove("collapsed"); // ĉu nur kiam certe estas eraroj?
@@ -520,8 +520,8 @@ var redaktilo = function() {
     }
     */
 
-    var art = document.getElementById("r:art").value;
-    var xml = document.getElementById("r:xmltxt").value;
+    const art = document.getElementById("r:art").value;
+    const xml = xmlarea.syncedXml();
 
     var eraroj = document.getElementById("r:eraroj");
     eraroj.textContent='';
@@ -680,14 +680,15 @@ var redaktilo = function() {
     // kreu novan artikolon per la sekva ŝablono
     function create_new_art() {
       var art = document.getElementById("r:nova_art").value;
-      var ta = document.getElementById("r:xmltxt");
+      //var ta = document.getElementById("r:xmltxt");
       document.getElementById("r:art").value = art;
       document.getElementById("r:art_titolo").textContent = art;
       redakto = 'aldono';
       var shg = document.getElementById("r:sxangxo");
       shg.value = art; shg.setAttribute("readonly","readonly");
       /* jshint ignore:start */
-      ta.value = 
+      //ta.value = 
+      xmlarea.setText(
           '<?xml version="1.0"?>\n'
         + '<!DOCTYPE vortaro SYSTEM "../dtd/vokoxml.dtd">\n'
         + '<vortaro>\n'
@@ -710,7 +711,7 @@ var redaktilo = function() {
         + '  <trd lng=""></trd>\n'
         + '</drv>\n'
         + '</art>\n'
-        + '</vortaro>\n';
+        + '</vortaro>\n');
       /* jshint ignore:end */
     }
 
@@ -748,11 +749,13 @@ var redaktilo = function() {
 
           xmlarea.setText(xmlteksto);
           // plenigu la liston de sub-tekstoj (strukturo)
+          /*
           const sel_stru = document.getElementById("r:art_strukturo");
           for (i in xmlarea.strukturo) {
             const item = xmlarea.strukturo[i].id;
             sel_stru.append(make_element('option',{value: i},item));
           }
+          */
           /*
           document.getElementById('r:xmltxt').value = xmlteksto;
           xmlarea.resetCursor();   
@@ -766,6 +769,17 @@ var redaktilo = function() {
     }
   }
 
+  function on_xml_add_sub(item,index,selected) {
+    const sel_stru = document.getElementById("r:art_strukturo");
+    if (index == 0) sel_stru.textContent = ''; // malplenigu la liston ĉe aldono de unua ero...
+
+    if (selected) {
+      sel_stru.append(make_element('option',{value: index, selected: 'selected'},item.id));
+    } else {
+      sel_stru.append(make_element('option',{value: index},item.id));
+    }
+  }
+
   // elektas parton de la XML-teksto por redakti nur tiun
   function struktur_elekto(event) {
     const val = event.target.value;
@@ -776,10 +790,7 @@ var redaktilo = function() {
     // do ni poste rekreos ĝin kaj devos ankaŭ marki la elektitan laŭ _item_
     xmlarea.changeSubtext(val);
     show_pos();
-    // eble la strukturo ŝanĝigis pro aldonita drv, snc, sintakseraro...
-    // do replenigu la elektoliston!
-    const sel_stru = document.getElementById("r:art_strukturo");
-    sel_stru.textContent = '';
+    /*
     for (i in xmlarea.strukturo) {
       const item = xmlarea.strukturo[i].id;
       if (sel == item) {
@@ -788,6 +799,7 @@ var redaktilo = function() {
         sel_stru.append(make_element('option',{value: i},item));
       }
     }
+    */
   }
 
   // metu elekton kaj fokuson ĝuste por ekredakto
@@ -828,7 +840,7 @@ var redaktilo = function() {
       // ŝanĝu tekston al nurlege
       document.getElementById("r:xmltxt").removeAttribute("readonly");
 
-      xmlarea = new Xmlarea("r:xmltxt");
+      xmlarea = new Xmlarea("r:xmltxt",on_xml_add_sub);
       load_xml(params); // se doniĝis ?art=xxx ni fone ŝargas tiun artikolon
     }
 
@@ -842,8 +854,12 @@ var redaktilo = function() {
     document.getElementById("r:xmltxt")
       .addEventListener("keypress",klavo);
 
+    //document.getElementById("r:xmltxt")
+    //  .addEventListener("keyup",show_pos);
     document.getElementById("r:xmltxt")
-      .addEventListener("keyup",show_pos);
+      .addEventListener("input",show_pos);
+    document.getElementById("r:xmltxt")
+      .addEventListener("input",() => { xmlarea.synced = false});
     document.getElementById("r:xmltxt")
       .addEventListener("focus",show_pos);
     document.getElementById("r:xmltxt")
