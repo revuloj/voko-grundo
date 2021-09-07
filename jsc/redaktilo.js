@@ -308,7 +308,7 @@ var redaktilo = function() {
       xmlarea.setText(art.xml); // document.getElementById("r:xmltxt").value = art.xml;
       //  document.getElementById("...").value = art.red;
       document.getElementById("r:art").value = art.nom;
-      document.getElementById("r:art_titolo").textContent = art.nom; 
+      //document.getElementById("r:art_titolo").textContent = art.nom; 
     }
   }
 
@@ -682,7 +682,7 @@ var redaktilo = function() {
       var art = document.getElementById("r:nova_art").value;
       //var ta = document.getElementById("r:xmltxt");
       document.getElementById("r:art").value = art;
-      document.getElementById("r:art_titolo").textContent = art;
+      //document.getElementById("r:art_titolo").textContent = art;
       redakto = 'aldono';
       var shg = document.getElementById("r:sxangxo");
       shg.value = art; shg.setAttribute("readonly","readonly");
