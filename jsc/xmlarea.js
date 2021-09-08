@@ -9,7 +9,7 @@ function Xmlarea(ta_id, onAddSub) {
 
     this.re_stru = {
       _elm: /[ \t]*<((?:sub)?(?:art|drv|snc))/g,
-      _eoe: />[ \t]*\n/g,
+      _eoe: />[ \t]*\n?/g,
       _mrk: /mrk\s*=\s*"([^>"]*?)"/g,
       _kap: /<kap>([^]*)<\/kap>/,
       _var: /<var>[^]*<\/var>/g,
@@ -26,10 +26,14 @@ function Xmlarea(ta_id, onAddSub) {
 };
 
 Xmlarea.prototype.setText = function(xml) {
-  this.xmlteksto = xml;
-  this.txtarea.value = xml;
-  this.resetCursor();   
+  this.xmlteksto = xml;  
+  //this.txtarea.value = xml;
+  // kreu strukturliston
   this.structure();      
+  // elektu la unuan (art)
+  this.xml_elekto = this.strukturo[0];
+  this.txtarea.value = this.xmlteksto.slice(this.xml_elekto.de,this.xml_elekto.al);
+  this.resetCursor();   
 }
 
 // ekstraktas strukturon de art/subart/drv/subdrv/snc/subsnc el la artikolo
@@ -61,10 +65,8 @@ Xmlarea.prototype.structure = function(selected = undefined) {
       const mrk = re_stru._mrk.exec(xmlteksto);
       if (mrk && mrk.index < ghis) {          
         return (elm != 'art'? 
-          elm+' ' 
-            + mrk[1].substring(mrk[1].indexOf('.')+1)
-              .replace('0','~') 
-          : mrk[1].slice(mrk[1].indexOf(':')+2,-20))
+          elm + ' ' + mrk[1].substring(mrk[1].indexOf('.')+1).replace('0','~') 
+          : (mrk[1].slice(mrk[1].indexOf(':')+2,-20)) || 'art')
       } else {
         return elm;
       }

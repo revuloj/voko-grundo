@@ -854,8 +854,9 @@ var redaktilo = function() {
     document.getElementById("r:xmltxt")
       .addEventListener("keypress",klavo);
 
-    //document.getElementById("r:xmltxt")
-    //  .addEventListener("keyup",show_pos);
+    document.getElementById("r:xmltxt")
+      .addEventListener("selectionchange",show_pos); // movado de kursoro, ne kaŭzas input-eventon...!
+      // .addEventListener("keyup",show_pos); // movado de kursoro, ne kaŭzas input-eventon...!
     document.getElementById("r:xmltxt")
       .addEventListener("input",show_pos);
     document.getElementById("r:xmltxt")
