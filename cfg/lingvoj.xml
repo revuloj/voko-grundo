@@ -22,7 +22,6 @@
   <lingvo kodo="az">azerbajĝana</lingvo>
   <lingvo kodo="ba">baŝkira</lingvo>
   <lingvo kodo="be">belorusa</lingvo>
-  <lingvo kodo="ber">berbera</lingvo>
   <lingvo kodo="bg">bulgara</lingvo>
   <lingvo kodo="bh">bihara</lingvo>
   <lingvo kodo="bi">bislama</lingvo>
@@ -65,6 +64,7 @@
   <lingvo kodo="hbs">serbokroata</lingvo>
   <lingvo kodo="he">hebrea</lingvo>
   <lingvo kodo="hi">hinda</lingvo>
+  <lingvo kodo="hmn">monga</lingvo>
   <lingvo kodo="hr">kroata</lingvo>
   <lingvo kodo="hsb">supra-sorba</lingvo>
   <lingvo kodo="ht">haitia</lingvo>
@@ -73,6 +73,7 @@
   <lingvo kodo="ia">interlingvaa</lingvo>
   <lingvo kodo="id">indonezia</lingvo>
   <lingvo kodo="ie">okcidentala</lingvo>
+  <lingvo kodo="ig">igba</lingvo>
   <lingvo kodo="ik">inupiaka</lingvo>
   <lingvo kodo="io">ida</lingvo>
   <lingvo kodo="is">islanda</lingvo>
