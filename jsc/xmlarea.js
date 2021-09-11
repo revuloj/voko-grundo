@@ -89,7 +89,9 @@ Xmlarea.prototype.structure = function(selected = undefined) {
     //fino = xml.indexOf('>',fino);
     //const id = el_id(m[1], m.index+5, fino);
     subt.id = this.indents[elm] + el_id(elm, m.index+5, fin);
-    //console.log(m.index + '-' + fin + ': ' + item);
+
+    console.debug(subt.de + '-' + subt.al + ': ' + subt.id);
+
     if (this.onaddsub) this.onaddsub(subt,this.strukturo.length,subt.id == selected);
     this.strukturo.push(subt);
     //sel_stru.append(make_element('option',{value: strukturo.length-1},item));
@@ -105,12 +107,29 @@ Xmlarea.prototype.structure = function(selected = undefined) {
 // la struktur-liston
 Xmlarea.prototype.sync = function(select = undefined) {
   if (this.xml_elekto) {
+    console.debug("SYNC "+this.xml_elekto.id+": "+this.xml_elekto.de+"-"+this.xml_elekto.al
+      +"("+(this.xml_elekto.al-this.xml_elekto.de)+") <- "+this.txtarea.value.length);
+      /*
+    console.debug("Sd:"+this.xmlteksto.substr(this.xml_elekto.de-20,20));
+    console.debug("Sa:"+this.xmlteksto.substr(this.xml_elekto.al,20));
+    */
+
     this.xmlteksto = 
-      this.xmlteksto.slice(0, this.xml_elekto.de) 
+      (this.xmlteksto.substring(0, this.xml_elekto.de) 
       + this.txtarea.value 
-      + this.xmlteksto.slice( this.xml_elekto.al);
+      + this.xmlteksto.substring(this.xml_elekto.al));
     // rekalkulu la strukturon pro ŝovitaj pozicioj...
     this.structure(select);
+
+    // aktualigu la elekton 
+    this.xml_elekto = this.strukturo[0]; // fallback
+    for (e of this.strukturo) {
+      if (e.id == select) {
+        this.xml_elekto = e;
+        break;
+      }
+    }
+
     this.synced = true;
   }
 }
@@ -137,6 +156,11 @@ Xmlarea.prototype.changeSubtext = function(n) {
         break;
       }
     }
+
+    // komparu kun SYNC...
+    console.debug("CHNG "+this.xml_elekto.id+": "+this.xml_elekto.de+"-"+this.xml_elekto.al
+      +"("+(this.xml_elekto.al-this.xml_elekto.de)+")");
+
     this.txtarea.value = this.xmlteksto.slice(this.xml_elekto.de,this.xml_elekto.al);
     // iru al la komenco!
     this.resetCursor();
