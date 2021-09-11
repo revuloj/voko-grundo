@@ -386,11 +386,14 @@ var artikolo = function() {
             ver.remove();
             // forigu finan <br>
             pied.querySelector("br").remove();
+
+            /***
             // adaptu reagon al traduki...
             const trd =  pied.querySelector("A[href^='http://kono.be']");
             trd.setAttribute("href","#");
             trd.setAttribute("title","trovu kaj aldonu pliajn tradukojn");
             trd.addEventListener("click",(event)=>{traduku(event,artikolo)});
+             */
         }        
     }
 
