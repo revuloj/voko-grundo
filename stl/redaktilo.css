@@ -19,10 +19,15 @@
     background: linear-gradient(-140deg, var(--main-bgr-clr), var(--main-act-bgr-clr));
 }
 
+/*
 #r\:art_titolo {
     color: inherit;
     text-decoration: none;
-    /*overflow: auto; */
+}
+*/
+
+#r\:art_strukturo {
+    flex: 1
 }
 
 #r\:tabulo {

@@ -7,7 +7,7 @@ var redaktilo = function() {
   var xmlarea = null;  
   var redakto = 'redakto'; // 'aldono' por nova artikolo
 
-  const cgi_vokomailx = '/cgi-bin/vokosubmx.pl';
+  const cgi_vokosubmx = '/cgi-bin/vokosubmx.pl';
   const cgi_vokohtmlx = '/cgi-bin/vokohtmlx.pl';
   const cgi_vokosubm_json = '/cgi-bin/vokosubm-json.pl';
 
@@ -597,7 +597,7 @@ var redaktilo = function() {
     // console.log("vokomailx red:"+red);
     // console.log("vokomailx sxg:"+sxg);
 
-    HTTPRequest('POST',cgi_vokomailx,
+    HTTPRequest('POST',cgi_vokosubmx,
       {
         xmlTxt: xml,
         art: art,
@@ -855,8 +855,8 @@ var redaktilo = function() {
       .addEventListener("keypress",klavo);
 
     document.getElementById("r:xmltxt")
-      .addEventListener("selectionchange",show_pos); // movado de kursoro, ne kaŭzas input-eventon...!
-      // .addEventListener("keyup",show_pos); // movado de kursoro, ne kaŭzas input-eventon...!
+      //.addEventListener("selectionchange",show_pos); // movado de kursoro, ne kaŭzas input-eventon...!
+      .addEventListener("keyup",show_pos); // movado de kursoro, ne kaŭzas input-eventon...!
     document.getElementById("r:xmltxt")
       .addEventListener("input",show_pos);
     document.getElementById("r:xmltxt")

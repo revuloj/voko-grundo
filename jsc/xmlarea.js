@@ -73,22 +73,6 @@ Xmlarea.prototype.structure = function(selected = undefined) {
     }
   }
 
-  /*
-  var parser = new DOMParser();
-  var doc = parser.parseFromString(xml,"text/xml");
-  const sel_stru = document.getElementById('r:art_strukturo');
-
-  // kreu struktur-liston...
-  strukturo = [];
-  for (var el of doc.querySelectorAll('art,subart,drv,subdrv,snc,subsnc')) {
-    const item = indents[el.nodeName]+el.nodeName + el_id(el);
-    console.log(item);
-    sel_stru.append(make_element('option',{value: strukturo.length},item));
-    strukturo.push(el);
-  }
-  */
-
-  //const sel_stru = this.structure_selection;
   this.strukturo = [];
   while (m = re_stru._elm.exec(xmlteksto)) {
     var subt = {de: m.index};
@@ -110,6 +94,11 @@ Xmlarea.prototype.structure = function(selected = undefined) {
     this.strukturo.push(subt);
     //sel_stru.append(make_element('option',{value: strukturo.length-1},item));
   }
+
+  // aldonu ankoraŭ elektilon por la tuta XML
+  const tuto = {de: 0, ln: 0, al: xmlteksto.length, id: "tuta xml-fonto"};
+  if (this.onaddsub) this.onaddsub(tuto,this.strukturo.length,tuto.id == selected);
+  this.strukturo.push(tuto);
 }
 
 // aktualigas la tekstbufron per la redaktata subteksto kaj
