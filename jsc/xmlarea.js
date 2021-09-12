@@ -150,7 +150,9 @@ Xmlarea.prototype.structure = function(selected = undefined) {
     subt.id = id(subt);
 
     //const id = el_id(m[1], m.index+5, fino);
-    subt.dsc = this.indents[subt.el] + subt.el + ':' + (subt.kap ? subt.kap : subt.mrk||'');
+    const suff = subt.kap ? subt.kap : subt.mrk||'';
+    subt.dsc = this.indents[subt.el] + subt.el 
+      + (suff?':'+suff:'');
 
     console.debug(subt.de + '-' + subt.al + ': ' + subt.id + ':' + subt.dsc);
 
