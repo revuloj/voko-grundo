@@ -8,7 +8,7 @@ function Xmlarea(ta_id, onAddSub) {
     this.synced = true;
 
     this.re_stru = {
-      _elm: /[ \t]*<((?:sub)?(?:art|drv|snc))/g,
+      _elm: /[ \t]*<((?:sub)?(?:art|drv|snc))[>\s]/g,
       _eoe: />[ \t]*\n?/g,
       _mrk: /mrk\s*=\s*"([^>"]*?)"/g,
       _kap: /<kap>([^]*)<\/kap>/,
