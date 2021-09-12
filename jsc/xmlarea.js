@@ -41,6 +41,58 @@ Xmlarea.prototype.structure = function(selected = undefined) {
   const re_stru = this.re_stru;
   const xmlteksto = this.xmlteksto;
 
+  function mrk(elm,de,ghis) {
+    re_stru._mrk.lastIndex = de;
+    const mrk = re_stru._mrk.exec(xmlteksto);
+    if (mrk && mrk.index < ghis) {          
+      return (elm != 'art'? 
+        mrk[1].substring(mrk[1].indexOf('.')+1).replace('0','~') 
+        : (mrk[1].slice(mrk[1].indexOf(':')+2,-20)) || '<nova>')
+    }
+  }
+
+  function kap(elm,de,ghis) {
+    if (elm == 'drv') {
+      // find kap
+      const drv = xmlteksto.substring(de,ghis);
+      const mk = drv.match(re_stru._kap); 
+      //re_stru._kap.lastIndex = de;
+      if (mk) {
+        const kap = mk[1]
+        .replace(re_stru._var,'')
+        .replace(re_stru._ofc,'')
+        .replace(re_stru._fnt,'')
+        .replace(re_stru._tl1,'$1~')
+        .replace(re_stru._tl2,'~')
+        .replace(/\s+/,' ')
+        .replace(',',',..')
+        .trim();  // [^] = [.\r\n]
+
+        return kap;
+      }
+    };
+  }
+
+  function id(subt) {
+    const rx = /[^A-Za-z]/g;
+    const key = [111,222,33,44]; // ne tro gravas...
+    var xor_str = function(str)
+    { 
+        var c = key;
+        for(i=0; i<str.length; i++) { 
+            c[i%key.length] ^= str.charCodeAt(i);
+        }
+        return c.join('.');
+    }
+
+    if (subt.mrk) {
+      return xor_str(subt.mrk)
+    } else {
+      return xor_str(xmlteksto.substr(subt.de,120).replace(rx,''))
+    }
+  }
+
+  /*
   function el_id(elm,de,ghis) {
     if (elm == 'drv') {
       // find kap
@@ -72,25 +124,35 @@ Xmlarea.prototype.structure = function(selected = undefined) {
       }
     }
   }
+  */
+
+  function al(elm,de) {
+    // trovu la finon de elemento 'elm'
+    var fin = xmlteksto.indexOf('</'+elm, de);
+    // trovu avance >..\n?
+    re_stru._eoe.lastIndex = fin;
+    const eoe = re_stru._eoe.exec(xmlteksto);
+    if (eoe && eoe.index) fin = eoe.index + eoe[0].length;
+
+    return fin;
+  }
 
   this.strukturo = [];
   while (m = re_stru._elm.exec(xmlteksto)) {
     var subt = {de: m.index};
     // kiom da linioj antaŭ tio?
+    subt.el = m[1];
     subt.ln = count_char(xmlteksto,'\n',0,m.index);
-    // trovu la finon
-    const elm = m[1];
-    var fin = xmlteksto.indexOf('</'+m[1], m.index+5);
-    // trovu >..\n?
-    re_stru._eoe.lastIndex = fin;
-    const eoe = re_stru._eoe.exec(xmlteksto);
-    if (eoe && eoe.index) fin = eoe.index + eoe[0].length;
-    subt.al = fin;
-    //fino = xml.indexOf('>',fino);
-    //const id = el_id(m[1], m.index+5, fino);
-    subt.id = this.indents[elm] + el_id(elm, m.index+5, fin);
+    subt.al = al(subt.el,m.index+5);
 
-    console.debug(subt.de + '-' + subt.al + ': ' + subt.id);
+    subt.mrk = mrk(subt.el,subt.de,subt.al);
+    subt.kap = kap(subt.el,subt.de,subt.al);
+    subt.id = id(subt);
+
+    //const id = el_id(m[1], m.index+5, fino);
+    subt.dsc = this.indents[subt.el] + subt.el + ':' + (subt.kap ? subt.kap : subt.mrk||'');
+
+    console.debug(subt.de + '-' + subt.al + ': ' + subt.id + ':' + subt.dsc);
 
     if (this.onaddsub) this.onaddsub(subt,this.strukturo.length,subt.id == selected);
     this.strukturo.push(subt);
@@ -98,7 +160,7 @@ Xmlarea.prototype.structure = function(selected = undefined) {
   }
 
   // aldonu ankoraŭ elektilon por la tuta XML
-  const tuto = {de: 0, ln: 0, al: xmlteksto.length, id: "tuta xml-fonto"};
+  const tuto = {de: 0, ln: 0, al: xmlteksto.length, id: "xml", dsc: 'tuta xml-fonto'};
   if (this.onaddsub) this.onaddsub(tuto,this.strukturo.length,tuto.id == selected);
   this.strukturo.push(tuto);
 }
@@ -141,17 +203,15 @@ Xmlarea.prototype.syncedXml = function() {
 
 // elektas parton de la XML-teksto por redakti nur tiun
 //  laŭbezone sekurigas la nune redaktatan parton...
-Xmlarea.prototype.changeSubtext = function(n) {
-  // al kiu subteksto ni ŝanĝu?
-  const subt = this.strukturo[n];
+Xmlarea.prototype.changeSubtext = function(id) {
   // ni unue sekurigu la aktuale redaktatan parton...
-  this.sync(subt.id); // ni transdonas ankaŭ la elektotan id por navigi tien en la elekto-listo
+  this.sync(id); // ni transdonas ankaŭ la elektotan id por navigi tien en la elekto-listo
   
   // nun ni montras la celatan XML-parton por redaktado
-  if (subt) {
+  if (id) {
     // ni trovu la celatan subtekston per ĝia nomo, ĉar eble la numeroj ŝanĝiĝis...
     for (e of this.strukturo) {
-      if (e.id == subt.id) {
+      if (e.id == id) {
         this.xml_elekto = e;
         break;
       }

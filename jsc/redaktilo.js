@@ -769,14 +769,14 @@ var redaktilo = function() {
     }
   }
 
-  function on_xml_add_sub(item,index,selected) {
+  function on_xml_add_sub(subt,index,selected) {
     const sel_stru = document.getElementById("r:art_strukturo");
     if (index == 0) sel_stru.textContent = ''; // malplenigu la liston ĉe aldono de unua ero...
 
     if (selected) {
-      sel_stru.append(make_element('option',{value: index, selected: 'selected'},item.id));
+      sel_stru.append(make_element('option',{value: subt.id, selected: 'selected'},subt.dsc));
     } else {
-      sel_stru.append(make_element('option',{value: index},item.id));
+      sel_stru.append(make_element('option',{value: subt.id},subt.dsc));
     }
   }
 
