@@ -169,6 +169,8 @@ Xmlarea.prototype.structure = function(selected = undefined) {
 // la struktur-liston
 Xmlarea.prototype.sync = function(select = undefined) {
   if (this.xml_elekto) {
+    const old_id = this.xml_elekto.id;
+
     console.debug("SYNC "+this.xml_elekto.id+": "+this.xml_elekto.de+"-"+this.xml_elekto.al
       +"("+(this.xml_elekto.al-this.xml_elekto.de)+") <- "+this.txtarea.value.length);
       /*
@@ -192,6 +194,12 @@ Xmlarea.prototype.sync = function(select = undefined) {
       }
     }
 
+    // se ni ne retrovas la antaŭan id, ekz. ĉar @mrk ŝanĝiĝis aŭ snc aldoniĝis....
+    // ni devos aktualigi XML en la redaktilo per la nuna id (ekz-e <art>...</art>)
+    if (old_id != this.xml_elekto.id)
+      // nun ni montras la celatan XML-parton por redaktado
+      this.txtarea.value = this.xmlteksto.slice(this.xml_elekto.de,this.xml_elekto.al);
+
     this.synced = true;
   }
 }
@@ -204,12 +212,15 @@ Xmlarea.prototype.syncedXml = function() {
 // elektas parton de la XML-teksto por redakti nur tiun
 //  laŭbezone sekurigas la nune redaktatan parton...
 Xmlarea.prototype.changeSubtext = function(id) {
-  // ni unue sekurigu la aktuale redaktatan parton...
-  this.sync(id); // ni transdonas ankaŭ la elektotan id por navigi tien en la elekto-listo
-  
-  // nun ni montras la celatan XML-parton por redaktado
   if (id) {
+    // ni unue sekurigu la aktuale redaktatan parton...
+    this.sync(id); // ni transdonas ankaŭ la elektotan id por navigi tien en la elekto-listo
+    
     // ni trovu la celatan subtekston per ĝia nomo, ĉar eble la numeroj ŝanĝiĝis...
+    this.xml_elekto = this.strukturo[0]; // se ni ne trovos la celatan, ekz-e ĉar marko aŭ enhavo snc-aldono...) ŝanĝiĝis
+        // ni montro simple la unua subtekston, t.e. la artikolon
+    
+    // nun serĉu...
     for (e of this.strukturo) {
       if (e.id == id) {
         this.xml_elekto = e;
@@ -221,6 +232,7 @@ Xmlarea.prototype.changeSubtext = function(id) {
     console.debug("CHNG "+this.xml_elekto.id+": "+this.xml_elekto.de+"-"+this.xml_elekto.al
       +"("+(this.xml_elekto.al-this.xml_elekto.de)+")");
 
+    // nun ni montras la celatan XML-parton por redaktado
     this.txtarea.value = this.xmlteksto.slice(this.xml_elekto.de,this.xml_elekto.al);
     // iru al la komenco!
     this.resetCursor();
