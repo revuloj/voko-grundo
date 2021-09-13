@@ -92,39 +92,6 @@ Xmlarea.prototype.structure = function(selected = undefined) {
     }
   }
 
-  /*
-  function el_id(elm,de,ghis) {
-    if (elm == 'drv') {
-      // find kap
-      const drv = xmlteksto.substring(de,ghis);
-      const mk = drv.match(re_stru._kap); 
-      //re_stru._kap.lastIndex = de;
-      if (mk) {
-        const kap = mk[1]
-        .replace(re_stru._var,'')
-        .replace(re_stru._ofc,'')
-        .replace(re_stru._fnt,'')
-        .replace(re_stru._tl1,'$1~')
-        .replace(re_stru._tl2,'~')
-        .replace(/\s+/,' ')
-        .replace(',',',..')
-        .trim();  // [^] = [.\r\n]
-
-        return elm+' '+kap;
-      }
-    } else {
-      re_stru._mrk.lastIndex = de;
-      const mrk = re_stru._mrk.exec(xmlteksto);
-      if (mrk && mrk.index < ghis) {          
-        return (elm != 'art'? 
-          elm + ' ' + mrk[1].substring(mrk[1].indexOf('.')+1).replace('0','~') 
-          : (mrk[1].slice(mrk[1].indexOf(':')+2,-20)) || 'art')
-      } else {
-        return elm;
-      }
-    }
-  }
-  */
 
   function al(elm,de) {
     // trovu la finon de elemento 'elm'
@@ -154,7 +121,7 @@ Xmlarea.prototype.structure = function(selected = undefined) {
     subt.dsc = this.indents[subt.el] + subt.el 
       + (suff?':'+suff:'');
 
-    console.debug(subt.de + '-' + subt.al + ': ' + subt.id + ':' + subt.dsc);
+    // console.debug(subt.de + '-' + subt.al + ': ' + subt.id + ':' + subt.dsc);
 
     if (this.onaddsub) this.onaddsub(subt,this.strukturo.length,subt.id == selected);
     this.strukturo.push(subt);
@@ -162,7 +129,7 @@ Xmlarea.prototype.structure = function(selected = undefined) {
   }
 
   // aldonu ankoraŭ elektilon por la tuta XML
-  const tuto = {de: 0, ln: 0, al: xmlteksto.length, id: "xml", dsc: 'tuta xml-fonto'};
+  const tuto = {de: 0, ln: 0, al: xmlteksto.length, id: "x.m.l", dsc: 'tuta xml-fonto'};
   if (this.onaddsub) this.onaddsub(tuto,this.strukturo.length,tuto.id == selected);
   this.strukturo.push(tuto);
 }
@@ -324,6 +291,10 @@ Xmlarea.prototype.selection = function(insertion,p_kursoro=0) {
         txtarea.selectionEnd = txtarea.selectionStart;
       }
     }
+    // ni ŝangis la tekston, sed la evento "input" ne en ciu retumilo lanciĝas
+    // se la klavaro ne estas tuŝita...:
+    this.synced = false;
+
   } else { // redonu la markitan tekston
     if (document.selection && document.selection.createRange) { // IE/Opera
       range = document.selection.createRange();
@@ -382,6 +353,10 @@ Xmlarea.prototype.indent = function(indent) {
         this.scrollPos(scrollPos);
       }
     } 
+    // ni ŝangis la tekston, sed la evento "input" ne en ciu retumilo lanciĝas
+    // se la klavaro ne estas tuŝita...:
+    this.synced = false;
+
   } else { // eltrovu la nunan enŝovon
     indent = 0;
     var linestart;
