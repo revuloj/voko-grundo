@@ -141,6 +141,7 @@ Xmlarea.prototype.structure = function(selected = undefined) {
 Xmlarea.prototype.sync = function(select = undefined) {
   if (this.xml_elekto) {
     const old_id = this.xml_elekto.id;
+    const nstru = this.strukturo.length;
 
     console.debug("SYNC "+this.xml_elekto.id+": "+this.xml_elekto.de+"-"+this.xml_elekto.al
       +"("+(this.xml_elekto.al-this.xml_elekto.de)+") <- "+this.txtarea.value.length);
@@ -167,7 +168,7 @@ Xmlarea.prototype.sync = function(select = undefined) {
 
     // se ni ne retrovas la antaŭan id, ekz. ĉar @mrk ŝanĝiĝis aŭ snc aldoniĝis....
     // ni devos aktualigi XML en la redaktilo per la nuna id (ekz-e <art>...</art>)
-    if (old_id != this.xml_elekto.id)
+    if (old_id != this.xml_elekto.id || nstru != this.strukturo.length)
       // nun ni montras la celatan XML-parton por redaktado
       this.txtarea.value = this.xmlteksto.slice(this.xml_elekto.de,this.xml_elekto.al);
 
