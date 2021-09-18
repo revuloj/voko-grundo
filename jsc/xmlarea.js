@@ -46,7 +46,7 @@ Xmlarea.prototype.structure = function(selected = undefined) {
     const mrk = re_stru._mrk.exec(xmlteksto);
     if (mrk && mrk.index < ghis) {          
       return (elm != 'art'? 
-        mrk[1].substring(mrk[1].indexOf('.')+1).replace('0','~') 
+        mrk[1].substring(mrk[1].indexOf('.')+1) 
         : (mrk[1].slice(mrk[1].indexOf(':')+2,-20)) || '<nova>')
     }
   }
@@ -118,8 +118,10 @@ Xmlarea.prototype.structure = function(selected = undefined) {
 
     //const id = el_id(m[1], m.index+5, fino);
     const suff = subt.kap ? subt.kap : subt.mrk||'';
-    subt.dsc = this.indents[subt.el] + subt.el 
-      + (suff?':'+suff:'');
+    subt.dsc = this.indents[subt.el] + (
+      subt.el!='art'? 
+        subt.el+ (suff?':'+suff:'') 
+        : suff);
 
     // console.debug(subt.de + '-' + subt.al + ': ' + subt.id + ':' + subt.dsc);
 
@@ -170,6 +172,28 @@ Xmlarea.prototype.sync = function(select = undefined) {
       this.txtarea.value = this.xmlteksto.slice(this.xml_elekto.de,this.xml_elekto.al);
 
     this.synced = true;
+  }
+}
+
+// redonu la markon de la aktuala subteksto, aŭ la markon de parenco, se ĝi ne havas mem
+Xmlarea.prototype.getCurrentMrk = function() {
+  if (this.xml_elekto.mrk) {
+    return this.xml_elekto.mrk;
+  } else {
+    // trovu la elektitan subtekston en la strukturlisto
+    const s = this.strukturo;
+    for (i in s) {
+      if (s[i].id == this.xml_elekto.id) {
+        // iru la liston supren kaj trovu plej proksiman derivaĵon 
+        // (kiu devige havas markon)
+        for (j=i-1; j>0; j--) {
+          if (s[j].el == 'drv') return s[j].mrk
+        }
+        // ni estas ĉe la 0-a elemento (art), sed ŝajne ne trovis derivaĵon, 
+        // tio povas okazi ekz-e ĉe subart
+        return ''; 
+      }
+    }
   }
 }
 
