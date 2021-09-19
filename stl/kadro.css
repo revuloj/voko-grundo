@@ -611,9 +611,17 @@ nav li {
     border-bottom: 3px solid var(--nav-act-brd-clr);
 }
 
+.literoj[lang='bo'] {
+    line-height: 150%;
+}
+
 .literoj[lang='bo'] .elektita {
+    /*
     border: 2px dotted var(--nav-act-brd-clr);
     padding: .2em;
+    */
+    border: none; 
+    text-decoration: underline var(--nav-brd-clr);
 }
 
 /*

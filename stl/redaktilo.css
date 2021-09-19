@@ -19,10 +19,31 @@
     background: linear-gradient(-140deg, var(--main-bgr-clr), var(--main-act-bgr-clr));
 }
 
+/*
 #r\:art_titolo {
     color: inherit;
     text-decoration: none;
-    /*overflow: auto; */
+}
+*/
+
+#r\:art_stru_div {
+    flex-basis: 60%;
+    flex-grow: 1;
+    flex-shrink: 1;
+}
+
+#r\:art_strukturo {
+    width: 100%;
+    /* en Safari mobila la listeroj aperas
+    centrigite, kio fuŝas la hierakian aperigon,
+    ĉu (iuj el) la sekvaj eble korektos la problemon(?) - mi ne trovis solvoproponon en la reto 
+    krom tiu indiketo: https://newbedev.com/text-align-is-not-working-on-safari-select 
+    kaj tie oni uzas direction-manipuladon: https://www.py4u.net/discuss/978439 */
+    text-align-last: left;
+    text-align: -webkit-left;
+    text-align: left !important; 
+    /*Üalign-items: start !important;*/
+    direction: ltr;
 }
 
 #r\:tabulo {

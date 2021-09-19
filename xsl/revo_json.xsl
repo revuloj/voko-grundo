@@ -31,7 +31,8 @@
   <!-- la tuta artikolmarko, kun dosiernomo, eldono kaj dato -->
   <xsl:value-of select="//art/@mrk"/>
 <xsl:text>",
-</xsl:text>  
+</xsl:text>
+  <xsl:call-template name="art-rad"/>
   <xsl:call-template name="drv-kap"/>
   <xsl:call-template name="snc-mrk"/>
   <xsl:call-template name="ref"/>
@@ -42,6 +43,33 @@
 
 <xsl:template match="art/@mrk">
   <xsl:value-of select="substring-after(substring-before(.,'.xml'),'Id: ')"/>
+</xsl:template>
+
+<!-- oficialecoj de la radiko(j) 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+<xsl:template name="art-rad">
+<xsl:if test=".//art//kap[rad]">
+  <xsl:text>"rad":{"</xsl:text>
+  <xsl:for-each select=".//art//kap[rad]">
+    <xsl:value-of select="normalize-space(rad)"/>
+    <xsl:text>":[</xsl:text>
+    <xsl:apply-templates select="ofc"/>
+    <xsl:text>]</xsl:text>
+    <xsl:if test="var/kap[rad]|following::var/kap[rad]">
+    <xsl:text>,"</xsl:text>
+    </xsl:if>
+  </xsl:for-each>
+  <xsl:text>},
+</xsl:text>
+</xsl:if>
+</xsl:template>
+
+<xsl:template match="ofc">
+  <xsl:text>"</xsl:text><xsl:value-of select="."/><xsl:text>"</xsl:text>
+  <xsl:if test="following-sibling::ofc">
+  <xsl:text>,</xsl:text>
+  </xsl:if>
 </xsl:template>
 
 <!-- kolekti la kapvortojn de drv 

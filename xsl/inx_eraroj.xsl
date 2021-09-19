@@ -17,8 +17,12 @@
 -->
 
 
-<!-- (c) 2006 che Wolfram Diestel
-     licenco GPL 2.0
+<!-- (c) 2006 - 2021 ĉe Wolfram Diestel
+     laŭ permesilo GPL 2.0
+
+testu ekz-e:
+    saxonb-xslt -xsl:xsl/inx_eraroj.xsl -s:/pado/revo/xml/{artikolo}.xml
+
 -->
 
 
@@ -79,7 +83,7 @@
 </xsl:template>
 
 
-<xsl:template match="drv|snc[@mrk]|subsnc[@mrk]|subart[@mrk]">
+<xsl:template match="drv|snc[@mrk]|subsnc[@mrk]|subart[@mrk]|ekz[@mrk]|rim[@mrk]">
 
   <xsl:variable name="mrk" select="@mrk"/>
   <xsl:variable name="kie" select="node-name(.)"/>
@@ -112,7 +116,7 @@
     <xsl:when test="not(contains($mrk,'.'))">
       <ero kie="{$kie}" mrk="{$mrk}" tip="mrk-prt"/>
     </xsl:when>
-    <xsl:when test="not(contains($mrk2,'0'))">
+    <xsl:when test="not(contains($mrk2,'0')) and not(self::ekz|self::rim)">
       <ero kie="{$kie}" mrk="{$mrk}" tip="mrk-nul"/>
     </xsl:when>
     <xsl:when test="$mrk1 != $filename">

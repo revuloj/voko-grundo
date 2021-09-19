@@ -1,11 +1,13 @@
 
 /* jshint esversion: 6 */
 
-const version="1g";
+const version="2a";
 const debug=false; //true; // ni bezonas provizore aparte por vidi erarojn en iOS Webkit, kie ni ne havas "console"
 const revo_url = "reta-vortaro.de";
 const art_prefix = "/revo/art/";
+const tez_prefix = "/revo/tez/";
 const sercho_url = "/cgi-bin/sercxu-json-"+version+".pl";
+const trad_uwn_url = "/cgi-bin/traduku-uwn.pl";
 //const hazarda_url = "/cgi-bin/hazarda_art.pl";
 const titolo_url = "titolo-"+version+".html";
 const redaktilo_url = "redaktilo-"+version+".html";
@@ -22,7 +24,7 @@ const sercho_videblaj = 7;
 // statoj kaj transiroj
 const t_nav  = new Transiroj("nav","start",["ĉefindekso","subindekso","serĉo","redaktilo"]);
 const t_main = new Transiroj("main","start",["titolo","artikolo","red_xml","red_rigardo"]);
-const t_red  = new Transiroj("red","ne_redaktante",["ne_redaktante","redaktante","sendita"]);
+const t_red  = new Transiroj("red","ne_redaktante",["ne_redaktante","redaktante","tradukante","sendita"]);
 
 const revo_codes = {
     lingvoj: new Codelist('lingvo', '/revo/cfg/lingvoj.xml'),
@@ -178,6 +180,12 @@ when_doc_ready(function() {
 
         hide("x:redakt_btn");
         hide("x:rigardo_btn");
+    });
+
+    t_red.alvene("tradukante",()=>{
+        show("r:tab_tradukoj",'collapsed');
+        // tion ni faru verŝajne pli bone en forire("redaktante"), ĉu?
+        hide("r:tab_txmltxt",'collapsed');
     });
 
     t_red.alvene("ne_redaktante",()=>{
@@ -1143,7 +1151,7 @@ function mrk_eraroj() {
             // mrk nekongruaj kun drv@mrk
             if (json.snc && json.snc.length) {
                 const e2 = make_element("p",{},"Markoj de sencoj, rimarkoj ktp. kongruu kun la "
-                    + "marko de la enhavatna derivaĵo, ĝia prefikso estu la sama:");
+                    + "marko de la enhavanta derivaĵo, ĝia prefikso estu la sama:");
                 const ul = make_element("ul");
                 listo.append(e2,ul);
                 for (let m of json.snc) {
@@ -1178,6 +1186,105 @@ function mrk_eraroj() {
     );    
 }
 
+function trad_uwn(artikolo) {
+    HTTPRequest('POST', tez_prefix+artikolo+'.json', {x: 1}, 
+        function(data) {
+            const json = JSON.parse(data); 
+            if (json) {
+                const s_snc = document.getElementById('r:trd_sencoj');
+                const tez = Object.values(json)[0];
+                // kreu liston de kapvortoj
+                const l_kap = make_list(tez.kap,'div',{},
+                    // ĉiu kapvorto estas malfaldebla aperigonta sencojn kaj tradukojn...
+                    function(k) {
+                        return make_details(
+                            k[0],
+                            tez.mrk.filter(m => m[0].startsWith(k[1]+'.')),
+                            (det,lst) => {
+                                det.append(make_list(lst,'ul',{},
+                                    // KOREKTU: se snc ne havas @mrk la senco kaj tradukoj ne aperas!
+                                    (snc) => {
+                                        const li = make_element('li',{},snc);
+                                        // aldonu tradukojn de tiu senco...
+                                        const trdj = tez.trd.filter(t => t[0] = snc[0]);
+                                        li.append(make_list(trdj,'ul',{},
+                                            (trd) => {
+                                                return make_element('li',{},trd[1]+': '+trd[2]); 
+                                            }
+                                        ));
+                                        return li;
+                                    }
+                                ))
+                            },
+                            (sum,txt) => { 
+                                const btns = make_elements([
+                                    ['button',{},'serĉu'],
+                                    ['button',{},'elektu']
+                                ]);
+                                sum.append(txt,...btns);
+                            }
+                        ) // sum,det,det_callback,sum_callback 
+                        //return make_element('span',{},ero[0]);
+                    });
+                //const l_snc = make_list(tez.mrk,'div');
+                s_snc.append(l_kap);
+            }
+        },
+        start_wait,
+        stop_wait
+    );
+
+
+    HTTPRequest('POST', trad_uwn_url, {art: artikolo}, 
+        function(data) {
+            const json = JSON.parse(data);
+            const s_trd = document.getElementById('r:trd_elekto');
+            if (json) {
+                for (let t in json) {
+                    const tv = json[t];
+                    const details = make_details(tv.trd.eo||t,null,function(d){
+                        if (tv.dif) { // esp-a difino
+                            const pe = make_elements([
+                                ['p',{},[
+                                    ['em',{},'eo: '],
+                                    ...tv.dif
+                                ]]
+                            ]);
+                            d.append(...pe);
+                        };
+                        if (tv.dsc) { // angla difino
+                            const pa = make_elements([
+                                ['p',{},[
+                                    ['em',{},'en: '],
+                                    tv.dsc
+                                ]]
+                            ]);
+                            d.append(...pa);
+                        };
+                        d.append(make_dl(tv.trd, function(lng) {
+                            const ln = revo_codes.lingvoj.codes[lng];
+                            return (ln? ln : '-') +' ['+lng+']';
+                        }));
+                    });
+                    s_trd.append(details);
+                };
+                t_red.transiro("tradukante");    
+            }
+        },
+        start_wait,
+        stop_wait
+    );
+}
+
+function traduku(event,artikolo) {
+    event.preventDefault();
+
+    //const params = href.split('?')[1];
+    //const art = getParamValue("art",params);    
+    load_page("main",redaktilo_url+'?'+artikolo,
+        false, () => trad_uwn(artikolo));
+    load_page("nav",redaktmenu_url);
+}
 
 function redaktu(href) {
     const params = href.split('?')[1];
