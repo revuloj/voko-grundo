@@ -1,7 +1,7 @@
 
 /* jshint esversion: 6 */
 
-const version="2a";
+const version="2b";
 const debug=false; //true; // ni bezonas provizore aparte por vidi erarojn en iOS Webkit, kie ni ne havas "console"
 const revo_url = "reta-vortaro.de";
 const art_prefix = "/revo/art/";
@@ -563,6 +563,7 @@ function load_page(trg,url,push_state=true,whenLoaded) {
 
         if (filename.startsWith("redaktilo")) {
             redaktilo.preparu_red(filename.split('?').pop()); // redaktilo-paĝo
+            
         } else {
             // laŭbezone ankoraŭ iru al loka marko
             update_hash();
