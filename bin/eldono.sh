@@ -38,8 +38,8 @@ servilo)
 docker)
     araneo_id=$(docker ps --filter name=araneujo_araneo -q)
     todir=/usr/local/apache2/htdocs/revo
-    docker cp ${JS} ${araneo_id}:${todir}/jsc
-    docker cp $CSS} ${araneo_id}:${todir}/stl
+    docker cp ${JSC} ${araneo_id}:${todir}/jsc
+    docker cp ${CSS} ${araneo_id}:${todir}/stl
     ;;
 preparo)
     # kontrolu ĉu la branĉo kongruas kun la agordita versio
