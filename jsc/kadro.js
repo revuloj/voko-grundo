@@ -1187,96 +1187,9 @@ function mrk_eraroj() {
     );    
 }
 
-function trad_uwn(artikolo) {
-    HTTPRequest('POST', tez_prefix+artikolo+'.json', {x: 1}, 
-        function(data) {
-            const json = JSON.parse(data); 
-            if (json) {
-                const s_snc = document.getElementById('r:trd_sencoj');
-                const tez = Object.values(json)[0];
-                // kreu liston de kapvortoj
-                const l_kap = make_list(tez.kap,'div',{},
-                    // ĉiu kapvorto estas malfaldebla aperigonta sencojn kaj tradukojn...
-                    function(k) {
-                        return make_details(
-                            k[0],
-                            tez.mrk.filter(m => m[0].startsWith(k[1]+'.')),
-                            (det,lst) => {
-                                det.append(make_list(lst,'ul',{},
-                                    // KOREKTU: se snc ne havas @mrk la senco kaj tradukoj ne aperas!
-                                    (snc) => {
-                                        const li = make_element('li',{},snc);
-                                        // aldonu tradukojn de tiu senco...
-                                        const trdj = tez.trd.filter(t => t[0] = snc[0]);
-                                        li.append(make_list(trdj,'ul',{},
-                                            (trd) => {
-                                                return make_element('li',{},trd[1]+': '+trd[2]); 
-                                            }
-                                        ));
-                                        return li;
-                                    }
-                                ))
-                            },
-                            (sum,txt) => { 
-                                const btns = make_elements([
-                                    ['button',{},'serĉu'],
-                                    ['button',{},'elektu']
-                                ]);
-                                sum.append(txt,...btns);
-                            }
-                        ) // sum,det,det_callback,sum_callback 
-                        //return make_element('span',{},ero[0]);
-                    });
-                //const l_snc = make_list(tez.mrk,'div');
-                s_snc.append(l_kap);
-            }
-        },
-        start_wait,
-        stop_wait
-    );
 
 
-    HTTPRequest('POST', trad_uwn_url, {art: artikolo}, 
-        function(data) {
-            const json = JSON.parse(data);
-            const s_trd = document.getElementById('r:trd_elekto');
-            if (json) {
-                for (let t in json) {
-                    const tv = json[t];
-                    const details = make_details(tv.trd.eo||t,null,function(d){
-                        if (tv.dif) { // esp-a difino
-                            const pe = make_elements([
-                                ['p',{},[
-                                    ['em',{},'eo: '],
-                                    ...tv.dif
-                                ]]
-                            ]);
-                            d.append(...pe);
-                        };
-                        if (tv.dsc) { // angla difino
-                            const pa = make_elements([
-                                ['p',{},[
-                                    ['em',{},'en: '],
-                                    tv.dsc
-                                ]]
-                            ]);
-                            d.append(...pa);
-                        };
-                        d.append(make_dl(tv.trd, function(lng) {
-                            const ln = revo_codes.lingvoj.codes[lng];
-                            return (ln? ln : '-') +' ['+lng+']';
-                        }));
-                    });
-                    s_trd.append(details);
-                };
-                t_red.transiro("tradukante");    
-            }
-        },
-        start_wait,
-        stop_wait
-    );
-}
-
+/*
 function traduku(event,artikolo) {
     event.preventDefault();
 
@@ -1286,6 +1199,7 @@ function traduku(event,artikolo) {
         false, () => trad_uwn(artikolo));
     load_page("nav",redaktmenu_url);
 }
+*/
 
 function redaktu(href) {
     const params = href.split('?')[1];
