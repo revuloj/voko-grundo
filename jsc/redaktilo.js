@@ -984,8 +984,8 @@ var redaktilo = function() {
 
   function trad_uwn(event) {
     event.preventDefault();
-    artikolo = 'test';
-
+    sercho = xmlarea.getCurrentKap(); //'hundo';
+/*
     HTTPRequest('POST', tez_prefix+artikolo+'.json', {x: 1}, 
         function(data) {
             const json = JSON.parse(data); 
@@ -1032,46 +1032,45 @@ var redaktilo = function() {
         start_wait,
         stop_wait
     );
+ */
 
-
-    HTTPRequest('POST', trad_uwn_url, {art: artikolo}, 
-        function(data) {
-            const json = JSON.parse(data);
-            const s_trd = document.getElementById('r:trd_elekto');
-            if (json) {
-                for (let t in json) {
-                    const tv = json[t];
-                    const details = make_details(tv.trd.eo||t,null,function(d){
-                        if (tv.dif) { // esp-a difino
-                            const pe = make_elements([
-                                ['p',{},[
-                                    ['em',{},'eo: '],
-                                    ...tv.dif
-                                ]]
-                            ]);
-                            d.append(...pe);
-                        };
-                        if (tv.dsc) { // angla difino
-                            const pa = make_elements([
-                                ['p',{},[
-                                    ['em',{},'en: '],
-                                    tv.dsc
-                                ]]
-                            ]);
-                            d.append(...pa);
-                        };
-                        d.append(make_dl(tv.trd, function(lng) {
-                            const ln = revo_codes.lingvoj.codes[lng];
-                            return (ln? ln : '-') +' ['+lng+']';
-                        }));
-                    });
-                    s_trd.append(details);
-                };
-                t_red.transiro("tradukante");    
-            }
-        },
-        start_wait,
-        stop_wait
+    const srch = new Sercho();
+    srch.serchu_uwn(sercho, function(json) {
+      const s_trd = document.getElementById('r:trd_elekto');
+      if (json) {
+          for (let t in json) {
+              const tv = json[t];
+              const details = make_details(tv.trd.eo||t,null,function(d){
+                  if (tv.dif) { // esp-a difino
+                      const pe = make_elements([
+                          ['p',{},[
+                              ['em',{},'eo: '],
+                              ...tv.dif
+                          ]]
+                      ]);
+                      d.append(...pe);
+                  };
+                  if (tv.dsc) { // angla difino
+                      const pa = make_elements([
+                          ['p',{},[
+                              ['em',{},'en: '],
+                              tv.dsc
+                          ]]
+                      ]);
+                      d.append(...pa);
+                  };
+                  d.append(make_dl(tv.trd, function(lng) {
+                      const ln = revo_codes.lingvoj.codes[lng];
+                      return (ln? ln : '-') +' ['+lng+']';
+                  }));
+              });
+              s_trd.append(details);
+          };
+          t_red.transiro("tradukante");    
+      }
+    },
+    start_wait,
+    stop_wait
     );
   }    
 

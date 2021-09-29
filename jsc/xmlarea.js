@@ -4,6 +4,7 @@ function Xmlarea(ta_id, onAddSub) {
     this.xmlteksto = ''; // la tuta teksto
     this.xml_elekto = undefined; // aktuale redaktata subteksto
     this.strukturo = []; // la listo de subtekstoj [komenco,fino,nomo]
+    this.radiko = '';
     this.onaddsub = onAddSub;
     this.synced = true;
 
@@ -12,6 +13,7 @@ function Xmlarea(ta_id, onAddSub) {
       _eoe: />[ \t]*\n?/g,
       _mrk: /mrk\s*=\s*"([^>"]*?)"/g,
       _kap: /<kap>([^]*)<\/kap>/,
+      _rad: /<rad>([^<]+)<\/rad>/,
       _var: /<var>[^]*<\/var>/g,
       _ofc: /<ofc>[^]*<\/ofc>/g,
       _fnt: /<fnt>[^]*<\/fnt>/g,
@@ -50,6 +52,20 @@ Xmlarea.prototype.structure = function(selected = undefined) {
         : (mrk[1].slice(mrk[1].indexOf(':')+2,-20)) || '<nova>')
     }
   }
+
+  function rad(de,ghis) {
+    const art = xmlteksto.substring(de,ghis);
+    const mr = art.match(re_stru._rad);
+
+    if (mr) {
+      const rad = mr[1]
+      .replace(/\s+/,' ')
+      .trim();  // [^] = [.\r\n]
+
+      return rad;
+    }
+  }
+  
 
   function kap(elm,de,ghis) {
     if (elm == 'drv') {
@@ -123,14 +139,18 @@ Xmlarea.prototype.structure = function(selected = undefined) {
         subt.el+ (suff?':'+suff:'') 
         : suff);
 
+    // ĉe la kapvorto de la artikolo ekstraktu la radikon
+    if (subt.el == 'art') this.radiko = rad(subt.de,subt.al);
+
     // console.debug(subt.de + '-' + subt.al + ': ' + subt.id + ':' + subt.dsc);
 
     if (this.onaddsub) this.onaddsub(subt,this.strukturo.length,subt.id == selected);
     this.strukturo.push(subt);
     //sel_stru.append(make_element('option',{value: strukturo.length-1},item));
+
   }
 
-  // aldonu ankoraŭ elektilon por la tuta XML
+  // en la fino aldonu ankoraŭ elektilon por la tuta XML
   const tuto = {de: 0, ln: 0, al: xmlteksto.length, id: "x.m.l", dsc: 'tuta xml-fonto'};
   if (this.onaddsub) this.onaddsub(tuto,this.strukturo.length,tuto.id == selected);
   this.strukturo.push(tuto);
@@ -197,6 +217,32 @@ Xmlarea.prototype.getCurrentMrk = function() {
     }
   }
 }
+
+// redonu la aktualan kapvorton, se ene de drv t.e. ties kapvorto, alie la kapvorto de la unua drv
+Xmlarea.prototype.getCurrentKap = function() {
+    function kap(e) {
+      return e.kap.replace('~',rad);
+    }
+
+  const rad = this.radiko;
+  const elekto = this.xml_elekto;
+  const mrk = (elekto.el != 'art' && elekto.id != "x.m.l")? this.getCurrentMrk() : '';
+
+  if (mrk && this.xml_elekto.el != 'art') { // trovu la struktur-elementon kun tiu mrk
+    for (s of this.strukturo) {
+      if (s.mrk == mrk) {
+        return (kap(s))
+      }
+    }
+  } else { // prenu kapvorton de unua drv
+    for (s of this.strukturo) {
+      if (s.el == 'drv') {
+        return (kap(s))
+      }
+    }
+  }
+}
+
 
 Xmlarea.prototype.syncedXml = function() {
   if (! this.synced) this.sync(this.xml_elekto.id); 
