@@ -35,7 +35,11 @@ servilo)
     scp ${JSC} ${revo}/jsc
     scp ${CSS} ${revo}/stl
     ;;
-docker)
+debug)
+    npm run build:js:debug
+    npm run build:css
+    ;;&
+docker|debug)
     araneo_id=$(docker ps --filter name=araneujo_araneo -q)
     todir=/usr/local/apache2/htdocs/revo
     docker cp ${JSC} ${araneo_id}:${todir}/jsc
