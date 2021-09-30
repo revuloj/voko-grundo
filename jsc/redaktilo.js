@@ -1066,7 +1066,8 @@ var redaktilo = function() {
               });
               s_trd.append(details);
           };
-          t_red.transiro("tradukante");    
+          //t_red.transiro("tradukante");
+          show("r:tab_tradukoj",'collapsed');    
       }
     },
     start_wait,

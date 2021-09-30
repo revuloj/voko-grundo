@@ -185,7 +185,7 @@ when_doc_ready(function() {
     t_red.alvene("tradukante",()=>{
         show("r:tab_tradukoj",'collapsed');
         // tion ni faru verŝajne pli bone en forire("redaktante"), ĉu?
-        hide("r:tab_txmltxt",'collapsed');
+        // hide("r:tab_txmltxt",'collapsed');
     });
 
     t_red.alvene("ne_redaktante",()=>{
