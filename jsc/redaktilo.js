@@ -1040,7 +1040,10 @@ var redaktilo = function() {
       if (json) {
           for (let t in json) {
               const tv = json[t];
-              const details = make_details(tv.trd.eo||t,null,function(d){
+              const details = make_details(
+                tv.trd.eo.map(s => s.replace(/\?;/,'?:\u00a0'))
+                  .join(', ')||t, null,
+                function(d){
                   if (tv.dif) { // esp-a difino
                       const pe = make_elements([
                           ['p',{},[
