@@ -222,7 +222,7 @@ function when_doc_ready(onready_fn) {
     }
 }
 
-function make_element(name,attributes,textcontent) {
+function ht_element(name,attributes,textcontent) {
     var element = document.createElement(name);
     for (var a in attributes) {
         element.setAttribute(a,attributes[a]);
@@ -231,7 +231,7 @@ function make_element(name,attributes,textcontent) {
     return element;
 }
 
-function make_elements(jlist) {
+function ht_elements(jlist) {
     var dlist = [];
     for (var el of jlist) {
       var element;
@@ -239,11 +239,11 @@ function make_elements(jlist) {
         element = document.createTextNode(el);
       } else {
         if (el[2] && el[2] instanceof Array) {
-            var content = make_elements(el[2]);
-            element = make_element(el[0],el[1]);
+            var content = ht_elements(el[2]);
+            element = ht_element(el[0],el[1]);
             element.append(...content);
         } else {
-            element=make_element(el[0],el[1],el[2]);
+            element=ht_element(el[0],el[1],el[2]);
         }
       } //else
       dlist.push(element);
@@ -264,7 +264,7 @@ function addAttribute(node,name,value) {
 }
 */
 
-function make_button(label,handler,hint='') {
+function ht_button(label,handler,hint='') {
     var btn = document.createElement("BUTTON");
     btn.appendChild(document.createTextNode(label)); 
     btn.addEventListener("click",handler);
@@ -273,7 +273,7 @@ function make_button(label,handler,hint='') {
     return btn;
 }
 
-function make_icon_button(iclass,handler,hint='') {
+function ht_icon_button(iclass,handler,hint='') {
     var btn = document.createElement("BUTTON");
     //btn.appendChild(document.createTextNode(label)); 
     if (handler) btn.addEventListener("click",handler);
@@ -282,34 +282,36 @@ function make_icon_button(iclass,handler,hint='') {
     return btn;
 }
 
-function make_list(list,listtype = 'ul',attrlist,listero_cb) {
+function ht_list(list,listtype = 'ul',attrlist,listero_cb) {
   const elmtype = (listtype == 'ul' || listtype == 'ol')? 'li' : 'span';
-  const container = make_element(listtype,attrlist);
+  const container = ht_element(listtype,attrlist);
   for (e of list) {    
-    let li = (listero_cb? listero_cb(e) : make_element(elmtype,{},e));
+    let li = (listero_cb? listero_cb(e) : ht_element(elmtype,{},e));
     container.append(li);
   }
   return container;
 }
 
-function make_dl(obj,dt_callback,dd_callback) {
-  const dl = make_element("dl");
-  for (const [key, value] of Object.entries(obj)) {
-    const dt = make_element('dt',{},dt_callback? dt_callback(key) : key);
-    const dd = make_element('dd',{},dd_callback? dd_callback(value) : value);
+function ht_dl(obj,dt_callback,dd_callback,sorted) {
+  const dl = ht_element("dl");
+  if (sorted) keys = Object.keys(obj).sort(); else keys = Object.keys(obj);
+  for (const key of keys) {
+    const value = obj[key];
+    const dt = ht_element('dt',{},dt_callback? dt_callback(key) : key);
+    const dd = ht_element('dd',{},dd_callback? dd_callback(value) : value);
     dl.append(dt,dd);
   }
   return dl;
 }
 
-function make_details(sum,det,det_callback,sum_callback) {
-  const details = make_element("details");
+function ht_details(sum,det,det_callback,sum_callback) {
+  const details = ht_element("details");
   if (sum_callback) {
-    const summary = make_element('summary'); 
+    const summary = ht_element('summary'); 
     sum_callback(summary,sum);
     details.append(summary);
   } else {
-    details.append(make_element('summary',{},sum));
+    details.append(ht_element('summary',{},sum));
   }
   det_callback? det_callback(details,det) : details.append(det);  
   return details;
@@ -472,7 +474,7 @@ function Codelist(xmlTag,url) {
     for (var item in this.codes) {
       //var opt = createTElement("option",item + ' - ' + this.codes[item]);
       //addAttribute(opt,"value",item);
-      const opt = make_element("option",{value: item},item + ' - ' + this.codes[item]);
+      const opt = ht_element("option",{value: item},item + ' - ' + this.codes[item]);
       sel.appendChild(opt);
     }
   };

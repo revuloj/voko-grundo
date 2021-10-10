@@ -355,7 +355,7 @@ var redaktilo = function() {
       ul = elch[0];
     }
     for (var e of err) {
-      var li = make_element("li",{},e); //createTElement("li",e);               
+      var li = ht_element("li",{},e); //createTElement("li",e);               
       ul.appendChild(li);       
     }
   }
@@ -758,7 +758,7 @@ var redaktilo = function() {
           const sel_stru = document.getElementById("r:art_strukturo");
           for (i in xmlarea.strukturo) {
             const item = xmlarea.strukturo[i].id;
-            sel_stru.append(make_element('option',{value: i},item));
+            sel_stru.append(ht_element('option',{value: i},item));
           }
           */
           /*
@@ -779,9 +779,9 @@ var redaktilo = function() {
     if (index == 0) sel_stru.textContent = ''; // malplenigu la liston ĉe aldono de unua ero...
 
     if (selected) {
-      sel_stru.append(make_element('option',{value: subt.id, selected: 'selected'},subt.dsc));
+      sel_stru.append(ht_element('option',{value: subt.id, selected: 'selected'},subt.dsc));
     } else {
-      sel_stru.append(make_element('option',{value: subt.id},subt.dsc));
+      sel_stru.append(ht_element('option',{value: subt.id},subt.dsc));
     }
   }
 
@@ -799,9 +799,9 @@ var redaktilo = function() {
     for (i in xmlarea.strukturo) {
       const item = xmlarea.strukturo[i].id;
       if (sel == item) {
-        sel_stru.append(make_element('option',{value: i, selected: 'selected'},item));
+        sel_stru.append(ht_element('option',{value: i, selected: 'selected'},item));
       } else {
-        sel_stru.append(make_element('option',{value: i},item));
+        sel_stru.append(ht_element('option',{value: i},item));
       }
     }
     */
@@ -993,22 +993,22 @@ var redaktilo = function() {
                 const s_snc = document.getElementById('r:trd_sencoj');
                 const tez = Object.values(json)[0];
                 // kreu liston de kapvortoj
-                const l_kap = make_list(tez.kap,'div',{},
+                const l_kap = ht_list(tez.kap,'div',{},
                     // ĉiu kapvorto estas malfaldebla aperigonta sencojn kaj tradukojn...
                     function(k) {
-                        return make_details(
+                        return ht_details(
                             k[0],
                             tez.mrk.filter(m => m[0].startsWith(k[1]+'.')),
                             (det,lst) => {
-                                det.append(make_list(lst,'ul',{},
+                                det.append(ht_list(lst,'ul',{},
                                     // KOREKTU: se snc ne havas @mrk la senco kaj tradukoj ne aperas!
                                     (snc) => {
-                                        const li = make_element('li',{},snc);
+                                        const li = ht_element('li',{},snc);
                                         // aldonu tradukojn de tiu senco...
                                         const trdj = tez.trd.filter(t => t[0] = snc[0]);
-                                        li.append(make_list(trdj,'ul',{},
+                                        li.append(ht_list(trdj,'ul',{},
                                             (trd) => {
-                                                return make_element('li',{},trd[1]+': '+trd[2]); 
+                                                return ht_element('li',{},trd[1]+': '+trd[2]); 
                                             }
                                         ));
                                         return li;
@@ -1016,16 +1016,16 @@ var redaktilo = function() {
                                 ))
                             },
                             (sum,txt) => { 
-                                const btns = make_elements([
+                                const btns = ht_elements([
                                     ['button',{},'serĉu'],
                                     ['button',{},'elektu']
                                 ]);
                                 sum.append(txt,...btns);
                             }
                         ) // sum,det,det_callback,sum_callback 
-                        //return make_element('span',{},ero[0]);
+                        //return ht_element('span',{},ero[0]);
                     });
-                //const l_snc = make_list(tez.mrk,'div');
+                //const l_snc = ht_list(tez.mrk,'div');
                 s_snc.append(l_kap);
             }
         },
@@ -1040,37 +1040,47 @@ var redaktilo = function() {
       if (json) {
           for (let t in json) {
               const tv = json[t];
-              const details = make_details(
+              const details = ht_details(
                 tv.trd.eo.map(s => s.replace(/\?;/,'?:\u00a0'))
                   .join(', ')||t, null,
                 function(d){
                   if (tv.dif) { // esp-a difino
-                      const pe = make_elements([
+                      const pe = ht_elements([
                           ['p',{},[
                               ['em',{},'eo: '],
-                              ...tv.dif
+                              ...tv.dif || ['-/-']
                           ]]
                       ]);
                       d.append(...pe);
                   };
                   if (tv.dsc) { // angla difino
-                      const pa = make_elements([
+                      const pa = ht_elements([
                           ['p',{},[
                               ['em',{},'en: '],
-                              tv.dsc
+                              tv.dsc || '-/-'
                           ]]
                       ]);
                       d.append(...pa);
                   };
-                  d.append(make_dl(tv.trd, function(lng) {
+                  d.append(ht_dl(tv.trd,
+                    function(lng) {
                       const ln = revo_codes.lingvoj.codes[lng];
-                      return (ln? ln : '-') +' ['+lng+']';
-                  }));
+                      return ('['+lng+']' + (ln? ' '+ln+':' : ' :'));
+                    },
+                    function(trd) {
+                      return trd.map(s => s.replace(/\?;/,'?:\u00a0'))
+                        .join(', ')
+                    },
+                    true)
+                  );
               });
               s_trd.append(details);
           };
           //t_red.transiro("tradukante");
           show("r:tab_tradukoj",'collapsed');    
+      } else {
+        s_trd.append("Nenio troviĝis.");
+        show("r:tab_tradukoj",'collapsed');    
       }
     },
     start_wait,

@@ -369,7 +369,7 @@ function enkadrigu() {
 
     // preparu la ĉefan parton de la paĝo
     if (document.getElementsByTagName("main").length == 0) {
-        var main = make_element("main",{});
+        var main = ht_element("main",{});
         main.append(...document.body.children);
         document.body.appendChild(main);
     } else {
@@ -378,8 +378,8 @@ function enkadrigu() {
 
     // preparu la navigo-parton de la paĝo
     if (document.getElementsByTagName("nav").length == 0) {
-        var nav = make_element("nav",{});
-        var div = make_element("div",{id: "navigado"});
+        var nav = ht_element("nav",{});
+        var div = ht_element("div",{id: "navigado"});
         nav.appendChild(div);
         document.body.appendChild(nav);
     }
@@ -912,7 +912,7 @@ function serchu_q(esprimo) {
             //     ]}
             // ]
             function make_pli(n_kasxitaj) {
-                var pli = make_elements([
+                var pli = ht_elements([
                     ["dt",{},
                         [["a",{href: "#"},"(+"+(n_kasxitaj)+")"]]
                     ],
@@ -932,12 +932,12 @@ function serchu_q(esprimo) {
             }
 
             function findings(lng) {
-                var div = make_elements([
+                var div = ht_elements([
                     ["div",{},
                         [["h1",{}, revo_codes.lingvoj.codes[lng]||lng ]]
                     ]
                 ])[0];
-                var dl = make_element("dl");
+                var dl = ht_element("dl");
 
                 const trvj = srch.trovoj(lng);
                 // console.log(trvj);
@@ -954,21 +954,21 @@ function serchu_q(esprimo) {
                         atr = {class: "kasxita"};
                     }
 
-                    const dt = make_element("dt",atr);
+                    const dt = ht_element("dt",atr);
 
                     if ( lng == 'eo' ) {
                         // tradukojn oni momente ne povas ne povas rekte alsalti,
                         // do ni provizore uzas t.eo.mrk anst. t[l].mrk
-                        const a = make_element("a",{target: "precipa", href: t.h}, t.v);
+                        const a = ht_element("a",{target: "precipa", href: t.h}, t.v);
                         dt.append(a);
                     } else {
-                        const s = make_element("span",{lang: lng}, t.v);
+                        const s = ht_element("span",{lang: lng}, t.v);
                         dt.append(s);
                     }
 
                     // dum redakto ni aldonas transprenan butonon por kreado de referencoj
                     if ( lng == 'eo' && t_red.stato == "redaktante") {
-                        const ref_btn = make_element("button",{
+                        const ref_btn = ht_element("button",{
                             class: "icon_btn r_vid", 
                             value: t.h.split('#')[1], // mrk
                             title:"transprenu kiel referenco"
@@ -976,14 +976,14 @@ function serchu_q(esprimo) {
                         dt.append(ref_btn);
                     }                            
 
-                    const dd = make_element("dd",atr);
+                    const dd = ht_element("dd",atr);
    
                     if ( lng == 'eo' ) {
                         // trovitaj tradukoj de tiu e-a vorto
                         for ( let [l,trd] of Object.entries(t.t) ) { // ni trairu ĉiujn lingvojn....
                             // tradukojn oni momente ne povas rekte alsalti,
                             // do ni (provizore?) uzas href (el drv-mrk) 
-                            const a = make_elements([
+                            const a = ht_elements([
                                     ["a",{target: "precipa", href: t.h},
                                         [["code",{}, l + ":"],["span",{lang: l}, trd]]
                                     ],["br"]
@@ -993,7 +993,7 @@ function serchu_q(esprimo) {
                     } else {
                         // trovitaj esperantaj tradukoj de tiu nacilingva vorto
                         for ( e of t.t ) {
-                            const a = make_elements([
+                            const a = ht_elements([
                                 ["a",{target: "precipa", href: e.h},
                                     e.k
                                 ],["br"]
@@ -1007,14 +1007,14 @@ function serchu_q(esprimo) {
 
                 // atentigo pri limo
                 //if (lng.max == lng.trovoj.length) {
-                //    const noto = make_element("p",{class: "kasxita"},"noto: por trovi ankoraŭ pli, bv. precizigu la serĉon!");
+                //    const noto = ht_element("p",{class: "kasxita"},"noto: por trovi ankoraŭ pli, bv. precizigu la serĉon!");
                 //    div.append(noto);
                 //}
                 return div;
             }
 
             function nofindings() {
-                return make_elements([
+                return ht_elements([
                     ["p",{},
                         [["strong",{},"Nenio troviĝis!"]]
                     ]
@@ -1024,7 +1024,7 @@ function serchu_q(esprimo) {
             index_spread();
             const nav = document.getElementById("navigado");
             const inx_enh = nav.querySelector(".enhavo");
-            const trovoj = make_element("div",{id: "x:trovoj"},"");
+            const trovoj = ht_element("div",{id: "x:trovoj"},"");
 
             // se nenio troviĝis...
             if ( srch.malplena() ) {
@@ -1133,17 +1133,17 @@ function mrk_eraroj() {
             const listo = document.getElementById("mrk_sintakso");
             listo.textContent= '';
 
-            const sum = make_element("summary",{},"Nekongruaj markoj / referencoj");
+            const sum = ht_element("summary",{},"Nekongruaj markoj / referencoj");
             listo.append(sum);
             // tri- kaj plipartaj drv@mrk
             if (json.drv && json.drv.length) {
-                const e1 = make_element("p",{},"Markoj de derivaĵoj havu nur du partojn, t.e. "
+                const e1 = ht_element("p",{},"Markoj de derivaĵoj havu nur du partojn, t.e. "
                 + "enhavu nur unu punkton:");
-                const ul = make_element("ul");
+                const ul = ht_element("ul");
                 listo.append(e1,ul);
 
                 for (let m of json.drv) {
-                    let li = make_elements([
+                    let li = ht_elements([
                         ['li',{},
                             [['a',{href: art_href(m[0]), target: 'precipa'}, m[1]+' ['+m[0]+']']]
                         ]
@@ -1153,12 +1153,12 @@ function mrk_eraroj() {
             }
             // mrk nekongruaj kun drv@mrk
             if (json.snc && json.snc.length) {
-                const e2 = make_element("p",{},"Markoj de sencoj, rimarkoj ktp. kongruu kun la "
+                const e2 = ht_element("p",{},"Markoj de sencoj, rimarkoj ktp. kongruu kun la "
                     + "marko de la enhavanta derivaĵo, ĝia prefikso estu la sama:");
-                const ul = make_element("ul");
+                const ul = ht_element("ul");
                 listo.append(e2,ul);
                 for (let m of json.snc) {
-                    let li = make_elements([
+                    let li = ht_elements([
                         ['li',{},
                             [['a',{href: art_href(m[0]), target: 'precipa'}, m[1]+' ['+m[0]+']']]
                         ]
@@ -1168,11 +1168,11 @@ function mrk_eraroj() {
             }
             // homonimoj sen ref-hom
             if (json.hom && json.hom.length) {
-                const e2 = make_element("p",{},"Homonimoj, kiuj ne havas referencon de la tipo 'hom' aŭ duoblaj derivaĵoj:");
-                const ul = make_element("ul");
+                const e2 = ht_element("p",{},"Homonimoj, kiuj ne havas referencon de la tipo 'hom' aŭ duoblaj derivaĵoj:");
+                const ul = ht_element("ul");
                 listo.append(e2,ul);
                 for (let m of json.hom) {
-                    let li = make_elements([
+                    let li = ht_elements([
                         ['li',{},[
                             ['a',{href: art_href(m[1]), target: 'precipa'}, m[0]],' [',
                             ['a',{href:  art_href(m[1]), target: 'precipa'}, 'de '+m[1]],' ',
@@ -1215,7 +1215,7 @@ function viaj_submetoj() {
     if (redaktilo.get_preference("r:redaktanto")) {
         console.debug("+viaj submetoj");
         const nv = document.getElementById("navigado");
-        const ds = make_elements([
+        const ds = ht_elements([
             ["details",{id: "submetoj"},
                 [
                     ["summary",{},[
@@ -1261,7 +1261,7 @@ function montru_submeto_staton(sj) {
         }
         // enŝovu novan staton....
         for (s of sj) {
-            var info = make_elements([
+            var info = ht_elements([
                 ["details",{},[
                     ["summary",{},[
                         ["span",{class:'s_stato'},(stat[s.state]||'--')],

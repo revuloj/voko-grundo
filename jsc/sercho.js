@@ -147,8 +147,12 @@ Sercho.prototype.serchu_uwn = function(vorto,onSuccess,onStart,onStop) {
 
     HTTPRequest('POST', trad_uwn_url, {sercho: vorto}, 
         function(data) {
-            const json = JSON.parse(data);
-            onSuccess.call(self,json);
+            if (data) {
+                const json = JSON.parse(data);
+                onSuccess.call(self,json);    
+            } else {
+                onSuccess.call(self);    
+            }
         },
         start_wait,
         stop_wait

@@ -146,7 +146,7 @@ Xmlarea.prototype.structure = function(selected = undefined) {
 
     if (this.onaddsub) this.onaddsub(subt,this.strukturo.length,subt.id == selected);
     this.strukturo.push(subt);
-    //sel_stru.append(make_element('option',{value: strukturo.length-1},item));
+    //sel_stru.append(ht_element('option',{value: strukturo.length-1},item));
 
   }
 

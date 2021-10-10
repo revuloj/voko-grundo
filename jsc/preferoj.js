@@ -73,18 +73,7 @@ var preferoj = function() {
         }
     }
 
-    /*
-    function montru_opciojn() {    
-        var opt = make_options();
-        var art = document.getElementById(sec_art);
-        var h1 = art.getElementsByTagName("H1")[0];   
-        h1.appendChild(opt);
-    }
-    */
-
-
-
-    
+     
     function aldonuLingvon(event) {
         var el = event.target; 
 
@@ -128,10 +117,10 @@ var preferoj = function() {
             store();
         // se ankoraŭ ne ekzistas, faru la fenestrojn por preferoj (lingvoj)
         } else {
-            var dlg = make_element("DIV",{id: "pref_dlg", class: "overlay"});
-            var div = make_element("DIV",{id: "preferoj", class: "preferoj"});
-            //var tit = make_element("H2",{title: "tiun ĉi dialogon vi povas malfermi ĉiam el la piedlinio!"},"preferoj");
-            var close = make_button("preta",function() {
+            var dlg = ht_element("DIV",{id: "pref_dlg", class: "overlay"});
+            var div = ht_element("DIV",{id: "preferoj", class: "preferoj"});
+            //var tit = ht_element("H2",{title: "tiun ĉi dialogon vi povas malfermi ĉiam el la piedlinio!"},"preferoj");
+            var close = ht_button("preta",function() {
                 document.getElementById("pref_dlg").classList.add("kasxita");
                 store();
                 // adaptu la rigardon, t.e. trd-listojn
@@ -141,17 +130,17 @@ var preferoj = function() {
             close.setAttribute("id","pref_dlg_close");
 
             var xopt = inx.map(i => { return {id: i.join('_'), label: i.join('..')}; });
-            var xdiv = make_element("DIV",{id: "w:ix_literoj", class: "tabs"});
+            var xdiv = ht_element("DIV",{id: "w:ix_literoj", class: "tabs"});
             add_radios(xdiv,"pref_lingvoj",null,xopt,change_pref_lng);
             
             //div.appendChild(make_element("SPAN"));
             xdiv.appendChild(close);
             div.appendChild(xdiv);
 
-            div.appendChild(make_element("H3",{},"preferataj lingvoj"));
-            div.appendChild(make_element("H3",{},"aldoneblaj lingvoj"));
-            div.appendChild(make_element("UL",{id: "pref_lng"}));
-            div.appendChild(make_element("UL",{id: "alia_lng"}));
+            div.appendChild(ht_element("H3",{},"preferataj lingvoj"));
+            div.appendChild(ht_element("H3",{},"aldoneblaj lingvoj"));
+            div.appendChild(ht_element("UL",{id: "pref_lng"}));
+            div.appendChild(ht_element("UL",{id: "alia_lng"}));
 
             //dlg.appendChild(tit)
             dlg.appendChild(div);
@@ -177,10 +166,10 @@ var preferoj = function() {
         for (var r of radios) {
             var span = document.createElement("SPAN");
             var input = first?
-                make_element("INPUT",{name: name, type: "radio", id: r.id, checked: "checked", value: r.id}) :
-                make_element("INPUT",{name: name, type: "radio", id: r.id, value: r.id});
+                ht_element("INPUT",{name: name, type: "radio", id: r.id, checked: "checked", value: r.id}) :
+                ht_element("INPUT",{name: name, type: "radio", id: r.id, value: r.id});
             first = false;
-            var label = make_element("LABEL",{for: r.id}, r.label);
+            var label = ht_element("LABEL",{for: r.id}, r.label);
             span.appendChild(input);
             span.appendChild(label);
             parent.appendChild(span);
