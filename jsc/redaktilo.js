@@ -1040,42 +1040,67 @@ var redaktilo = function() {
       if (json) {
           for (let t in json) {
               const tv = json[t];
+              var nkasxitaj = 0;
+              // montru serĉ-rezultojn kiel html summary/details 
               const details = ht_details(
                 tv.trd.eo.map(s => s.replace(/\?;/,'?:\u00a0'))
                   .join(', ')||t, null,
-                function(d){
-                  if (tv.dif) { // esp-a difino
-                      const pe = ht_elements([
-                          ['p',{},[
-                              ['em',{},'eo: '],
-                              ...tv.dif || ['-/-']
-                          ]]
-                      ]);
-                      d.append(...pe);
-                  };
-                  if (tv.dsc) { // angla difino
-                      const pa = ht_elements([
-                          ['p',{},[
-                              ['em',{},'en: '],
-                              tv.dsc || '-/-'
-                          ]]
-                      ]);
-                      d.append(...pa);
-                  };
-                  d.append(ht_dl(tv.trd,
+                function(d) {
+                  // esp-a difino
+                  const eo = (tv.dif && tv.dif.length)? tv.dif : ['-/-'];
+                  const pe = ht_elements([
+                      ['p',{},[
+                          ['em',{},'eo: '],
+                          ...eo
+                      ]]
+                  ]);
+                  d.append(...pe);
+
+                  // angla difino
+                  const en = tv.dsc? tv.dsc : ['-/-'];
+                  const pa = ht_elements([
+                      ['p',{},[
+                        ['em',{},'en: '], 
+                        en ]]
+                  ]);
+                  d.append(...pa);
+
+                  // tradukoj kiel difinlisto (dl)
+                  const dl = ht_dl(tv.trd,
                     function(lng) {
                       const ln = revo_codes.lingvoj.codes[lng];
                       return ('['+lng+']' + (ln? ' '+ln+':' : ' :'));
                     },
                     function(trd) {
-                      return trd.map(s => s.replace(/\?;/,'?:\u00a0'))
-                        .join(', ')
+                      //const pref = preferoj.languages().indexOf(lng) < 0;
+                      //const attr = pref? '' : {class: 'kasxita'};
+                      return (trd.map(s => s.replace(/\?;/,'?:\u00a0'))
+                        .join(', '));
                     },
-                    true)
-                  );
-              });
+                    function(lng) {
+                      // ne montru e-ajn tradukojn en la listo (estas jam en summary)
+                      if (lng == 'eo') return {style: 'display: none'};
+                      // komence kaŝu ĉiujn krom la preferataj lingvoj
+                      const npref = preferoj.languages().indexOf(lng) < 0;
+                      if (npref) {
+                        nkasxitaj++;
+                        return {class: 'kasxita'}
+                      } else { return {} };
+                    },
+                    true); // true = sorted (keys=lng)
+                    
+                    // aldonu (+nn) - por videbligi la kasxitajn tradukojn
+                    if (nkasxitaj) {
+                      const pli = ht_pli(nkasxitaj);
+                      dl.append(...pli);  
+                    }
+
+                    d.append(dl);
+                }
+              );
               s_trd.append(details);
           };
+          
           //t_red.transiro("tradukante");
           show("r:tab_tradukoj",'collapsed');    
       } else {

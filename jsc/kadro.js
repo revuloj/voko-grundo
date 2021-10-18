@@ -911,6 +911,7 @@ function serchu_q(esprimo) {
             //         {"art":"cxeval","mrk1":"cxeval.0o","vrt1":"ĉevalo","mrk2":"lng_de","vrt2":"Gaul, Pferd, Ross, Springer"} 
             //     ]}
             // ]
+            /*
             function make_pli(n_kasxitaj) {
                 var pli = ht_elements([
                     ["dt",{},
@@ -930,6 +931,7 @@ function serchu_q(esprimo) {
                 });
                 return pli;
             }
+            */
 
             function findings(lng) {
                 var div = ht_elements([
@@ -948,7 +950,7 @@ function serchu_q(esprimo) {
                     if (n+1 > sercho_videblaj && trvj.length > sercho_videblaj+1) {
                         // enmetu +nn antaŭ la unua kaŝita elemento
                         if (n - sercho_videblaj == 1) {
-                            var pli = make_pli(trvj.length - sercho_videblaj);
+                            const pli = ht_pli(trvj.length - sercho_videblaj);
                             dl.append(...pli);
                         }                        
                         atr = {class: "kasxita"};

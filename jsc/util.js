@@ -292,13 +292,19 @@ function ht_list(list,listtype = 'ul',attrlist,listero_cb) {
   return container;
 }
 
-function ht_dl(obj,dt_callback,dd_callback,sorted) {
+function ht_dl(obj,dt_cb,dd_cb,atr_cb,sorted) {
   const dl = ht_element("dl");
   if (sorted) keys = Object.keys(obj).sort(); else keys = Object.keys(obj);
   for (const key of keys) {
     const value = obj[key];
-    const dt = ht_element('dt',{},dt_callback? dt_callback(key) : key);
-    const dd = ht_element('dd',{},dd_callback? dd_callback(value) : value);
+    // ricevu atributojn kaj enhavojn per revokfunkcioj, se estas
+    // aliokaze supozu {},key,value
+    const atr = atr_cb? atr_cb(key) : {};
+    const dt_ = dt_cb? dt_cb(key) : key;
+    const dd_ = dd_cb? dd_cb(value) : value;
+    // html elementoj dt/dd
+    const dt = ht_element('dt',atr,dt_);
+    const dd = ht_element('dd',atr,dd_);
     dl.append(dt,dd);
   }
   return dl;
@@ -315,6 +321,26 @@ function ht_details(sum,det,det_callback,sum_callback) {
   }
   det_callback? det_callback(details,det) : details.append(det);  
   return details;
+}
+
+function ht_pli(n_kasxitaj) {
+  var pli = ht_elements([
+      ["dt",{},
+          [["a",{href: "#"},"(+"+(n_kasxitaj)+")"]]
+      ],
+      ["dd"]
+  ]);
+  // funkcio por malkaŝi la reston...
+  pli[0].addEventListener("click",function(event) {
+      var dl = event.target.closest("dl");
+      for (var ch of dl.childNodes) {
+          ch.classList.remove("kasxita");
+      }
+      event.target.closest("dt").classList.add("kasxita");
+      var p = dl.parentElement.querySelector("p");
+      if (p) p.classList.remove("kasxita");
+  });
+  return pli;
 }
 
 function isLocalLink(url) {

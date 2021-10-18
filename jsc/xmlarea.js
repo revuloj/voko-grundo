@@ -108,7 +108,6 @@ Xmlarea.prototype.structure = function(selected = undefined) {
     }
   }
 
-
   function al(elm,de) {
     // trovu la finon de elemento 'elm'
     var fin = xmlteksto.indexOf('</'+elm, de);
@@ -121,6 +120,7 @@ Xmlarea.prototype.structure = function(selected = undefined) {
   }
 
   this.strukturo = [];
+
   while (m = re_stru._elm.exec(xmlteksto)) {
     var subt = {de: m.index};
     // kiom da linioj antaŭ tio?
@@ -131,6 +131,7 @@ Xmlarea.prototype.structure = function(selected = undefined) {
     subt.mrk = mrk(subt.el,subt.de,subt.al);
     subt.kap = kap(subt.el,subt.de,subt.al);
     subt.id = id(subt);
+    subt.no = this.strukturo.length;
 
     //const id = el_id(m[1], m.index+5, fino);
     const suff = subt.kap ? subt.kap : subt.mrk||'';
@@ -195,30 +196,40 @@ Xmlarea.prototype.sync = function(select = undefined) {
     this.synced = true;
   }
 }
+Xmlarea.prototype.getStructById = function(id) {
+  for (let s of this.strukturo) {
+    if (s.id == id) return s;
+  }
+}
 
-// redonu la markon de la aktuala subteksto, aŭ la markon de parenco, se ĝi ne havas mem
-Xmlarea.prototype.getCurrentMrk = function() {
+// ni trovos la parencon de la struktur-elemento donita per id
+Xmlarea.prototype.getParent = function(id) {
+  const s = this.getStructById(id);
+  // parenco venas antaŭ la nuna kaj enhavas ĝin (subteksto al..de)
+  const p = this.strukturo[s.no-1];
+  if (p.de < s.de && p.al > s.al ) return p;
+}
+
+Xmlarea.prototype.getClosestWithMrk = function() {
   if (this.xml_elekto.mrk) {
-    return this.xml_elekto.mrk;
+    return this.xml_elekto;
   } else {
-    // trovu la elektitan subtekston en la strukturlisto
-    const s = this.strukturo;
-    for (i in s) {
-      if (s[i].id == this.xml_elekto.id) {
-        // iru la liston supren kaj trovu plej proksiman derivaĵon 
-        // (kiu devige havas markon)
-        for (j=i-1; j>0; j--) {
-          if (s[j].el == 'drv') return s[j].mrk
-        }
-        // ni estas ĉe la 0-a elemento (art), sed ŝajne ne trovis derivaĵon, 
-        // tio povas okazi ekz-e ĉe subart
-        return ''; 
-      }
+    var p = this.getParent(this.xml_elekto.id);
+    while (p && p.no > 0) { // ni ne redonos art@mrk (0-a elemento)
+      if (p.mrk) return p;
+      p = this.getParent(p.id);
     }
   }
 }
 
-// redonu la aktualan kapvorton, se ene de drv t.e. ties kapvorto, alie la kapvorto de la unua drv
+// redonu la markon de la aktuala subteksto, aŭ la markon de parenco, se ĝi ne havas mem
+Xmlarea.prototype.getCurrentMrk = function() {
+  const c = this.getClosestWithMrk();
+  if (c) return c.mrk;
+  return '';
+}
+
+// redonu la aktualan kapvorton, se ene de drv t.e. ties kapvorton, alie la kapvorton de la unua drv
 Xmlarea.prototype.getCurrentKap = function() {
     function kap(e) {
       return e.kap.replace('~',rad);
@@ -226,14 +237,19 @@ Xmlarea.prototype.getCurrentKap = function() {
 
   const rad = this.radiko;
   const elekto = this.xml_elekto;
-  const mrk = (elekto.el != 'art' && elekto.id != "x.m.l")? this.getCurrentMrk() : '';
+  
+  if (elekto.el != 'art' && elekto.id != "x.m.l") {
 
-  if (mrk && this.xml_elekto.el != 'art') { // trovu la struktur-elementon kun tiu mrk
-    for (s of this.strukturo) {
-      if (s.mrk == mrk) {
-        return (kap(s))
+    if (elekto.kap) {
+      return kap(elekto);
+    } else {
+      var p = this.getParent(elekto.id);
+      while (p && p.no > 0) { // ni ne redonos art@mrk (0-a elemento)
+        if (p.kap) return kap(p);
+        p = this.getParent(p.id);
       }
     }
+
   } else { // prenu kapvorton de unua drv
     for (s of this.strukturo) {
       if (s.el == 'drv') {
