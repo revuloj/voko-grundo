@@ -52,7 +52,6 @@ Xmlarea.prototype.structure = function(selected = undefined) {
         : (mrk[1].slice(mrk[1].indexOf(':')+2,-20)) || '<nova>')
     }
   }
-
   function rad(de,ghis) {
     const art = xmlteksto.substring(de,ghis);
     const mr = art.match(re_stru._rad);
@@ -65,8 +64,6 @@ Xmlarea.prototype.structure = function(selected = undefined) {
       return rad;
     }
   }
-  
-
   function kap(elm,de,ghis) {
     if (elm == 'drv') {
       // find kap
@@ -88,7 +85,6 @@ Xmlarea.prototype.structure = function(selected = undefined) {
       }
     };
   }
-
   function id(subt) {
     const rx = /[^A-Za-z]/g;
     const key = [111,222,33,44]; // ne tro gravas...
@@ -100,14 +96,12 @@ Xmlarea.prototype.structure = function(selected = undefined) {
         }
         return c.join('.');
     }
-
     if (subt.mrk) {
       return xor_str(subt.mrk)
     } else {
       return xor_str(xmlteksto.substr(subt.de,120).replace(rx,''))
     }
   }
-
   function al(elm,de) {
     // trovu la finon de elemento 'elm'
     var fin = xmlteksto.indexOf('</'+elm, de);
@@ -196,6 +190,7 @@ Xmlarea.prototype.sync = function(select = undefined) {
     this.synced = true;
   }
 }
+
 Xmlarea.prototype.getStructById = function(id) {
   for (let s of this.strukturo) {
     if (s.id == id) return s;
@@ -256,6 +251,20 @@ Xmlarea.prototype.getCurrentKap = function() {
         return (kap(s))
       }
     }
+  }
+}
+
+// elprenu el la aktuale redaktata subteksto la
+// lastan tradukon de 'lng'
+Xmlarea.prototype.getCurrentLastTrd(lng) {
+  const xml = this.txtarea.value;
+  const pos = Math.max(
+    lastIndexOf('"'+lng+'"'),
+    lastIndexOf("'"+lng+"'"));
+  if (pos > -1) {
+    //const sub = xml.substr(pos-12);
+    //lookbehind ~: sub.find(/<trd(grp)?\s+lng\s*=\s*["']([a-z]{2,3})["']/)
+
   }
 }
 

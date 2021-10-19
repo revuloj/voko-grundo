@@ -222,12 +222,17 @@ function when_doc_ready(onready_fn) {
     }
 }
 
+
+function ht_attributes(el, attrs) {
+  for(var key in attrs) {
+    el.setAttribute(key, attrs[key]);
+  }
+}
+
 function ht_element(name,attributes,textcontent) {
     var element = document.createElement(name);
-    for (var a in attributes) {
-        element.setAttribute(a,attributes[a]);
-    }
-    if (textcontent) element.appendChild(document.createTextNode(textcontent));
+    ht_attributes(element,attributes);
+    if (textcontent) element.append(textcontent);
     return element;
 }
 
@@ -235,14 +240,14 @@ function ht_elements(jlist) {
     var dlist = [];
     for (var el of jlist) {
       var element;
-      if (typeof el == "string") {
+      if (typeof el == "string") { // teksta enhavo
         element = document.createTextNode(el);
-      } else {
+      } else { // elemento kun malsimpla enhavo: [nomo,attributoj,[...]]
         if (el[2] && el[2] instanceof Array) {
-            var content = ht_elements(el[2]);
+            var content = ht_elements(el[2]); // ni vokas nin mem por la enhavo-kreado
             element = ht_element(el[0],el[1]);
             element.append(...content);
-        } else {
+        } else { // elemento kun simpla tekstenhavo: [nomo,attributoj,enhavo]
             element=ht_element(el[0],el[1],el[2]);
         }
       } //else
@@ -250,19 +255,7 @@ function ht_elements(jlist) {
     } // for
     return dlist;
 }
-/*
-function createTElement(name,text) {
-  var el = document.createElement(name);
-  var tx= document.createTextNode(text);
-  el.appendChild(tx); return el;
-}
 
-function addAttribute(node,name,value) {
-  var att = document.createAttribute(name);
-  att.value = value;
-  node.setAttributeNode(att);    
-}
-*/
 
 function ht_button(label,handler,hint='') {
     var btn = document.createElement("BUTTON");
@@ -292,19 +285,21 @@ function ht_list(list,listtype = 'ul',attrlist,listero_cb) {
   return container;
 }
 
-function ht_dl(obj,dt_cb,dd_cb,atr_cb,sorted) {
+function ht_dl(obj,item_cb,sorted) {
   const dl = ht_element("dl");
   if (sorted) keys = Object.keys(obj).sort(); else keys = Object.keys(obj);
   for (const key of keys) {
     const value = obj[key];
-    // ricevu atributojn kaj enhavojn per revokfunkcioj, se estas
-    // aliokaze supozu {},key,value
-    const atr = atr_cb? atr_cb(key) : {};
-    const dt_ = dt_cb? dt_cb(key) : key;
-    const dd_ = dd_cb? dd_cb(value) : value;
-    // html elementoj dt/dd
-    const dt = ht_element('dt',atr,dt_);
-    const dd = ht_element('dd',atr,dd_);
+    var dt, dd;
+    if (! item_cb) {
+      dt = ht_element('dt',{},key);
+      dd = ht_element('dd',{},value);
+    } else {
+      dt = document.createElement('dt');
+      dd = document.createElement('dd');
+      // permesu modifadon...
+      item_cb(key,value,dt,dd);
+    }
     dl.append(dt,dd);
   }
   return dl;

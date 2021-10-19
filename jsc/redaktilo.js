@@ -1040,7 +1040,6 @@ var redaktilo = function() {
       if (json) {
           for (let t in json) {
               const tv = json[t];
-              var nkasxitaj = 0;
               // montru serĉ-rezultojn kiel html summary/details 
               const details = ht_details(
                 tv.trd.eo.map(s => s.replace(/\?;/,'?:\u00a0'))
@@ -1065,29 +1064,53 @@ var redaktilo = function() {
                   ]);
                   d.append(...pa);
 
-                  // tradukoj kiel difinlisto (dl)
-                  const dl = ht_dl(tv.trd,
-                    function(lng) {
+                  // tradukojn prezentu kiel difinlisto (dl)
+                  var nkasxitaj = 0;
+                  const dl = ht_dl(
+                    tv.trd,
+                    function(lng,trd,dt,dd) {
+                      // atributoj (class, style...)
+                      // ne montru e-ajn tradukojn en la listo (ili estas jam en summary)
+                      var atr = {};
+                      if (lng == 'eo') {
+                        atr = {style: 'display: none'};
+                      } else {
+                        // komence kaŝu ĉiujn krom la preferataj lingvoj
+                        const npref = preferoj.languages().indexOf(lng) < 0;
+                        if (npref) {
+                          nkasxitaj++;
+                          atr = {class: 'kasxita'};
+                        };
+                      }
+
+                      // dt enhavu la lingvon (kodo+nomo)
                       const ln = revo_codes.lingvoj.codes[lng];
-                      return ('['+lng+']' + (ln? ' '+ln+':' : ' :'));
-                    },
-                    function(trd) {
-                      //const pref = preferoj.languages().indexOf(lng) < 0;
-                      //const attr = pref? '' : {class: 'kasxita'};
-                      return (trd.map(s => s.replace(/\?;/,'?:\u00a0'))
-                        .join(', '));
-                    },
-                    function(lng) {
-                      // ne montru e-ajn tradukojn en la listo (estas jam en summary)
-                      if (lng == 'eo') return {style: 'display: none'};
-                      // komence kaŝu ĉiujn krom la preferataj lingvoj
-                      const npref = preferoj.languages().indexOf(lng) < 0;
-                      if (npref) {
-                        nkasxitaj++;
-                        return {class: 'kasxita'}
-                      } else { return {} };
+                      const dt_ = ('['+lng+']' + (ln? ' '+ln+':' : ' :'));
+                      ht_attributes(dt,atr);
+                      dt.append(dt_);
+                      
+                      // tradukoj estas listo, kiun ni aldonas kiel span-elementoj en dd
+                      const dd_ = trd.reduce((d,s) => {
+                        const t = s.replace(/\?;/,'?:\u00a0');
+                        d.push(ht_element('span',{},t));
+                        d.push(ht_element('button',{value: 'plus'},'+'));
+                        d.push(' ');
+                        return d;
+                      },[]);
+                      atr.lang = lng; 
+                      ht_attributes(dd,atr);
+                      dd.append(...dd_);
                     },
                     true); // true = sorted (keys=lng)
+
+                    // aldonu eventon por reagi al +-butonoj
+                    dl.addEventListener('click', function(event) {
+                      if (event.target.value == 'plus') {
+                        const dd = event.target.closest('dd');
+                        const sp = event.target.previousSibling;
+                        console.log('aldonu ['+dd.getAttribute('lang')+'] '+sp.textContent);
+                      }
+                    })
                     
                     // aldonu (+nn) - por videbligi la kasxitajn tradukojn
                     if (nkasxitaj) {
