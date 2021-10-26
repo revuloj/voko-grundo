@@ -18,7 +18,9 @@ function Xmlarea(ta_id, onAddSub) {
       _ofc: /<ofc>[^]*<\/ofc>/g,
       _fnt: /<fnt>[^]*<\/fnt>/g,
       _tl1: /<tld\s+lit="(.)"[^>]*>/g,
-      _tl2: /<tld[^>]*>/g
+      _tl2: /<tld[^>]*>/g,
+      _trd: /^<trd(grp)?\s+lng\s*=\s*["']([a-z]{2,3})['"]\s*>([^]*?)<\/trd\1\s*>$/,
+      _tagend: /[>\s]/
     }
 
     this.indents = {
@@ -27,6 +29,8 @@ function Xmlarea(ta_id, onAddSub) {
     }
 };
 
+// metas la kompletan XML-tekston laŭ la argumento xml
+// kaj aktualigas la strukturon el ĝi
 Xmlarea.prototype.setText = function(xml) {
   this.xmlteksto = xml;  
   //this.txtarea.value = xml;
@@ -217,14 +221,16 @@ Xmlarea.prototype.getClosestWithMrk = function() {
   }
 }
 
-// redonu la markon de la aktuala subteksto, aŭ la markon de parenco, se ĝi ne havas mem
+// redonu la XML-markon (atributo @mrk) de la aktuala subteksto, 
+// aŭ la markon de parenco, se ĝi ne havas mem
 Xmlarea.prototype.getCurrentMrk = function() {
   const c = this.getClosestWithMrk();
   if (c) return c.mrk;
   return '';
 }
 
-// redonu la aktualan kapvorton, se ene de drv t.e. ties kapvorton, alie la kapvorton de la unua drv
+// redonu la aktualan kapvorton, se ene de drv t.e. ties kapvorton, 
+// alie la kapvorton de la unua drv
 Xmlarea.prototype.getCurrentKap = function() {
     function kap(e) {
       return e.kap.replace('~',rad);
@@ -254,28 +260,182 @@ Xmlarea.prototype.getCurrentKap = function() {
   }
 }
 
+// trovas la elementokomencon aŭ finon (end=true) en this.xmlarea
+// la unua argumento estas listo de interesantaj elementoj
+// la serĉo okazas de la fino!
+Xmlarea.prototype.find_tag_bw = function(elements,end=false,xml,from) {    
+  const re_te = this.re_stru._tagend;
+  const mark = end? '</' : '<';
+  if (!xml) {
+    xml = this.txtarea.value;
+  }
+  if (from == undefined) {
+    from = xml.length;
+  }
+
+  var pos = xml.lastIndexOf(mark,from);
+
+    function match(p) {
+      for (e of elements) {
+        if ( xml.substr(p,e.length) == e 
+          && xml.substr(p+e.length,1).match(re_te) ) return e;
+      }
+    }
+
+  while (pos > -1 ) {
+    const element = match(pos+mark.length);
+    if (element) {
+      const end = xml.indexOf('>',pos)
+      return {pos: pos, end: end, elm: element};
+    }
+    pos = xml.lastIndexOf(mark,pos-1);
+  }
+}
+
+/*
 // elprenu el la aktuale redaktata subteksto la
 // lastan tradukon de 'lng'
-Xmlarea.prototype.getCurrentLastTrd(lng) {
+Xmlarea.prototype.getCurrentLastTrd = function(lng) {
   const xml = this.txtarea.value;
-  const pos = Math.max(
-    lastIndexOf('"'+lng+'"'),
-    lastIndexOf("'"+lng+"'"));
-  if (pos > -1) {
-    //const sub = xml.substr(pos-12);
-    //lookbehind ~: sub.find(/<trd(grp)?\s+lng\s*=\s*["']([a-z]{2,3})["']/)
+  const re_trd = this.re_stru._trd;
 
+  var m = re_trd.exec(xml);
+  var lastpos = -1; 
+  var trd_str = '';
+  var trd_grp = false;
+
+  while (m) {
+    if (m[2] == lng) {
+      lastpos = m.index;
+      trd_str = m[0];
+      trd_grp = (m[1] == 'grp');  
+      
+      console.debug(lastpos + ": " + m.join(', '));
+    } else if (m[2] < lng) {
+      lastpos = m.index + m[0].length
+    }
+    // serĉu plu
+    m = re_trd.exec(xml);
+  }
+
+  if (lastpos > -1) return {pos: lastpos, grp: trd_grp, trd: trd_str};
+
+  /// PLIBONIGU:
+    oni per regulesprimo povas serĉi nur antaŭen. Eblecoj por plirapidigi la kazon, ke
+    la koncerna lingvo jam havas tradukon:
+    -> aldonu la lingvon en la regulesprimon por trovi nur tiujn de la koncerna lingvo
+    -> serĉu unue nur "<lng>" de malantaŭe en la teksto kaj poste kontrolu, ĉu estas traduko de tiu lingvo (iom malfacile programebla, sed supozeble la plej rapida):
+    const pos = Math.max(
+      lastIndexOf('"'+lng+'"'),
+      lastIndexOf("'"+lng+"'"));
+    if (pos > -1) {
+      //const sub = xml.substr(pos-12);
+      //lookbehind ~: sub.find(/<trd(grp)?\s+lng\s*=\s*["']([a-z]{2,3})["']/)
+    }
+  ///
+}
+*/
+
+
+// trovas la lokon kie enmeti tradukon
+Xmlarea.prototype.findTrdPlace = function(lng) {
+  const xml = this.txtarea.value;
+
+  // trovu unue la pozicion de la fina elemento de la nuna strukturo
+  var p = this.find_tag_bw(['snc','subsnc','drv','subdrv','art','subart'],true,xml);
+  var q,t,lpos;
+
+  if (p) {
+    lpos = p.pos; // -1?
+    t = {pos: p.pos};
+
+    do {
+      q = this.find_tag_bw(['trd','trdgrp','dif','ekz','bld'],true,xml,t.pos);
+
+      if (q.elm == 'trd' || q.elm == 'trdgrp') {
+        // se ni trovis finon de trd/trdgrp ni serĉu ĝian komencon
+        t = this.find_tag_bw([q.elm],false,xml,q.pos);
+        if (t) {
+          // ni rigardu pri kiu lingvo temas...
+          const m = this.re_stru._trd.exec(xml.substring(t.pos,q.end+1));
+          if (m) {
+            const l = m[2];
+            if (l == lng) {
+              // ni trovis jaman tradukon en la koncerna lingvo, redonu la lokon!
+              return {pos: t.pos, grp: m[1], trd: m[0], itr: m[3]}
+            } else if (l > lng) {
+              // ni supozas ke la lingvoj estas ordigitaj, kaj se
+              // ni ne trovos la koncernan lingvon jam inter la tradukoj ni enŝovos
+              // ĝin laŭ alfabeto
+              lpos = t.pos
+            } else {
+              // ni trovis la alfabetan lokon po enŝovi 
+              // (traduko kun lingvo antaŭ la koncerna):
+              return {pos: lpos}
+            }
+          }
+        }
+      } else {
+        // ni alvenis supre ĉe dif/ekz/bld sen trovi laŭalfabetan ensovejon,
+        // ni redonos la lastan kovnenan lokon (supran trd-on)
+        return {pos: lpos}
+      }
+
+      // se trd(grp) ne estas valida aŭ se temas 
+      // pri ekz/dif/bld ni finu la serĉadon
+      // - ni interesiĝas nur pri tradukoj ekster ekz/dif/bld!
+    } while (q && t.elm);
+
+    // ni ĝis nun ne trovis tradukojn, ĉe aŭ post kiu enmeti, do enmetu ĉe la lasta trovita pozico
+    return {pos: (t.pos>-1? t.pos : p.pos)}
   }
 }
 
 
+Xmlarea.prototype.addTrd = function(lng,trd) {
+  const place = this.findTrdPlace(lng); // this.getCurrentLastTrd(lng);
+  if (place) {
+    const len = place.trd? place.trd.length : 0;
+    this.select(place.pos, len);
+    const ind = this.indent();
+
+    // jam estas trdgrp?
+    if (place.grp) {
+      // aldonu novan tradukon antaŭ '</trdgrp'
+      const pos = place.trd.indexOf('</trdgrp');
+      const nov = place.trd.substring(0,pos) + ',\n'
+        + ind + '  <trd>' + trd +'</trd>'
+        + place.trd.substring(pos+1);
+      console.debug(' --> '+nov);
+      this.selection(nov);
+    } else if (place.trd) {
+      // ni havas ĝis nun nur unu trd, kaj devas krei trdgrp nun
+      const nov = 
+        '<trdgrp lng="'+lng+'">\n'
+        + ind + '  <trd>' + place.itr + '</trd>,\n'
+        + ind + '  <trd>' + trd + '</trd>\n'
+        + ind + '</trdgrp>';
+      console.debug(' --> '+nov);
+      this.selection(nov);
+    } else {
+      // ankoraŭ neniu traduko, aldonu la unuan nun
+      const nov = '<trd lng="' + lng +'">' + trd + '</trd>\n'
+      console.debug(' --> '+nov);
+      this.selection(nov);
+    }
+  }
+}
+
+
+// eventuale aktualigas la XML-tekston kun la parto el this.xmlarea
+// kaj redonas la kompletan tekston
 Xmlarea.prototype.syncedXml = function() {
   if (! this.synced) this.sync(this.xml_elekto.id); 
   return this.xmlteksto;
 }
 
 // elektas parton de la XML-teksto por redakti nur tiun
-//  laŭbezone sekurigas la nune redaktatan parton...
+// laŭbezone sekurigas la nune redaktatan parton...
 Xmlarea.prototype.changeSubtext = function(id) {
   if (id) {
     // ni unue sekurigu la aktuale redaktatan parton...
@@ -305,6 +465,7 @@ Xmlarea.prototype.changeSubtext = function(id) {
   }
 }
 
+// redonas la aktualan y-koordinaton de la videbla parto de this.xmlarea
 Xmlarea.prototype.scrollPos =  function(pos) {
   var txtarea = this.txtarea;
   if (typeof pos == "number") {
@@ -326,22 +487,23 @@ Xmlarea.prototype.scrollPos =  function(pos) {
   }
 },
 
+// redonas la aktualan pozicion de la kursoro kiel linio + loko ene de la linio
 Xmlarea.prototype.position = function() {
   const loff = this.xml_elekto? this.xml_elekto.ln : 0;
 
-  // kalkulu el la signoindekso la linion kaj la pozicion ene de la linio
-  function get_line_pos(inx,text) {
-    var lines = 0;
-    var last_pos = 0;
-    for (i=0; i<inx; i++) { 
-        if (text[i] == '\n') {
-            lines++;
-            last_pos = i;
-        }
+    // kalkulu el la signoindekso la linion kaj la pozicion ene de la linio
+    function get_line_pos(inx,text) {
+      var lines = 0;
+      var last_pos = 0;
+      for (i=0; i<inx; i++) { 
+          if (text[i] == '\n') {
+              lines++;
+              last_pos = i;
+          }
+      }
+      pos = (lines == 0)? inx : (inx-last_pos-1);
+      return({line: loff+lines, pos: pos});
     }
-    pos = (lines == 0)? inx : (inx-last_pos-1);
-    return({line: loff+lines, pos: pos});
-  }
 
   //...
   var pos;
@@ -358,10 +520,25 @@ Xmlarea.prototype.position = function() {
   return get_line_pos(pos,txtarea.value);
 };
 
+Xmlarea.prototype.select = function(pos,len) {
+  const txtarea = this.txtarea;
 
+  // ne plu bezonata por aktualaj retumiloj
+  // if (document.selection && document.selection.createRange) { // IE/Opera
+  //  range = document.selection.createRange();
+  //  range.setStart(...);
+  //  range.setEnd(...);
+  //  range.select();   
+  //} else {
+    txtarea.selectionStart = pos;
+    txtarea.selectionEnd = pos + len;
+  //}
+}
+
+// legas aŭ anstataŭigas la momente elektitan tekston de this.txtarea
 Xmlarea.prototype.selection = function(insertion,p_kursoro=0) {
   //var txtarea = document.getElementById('r:xmltxt');
-  var txtarea = this.txtarea;
+  const txtarea = this.txtarea;
   var range;
   var startPos;
   txtarea.focus();
@@ -403,6 +580,8 @@ Xmlarea.prototype.selection = function(insertion,p_kursoro=0) {
   }
 },
 
+// ŝovas la markitan tekston *indent* signojn destren aŭ maldekstren
+// sen argumento *indent* gi eltrovas la enŝovon en la aktuala linio
 Xmlarea.prototype.indent = function(indent) {
   //var txtarea = document.getElementById('r:xmltxt');
   var txtarea = this.txtarea;
@@ -472,6 +651,7 @@ Xmlarea.prototype.indent = function(indent) {
   }
 },
 
+// redonas la signon antaŭ la kursoro
 Xmlarea.prototype.charBefore = function() {
   //var txtarea = document.getElementById('r:xmltxt');
   var txtarea = this.txtarea;

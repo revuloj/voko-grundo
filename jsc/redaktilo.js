@@ -1108,7 +1108,9 @@ var redaktilo = function() {
                       if (event.target.value == 'plus') {
                         const dd = event.target.closest('dd');
                         const sp = event.target.previousSibling;
-                        console.log('aldonu ['+dd.getAttribute('lang')+'] '+sp.textContent);
+                        const lng = dd.getAttribute('lang')
+                        console.log('aldonu ['+lng+'] '+sp.textContent);
+                        xmlarea.addTrd(lng,sp.textContent);
                       }
                     })
                     
