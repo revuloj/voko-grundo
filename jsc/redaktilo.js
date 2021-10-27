@@ -984,6 +984,9 @@ var redaktilo = function() {
 
   function trad_uwn(event) {
     event.preventDefault();
+    const s_trd = document.getElementById('r:trd_elekto');
+    s_trd.textContent = '';
+
     sercho = xmlarea.getCurrentKap(); //'hundo';
 /*
     HTTPRequest('POST', tez_prefix+artikolo+'.json', {x: 1}, 
@@ -1036,8 +1039,21 @@ var redaktilo = function() {
 
     const srch = new Sercho();
     srch.serchu_uwn(sercho, function(json) {
-      const s_trd = document.getElementById('r:trd_elekto');
       if (json) {
+          const drv_snc = ('drv|snc'.indexOf(xmlarea.xml_elekto.el) > -1);
+
+          if (drv_snc) {
+            // eltrovu kiujn tradukojn ni havas en la aktuala teksto
+            // PLIBONIGU: tio povus okazi paralele kaj krome ni devos
+            // refari tion, se la uzanto elektas alian subtekston!
+            xmlarea.collectTrd();
+          } else {
+            // artikolo/subartikolo estas elektita en la redaktilo...
+            s_trd.append(ht_element('p',{},'Elektu (sub)derivaĵon aŭ (sub)sencon en '
+              + 'en la redaktilo, poste vi povas aldoni tie novajn tradukojn el la '
+              + 'malsupraj faldlistoj per la +-butonoj.'));
+          }
+
           for (let t in json) {
               const tv = json[t];
               // montru serĉ-rezultojn kiel html summary/details 
@@ -1093,7 +1109,17 @@ var redaktilo = function() {
                       const dd_ = trd.reduce((d,s) => {
                         const t = s.replace(/\?;/,'?:\u00a0');
                         d.push(ht_element('span',{},t));
-                        d.push(ht_element('button',{value: 'plus'},'+'));
+
+                        // se drv/snc estas elektita kaj la traduko ankoraŭ 
+                        // ne troviĝas tie, ni permesu aldoni ĝin
+                        if (drv_snc && 
+                            (  ! xmlarea.tradukoj[lng] 
+                            || ! xmlarea.tradukoj[lng].find(e => e == t))) {
+                          // d.push('\u00a0'); // nbsp
+                          d.push(ht_element('button',{value: 'plus'},'+'));  
+                        } else {
+                          d.push('\u2713');
+                        }
                         d.push(' ');
                         return d;
                       },[]);

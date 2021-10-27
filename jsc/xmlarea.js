@@ -4,6 +4,7 @@ function Xmlarea(ta_id, onAddSub) {
     this.xmlteksto = ''; // la tuta teksto
     this.xml_elekto = undefined; // aktuale redaktata subteksto
     this.strukturo = []; // la listo de subtekstoj [komenco,fino,nomo]
+    this.tradukoj = {}; // tradukoj trovitaj en la aktuala redaktata subteksto
     this.radiko = '';
     this.onaddsub = onAddSub;
     this.synced = true;
@@ -16,10 +17,13 @@ function Xmlarea(ta_id, onAddSub) {
       _rad: /<rad>([^<]+)<\/rad>/,
       _var: /<var>[^]*<\/var>/g,
       _ofc: /<ofc>[^]*<\/ofc>/g,
+      _klr: /<klr>[^]*<\/klr>/g,
+      _ind: /<ind>([^]*)<\/ind>/g,
       _fnt: /<fnt>[^]*<\/fnt>/g,
       _tl1: /<tld\s+lit="(.)"[^>]*>/g,
       _tl2: /<tld[^>]*>/g,
       _trd: /^<trd(grp)?\s+lng\s*=\s*["']([a-z]{2,3})['"]\s*>([^]*?)<\/trd\1\s*>$/,
+      _tr1: /<trd\s*>([^]*?)<\/trd\s*>/g,
       _tagend: /[>\s]/
     }
 
@@ -336,6 +340,48 @@ Xmlarea.prototype.getCurrentLastTrd = function(lng) {
 }
 */
 
+Xmlarea.prototype.collectTrd = function(lng) {
+  const xml = this.txtarea.value;
+  const re = this.re_stru;
+  this.tradukoj = [];
+  var ta, te = this.find_tag_bw(['trd','trdgrp'],true,xml,xml.length);
+
+    // nudigas la tradukon je ofc, klr ktp.
+    function trd_norm(t) {
+      return (t.replace(re.ofc,'')
+       .replace(re.klr,'')
+       .replace(re.ind,'\1')
+       .replace(/\s+/,' ')
+       .trim());
+    }
+
+  while (te) {
+    // trovu la komencon ta de la traduko finiĝanta je te
+    ta = this.find_tag_bw([te.elm],false,xml,te.pos);
+
+    // ni ekstraktu lingvon kaj enhavon...
+    const m = re._trd.exec(xml.substring(ta.pos,te.end+1));
+    if (m && m[2]) {
+      const lng = m[2]; if (!this.tradukoj[lng]) this.tradukoj[lng] = [];
+      const grp = m[1];
+      const trd = m[3];
+      if (!grp) {
+        // unuopa traduko
+        this.tradukoj[lng].push(trd_norm(trd));
+      } else {
+        // grupigitaj tradukoj
+        var t = re._tr1.exec(trd);
+        while (t) {
+          this.tradukoj[lng].push(trd_norm(t[1]));
+          t = re._tr1.exec(trd);
+        }
+      }
+    }
+
+    te = this.find_tag_bw(['trd','trdgrp'],true,xml,ta.pos);
+  };
+}
+
 
 // trovas la lokon kie enmeti tradukon
 Xmlarea.prototype.findTrdPlace = function(lng) {
@@ -419,7 +465,7 @@ Xmlarea.prototype.addTrd = function(lng,trd) {
       this.selection(nov);
     } else {
       // ankoraŭ neniu traduko, aldonu la unuan nun
-      const nov = '<trd lng="' + lng +'">' + trd + '</trd>\n'
+      const nov = '<trd lng="' + lng +'">' + trd + '</trd>\n' + ind;
       console.debug(' --> '+nov);
       this.selection(nov);
     }
