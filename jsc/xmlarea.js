@@ -350,7 +350,7 @@ Xmlarea.prototype.collectTrd = function(lng) {
     function trd_norm(t) {
       return (t.replace(re.ofc,'')
        .replace(re.klr,'')
-       .replace(re.ind,'\1')
+       .replace(re.ind,'$1')
        .replace(/\s+/,' ')
        .trim());
     }
