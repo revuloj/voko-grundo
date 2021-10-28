@@ -11,7 +11,6 @@ var redaktilo = function() {
   const cgi_vokohtmlx = '/cgi-bin/vokohtmlx.pl';
   const cgi_vokosubm_json = '/cgi-bin/vokosubm-json.pl';
 
-
   const re_lng = /<(?:trd|trdgrp)\s+lng\s*=\s*"([^]*?)"\s*>/mg; 
   const re_fak = /<uzo\s+tip\s*=\s*"fak"\s*>([^]*?)</mg; 
   const re_stl = /<uzo\s+tip\s*=\s*"stl"\s*>([^]*?)</mg; 
@@ -1037,6 +1036,43 @@ var redaktilo = function() {
     );
  */
 
+    // prezento de traduklisto kiel HTML-dd-elemento
+    function dl_dd(lng,trd,show_plus) {
+      const dd_ = trd.reduce((d,s) => {
+        var t = s;
+        if (t.substr(0,2) == '?;') {
+          d.push(ht_element('span',{class: 'dubinda'},'?'));
+          t = t.substr(2);
+        };
+        d.push(ht_element('span',{},t));
+  
+        // se drv/snc estas elektita kaj la traduko ankoraŭ 
+        // ne troviĝas tie, ni permesu aldoni ĝin
+        if (show_plus) {
+          if ( ! xmlarea.tradukoj[lng] 
+            || ! xmlarea.tradukoj[lng].find(e => compareXMLStr(e,t) )
+            ) {
+            // d.push('\u00a0'); // nbsp
+            d.push(ht_element('button',{
+              value: 'plus', 
+              class: 'icon_btn',
+              title: 'aldonu al XML-(sub)drv/snc'},
+              '+'));  
+          } else {
+            // montru per hoketo, ke ni jam havas la tradukon en XML
+            d.push(ht_element('span',{class: 'ekzistas'},'\u2713'));
+          }
+        } 
+        d.push(ht_element('br'));
+        return d;
+      },[]);
+      return dd_;
+    } 
+
+    function has_trd(lng) {
+      return xmlarea.tradukoj[lng];
+    }
+
     const srch = new Sercho();
     srch.serchu_uwn(sercho, function(json) {
       if (json) {
@@ -1085,48 +1121,40 @@ var redaktilo = function() {
                   const dl = ht_dl(
                     tv.trd,
                     function(lng,trd,dt,dd) {
-                      // atributoj (class, style...)
-                      // ne montru e-ajn tradukojn en la listo (ili estas jam en summary)
-                      var atr = {};
-                      if (lng == 'eo') {
-                        atr = {style: 'display: none'};
-                      } else {
-                        // komence kaŝu ĉiujn krom la preferataj lingvoj
-                        const npref = preferoj.languages().indexOf(lng) < 0;
-                        if (npref) {
-                          nkasxitaj++;
-                          atr = {class: 'kasxita'};
-                        };
-                      }
-
-                      // dt enhavu la lingvon (kodo+nomo)
+                      // lingvonomo
                       const ln = revo_codes.lingvoj.codes[lng];
-                      const dt_ = ('['+lng+']' + (ln? ' '+ln+':' : ' :'));
-                      ht_attributes(dt,atr);
-                      dt.append(dt_);
-                      
-                      // tradukoj estas listo, kiun ni aldonas kiel span-elementoj en dd
-                      const dd_ = trd.reduce((d,s) => {
-                        const t = s.replace(/\?;/,'?:\u00a0');
-                        d.push(ht_element('span',{},t));
 
-                        // se drv/snc estas elektita kaj la traduko ankoraŭ 
-                        // ne troviĝas tie, ni permesu aldoni ĝin
-                        if (drv_snc && 
-                            (  ! xmlarea.tradukoj[lng] 
-                            || ! xmlarea.tradukoj[lng].find(e => e == t))) {
-                          // d.push('\u00a0'); // nbsp
-                          d.push(ht_element('button',{value: 'plus'},'+'));  
-                        } else {
-                          d.push('\u2713');
-                        }
-                        d.push(' ');
-                        return d;
-                      },[]);
-                      atr.lang = lng; 
-                      ht_attributes(dd,atr);
-                      dd.append(...dd_);
-                    },
+                      // ni ne montras nekonatajn lingvojn, ĉar enmeto
+                      // en la artikolon ne havas sencon aktuale...
+                      if (ln && lng != 'eo') {
+                        // atributoj (class, style...)
+                        // ne montru e-ajn tradukojn en la listo (ili estas jam en summary)
+                        // komence kaŝu ĉiujn krom la preferataj lingvoj
+                        var cls = [];
+                        if (preferoj.languages().indexOf(lng) < 0) {
+                          cls.push('kasxita');
+                          nkasxitaj++;
+                        };
+
+                        // se jam ekzistas tradukoj por tiu lingvo montru tion
+                        // per CSS
+                        if (has_trd(lng)) cls.push('tradukita');
+
+                        var atr = {};
+                        if (cls.length) atr = {class: cls.join(' ')};
+
+                        // DT
+                        ht_attributes(dt,atr);
+                        dt.append('['+lng+'] ' +ln);
+
+                        // DD: tradukoj estas listo, kiun ni aldonas en dd
+                        atr.lang = lng; 
+                        ht_attributes(dd,atr);
+
+                        const dd_ = dl_dd(lng,trd,drv_snc);
+                        dd.append(...dd_);
+                      } // ...if ln                      
+                    }, // ht_dl callback
                     true); // true = sorted (keys=lng)
 
                     // aldonu eventon por reagi al +-butonoj

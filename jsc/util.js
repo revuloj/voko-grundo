@@ -450,6 +450,23 @@ function cxigi(b, key) {
   }[b] || '';
 }
 
+function parseHtmlEntities(str) {
+  return str
+  .replace(/&#([0-9]{1,5});/gi, function(match, numStr) {
+      var num = parseInt(numStr, 10); // read num as normal number
+      return String.fromCharCode(num);
+  })
+  .replace(/&#x([0-9a-fA-F]{1,4});/gi, function(match, numStr) {
+    var num = parseInt(numStr, 16); // read num as normal number
+    return String.fromCharCode(num);
+  });
+}
+
+function compareXMLStr(a,b) {
+  return (parseHtmlEntities(a).toLowerCase()
+    === parseHtmlEntities(b).toLowerCase());
+}
+
 /*
 function dom_console() {
   if (navigator.userAgent.indexOf("AppleWebKit") > -1) {

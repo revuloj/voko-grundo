@@ -17,7 +17,7 @@ function Xmlarea(ta_id, onAddSub) {
       _rad: /<rad>([^<]+)<\/rad>/,
       _var: /<var>[^]*<\/var>/g,
       _ofc: /<ofc>[^]*<\/ofc>/g,
-      _klr: /<klr>[^]*<\/klr>/g,
+      _klr: /<klr[^>]*>[^]*<\/klr>/g,
       _ind: /<ind>([^]*)<\/ind>/g,
       _fnt: /<fnt>[^]*<\/fnt>/g,
       _tl1: /<tld\s+lit="(.)"[^>]*>/g,
