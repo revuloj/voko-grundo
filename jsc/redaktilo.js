@@ -1055,7 +1055,6 @@ var redaktilo = function() {
             // d.push('\u00a0'); // nbsp
             d.push(ht_element('button',{
               value: 'plus', 
-              class: 'icon_btn',
               title: 'aldonu al XML-(sub)drv/snc'},
               '+'));  
           } else {
@@ -1076,6 +1075,8 @@ var redaktilo = function() {
     const srch = new Sercho();
     srch.serchu_uwn(sercho, function(json) {
       if (json) {
+          // butonojn por aldoni ni montras nur, se (sub)drv|(sub)snc estas
+          // elektita en la redaktilo...
           const drv_snc = ('drv|snc'.indexOf(xmlarea.xml_elekto.el) > -1);
 
           if (drv_snc) {
@@ -1084,7 +1085,7 @@ var redaktilo = function() {
             // refari tion, se la uzanto elektas alian subtekston!
             xmlarea.collectTrd();
           } else {
-            // artikolo/subartikolo estas elektita en la redaktilo...
+            // (sub)art|xml estas elektita en la redaktilo...
             s_trd.append(ht_element('p',{},'Elektu (sub)derivaĵon aŭ (sub)sencon en '
               + 'en la redaktilo, poste vi povas aldoni tie novajn tradukojn el la '
               + 'malsupraj faldlistoj per la +-butonoj.'));

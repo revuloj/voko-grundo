@@ -300,7 +300,8 @@ function ht_dl(obj,item_cb,sorted) {
       // permesu modifadon...
       item_cb(key,value,dt,dd);
     }
-    dl.append(dt,dd);
+    if (dt.textContent || dd.textContent)
+      dl.append(dt,dd);
   }
   return dl;
 }

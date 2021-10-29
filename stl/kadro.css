@@ -152,6 +152,17 @@ nav {
     background-position-y: -.15em;
 }
 
+#r\:trd_elekto button {
+    float: right;
+    height: 1.3em;
+    width: 1.6em;
+    padding-top: 0;
+}
+
+#r\:trd_elekto dd {
+    border-bottom: 1px solid var(--nav-brd-clr);
+}
+
 #x\:statistiko meter {
     margin-left: .3em;
     /* interpreto de alteco tro varias inter Chrome kaj FF

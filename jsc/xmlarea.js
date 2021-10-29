@@ -264,12 +264,17 @@ Xmlarea.prototype.getCurrentKap = function() {
   }
 }
 
-// trovas la elementokomencon aŭ finon (end=true) en this.xmlarea
+// trovas la elemento-komencon (end=false) aŭ finon (end=true) en this.xmlarea
 // la unua argumento estas listo de interesantaj elementoj
-// la serĉo okazas de la fino!
-Xmlarea.prototype.find_tag_bw = function(elements,end=false,xml,from) {    
+// se stop_no_match = true, ni haltas ĉe la unua elemento, 
+// kiu ne estas en la listo
+// La serĉo okazas de la fino!
+
+Xmlarea.prototype.travel_tag_bw = function(elements,end=false,stop_no_match=false,xml,from) {    
   const re_te = this.re_stru._tagend;
   const mark = end? '</' : '<';
+
+  // se mankas unu el la du lastaj argumentoj, uzu apriorajn...
   if (!xml) {
     xml = this.txtarea.value;
   }
@@ -277,8 +282,8 @@ Xmlarea.prototype.find_tag_bw = function(elements,end=false,xml,from) {
     from = xml.length;
   }
 
-  var pos = xml.lastIndexOf(mark,from);
-
+    // kontrolu ĉu la trovita elemento estas en la listo
+    // de interesantaj elementoj
     function match(p) {
       for (e of elements) {
         if ( xml.substr(p,e.length) == e 
@@ -286,15 +291,23 @@ Xmlarea.prototype.find_tag_bw = function(elements,end=false,xml,from) {
       }
     }
 
+  // trovu krampon < aŭ </
+  var pos = xml.lastIndexOf(mark,from-mark.length);
+
   while (pos > -1 ) {
     const element = match(pos+mark.length);
     if (element) {
-      const end = xml.indexOf('>',pos)
+      const end = xml.indexOf('>',pos);
+      // redonu la trovitan elementon
       return {pos: pos, end: end, elm: element};
+    } else {
+      if (stop_no_match) return;
     }
+    // trovu sekvan krampon < aŭ </
     pos = xml.lastIndexOf(mark,pos-1);
   }
 }
+
 
 /*
 // elprenu el la aktuale redaktata subteksto la
@@ -344,7 +357,11 @@ Xmlarea.prototype.collectTrd = function(lng) {
   const xml = this.txtarea.value;
   const re = this.re_stru;
   this.tradukoj = [];
-  var ta, te = this.find_tag_bw(['trd','trdgrp'],true,xml,xml.length);
+  
+  const find_etag = (elist,xml,from) => this.travel_tag_bw (elist,true,false,xml,from);
+  const find_stag = (elist,xml,from) => this.travel_tag_bw (elist,false,false,xml,from);
+
+  var ta, te = find_etag(['trd','trdgrp'],xml,xml.length);
 
     // nudigas la tradukon je ofc, klr ktp.
     function trd_norm(t) {
@@ -357,7 +374,7 @@ Xmlarea.prototype.collectTrd = function(lng) {
 
   while (te) {
     // trovu la komencon ta de la traduko finiĝanta je te
-    ta = this.find_tag_bw([te.elm],false,xml,te.pos);
+    ta = find_stag([te.elm],xml,te.pos);
 
     // ni ekstraktu lingvon kaj enhavon...
     const m = re._trd.exec(xml.substring(ta.pos,te.end+1));
@@ -378,7 +395,7 @@ Xmlarea.prototype.collectTrd = function(lng) {
       }
     }
 
-    te = this.find_tag_bw(['trd','trdgrp'],true,xml,ta.pos);
+    te = find_etag(['trd','trdgrp'],xml,ta.pos);
   };
 }
 
@@ -387,8 +404,12 @@ Xmlarea.prototype.collectTrd = function(lng) {
 Xmlarea.prototype.findTrdPlace = function(lng) {
   const xml = this.txtarea.value;
 
+  const expect_etag = (elist,xml,from) => this.travel_tag_bw (elist,true,true,xml,from);
+  //expect_stag = (elist,xml,from) => this.travel_tag_bw (elist,false,true,xml,from);
+  const find_stag = (elist,xml,from) => this.travel_tag_bw (elist,false,false,xml,from);
+
   // trovu unue la pozicion de la fina elemento de la nuna strukturo
-  var p = this.find_tag_bw(['snc','subsnc','drv','subdrv','art','subart'],true,xml);
+  var p = expect_etag(['snc','subsnc','drv','subdrv','art','subart'],xml);
   var q,t,lpos;
 
   if (p) {
@@ -396,11 +417,11 @@ Xmlarea.prototype.findTrdPlace = function(lng) {
     t = {pos: p.pos};
 
     do {
-      q = this.find_tag_bw(['trd','trdgrp','dif','ekz','bld'],true,xml,t.pos);
+      q = expect_etag(['trd','trdgrp','adm','rim'],xml,t.pos);
 
-      if (q.elm == 'trd' || q.elm == 'trdgrp') {
+      if (q && (q.elm == 'trd' || q.elm == 'trdgrp')) {
         // se ni trovis finon de trd/trdgrp ni serĉu ĝian komencon
-        t = this.find_tag_bw([q.elm],false,xml,q.pos);
+        t = find_stag([q.elm],xml,q.pos);
         if (t) {
           // ni rigardu pri kiu lingvo temas...
           const m = this.re_stru._trd.exec(xml.substring(t.pos,q.end+1));
@@ -422,17 +443,18 @@ Xmlarea.prototype.findTrdPlace = function(lng) {
           }
         }
       } else {
-        // ni alvenis supre ĉe dif/ekz/bld sen trovi laŭalfabetan ensovejon,
+        // ni alvenis supre ĉe 'haltiga' elemento kiel dif/ekz/bld 
+        // sen trovi laŭalfabetan enŝovejon,
         // ni redonos la lastan kovnenan lokon (supran trd-on)
         return {pos: lpos}
       }
 
       // se trd(grp) ne estas valida aŭ se temas 
-      // pri ekz/dif/bld ni finu la serĉadon
+      // pri 'haltiga' elemento kiel ekz/dif/bld ni finu la serĉadon
       // - ni interesiĝas nur pri tradukoj ekster ekz/dif/bld!
-    } while (q && t.elm);
+    } while (t && t.elm);
 
-    // ni ĝis nun ne trovis tradukojn, ĉe aŭ post kiu enmeti, do enmetu ĉe la lasta trovita pozico
+    // ni ĝis nun ne trovis tradukojn, ĉe aŭ post kiu enmeti, do enmetu ĉe la lasta trovita pozicio
     return {pos: (t.pos>-1? t.pos : p.pos)}
   }
 }
