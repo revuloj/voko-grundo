@@ -205,12 +205,19 @@ Xmlarea.prototype.getStructById = function(id) {
   }
 }
 
+Xmlarea.prototype.getSubtextById = function(id) {
+  const s = this.getStructById(id);
+  return this.xmlteksto.slice(s.de,s.al);
+}
+
 // ni trovos la parencon de la struktur-elemento donita per id
 Xmlarea.prototype.getParent = function(id) {
   const s = this.getStructById(id);
   // parenco venas antaŭ la nuna kaj enhavas ĝin (subteksto al..de)
-  const p = this.strukturo[s.no-1];
-  if (p.de < s.de && p.al > s.al ) return p;
+  for (var n = s.no-1; n>=0; n--) {
+    const p = this.strukturo[n];
+    if (p.de < s.de && p.al > s.al ) return p;  
+  }
 }
 
 Xmlarea.prototype.getClosestWithMrk = function() {
@@ -353,15 +360,34 @@ Xmlarea.prototype.getCurrentLastTrd = function(lng) {
 }
 */
 
-Xmlarea.prototype.collectTrd = function(lng) {
-  const xml = this.txtarea.value;
+Xmlarea.prototype.collectTrd = function(lng, xml, shallow=false) {
   const re = this.re_stru;
-  this.tradukoj = [];
+  if (!xml) {
+    xml = this.txtarea.value;
+    this.tradukoj = [];
+  }
   
-  const find_etag = (elist,xml,from) => this.travel_tag_bw (elist,true,false,xml,from);
-  const find_stag = (elist,xml,from) => this.travel_tag_bw (elist,false,false,xml,from);
+  const find_stag = (elm,xml,from) => this.travel_tag_bw([elm],false,false,xml,from);  
 
-  var ta, te = find_etag(['trd','trdgrp'],xml,xml.length);
+  var find_etag, spos = xml.length;
+  if (shallow) {
+    // expect
+    find_etag = (elist,xml,from) => this.travel_tag_bw(elist,true,true,xml,from);
+    // ĉar ni ne ignoras aliajn elementojn ol trd/trgrp ni unue devas aliri
+    // la kadran elementon
+    const kadr = find_etag(['drv','subdrv','snc','subsnc'],xml,xml.length);
+    if (kadr) {
+      spos = kadr.pos;
+    } else {
+      throw("La subteksto ne finiĝas per </drv>, </subdrv>, </snc> aŭ </subsnc>!")
+    }
+  } else {
+    // find
+    find_etag = (elist,xml,from) => this.travel_tag_bw(elist,true,false,xml,from); 
+    spos = xml.length;
+  }
+
+  var ta, te = find_etag(['trd','trdgrp','adm','rim'],xml,spos);
 
     // nudigas la tradukon je ofc, klr ktp.
     function trd_norm(t) {
@@ -372,31 +398,51 @@ Xmlarea.prototype.collectTrd = function(lng) {
        .trim());
     }
 
-  while (te) {
-    // trovu la komencon ta de la traduko finiĝanta je te
-    ta = find_stag([te.elm],xml,te.pos);
+  while (te) {    
+    // trovu la komencon ta de la elemento finiĝanta je te
+    ta = find_stag(te.elm,xml,te.pos);
 
-    // ni ekstraktu lingvon kaj enhavon...
-    const m = re._trd.exec(xml.substring(ta.pos,te.end+1));
-    if (m && m[2]) {
-      const lng = m[2]; if (!this.tradukoj[lng]) this.tradukoj[lng] = [];
-      const grp = m[1];
-      const trd = m[3];
-      if (!grp) {
-        // unuopa traduko
-        this.tradukoj[lng].push(trd_norm(trd));
-      } else {
-        // grupigitaj tradukoj
-        var t = re._tr1.exec(trd);
-        while (t) {
-          this.tradukoj[lng].push(trd_norm(t[1]));
-          t = re._tr1.exec(trd);
+    // se temas pri trd/trdgrp...
+    if (te.elm.indexOf('trd') == 0) {
+      // ni ekstraktu lingvon kaj enhavon...
+      const m = re._trd.exec(xml.substring(ta.pos,te.end+1));
+      if (m && m[2]) {
+        const lng = m[2]; if (!this.tradukoj[lng]) this.tradukoj[lng] = [];
+        const grp = m[1];
+        const trd = m[3];
+        if (!grp) {
+          // unuopa traduko
+          this.tradukoj[lng].push(trd_norm(trd));
+        } else {
+          // grupigitaj tradukoj
+          var t = re._tr1.exec(trd);
+          while (t) {
+            this.tradukoj[lng].push(trd_norm(t[1]));
+            t = re._tr1.exec(trd);
+          }
         }
       }
     }
 
-    te = find_etag(['trd','trdgrp'],xml,ta.pos);
+    te = find_etag(['trd','trdgrp','adm','rim'],xml,ta.pos);
   };
+}
+
+Xmlarea.prototype.collectTrdAll = function(lng) {
+  var xml = this.txtarea.value;
+  this.tradukoj = [];
+
+  // kolektu unue la tradukojn en la aktuala subteksto
+  this.collectTrd(lng,xml,false);
+
+  // se ne temas subdrv, snc, subsnc ni kolektu ankaŭ de la parencaj...
+  var p = this.getParent(this.xml_elekto.id);
+
+  while ( ['snc','subdrv','drv'].indexOf(p.el)>-1 ) {
+    xml = this.getSubtextById(p.id);
+    this.collectTrd(lng,xml,true);
+    p = this.getParent(p.id);
+  }
 }
 
 

@@ -1083,7 +1083,7 @@ var redaktilo = function() {
             // eltrovu kiujn tradukojn ni havas en la aktuala teksto
             // PLIBONIGU: tio povus okazi paralele kaj krome ni devos
             // refari tion, se la uzanto elektas alian subtekston!
-            xmlarea.collectTrd();
+            xmlarea.collectTrdAll();
           } else {
             // (sub)art|xml estas elektita en la redaktilo...
             s_trd.append(ht_element('p',{},'Elektu (sub)derivaĵon aŭ (sub)sencon en '
