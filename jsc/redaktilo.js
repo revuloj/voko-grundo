@@ -1026,10 +1026,6 @@ var redaktilo = function() {
       });
     } 
 
-    function has_trd(lng) {
-      return xmlarea.tradukoj[lng];
-    }
-
     const srch = new Sercho();
     srch.serchu_uwn(sercho, function(json) {
       if (json) {
@@ -1102,7 +1098,7 @@ var redaktilo = function() {
 
                         // se jam ekzistas tradukoj por tiu lingvo montru tion
                         // per CSS
-                        if (has_trd(lng)) cls.push('tradukita');
+                        //if (has_trd(lng)) cls.push('tradukita');
 
                         var atr = {};
                         if (cls.length) atr = {class: cls.join(' ')};
@@ -1203,8 +1199,22 @@ var redaktilo = function() {
             }
             li.querySelector('button')?.remove();
           }
-        }
-      }
+
+        } // for li...
+
+        // krome ni elstarigu lingvojn, kiuj jam havas tradukon por
+        // eviti tro facilan aldonon!
+        const dt = dd.previousSibling;
+        if (xmlarea.tradukoj[lng]) {
+          dt.classList.add('ekzistas');
+          dt.querySelector('span.aldonebla')?.remove();
+          dt.append(ht_element('span',{class: 'ekzistas'},'\u2713'));
+        } else {
+          dt.classList.remove('ekzistas');
+          dt.querySelector('span.ekzistas')?.remove();
+          dt.append(ht_element('span',{class: 'aldonebla'},'\u2026'));
+        }         
+      } // for dd..
 
     // ĉe elekto de (sub)art|xml ni montras nur la tradukojn..., t.e. ni
     // forigas ilin, se ili restis de antaŭa elekto
@@ -1218,7 +1228,7 @@ var redaktilo = function() {
         li.querySelector('.ekzistas')?.remove();
         li.querySelector('button')?.remove();
       }
-    }
+    } // if drv_snc
   }
 
   /* 

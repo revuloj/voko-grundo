@@ -157,11 +157,29 @@ nav {
     height: 1.3rem;
     width: 1.6rem;
     padding: 0;
+    font-size: 1rem;
+}
+
+#r\:trd_elekto p em {
+    font-weight: bold;
+}
+
+#r\:trd_elekto dd ul {
+    padding: 0;
+    list-style-type: none;    
 }
 
 #r\:trd_elekto dd li.aldonebla {
     border-bottom: 1px solid var(--nav-brd-clr);
 }
+
+#r\:trd_elekto span.ekzistas,
+#r\:trd_elekto span.dubinda {
+    font-weight: bold;
+    padding-left: .2rem;
+    padding-right: .2rem;
+}
+
 
 #x\:statistiko meter {
     margin-left: .3em;
