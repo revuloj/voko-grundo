@@ -154,12 +154,12 @@ nav {
 
 #r\:trd_elekto button {
     float: right;
-    height: 1.3em;
-    width: 1.6em;
-    padding-top: 0;
+    height: 1.3rem;
+    width: 1.6rem;
+    padding: 0;
 }
 
-#r\:trd_elekto dd li {
+#r\:trd_elekto dd li.aldonebla {
     border-bottom: 1px solid var(--nav-brd-clr);
 }
 
