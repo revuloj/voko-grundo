@@ -456,11 +456,13 @@ Xmlarea.prototype.findTrdPlace = function(lng) {
 
   // trovu unue la pozicion de la fina elemento de la nuna strukturo
   var p = expect_etag(['snc','subsnc','drv','subdrv','art','subart'],xml);
-  var q,t,lpos;
+  var q,t,lpos,lelm;
 
   if (p) {
-    lpos = p.pos; // -1?
-    t = {pos: p.pos};
+    lpos = p.pos;
+    lelm = p.elm;
+    //while (xml[lpos-1] == ' ') lpos--;
+    t = {pos: lpos};
 
     do {
       q = expect_etag(['trd','trdgrp','adm','rim'],xml,t.pos);
@@ -475,7 +477,7 @@ Xmlarea.prototype.findTrdPlace = function(lng) {
             const l = m[2];
             if (l == lng) {
               // ni trovis jaman tradukon en la koncerna lingvo, redonu la lokon!
-              return {pos: t.pos, grp: m[1], trd: m[0], itr: m[3]}
+              return {pos: t.pos, grp: m[1], trd: m[0], itr: m[3], elm: q.elm}
             } else if (l > lng) {
               // ni supozas ke la lingvoj estas ordigitaj, kaj se
               // ni ne trovos la koncernan lingvon jam inter la tradukoj ni enŝovos
@@ -484,7 +486,7 @@ Xmlarea.prototype.findTrdPlace = function(lng) {
             } else {
               // ni trovis la alfabetan lokon po enŝovi 
               // (traduko kun lingvo antaŭ la koncerna):
-              return {pos: lpos}
+              return {pos: lpos, elm: lelm}
             }
           }
         }
@@ -492,8 +494,10 @@ Xmlarea.prototype.findTrdPlace = function(lng) {
         // ni alvenis supre ĉe 'haltiga' elemento kiel dif/ekz/bld 
         // sen trovi laŭalfabetan enŝovejon,
         // ni redonos la lastan kovnenan lokon (supran trd-on)
-        return {pos: lpos}
+        return {pos: lpos, elm: lelm}
       }
+
+      lelm = q.elm;
 
       // se trd(grp) ne estas valida aŭ se temas 
       // pri 'haltiga' elemento kiel ekz/dif/bld ni finu la serĉadon
@@ -501,7 +505,7 @@ Xmlarea.prototype.findTrdPlace = function(lng) {
     } while (t && t.elm);
 
     // ni ĝis nun ne trovis tradukojn, ĉe aŭ post kiu enmeti, do enmetu ĉe la lasta trovita pozicio
-    return {pos: (t.pos>-1? t.pos : p.pos)}
+    return {pos: (t.pos>-1? t.pos : p.pos), elm: lelm}
   }
 }
 
@@ -509,6 +513,8 @@ Xmlarea.prototype.findTrdPlace = function(lng) {
 Xmlarea.prototype.addTrd = function(lng,trd) {
   const place = this.findTrdPlace(lng); // this.getCurrentLastTrd(lng);
   if (place) {
+    // se jam estas .trd, ni anstataŭigu ĝin per la etendita trdgrp...,
+    // alie ni enmetos novan trd (len=0)
     const len = place.trd? place.trd.length : 0;
     this.select(place.pos, len);
     const ind = this.indent();
@@ -532,8 +538,10 @@ Xmlarea.prototype.addTrd = function(lng,trd) {
       console.debug(' --> '+nov);
       this.selection(nov);
     } else {
+      // antaŭ elementoj (sub)drv/snc ni aldonas du spacojn...
+      const iplus = place.elm[0] == 's' || place.elm[0] == 'd' ? '  ' : '';
       // ankoraŭ neniu traduko, aldonu la unuan nun
-      const nov = '<trd lng="' + lng +'">' + trd + '</trd>\n' + ind;
+      const nov = iplus + '<trd lng="' + lng +'">' + trd + '</trd>\n' + ind;
       console.debug(' --> '+nov);
       this.selection(nov);
     }

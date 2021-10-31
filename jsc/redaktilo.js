@@ -11,6 +11,8 @@ var redaktilo = function() {
   const cgi_vokohtmlx = '/cgi-bin/vokohtmlx.pl';
   const cgi_vokosubm_json = '/cgi-bin/vokosubm-json.pl';
 
+  const uwn_url = 'http://www.lexvo.org/uwn/';
+
   const re_lng = /<(?:trd|trdgrp)\s+lng\s*=\s*"([^]*?)"\s*>/mg; 
   const re_fak = /<uzo\s+tip\s*=\s*"fak"\s*>([^]*?)</mg; 
   const re_stl = /<uzo\s+tip\s*=\s*"stl"\s*>([^]*?)</mg; 
@@ -995,7 +997,7 @@ var redaktilo = function() {
 
     // prezento de traduklisto kiel HTML-dd-elemento
     // enhavanta la tradukojn kiel ul-listo
-    function dl_dd(lng,trd,show_plus) {
+    function dl_dd(lng,trd) {
       return ht_list(trd,'ul',{},function(t) {
           //var t = s; // la traduko
           const li = ht_element('li');
@@ -1031,9 +1033,10 @@ var redaktilo = function() {
       if (json) {
           // butonojn por aldoni ni montras nur, se (sub)drv|(sub)snc estas
           // elektita en la redaktilo...
-          const drv_snc = ('drv|snc'.indexOf(xmlarea.xml_elekto.el) > -1);
 
           /*
+          const drv_snc = ('drv|snc'.indexOf(xmlarea.xml_elekto.el) > -1);
+
           if (drv_snc) {
             // eltrovu kiujn tradukojn ni havas en la aktuala teksto
             // PLIBONIGU: tio povus okazi paralele kaj krome ni devos
@@ -1046,6 +1049,9 @@ var redaktilo = function() {
               + 'malsupraj faldlistoj per la +-butonoj.'));
           }
           */
+
+          s_trd.prepend('el ',ht_element('a',{href: uwn_url},'Universala Vortreto'),
+            ', kontrolu ĝustecon antaŭ aldoni!');          
 
           for (let t in json) {
               const tv = json[t];
@@ -1111,7 +1117,7 @@ var redaktilo = function() {
                         atr.lang = lng; 
                         ht_attributes(dd,atr);
 
-                        dd.append(dl_dd(lng,trd,drv_snc));
+                        dd.append(dl_dd(lng,trd));
                       } // ...if ln                      
                     }, // ht_dl callback
                     true); // true = sorted (keys=lng)
@@ -1120,10 +1126,17 @@ var redaktilo = function() {
                     dl.addEventListener('click', function(event) {
                       if (event.target.value == 'plus') {
                         const dd = event.target.closest('dd');
+                        // la traduko troivĝas rekte antaŭ la butono!
                         const sp = event.target.previousSibling;
                         const lng = dd.getAttribute('lang')
                         console.log('aldonu ['+lng+'] '+sp.textContent);
                         xmlarea.addTrd(lng,sp.textContent);
+
+                        // montru per hoketo, ke ni nun havas la tradukon en XML
+                        const li = event.target.closest('li');
+                        li.classList.remove('aldonebla');
+                        li.append(ht_element('span',{class: 'ekzistas'},'\u2713'));
+                        li.querySelector('button')?.remove();
                       }
                     })
                     
@@ -1229,6 +1242,7 @@ var redaktilo = function() {
         li.querySelector('button')?.remove();
       }
     } // if drv_snc
+
   }
 
   /* 
