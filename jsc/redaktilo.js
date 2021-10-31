@@ -1037,35 +1037,35 @@ var redaktilo = function() {
  */
 
     // prezento de traduklisto kiel HTML-dd-elemento
+    // enhavanta la tradukojn kiel ul-listo
     function dl_dd(lng,trd,show_plus) {
-      const dd_ = trd.reduce((d,s) => {
-        var t = s;
-        if (t.substr(0,2) == '?;') {
-          d.push(ht_element('span',{class: 'dubinda'},'?'));
-          t = t.substr(2);
-        };
-        d.push(ht_element('span',{},t));
-  
-        // se drv/snc estas elektita kaj la traduko ankoraŭ 
-        // ne troviĝas tie, ni permesu aldoni ĝin
-        if (show_plus) {
-          if ( ! xmlarea.tradukoj[lng] 
-            || ! xmlarea.tradukoj[lng].find(e => compareXMLStr(e,t) )
-            ) {
-            // d.push('\u00a0'); // nbsp
-            d.push(ht_element('button',{
-              value: 'plus', 
-              title: 'aldonu al XML-(sub)drv/snc'},
-              '+'));  
-          } else {
-            // montru per hoketo, ke ni jam havas la tradukon en XML
-            d.push(ht_element('span',{class: 'ekzistas'},'\u2713'));
-          }
-        } 
-        d.push(ht_element('br'));
-        return d;
-      },[]);
-      return dd_;
+      return ht_list(trd,'ul',{},function(t) {
+          //var t = s; // la traduko
+          const li = ht_element('li');
+          if (t.substr(0,2) == '?;') {
+            li.append(ht_element('span',{class: 'dubinda'},'?'));
+            t = t.substr(2);
+          };
+          li.append(ht_element('span',{},t));
+    
+          // se drv/snc estas elektita kaj la traduko ankoraŭ 
+          // ne troviĝas tie, ni permesu aldoni ĝin
+          if (show_plus) {
+            if ( ! xmlarea.tradukoj[lng] 
+              || ! xmlarea.tradukoj[lng].find(e => compareXMLStr(e,t) )
+              ) {
+              // d.push('\u00a0'); // nbsp
+              li.append(ht_element('button',{
+                value: 'plus', 
+                title: 'aldonu al XML-(sub)drv/snc'},
+                '+'));  
+            } else {
+              // montru per hoketo, ke ni jam havas la tradukon en XML
+              li.append(ht_element('span',{class: 'ekzistas'},'\u2713'));
+            }
+          } 
+          return li;
+      });
     } 
 
     function has_trd(lng) {
@@ -1121,6 +1121,9 @@ var redaktilo = function() {
                   var nkasxitaj = 0;
                   const dl = ht_dl(
                     tv.trd,
+
+                    // tiu funkci revokiĝas por ĉiu trovita en la json-listo lingvo 
+                    // kun listo de tradukoj
                     function(lng,trd,dt,dd) {
                       // lingvonomo
                       const ln = revo_codes.lingvoj.codes[lng];
@@ -1152,8 +1155,7 @@ var redaktilo = function() {
                         atr.lang = lng; 
                         ht_attributes(dd,atr);
 
-                        const dd_ = dl_dd(lng,trd,drv_snc);
-                        dd.append(...dd_);
+                        dd.append(dl_dd(lng,trd,drv_snc));
                       } // ...if ln                      
                     }, // ht_dl callback
                     true); // true = sorted (keys=lng)

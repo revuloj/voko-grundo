@@ -159,7 +159,7 @@ nav {
     padding-top: 0;
 }
 
-#r\:trd_elekto dd {
+#r\:trd_elekto dd li {
     border-bottom: 1px solid var(--nav-brd-clr);
 }
 
