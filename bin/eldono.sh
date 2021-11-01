@@ -29,9 +29,9 @@ PACKG=package.json
 
 case $target in
 servilo)
-    # ni supozas, ke vi jam kompilis JS kaj CSS per 
-    #    npm run build:js[:debug]
-    #    npm run build:css
+    # ĉu ni supozu, ke ni jam kompilis JS kaj CSS ...? 
+    npm run build:js
+    npm run build:css
     scp ${JSC} ${revo}/jsc
     scp ${CSS} ${revo}/stl
     ;;
