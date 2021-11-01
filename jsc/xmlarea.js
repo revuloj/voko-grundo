@@ -391,9 +391,9 @@ Xmlarea.prototype.collectTrd = function(lng, xml, shallow=false) {
 
     // nudigas la tradukon je ofc, klr ktp.
     function trd_norm(t) {
-      return (t.replace(re.ofc,'')
-       .replace(re.klr,'')
-       .replace(re.ind,'$1')
+      return (t.replace(re._ofc,'')
+       .replace(re._klr,'')
+       .replace(re._ind,'$1')
        .replace(/\s+/,' ')
        .trim());
     }

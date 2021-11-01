@@ -1050,7 +1050,7 @@ var redaktilo = function() {
           }
           */
 
-          s_trd.prepend('el ',ht_element('a',{href: uwn_url},'Universala Vortreto'),
+          s_trd.prepend('El ',ht_element('a',{href: uwn_url},'Universala Vortreto'),
             ', kontrolu ĝustecon antaŭ aldoni!');          
 
           for (let t in json) {
@@ -1174,8 +1174,8 @@ var redaktilo = function() {
     const elekto = document.getElementById('r:trd_elekto');
     const drv_snc = ('drv|snc'.indexOf(xmlarea.xml_elekto.el.substr(-3)) > -1);
 
-    // se iu (sub)drv|(sub)snc estas elektita ni montras +-butonojn kkaj hoketojn...
-    if (drv_snc) {
+    // se iu (sub)drv|(sub)snc estas elektita ni montras +-butonojn kaj hoketojn...
+    if (drv_snc && elekto.querySelector('details')) {
       // forigu la noton pri drv/snc-elekto...
       const noto = elekto.querySelector('p.noto');
       if (noto) noto.remove();
@@ -1221,11 +1221,13 @@ var redaktilo = function() {
         if (xmlarea.tradukoj[lng]) {
           dt.classList.add('ekzistas');
           dt.querySelector('span.aldonebla')?.remove();
-          dt.append(ht_element('span',{class: 'ekzistas'},'\u2713'));
+          if (! dt.querySelector('span.ekzistas'))
+            dt.append(ht_element('span',{class: 'ekzistas'},'\u2713'));
         } else {
           dt.classList.remove('ekzistas');
           dt.querySelector('span.ekzistas')?.remove();
-          dt.append(ht_element('span',{class: 'aldonebla'},'\u2026'));
+          if (! dt.querySelector('span.aldonebla'))
+            dt.append(ht_element('span',{class: 'aldonebla'},'\u2026'));
         }         
       } // for dd..
 

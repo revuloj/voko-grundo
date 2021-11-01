@@ -160,6 +160,10 @@ nav {
     font-size: 1rem;
 }
 
+#r\:trd_elekto .trd {
+    color: var(--nav-fnt-clr);
+}
+
 #r\:trd_elekto p em {
     font-weight: bold;
 }
