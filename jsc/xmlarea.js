@@ -244,7 +244,9 @@ Xmlarea.prototype.getCurrentMrk = function() {
 // alie la kapvorton de la unua drv
 Xmlarea.prototype.getCurrentKap = function() {
     function kap(e) {
-      return e.kap.replace('~',rad);
+      return e.kap
+        .replace('~',rad)
+        .replace(/,.*/,'');
     }
 
   const rad = this.radiko;
