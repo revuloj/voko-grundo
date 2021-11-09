@@ -1175,75 +1175,84 @@ var redaktilo = function() {
     const drv_snc = ('drv|snc'.indexOf(xmlarea.xml_elekto.el.substr(-3)) > -1);
 
     // se iu (sub)drv|(sub)snc estas elektita ni montras +-butonojn kaj hoketojn...
-    if (drv_snc && elekto.querySelector('details')) {
-      // forigu la noton pri drv/snc-elekto...
-      const noto = elekto.querySelector('p.noto');
-      if (noto) noto.remove();
+    if (elekto.querySelector('details')) {
+      if ( drv_snc ) {
+        // forigu la noton pri drv/snc-elekto...
+        const noto = elekto.querySelector('p.noto');
+        if (noto) noto.remove();
 
-      // eltrovu kiujn tradukojn ni havas en la aktuala teksto
-      xmlarea.collectTrdAll();
+        // eltrovu kiujn tradukojn ni havas en la aktuala teksto
+        xmlarea.collectTrdAll();
 
-      for (var dd of elekto.querySelectorAll('dd')) {
-        const lng = dd.getAttribute('lang');
+        for (var dd of elekto.querySelectorAll('dd')) {
+          const lng = dd.getAttribute('lang');
 
-        for (var li of dd.querySelectorAll('li')) {
-          const t = li.querySelector('.trd')?.textContent;
-          // se drv/snc estas elektita kaj la traduko ankoraŭ 
-          // ne troviĝas tie, ni permesu aldoni ĝin
-          if ( ! xmlarea.tradukoj[lng] 
-            || ! xmlarea.tradukoj[lng].find(e => compareXMLStr(e,t) )
-            ) {
-            // d.push('\u00a0'); // nbsp
-            li.classList.add('aldonebla');
+          for (var li of dd.querySelectorAll('li')) {
+            const t = li.querySelector('.trd')?.textContent;
+            // se drv/snc estas elektita kaj la traduko ankoraŭ 
+            // ne troviĝas tie, ni permesu aldoni ĝin
+            if ( ! xmlarea.tradukoj[lng] 
+              || ! xmlarea.tradukoj[lng].find(e => compareXMLStr(e,t) )
+              ) {
+              // d.push('\u00a0'); // nbsp
+              li.classList.add('aldonebla');
 
-            if (!li.querySelector('button')) {
-              li.append(ht_element('button',{
-                value: 'plus', 
-                title: 'aldonu al XML-(sub)drv/snc'},
-                '+'));    
+              if (!li.querySelector('button')) {
+                li.append(ht_element('button',{
+                  value: 'plus', 
+                  title: 'aldonu al XML-(sub)drv/snc'},
+                  '+'));    
+              }
+              li.querySelector('span.ekzistas')?.remove();
+
+            } else {
+              // montru per hoketo, ke ni jam havas la tradukon en XML
+              li.classList.remove('aldonebla');
+              if (! li.querySelector('span.ekzistas')) {
+                li.append(ht_element('span',{class: 'ekzistas'},'\u2713'));
+              }
+              li.querySelector('button')?.remove();
             }
-            li.querySelector('span.ekzistas')?.remove();
 
+          } // for li...
+
+          // krome ni elstarigu lingvojn, kiuj jam havas tradukon por
+          // eviti tro facilan aldonon!
+          const dt = dd.previousSibling;
+          if (xmlarea.tradukoj[lng]) {
+            dt.classList.add('ekzistas');
+            dt.querySelector('span.aldonebla')?.remove();
+            if (! dt.querySelector('span.ekzistas'))
+              dt.append(ht_element('span',{class: 'ekzistas'},'\u2713'));
           } else {
-            // montru per hoketo, ke ni jam havas la tradukon en XML
-            li.classList.remove('aldonebla');
-            if (! li.querySelector('span.ekzistas')) {
-              li.append(ht_element('span',{class: 'ekzistas'},'\u2713'));
-            }
-            li.querySelector('button')?.remove();
-          }
+            dt.classList.remove('ekzistas');
+            dt.querySelector('span.ekzistas')?.remove();
+            if (! dt.querySelector('span.aldonebla'))
+              dt.append(ht_element('span',{class: 'aldonebla'},'\u2026'));
+          }         
+        } // for dd..
 
-        } // for li...
+      // ĉe elekto de (sub)art|xml ni montras nur la tradukojn..., t.e. ni
+      // forigas ilin, se ili restis de antaŭa elekto
+      } else {
 
-        // krome ni elstarigu lingvojn, kiuj jam havas tradukon por
-        // eviti tro facilan aldonon!
-        const dt = dd.previousSibling;
-        if (xmlarea.tradukoj[lng]) {
-          dt.classList.add('ekzistas');
-          dt.querySelector('span.aldonebla')?.remove();
-          if (! dt.querySelector('span.ekzistas'))
-            dt.append(ht_element('span',{class: 'ekzistas'},'\u2713'));
-        } else {
+        elekto.prepend(ht_element('p',{class: 'noto'},'Elektu (sub)derivaĵon aŭ (sub)sencon '
+          + 'en la redaktilo, poste vi povas aldoni tie novajn tradukojn el la '
+          + 'malsupraj faldlistoj per la +-butonoj.'));
+
+        for (var li of elekto.querySelectorAll('dd li')) {
+          li.querySelector('.ekzistas')?.remove();
+          li.querySelector('button')?.remove();
+        }
+
+        for (var dt of elekto.querySelectorAll('dt')) {
           dt.classList.remove('ekzistas');
           dt.querySelector('span.ekzistas')?.remove();
-          if (! dt.querySelector('span.aldonebla'))
-            dt.append(ht_element('span',{class: 'aldonebla'},'\u2026'));
-        }         
-      } // for dd..
+          dt.querySelector('span.aldonebla')?.remove();
+        }
 
-    // ĉe elekto de (sub)art|xml ni montras nur la tradukojn..., t.e. ni
-    // forigas ilin, se ili restis de antaŭa elekto
-    } else {
-
-      elekto.prepend(ht_element('p',{class: 'noto'},'Elektu (sub)derivaĵon aŭ (sub)sencon '
-        + 'en la redaktilo, poste vi povas aldoni tie novajn tradukojn el la '
-        + 'malsupraj faldlistoj per la +-butonoj.'));
-
-      for (var li of elekto.querySelectorAll('dd li')) {
-        li.querySelector('.ekzistas')?.remove();
-        li.querySelector('button')?.remove();
-      }
-    } // if drv_snc
+      } // if drv_snc
+    } // if.. details..else..
 
   }
 
