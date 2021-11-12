@@ -139,3 +139,22 @@ Sercho.prototype.unua = function() {
     var u = Object.values(this.eo)[0] || Object.values(this.trd)[0];
     return { href: art_href(u[0][MRK]) }        
 }
+
+
+// Serĉo en universala vortreto, vd. http://www.lexvo.org/uwn/
+Sercho.prototype.serchu_uwn = function(vorto,onSuccess,onStart,onStop) {
+    const self = this;
+
+    HTTPRequest('POST', trad_uwn_url, {sercho: vorto}, 
+        function(data) {
+            if (data) {
+                const json = JSON.parse(data);
+                onSuccess.call(self,json);    
+            } else {
+                onSuccess.call(self);    
+            }
+        },
+        start_wait,
+        stop_wait
+    );
+  }    

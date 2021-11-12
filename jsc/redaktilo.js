@@ -11,6 +11,7 @@ var redaktilo = function() {
   const cgi_vokohtmlx = '/cgi-bin/vokohtmlx.pl';
   const cgi_vokosubm_json = '/cgi-bin/vokosubm-json.pl';
 
+  const uwn_url = 'http://www.lexvo.org/uwn/';
 
   const re_lng = /<(?:trd|trdgrp)\s+lng\s*=\s*"([^]*?)"\s*>/mg; 
   const re_fak = /<uzo\s+tip\s*=\s*"fak"\s*>([^]*?)</mg; 
@@ -355,7 +356,7 @@ var redaktilo = function() {
       ul = elch[0];
     }
     for (var e of err) {
-      var li = make_element("li",{},e); //createTElement("li",e);               
+      var li = ht_element("li",{},e); //createTElement("li",e);               
       ul.appendChild(li);       
     }
   }
@@ -758,7 +759,7 @@ var redaktilo = function() {
           const sel_stru = document.getElementById("r:art_strukturo");
           for (i in xmlarea.strukturo) {
             const item = xmlarea.strukturo[i].id;
-            sel_stru.append(make_element('option',{value: i},item));
+            sel_stru.append(ht_element('option',{value: i},item));
           }
           */
           /*
@@ -779,9 +780,9 @@ var redaktilo = function() {
     if (index == 0) sel_stru.textContent = ''; // malplenigu la liston ĉe aldono de unua ero...
 
     if (selected) {
-      sel_stru.append(make_element('option',{value: subt.id, selected: 'selected'},subt.dsc));
+      sel_stru.append(ht_element('option',{value: subt.id, selected: 'selected'},subt.dsc));
     } else {
-      sel_stru.append(make_element('option',{value: subt.id},subt.dsc));
+      sel_stru.append(ht_element('option',{value: subt.id},subt.dsc));
     }
   }
 
@@ -795,13 +796,18 @@ var redaktilo = function() {
     // do ni poste rekreos ĝin kaj devos ankaŭ marki la elektitan laŭ _item_
     xmlarea.changeSubtext(val);
     show_pos();
+
+    // se montriĝas traduk-proponoj, necesas adapti la hoketojn kaj +-butonoj
+    // laŭ la elektita (sub)drv/snc
+    trad_ebloj();
+
     /*
     for (i in xmlarea.strukturo) {
       const item = xmlarea.strukturo[i].id;
       if (sel == item) {
-        sel_stru.append(make_element('option',{value: i, selected: 'selected'},item));
+        sel_stru.append(ht_element('option',{value: i, selected: 'selected'},item));
       } else {
-        sel_stru.append(make_element('option',{value: i},item));
+        sel_stru.append(ht_element('option',{value: i},item));
       }
     }
     */
@@ -964,6 +970,9 @@ var redaktilo = function() {
       if (b.id == "r:create_new_art") { // [kreu]
         b.addEventListener("click", create_new_art);
 
+      } else if (b.id == "r:trd_sercho") { // traduko-serĉo
+        b.addEventListener("click", trad_uwn);
+
       } else if (b.classList.contains("help_btn")) { // (?) (<>)
         b.addEventListener("click", function(event) {
           helpo_pagho(event.currentTarget.getAttribute("value"));
@@ -978,6 +987,274 @@ var redaktilo = function() {
 
     }
   }  
+
+  function trad_uwn(event) {
+    event.preventDefault();
+    const s_trd = document.getElementById('r:trd_elekto');
+    s_trd.textContent = '';
+
+    sercho = xmlarea.getCurrentKap(); //'hundo';
+
+    // prezento de traduklisto kiel HTML-dd-elemento
+    // enhavanta la tradukojn kiel ul-listo
+    function dl_dd(lng,trd) {
+      return ht_list(trd,'ul',{},function(t) {
+          //var t = s; // la traduko
+          const li = ht_element('li');
+          if (t.substr(0,2) == '?;') {
+            li.append(ht_element('span',{class: 'dubinda'},'?'));
+            t = t.substr(2);
+          };
+          li.append(ht_element('span',{class: 'trd'},t));
+    /*
+          // se drv/snc estas elektita kaj la traduko ankoraŭ 
+          // ne troviĝas tie, ni permesu aldoni ĝin
+          if (show_plus) {
+            if ( ! xmlarea.tradukoj[lng] 
+              || ! xmlarea.tradukoj[lng].find(e => compareXMLStr(e,t) )
+              ) {
+              // d.push('\u00a0'); // nbsp
+              li.append(ht_element('button',{
+                value: 'plus', 
+                title: 'aldonu al XML-(sub)drv/snc'},
+                '+'));  
+            } else {
+              // montru per hoketo, ke ni jam havas la tradukon en XML
+              li.append(ht_element('span',{class: 'ekzistas'},'\u2713'));
+            }
+            
+          } */
+          return li;
+      });
+    } 
+
+    const srch = new Sercho();
+    srch.serchu_uwn(sercho, function(json) {
+      if (json) {
+          // butonojn por aldoni ni montras nur, se (sub)drv|(sub)snc estas
+          // elektita en la redaktilo...
+
+          /*
+          const drv_snc = ('drv|snc'.indexOf(xmlarea.xml_elekto.el) > -1);
+
+          if (drv_snc) {
+            // eltrovu kiujn tradukojn ni havas en la aktuala teksto
+            // PLIBONIGU: tio povus okazi paralele kaj krome ni devos
+            // refari tion, se la uzanto elektas alian subtekston!
+            xmlarea.collectTrdAll();
+          } else {
+            // (sub)art|xml estas elektita en la redaktilo...
+            s_trd.append(ht_element('p',{},'Elektu (sub)derivaĵon aŭ (sub)sencon '
+              + 'en la redaktilo, poste vi povas aldoni tie novajn tradukojn el la '
+              + 'malsupraj faldlistoj per la +-butonoj.'));
+          }
+          */
+
+          s_trd.prepend('El ',ht_element('a',{href: uwn_url},'Universala Vortreto'),
+            ', kontrolu ĝustecon antaŭ aldoni!');          
+
+          for (let t in json) {
+              const tv = json[t];
+              // montru serĉ-rezultojn kiel html summary/details 
+              const details = ht_details(
+                tv.trd.eo.map(s => s.replace(/\?;/,'?:\u00a0'))
+                  .join(', ')||t, null,
+                function(d) {
+                  // esp-a difino
+                  const eo = (tv.dif && tv.dif.length)? tv.dif : ['-/-'];
+                  const pe = ht_elements([
+                      ['p',{},[
+                          ['em',{},'eo: '],
+                          ...eo
+                      ]]
+                  ]);
+                  d.append(...pe);
+
+                  // angla difino
+                  const en = tv.dsc? tv.dsc : ['-/-'];
+                  const pa = ht_elements([
+                      ['p',{},[
+                        ['em',{},'en: '], 
+                        en ]]
+                  ]);
+                  d.append(...pa);
+
+                  // tradukojn prezentu kiel difinlisto (dl)
+                  var nkasxitaj = 0;
+                  const dl = ht_dl(
+                    tv.trd,
+
+                    // tiu funkci revokiĝas por ĉiu trovita en la json-listo lingvo 
+                    // kun listo de tradukoj
+                    function(lng,trd,dt,dd) {
+                      // lingvonomo
+                      const ln = revo_codes.lingvoj.codes[lng];
+
+                      // ni ne montras nekonatajn lingvojn, ĉar enmeto
+                      // en la artikolon ne havas sencon aktuale...
+                      if (ln && lng != 'eo') {
+                        // atributoj (class, style...)
+                        // ne montru e-ajn tradukojn en la listo (ili estas jam en summary)
+                        // komence kaŝu ĉiujn krom la preferataj lingvoj
+                        var cls = [];
+                        if (preferoj.languages().indexOf(lng) < 0) {
+                          cls.push('kasxita');
+                          nkasxitaj++;
+                        };
+
+                        // se jam ekzistas tradukoj por tiu lingvo montru tion
+                        // per CSS
+                        //if (has_trd(lng)) cls.push('tradukita');
+
+                        var atr = {};
+                        if (cls.length) atr = {class: cls.join(' ')};
+
+                        // DT
+                        ht_attributes(dt,atr);
+                        dt.append('['+lng+'] ' +ln);
+
+                        // DD: tradukoj estas listo, kiun ni aldonas en dd
+                        atr.lang = lng; 
+                        ht_attributes(dd,atr);
+
+                        dd.append(dl_dd(lng,trd));
+                      } // ...if ln                      
+                    }, // ht_dl callback
+                    true); // true = sorted (keys=lng)
+
+                    // aldonu eventon por reagi al +-butonoj
+                    dl.addEventListener('click', function(event) {
+                      if (event.target.value == 'plus') {
+                        const dd = event.target.closest('dd');
+                        // la traduko troivĝas rekte antaŭ la butono!
+                        const sp = event.target.previousSibling;
+                        const lng = dd.getAttribute('lang')
+                        console.log('aldonu ['+lng+'] '+sp.textContent);
+                        xmlarea.addTrd(lng,sp.textContent);
+
+                        // montru per hoketo, ke ni nun havas la tradukon en XML
+                        const li = event.target.closest('li');
+                        li.classList.remove('aldonebla');
+                        li.append(ht_element('span',{class: 'ekzistas'},'\u2713'));
+                        li.querySelector('button')?.remove();
+                      }
+                    })
+                    
+                    // aldonu (+nn) - por videbligi la kasxitajn tradukojn
+                    if (nkasxitaj) {
+                      const pli = ht_pli(nkasxitaj);
+                      dl.append(...pli);  
+                    }
+
+                    d.append(dl);
+                }
+              ); // ht_details
+              s_trd.append(details);
+
+          };  // for t in json
+
+          // aldonu hoketojn kaj +-butonojn...
+          trad_ebloj();
+          
+          //t_red.transiro("tradukante");
+          show("r:tab_tradukoj",'collapsed');    
+      } else {
+        s_trd.append("Nenio troviĝis.");
+        show("r:tab_tradukoj",'collapsed');    
+      }
+    },
+    start_wait,
+    stop_wait
+    );
+  }
+
+  // montras depende elektita (sub)drv|(sub)snc la jam ekzistantajn
+  // tradukojn kaj +-butonoj por eblaj aldonoj
+  function trad_ebloj() {
+    const elekto = document.getElementById('r:trd_elekto');
+    const drv_snc = ('drv|snc'.indexOf(xmlarea.xml_elekto.el.substr(-3)) > -1);
+
+    // se iu (sub)drv|(sub)snc estas elektita ni montras +-butonojn kaj hoketojn...
+    if (elekto.querySelector('details')) {
+      if ( drv_snc ) {
+        // forigu la noton pri drv/snc-elekto...
+        const noto = elekto.querySelector('p.noto');
+        if (noto) noto.remove();
+
+        // eltrovu kiujn tradukojn ni havas en la aktuala teksto
+        xmlarea.collectTrdAll();
+
+        for (var dd of elekto.querySelectorAll('dd')) {
+          const lng = dd.getAttribute('lang');
+
+          for (var li of dd.querySelectorAll('li')) {
+            const t = li.querySelector('.trd')?.textContent;
+            // se drv/snc estas elektita kaj la traduko ankoraŭ 
+            // ne troviĝas tie, ni permesu aldoni ĝin
+            if ( ! xmlarea.tradukoj[lng] 
+              || ! xmlarea.tradukoj[lng].find(e => compareXMLStr(e,t) )
+              ) {
+              // d.push('\u00a0'); // nbsp
+              li.classList.add('aldonebla');
+
+              if (!li.querySelector('button')) {
+                li.append(ht_element('button',{
+                  value: 'plus', 
+                  title: 'aldonu al XML-(sub)drv/snc'},
+                  '+'));    
+              }
+              li.querySelector('span.ekzistas')?.remove();
+
+            } else {
+              // montru per hoketo, ke ni jam havas la tradukon en XML
+              li.classList.remove('aldonebla');
+              if (! li.querySelector('span.ekzistas')) {
+                li.append(ht_element('span',{class: 'ekzistas'},'\u2713'));
+              }
+              li.querySelector('button')?.remove();
+            }
+
+          } // for li...
+
+          // krome ni elstarigu lingvojn, kiuj jam havas tradukon por
+          // eviti tro facilan aldonon!
+          const dt = dd.previousSibling;
+          if (xmlarea.tradukoj[lng]) {
+            dt.classList.add('ekzistas');
+            dt.querySelector('span.aldonebla')?.remove();
+            if (! dt.querySelector('span.ekzistas'))
+              dt.append(ht_element('span',{class: 'ekzistas'},'\u2713'));
+          } else {
+            dt.classList.remove('ekzistas');
+            dt.querySelector('span.ekzistas')?.remove();
+            if (! dt.querySelector('span.aldonebla'))
+              dt.append(ht_element('span',{class: 'aldonebla'},'\u2026'));
+          }         
+        } // for dd..
+
+      // ĉe elekto de (sub)art|xml ni montras nur la tradukojn..., t.e. ni
+      // forigas ilin, se ili restis de antaŭa elekto
+      } else {
+
+        elekto.prepend(ht_element('p',{class: 'noto'},'Elektu (sub)derivaĵon aŭ (sub)sencon '
+          + 'en la redaktilo, poste vi povas aldoni tie novajn tradukojn el la '
+          + 'malsupraj faldlistoj per la +-butonoj.'));
+
+        for (var li of elekto.querySelectorAll('dd li')) {
+          li.querySelector('.ekzistas')?.remove();
+          li.querySelector('button')?.remove();
+        }
+
+        for (var dt of elekto.querySelectorAll('dt')) {
+          dt.classList.remove('ekzistas');
+          dt.querySelector('span.ekzistas')?.remove();
+          dt.querySelector('span.aldonebla')?.remove();
+        }
+
+      } // if drv_snc
+    } // if.. details..else..
+
+  }
 
   /* 
   when_doc_ready(function() { 

@@ -293,7 +293,7 @@ attlist-subdrv &= attribute mrk { snc-marko }?
 ## Per <em>mrk</em> (vd <dfn>snc-marko</dfn>) 
 ## oni povas referenci sencon de alie. Per <em>ref</em> oni
 ## referencas al alia senco samartikola (uzata en malmultaj longaj artikoloj, ekz.
-## "al". Per <em>num</em> oni povus atribui al la senco fiksitan numeron, 
+## "al"). Per <em>num</em> oni povus atribui al la senco fiksitan numeron, 
 ## sed tion ni normale ne uzas, ni lasas tion al la aŭtomata numerado.
 ##
 ## La enhavo de senco povas obei al unu el du modeloj:

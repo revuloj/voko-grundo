@@ -42,8 +42,10 @@ RUN apt-get update && apt-get install -y curl xsltproc \
 WORKDIR /usr/app
 COPY ./ /usr/app
 COPY --from=metapost /build/ /usr/app/build/
+
 # aldonu eble:  npm audit fix, kelkfoje ni devas uzi -g npm@next - se ekzistas posta eldono
 # mi ne scias npm sufiĉe bone por forumli aktualigan komandon, kiu fidinde ĉiam funkcias...
+
 RUN npm install -g npm@latest && npm ci && npm run build
 
 # staĝo 3 kopiu nur la kreitajn rezultojn al nova malplena ujo

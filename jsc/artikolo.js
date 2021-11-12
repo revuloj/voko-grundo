@@ -122,12 +122,12 @@ var artikolo = function() {
                 // 2b. aŭ ĝi ne estas la unua derivaĵo en la artikolo, kondiĉe ke ni ne celas al specifa derivaĵo 
                 if ( multaj && (h && h2.id != d_vid) || (!h && !first) ) { 
                     // \u25be
-                    h2.appendChild(make_icon_button("i_mkash",
+                    h2.appendChild(ht_icon_button("i_mkash",
                         null,"malkaŝu derivaĵon"));
                     el.classList.add("kasxita");
                 } else {
                     // "\u25b2"
-                    h2.appendChild(make_icon_button("i_kash",
+                    h2.appendChild(ht_icon_button("i_kash",
                         null,"kaŝu derivaĵon"));
                 }                    
                 first = false;
@@ -249,7 +249,7 @@ var artikolo = function() {
         }
         // aldonu pli...
         if (maletenditaj && ! element.querySelector(".pli")) {
-            var pli = make_elements([
+            var pli = ht_elements([
                 ["DT",{class: "pli lng"},
                     ["(",["A",{lang: "eo", href: "#", class: "pli etendilo"},"+"+maletenditaj],")"]
                 ],
@@ -261,7 +261,7 @@ var artikolo = function() {
 
             const _MS_PER_DAY = 1000 * 60 * 60 * 24;
             if ( Math.round((Date.now() - preferoj.date()) / _MS_PER_DAY, 0) < 1 ) {
-                var pref = make_elements([
+                var pref = ht_elements([
                     ["DT",{class: "pref"},
                         [["A",{lang: "eo", href: "#", class: "pref"}, "preferoj..."]]
                     ],
@@ -306,7 +306,7 @@ var artikolo = function() {
                 // etendilon "+nn..."
                 if (ekz_cnt > ekz_sojlo) {
                     var maletenditaj = ekz_cnt - ekz_sojlo;
-                    var pli = make_elements([
+                    var pli = ht_elements([
                             ["i",{class: "ekz pli"},
                                 ["(",["A",{href: "#", class: "pli etendilo"},"+"+maletenditaj],")"]
                             ]])[0];
@@ -346,15 +346,15 @@ var artikolo = function() {
         var art = document.getElementsByTagName("article")[0];
 
 
-        var div=make_element("DIV",{id: "tez_btn"});
-        div.appendChild(make_icon_button("i_tez",()=>{tezauro(artikolo)},"montru la tezaŭron"));
-        div.appendChild(make_icon_button("i_mtez kasxita",tezauro_kashu,"kaŝu la tezaŭron"));    
+        var div=ht_element("DIV",{id: "tez_btn"});
+        div.appendChild(ht_icon_button("i_tez",()=>{tezauro(artikolo)},"montru la tezaŭron"));
+        div.appendChild(ht_icon_button("i_mtez kasxita",tezauro_kashu,"kaŝu la tezaŭron"));    
         art.appendChild(div);
 
-        div=make_element("DIV",{id: "kash_btn"});
-        div.appendChild(make_icon_button("i_kash_ch",kashu_chiujn_drv,"kaŝu ĉiujn derivaĵojn"));
-        div.appendChild(make_icon_button("i_mkash_ch",malkashu_chiujn_drv,"malkaŝu ĉiujn derivaĵojn"));
-        //h1.appendChild(make_button(icon_opcioj,preferoj_dlg,"agordu viajn preferatajn lingvojn"));
+        div=ht_element("DIV",{id: "kash_btn"});
+        div.appendChild(ht_icon_button("i_kash_ch",kashu_chiujn_drv,"kaŝu ĉiujn derivaĵojn"));
+        div.appendChild(ht_icon_button("i_mkash_ch",malkashu_chiujn_drv,"malkaŝu ĉiujn derivaĵojn"));
+        //h1.appendChild(ht_button(icon_opcioj,preferoj_dlg,"agordu viajn preferatajn lingvojn"));
         art.appendChild(div);
     }
 
@@ -363,7 +363,7 @@ var artikolo = function() {
         if (pied) { // en la redeaktilo eble jam foriĝis...
             var first_a = pied.querySelector("A");
             if (first_a) {
-                var pref = make_element("A",{class: "redakto", href: "#", title: "agordu preferatajn lingvojn"},"preferoj");
+                var pref = ht_element("A",{class: "redakto", href: "#", title: "agordu preferatajn lingvojn"},"preferoj");
                 pref.addEventListener("click", () =>
                     preferoj.dialog(preparu_maletendu_sekciojn));
                 first_a.insertAdjacentElement("afterend",pref);
@@ -445,7 +445,7 @@ var artikolo = function() {
                             if (! pas[r.v.toLowerCase()] ) {
                                 pas[r.v.toLowerCase()] = true;  // memoru
 
-                                const v = make_elements([
+                                const v = ht_elements([
                                     ['a',{ href: vikipedio_url+r.v }, r.v.replace(/_/g,' ')],', '
                                 ]);
                                 vj.push(...v); 
@@ -454,8 +454,8 @@ var artikolo = function() {
                     }
                     
                     if (vj.length) {
-                        vj.splice(vj.length-1,1,make_element("br")); // anstataŭigu lastan komon per <br/>
-                        const p = make_elements([
+                        vj.splice(vj.length-1,1,ht_element("br")); // anstataŭigu lastan komon per <br/>
+                        const p = ht_elements([
                             ['p',{},[
                                 ['img',{  
                                     //src: '../smb/i_wiki.svg', 
@@ -506,22 +506,22 @@ var artikolo = function() {
                             if (! (pas[cel.k] && pas[cel.k] == (cel.n||-1)) )// jam antaŭe donita...
                             {
                                 pas[cel.k] = cel.n || -1;  // memoru
-                                const a = make_elements([
+                                const a = ht_elements([
                                     ['a',{ 
                                         href: mrk_art_url(cel.m),
                                         class: "ref"
                                     },cel.k],', '
                                 ]);
                                 if (cel.n) {
-                                    const s = make_element("sup",{},cel.n);
+                                    const s = ht_element("sup",{},cel.n);
                                     a[0].append(s);
                                 }  
                                 aj.push(...a);    
                             }
                         }
                         if (aj.length) {
-                            aj.splice(aj.length-1,1,make_element("br")); // anstataŭigu lastan komon per <br/>
-                            const p = make_elements([
+                            aj.splice(aj.length-1,1,ht_element("br")); // anstataŭigu lastan komon per <br/>
+                            const p = ht_elements([
                                 ['p',{},[
                                     ['img',{ 
                                         src: '../smb/' + tip_fixed(tip) + '.gif', 
@@ -537,7 +537,7 @@ var artikolo = function() {
 
                     // nestigu ĉiujn trovitajn referencojn den div
                     if (refs.length) {
-                        const div = make_element("div", { class: 'tezauro' });
+                        const div = ht_element("div", { class: 'tezauro' });
                         div.append(...refs);
                         return div;
                     }
@@ -562,7 +562,7 @@ var artikolo = function() {
                         const dk = sec.querySelector("div.kasxebla");
                         dk.prepend(div);
                         // aldonu simbolon en h2
-                        //const btn = make_element('button', { 
+                        //const btn = ht_element('button', { 
                         //    class: "i_tez" });                        
                         //h2.append(btn);
                     }
