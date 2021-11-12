@@ -42,14 +42,15 @@
         "build:js:debug": "google-closure-compiler --compilation_level BUNDLE --js_module_root jsc --entry_point jsc/kadro.js --js_output_file build/jsc/revo-2b-min.js jsc/util.js jsc/transiroj.js jsc/preferoj.js jsc/artikolo.js jsc/sercho.js jsc/kadro.js build/jsc/voko_entities.js jsc/xmlarea.js jsc/redaktilo.js",
         "build:jq": "google-closure-compiler --compilation_level SIMPLE --js_module_root ./jsc --entry_point jqu/ui_kreo.js --js_output_file build/jqu/redaktilo-2a-min.js jqu/kodado.js jqu/tekstiloj.js jqu/procentoj.js jqu/sxablonoj.js jqu/sxabloniloj.js jqu/jquery_ext.js jqu/ui_art.js jqu/ui_dlg.js jqu/ui_err.js jqu/ui_klv.js jqu/ui_tabl.js jqu/ui_srch.js jqu/ui_menu.js jqu/ui_kreo.js",        
         "build:jq:debug": "google-closure-compiler --compilation_level BUNDLE --js_module_root jqu --entry_point jqu/ui_kreo.js --js_output_file build/jqu/redaktilo-2a-min.js jqu/kodado.js jqu/tekstiloj.js jqu/procentoj.js jqu/sxablonoj.js jqu/sxabloniloj.js jqu/jquery_ext.js jqu/ui_art.js jqu/ui_dlg.js jqu/ui_err.js jqu/ui_klv.js jqu/ui_tabl.js jqu/ui_srch.js jqu/ui_menu.js jqu/ui_kreo.js",        
-        "build": "npm run build:css && npm run build:dok && npm run build:js",
+        "build": "npm run build:css && npm run build:dok && npm run build:js && npm run build:jq",
         "publish:araneo:js": "araneo_id=$(docker ps --filter name=araneujo_araneo -q) && docker cp build/jsc ${araneo_id}:$npm_package_config_araneo_target",
         "publish:araneo:css": "araneo_id=$(docker ps --filter name=araneujo_araneo -q) && docker cp build/stl ${araneo_id}:$npm_package_config_araneo_target",
         "publish:araneo": "npm run publish:araneo:js && npm run publish:araneo:css"
     },
     "scriptsComments": {
         "build": "Kompilas CSS, JS kaj DOK al dosierujo build/",
-        "build:js": "pri google-closure-compiler vd. https://www.npmjs.com/package/google-closure-compiler",
+        "build:js": "Js por simpla redaktilo, pri google-closure-compiler vd. https://www.npmjs.com/package/google-closure-compiler",
+        "build:jq": "JS/jQuery por komforta redaktilo, pri google-closure-compiler vd. https://www.npmjs.com/package/google-closure-compiler",
         "build:svg": "kunigas piktogramojn el unuopaj SVG-dosieroj. Ne uzante docker build vi antaŭe voku bin/mp2png_svg.sh"
     }
 }
