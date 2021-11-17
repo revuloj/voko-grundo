@@ -1,3 +1,9 @@
+/**
+ * Administras la redaktatan tekston tiel, ke eblas redakti nur parton de ĝi, t.e. unuopan derivaĵon, sencon ktp.
+ * @constructor
+ * @param {*} ta_id - La HTML-Id de la koncerna textarea-elemento en la HTML-paĝo
+ * @param {*} onAddSub - Revokfunkcio, vokata dum analizo de la strukturo ĉiam, kiam troviĝas subteksto. Tiel eblas reagi ekzemple plenigante liston per la trovitaj subtekstoj (art, drv, snc...) 
+ */
 function Xmlarea(ta_id, onAddSub) {
     this.txtarea = document.getElementById(ta_id);
     //this.structure_selection = document.getElementById(struc_sel);
@@ -33,8 +39,10 @@ function Xmlarea(ta_id, onAddSub) {
     }
 };
 
-// metas la kompletan XML-tekston laŭ la argumento xml
-// kaj aktualigas la strukturon el ĝi
+/**
+ * Metas la kompletan XML-tekston laŭ la argumento 'xml' kaj aktualigas la strukturon el ĝi
+ * @param {string} xml 
+ */
 Xmlarea.prototype.setText = function(xml) {
   this.xmlteksto = xml;  
   //this.txtarea.value = xml;
@@ -46,11 +54,22 @@ Xmlarea.prototype.setText = function(xml) {
   this.resetCursor();   
 }
 
-// ekstraktas strukturon de art/subart/drv/subdrv/snc/subsnc el la artikolo
+
+/**
+ * Ekstraktas strukturon de art/subart/drv/subdrv/snc/subsnc el la artikolo
+ * @param {string} selected - se donita tio estas la elektita subteksto kaj estos markita en la revokfunkcio onaddsub (4-a argumento: true)
+ */
 Xmlarea.prototype.structure = function(selected = undefined) {
   const re_stru = this.re_stru;
   const xmlteksto = this.xmlteksto;
 
+  /**
+   * Ekstraktu la XML-atributon 'mrk' el la subteksto
+   * @param {string} elm - la elemento de la subteksto (art,subart,drv,...,subsnc)
+   * @param {number} de - la komenco de la subteksto en la tuta XML
+   * @param {number} ghis - la fino de la subteksto en la tuta XML
+   * @returns la atributon 'mrk'
+   */
   function mrk(elm,de,ghis) {
     re_stru._mrk.lastIndex = de;
     const mrk = re_stru._mrk.exec(xmlteksto);
@@ -159,8 +178,11 @@ Xmlarea.prototype.structure = function(selected = undefined) {
   this.strukturo.push(tuto);
 }
 
-// aktualigas la tekstbufron per la redaktata subteksto kaj
-// la struktur-liston
+/**
+ * Aktualigas la tekstbufron per la redaktata subteksto, ankaŭ aktualigas la struktur-liston
+ * @param {string} select - se donita, la strukturelemento kun tiu .id estos poste la elektita
+ */
+
 Xmlarea.prototype.sync = function(select = undefined) {
   if (this.xml_elekto) {
     const old_id = this.xml_elekto.id;
@@ -199,18 +221,33 @@ Xmlarea.prototype.sync = function(select = undefined) {
   }
 }
 
+/**
+ * Trovu la informojn de subtekston 'id' en la strukturlisto 
+ * @param {string} id 
+ * @returns la detalojn kiel objekto
+ */
 Xmlarea.prototype.getStructById = function(id) {
   for (let s of this.strukturo) {
     if (s.id == id) return s;
   }
 }
 
+/**
+ * Trovas la subtekston kun 'id' en la strukturlisto
+ * @param {string} id 
+ * @returns la konernan XML-tekston
+ */
 Xmlarea.prototype.getSubtextById = function(id) {
   const s = this.getStructById(id);
   return this.xmlteksto.slice(s.de,s.al);
 }
 
-// ni trovos la parencon de la struktur-elemento donita per id
+
+/**
+ * Trovos la parencon de la struktur-elemento donita per 'id', ekzemple ĉe senco tio estas la enhavanta derivaĵo.
+ * @param {string} id 
+ * @returns la detalojn de la parenco kiel objekto
+ */
 Xmlarea.prototype.getParent = function(id) {
   const s = this.getStructById(id);
   // parenco venas antaŭ la nuna kaj enhavas ĝin (subteksto al..de)
@@ -220,6 +257,10 @@ Xmlarea.prototype.getParent = function(id) {
   }
 }
 
+/**
+ * Trovas la plej proksiman parencon de la aktuale elektita subteksto, kiu havas XML-atributon 'mrk'
+ * @returns la detalojn de la parenco kiel objekto
+ */
 Xmlarea.prototype.getClosestWithMrk = function() {
   if (this.xml_elekto.mrk) {
     return this.xml_elekto;
@@ -232,16 +273,23 @@ Xmlarea.prototype.getClosestWithMrk = function() {
   }
 }
 
-// redonu la XML-markon (atributo @mrk) de la aktuala subteksto, 
-// aŭ la markon de parenco, se ĝi ne havas mem
+
+/**
+ * Redonas la XML-atributon 'mrk' de la aktuala subteksto, aŭ tiun de parenco, se ĝi ne havas mem
+ * @returns la XML-atributon 'mrk'
+ */
 Xmlarea.prototype.getCurrentMrk = function() {
   const c = this.getClosestWithMrk();
   if (c) return c.mrk;
   return '';
 }
 
-// redonu la aktualan kapvorton, se ene de drv t.e. ties kapvorton, 
-// alie la kapvorton de la unua drv
+
+/**
+ * Redonas la aktualan kapvorton, se ene de drv t.e. ties kapvorton, alie la kapvorton de la unua drv
+ * en la artikolo
+ * @returns la kapvorton, tildo estas anstataŭigita per la radiko, variaĵoj post komo forbalaita
+ */
 Xmlarea.prototype.getCurrentKap = function() {
     function kap(e) {
       return e.kap
@@ -273,12 +321,17 @@ Xmlarea.prototype.getCurrentKap = function() {
   }
 }
 
-// trovas la elemento-komencon (end=false) aŭ finon (end=true) en this.xmlarea
-// la unua argumento estas listo de interesantaj elementoj
-// se stop_no_match = true, ni haltas ĉe la unua elemento, 
-// kiu ne estas en la listo
-// La serĉo okazas de la fino!
 
+/**
+ * Trovas la elemento-komencon (end=false) aŭ finon (end=true) en la XML-teksto.
+ * La serĉo okazas de la fino!
+ * @param {Array.string} elements - listo de interesantaj elementoj
+ * @param {boolean} end - true: ni serĉas elementofinon (&lt;/drv), false: ni serĉas komencon (&lt;drv)
+ * @param {boolean} stop_no_match - se 'true', ni haltas ĉe la unua elemento, kiu ne estas en la listo
+ * @param {string} xml - la XML-teksto en kiu ni serĉas
+ * @param {number} from - la finpozicio de kiu ni serĉas en alantaŭa direkto
+ * @returns objekton kun kampoj pos, end, elm
+ */
 Xmlarea.prototype.travel_tag_bw = function(elements,end=false,stop_no_match=false,xml,from) {    
   const re_te = this.re_stru._tagend;
   const mark = end? '</' : '<';
@@ -318,50 +371,12 @@ Xmlarea.prototype.travel_tag_bw = function(elements,end=false,stop_no_match=fals
 }
 
 
-/*
-// elprenu el la aktuale redaktata subteksto la
-// lastan tradukon de 'lng'
-Xmlarea.prototype.getCurrentLastTrd = function(lng) {
-  const xml = this.txtarea.value;
-  const re_trd = this.re_stru._trd;
-
-  var m = re_trd.exec(xml);
-  var lastpos = -1; 
-  var trd_str = '';
-  var trd_grp = false;
-
-  while (m) {
-    if (m[2] == lng) {
-      lastpos = m.index;
-      trd_str = m[0];
-      trd_grp = (m[1] == 'grp');  
-      
-      console.debug(lastpos + ": " + m.join(', '));
-    } else if (m[2] < lng) {
-      lastpos = m.index + m[0].length
-    }
-    // serĉu plu
-    m = re_trd.exec(xml);
-  }
-
-  if (lastpos > -1) return {pos: lastpos, grp: trd_grp, trd: trd_str};
-
-  /// PLIBONIGU:
-    oni per regulesprimo povas serĉi nur antaŭen. Eblecoj por plirapidigi la kazon, ke
-    la koncerna lingvo jam havas tradukon:
-    -> aldonu la lingvon en la regulesprimon por trovi nur tiujn de la koncerna lingvo
-    -> serĉu unue nur "<lng>" de malantaŭe en la teksto kaj poste kontrolu, ĉu estas traduko de tiu lingvo (iom malfacile programebla, sed supozeble la plej rapida):
-    const pos = Math.max(
-      lastIndexOf('"'+lng+'"'),
-      lastIndexOf("'"+lng+"'"));
-    if (pos > -1) {
-      //const sub = xml.substr(pos-12);
-      //lookbehind ~: sub.find(/<trd(grp)?\s+lng\s*=\s*["']([a-z]{2,3})["']/)
-    }
-  ///
-}
-*/
-
+/**
+ * Kolektas ĉiujn tradukojn de unu lingvo en XML-teksto
+ * @param {string} lng - la lingvokodo, ekz-e en, de, fr ktp.
+ * @param {string} xml - la XML-teksto
+ * @param {boolean} shallow - true: ni serĉas nur en la unua strukturnivelo, false: ni serĉas strukturprofunde, do ĉiujn tradukojn
+ */
 Xmlarea.prototype.collectTrd = function(lng, xml, shallow=false) {
   const re = this.re_stru;
   if (!xml) {
@@ -430,6 +445,11 @@ Xmlarea.prototype.collectTrd = function(lng, xml, shallow=false) {
   };
 }
 
+/**
+ * Kolektas ĉiujn tradukojn de unu lingvo en la aktuale redaktata XML-subteksto.
+ * La rezulto estos poste en la propra listo this.tradukoj
+ * @param {string} lng - la lingvokodo: ar, en, de ktp.
+ */
 Xmlarea.prototype.collectTrdAll = function(lng) {
   var xml = this.txtarea.value;
   this.tradukoj = [];
@@ -448,7 +468,11 @@ Xmlarea.prototype.collectTrdAll = function(lng) {
 }
 
 
-// trovas la lokon kie enmeti tradukon
+/**
+ * Trovas la lokon kie enmeti tradukon de certa lingvo en la aktuala redaktata subteksto
+ * @param {string} lng - la lingvokodo
+ * @returns objekton kun la kampoj pos kaj elm
+ */
 Xmlarea.prototype.findTrdPlace = function(lng) {
   const xml = this.txtarea.value;
 
@@ -511,7 +535,12 @@ Xmlarea.prototype.findTrdPlace = function(lng) {
   }
 }
 
-
+/**
+ * Aldonas tradukon de donita lingvo en la konvena loko (alfabete inter la aliaj tradukoj
+ * kaj etendante tradukgrupojn se jam ekzistas traduko(j) de tiu lingvo en la teksto)
+ * @param {string} lng - la lingvokodo
+ * @param {string} trd - la aldonenda traduko
+ */
 Xmlarea.prototype.addTrd = function(lng,trd) {
   const place = this.findTrdPlace(lng); // this.getCurrentLastTrd(lng);
   if (place) {
@@ -551,15 +580,21 @@ Xmlarea.prototype.addTrd = function(lng,trd) {
 }
 
 
-// eventuale aktualigas la XML-tekston kun la parto el this.xmlarea
-// kaj redonas la kompletan tekston
+/**
+ * Redonas la tutan XML-tekston post eventuala sinkronigo kun la aktuala redakto
+ * @returns la tuta sinkronigita XML-teksto
+ */
 Xmlarea.prototype.syncedXml = function() {
   if (! this.synced) this.sync(this.xml_elekto.id); 
   return this.xmlteksto;
 }
 
-// elektas parton de la XML-teksto por redakti nur tiun
-// laŭbezone sekurigas la nune redaktatan parton...
+
+/**
+ * Elektas (alian) parton de la XML-teksto por redakti nur tiun.
+ * Laŭbezone sekurigas la nune redaktatan parton...
+ * @param {string} id - la identigilo de la subteksto
+ */
 Xmlarea.prototype.changeSubtext = function(id) {
   if (id) {
     // ni unue sekurigu la aktuale redaktatan parton...
@@ -589,8 +624,13 @@ Xmlarea.prototype.changeSubtext = function(id) {
   }
 }
 
-// redonas la aktualan y-koordinaton de la videbla parto de this.xmlarea
-Xmlarea.prototype.scrollPos =  function(pos) {
+
+/**
+ * Redonas aŭ metas la aktualan y-koordinaton de la videbla parto de this.xmlarea
+ * @param {number} pos - se donita rulas al tiu y-koordinato, se mankas redonu la aktualan
+ * @returns la aktuala y-koordinato
+ */
+Xmlarea.prototype.scrollPos = function(pos) {
   var txtarea = this.txtarea;
   if (typeof pos == "number") {
     // set scroll pos
@@ -609,9 +649,13 @@ Xmlarea.prototype.scrollPos =  function(pos) {
     else /*if (document.body)*/
       return document.body.scrollTop;
   }
-},
+}
 
-// redonas la aktualan pozicion de la kursoro kiel linio + loko ene de la linio
+
+/**
+ * Redonas la aktualan pozicion de la kursoro kiel linio kaj loko ene de la linio 
+ * @returns objekto {{line: number, pos: number}}
+ */
 Xmlarea.prototype.position = function() {
   const loff = this.xml_elekto? this.xml_elekto.ln : 0;
 
@@ -644,6 +688,11 @@ Xmlarea.prototype.position = function() {
   return get_line_pos(pos,txtarea.value);
 };
 
+/**
+ * Elektas tekstoparton en la redaktata teksto
+ * @param {number} pos - la pozicio ekde kie elekti
+ * @param {number} len - la nombro de elektendaj signoj
+ */
 Xmlarea.prototype.select = function(pos,len) {
   const txtarea = this.txtarea;
 
@@ -659,7 +708,12 @@ Xmlarea.prototype.select = function(pos,len) {
   //}
 }
 
-// legas aŭ anstataŭigas la momente elektitan tekston de this.txtarea
+/**
+ * Legas aŭ anstataŭigas la momente elektitan tekston en la redaktatat teksto
+ * @param {string} insertion - se donita la enmetenda teksto (ĉe la aktuala pozicio aŭ anstataŭ la aktuala elekto)
+ * @param {number} p_kursoro - se donita tiom da signoj ni moviĝas antataŭen antaŭ enmeti la tekston
+ * @returns la momente elektita teksto, se ne estas donita enmetenda teksto
+ */
 Xmlarea.prototype.selection = function(insertion,p_kursoro=0) {
   //var txtarea = document.getElementById('r:xmltxt');
   const txtarea = this.txtarea;
@@ -704,8 +758,13 @@ Xmlarea.prototype.selection = function(insertion,p_kursoro=0) {
   }
 },
 
-// ŝovas la markitan tekston *indent* signojn destren aŭ maldekstren
-// sen argumento *indent* gi eltrovas la enŝovon en la aktuala linio
+
+/**
+ * Ŝovas la markitan tekston 'indent' signojn dekstren aŭ maldekstren
+ * sen argumento 'indent' ĝi eltrovas la enŝovon en la aktuala linio
+ * @param {number} indent - la nombro de ŝovendaj spacoj
+ * @returns - la enŝovo de la aktuala linio (la spacsignoj en ties komenco)
+ */
 Xmlarea.prototype.indent = function(indent) {
   //var txtarea = document.getElementById('r:xmltxt');
   var txtarea = this.txtarea;
@@ -775,7 +834,11 @@ Xmlarea.prototype.indent = function(indent) {
   }
 },
 
-// redonas la signon antaŭ la kursoro
+
+/**
+ * Signo antaŭ kursoro
+ * @returns la signon antaŭ la kursoro
+ */
 Xmlarea.prototype.charBefore = function() {
   //var txtarea = document.getElementById('r:xmltxt');
   var txtarea = this.txtarea;
@@ -791,7 +854,10 @@ Xmlarea.prototype.charBefore = function() {
   }
 },
 
-// iru al la komenco de la redaktejo kaj fokusu ĝin.
+
+/**
+ * Metas la kursoron al la komenco de la redaktejo kaj fokusas ĝin
+ */
 Xmlarea.prototype.resetCursor = function() { 
   var txtarea = this.txtarea;
   if (txtarea.setSelectionRange) { 

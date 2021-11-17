@@ -11,7 +11,13 @@
 var regex_tld = new RegExp('<tld\\s+lit="([^"]+)"\\s*/>','g');
 var regex_xmltag = new RegExp('<[^>]+>','g');
 
-// kalkulu el la signoindekso la linion kaj la pozicion ene de la linio
+
+/**
+ * Kalkulas el la signoindekso la linion kaj la pozicion ene de la linio
+ * @param {number} inx - la pozicio en la teksto (sen konsideri liniojn)
+ * @param {string} text - la koncerna teksto
+ * @returns la pozicion kiel objekto {{line: number, pos: number}}
+ */
 function get_line_pos(inx,text) {
     var lines = 0;
     var last_pos = 0;
@@ -25,13 +31,24 @@ function get_line_pos(inx,text) {
     return({line: lines, pos: pos})
 }
 
+/**
+ * Anstataŭigas XML-tildo-elementojn en teksto per donita radiko. Se la
+ * tld-elemento enhavas liter-atributon (majusklo-minusklo-ŝanĝo) tio estas konsiderata
+ * @param {string} radiko - la radiko (kapvorto sen finaĵo)
+ * @param {string} str - la XML-teksto kun elementoj 'tld' anstataŭigendaj
+ * @returns la ŝanĝita teksto
+ */
 function replaceTld(radiko,str) {
     return (str
             .replace(/<tld\/>/g,radiko)
             .replace(regex_tld,'$1'+radiko.substr(1)));
 }
 
-// elprenu la lingvojn en kiuj ekzistas tradukoj el XML-artikolo
+/**
+ * Elprenas la lingvojn en kiuj ekzistas tradukoj el XML-artikolo
+ * @param {string} xmlStr - la XML-teksto
+ * @returns la lingvoj kiel objekto
+ */
 function traduk_lingvoj(xmlStr) {
     var lingvoj = {};
     var xml = xmlStr.replace(/&[a-zA-Z0-9_]+;/g,'?'); // entities cannot be resolved...
@@ -51,6 +68,12 @@ function traduk_lingvoj(xmlStr) {
     return lingvoj;
 }
 
+/**
+ * Redonas la XML-enhavon de XML-nodo, IE rekte subtenas tion kiel atributo de XmlNode,
+ * sed por aliaj retumiloj ni devas seriigi ekstrakti la enhavon forigante la elementokomencon kaj finon
+ * @param {*} xmlNode 
+ * @returns la XML-enhavo
+ */
 function innerXML(xmlNode) {
    try {
       // Gecko- and Webkit-based browsers (Firefox, Chrome), Opera.
@@ -71,6 +94,13 @@ function innerXML(xmlNode) {
    return false;
 }
 
+
+/**
+ * Redonas la la XML-kodon de elemento. IE rekte subtenas tian atributon ĉe
+ * aliaj retumiloj ne devas seriigi la XML-nodon
+ * @param {*} xmlNode 
+ * @returns la XML-enahvo kun la elemento mem
+ */
 function outerXML(xmlNode) {
    try {
       // Gecko- and Webkit-based browsers (Firefox, Chrome), Opera.
@@ -78,7 +108,7 @@ function outerXML(xmlNode) {
   }
   catch (e) {
      try {
-        // if XMLSerializer is not supported, old Internet Explorer, but innerHTML.
+        // if XMLSerializer is not supported, old Internet Explorer, but outerHTML.
         return xmlNode.outerHTML;
      }
      catch (e) {  
@@ -90,6 +120,14 @@ function outerXML(xmlNode) {
 }
 
 
+/**
+ * Enŝovas tradukojn de unu lingvo en XML
+ * KOREKTU: ĉar tio uzas jQuery - prefere ŝovu tion al iu dosiero rs/jq_util.js
+ * @param {*} element - la elemento (CSS elektilo) en kiu enŝovi la tradukojn (ekz. 'drv')
+ * @param {*} shov - la linikomenca enŝovo aplikenda
+ * @param {*} lng - la lingvokodo
+ * @param {*} tradukoj - la tradukoj por tiu linggvo
+ */
 function insert_trd_lng(element,shov,lng,tradukoj) {
     // kunmetu la XML por la tradukoj
     var trdXML = trd_xml_dom(lng,shov,tradukoj);
@@ -127,6 +165,14 @@ function insert_trd_lng(element,shov,lng,tradukoj) {
     }
 }
 
+/**
+ * Anstataŭigas id-elementon per novaj (ni bezonas tion por la tradukenŝovo)
+ * @param {*} element - la patra elemento en kiu anstataŭigi
+ * @param {*} oldChild - la anstataŭigenda ido
+ * @param {*} newChildren - la novaj id-elementoj
+ * @param {*} wsBefore - teksto enŝovenda antaŭe
+ * @param {*} wsAfter - teksto enŝovenda poste
+ */
 function replaceChildren(element,oldChild,newChildren,wsBefore,wsAfter) {
   if (wsBefore) element.insertBefore(element.ownerDocument.createTextNode(wsBefore),before);
   for (var i=0; i<newChildren.length; i++) {
@@ -136,6 +182,14 @@ function replaceChildren(element,oldChild,newChildren,wsBefore,wsAfter) {
   element.removeChild(oldChild);
 }
 
+/**
+ * Enŝovas novajn idojn antaŭe
+ * @param {*} element - la patra elemento en kiu enŝovi
+ * @param {*} before - la elemento antaŭ kiu enŝovi
+ * @param {*} children - la aldonendaj idoj
+ * @param {*} wsBefore - teksto aldonenda antaŭe
+ * @param {*} wsAfter - teksto aldonenda poste
+ */
 function beforeChildren(element,before,children,wsBefore,wsAfter) {
     if (wsBefore) element.insertBefore(element.ownerDocument.createTextNode(wsBefore),before);
     for (var i=0; i<children.length; i++) {
@@ -144,6 +198,13 @@ function beforeChildren(element,before,children,wsBefore,wsAfter) {
     if (wsAfter) element.insertBefore(element.ownerDocument.createTextNode(wsAfter),before);
 }
 
+/**
+ * Alpendigas idojn.
+ * @param {*} element - la patra elemento
+ * @param {*} children - la novaj idoj
+ * @param {*} wsBefore - teksto aldonenda antaŭe
+ * @param {*} wsAfter - teksto aldonenda poste
+ */
 function appendChildren(element,children,wsBefore,wsAfter) {
     if (wsBefore) element.appendChild(element.ownerDocument.createTextNode(wsBefore));
     for (var i=0; i<children.length; i++) {
@@ -153,6 +214,13 @@ function appendChildren(element,children,wsBefore,wsAfter) {
 }
 
 
+/**
+ * Aldonas tradukojn de iu lingvo en la XML-DOM
+ * @param {*} lng - la lingvokodo
+ * @param {*} shov - la linikomenca enŝovo aplikenda
+ * @param {*} tradukoj - la tradukoj
+ * @returns la XML-dokumento kun la aldonitaj tradukoj
+ */
 function trd_xml_dom(lng,shov,tradukoj) {
     parser = new DOMParser();
     xmlDoc = parser.parseFromString('<xml></xml>',"text/xml");
@@ -192,6 +260,12 @@ function trd_xml_dom(lng,shov,tradukoj) {
     return root;
 }
 
+/**
+ * Transformas la traduktekston al XML-strukturo
+ * @param {*} parser - XML-analizilo reuzenda
+ * @param {string} traduko - la tradukteksto
+ * @returns - la kreita XML-strukturo
+ */
 function parseTrd(parser, traduko) {
     try {
         var doc = parser.parseFromString('<xml>'+traduko+'</xml>',"text/xml");
@@ -207,6 +281,13 @@ function parseTrd(parser, traduko) {
     return doc.documentElement.childNodes;
 }
 
+
+/**
+ * Trovas la lingvon, post kiu ni aldonas novan
+ * @param {*} lng - la aldonenda lingvo
+ * @param {*} lingvoj - la listo de ekzistantaj lingvoj
+ * @returns la lingvo, post kiu enŝovi aŭ null, kiam enŝovi en la fino
+ */
 function lingvo_post(lng,lingvoj) {
     for (var i=0; i<lingvoj.length;i++) {
         if (lingvoj[i] > lng) return lingvoj[i];
@@ -216,6 +297,11 @@ function lingvo_post(lng,lingvoj) {
     return null;
 }
 
+/**
+ * Redonas la spacsignojn en la fino de la teksto (kutime post la lasta linifino) kiel enŝovo
+ * @param {*} text - la teksto
+ * @returns  la finspacsignoj de enŝovo
+ */
 function enshovo(text) {
     // redonu la spacsignojn en la fino de text
     var enshovo = '';
@@ -229,6 +315,12 @@ function enshovo(text) {
     return enshovo;
 }
 
+/**
+ * Redonas la spacsignojn de la enŝovo en la antaaŭ linio
+ * @param {*} text - la teksto
+ * @param {*} pos - la pozicio antaŭ kiu kolekti spacsignojn
+ * @returns la kolektitaj spacsignoj kiel enŝovo
+ */
 function enshovo_antaua_linio(text, pos) {
     // redonu la spacsignojn en la linio antaŭ pos
     // minus la spacsignojn post pos
@@ -247,12 +339,22 @@ function enshovo_antaua_linio(text, pos) {
     return enshovo.substr(p-pos);
 }
 
+/** Kontrolas ĉu teksto konsistas nur el spacsignoj
+ * @param {string} spaces - la teksto
+ * @returns true, se la teksto enhavas nur spacojn
+ */
 function all_spaces(spaces) {
     var p = 0;
     while (spaces[p] == ' ' && p<spaces.length) p++;
     return p == spaces.length;
 }
 
+/**
+ * Majuskligas la unuajn signojn de ĉiu trovita vorto
+ * @param {*} str - la teksto de vortoj
+ * @param {*} rad - radiko, se donita ni uzas ties komencliteron por majuskligi ankaŭ tld-elementojn
+ * @returns la teksto kun majuskligitaj vortkomencoj
+ */
 function kameligo(str, rad='') {
     var kamelo = '';
     var vortoj = str.split(' ');
@@ -267,6 +369,12 @@ function kameligo(str, rad='') {
     return kamelo.substr(1);
 }
 
+/**
+ * Minuskligas tekston
+ * @param {*} str - la teksto kun la vortoj
+ * @param {*} rad - radiko, se donita ni uzas ties unuan minuskligitan literon por minuskligi tld-elementojn
+ * @returns la minuskligita teksto
+ */
 function minuskligo(str, rad='') {
     str = str.toLowerCase();
     if (rad && rad[0].toLowerCase() != rad[0])
@@ -274,11 +382,23 @@ function minuskligo(str, rad='') {
     return str;
 }
 
+/**
+ * Forigas ĉiujn XML-elementoj el teksto kaj lasas nur la nudan enhavon
+ * @param {*} xml - la XML-teksto
+ * @returns la nuda enhavo send la XML-elementoj
+ */
 function forigu_markup(xml) {
     var t = xml.replace(regex_xmltag,'');
     return t;
 }
 
+/**
+ * Rompas tro lingajn liniojn
+ * @param {*} str - la traktenda teksto
+ * @param {*} indent - se donita, la enŝovo aldonenda ĉe ĉiu nova linio
+ * @param {*} linirompo - la maksimuma linilongeco, 80 apriore
+ * @returns la teksto kun eventuale aldonitaj linirompoj
+ */
 function linirompo(str, indent=0, linirompo=80) {
     var pos = 0, bpos = 0, lrpos = 0;
     if (indent) {

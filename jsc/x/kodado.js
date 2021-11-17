@@ -1,9 +1,6 @@
 /*************************************************************************
-
 // (c) 2008 - 2018 Wolfram Diestel, Wieland Pusch, Bart Demeyere & al.
 // laŭ GPL 2.0
-
-
 *****************************************************************************/
 
 
@@ -11,6 +8,10 @@
 // iloj por signaroj...
 //*********************************************************************************************
 
+/**
+ * Haketo kreita el teksto. Ni etendas la String.objekton tiel
+ * @returns la haketo de la teksto
+ */
 String.prototype.hashCode = function() {
     var hash = 0, i, chr;
     if (this.length === 0) return hash;
@@ -23,18 +24,18 @@ String.prototype.hashCode = function() {
   };
 
 
-  /**
-   * Calculate a 32 bit FNV-1a hash
-   * Found here: https://gist.github.com/vaiorabbit/5657561
-   * Ref.: http://isthe.com/chongo/tech/comp/fnv/
-   *
-   * @param {string} str the input value
-   * @param {boolean} [asString=false] set to true to return the hash value as 
-   *     8-digit hex string instead of an integer
-   * @param {integer} [seed] optionally pass the hash of the previous chunk
-   * @returns {integer | string}
-   */
-  String.prototype.hashFnv32a = function(asString, seed) {
+/**
+ * Kalkulas 32bit FNV-1a-haketon
+ * trovita ĉi tie: https://gist.github.com/vaiorabbit/5657561
+ * ref.: http://isthe.com/chongo/tech/comp/fnv/
+ *
+ * @param {string} str la teksto
+ * @param {boolean} [asString=false] true: redonu la haketon kiel 
+ *     8-ciferan hex-signaron anstataŭ kiel nombron
+ * @param {integer} [seed] opcie pasas la haketon de la antaŭa porcio kiel semon
+ * @returns {integer | string}
+ */
+String.prototype.hashFnv32a = function(asString, seed) {
       var str = this;
       /*jshint bitwise:false */
       var i, l,
@@ -51,7 +52,11 @@ String.prototype.hashCode = function() {
       return hval >>> 0;
  }  
 
- 
+/**
+ * Tradukas en teksto supersignajn literoj la la x-formo, do Ĉ al Cx ktp. ... ŭ al ux 
+ * @param {*} text 
+ * @returns la teksto kun la askiigitaj supersignoj
+ */ 
 function alCx(text) {
     return (
       text.replace('Ĉ','Cx')
@@ -69,7 +74,13 @@ function alCx(text) {
 }
 
 
-// http://stackoverflow.com/questions/7753448/how-do-i-escape-quotes-in-html-attribute-values
+/**
+ * Tradukas la specialajn XML-signojn al unuoj por protekti ilin de interpreto kiel XML-sintakso
+ * vd http://stackoverflow.com/questions/7753448/how-do-i-escape-quotes-in-html-attribute-values
+ * @param {*} s 
+ * @param {*} preserveCR 
+ * @returns la tradukita teksto
+ */
 function quoteattr(s, preserveCR) {
     preserveCR = preserveCR ? '&#13;' : '\n';
     return ('' + s) /* Forces the conversion to string. */
@@ -88,6 +99,12 @@ function quoteattr(s, preserveCR) {
         ;
 }
 
+/**
+ * Prezentas glitpunktan nombron kiel teksto
+ * @param {*} x 
+ * @param {*} nbDec 
+ * @returns la teksta prezento de la nombro
+ */
 function formatFloat(x,nbDec) { 
     if (!nbDec) nbDec = 100;
     var a = Math.abs(x);

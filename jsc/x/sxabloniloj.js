@@ -10,7 +10,11 @@
 
 /** ŝablonoj por flekseble enmeti referencojn, fontojn ktp. **/
 
-/*** XMLŜablono: baza funkcioj de ŝablonoj ***/
+/**
+ * Bazaj funkcioj de ŝablonoj
+ * @constructor
+ * @param {*} sxablono 
+ */
 var XMLŜablono = function(sxablono) {
     this.sxablono = sxablono;
 }
@@ -66,8 +70,11 @@ function extend(ChildCls, ParentCls) {
         writable: true });
 }
 
-/*** XMLArtikolo: krei novan artikolon surbaze de ŝablono ***/
-
+/**
+ * Krei novan artikolon surbaze de ŝablono
+ * @constructor
+ * @param {*} art 
+ */
 var XMLArtikolo = function(art) {
     XMLŜablono.call(this,xml_sxablonoj.art);
     art.dif = art.dif.replace(/~/g,'<tld/>');
@@ -80,8 +87,11 @@ XMLArtikolo.prototype.xml = function(indent) {
 }
 
 
-/*** XMLDerivaĵo: krei novan derivaĵon surbaze de ŝablono ***/
-
+/**
+ * Krei novan derivaĵon surbaze de ŝablono 
+ * @constructor
+ * @param {*} drv 
+ */
 var XMLDerivaĵo = function(drv) {
     XMLŜablono.call(this,xml_sxablonoj.drv);
     drv.dif = drv.dif.replace(/\n/g,"\n       ").replace(/~/g,'<tld/>');
@@ -95,8 +105,12 @@ XMLDerivaĵo.prototype.xml = function(indent) {
     return XMLŜablono.prototype.xml.call(this,this.drv,indent);
 }
 
-/*** XMLSenco: krei novan sencon surbaze de ŝablono ***/
 
+/**
+ * Krei novan sencon surbaze de ŝablono
+ * @constructor
+ * @param {*} snc 
+ */
 var XMLSenco = function(snc) {
     XMLŜablono.call(this,xml_sxablonoj.snc);
     snc.dif = snc.dif.replace(/\n/g,"\n       ").replace(/~/g,'<tld/>');
@@ -109,9 +123,12 @@ XMLSenco.prototype.xml = function(indent=2) {
     return XMLŜablono.prototype.xml.call(this,this.snc,indent);
 }
 
-/*** XMLFonto, XMLEkzemplo: krei novan fonton resp. ekzemplon surbaze de ŝablono ***/
 
-
+/**
+ * Krei novan fonton surbaze de ŝablono
+ * @constructor
+ * @param {*} fnt 
+ */
 var XMLFonto = function(fnt) {
     XMLŜablono.call(this,xml_sxablonoj.fnt);
     this.fnt = fnt;
@@ -122,7 +139,11 @@ XMLFonto.prototype.xml = function(indent) {
     return XMLŜablono.prototype.xml.call(this,this.fnt,indent);
 }
 
-
+/**
+ * Krei novan ekzemplon surbaze de ŝablono
+ * @constructor
+ * @param {*} ekz 
+ */
 var XMLEkzemplo = function(ekz) {
     XMLŜablono.call(this,xml_sxablonoj.ekz);
     this.fonto = new XMLFonto(ekz);
@@ -136,8 +157,11 @@ XMLEkzemplo.prototype.xml = function(indent) {
     return XMLŜablono.prototype.xml.call(this,ekz,indent);
 }
 
-/*** XMLReferenco, XMLReferencGrupo: krei novan referencon aŭ Referenc-Grupon surbaze de ŝablono ***/
-
+/**
+ * Krei novan referencon surbaze de ŝablono
+ * @constructor
+ * @param {*} ref 
+ */
 var XMLReferenco = function(ref) {
     XMLŜablono.call(this,xml_sxablonoj.ref);
     if (ref.tip == 'nuda') { ref.tip = '' };
@@ -149,6 +173,11 @@ XMLReferenco.prototype.xml = function(indent=0) {
     return XMLŜablono.prototype.xml.call(this,this.ref,indent).replace(/\s+$/, '');
 }
 
+/**
+ * Krei novan referenc-grupon surbaze de ŝablono
+ * @constructor
+ * @param {*} ref 
+ */
 
 var XMLReferencGrupo = function(ref) {
     XMLŜablono.call(this,xml_sxablonoj.refgrp);
@@ -161,8 +190,13 @@ XMLReferencGrupo.prototype.xml = function(indent=4) {
     return XMLŜablono.prototype.xml.call(this,this.ref,indent);
 }
 
-/*** XMLRimarko: krei novan rimarkon surbaze de ŝablono ***/
 
+/**
+ * Krei novan rimarkon surbaze de ŝablono
+ * @constructor
+ * @param {*} rim 
+ * @param {*} tip 
+ */
 var XMLRimarko = function(rim, tip='rim') {
     XMLŜablono.call(this,(tip=='rim'?xml_sxablonoj.rim:xml_sxablonoj.adm));
     this.rim = rim;
@@ -173,8 +207,12 @@ XMLRimarko.prototype.xml = function(indent) {
     return XMLŜablono.prototype.xml.call(this,this.rim,indent);
 }
 
-/*** XMLBildo: krei novan bildo-strukturon surbaze de ŝablono ***/
 
+/**
+ * Krei novan bildo-strukturon surbaze de ŝablono
+ * @constructor
+ * @param {*} bld 
+ */
 var XMLBildo = function(bld) {
     XMLŜablono.call(this,xml_sxablonoj.bld);
 
@@ -203,8 +241,11 @@ XMLBildo.prototype.xml = function(indent) {
 }
 
 
-/*** HTMLFonto: krei novan fonton (ekz. en trov-listo) surbaze de ŝablono ***/
-
+/**
+ * Krei novan fonton (HTML ekz. en trov-listo) surbaze de ŝablono
+ * @constructor
+ * @param {*} bib_src 
+ */
 var HTMLFonto = function(bib_src) {
     this.source = bib_src;
     this.v = new XMLŜablono(html_sxablonoj.vrk);
@@ -246,8 +287,11 @@ HTMLFonto.prototype = {
     }
 }
 
-/*** HTMLTrovoDt, HTMLTrovoDdBld: krei novan trovon (ekz. en trov-listo) surbaze de ŝablono ***/
 
+/**
+ * Krei novan trovon (DT-elemento ekz. en trov-listo) surbaze de ŝablono
+ * @constrcutor
+ */
 var HTMLTrovoDt = function() {
     this.t = new XMLŜablono(html_sxablonoj.dt_trovo);
     this.tc = new XMLŜablono(html_sxablonoj.dt_trovo_cit);
@@ -263,6 +307,11 @@ HTMLTrovoDt.prototype = {
     }
 }
 
+/**
+ * Krei novan trovon (DD-bildo-elemento 
+ * ekz. en trov-listo) surbaze de ŝablono 
+ * @constructor
+ */
 var HTMLTrovoDdBld = function() {
     this.dd = new XMLŜablono(html_sxablonoj.dd_trovo_bld);
 }
@@ -273,7 +322,10 @@ HTMLTrovoDdBld.prototype = {
     }
 }
 
-/* listeroj de eraro- kaj avertolistoj */
+/**
+ * Listero de eraro- kaj avertolisto
+ * @constructor
+ */
 var HTMLError = function() {
     this.li = new XMLŜablono(html_sxablonoj.err_msg);
 }
@@ -285,8 +337,11 @@ HTMLError.prototype = {
 }
 
 
-/** ŝablonoj elekteblaj kaj prilaboreblaj per menuo Ŝablonoj **/
-
+/**
+ * Ŝablonoj elekteblaj kaj prilaboreblaj per menuo Ŝablonoj
+ * @constructor
+ * @param {*} sxbl 
+ */
 var SncŜablono = function(sxbl) {
     this.sxablono = snc_sxablonoj[sxbl];
 }

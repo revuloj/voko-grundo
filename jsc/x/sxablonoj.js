@@ -4,7 +4,9 @@
 // (c) 2017  - 2019 Wolfram Diestel
 // laŭ GPL 2.0
 
-// ŝablonoj por enmeti dialogenhavon en XML
+/**
+ * Ŝablonoj por enmeti dialogenhavon en XML
+ */
 var xml_sxablonoj = {
   art:
   ':<?xml version="1.0"?>\n' +

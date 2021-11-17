@@ -9,20 +9,17 @@
     "devDependencies": {
         "cssmin": "latest",
         "google-closure-compiler": "latest",
+        "jsdoc": "latest",
         "jshint": "latest",
         "localforage": "latest"
     },
-    "config": {
-        "js_compiler": "google-closure-compiler --compilation_level SIMPLE --js_module_root jsc",
-        "js_src": "jsc/util.js jsc/transiroj.js jsc/preferoj.js jsc/artikolo.js jsc/kadro.js jsc/voko_entities.js jsc/xmlarea.js jsc/redaktilo.js",
-        "css_src": "stl/normalize.css stl/koloroj.css stl/piktogram.css stl/formularo.css stl/kadro.css stl/artikoloj.css stl/redaktilo.css",
-        "araneo_target": "/usr/local/apache2/htdocs/revo/"
-    },
+    "config": {},
     "scripts": {
         "env": "env",
         "css_src": "stl/normalize.css stl/koloroj.css stl/piktogramoj.css stl/formularo.css stl/kadro.css stl/artikoloj.css stl/redaktilo.css",
         "jsc_src": "jsc/util.js jsc/transiroj.js jsc/preferoj.js jsc/artikolo.js jsc/kadro.js jsc/voko_entities.js jsc/xmlarea.js jsc/redaktilo.js",
         "lint": "jshint jsc/**.js jqu/**.js",
+        "doc": "jsdoc -d doc jsc/x/*.js",
         "prebuild": "mkdir -p build",
         "build:mp": "bin/mp2png_svg.sh",
         "//prebuild:svg": "bin/mp2png_svg.sh",
@@ -38,14 +35,11 @@
         "//build:codec": "node js_util/vokosgn2x.js",
         "prebuild:js": "mkdir -p build/jsc && node js_util/vokosgn2x.js",
         "prebuild:rsj": "mkdir -p build/rsj",
-        "build:js": "google-closure-compiler --compilation_level SIMPLE --js_module_root ./jsc/rv --entry_point ./kadro.js --js_output_file build/jsc/revo-2b-min.js --js='jsc/rv/*.js' --js='jsc/u/*.js' --js='jsc/x/*.js' && cp jsc/revo-art-1b.js build/jsc",
+        "build:js": "google-closure-compiler -W VERBOSE --compilation_level SIMPLE --js_module_root ./jsc/rv --entry_point ./kadro.js --js_output_file build/jsc/revo-2b-min.js --js='jsc/rv/*.js' --js='jsc/u/*.js' --js='jsc/x/*.js' && cp jsc/revo-art-1b.js build/jsc",
         "build:js:debug": "google-closure-compiler -W VERBOSE --compilation_level BUNDLE --js_module_root ./jsc --entry_point ./jsc/kadro.js --js_output_file build/jsc/revo-2b-min.js jsc/util.js jsc/transiroj.js jsc/preferoj.js jsc/artikolo.js jsc/sercho.js jsc/kadro.js build/jsc/voko_entities.js jsc/xmlarea.js jsc/redaktilo.js",
-        "build:rsj": "google-closure-compiler --compilation_level SIMPLE --js_module_root ./jsc/rs --entry_point ./ui_kreo.js --js_output_file build/rsj/redaktilo-2a-min.js --js='jsc/rs/*.js' --js='jsc/u/*.js' --js='jsc/x/*.js'",        
-        "build:rsj:debug": "google-closure-compiler -W VERBOSE --compilation_level BUNDLE --js_module_root jqu --entry_point jsc/rs/ui_kreo.js --js_output_file build/rsj/redaktilo-2a-min.js jsc/u/*.js jsc/x/*.js jsc/rs/*.js",        
-        "build": "npm run build:css && npm run build:dok && npm run build:js && npm run build:jq",
-        "publish:araneo:js": "araneo_id=$(docker ps --filter name=araneujo_araneo -q) && docker cp build/jsc ${araneo_id}:$npm_package_config_araneo_target",
-        "publish:araneo:css": "araneo_id=$(docker ps --filter name=araneujo_araneo -q) && docker cp build/stl ${araneo_id}:$npm_package_config_araneo_target",
-        "publish:araneo": "npm run publish:araneo:js && npm run publish:araneo:css"
+        "build:rsj": "google-closure-compiler --compilation_level SIMPLE --process_common_js_modules --js_module_root ./jsc/rs --entry_point ./ui_kreo.js --js_output_file build/rsj/redaktilo-2a-min.js --js='jsc/rs/*.js' --js='jsc/u/*.js' --js='jsc/x/*.js'",
+        "build:rsj:debug": "google-closure-compiler -W VERBOSE --compilation_level BUNDLE --js_module_root jqu --entry_point jsc/rs/ui_kreo.js --js_output_file build/rsj/redaktilo-2a-min.js jsc/u/*.js jsc/x/*.js jsc/rs/*.js",
+        "build": "npm run build:css && npm run build:dok && npm run build:js && npm run build:jq"
     },
     "scriptsComments": {
         "build": "Kompilas CSS, JS kaj DOK al dosierujo build/",

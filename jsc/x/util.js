@@ -428,8 +428,12 @@ function ascii_eo(str) {
 }
 
   
-// en textarea ni nur rigardas la antaŭan signon
-// por anstataŭigi cx -> ĉ ktp.
+/**
+ * Anstataŭigas cx -> ĉ, gx -> ĝ, ..., ux -> ŭ, ĉx -> cx, ĝx -> gx,..., ŭx -> ux
+ * @param {char} b - la antaŭa signo
+ * @param {number} key - la tajpita klavkodo
+ * @returns - la eventuale modifita signo
+ */
 function cxigi(b, key) {
     var n="";
     var k=String.fromCharCode(key);
@@ -448,9 +452,15 @@ function cxigi(b, key) {
     j: '\u0135', '\u0135': 'j'+k,
     J: '\u0134', '\u0134': 'J'+k,
     x: 'x'+k, X: 'X'+k
-  }[b] || '';
+    }[b] || '';
 }
 
+/**
+ * Transformas HTML-unuojn en la formoj &#9999; aŭ &#xFFFF; al la
+ * reprezentitaj signoj
+ * @param {string} str - la traktenda teksto
+ * @returns - la teksto kun anstataŭigitaj HTML-unuoj
+ */
 function parseHtmlEntities(str) {
   return str
   .replace(/&#([0-9]{1,5});/gi, function(match, numStr) {
@@ -463,6 +473,13 @@ function parseHtmlEntities(str) {
   });
 }
 
+/**
+ * Komparas du HTML-tekstojn anstataŭigante la HTML-unuojn per la ĝustaj signoj
+ * kaj minusklante
+ * @param {string} a - la unua teksto
+ * @param {string} b - la dua teksto
+ * @returns -1, se a&lt;b; 1, se a&gt;b; 0 se a=b post la normigo de ambaŭ
+ */
 function compareXMLStr(a,b) {
   return (parseHtmlEntities(a).toLowerCase()
     === parseHtmlEntities(b).toLowerCase());
@@ -499,14 +516,23 @@ function dom_console() {
 }
 */
 
-// listoj lingvoj, fakoj, stiloj de Revo
-// por montri elektilojn en la redaktilo kaj traduki lingvojn en la
-// serĉilo
+/**
+ * Legas Revo-liston kiel lingvoj, fakoj, stiloj por montri 
+ * elektilojn en la redaktilo kaj traduki lingvojn en la
+ * serĉilo
+ * @constructor
+ * @param {string} xmlTag - la XML-elemento de listero, ĝi havu atributon 'kodo'
+ * @param {URL} url  - la URL de kie ŝargi la XML-liston
+ */
 function Codelist(xmlTag,url) {
   this.url = url;
   this.xmlTag = xmlTag;
   this.codes = {};
 
+  /**
+   * Plenigas HTML-elementon 'selection' per la kodlisto
+   * @param {*} selection - la HTML-elemento plenigenda per 'option'-elementoj 
+   */
   this.fill = function(selection) {
     var sel = document.getElementById(selection);
   
@@ -518,6 +544,10 @@ function Codelist(xmlTag,url) {
     }
   };
 
+  /**
+   * Ŝargas la kodliston de la donita URL.
+   * @param {*} selection - HTML-elemento, se donita ĝi pleniĝas per la trovitaj listeroj
+   */
   this.load = function(selection) {
     var self = this;
 
