@@ -268,7 +268,7 @@ function kameligo(str, rad='') {
 }
 
 function minuskligo(str, rad='') {
-    var str = str.toLowerCase();
+    str = str.toLowerCase();
     if (rad && rad[0].toLowerCase() != rad[0])
         str = str.replace(/<tld[^\/>]*\/>/,'<tld lit="'+rad[0].toLowerCase()+'"/>');
     return str;

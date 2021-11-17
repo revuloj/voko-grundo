@@ -1,26 +1,17 @@
-Instali vokon
--------------
+Ĝeneralaj informoj estas end README.md kaj en Viki-paĝoj ĉe la Github-projekto
 
-Por agordi vokon en via sistemo vi devas difini
-la mediovariablon VOKO celante al la dosierujo kun Voko-iloj, ekz.:
+Eventuala problemoj
+-------------------
 
-  export $VOKO = /pado/al/voko
+Uzante google-closure-compiler kun la parametroj --js_module_root kaj --entry_point
+mi ofte ricevas tian eraron:
 
-Se vi ne uzas Uniksan sistemon, eble bezonighas adapto
-de iuj programoj en bin/, aparte tie, kie sistemkomandoj
-estas vokataj, kaj padnomoj kun '/' estas uzataj.
+ERROR - [JSC_MISSING_ENTRY_ERROR] required entry point "jsc/rs/ui_kreo.js" never provided
 
+La problemo ŝajne okazas pro problemo kun padoj. Aparte --entry_point estu pado relativa al
+--js_module_root!
 
-Konciza pasharo por krei vortaron
----------------------------------
-
-Vidu en ant/LEGUMIN
-
-         13a de Marto 2008, Wolfram Diestel
-         <wolfram@steloj.de>
-
-
-
+Jen diskuto pri la tia problemo: https://github.com/google/closure-compiler/issues/3628
 
 
 

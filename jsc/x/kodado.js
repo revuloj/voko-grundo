@@ -50,6 +50,8 @@ String.prototype.hashCode = function() {
       }
       return hval >>> 0;
  }  
+
+ 
 function alCx(text) {
     return (
       text.replace('Ĉ','Cx')

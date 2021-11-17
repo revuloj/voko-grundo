@@ -224,7 +224,7 @@ HTMLFonto.prototype = {
     },
     
     html: function(fnt) {
-        var _html = '', f = {};
+        var _html = '';
         var bib = fnt.bib;
 
         var f = {
