@@ -1,7 +1,19 @@
 
 /* jshint esversion: 6 */
 
-// ajax http request
+const help_base_url = 'https://revuloj.github.io/temoj/';
+
+/**
+ * Ŝargas fonan dokumenton de la servilo per XMLHttpRequest
+ * @param {string} method - la HTTP-metodo
+ * @param {string} url - la URL
+ * @param {string} headers - la HTTP-kapoj
+ * @param {string} params - la HTTP-parametroj
+ * @param {Function(*)} onSuccess - vokata post sukceso
+ * @param {Function} onStart - vokata antaŭ la ŝargo
+ * @param {Function} onFinish - vokata fine
+ * @param {Function} onError - vokata kiam okazas eraro
+ */
 function HTTPRequestFull(method, url, headers, params, onSuccess, 
     onStart = undefined, onFinish = undefined, onError = undefined) {  // onStart, onFinish, onError vi povas ellasi!
 
@@ -70,18 +82,34 @@ function HTTPRequestFull(method, url, headers, params, onSuccess,
     request.send(data);  
 }
 
+/**
+ * Ŝargas fonan dokumenton de la servilo per XMLHttpRequest
+ * @param {string} method - la HTTP-metodo
+ * @param {string} url - la URL
+ * @param {string} params - la HTTP-parametroj
+ * @param {Function(*)} onSuccess - vokata post sukceso
+ * @param {Function} onStart - vokata antaŭ la ŝargo
+ * @param {Function} onFinish - vokata fine
+ * @param {Function} onError - vokata kiam okazas eraro
+ */
 function HTTPRequest(method, url, params, onSuccess, 
   onStart=undefined, onFinish=undefined, onError=undefined) {  // onStart, onFinish, onError vi povas ellasi!
     HTTPRequestFull(method, url, null, params, onSuccess, 
     onStart, onFinish, onError);
 }
 
-// Reordigas liston de objektoj havantaj komunan ŝlosilkampon
-// al objekto de listoj de objektoj uzante la valorojn de la ŝlosilkampo
-// kiel ŝlosilo (indekso) de tiu objekto.
-// Se mankas la ŝlosilkampo tiu listero estas aldonata al "<_sen_>".
-// Tio ankaŭ funkcia por listo de listoj, kiel ŝlosilo (key) tiam vi donu la
-// numeron de la kolumno laŭ kiu ordigi: group_by(0,listo_de_listoj)
+
+/**
+ * Reordigas liston de objektoj havantaj komunan ŝlosilkampon
+ * al objekto de listoj de objektoj uzante la valorojn de la ŝlosilkampo
+ * kiel ŝlosilo (indekso) de tiu objekto.
+ * Se mankas la ŝlosilkampo tiu listero estas aldonata al "&lt;_sen_&gt;".
+ * Tio ankaŭ funkcias por listo de listoj, kiel ŝlosilo (key) tiam vi donu la
+ * numeron de la kolumno laŭ kiu ordigi: group_by(0,listo_de_listoj)
+ * @param {string|number} key 
+ * @param { Array<Object|Array> } array 
+ * @returns { Object<string|Array<Object>> }
+ */
 function group_by(key, array) {
   var grouped = {}
   for (var el of array) {
@@ -94,12 +122,21 @@ function group_by(key, array) {
   return grouped;
 }
 
-// transformu markon al href por artikolo
+
+/**
+ * Transformas markon al href por artikolo
+ * @param {string} mrk 
+ * @returns {string} URL-o por artikolo.
+ */
 function art_href(mrk) {
   return art_prefix + mrk.split('.')[0] + '.html#' + mrk;
 }
 
-// aldonu ../art en relativaj URL-oj
+
+/**
+ * Aldonas ../art en href-atributoj kun relativaj URL-oj
+ * @param {Element} root_el 
+ */
 function fix_art_href(root_el) {
   for (var a of root_el.getElementsByTagName("a")) {
     var href = a.getAttribute("href");
@@ -112,8 +149,14 @@ function fix_art_href(root_el) {
   }
 }
 
-// ni ne havas por ĉiu referenctipo apartan vinjeton
-// kaj ni nun uzas SVG-fonon per CSS anstataŭ GIF-bildeton
+
+/**
+ * Tradukas referenctipon al responda CSS-klasnomo.
+ * (Ni ne havas por ĉiu referenctipo apartan vinjeton
+ * kaj ni nun uzas SVG-fonon per CSS anstataŭ GIF-bildeton.)
+ * @param {string} tip - la referenctipo
+ * @returns {string} - la CSS-klasnomo
+ */
 function ref_tip_class(tip) {
   return {
     dif: "r_dif", difino: "r_dif", 
@@ -128,6 +171,11 @@ function ref_tip_class(tip) {
   }[tip]
 }
 
+/**
+ * Tradukas referenctipon al responda ALT-atributo.
+ * @param {string} tip - la referenctipo
+ * @returns {string} - la HTML-ALT-atributo
+ */
 function ref_tip_alt(tip) {
   return {
     dif: "=", difino: "=", 
@@ -142,6 +190,11 @@ function ref_tip_alt(tip) {
   }[tip]
 }
 
+/**
+ * Tradukas referenctipon al responda TITLE-atributo.
+ * @param {string} tip - la referenctipo
+ * @returns {string} - la HTML-TITLE-atributo
+ */
 function ref_tip_title(tip) {
   return {
     dif: "difino ĉe", difino: "difino ĉe", 
@@ -157,7 +210,10 @@ function ref_tip_title(tip) {
 }
 
 
-// anstataŭigu GIF per SVG  
+/**
+ * Anstataŭigas GIF per SVG en IMG-SRC-atributoj
+ * @param {Element} root_el 
+ */
 function fix_img_svg(root_el) {
   var src;
 
@@ -177,43 +233,71 @@ function fix_img_svg(root_el) {
   }
 }
 
-
+/**
+ * Videbligas HTML-elementon forigante CSS-klason 'kasxita'.
+ * @param {string} id - la 'id'-atributo de la elemento
+ * @param {string} cls - CSS-klaso, se alia ol 'kasxita'
+ */
 function show(id,cls='kasxita') {
   const el = document.getElementById(id);
   if (el) el.classList.remove(cls);
   else console.warn("show: elemento "+id+" ne troviĝis.");
 }
 
+/**
+ * Kaŝas HTML-elementon aldonante CSS-klason 'kasxita'.
+ * @param {string} id - la 'id'-atributo de la elemento
+ * @param {string} cls - CSS-klaso, se alia ol 'kasxita'
+ */
 function hide(id,cls='kasxita') {
   const el = document.getElementById(id);
   if (el) el.classList.add(cls);
   else console.warn("hide: elemento "+id+" ne troviĝis.");
 }
 
+/**
+ * Ŝanĝas videblecon de HTML-elemento aldonante aŭ forigante CSS-klason 'kasxita'.
+ * @param {string} id - la 'id'-atributo de la elemento
+ * @param {string} cls - CSS-klaso, se alia ol 'kasxita'
+ */
 function toggle(id,cls='kasxita') {
   const el = document.getElementById(id);
   if (el) el.classList.toggle(cls);
   else console.warn("toggle: elemento "+id+" ne troviĝis.");
 }
 
+/**
+ * Malaktivigas HTML-elementon metante atributon 'disabled'.
+ * @param {string} cls - CSS-klaso, se alia ol 'kasxita'
+ */
 function disable(id) {
   const el = document.getElementById(id);
   if (el) el.setAttribute("disabled","disabled");
   else console.warn("disable: elemento "+id+" ne troviĝis.");
 }
 
+/**
+ * Aktivigas HTML-elementon forigante atributon 'disabled'.
+ * @param {string} cls - CSS-klaso, se alia ol 'kasxita'
+ */
 function enable(id) {
   const el = document.getElementById(id);
   if (el) el.removeAttribute("disabled");
   else console.warn("disable: elemento "+id+" ne troviĝis.");
 }
 
-// aliras helpo-paĝon
+/**
+ * Navigas la retumilon al helpo-paĝo
+ * @param {string} url - la pado de helpopaĝo, rilate al 'help_base_url'
+ */
 function helpo_pagho(url) {
-    window.open('https://revuloj.github.io/temoj/'+url);
+    window.open(help_base_url+url);
 }
 
-// por prepari paĝon post kiam ĝi estas ŝargita
+/**
+ * Preparas paĝon post kiam ĝi estas ŝargita
+ * @param {Function} onready_fn 
+ */
 function when_doc_ready(onready_fn) {
     if (document.readyState != 'loading'){
       onready_fn();
@@ -222,13 +306,24 @@ function when_doc_ready(onready_fn) {
     }
 }
 
-
+/**
+ * Metas plurajn HTML-atributojn samtempe
+ * @param {Element} el - la HTML-elemento
+ * @param {Object<string,string>} attrs - Objekto, kies ŝlosiloj estas la atributnomoj, donantaj ties valorojn
+ */
 function ht_attributes(el, attrs) {
   for(var key in attrs) {
     el.setAttribute(key, attrs[key]);
   }
 }
 
+/**
+ * Kreas HTML-elementon kun atributoj kaj eventuala tekstenhavo.
+ * @param {string} name - elemento-nomo, ekz-e 'div'
+ * @param {Object<string,string>} attributes 
+ * @param {string} textcontent 
+ * @returns {Element}
+ */
 function ht_element(name, attributes = undefined, textcontent = undefined) {
     var element = document.createElement(name);
     ht_attributes(element,attributes);
@@ -236,6 +331,13 @@ function ht_element(name, attributes = undefined, textcontent = undefined) {
     return element;
 }
 
+/**
+ * Kreas ingitan HTML-elementostrukturon. Vi transdonu liston de kreendaj elementoj.
+ * Ĉiu elemento estas tri-elementa listo [elementnomo,atributoj,enhavo]. La enhavo 
+ * povas esti malplena, teksto aŭ samstruktura elementolisto.
+ * @param {Array<Array<string,Object,Array>|string>} jlist 
+ * @returns {Array<Element>} - listo de kreitaj elementoj, eventuale ingitaj
+ */
 function ht_elements(jlist) {
     var dlist = [];
     for (var el of jlist) {
@@ -256,7 +358,13 @@ function ht_elements(jlist) {
     return dlist;
 }
 
-
+/**
+ * Kreas HTML-butonon kun teksto
+ * @param {string} label - la surskribo
+ * @param {Function} handler - la reagfunkcio al premoj
+ * @param {string} hint - la musnoto klariganta la butonfunkcion
+ * @returns {Element} - la HTML-butono
+ */
 function ht_button(label,handler,hint='') {
     var btn = document.createElement("BUTTON");
     btn.appendChild(document.createTextNode(label)); 
@@ -266,6 +374,13 @@ function ht_button(label,handler,hint='') {
     return btn;
 }
 
+/**
+ * Kreas HTML-butonon kun bildeto
+ * @param {string} iclass - CSS-klasoj, dividitaj per spaco
+ * @param {Function} handler - la reagfunkcio al premoj
+ * @param {string} hint - la musnoto klariganta la butonfunkcion
+ * @returns {Element} - la HTML-butono
+ */
 function ht_icon_button(iclass,handler,hint='') {
     var btn = document.createElement("BUTTON");
     //btn.appendChild(document.createTextNode(label)); 
@@ -275,6 +390,15 @@ function ht_icon_button(iclass,handler,hint='') {
     return btn;
 }
 
+/**
+ * Kreas HTML-liston. Ĝi povas esti 'ul'- aŭ 'ol'-listo enhavanta 'li'-elementojn,
+ * sed ankaŭ iu ajn alia HTML-elemento, tiam la listeroj estos 'span'-elementoj
+ * @param {Array} list - la listo de enhavoj
+ * @param {string} listtype - la nomo de la ĉirkaŭa elemento
+ * @param {Object<string,string>} attrlist - atributlisto aldonante al la ĉirkaŭa elemento
+ * @param {Function} listero_cb - revokfunkcioj por adaptita kreado de la listeroj
+ * @returns {Element} - la HTML-elemento kun la tuta listo
+ */
 function ht_list(list, listtype='ul', attrlist=undefined, listero_cb=undefined) {
   const elmtype = (listtype == 'ul' || listtype == 'ol')? 'li' : 'span';
   const container = ht_element(listtype,attrlist);
@@ -285,6 +409,14 @@ function ht_list(list, listtype='ul', attrlist=undefined, listero_cb=undefined) 
   return container;
 }
 
+/**
+ * Kreas difinliston (HTML-dl). La ŝlosiloj de la transdonita objekto donas la difintermojn ('dt')
+ * kaj la valoroj la difinojn ('dd'). Per la revokfunkcio item_cb vi povas strukturi ilin individue.
+ * @param {Object<string,*>} obj 
+ * @param {Function(*,*,Element,Element)} item_cb 
+ * @param {boolean} sorted - true: ordigu la ŝlosilojn
+ * @returns {Element}
+ */
 function ht_dl(obj,item_cb,sorted) {
   const dl = ht_element("dl");
   var keys;
@@ -307,6 +439,15 @@ function ht_dl(obj,item_cb,sorted) {
   return dl;
 }
 
+/**
+ * Kreas HTML-details-summary-elementon. Per la revokfunkcioj vi povas
+ * enmeti pli kompleksajn strukturojn ol simplajn tekstojn
+ * @param {string} sum - la enhavo de 'summary'
+ * @param {string} det - la enhavo de 'details'
+ * @param {Function} det_callback 
+ * @param {Function} sum_callback 
+ * @returns {Element}
+ */
 function ht_details(sum, det, det_callback=undefined, sum_callback=undefined) {
   const details = ht_element("details");
   if (sum_callback) {
@@ -320,6 +461,13 @@ function ht_details(sum, det, det_callback=undefined, sum_callback=undefined) {
   return details;
 }
 
+/**
+ * Kreas klakeblan tekston '(+nnn)' por malfaldi kaŝitan enhavon (pliaj tradukoj, pliaj trovoj k.c.)
+ * Ni realigas ĝin kiel dt-dl-elemento ene de 'dl'-elemento, kiu enhavas la tutan liston 
+ * - videblaj kaj kasitaj enhavoj.
+ * @param {number} n_kasxitaj - la nombro de kasitaj elementoj
+ * @returns {Array<Element>} - la HTML-elemento
+ */
 function ht_pli(n_kasxitaj) {
   var pli = ht_elements([
       ["dt",{},
@@ -340,6 +488,12 @@ function ht_pli(n_kasxitaj) {
   return pli;
 }
 
+/**
+ * Kontrolas ĉu 'url' estas al la sama paĝo, kiel ĵus montrata. Se url komenciĝas
+ * per '#' tio estas evidenta, alie ni komparas la URL-on de la aktuala paĝo kun 'url'.
+ * @param {string} url 
+ * @returns {boolean} true: se estas paĝo-loka referenco
+ */
 function isLocalLink(url) {
     if (url[0] == '#') return true;
     // necesas kompari ankaŭ la dosiernomon      
@@ -348,10 +502,20 @@ function isLocalLink(url) {
     return doc==trg;
 }
 
+/**
+ * Ekstraktas la dosieronomon el URL, t.e. la parto inter la lasta '/' kaj eventuala '#'
+ * @param {string} url 
+ * @returns {string}
+ */
 function getUrlFileName(url) {
     return url.substring(url.lastIndexOf('/')+1).split('#')[0];
 }
 
+
+/**
+ * Redonas la parton post '#' interpretante ĝin kiel parametroliston.
+ * @returns {Object<string,string>} - la trovitaj parametroj kiel Objekto kies ŝlosiloj estas la parametronomoj
+ */
 function getHashParts() {
     var h = (location.hash[0] == '#' ?
         location.hash.substr(1) :
@@ -372,7 +536,7 @@ function getHashParts() {
  * Ekstraktas unuopan parametron el signoĉeno kun pluraj HTML-parametroj
  * @param {string} param - la nomo de la petata parametro
  * @param {string} params - la signoĉeno de parametroj, se manks location.search estas uzata
- * @returns la valoro de la petata parametro
+ * @returns {string} la valoro de la petata parametro
  */
 function getParamValue(param, params=undefined) {
   // ĉu ni vere bezonos tion? parametroj estas afero de la servilo,
@@ -387,7 +551,12 @@ function getParamValue(param, params=undefined) {
     return result;
 }
 
-
+/**
+ * Kreas signoĉenon el samaj signoj
+ * @param {string} rStr - la ripetenda signo
+ * @param {number} rNum - la nombro de ripetoj
+ * @returns {string}
+ */
 function str_repeat(rStr, rNum) {
     var nStr="";
     for (var x=1; x<=rNum; x++) {
@@ -396,7 +565,15 @@ function str_repeat(rStr, rNum) {
     return nStr;
 } 
 
-function count_char(str,chr,from,to) {
+/**
+ * Nombras, kiom ofte certa signo aperas en teksto. Vi povas limigi la nombradon al parto de la teksto.
+ * @param {string} str - la teksto
+ * @param {string} chr - la nombrenda signo
+ * @param {number} from - komenco de nombrado, se ne donita 0
+ * @param {number} to - fino de nombrado, se ne donita fino de 'str'
+ * @returns {number}
+ */
+function count_char(str,chr,from=undefined,to=undefined) {
   var nc = 0;
   const f = from||0;
   const t = to||str.length;
@@ -407,6 +584,11 @@ function count_char(str,chr,from,to) {
 }
   
 
+/**
+ * Konvertas supersignajn literojn al askia x-konvencio, do ĉ al cx ... ŭ al ux
+ * @param {string} str - la konvertenda teksto
+ * @returns {string} - la konvertita teksto
+ */
 function eo_ascii(str) {
     return str
         .replace(/ĉ/g,'cx')
@@ -417,6 +599,11 @@ function eo_ascii(str) {
         .replace(/ŭ/g,'ux');
 }
 
+/**
+ * Konvertas de la x-konvencio al supersignaj literoj, do cx al ĉ ... ux al ŭ.
+ * @param {string} str - la konvertenda teksto
+ * @returns {string} - la konvertita teksto
+ */
 function ascii_eo(str) {
   return str
     .replace(/c[xX]/g, "\u0109")
