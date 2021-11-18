@@ -3,6 +3,8 @@
 Eventuala problemoj
 -------------------
 
+module_root kaj entry_point
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Uzante google-closure-compiler kun la parametroj --js_module_root kaj --entry_point
 mi ofte ricevas tian eraron:
 
@@ -13,6 +15,13 @@ La problemo ŝajne okazas pro problemo kun padoj. Aparte --entry_point estu pado
 
 Jen diskuto pri la tia problemo: https://github.com/google/closure-compiler/issues/3628
 
+JSDoc kaj closure-compiler, @typedef
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+JSDoc kaj closure-compiler nekonsentas pri specialaj notacioj, ekze-e pri @typedef vd.
+http://closuretools.blogspot.com/2017/01/common-pitfalls-when-using-typedefs-in.html
+https://github.com/google/closure-compiler/wiki/Annotating-JavaScript-for-the-Closure-Compiler
+https://pretagteam.com/question/documenting-callback-parameters-using-google-closure-compiler
 
+https://github.com/google/closure-compiler/wiki/@suppress-annotations
 

@@ -4,12 +4,33 @@
 const help_base_url = 'https://revuloj.github.io/temoj/';
 
 /**
+ * HTML-elemento-specifo, konsistanta el nomo:string, atributoj:Object kaj enhavo.
+ * Enhavo povas esti malplena, teksto aŭ listo de enhavataj HTML-elemento-specifoj.
+ * @typedef { Array<*> } ElementSpec
+ */ var ElementSpec;
+ 
+
+/**
+ * Respondo de XMLHttpRequest, ĉe malsukcesa 'response' estas nedeifinita
+ *  @callback RequestResult
+ * @param {XMLHttpRequest} request
+ * @param {string|undefined} response
+ */
+
+/**
+ * Evento okazanta antaŭ kaj post XMLHttpRequest, tio ebligas ekz-e ŝalti kaj malŝalti
+ * atendovinjeton
+ *  @callback RequestStartStop
+ */
+
+
+/**
  * Ŝargas fonan dokumenton de la servilo per XMLHttpRequest
  * @param {string} method - la HTTP-metodo
  * @param {string} url - la URL
- * @param {string} headers - la HTTP-kapoj
- * @param {string} params - la HTTP-parametroj
- * @param {Function(*)} onSuccess - vokata post sukceso
+ * @param {Object<string,string>} headers - la HTTP-kapoj
+ * @param {Object<string,string>} params - la HTTP-parametroj
+ * @param {Function} onSuccess - vokata post sukceso
  * @param {Function} onStart - vokata antaŭ la ŝargo
  * @param {Function} onFinish - vokata fine
  * @param {Function} onError - vokata kiam okazas eraro
@@ -41,8 +62,10 @@ function HTTPRequestFull(method, url, headers, params, onSuccess,
     // parametroj
     // PLIBONIGU: momente tio funkcias nur por POST, 
     // sed ĉe GET ni devus alpendigi tion al la URL!
-    for (let [key, value] of Object.entries(params)) {
+    if (params) {
+      for (let [key, value] of Object.entries(params)) {
         data.append(key,value);
+      }
     }
 
     // alpendigu version por certigi freŝan paĝon
@@ -86,8 +109,8 @@ function HTTPRequestFull(method, url, headers, params, onSuccess,
  * Ŝargas fonan dokumenton de la servilo per XMLHttpRequest
  * @param {string} method - la HTTP-metodo
  * @param {string} url - la URL
- * @param {string} params - la HTTP-parametroj
- * @param {Function(*)} onSuccess - vokata post sukceso
+ * @param {Object<string,string>} params - la HTTP-parametroj
+ * @param {Function} onSuccess - vokata post sukceso
  * @param {Function} onStart - vokata antaŭ la ŝargo
  * @param {Function} onFinish - vokata fine
  * @param {Function} onError - vokata kiam okazas eraro
@@ -107,7 +130,7 @@ function HTTPRequest(method, url, params, onSuccess,
  * Tio ankaŭ funkcias por listo de listoj, kiel ŝlosilo (key) tiam vi donu la
  * numeron de la kolumno laŭ kiu ordigi: group_by(0,listo_de_listoj)
  * @param {string|number} key 
- * @param { Array<Object|Array> } array 
+ * @param { !Array<Object|Array> } array 
  * @returns { Object<string|Array<Object>> }
  */
 function group_by(key, array) {
@@ -135,7 +158,7 @@ function art_href(mrk) {
 
 /**
  * Aldonas ../art en href-atributoj kun relativaj URL-oj
- * @param {Element} root_el 
+ * @param {Node} root_el 
  */
 function fix_art_href(root_el) {
   for (var a of root_el.getElementsByTagName("a")) {
@@ -212,7 +235,7 @@ function ref_tip_title(tip) {
 
 /**
  * Anstataŭigas GIF per SVG en IMG-SRC-atributoj
- * @param {Element} root_el 
+ * @param {Node} root_el 
  */
 function fix_img_svg(root_el) {
   var src;
@@ -268,7 +291,7 @@ function toggle(id,cls='kasxita') {
 
 /**
  * Malaktivigas HTML-elementon metante atributon 'disabled'.
- * @param {string} cls - CSS-klaso, se alia ol 'kasxita'
+ * @param {string} id - la 'id'-atributo de la elemento
  */
 function disable(id) {
   const el = document.getElementById(id);
@@ -278,7 +301,7 @@ function disable(id) {
 
 /**
  * Aktivigas HTML-elementon forigante atributon 'disabled'.
- * @param {string} cls - CSS-klaso, se alia ol 'kasxita'
+ * @param {string} id - la 'id'-atributo de la elemento
  */
 function enable(id) {
   const el = document.getElementById(id);
@@ -318,13 +341,14 @@ function ht_attributes(el, attrs) {
 }
 
 /**
- * Kreas HTML-elementon kun atributoj kaj eventuala tekstenhavo.
- * @param {string} name - elemento-nomo, ekz-e 'div'
- * @param {Object<string,string>} attributes 
- * @param {string} textcontent 
- * @returns {Element}
+ * Kreas HTML-elementon kun atributoj kaj eventuala tekstenhavo. 
+ * @param {*} name - elemento-nomo, ekz-e 'div'
+ * @param {*} attributes 
+ * @param {*} textcontent 
+ * @returns {Node}
+ * @suppress {checkTypes}
  */
-function ht_element(name, attributes = undefined, textcontent = undefined) {
+function ht_element(name, attributes = null, textcontent = undefined) {
     var element = document.createElement(name);
     ht_attributes(element,attributes);
     if (textcontent) element.append(textcontent);
@@ -335,8 +359,8 @@ function ht_element(name, attributes = undefined, textcontent = undefined) {
  * Kreas ingitan HTML-elementostrukturon. Vi transdonu liston de kreendaj elementoj.
  * Ĉiu elemento estas tri-elementa listo [elementnomo,atributoj,enhavo]. La enhavo 
  * povas esti malplena, teksto aŭ samstruktura elementolisto.
- * @param {Array<Array<string,Object,Array>|string>} jlist 
- * @returns {Array<Element>} - listo de kreitaj elementoj, eventuale ingitaj
+ * @param {!Array<*>} jlist 
+ * @returns {Array<Node>} - listo de kreitaj elementoj, eventuale ingitaj
  */
 function ht_elements(jlist) {
     var dlist = [];
@@ -348,7 +372,7 @@ function ht_elements(jlist) {
         if (el[2] && el[2] instanceof Array) {
             var content = ht_elements(el[2]); // ni vokas nin mem por la enhavo-kreado
             element = ht_element(el[0],el[1]);
-            element.append(...content);
+            if (content) element.append(...content);
         } else { // elemento kun simpla tekstenhavo: [nomo,attributoj,enhavo]
             element=ht_element(el[0],el[1],el[2]);
         }
@@ -363,7 +387,7 @@ function ht_elements(jlist) {
  * @param {string} label - la surskribo
  * @param {Function} handler - la reagfunkcio al premoj
  * @param {string} hint - la musnoto klariganta la butonfunkcion
- * @returns {Element} - la HTML-butono
+ * @returns {Node} - la HTML-butono
  */
 function ht_button(label,handler,hint='') {
     var btn = document.createElement("BUTTON");
@@ -379,7 +403,7 @@ function ht_button(label,handler,hint='') {
  * @param {string} iclass - CSS-klasoj, dividitaj per spaco
  * @param {Function} handler - la reagfunkcio al premoj
  * @param {string} hint - la musnoto klariganta la butonfunkcion
- * @returns {Element} - la HTML-butono
+ * @returns {Node} - la HTML-butono
  */
 function ht_icon_button(iclass,handler,hint='') {
     var btn = document.createElement("BUTTON");
@@ -393,11 +417,11 @@ function ht_icon_button(iclass,handler,hint='') {
 /**
  * Kreas HTML-liston. Ĝi povas esti 'ul'- aŭ 'ol'-listo enhavanta 'li'-elementojn,
  * sed ankaŭ iu ajn alia HTML-elemento, tiam la listeroj estos 'span'-elementoj
- * @param {Array} list - la listo de enhavoj
+ * @param {!Array} list - la listo de enhavoj
  * @param {string} listtype - la nomo de la ĉirkaŭa elemento
  * @param {Object<string,string>} attrlist - atributlisto aldonante al la ĉirkaŭa elemento
  * @param {Function} listero_cb - revokfunkcioj por adaptita kreado de la listeroj
- * @returns {Element} - la HTML-elemento kun la tuta listo
+ * @returns {Node} - la HTML-elemento kun la tuta listo
  */
 function ht_list(list, listtype='ul', attrlist=undefined, listero_cb=undefined) {
   const elmtype = (listtype == 'ul' || listtype == 'ol')? 'li' : 'span';
@@ -412,10 +436,10 @@ function ht_list(list, listtype='ul', attrlist=undefined, listero_cb=undefined) 
 /**
  * Kreas difinliston (HTML-dl). La ŝlosiloj de la transdonita objekto donas la difintermojn ('dt')
  * kaj la valoroj la difinojn ('dd'). Per la revokfunkcio item_cb vi povas strukturi ilin individue.
- * @param {Object<string,*>} obj 
- * @param {Function(*,*,Element,Element)} item_cb 
+ * @param {!Object<string,*>} obj 
+ * @param {Function} item_cb 
  * @param {boolean} sorted - true: ordigu la ŝlosilojn
- * @returns {Element}
+ * @returns {Node}
  */
 function ht_dl(obj,item_cb,sorted) {
   const dl = ht_element("dl");
@@ -426,7 +450,7 @@ function ht_dl(obj,item_cb,sorted) {
     var dt, dd;
     if (! item_cb) {
       dt = ht_element('dt',{},key);
-      dd = ht_element('dd',{},value);
+      dd = ht_element('dd',{},/**@type{string}*/(value));
     } else {
       dt = document.createElement('dt');
       dd = document.createElement('dd');
@@ -446,7 +470,7 @@ function ht_dl(obj,item_cb,sorted) {
  * @param {string} det - la enhavo de 'details'
  * @param {Function} det_callback 
  * @param {Function} sum_callback 
- * @returns {Element}
+ * @returns {Node}
  */
 function ht_details(sum, det, det_callback=undefined, sum_callback=undefined) {
   const details = ht_element("details");
@@ -466,7 +490,7 @@ function ht_details(sum, det, det_callback=undefined, sum_callback=undefined) {
  * Ni realigas ĝin kiel dt-dl-elemento ene de 'dl'-elemento, kiu enhavas la tutan liston 
  * - videblaj kaj kasitaj enhavoj.
  * @param {number} n_kasxitaj - la nombro de kasitaj elementoj
- * @returns {Array<Element>} - la HTML-elemento
+ * @returns {Array<Node>} - la HTML-elemento
  */
 function ht_pli(n_kasxitaj) {
   var pli = ht_elements([
@@ -536,7 +560,7 @@ function getHashParts() {
  * Ekstraktas unuopan parametron el signoĉeno kun pluraj HTML-parametroj
  * @param {string} param - la nomo de la petata parametro
  * @param {string} params - la signoĉeno de parametroj, se manks location.search estas uzata
- * @returns {string} la valoro de la petata parametro
+ * @returns {?string} la valoro de la petata parametro
  */
 function getParamValue(param, params=undefined) {
   // ĉu ni vere bezonos tion? parametroj estas afero de la servilo,
