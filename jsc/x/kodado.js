@@ -29,11 +29,10 @@ String.prototype.hashCode = function() {
  * trovita ĉi tie: https://gist.github.com/vaiorabbit/5657561
  * ref.: http://isthe.com/chongo/tech/comp/fnv/
  *
- * @param {string} str la teksto
  * @param {boolean} [asString=false] true: redonu la haketon kiel 
  *     8-ciferan hex-signaron anstataŭ kiel nombron
- * @param {integer} [seed] opcie pasas la haketon de la antaŭa porcio kiel semon
- * @returns {integer | string}
+ * @param {number} [seed] opcie pasas la haketon de la antaŭa porcio kiel semon
+ * @returns {number | string}
  */
 String.prototype.hashFnv32a = function(asString, seed) {
       var str = this;
@@ -77,12 +76,12 @@ function alCx(text) {
 /**
  * Tradukas la specialajn XML-signojn al unuoj por protekti ilin de interpreto kiel XML-sintakso
  * vd http://stackoverflow.com/questions/7753448/how-do-i-escape-quotes-in-html-attribute-values
- * @param {*} s 
- * @param {*} preserveCR 
+ * @param {string} s 
+ * @param {boolean} preserveCR 
  * @returns la tradukita teksto
  */
-function quoteattr(s, preserveCR) {
-    preserveCR = preserveCR ? '&#13;' : '\n';
+function quoteattr(s, preserveCR=false) {
+    const CR = preserveCR ? '&#13;' : '\n';
     return ('' + s) /* Forces the conversion to string. */
         .replace(/&/g, '&amp;') /* This MUST be the 1st replacement. */
         .replace(/'/g, '&apos;') /* The 4 other predefined entities, required. */
@@ -94,15 +93,15 @@ function quoteattr(s, preserveCR) {
         (but it's not necessary).
         Or for XML, only if the named entities are defined in its DTD.
         */ 
-        .replace(/\r\n/g, preserveCR) /* Must be before the next replacement. */
-        .replace(/[\r\n]/g, preserveCR);
+        .replace(/\r\n/g, CR) /* Must be before the next replacement. */
+        .replace(/[\r\n]/g, CR);
         ;
 }
 
 /**
  * Prezentas glitpunktan nombron kiel teksto
- * @param {*} x 
- * @param {*} nbDec 
+ * @param {number} x 
+ * @param {number} nbDec 
  * @returns la teksta prezento de la nombro
  */
 function formatFloat(x,nbDec) { 

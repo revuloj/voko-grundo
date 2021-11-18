@@ -257,7 +257,7 @@ var HTMLFonto = function(bib_src) {
 HTMLFonto.prototype = {
     bib_text: function(bib) {
         for (var i=0;i<this.source.length;i++) {
-            entry = this.source[i];
+            const entry = this.source[i];
             if (entry.value == bib) {
                 return entry.label
             }
@@ -290,7 +290,7 @@ HTMLFonto.prototype = {
 
 /**
  * Krei novan trovon (DT-elemento ekz. en trov-listo) surbaze de ŝablono
- * @constrcutor
+ * @constructor
  */
 var HTMLTrovoDt = function() {
     this.t = new XMLŜablono(html_sxablonoj.dt_trovo);

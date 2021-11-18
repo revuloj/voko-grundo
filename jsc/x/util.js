@@ -3,7 +3,7 @@
 
 // ajax http request
 function HTTPRequestFull(method, url, headers, params, onSuccess, 
-    onStart, onFinish, onError) {  // onStart, onFinish, onError vi povas ellasi!
+    onStart = undefined, onFinish = undefined, onError = undefined) {  // onStart, onFinish, onError vi povas ellasi!
 
     var request = new XMLHttpRequest();
     var data = new FormData();
@@ -11,7 +11,7 @@ function HTTPRequestFull(method, url, headers, params, onSuccess,
       // alpendigu aktualigilon por eventuale certigi freŝajn paĝojn
     function url_v() {
       var akt = window.localStorage.getItem("aktualigilo");
-      akt = (akt && parseInt(akt)) || 0;
+      akt = (akt && parseInt(akt,10)) || 0;
 
       if (akt) {
         const _url = url.split("#");
@@ -71,7 +71,7 @@ function HTTPRequestFull(method, url, headers, params, onSuccess,
 }
 
 function HTTPRequest(method, url, params, onSuccess, 
-  onStart, onFinish, onError) {  // onStart, onFinish, onError vi povas ellasi!
+  onStart=undefined, onFinish=undefined, onError=undefined) {  // onStart, onFinish, onError vi povas ellasi!
     HTTPRequestFull(method, url, null, params, onSuccess, 
     onStart, onFinish, onError);
 }
@@ -229,7 +229,7 @@ function ht_attributes(el, attrs) {
   }
 }
 
-function ht_element(name,attributes,textcontent) {
+function ht_element(name, attributes = undefined, textcontent = undefined) {
     var element = document.createElement(name);
     ht_attributes(element,attributes);
     if (textcontent) element.append(textcontent);
@@ -275,10 +275,10 @@ function ht_icon_button(iclass,handler,hint='') {
     return btn;
 }
 
-function ht_list(list,listtype = 'ul',attrlist,listero_cb) {
+function ht_list(list, listtype='ul', attrlist=undefined, listero_cb=undefined) {
   const elmtype = (listtype == 'ul' || listtype == 'ol')? 'li' : 'span';
   const container = ht_element(listtype,attrlist);
-  for (e of list) {    
+  for (let e of list) {    
     let li = (listero_cb? listero_cb(e) : ht_element(elmtype,{},e));
     container.append(li);
   }
@@ -287,6 +287,7 @@ function ht_list(list,listtype = 'ul',attrlist,listero_cb) {
 
 function ht_dl(obj,item_cb,sorted) {
   const dl = ht_element("dl");
+  var keys;
   if (sorted) keys = Object.keys(obj).sort(); else keys = Object.keys(obj);
   for (const key of keys) {
     const value = obj[key];
@@ -306,7 +307,7 @@ function ht_dl(obj,item_cb,sorted) {
   return dl;
 }
 
-function ht_details(sum,det,det_callback,sum_callback) {
+function ht_details(sum, det, det_callback=undefined, sum_callback=undefined) {
   const details = ht_element("details");
   if (sum_callback) {
     const summary = ht_element('summary'); 
@@ -367,10 +368,15 @@ function getHashParts() {
     return r;
 }
 
-
-// ĉu ni vere bezonos tion? parametroj estas afero de la servilo,
-// sed ni povas kaŝi ilin ankaŭ post #, vd. supre getHashParts
-function getParamValue(param,params) {
+/**
+ * Ekstraktas unuopan parametron el signoĉeno kun pluraj HTML-parametroj
+ * @param {string} param - la nomo de la petata parametro
+ * @param {string} params - la signoĉeno de parametroj, se manks location.search estas uzata
+ * @returns la valoro de la petata parametro
+ */
+function getParamValue(param, params=undefined) {
+  // ĉu ni vere bezonos tion? parametroj estas afero de la servilo,
+  // sed ni povas kaŝi ilin ankaŭ post #, vd. supre getHashParts
     var result = null,
         tmp = [],
         parstr = params || location.search.substr(1);
@@ -430,7 +436,7 @@ function ascii_eo(str) {
   
 /**
  * Anstataŭigas cx -> ĉ, gx -> ĝ, ..., ux -> ŭ, ĉx -> cx, ĝx -> gx,..., ŭx -> ux
- * @param {char} b - la antaŭa signo
+ * @param {string} b - la antaŭa signo
  * @param {number} key - la tajpita klavkodo
  * @returns - la eventuale modifita signo
  */
@@ -476,13 +482,13 @@ function parseHtmlEntities(str) {
 /**
  * Komparas du HTML-tekstojn anstataŭigante la HTML-unuojn per la ĝustaj signoj
  * kaj minusklante
- * @param {string} a - la unua teksto
- * @param {string} b - la dua teksto
+ * @param {string|undefined} a - la unua teksto
+ * @param {string|undefined} b - la dua teksto
  * @returns -1, se a&lt;b; 1, se a&gt;b; 0 se a=b post la normigo de ambaŭ
  */
-function compareXMLStr(a,b) {
-  return (parseHtmlEntities(a).toLowerCase()
-    === parseHtmlEntities(b).toLowerCase());
+function compareXMLStr(a,b) {  
+  return (parseHtmlEntities(a||'').toLowerCase()
+    === parseHtmlEntities(b||'').toLowerCase());
 }
 
 /*
@@ -522,7 +528,7 @@ function dom_console() {
  * serĉilo
  * @constructor
  * @param {string} xmlTag - la XML-elemento de listero, ĝi havu atributon 'kodo'
- * @param {URL} url  - la URL de kie ŝargi la XML-liston
+ * @param {string} url  - la URL de kie ŝargi la XML-liston
  */
 function Codelist(xmlTag,url) {
   this.url = url;
@@ -531,7 +537,7 @@ function Codelist(xmlTag,url) {
 
   /**
    * Plenigas HTML-elementon 'selection' per la kodlisto
-   * @param {*} selection - la HTML-elemento plenigenda per 'option'-elementoj 
+   * @param {string} selection - 'id' de HTML-elemento plenigenda per 'option'-elementoj 
    */
   this.fill = function(selection) {
     var sel = document.getElementById(selection);
@@ -546,13 +552,13 @@ function Codelist(xmlTag,url) {
 
   /**
    * Ŝargas la kodliston de la donita URL.
-   * @param {*} selection - HTML-elemento, se donita ĝi pleniĝas per la trovitaj listeroj
+   * @param {string} selection - 'id' de HTML-elemento, se donita ĝi pleniĝas per la trovitaj listeroj
    */
-  this.load = function(selection) {
+  this.load = function(selection=undefined) {
     var self = this;
 
     // unuafoje ŝargu la tutan liston el XML-dosiero
-    if (! self.codes.keys) {
+    if (! Object.keys(self.codes)) {
       var codes = {};
 
       HTTPRequest('GET', this.url, {},
@@ -562,7 +568,7 @@ function Codelist(xmlTag,url) {
             var doc = parser.parseFromString(this.response,"text/xml");
       
             for (var e of doc.getElementsByTagName(self.xmlTag)) {
-                var c = e.attributes.kodo;
+                var c = e.attributes['kodo'];
                 //console.log(c);
                 codes[c.value] = e.textContent;
             } 

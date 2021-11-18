@@ -341,8 +341,8 @@ function aktualigilo() {
     // Se ni uzus sessionStorage ni post remalfermo de la retumilo denove
     // ricevus pli malnovajn paĝ-versiojn, do ni uzas localStorage
     const akt = window.localStorage.getItem("aktualigilo");
-    const akt1 = (((akt && parseInt(akt)) || 0) + 1) % 30000; // +1, sed rekomencu ĉe 0 post 29999
-    window.localStorage.setItem("aktualigilo",akt1);
+    const akt1 = (((akt && parseInt(akt,10)) || 0) + 1) % 30000; // +1, sed rekomencu ĉe 0 post 29999
+    window.localStorage.setItem("aktualigilo",akt1.toString());
 }
 
 function index_toggle() {
@@ -488,7 +488,7 @@ function load_error(request) {
         load_page("main",http_404_url);
 }
 
-function load_page(trg,url,push_state=true,whenLoaded) {
+function load_page(trg, url, push_state=true, whenLoaded=undefined) {
     function update_hash() {
         var hash;
         if (url.indexOf('#') > -1) {
@@ -497,17 +497,20 @@ function load_page(trg,url,push_state=true,whenLoaded) {
             hash = '';
         }
         // evitu, ĉar tio konfuzas la historion:... window.location.hash = hash;
-        if (hash && (h=document.getElementById(hash))) {
-            h.scrollIntoView();
-            history.replaceState(history.state,null,
+        if (hash) {
+            const h = document.getElementById(hash); 
+            if (h) {
+                h.scrollIntoView();
+                history.replaceState(history.state,'',
                 location.origin+location.pathname+"#"+encodeURIComponent(hash));
-        } else if (!hash) {
-            history.replaceState(history.state,null,
+            }
+        } else {
+            history.replaceState(history.state,'',
                 location.origin+location.pathname);
         }
     }
 
-    function load_page_nav(doc,nav) {
+    function load_page_nav(doc, nav) {
         nav.textContent= '';
         var filename;
         var table = doc.querySelector("table"); 
@@ -551,7 +554,7 @@ function load_page(trg,url,push_state=true,whenLoaded) {
         update_hash();
     }
 
-    function load_page_main(doc,main) {
+    function load_page_main(doc, main) {
         var body = doc.body;
         try {
             adaptu_paghon(body,url);
@@ -625,7 +628,7 @@ function load_page(trg,url,push_state=true,whenLoaded) {
 
             if (nav && trg == "nav") {
                 // PLIBONIGU: difinu load_page_nav kiel ago de transiro
-                load_page_nav(doc,nav,update_hash);
+                load_page_nav(doc,nav);
 
                 if (url == redaktmenu_url)
                     t_nav.transiro("redaktilo"); 
@@ -643,7 +646,7 @@ function load_page(trg,url,push_state=true,whenLoaded) {
                     redaktilo.store_art();
 
                 // PLIBONIGU: difinu load_page_main kiel ago de transiro(?()
-                load_page_main(doc,main,update_hash);
+                load_page_main(doc,main);
                 if (url == titolo_url)
                     t_main.transiro("titolo"); 
                 else if (url.startsWith(redaktilo_url))
@@ -658,7 +661,7 @@ function load_page(trg,url,push_state=true,whenLoaded) {
                 console.debug("transiru el:"+JSON.stringify(history.state));
                 console.debug("=======> al:"+JSON.stringify(hstate));
                 // provizore ne ŝanĝu la URL de la paĝo
-                history.pushState(hstate,null,null);
+                history.pushState(hstate,'');
             }  
             
             // faru, kion poste faru donita kiel argumento
@@ -894,7 +897,7 @@ function serchu(event) {
     if (esprimo) {
         // evitu ŝanĝi .search, ĉar tio refreŝigas la paĝon nevolite: 
         // location.search = "?q="+encodeURIComponent(esprimo);
-        history.pushState(history.state,null,location.origin+location.pathname+"?q="+encodeURIComponent(esprimo));
+        history.pushState(history.state,'',location.origin+location.pathname+"?q="+encodeURIComponent(esprimo));
         serchu_q(esprimo);
     }
 }
@@ -994,7 +997,7 @@ function serchu_q(esprimo) {
                         } // for lng,trd ...
                     } else {
                         // trovitaj esperantaj tradukoj de tiu nacilingva vorto
-                        for ( e of t.t ) {
+                        for (let e of t.t) {
                             const a = ht_elements([
                                 ["a",{target: "precipa", href: e.h},
                                     e.k
@@ -1044,8 +1047,8 @@ function serchu_q(esprimo) {
                 }    
 
                 // aldonu la reagon por ref-enmetaj butonoj
-                if ( t_red.stato == "redaktante") {
-                    for (btn of trovoj.querySelectorAll("button.r_vid")) {
+                if (t_red.stato == "redaktante") {
+                    for (let btn of trovoj.querySelectorAll("button.r_vid")) {
                         btn.addEventListener("click",(event)=>{                         
                             // kiun ref-mrk ni uzu - depende de kiu butono premita
                             const refmrk = event.target.value;
@@ -1098,7 +1101,9 @@ function hazarda_art() {
     HTTPRequest('POST', sercho_url, {sercxata: "!iu ajn!"},
         function(data) {
             // sukceso!
-            var json = JSON.parse(data);
+            var json = 
+                /** @type { {hazarda: Array<string>} } */
+                (JSON.parse(data));
             const mrk = json.hazarda[0];
             const href = art_prefix+mrk.split('.')[0]+'.html#'+mrk;
             if (href) load_page("main",href);
@@ -1113,7 +1118,9 @@ function nombroj() {
     HTTPRequest('POST', nombroj_url, {x:0}, // sen parametroj POST ne funkcius, sed GET eble ne estus aktuala!
         function(data) {
             // sukceso!
-            var json = JSON.parse(data);
+            var json = 
+                /** @type { {trd: Array, kap: Array} } */
+                (JSON.parse(data));
             console.log(json);
             const n = document.getElementById('t:nombroj');
             if (n && json) {
@@ -1131,7 +1138,9 @@ function nombroj() {
 function mrk_eraroj() {
     HTTPRequest('POST', mrk_eraro_url, {x:1}, // ni sendu ion per POST por ĉiam havi aktualan liston
         function(data) {
-            var json = JSON.parse(data);
+            var json = 
+                /** @type { {drv: Array<Array>, snc: Array<Array>, hom: Array<Array>} } */
+                (JSON.parse(data));
             const listo = document.getElementById("mrk_sintakso");
             listo.textContent= '';
 
@@ -1237,6 +1246,10 @@ function viaj_submetoj() {
     }    
 }
 
+/**
+ * Montras la staton de submetoj
+ * @param { Array<{state,fname,desc,time,result}> } sj - la informoj pri la submetoj de la redaktanto
+ */
 function montru_submeto_staton(sj) {
     const stat = {
         'nov': '\u23f2\ufe0e', 'trakt': '\u23f2\ufe0e', 
@@ -1258,11 +1271,11 @@ function montru_submeto_staton(sj) {
     if (sj) {
         const ds = document.getElementById("submetoj");
         // forigu antaŭajn...
-        for (ch of ds.querySelectorAll("details")) {
+        for (let ch of ds.querySelectorAll("details")) {
             ds.removeChild(ch);
         }
         // enŝovu novan staton....
-        for (s of sj) {
+        for (let s of sj) {
             var info = ht_elements([
                 ["details",{},[
                     ["summary",{},[

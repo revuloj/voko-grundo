@@ -25,7 +25,7 @@ var preferoj = function() {
             // kolekti la lingvojn unue, ni bezonos ordigi ilin...
             var _lingvoj = {};
             for (var e of doc.getElementsByTagName("lingvo")) {
-                var c = e.attributes.kodo;
+                var c = e.attributes['kodo'];
                 if (c.value != "eo") {
                     var ascii = eo_ascii(e.textContent);
                     _lingvoj[ascii] = {lc: c.value, ln: e.textContent};
@@ -102,7 +102,7 @@ var preferoj = function() {
                 lingvoj.splice(i, 1);
             }
             el.parentElement.removeChild(el);
-            ela = document.getElementById("alia_lng").querySelector("[data-lng='"+lng+"'");
+            const ela = document.getElementById("alia_lng").querySelector("[data-lng='"+lng+"'");
             ela.classList.remove("kasxita");
         }
     }

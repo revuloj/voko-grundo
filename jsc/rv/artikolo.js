@@ -48,7 +48,7 @@ var artikolo = function() {
         //enkadrigu();
     });
 
-    function preparu_art(artikolo) {
+    function preparu_art(artikolo = undefined) {
         // evitu preparon, se ni troviĝas en la redaktilo kaj
         // la artikolo ne ĉeestas!
         if (! document.getElementById(sec_art)) return;
@@ -260,7 +260,7 @@ var artikolo = function() {
             element.append(...pli);
 
             const _MS_PER_DAY = 1000 * 60 * 60 * 24;
-            if ( Math.round((Date.now() - preferoj.date()) / _MS_PER_DAY, 0) < 1 ) {
+            if ( Math.round((Date.now() - preferoj.date()) / _MS_PER_DAY) < 1 ) {
                 var pref = ht_elements([
                     ["DT",{class: "pref"},
                         [["A",{lang: "eo", href: "#", class: "pref"}, "preferoj..."]]
@@ -423,6 +423,21 @@ var artikolo = function() {
         // se la tezaŭro ankoraŭ ne ŝarĝiĝis ni devos fari tion nun
         HTTPRequestFull('POST', vokoref_url, {}, {art: artikolo},
             function(data) {
+
+                if (! data) return;   
+
+                // trakuru la derivaĵojn kaj alordigu la referencojn kun sama mrk-o
+                // en la unua drv aldonu ankaŭ referencojn celantaj al la artikolo (sen '.')
+                const art = document.getElementById(sec_art);
+                // ĉe duobla klako povas okazi, ke ni dufoje ŝargas la tezaŭon,
+                // do se ĝi jam ĉeestas, ni transsaltas la reston...
+                if (art.querySelector('div.tezauro')) return;
+                                
+                var json = 
+                    /** @type { {viki: Array<{m,v}>, tez: Array<{mrk,tip,cel}>} } VikiRef */
+                    (JSON.parse(data));
+                var first = true;
+
                 function mrk_art_url(mrk) {
                     const fn = mrk.substring(0,mrk.indexOf('.'));
                     return art_path + fn + '.html#' + mrk;
@@ -438,19 +453,21 @@ var artikolo = function() {
                                   // kaj pri minuklaj/majusklaj alinomoj de Viki-titoloj (internaj referencoj de V.)
 
                     var vj = [];
-                    for (r of json.viki) {
-                        if (r.m == mrk || 
-                            (first_drv && r.m == mrk.substring(0,mrk.indexOf('.')))) {                            
-
-                            if (! pas[r.v.toLowerCase()] ) {
-                                pas[r.v.toLowerCase()] = true;  // memoru
-
-                                const v = ht_elements([
-                                    ['a',{ href: vikipedio_url+r.v }, r.v.replace(/_/g,' ')],', '
-                                ]);
-                                vj.push(...v); 
+                    if (json.viki) {
+                        for (let r of json.viki) {
+                            if (r.m == mrk || 
+                                (first_drv && r.m == mrk.substring(0,mrk.indexOf('.')))) {                            
+    
+                                if (! pas[r.v.toLowerCase()] ) {
+                                    pas[r.v.toLowerCase()] = true;  // memoru
+    
+                                    const v = ht_elements([
+                                        ['a',{ href: vikipedio_url+r.v }, r.v.replace(/_/g,' ')],', '
+                                    ]);
+                                    vj.push(...v); 
+                                }
                             }
-                        }
+                        }    
                     }
                     
                     if (vj.length) {
@@ -490,13 +507,13 @@ var artikolo = function() {
                                   // kaj ankaŭ pro inversaj dif/sin, sin/vid...
 
                     // montru referencojn en taŭga ordo... 
-                    for (tip of ['dif','sin','ant','hom','super','malprt','sub','ekz','prt','vid']) {
+                    for (let tip of ['dif','sin','ant','hom','super','malprt','sub','ekz','prt','vid']) {
                         const rj = tez[tip];
                         if (!rj) continue;
 
                         var aj = [];
 
-                        for (r of rj) {
+                        for (let r of rj) {
                             const cel = r.cel;
 
                             // NOTO: tio povus neintencite kaŝi homonimojn, se ni referencas al pluraj
@@ -543,19 +560,7 @@ var artikolo = function() {
                     }
                 }
 
-                if (! data) return;   
-
-                // trakuru la derivaĵojn kaj alordigu la referencojn kun sama mrk-o
-                // en la unua drv aldonu ankaŭ referencojn celantaj al la artikolo (sen '.')
-                const art = document.getElementById(sec_art);
-                // ĉe duobla klako povas okazi, ke ni dufoje ŝargas la tezaŭon,
-                // do se ĝi jam ĉeestas, ni transsaltas la reston...
-                if (art.querySelector('div.tezauro')) return;
-                
-                var json = JSON.parse(data);
-                var first = true;
-
-                for (h2 of art.querySelectorAll('h2[id]')) {
+                for (let h2 of art.querySelectorAll('h2[id]')) {
                     const div = kreu_ref_div(h2.id,first); first = false;
                     if (div) {
                         const sec = h2.closest("section");

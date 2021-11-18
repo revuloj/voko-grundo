@@ -21,13 +21,13 @@ var regex_xmltag = new RegExp('<[^>]+>','g');
 function get_line_pos(inx,text) {
     var lines = 0;
     var last_pos = 0;
-    for (i=0; i<inx; i++) { 
+    for (let i=0; i<inx; i++) { 
         if (text[i] == '\n') {
             lines++;
             last_pos = i;
         }
     }
-    pos = (lines == 0)? inx : (inx-last_pos-1);
+    const pos = (lines == 0)? inx : (inx-last_pos-1);
     return({line: lines, pos: pos})
 }
 
@@ -54,16 +54,24 @@ function traduk_lingvoj(xmlStr) {
     var xml = xmlStr.replace(/&[a-zA-Z0-9_]+;/g,'?'); // entities cannot be resolved...
     
     try {
-        var artikolo = $("vortaro",$.parseXML(xml));
+        //var artikolo = $("vortaro",$.parseXML(xml));
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(xmlStr,"text/xml");
+        const artikolo = doc.querySelector("vortaro");
+
     } catch(e) {
         console.error("Pro nevalida XML ne eblas trovi traduklingvojn.");
         //console.error(e);
         return;
     }
     
-    artikolo.find("trd[lng],trdgrp[lng]").each(function(index) {
-        lingvoj[$(this).attr('lng')] = true;
-    });
+    //artikolo.find("trd[lng],trdgrp[lng]").each(function(index) {
+    //    lingvoj[$(this).attr('lng')] = true;
+    //});
+    for (let t of artikolo.querySelectorAll("trd[lng],trdgrp[lng]")) {
+        const lng = t.getAttribute("lng");
+        lingvoj[lng] = true;
+    }
     
     return lingvoj;
 }
@@ -71,7 +79,7 @@ function traduk_lingvoj(xmlStr) {
 /**
  * Redonas la XML-enhavon de XML-nodo, IE rekte subtenas tion kiel atributo de XmlNode,
  * sed por aliaj retumiloj ni devas seriigi ekstrakti la enhavon forigante la elementokomencon kaj finon
- * @param {*} xmlNode 
+ * @param {Node} xmlNode 
  * @returns la XML-enhavo
  */
 function innerXML(xmlNode) {
@@ -98,7 +106,7 @@ function innerXML(xmlNode) {
 /**
  * Redonas la la XML-kodon de elemento. IE rekte subtenas tian atributon ĉe
  * aliaj retumiloj ne devas seriigi la XML-nodon
- * @param {*} xmlNode 
+ * @param {Node} xmlNode 
  * @returns la XML-enahvo kun la elemento mem
  */
 function outerXML(xmlNode) {
@@ -123,16 +131,16 @@ function outerXML(xmlNode) {
 /**
  * Enŝovas tradukojn de unu lingvo en XML
  * KOREKTU: ĉar tio uzas jQuery - prefere ŝovu tion al iu dosiero rs/jq_util.js
- * @param {*} element - la elemento (CSS elektilo) en kiu enŝovi la tradukojn (ekz. 'drv')
- * @param {*} shov - la linikomenca enŝovo aplikenda
- * @param {*} lng - la lingvokodo
- * @param {*} tradukoj - la tradukoj por tiu linggvo
+ * @param {Object} element - la elemento (havanta atributon mrk) en kiu enŝovi la tradukojn (ekz. 'drv')
+ * @param {string} shov - la linikomenca enŝovo aplikenda
+ * @param {string} lng - la lingvokodo
+ * @param {Array<string>} tradukoj - la tradukoj por tiu linggvo
  */
 function insert_trd_lng(element,shov,lng,tradukoj) {
     // kunmetu la XML por la tradukoj
     var trdXML = trd_xml_dom(lng,shov,tradukoj);
     
-    var old_trd = $(element).children("trd[lng='"+lng+"'],trdgrp[lng='"+lng+"']");
+    var old_trd = element.querySelectorAll("trd[lng='"+lng+"'],trdgrp[lng='"+lng+"']");
     // se troviĝas jam tradukoj de tiu ĉi lingvo (lng) metu tien la novajn
     if (old_trd.length) {
         //old_trd.replaceWith($(trdXML).find('xml').children);
@@ -142,14 +150,14 @@ function insert_trd_lng(element,shov,lng,tradukoj) {
     // metu laŭ alfabeto
     } else {
         var lngj = Array();
-        $(element).children("trd[lng],trdgrp[lng]").each(function(i,e) {
-            lngj.push($(this).attr("lng"))
-        });
+        for (let e of element.querySelectorAll("trd[lng],trdgrp[lng]")) {
+            lngj.push(e.getAttribute("lng"))
+        };
 
         // lingvo_post redonas la pozicion (lingvon) antaŭ kiu meti la tradukojn
         var lpost = lingvo_post(lng,lngj);
         if (lpost) {
-            var post_trd = $(element).children("trd[lng='"+lpost+"'],trdgrp[lng='"+lpost+"']");
+            var post_trd = element.querySelectorAll("trd[lng='"+lpost+"'],trdgrp[lng='"+lpost+"']");
             //post_trd.before(trdStr + '\n' + shov)
             //post_trd.before($(trdXML).find('xml').children)
             beforeChildren(element,post_trd[0],trdXML.childNodes,'','\n' + shov)
@@ -167,30 +175,30 @@ function insert_trd_lng(element,shov,lng,tradukoj) {
 
 /**
  * Anstataŭigas id-elementon per novaj (ni bezonas tion por la tradukenŝovo)
- * @param {*} element - la patra elemento en kiu anstataŭigi
- * @param {*} oldChild - la anstataŭigenda ido
- * @param {*} newChildren - la novaj id-elementoj
- * @param {*} wsBefore - teksto enŝovenda antaŭe
- * @param {*} wsAfter - teksto enŝovenda poste
+ * @param {Object} element - la patra elemento en kiu anstataŭigi
+ * @param {Object} oldChild - la anstataŭigenda ido
+ * @param {Array} newChildren - la novaj id-elementoj
+ * @param {string} wsBefore - teksto enŝovenda antaŭe
+ * @param {string} wsAfter - teksto enŝovenda poste
  */
-function replaceChildren(element,oldChild,newChildren,wsBefore,wsAfter) {
-  if (wsBefore) element.insertBefore(element.ownerDocument.createTextNode(wsBefore),before);
+function replaceChildren(element,oldChild,newChildren,wsBefore=undefined,wsAfter=undefined) {
+  if (wsBefore) element.insertBefore(element.ownerDocument.createTextNode(wsBefore),oldChild);
   for (var i=0; i<newChildren.length; i++) {
         element.insertBefore(newChildren[i],oldChild)
   }   
-  if (wsAfter) element.insertBefore(element.ownerDocument.createTextNode(wsAfter),before);
+  if (wsAfter) element.insertBefore(element.ownerDocument.createTextNode(wsAfter),oldChild);
   element.removeChild(oldChild);
 }
 
 /**
  * Enŝovas novajn idojn antaŭe
- * @param {*} element - la patra elemento en kiu enŝovi
- * @param {*} before - la elemento antaŭ kiu enŝovi
- * @param {*} children - la aldonendaj idoj
- * @param {*} wsBefore - teksto aldonenda antaŭe
- * @param {*} wsAfter - teksto aldonenda poste
+ * @param {Object} element - la patra elemento en kiu enŝovi
+ * @param {Object} before - la elemento antaŭ kiu enŝovi
+ * @param {Array} children - la aldonendaj idoj
+ * @param {string} wsBefore - teksto aldonenda antaŭe
+ * @param {string} wsAfter - teksto aldonenda poste
  */
-function beforeChildren(element,before,children,wsBefore,wsAfter) {
+function beforeChildren(element,before,children,wsBefore=undefined,wsAfter=undefined) {
     if (wsBefore) element.insertBefore(element.ownerDocument.createTextNode(wsBefore),before);
     for (var i=0; i<children.length; i++) {
         element.insertBefore(children[i],before)
@@ -200,12 +208,12 @@ function beforeChildren(element,before,children,wsBefore,wsAfter) {
 
 /**
  * Alpendigas idojn.
- * @param {*} element - la patra elemento
- * @param {*} children - la novaj idoj
- * @param {*} wsBefore - teksto aldonenda antaŭe
- * @param {*} wsAfter - teksto aldonenda poste
+ * @param {Object} element - la patra elemento
+ * @param {Array} children - la novaj idoj
+ * @param {string} wsBefore - teksto aldonenda antaŭe
+ * @param {string} wsAfter - teksto aldonenda poste
  */
-function appendChildren(element,children,wsBefore,wsAfter) {
+function appendChildren(element,children,wsBefore=undefined,wsAfter=undefined) {
     if (wsBefore) element.appendChild(element.ownerDocument.createTextNode(wsBefore));
     for (var i=0; i<children.length; i++) {
         element.appendChild(children[i])
@@ -216,14 +224,14 @@ function appendChildren(element,children,wsBefore,wsAfter) {
 
 /**
  * Aldonas tradukojn de iu lingvo en la XML-DOM
- * @param {*} lng - la lingvokodo
- * @param {*} shov - la linikomenca enŝovo aplikenda
- * @param {*} tradukoj - la tradukoj
+ * @param {string} lng - la lingvokodo
+ * @param {string} shov - la linikomenca enŝovo aplikenda
+ * @param {Array<string>} tradukoj - la tradukoj
  * @returns la XML-dokumento kun la aldonitaj tradukoj
  */
 function trd_xml_dom(lng,shov,tradukoj) {
-    parser = new DOMParser();
-    xmlDoc = parser.parseFromString('<xml></xml>',"text/xml");
+    const parser = new DOMParser();
+    const xmlDoc = parser.parseFromString('<xml></xml>',"text/xml");
     var root = xmlDoc.documentElement;
    // kunmetu la XML por la tradukoj
     if (tradukoj.length == 1 && tradukoj[0]) {
@@ -284,8 +292,8 @@ function parseTrd(parser, traduko) {
 
 /**
  * Trovas la lingvon, post kiu ni aldonas novan
- * @param {*} lng - la aldonenda lingvo
- * @param {*} lingvoj - la listo de ekzistantaj lingvoj
+ * @param {string} lng - la aldonenda lingvo
+ * @param {Array<string>} lingvoj - la listo de ekzistantaj lingvoj
  * @returns la lingvo, post kiu enŝovi aŭ null, kiam enŝovi en la fino
  */
 function lingvo_post(lng,lingvoj) {
@@ -299,7 +307,7 @@ function lingvo_post(lng,lingvoj) {
 
 /**
  * Redonas la spacsignojn en la fino de la teksto (kutime post la lasta linifino) kiel enŝovo
- * @param {*} text - la teksto
+ * @param {string} text - la teksto
  * @returns  la finspacsignoj de enŝovo
  */
 function enshovo(text) {
@@ -317,8 +325,8 @@ function enshovo(text) {
 
 /**
  * Redonas la spacsignojn de la enŝovo en la antaaŭ linio
- * @param {*} text - la teksto
- * @param {*} pos - la pozicio antaŭ kiu kolekti spacsignojn
+ * @param {string} text - la teksto
+ * @param {number} pos - la pozicio antaŭ kiu kolekti spacsignojn
  * @returns la kolektitaj spacsignoj kiel enŝovo
  */
 function enshovo_antaua_linio(text, pos) {
@@ -394,17 +402,16 @@ function forigu_markup(xml) {
 
 /**
  * Rompas tro lingajn liniojn
- * @param {*} str - la traktenda teksto
- * @param {*} indent - se donita, la enŝovo aldonenda ĉe ĉiu nova linio
- * @param {*} linirompo - la maksimuma linilongeco, 80 apriore
+ * @param {string} str - la traktenda teksto
+ * @param {number} indent - se donita, nombro de spacsignoj aldonendaj ĉe ĉiu nova linio
+ * @param {number} linirompo - la maksimuma linilongeco, 80 apriore
  * @returns la teksto kun eventuale aldonitaj linirompoj
  */
 function linirompo(str, indent=0, linirompo=80) {
     var pos = 0, bpos = 0, lrpos = 0;
+    var ispaces = '';
     if (indent) {
         ispaces = ' '.repeat(indent);
-    } else {
-        ispaces =''
     };
     str = str.replace(/[ \t\n]+/g,' ').trim();
     while (pos < str.length) {

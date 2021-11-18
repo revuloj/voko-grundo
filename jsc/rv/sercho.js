@@ -11,7 +11,11 @@ const EKZ=5; // ekz/ind aŭ bld/ind
 
 const e_regex = /[\.\^\$\[\(\|+\?{\\]/;
 
-function Sercho(kion) {
+/**
+ * Kreas novan serĉon. Ĝi helpas aliri la esperantajn kaj nacilingvajn trovojn post farita serĉo.
+ * @constructor
+ */
+function Sercho() {
     //komence malplena
     this.eo = [];
     this.trd = []; 
@@ -109,7 +113,7 @@ Sercho.prototype.trovoj = function(lng) {
         // la elektita lingvo: [mrk,kap,num,lng,ind,trd] 
         // ...ni grupigos laŭ trd, sed devos plenigi ĝin per ind, kie ĝi mankas
         const trvj = this.trd[lng];
-        for (t of trvj) { if (! t[TRD]) t[TRD] = t[IND] };
+        for (let t of trvj) { if (! t[TRD]) t[TRD] = t[IND] };
         const grouped = group_by(TRD,trvj); // ni grupigas laŭ 'ind'
         return Object.keys(grouped)
             .sort(new Intl.Collator(lng).compare)
