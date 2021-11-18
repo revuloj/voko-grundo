@@ -24,8 +24,6 @@ function XmlStruct(xml, onAddSub) {
       _fnt: /<fnt>[^]*<\/fnt>/g,
       _tl1: /<tld\s+lit="(.)"[^>]*>/g,
       _tl2: /<tld[^>]*>/g,
-      _trd: /^<trd(grp)?\s+lng\s*=\s*["']([a-z]{2,3})['"]\s*>([^]*?)<\/trd\1\s*>$/,
-      _tr1: /<trd\s*>([^]*?)<\/trd\s*>/g,
       _tagend: /[>\s]/
     }
   

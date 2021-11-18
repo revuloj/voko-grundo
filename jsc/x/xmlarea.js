@@ -13,6 +13,11 @@ function Xmlarea(ta_id, onAddSub) {
     //this.radiko = '';
     this.onaddsub = onAddSub;
     this.synced = true;
+
+    this.re_stru = {
+      _trd: /^<trd(grp)?\s+lng\s*=\s*["']([a-z]{2,3})['"]\s*>([^]*?)<\/trd\1\s*>$/,
+      _tr1: /<trd\s*>([^]*?)<\/trd\s*>/g
+    }
 };
 
 /**
@@ -235,7 +240,7 @@ Xmlarea.prototype.changeSubtext = function(id) {
         t = find_stag([q.elm],xml,q.pos);
         if (t) {
           // ni rigardu pri kiu lingvo temas...
-          const m = this.xmlstruct.re_stru._trd.exec(xml.substring(t.pos,q.end+1));
+          const m = this.re_stru._trd.exec(xml.substring(t.pos,q.end+1));
           if (m) {
             const l = m[2];
             if (l == lng) {
