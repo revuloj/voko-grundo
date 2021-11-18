@@ -1,42 +1,18 @@
 /**
  * Administras la redaktatan tekston tiel, ke eblas redakti nur parton de ĝi, t.e. unuopan derivaĵon, sencon ktp.
  * @constructor
- * @param {*} ta_id - La HTML-Id de la koncerna textarea-elemento en la HTML-paĝo
- * @param {*} onAddSub - Revokfunkcio, vokata dum analizo de la strukturo ĉiam, kiam troviĝas subteksto. Tiel eblas reagi ekzemple plenigante liston per la trovitaj subtekstoj (art, drv, snc...) 
+ * @param {string} ta_id - La HTML-Id de la koncerna textarea-elemento en la HTML-paĝo
+ * @param {Function} onAddSub - Revokfunkcio, vokata dum analizo de la strukturo ĉiam, kiam troviĝas subteksto. Tiel eblas reagi ekzemple plenigante liston per la trovitaj subtekstoj (art, drv, snc...) 
  */
 function Xmlarea(ta_id, onAddSub) {
     this.txtarea = document.getElementById(ta_id);
     //this.structure_selection = document.getElementById(struc_sel);
-    this.xmlteksto = ''; // la tuta teksto
-    this.xml_elekto = undefined; // aktuale redaktata subteksto
-    this.strukturo = []; // la listo de subtekstoj [komenco,fino,nomo]
-    this.tradukoj = {}; // tradukoj trovitaj en la aktuala redaktata subteksto
-    this.radiko = '';
+    this.xmlstruct = undefined; // la tuta teksto
+    this.elekto = undefined; // aktuale redaktata subteksto
+    //this.tradukoj = {}; // tradukoj trovitaj en la aktuala redaktata subteksto
+    //this.radiko = '';
     this.onaddsub = onAddSub;
     this.synced = true;
-
-    this.re_stru = {
-      _elm: /[ \t]*<((?:sub)?(?:art|drv|snc))[>\s]/g,
-      _eoe: />[ \t]*\n?/g,
-      _mrk: /mrk\s*=\s*"([^>"]*?)"/g,
-      _kap: /<kap>([^]*)<\/kap>/,
-      _rad: /<rad>([^<]+)<\/rad>/,
-      _var: /<var>[^]*<\/var>/g,
-      _ofc: /<ofc>[^]*<\/ofc>/g,
-      _klr: /<klr[^>]*>[^]*<\/klr>/g,
-      _ind: /<ind>([^]*)<\/ind>/g,
-      _fnt: /<fnt>[^]*<\/fnt>/g,
-      _tl1: /<tld\s+lit="(.)"[^>]*>/g,
-      _tl2: /<tld[^>]*>/g,
-      _trd: /^<trd(grp)?\s+lng\s*=\s*["']([a-z]{2,3})['"]\s*>([^]*?)<\/trd\1\s*>$/,
-      _tr1: /<trd\s*>([^]*?)<\/trd\s*>/g,
-      _tagend: /[>\s]/
-    }
-
-    this.indents = {
-      art: "", subart: "\u00a0", drv: "\u22ef ", subdrv: "\u22ef\u22ef ", 
-      snc: "\u22ef\u22ef\u22ef ", subsnc: "\u22ef\u22ef\u22ef\u22ef "
-    }
 };
 
 /**
@@ -44,138 +20,16 @@ function Xmlarea(ta_id, onAddSub) {
  * @param {string} xml 
  */
 Xmlarea.prototype.setText = function(xml) {
-  this.xmlteksto = xml;  
-  //this.txtarea.value = xml;
-  // kreu strukturliston
-  this.structure();      
+  this.xmlstruct = new XmlStruct(xml,this.onaddsub);  
   // elektu la unuan (art)
-  this.xml_elekto = this.strukturo[0];
-  this.txtarea.value = this.xmlteksto.slice(this.xml_elekto.de,this.xml_elekto.al);
+  this.elekto = this.xmlstruct.strukturo[0].id;
+  this.txtarea.value = this.xmlstruct.getSubtextById(this.elekto);
   this.resetCursor();   
 }
 
 
-/**
- * Ekstraktas strukturon de art/subart/drv/subdrv/snc/subsnc el la artikolo
- * @param {string} selected - se donita tio estas la elektita subteksto kaj estos markita en la revokfunkcio onaddsub (4-a argumento: true)
- */
-Xmlarea.prototype.structure = function(selected = undefined) {
-  const re_stru = this.re_stru;
-  const xmlteksto = this.xmlteksto;
-
-  /**
-   * Ekstraktu la XML-atributon 'mrk' el la subteksto
-   * @param {string} elm - la elemento de la subteksto (art,subart,drv,...,subsnc)
-   * @param {number} de - la komenco de la subteksto en la tuta XML
-   * @param {number} ghis - la fino de la subteksto en la tuta XML
-   * @returns la atributon 'mrk'
-   */
-  function mrk(elm,de,ghis) {
-    re_stru._mrk.lastIndex = de;
-    const mrk = re_stru._mrk.exec(xmlteksto);
-    if (mrk && mrk.index < ghis) {          
-      return (elm != 'art'? 
-        mrk[1].substring(mrk[1].indexOf('.')+1) 
-        : (mrk[1].slice(mrk[1].indexOf(':')+2,-20)) || '<nova>')
-    }
-  }
-  function rad(de,ghis) {
-    const art = xmlteksto.substring(de,ghis);
-    const mr = art.match(re_stru._rad);
-
-    if (mr) {
-      const rad = mr[1]
-      .replace(/\s+/,' ')
-      .trim();  // [^] = [.\r\n]
-
-      return rad;
-    }
-  }
-  function kap(elm,de,ghis) {
-    if (elm == 'drv') {
-      // find kap
-      const drv = xmlteksto.substring(de,ghis);
-      const mk = drv.match(re_stru._kap); 
-      //re_stru._kap.lastIndex = de;
-      if (mk) {
-        const kap = mk[1]
-        .replace(re_stru._var,'')
-        .replace(re_stru._ofc,'')
-        .replace(re_stru._fnt,'')
-        .replace(re_stru._tl1,'$1~')
-        .replace(re_stru._tl2,'~')
-        .replace(/\s+/,' ')
-        .replace(',',',..')
-        .trim();  // [^] = [.\r\n]
-
-        return kap;
-      }
-    };
-  }
-  function id(subt) {
-    const rx = /[^A-Za-z]/g;
-    const key = [111,222,33,44]; // ne tro gravas...
-    var xor_str = function(str)
-    { 
-        var c = key;
-        for(i=0; i<str.length; i++) { 
-            c[i%key.length] ^= str.charCodeAt(i);
-        }
-        return c.join('.');
-    }
-    if (subt.mrk) {
-      return xor_str(subt.mrk)
-    } else {
-      return xor_str(xmlteksto.substr(subt.de,120).replace(rx,''))
-    }
-  }
-  function al(elm,de) {
-    // trovu la finon de elemento 'elm'
-    var fin = xmlteksto.indexOf('</'+elm, de);
-    // trovu avance >..\n?
-    re_stru._eoe.lastIndex = fin;
-    const eoe = re_stru._eoe.exec(xmlteksto);
-    if (eoe && eoe.index) fin = eoe.index + eoe[0].length;
-
-    return fin;
-  }
-
-  this.strukturo = [];
-
-  while (m = re_stru._elm.exec(xmlteksto)) {
-    var subt = {de: m.index};
-    // kiom da linioj antaŭ tio?
-    subt.el = m[1];
-    subt.ln = count_char(xmlteksto,'\n',0,m.index);
-    subt.al = al(subt.el,m.index+5);
-
-    subt.mrk = mrk(subt.el,subt.de,subt.al);
-    subt.kap = kap(subt.el,subt.de,subt.al);
-    subt.id = id(subt);
-    subt.no = this.strukturo.length;
-
-    //const id = el_id(m[1], m.index+5, fino);
-    const suff = subt.kap ? subt.kap : subt.mrk||'';
-    subt.dsc = this.indents[subt.el] + (
-      subt.el!='art'? 
-        subt.el+ (suff?':'+suff:'') 
-        : suff);
-
-    // ĉe la kapvorto de la artikolo ekstraktu la radikon
-    if (subt.el == 'art') this.radiko = rad(subt.de,subt.al);
-
-    // console.debug(subt.de + '-' + subt.al + ': ' + subt.id + ':' + subt.dsc);
-
-    if (this.onaddsub) this.onaddsub(subt,this.strukturo.length,subt.id == selected);
-    this.strukturo.push(subt);
-    //sel_stru.append(ht_element('option',{value: strukturo.length-1},item));
-
-  }
-
-  // en la fino aldonu ankoraŭ elektilon por la tuta XML
-  const tuto = {de: 0, ln: 0, al: xmlteksto.length, id: "x.m.l", dsc: 'tuta xml-fonto'};
-  if (this.onaddsub) this.onaddsub(tuto,this.strukturo.length,tuto.id == selected);
-  this.strukturo.push(tuto);
+Xmlarea.prototype.getElekto = function() {
+  return this.xmlstruct.getStructById(this.elekto);
 }
 
 /**
@@ -185,188 +39,93 @@ Xmlarea.prototype.structure = function(selected = undefined) {
 
 Xmlarea.prototype.sync = function(select = undefined) {
   if (this.xml_elekto) {
-    const old_id = this.xml_elekto.id;
-    const nstru = this.strukturo.length;
+    const old_id = this.elekto;
+    const nstru = this.xmlstruct.strukturo.length;
 
-    console.debug("SYNC "+this.xml_elekto.id+": "+this.xml_elekto.de+"-"+this.xml_elekto.al
-      +"("+(this.xml_elekto.al-this.xml_elekto.de)+") <- "+this.txtarea.value.length);
-      /*
-    console.debug("Sd:"+this.xmlteksto.substr(this.xml_elekto.de-20,20));
-    console.debug("Sa:"+this.xmlteksto.substr(this.xml_elekto.al,20));
-    */
+    this.xmlstruct.replaceSubtext(this.elekto,this.txtarea.value,select)
 
-    this.xmlteksto = 
-      (this.xmlteksto.substring(0, this.xml_elekto.de) 
-      + this.txtarea.value 
-      + this.xmlteksto.substring(this.xml_elekto.al));
-    // rekalkulu la strukturon pro ŝovitaj pozicioj...
-    this.structure(select);
-
-    // aktualigu la elekton 
-    this.xml_elekto = this.strukturo[0]; // fallback
-    for (e of this.strukturo) {
-      if (e.id == select) {
-        this.xml_elekto = e;
-        break;
-      }
+    // aktualigu la elekton al 'select', kondiĉe ke ĝi troviĝas
+    // se ne ni elektas la unuan subtekston
+    this.elekto = this.xmlstruct.strukturo[0].id; // fallback
+    const tbs = select?this.xmlstruct.getStructById(select):undefined;
+    if (tbs) {
+      this.elekto = tbs.id;
     }
 
     // se ni ne retrovas la antaŭan id, ekz. ĉar @mrk ŝanĝiĝis aŭ snc aldoniĝis....
     // ni devos aktualigi XML en la redaktilo per la nuna id (ekz-e <art>...</art>)
-    if (old_id != this.xml_elekto.id || nstru != this.strukturo.length)
+    if (old_id != this.elekto || nstru != this.xmlstruct.strukturo.length) {
       // nun ni montras la celatan XML-parton por redaktado
-      this.txtarea.value = this.xmlteksto.slice(this.xml_elekto.de,this.xml_elekto.al);
+      this.txtarea.value = this.xmlstruct.getSubtextById(this.elekto);
+    }
 
     this.synced = true;
   }
 }
 
-/**
- * Trovu la informojn de subtekston 'id' en la strukturlisto 
- * @param {string} id 
- * @returns la detalojn kiel objekto
- */
-Xmlarea.prototype.getStructById = function(id) {
-  for (let s of this.strukturo) {
-    if (s.id == id) return s;
-  }
-}
 
 /**
- * Trovas la subtekston kun 'id' en la strukturlisto
- * @param {string} id 
- * @returns la konernan XML-tekston
+ * Redonas la tutan XML-tekston post eventuala sinkronigo kun la aktuala redakto
+ * @returns la tuta sinkronigita XML-teksto
  */
-Xmlarea.prototype.getSubtextById = function(id) {
-  const s = this.getStructById(id);
-  return this.xmlteksto.slice(s.de,s.al);
+Xmlarea.prototype.syncedXml = function() {
+  if (! this.synced) this.sync(this.elekto); 
+  return this.xmlstruct.xmlteksto;
 }
 
 
 /**
- * Trovos la parencon de la struktur-elemento donita per 'id', ekzemple ĉe senco tio estas la enhavanta derivaĵo.
- * @param {string} id 
- * @returns la detalojn de la parenco kiel objekto
+ * Elektas (alian) parton de la XML-teksto por redakti nur tiun.
+ * Laŭbezone sekurigas la nune redaktatan parton...
+ * @param {string} id - la identigilo de la subteksto
  */
-Xmlarea.prototype.getParent = function(id) {
-  const s = this.getStructById(id);
-  // parenco venas antaŭ la nuna kaj enhavas ĝin (subteksto al..de)
-  for (var n = s.no-1; n>=0; n--) {
-    const p = this.strukturo[n];
-    if (p.de < s.de && p.al > s.al ) return p;  
-  }
-}
-
-/**
- * Trovas la plej proksiman parencon de la aktuale elektita subteksto, kiu havas XML-atributon 'mrk'
- * @returns la detalojn de la parenco kiel objekto
- */
-Xmlarea.prototype.getClosestWithMrk = function() {
-  if (this.xml_elekto.mrk) {
-    return this.xml_elekto;
-  } else {
-    var p = this.getParent(this.xml_elekto.id);
-    while (p && p.no > 0) { // ni ne redonos art@mrk (0-a elemento)
-      if (p.mrk) return p;
-      p = this.getParent(p.id);
+Xmlarea.prototype.changeSubtext = function(id) {
+  if (id) {
+    // ni unue sekurigu la aktuale redaktatan parton...
+    this.sync(id); // ni transdonas ankaŭ la elektotan id por navigi tien en la elekto-listo
+    
+    // ni trovu la celatan subtekston per ĝia nomo, ĉar eble la numeroj ŝanĝiĝis...
+    this.elekto = this.xmlstruct.strukturo[0]; // se ni ne trovos la celatan, ekz-e ĉar marko aŭ enhavo snc-aldono...) ŝanĝiĝis
+        // ni montro simple la unua subtekston, t.e. la artikolon
+    
+    // nun serĉu...
+    const tbs = this.xmlstruct.getStructById(id);
+    if (tbs) {
+      this.elekto = tbs.id;
     }
+
+    // komparu kun SYNC...
+    //console.debug("CHNG "+this.xml_elekto.id+": "+this.xml_elekto.de+"-"+this.xml_elekto.al
+    //  +"("+(this.xml_elekto.al-this.xml_elekto.de)+")");
+
+    // nun ni montras la celatan XML-parton por redaktado
+    this.txtarea.value = this.xmlstruct.getSubtextById(this.elekto);
+    // iru al la komenco!
+    this.resetCursor();
+    this.scrollPos(0);
   }
 }
 
 
 /**
- * Redonas la XML-atributon 'mrk' de la aktuala subteksto, aŭ tiun de parenco, se ĝi ne havas mem
- * @returns la XML-atributon 'mrk'
+ * Kolektas ĉiujn tradukojn de unu lingvo en la aktuale redaktata XML-subteksto.
+ * La rezulto estos poste en la propra listo this.tradukoj
+ * @param {string} lng - la lingvokodo: ar, en, de ktp.
  */
-Xmlarea.prototype.getCurrentMrk = function() {
-  const c = this.getClosestWithMrk();
-  if (c) return c.mrk;
-  return '';
-}
+ Xmlarea.prototype.collectTrdAll = function(lng) {
+  var xml = this.txtarea.value;
+  this.tradukoj = [];
 
+  // kolektu unue la tradukojn en la aktuala subteksto
+  this.collectTrd(lng,xml,false);
 
-/**
- * Redonas la aktualan kapvorton, se ene de drv t.e. ties kapvorton, alie la kapvorton de la unua drv
- * en la artikolo
- * @returns la kapvorton, tildo estas anstataŭigita per la radiko, variaĵoj post komo forbalaita
- */
-Xmlarea.prototype.getCurrentKap = function() {
-    function kap(e) {
-      return e.kap
-        .replace('~',rad)
-        .replace(/,.*/,'');
-    }
+  // se ne temas subdrv, snc, subsnc ni kolektu ankaŭ de la parencaj...
+  var p = this.xmlstruct.getParent(this.elekto);
 
-  const rad = this.radiko;
-  const elekto = this.xml_elekto;
-  
-  if (elekto.el != 'art' && elekto.id != "x.m.l") {
-
-    if (elekto.kap) {
-      return kap(elekto);
-    } else {
-      var p = this.getParent(elekto.id);
-      while (p && p.no > 0) { // ni ne redonos art@mrk (0-a elemento)
-        if (p.kap) return kap(p);
-        p = this.getParent(p.id);
-      }
-    }
-
-  } else { // prenu kapvorton de unua drv
-    for (s of this.strukturo) {
-      if (s.el == 'drv') {
-        return (kap(s))
-      }
-    }
-  }
-}
-
-
-/**
- * Trovas la elemento-komencon (end=false) aŭ finon (end=true) en la XML-teksto.
- * La serĉo okazas de la fino!
- * @param {Array.string} elements - listo de interesantaj elementoj
- * @param {boolean} end - true: ni serĉas elementofinon (&lt;/drv), false: ni serĉas komencon (&lt;drv)
- * @param {boolean} stop_no_match - se 'true', ni haltas ĉe la unua elemento, kiu ne estas en la listo
- * @param {string} xml - la XML-teksto en kiu ni serĉas
- * @param {number} from - la finpozicio de kiu ni serĉas en alantaŭa direkto
- * @returns objekton kun kampoj pos, end, elm
- */
-Xmlarea.prototype.travel_tag_bw = function(elements,end=false,stop_no_match=false,xml,from) {    
-  const re_te = this.re_stru._tagend;
-  const mark = end? '</' : '<';
-
-  // se mankas unu el la du lastaj argumentoj, uzu apriorajn...
-  if (!xml) {
-    xml = this.txtarea.value;
-  }
-  if (from == undefined) {
-    from = xml.length;
-  }
-
-    // kontrolu ĉu la trovita elemento estas en la listo
-    // de interesantaj elementoj
-    function match(p) {
-      for (e of elements) {
-        if ( xml.substr(p,e.length) == e 
-          && xml.substr(p+e.length,1).match(re_te) ) return e;
-      }
-    }
-
-  // trovu krampon < aŭ </
-  var pos = xml.lastIndexOf(mark,from-mark.length);
-
-  while (pos > -1 ) {
-    const element = match(pos+mark.length);
-    if (element) {
-      const end = xml.indexOf('>',pos);
-      // redonu la trovitan elementon
-      return {pos: pos, end: end, elm: element};
-    } else {
-      if (stop_no_match) return;
-    }
-    // trovu sekvan krampon < aŭ </
-    pos = xml.lastIndexOf(mark,pos-1);
+  while ( ['snc','subdrv','drv'].indexOf(p.el)>-1 ) {
+    xml = this.xmlstruct.getSubtextById(p.id);
+    this.collectTrd(lng,xml,true);
+    p = this.xmlstruct.getParent(p.id);
   }
 }
 
@@ -377,19 +136,19 @@ Xmlarea.prototype.travel_tag_bw = function(elements,end=false,stop_no_match=fals
  * @param {string} xml - la XML-teksto
  * @param {boolean} shallow - true: ni serĉas nur en la unua strukturnivelo, false: ni serĉas strukturprofunde, do ĉiujn tradukojn
  */
-Xmlarea.prototype.collectTrd = function(lng, xml, shallow=false) {
-  const re = this.re_stru;
+ Xmlarea.prototype.collectTrd = function(lng, xml, shallow=false) {
+  const re = this.xmlstruct.re_stru;
   if (!xml) {
     xml = this.txtarea.value;
     this.tradukoj = [];
   }
   
-  const find_stag = (elm,xml,from) => this.travel_tag_bw([elm],false,false,xml,from);  
+  const find_stag = (elm,xml,from) => this.xmlstruct.travel_tag_bw([elm],false,false,xml,from);  
 
   var find_etag, spos = xml.length;
   if (shallow) {
     // expect
-    find_etag = (elist,xml,from) => this.travel_tag_bw(elist,true,true,xml,from);
+    find_etag = (elist,xml,from) => this.xmlstruct.travel_tag_bw(elist,true,true,xml,from);
     // ĉar ni ne ignoras aliajn elementojn ol trd/trgrp ni unue devas aliri
     // la kadran elementon
     const kadr = find_etag(['drv','subdrv','snc','subsnc'],xml,xml.length);
@@ -400,7 +159,7 @@ Xmlarea.prototype.collectTrd = function(lng, xml, shallow=false) {
     }
   } else {
     // find
-    find_etag = (elist,xml,from) => this.travel_tag_bw(elist,true,false,xml,from); 
+    find_etag = (elist,xml,from) => this.xmlstruct.travel_tag_bw(elist,true,false,xml,from); 
     spos = xml.length;
   }
 
@@ -445,40 +204,18 @@ Xmlarea.prototype.collectTrd = function(lng, xml, shallow=false) {
   };
 }
 
-/**
- * Kolektas ĉiujn tradukojn de unu lingvo en la aktuale redaktata XML-subteksto.
- * La rezulto estos poste en la propra listo this.tradukoj
- * @param {string} lng - la lingvokodo: ar, en, de ktp.
- */
-Xmlarea.prototype.collectTrdAll = function(lng) {
-  var xml = this.txtarea.value;
-  this.tradukoj = [];
-
-  // kolektu unue la tradukojn en la aktuala subteksto
-  this.collectTrd(lng,xml,false);
-
-  // se ne temas subdrv, snc, subsnc ni kolektu ankaŭ de la parencaj...
-  var p = this.getParent(this.xml_elekto.id);
-
-  while ( ['snc','subdrv','drv'].indexOf(p.el)>-1 ) {
-    xml = this.getSubtextById(p.id);
-    this.collectTrd(lng,xml,true);
-    p = this.getParent(p.id);
-  }
-}
-
 
 /**
  * Trovas la lokon kie enmeti tradukon de certa lingvo en la aktuala redaktata subteksto
  * @param {string} lng - la lingvokodo
  * @returns objekton kun la kampoj pos kaj elm
  */
-Xmlarea.prototype.findTrdPlace = function(lng) {
+ Xmlarea.prototype.findTrdPlace = function(lng) {
   const xml = this.txtarea.value;
 
-  const expect_etag = (elist,xml,from) => this.travel_tag_bw (elist,true,true,xml,from);
+  const expect_etag = (elist,xml,from=undefined) => this.xmlstruct.travel_tag_bw (elist,true,true,xml,from);
   //expect_stag = (elist,xml,from) => this.travel_tag_bw (elist,false,true,xml,from);
-  const find_stag = (elist,xml,from) => this.travel_tag_bw (elist,false,false,xml,from);
+  const find_stag = (elist,xml,from=undefined) => this.xmlstruct.travel_tag_bw (elist,false,false,xml,from);
 
   // trovu unue la pozicion de la fina elemento de la nuna strukturo
   var p = expect_etag(['snc','subsnc','drv','subdrv','art','subart'],xml);
@@ -498,7 +235,7 @@ Xmlarea.prototype.findTrdPlace = function(lng) {
         t = find_stag([q.elm],xml,q.pos);
         if (t) {
           // ni rigardu pri kiu lingvo temas...
-          const m = this.re_stru._trd.exec(xml.substring(t.pos,q.end+1));
+          const m = this.xmlstruct.re_stru._trd.exec(xml.substring(t.pos,q.end+1));
           if (m) {
             const l = m[2];
             if (l == lng) {
@@ -535,13 +272,14 @@ Xmlarea.prototype.findTrdPlace = function(lng) {
   }
 }
 
+
 /**
  * Aldonas tradukon de donita lingvo en la konvena loko (alfabete inter la aliaj tradukoj
  * kaj etendante tradukgrupojn se jam ekzistas traduko(j) de tiu lingvo en la teksto)
  * @param {string} lng - la lingvokodo
  * @param {string} trd - la aldonenda traduko
  */
-Xmlarea.prototype.addTrd = function(lng,trd) {
+ Xmlarea.prototype.addTrd = function(lng,trd) {
   const place = this.findTrdPlace(lng); // this.getCurrentLastTrd(lng);
   if (place) {
     // se jam estas .trd, ni anstataŭigu ĝin per la etendita trdgrp...,
@@ -579,58 +317,12 @@ Xmlarea.prototype.addTrd = function(lng,trd) {
   }
 }
 
-
-/**
- * Redonas la tutan XML-tekston post eventuala sinkronigo kun la aktuala redakto
- * @returns la tuta sinkronigita XML-teksto
- */
-Xmlarea.prototype.syncedXml = function() {
-  if (! this.synced) this.sync(this.xml_elekto.id); 
-  return this.xmlteksto;
-}
-
-
-/**
- * Elektas (alian) parton de la XML-teksto por redakti nur tiun.
- * Laŭbezone sekurigas la nune redaktatan parton...
- * @param {string} id - la identigilo de la subteksto
- */
-Xmlarea.prototype.changeSubtext = function(id) {
-  if (id) {
-    // ni unue sekurigu la aktuale redaktatan parton...
-    this.sync(id); // ni transdonas ankaŭ la elektotan id por navigi tien en la elekto-listo
-    
-    // ni trovu la celatan subtekston per ĝia nomo, ĉar eble la numeroj ŝanĝiĝis...
-    this.xml_elekto = this.strukturo[0]; // se ni ne trovos la celatan, ekz-e ĉar marko aŭ enhavo snc-aldono...) ŝanĝiĝis
-        // ni montro simple la unua subtekston, t.e. la artikolon
-    
-    // nun serĉu...
-    for (e of this.strukturo) {
-      if (e.id == id) {
-        this.xml_elekto = e;
-        break;
-      }
-    }
-
-    // komparu kun SYNC...
-    console.debug("CHNG "+this.xml_elekto.id+": "+this.xml_elekto.de+"-"+this.xml_elekto.al
-      +"("+(this.xml_elekto.al-this.xml_elekto.de)+")");
-
-    // nun ni montras la celatan XML-parton por redaktado
-    this.txtarea.value = this.xmlteksto.slice(this.xml_elekto.de,this.xml_elekto.al);
-    // iru al la komenco!
-    this.resetCursor();
-    this.scrollPos(0);
-  }
-}
-
-
 /**
  * Redonas aŭ metas la aktualan y-koordinaton de la videbla parto de this.xmlarea
  * @param {number} pos - se donita rulas al tiu y-koordinato, se mankas redonu la aktualan
  * @returns la aktuala y-koordinato
  */
-Xmlarea.prototype.scrollPos = function(pos) {
+Xmlarea.prototype.scrollPos = function(pos=undefined) {
   var txtarea = this.txtarea;
   if (typeof pos == "number") {
     // set scroll pos
@@ -663,7 +355,7 @@ Xmlarea.prototype.position = function() {
     function get_line_pos(inx,text) {
       var lines = 0;
       var last_pos = 0;
-      for (i=0; i<inx; i++) { 
+      for (let i=0; i<inx; i++) { 
           if (text[i] == '\n') {
               lines++;
               last_pos = i;
@@ -714,7 +406,7 @@ Xmlarea.prototype.select = function(pos,len) {
  * @param {number} p_kursoro - se donita tiom da signoj ni moviĝas antataŭen antaŭ enmeti la tekston
  * @returns la momente elektita teksto, se ne estas donita enmetenda teksto
  */
-Xmlarea.prototype.selection = function(insertion,p_kursoro=0) {
+Xmlarea.prototype.selection = function(insertion=undefined, p_kursoro=0) {
   //var txtarea = document.getElementById('r:xmltxt');
   const txtarea = this.txtarea;
   var range;
@@ -756,7 +448,7 @@ Xmlarea.prototype.selection = function(insertion,p_kursoro=0) {
       return txtarea.value.substring(startPos, endPos); 
     }
   }
-},
+};
 
 
 /**
@@ -765,7 +457,7 @@ Xmlarea.prototype.selection = function(insertion,p_kursoro=0) {
  * @param {number} indent - la nombro de ŝovendaj spacoj
  * @returns - la enŝovo de la aktuala linio (la spacsignoj en ties komenco)
  */
-Xmlarea.prototype.indent = function(indent) {
+Xmlarea.prototype.indent = function(indent=undefined) {
   //var txtarea = document.getElementById('r:xmltxt');
   var txtarea = this.txtarea;
   var selText;
@@ -832,7 +524,7 @@ Xmlarea.prototype.indent = function(indent) {
     }
     return (str_repeat(" ", indent));  
   }
-},
+}
 
 
 /**
@@ -852,7 +544,7 @@ Xmlarea.prototype.charBefore = function() {
     txtarea.setSelectionRange(startPos-1,startPos);
     return txtarea.value.substring(startPos - 1, startPos);
   }
-},
+};
 
 
 /**

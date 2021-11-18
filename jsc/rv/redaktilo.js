@@ -156,7 +156,7 @@ var redaktilo = function() {
     // RET: aldonu enŝovon (spacojn) komence de nova linio
     if (key == 13) {  
       scrollPos = xmlarea.scrollPos();        
-      indent = xmlarea.indent();
+      const indent = xmlarea.indent();
       xmlarea.selection("\n"+indent,-1);
       xmlarea.scrollPos(scrollPos);
       event.preventDefault();
@@ -173,7 +173,7 @@ var redaktilo = function() {
 
       //var txtarea = document.getElementById('r:xmltxt');
       scrollPos = xmlarea.scrollPos();
-      selText = xmlarea.selection();
+      const selText = xmlarea.selection();
 
       if (selText != "") return true;
 
@@ -411,7 +411,7 @@ var redaktilo = function() {
   // trovu tradukojn sen lingvo
   function kontrolu_trd() {
     var xml = xmlarea.syncedXml(); //document.getElementById("r:xmltxt").value;
-    var m; re_t2 = /(<trd.*?<\/trd>)/g;
+    var m, re_t2 = /(<trd.*?<\/trd>)/g;
     var errors = [];
     
     // forigu bonajn trdgrp kaj trd FARENDA: tio ne trovas <trd lng="..."> ene de trdgrp!
@@ -569,7 +569,7 @@ var redaktilo = function() {
 
         // saltu en la artikolo al la redaktata parto
         const pref = document.getElementById("r:art").value;
-        const mrk = xmlarea.getCurrentMrk();
+        const mrk = xmlarea.xmlstruct.getCurrentMrk(xmlarea.elekto);
         window.location.hash = pref+'.'+mrk;
 
         // eble tio devas esti en preparu_art?
@@ -732,7 +732,7 @@ var redaktilo = function() {
           if (key.match(re_hex)) {
             return String.fromCharCode(parseInt(key.substring(2),16));
           } else if (key.match(re_dec)) {
-            return String.fromCharCode(parseInt(key.substring(1)));
+            return String.fromCharCode(parseInt(key.substring(1),10));
           } else {
             const val = voko_entities[key];
             return (val && val.length == 1)? val : ent;
@@ -886,7 +886,7 @@ var redaktilo = function() {
     nav.querySelectorAll("button").forEach(function (b) { 
         var val = b.getAttribute("value");
         if (val) {
-          var n = parseInt(val.substring(0,2));
+          var n = parseInt(val.substring(0,2),10);
           var t = val.substring(2);
           if ( t == "d") {
             b.addEventListener("click", function() { nextTag('<drv',n); });
@@ -993,7 +993,7 @@ var redaktilo = function() {
     const s_trd = document.getElementById('r:trd_elekto');
     s_trd.textContent = '';
 
-    sercho = xmlarea.getCurrentKap(); //'hundo';
+    const sercho = xmlarea.xmlstruct.getCurrentKap(xmlarea.elekto); //'hundo';
 
     // prezento de traduklisto kiel HTML-dd-elemento
     // enhavanta la tradukojn kiel ul-listo
@@ -1172,7 +1172,7 @@ var redaktilo = function() {
   // tradukojn kaj +-butonoj por eblaj aldonoj
   function trad_ebloj() {
     const elekto = document.getElementById('r:trd_elekto');
-    const drv_snc = ('drv|snc'.indexOf(xmlarea.xml_elekto.el.substr(-3)) > -1);
+    const drv_snc = ('drv|snc'.indexOf(xmlarea.getElekto()?.el.substr(-3)) > -1);
 
     // se iu (sub)drv|(sub)snc estas elektita ni montras +-butonojn kaj hoketojn...
     if (elekto.querySelector('details')) {
