@@ -74,6 +74,7 @@ function extend(ChildCls, ParentCls) {
  * Krei novan artikolon surbaze de ŝablono
  * @constructor
  * @param {*} art 
+ * @extends XMLŜablono
  */
 var XMLArtikolo = function(art) {
     XMLŜablono.call(this,xml_sxablonoj.art);
@@ -90,7 +91,8 @@ XMLArtikolo.prototype.xml = function(indent) {
 /**
  * Krei novan derivaĵon surbaze de ŝablono 
  * @constructor
- * @param {*} drv 
+ * @param {*} drv
+ * @extends XMLŜablono
  */
 var XMLDerivaĵo = function(drv) {
     XMLŜablono.call(this,xml_sxablonoj.drv);
@@ -109,7 +111,8 @@ XMLDerivaĵo.prototype.xml = function(indent) {
 /**
  * Krei novan sencon surbaze de ŝablono
  * @constructor
- * @param {*} snc 
+ * @param { {dif: string, drvmrk: string} } snc
+ * @extends XMLŜablono
  */
 var XMLSenco = function(snc) {
     XMLŜablono.call(this,xml_sxablonoj.snc);
@@ -127,7 +130,8 @@ XMLSenco.prototype.xml = function(indent=2) {
 /**
  * Krei novan fonton surbaze de ŝablono
  * @constructor
- * @param {*} fnt 
+ * @param {*} fnt
+ * @extends XMLŜablono 
  */
 var XMLFonto = function(fnt) {
     XMLŜablono.call(this,xml_sxablonoj.fnt);
@@ -142,7 +146,8 @@ XMLFonto.prototype.xml = function(indent) {
 /**
  * Krei novan ekzemplon surbaze de ŝablono
  * @constructor
- * @param {*} ekz 
+ * @param {*} ekz
+ * @extends XMLŜablono
  */
 var XMLEkzemplo = function(ekz) {
     XMLŜablono.call(this,xml_sxablonoj.ekz);
@@ -160,7 +165,8 @@ XMLEkzemplo.prototype.xml = function(indent) {
 /**
  * Krei novan referencon surbaze de ŝablono
  * @constructor
- * @param {*} ref 
+ * @param {*} ref
+ * @extends XMLŜablono
  */
 var XMLReferenco = function(ref) {
     XMLŜablono.call(this,xml_sxablonoj.ref);
@@ -176,7 +182,8 @@ XMLReferenco.prototype.xml = function(indent=0) {
 /**
  * Krei novan referenc-grupon surbaze de ŝablono
  * @constructor
- * @param {*} ref 
+ * @param {*} ref
+ * @extends XMLŜablono
  */
 
 var XMLReferencGrupo = function(ref) {
@@ -195,7 +202,8 @@ XMLReferencGrupo.prototype.xml = function(indent=4) {
  * Krei novan rimarkon surbaze de ŝablono
  * @constructor
  * @param {*} rim 
- * @param {*} tip 
+ * @param {*} tip
+ * @extends XMLŜablono
  */
 var XMLRimarko = function(rim, tip='rim') {
     XMLŜablono.call(this,(tip=='rim'?xml_sxablonoj.rim:xml_sxablonoj.adm));
@@ -211,7 +219,8 @@ XMLRimarko.prototype.xml = function(indent) {
 /**
  * Krei novan bildo-strukturon surbaze de ŝablono
  * @constructor
- * @param {*} bld 
+ * @param {*} bld
+ * @extends XMLŜablono
  */
 var XMLBildo = function(bld) {
     XMLŜablono.call(this,xml_sxablonoj.bld);
@@ -244,7 +253,7 @@ XMLBildo.prototype.xml = function(indent) {
 /**
  * Krei novan fonton (HTML ekz. en trov-listo) surbaze de ŝablono
  * @constructor
- * @param {*} bib_src 
+ * @param {*} bib_src
  */
 var HTMLFonto = function(bib_src) {
     this.source = bib_src;

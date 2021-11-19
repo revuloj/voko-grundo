@@ -362,7 +362,7 @@ var artikolo = function() {
         var pied = document.body.getElementsByTagName("FOOTER")[0];
         if (pied) { // en la redeaktilo eble jam foriĝis...
             var first_a = pied.querySelector("A");
-            if (first_a) {
+            if (first_a) {                
                 var pref = ht_element("A",{class: "redakto", href: "#", title: "agordu preferatajn lingvojn"},"preferoj");
                 pref.addEventListener("click", () =>
                     preferoj.dialog(preparu_maletendu_sekciojn));
@@ -435,7 +435,9 @@ var artikolo = function() {
                                 
                 var json = 
                     /** @type { {viki: Array<{m,v}>, tez: Array<{mrk,tip,cel}>} } VikiRef */
-                    (JSON.parse(data));
+                    (JSON.parse(
+                        /** @type {string} */ (data)
+                    ));
                 var first = true;
 
                 function mrk_art_url(mrk) {
@@ -464,7 +466,7 @@ var artikolo = function() {
                                     const v = ht_elements([
                                         ['a',{ href: vikipedio_url+r.v }, r.v.replace(/_/g,' ')],', '
                                     ]);
-                                    vj.push(...v); 
+                                    if (v) vj.push(...v); 
                                 }
                             }
                         }    
@@ -533,7 +535,7 @@ var artikolo = function() {
                                     const s = ht_element("sup",{},cel.n);
                                     a[0].append(s);
                                 }  
-                                aj.push(...a);    
+                                if (a) aj.push(...a);    
                             }
                         }
                         if (aj.length) {

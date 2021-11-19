@@ -1058,7 +1058,7 @@ var redaktilo = function() {
               // montru serĉ-rezultojn kiel html summary/details 
               const details = ht_details(
                 tv.trd.eo.map(s => s.replace(/\?;/,'?:\u00a0'))
-                  .join(', ')||t, null,
+                  .join(', ')||t, '',
                 function(d) {
                   // esp-a difino
                   const eo = (tv.dif && tv.dif.length)? tv.dif : ['-/-'];
@@ -1068,7 +1068,7 @@ var redaktilo = function() {
                           ...eo
                       ]]
                   ]);
-                  d.append(...pe);
+                  if (pe) d.append(...pe);
 
                   // angla difino
                   const en = tv.dsc? tv.dsc : ['-/-'];
@@ -1077,7 +1077,7 @@ var redaktilo = function() {
                         ['em',{},'en: '], 
                         en ]]
                   ]);
-                  d.append(...pa);
+                  if (pa) d.append(...pa);
 
                   // tradukojn prezentu kiel difinlisto (dl)
                   var nkasxitaj = 0;
@@ -1143,13 +1143,13 @@ var redaktilo = function() {
                     // aldonu (+nn) - por videbligi la kasxitajn tradukojn
                     if (nkasxitaj) {
                       const pli = ht_pli(nkasxitaj);
-                      dl.append(...pli);  
+                      if (pli) dl.append(...pli);  
                     }
 
                     d.append(dl);
                 }
               ); // ht_details
-              s_trd.append(details);
+              if (details) s_trd.append(details);
 
           };  // for t in json
 

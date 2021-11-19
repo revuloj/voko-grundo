@@ -476,7 +476,7 @@ function start_wait() {
     if (s_btn) s_btn.classList.add('revo_icon_run');
 }
 
-function stop_wait(btn_id) {
+function stop_wait() {
     var s_btn = document.getElementById('x:revo_icon');
     if (s_btn) s_btn.classList.remove('revo_icon_run');
     s_btn = document.getElementById('w:revo_icon');
@@ -954,7 +954,7 @@ function serchu_q(esprimo) {
                         // enmetu +nn antaŭ la unua kaŝita elemento
                         if (n - sercho_videblaj == 1) {
                             const pli = ht_pli(trvj.length - sercho_videblaj);
-                            dl.append(...pli);
+                            if (pli) dl.append(...pli);
                         }                        
                         atr = {class: "kasxita"};
                     }
@@ -993,7 +993,7 @@ function serchu_q(esprimo) {
                                         [["code",{}, l + ":"],["span",{lang: l}, trd]]
                                     ],["br"]
                                 ]);    
-                            dd.append(...a);
+                            if (a) dd.append(...a);
                         } // for lng,trd ...
                     } else {
                         // trovitaj esperantaj tradukoj de tiu nacilingva vorto
@@ -1003,7 +1003,7 @@ function serchu_q(esprimo) {
                                     e.k
                                 ],["br"]
                             ]);    
-                            dd.append(...a);
+                            if (a) dd.append(...a);
                         } // for e
                     }
                     dl.append(dt,dd);
@@ -1159,7 +1159,7 @@ function mrk_eraroj() {
                             [['a',{href: art_href(m[0]), target: 'precipa'}, m[1]+' ['+m[0]+']']]
                         ]
                     ])
-                    ul.append(...li);
+                    if (li) ul.append(...li);
                 };
             }
             // mrk nekongruaj kun drv@mrk
@@ -1174,7 +1174,7 @@ function mrk_eraroj() {
                             [['a',{href: art_href(m[0]), target: 'precipa'}, m[1]+' ['+m[0]+']']]
                         ]
                     ]);
-                    ul.append(...li);
+                    if (li) ul.append(...li);
                 }
             }
             // homonimoj sen ref-hom
@@ -1190,7 +1190,7 @@ function mrk_eraroj() {
                             ['a',{href:  art_href(m[2]), target: 'precipa'}, 'al '+m[2]],']'
                         ]]
                     ]);
-                    ul.append(...li);
+                    if (li) ul.append(...li);
                 }
             }
 
@@ -1235,7 +1235,7 @@ function viaj_submetoj() {
                 ]
             ]
         ]);
-        nv.append(...ds);
+        if (ds) nv.append(...ds);
         ds[0].addEventListener("toggle", function(event) {
             if (event.target.hasAttribute("open")) {
                 redaktilo.submetoj_stato(montru_submeto_staton,start_wait,stop_wait);
@@ -1289,7 +1289,7 @@ function montru_submeto_staton(sj) {
                     ]]
                 ]]
             ]);
-            ds.append(...info);
+            if (info) ds.append(...info);
         }
     }   
 }

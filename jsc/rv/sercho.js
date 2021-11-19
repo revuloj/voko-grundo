@@ -60,9 +60,10 @@ Sercho.prototype.trovoj = function(lng) {
     // strukturas unu e-an trovon kun unika kap-mrk
     function trovo_eo(kap,mrk,trdj) {
         // grupigu la tradukojn laŭ lingvo kaj kunigi ĉiujn de
-        // sama lingvo per komoj...
-        const t_l = Object.entries(
-            group_by(LNG,trdj)) // grupigu tradukojn laŭ lingvo            
+    // sama lingvo per komoj...
+        // grupigu tradukojn laŭ lingvo            
+        const t_grouped = (group_by(LNG,trdj) || {});
+        const t_l = Object.entries(t_grouped)
             .filter( ([lng,list]) => { return lng != '<_sen_>' } )
             .reduce( (obj,[lng,list]) => {
                 obj[lng] = 
@@ -71,7 +72,7 @@ Sercho.prototype.trovoj = function(lng) {
                     list.map((e) => e[TRD]||e[IND]) 
                     .join(', ');
                 return obj;
-            }, {} );
+            }, {} );    
         return {
             v: kap,
             h: art_href(mrk),
@@ -100,11 +101,17 @@ Sercho.prototype.trovoj = function(lng) {
         // ni jam grupigis laŭ kapvortoj, sed
         // la liston de trovoj/tradukoj por la sama kapvorto
         // ...ni ankoraŭ grupigu laŭ mrk - ĉar povas enesti homonimoj!
-        for (let [kap,eroj] of Object.entries(this.eo)) {
-            const grouped = group_by(MRK,eroj);
-            trvj.push(...Object.keys(grouped)
-                .map( mrk => trovo_eo(kap,mrk,grouped[mrk]) ));
-        };
+        if (this.eo) {
+            for (let [kap,eroj] of Object.entries(this.eo)) {
+                if (Array.isArray(eroj)) {
+                    const grouped = group_by(MRK,eroj);
+                    if (grouped) {
+                        trvj.push(...Object.keys(grouped)
+                            .map( mrk => trovo_eo(kap,mrk,grouped[mrk]) ));    
+                    }
+                }
+            };    
+        }
         return trvj.sort((a,b) =>
             a.v.localeCompare(b.v,'eo'));
 
@@ -113,17 +120,20 @@ Sercho.prototype.trovoj = function(lng) {
         // la elektita lingvo: [mrk,kap,num,lng,ind,trd] 
         // ...ni grupigos laŭ trd, sed devos plenigi ĝin per ind, kie ĝi mankas
         const trvj = this.trd[lng];
-        for (let t of trvj) { if (! t[TRD]) t[TRD] = t[IND] };
-        const grouped = group_by(TRD,trvj); // ni grupigas laŭ 'ind'
-        return Object.keys(grouped)
-            .sort(new Intl.Collator(lng).compare)
-            .map( trd => trovo_trd(trd,grouped[trd]) );
+        if (Array.isArray(trvj)) {
+            for (let t of trvj) { if (! t[TRD]) t[TRD] = t[IND] };
+            const grouped = group_by(TRD,trvj); // ni grupigas laŭ 'ind'
+            if (grouped)
+                return Object.keys(grouped)
+                    .sort(new Intl.Collator(lng).compare)
+                    .map( trd => trovo_trd(trd,grouped[trd]) );
+        }
     }
 }
 
 // en kiuj lingvoj (krom eo) ni trovis ion?
 Sercho.prototype.lingvoj = function() {
-    return ( Object.keys(this.trd) );
+    if (this.trd) return ( Object.keys(this.trd) );
 }
 
 Sercho.prototype.malplena = function() {
@@ -132,16 +142,22 @@ Sercho.prototype.malplena = function() {
 }
 
 Sercho.prototype.sola = function() {
-    return ( Object.keys(this.eo).length === 1 
-             && Object.keys(this.trd).length === 0 
-          || Object.keys(this.eo).length === 0 
-             && Object.keys(this.trd).length === 1 
-             && Object.values(this.trd)[0].length === 1 );
+    return ( 
+            this.eo 
+            && Object.keys(this.eo).length === 1 
+            && (!this.trd || Object.keys(this.trd).length === 0) 
+          || 
+            (!this.eo || Object.keys(this.eo).length === 0)
+            && this.trd
+            && Object.keys(this.trd).length === 1 
+            && Object.values(this.trd)[0].length === 1 );
 }
 
 Sercho.prototype.unua = function() {
-    var u = Object.values(this.eo)[0] || Object.values(this.trd)[0];
-    return { href: art_href(u[0][MRK]) }        
+    if (this.eo && this.trd) {
+        var u = Object.values(this.eo)[0] || Object.values(this.trd)[0];
+        return { href: art_href(u[0][MRK]) }            
+    }
 }
 
 

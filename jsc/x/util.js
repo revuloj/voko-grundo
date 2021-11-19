@@ -6,22 +6,28 @@ const help_base_url = 'https://revuloj.github.io/temoj/';
 /**
  * HTML-elemento-specifo, konsistanta el nomo:string, atributoj:Object kaj enhavo.
  * Enhavo povas esti malplena, teksto aŭ listo de enhavataj HTML-elemento-specifoj.
- * @typedef { Array<*> } ElementSpec
- */ var ElementSpec;
+ * La tipkontrolo de closure-compiler ne povas kontroli tro kompleksajn kaj refleksivajn
+ * tipdifinojn kiel:
+ * [string,Object<string,string>,string|Array<string|ElementSpec>]
+ * Ni povas pripensi uzi ion kiel {tag: string, atr: Object<string,string>, cnt: ...}
+ * anstatataŭ sed tio plilongigus nebezone niajn struktur-specifojn.
+ * /@/typedef { Array<*> } ElementSpec; var ElementSpec;
+ * /
  
 
 /**
+ * pri elturnoj de specifo de revokfunkcioj por closure-compiler *kaj* JSDoc
+ * vd. ekz-e https://stackoverflow.com/questions/49582691/how-do-i-document-complex-callback-requirement-in-jsdoc-while-keeping-jsdocs-ge
+ * 
  * Respondo de XMLHttpRequest, ĉe malsukcesa 'response' estas nedeifinita
- *  @callback RequestResult
- * @param {XMLHttpRequest} request
- * @param {string|undefined} response
- */
+ * @typedef {function(string)} RequestResult
+ */ var RequestResult;
 
 /**
  * Evento okazanta antaŭ kaj post XMLHttpRequest, tio ebligas ekz-e ŝalti kaj malŝalti
  * atendovinjeton
- *  @callback RequestStartStop
- */
+ *  @typedef {function()} RequestStartStop
+ */ var RequestStartStop;
 
 
 /**
@@ -30,10 +36,10 @@ const help_base_url = 'https://revuloj.github.io/temoj/';
  * @param {string} url - la URL
  * @param {Object<string,string>} headers - la HTTP-kapoj
  * @param {Object<string,string>} params - la HTTP-parametroj
- * @param {Function} onSuccess - vokata post sukceso
- * @param {Function} onStart - vokata antaŭ la ŝargo
- * @param {Function} onFinish - vokata fine
- * @param {Function} onError - vokata kiam okazas eraro
+ * @param {RequestResult} onSuccess - vokata post sukceso
+ * @param {RequestStartStop} onStart - vokata antaŭ la ŝargo
+ * @param {RequestStartStop} onFinish - vokata fine
+ * @param {function(XMLHttpRequest)} onError - vokata kiam okazas eraro
  */
 function HTTPRequestFull(method, url, headers, params, onSuccess, 
     onStart = undefined, onFinish = undefined, onError = undefined) {  // onStart, onFinish, onError vi povas ellasi!
@@ -84,8 +90,8 @@ function HTTPRequestFull(method, url, headers, params, onSuccess,
     }
     
     request.onload = function() {
-      if (this.status >= 200 && this.status < 400) {
-          onSuccess.call(this,this.response);
+      if (request.status >= 200 && request.status < 400) {
+          onSuccess.call(request,/**@type{string}*/(request.response));
       } else {
           // post konektiĝo okazis eraro
           console.error('Eraro dum ŝargo de ' + url);  
@@ -110,10 +116,10 @@ function HTTPRequestFull(method, url, headers, params, onSuccess,
  * @param {string} method - la HTTP-metodo
  * @param {string} url - la URL
  * @param {Object<string,string>} params - la HTTP-parametroj
- * @param {Function} onSuccess - vokata post sukceso
- * @param {Function} onStart - vokata antaŭ la ŝargo
- * @param {Function} onFinish - vokata fine
- * @param {Function} onError - vokata kiam okazas eraro
+ * @param {RequestResult} onSuccess - vokata post sukceso
+ * @param {RequestStartStop} onStart - vokata antaŭ la ŝargo
+ * @param {RequestStartStop} onFinish - vokata fine
+ * @param {function(XMLHttpRequest)} onError - vokata kiam okazas eraro
  */
 function HTTPRequest(method, url, params, onSuccess, 
   onStart=undefined, onFinish=undefined, onError=undefined) {  // onStart, onFinish, onError vi povas ellasi!
@@ -342,11 +348,10 @@ function ht_attributes(el, attrs) {
 
 /**
  * Kreas HTML-elementon kun atributoj kaj eventuala tekstenhavo. 
- * @param {*} name - elemento-nomo, ekz-e 'div'
- * @param {*} attributes 
- * @param {*} textcontent 
- * @returns {Node}
- * @suppress {checkTypes}
+ * @param {!string} name - elemento-nomo, ekz-e 'div'
+ * @param {Object<string,string>} attributes 
+ * @param {string} textcontent 
+ * @returns {!Element}
  */
 function ht_element(name, attributes = null, textcontent = undefined) {
     var element = document.createElement(name);
@@ -361,6 +366,9 @@ function ht_element(name, attributes = null, textcontent = undefined) {
  * povas esti malplena, teksto aŭ samstruktura elementolisto.
  * @param {!Array<*>} jlist 
  * @returns {Array<Node>} - listo de kreitaj elementoj, eventuale ingitaj
+ * @suppress {checkTypes} - la tip-kontrolo de closure-compiler ne kapablas difini
+ *                          specifajn diversajn tipojn por elementoj de areo (t.e. 
+ *                          nia elemento-specifo, do ni devas subpremi tion tie ĉi!)
  */
 function ht_elements(jlist) {
     var dlist = [];
