@@ -39,12 +39,12 @@
         "build:js:debug": "google-closure-compiler -W VERBOSE --compilation_level BUNDLE --js_module_root ./jsc --entry_point ./jsc/kadro.js --js_output_file build/jsc/revo-2b-min.js jsc/util.js jsc/transiroj.js jsc/preferoj.js jsc/artikolo.js jsc/sercho.js jsc/kadro.js build/jsc/voko_entities.js jsc/xmlarea.js jsc/redaktilo.js",
         "build:rsj": "google-closure-compiler --compilation_level SIMPLE --process_common_js_modules --js_module_root ./jsc/rs --entry_point ./ui_kreo.js --js_output_file build/rsj/redaktilo-2a-min.js --js='jsc/rs/*.js' --js='jsc/u/*.js' --js='jsc/x/*.js'",
         "build:rsj:debug": "google-closure-compiler -W VERBOSE --compilation_level BUNDLE --js_module_root jqu --entry_point jsc/rs/ui_kreo.js --js_output_file build/rsj/redaktilo-2a-min.js jsc/u/*.js jsc/x/*.js jsc/rs/*.js",
-        "build": "npm run build:css && npm run build:dok && npm run build:js && npm run build:jq"
+        "build": "npm run build:css && npm run build:dok && npm run build:js && npm run build:rsj"
     },
     "scriptsComments": {
         "build": "Kompilas CSS, JS kaj DOK al dosierujo build/",
         "build:js": "Js por simpla redaktilo, pri google-closure-compiler vd. https://www.npmjs.com/package/google-closure-compiler",
-        "build:jq": "JS/jQuery por komforta redaktilo, pri google-closure-compiler vd. https://www.npmjs.com/package/google-closure-compiler",
+        "build:rsj": "JS/jQuery por la komforta redaktilo, pri google-closure-compiler vd. https://www.npmjs.com/package/google-closure-compiler",
         "build:svg": "kunigas piktogramojn el unuopaj SVG-dosieroj. Ne uzante docker build vi antaŭe voku bin/mp2png_svg.sh"
     }
 }
