@@ -32,7 +32,28 @@ Xmlarea.prototype.setText = function(xml) {
   this.resetCursor();   
 }
 
+/**
+ * La radiko de la kapvorto, kiel eltrovita dum strukturanalizo.
+ * @returns Redonas la radikon de la artikolo (t.e. la kapvorto sen finaĵo)
+ */
+Xmlarea.prototype.getRadiko = function() {
+  return this.xmlstruct.radiko;
+}
 
+/**
+ * Redonas la dosiernomon ekstraktitan el mrk-atributo de art- aŭ drv-elemento
+ * @returns la dosiernomo
+ */
+XmlStruct.prototype.getDosiero = function() {
+  return this.xmlstruct.art_drv_mrk();
+}
+
+/**
+ * Redonas la informojn pri aktuale elektita subteksto.
+ * Tio estas objekto kun parametroj 'id', 'el', 'de', 'al' kc.
+ * 
+ * @returns la informoj de la aktuale elektita subteksto
+ */
 Xmlarea.prototype.getElekto = function() {
   return this.xmlstruct.getStructById(this.elekto);
 }
@@ -41,7 +62,6 @@ Xmlarea.prototype.getElekto = function() {
  * Aktualigas la tekstbufron per la redaktata subteksto, ankaŭ aktualigas la struktur-liston
  * @param {string} select - se donita, la strukturelemento kun tiu .id estos poste la elektita
  */
-
 Xmlarea.prototype.sync = function(select = undefined) {
   if (this.xml_elekto) {
     const old_id = this.elekto;

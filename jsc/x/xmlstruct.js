@@ -17,6 +17,7 @@ function XmlStruct(xml, onAddSub) {
       _mrk: /mrk\s*=\s*"([^>"]*?)"/g,
       _kap: /<kap>([^]*)<\/kap>/,
       _rad: /<rad>([^<]+)<\/rad>/,
+      _dos: /<art\s+mrk="\$Id:\s+([^\.]+)\.xml|<drv\s+mrk="([^\.]+)\.'/,
       _var: /<var>[^]*<\/var>/g,
       _ofc: /<ofc>[^]*<\/ofc>/g,
       _klr: /<klr[^>]*>[^]*<\/klr>/g,
@@ -167,6 +168,15 @@ XmlStruct.prototype.structure = function(selected = undefined) {
   const tuto = {de: 0, ln: 0, al: xmlteksto.length, id: "x.m.l", dsc: 'tuta xml-fonto'};
   if (this.onaddsub) this.onaddsub(tuto,this.strukturo.length,tuto.id == selected);
   this.strukturo.push(tuto);
+}
+
+/**
+ * Redonas dosieronomon trovante ĝin en art-mrk aŭ drv-mrk
+ * @returns La dosiernomon ekstraktitan el la trovita mrk-atributo
+ */
+XmlStruct.prototype.art_drv_mrk = function() {
+  var match = this.xmlteksto.match(re_stru._dos);
+  if (match) return (match[1]? match[1] : match[2]);
 }
 
 /**
