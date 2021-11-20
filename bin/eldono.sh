@@ -19,7 +19,7 @@ files=${host}:files
 # ni komprenas preparo | docker | servilo kaj supozas "docker", se nenio donita argumente
 # por specialaj okazoj ni povas kopii ankaŭ dosierojn el loka Revo-versio al la servilo
 # per unu el artikoloj | historioj | indeksoj | fontoj
-target="${1:-docker}"
+target="${1:-helpo}"
 
 JSC=build/jsc/revo-${release}-min.js
 CSS=build/stl/revo-${release}-min.css
@@ -28,22 +28,21 @@ KADRO=jsc/kadro.js
 PACKG=package.json
 
 case $target in
+helpo)
+    echo "---------------------------------------------------------------------------"
+    echo "Tiu skripto servas por publikigi dosierojn loke preparitajn en la servilo."
+    echo "Tiucele ekzistas celoj 'servilo', 'artikoloj', 'historioj', 'indeksoj', 'fontoj'."
+    echo ""
+    echo "Per la aparta celo 'preparo' oni povas krei git-branĉon kun nova eldono por tie "
+    echo "komenci programadon de novaj funkcioj, ŝanĝoj ktp. Antaŭ adaptu en la kapo de ĉi-skripto"
+    echo "la variablojn 'release' kaj 'node_release' al la nova eldono."
+    ;;
 servilo)
     # ĉu ni supozu, ke ni jam kompilis JS kaj CSS ...? 
     npm run build:js
     npm run build:css
     scp ${JSC} ${revo}/jsc
     scp ${CSS} ${revo}/stl
-    ;;
-debug)
-    npm run build:js:debug
-    npm run build:css
-    ;;&
-docker|debug)
-    araneo_id=$(docker ps --filter name=araneujo_araneo -q)
-    todir=/usr/local/apache2/htdocs/revo
-    docker cp ${JSC} ${araneo_id}:${todir}/jsc
-    docker cp ${CSS} ${araneo_id}:${todir}/stl
     ;;
 preparo)
     # kontrolu ĉu la branĉo kongruas kun la agordita versio
