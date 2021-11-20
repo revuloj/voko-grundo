@@ -15,7 +15,8 @@ import tabl_init from './ui_tabl.js';
 //* Preparoj 
 //*********************************************************************************************
 
-var preflng='en';
+// ŝovita al global.js
+// var preflng='en';
 
 console.debug("Instalante la enirfunkcion...");
 $(document).ready(function () {
