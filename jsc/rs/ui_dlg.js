@@ -497,6 +497,7 @@ export default function() {
             plenigu_lingvojn_artikolo();
             $("#traduko_menuo").menu("refresh");
             // jam difinita en ui_kreo... var preflng = pref_lngoj? pref_lngoj[0] : 'en'; // globala variablo
+            const preflng = global.preflng;
             fill_tradukojn(preflng,$("#trd_pref_"+preflng).text());
             // adaptu altecon de la tabelo
             var view_h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
@@ -1156,7 +1157,7 @@ function plenigu_lingvojn() {
 
                 //console.debug(pref_data);
                 var pref_lngoj = pref_data[0];
-                preflng = pref_lngoj[0] || 'en'; // globala variablo (ui_kreo)
+                global.preflng = pref_lngoj[0] || 'en'; // globala variablo (ui_kreo)
                  
                 var lingvoj_a_b = '';
                 var lingvoj_c_g = '';
