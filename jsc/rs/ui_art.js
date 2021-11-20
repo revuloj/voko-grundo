@@ -8,6 +8,7 @@ console.debug("Instalante la artikolfunkciojn...")
 $.widget( "redaktilo.Artikolo", {
 
     options: {
+        xmlarea: undefined,
         dosiero: '',
         reĝimo: 'redakto', // ĉe novaj artikoloj 'aldono'   
         poziciŝanĝo: null, // evento
@@ -82,8 +83,10 @@ $.widget( "redaktilo.Artikolo", {
     },
 
     backup: function() {
+        const xmlarea = this.option("xmlarea");
+        const xml = xmlarea.syncedXml();
         window.localStorage.setItem("red_artikolo",JSON.stringify({
-            'xml': this.element.val(), 
+            'xml': xml, //this.element.val(), 
             'nom': this.option.dosiero,
             'red': this.option.reĝimo
         }));
@@ -93,16 +96,23 @@ $.widget( "redaktilo.Artikolo", {
     restore: function() {
         var str = window.localStorage.getItem("red_artikolo");
         var art = (str? JSON.parse(str) : null);
-        if (art) {
-            this.element.val(art.xml);
+        if (art && art.xml) {
+            //this.element.val(art.xml);
+            const xmlarea = this.option("xmlarea");
+            xmlarea.setText(art.xml);
             this.option.reĝimo = art.red;
+            // ni povus alternaitve demandi xmlarea.getDosiero(), 
+            // se ni certas, ke enestas mrk
             this.option.dosiero = art.nom;
+            this._setRadiko();
         };
-        this._setRadiko();
     },
 
     nova: function(art) {
-        this.element.val(new XMLArtikolo(art).xml());
+        const nova_art = new XMLArtikolo(art).xml();
+        //this.element.val();
+        const xmlarea = this.option("xmlarea");
+        xmlarea.setText(nova_art);
 
         // notu, ke temas pri nova artikolo (aldono),
         // tion ni bezonas scii ĉe forsendo poste
@@ -112,9 +122,11 @@ $.widget( "redaktilo.Artikolo", {
 
     // aktualigu artikolon el data
     load: function(dosiero,data) {
-        var e = this.element;
-        e.val(data);
-        e.change();
+        const xmlarea = this.option("xmlarea");
+        xmlarea.setText(data);
+        //var e = this.element;
+        //e.val(data);
+        this.element.change();
         this._setOption("reĝimo",'redakto')
         this._setOption("dosiero",dosiero);
     },
@@ -143,9 +155,13 @@ $.widget( "redaktilo.Artikolo", {
     },
 
     _setRadiko: function() {
+        /*
         var xml = this.element.val();
         var m = xml.match(this._regex_mrk._rad);
         this._radiko = m ? m[1] : '';
+        */
+       const xmlarea = this.option("xmlarea");
+       this._radiko = xmlarea.getRadiko();
     },
 
     _dragOver: function(event) {
@@ -166,7 +182,9 @@ $.widget( "redaktilo.Artikolo", {
             reader.onload = function(ev) { 
                 // when finished reading file data.
                 var xml = ev.target.result;
-                el.val(xml);
+                // el.val(xml);
+                const xmlarea = art.option("xmlarea");
+                xmlarea.setText(xml);
                 art.option.reĝimo = 'redakto';
             }
             // start reading the file data.
@@ -326,13 +344,16 @@ $.widget( "redaktilo.Artikolo", {
 
     // redonu dosieronomon trovante ĝin en art-mrk aŭ drv-mrk
     art_drv_mrk: function() {
-        var match = this.element.val().match(this._regex_mrk._dos);
-        if (match) return (match[1]? match[1] : match[2]);
+        const xmlarea = this.option("xmlarea");
+        return xmlarea.getDosiero();
     },
 
     // eltrovas la markojn (mrk=) de derivaĵoj, la korespondajn kapvortojn kaj liniojn
+    // PLIBONIGU: ni povus preni tion supozeble nun rekte el la xmlarea-strukturo
+    // kontrolu, kie ni fakte uzas drv_markoj...
     drv_markoj: function() {
-        var xmlStr = this.element.val();
+        const xmlarea = this.option("xmlarea");
+        var xmlStr = xmlarea.syncedXml(); //this.element.val();
         var drvoj = [], pos = 0, line = 0;
 
         if (xmlStr) {
@@ -375,8 +396,10 @@ $.widget( "redaktilo.Artikolo", {
     },
 
     // eltrovas ĉiujn markojn (mrk=) de derivaĵoj, sencoj ktp.
+    // PLIBONIGU: elprenu el xmlarea anstatataŭe
     markoj: function() {
-        var xmlStr = this.element.val();
+        const xmlarea = this.option("xmlarea");
+        var xmlStr = xmlarea.syncedXml(); //this.element.val();
         var mrkoj = {};
 
         if (xmlStr) {
@@ -390,8 +413,10 @@ $.widget( "redaktilo.Artikolo", {
         return mrkoj;
     },   
     
+    // PLIBONIGU: ŝovu tiun funkcion al xmlarea
     snc_sen_mrk: function() {
-        var xmlStr = this.element.val();
+        const xmlarea = this.option("xmlarea");
+        var xmlStr = xmlarea.syncedXml(); //this.element.val();
         var sncoj = {};
 
         if (xmlStr) {
@@ -406,8 +431,11 @@ $.widget( "redaktilo.Artikolo", {
         return sncoj;
     },
 
+    // PLIBONIGU: ŝovu al xmlarea
+    // klarigoj el tri punktoj kie mankas []
     klr_ppp: function() {
-        var xmlStr = this.element.val();
+        const xmlarea = this.option("xmlarea");
+        var xmlStr = xmlarea.syncedXml(); //this.element.val();
         var klroj = {};
 
         if (xmlStr) {
@@ -421,10 +449,14 @@ $.widget( "redaktilo.Artikolo", {
     },    
 
     // elprenas la tradukojn de certa lingvo el XML-artikolo
+    // PLIBONIGU: uzu xmlarea por tiu funkcio!
     tradukoj: function(lng) {
-        var tradukoj = new Array();
+        var tradukoj = new Array();        
         var rx = this._regex_xml;
-        var xml = this.element.val().replace(rx._ent,'?'); // entities cannot be resolved...
+
+        const xmlarea = this.option("xmlarea");
+        var xml = xmlarea.syncedXml() //this.element.val();
+            .replace(rx._ent,'?'); // entities cannot be resolved...
         
         try {
             var artikolo = $("vortaro",$.parseXML(xml));
@@ -477,7 +509,10 @@ $.widget( "redaktilo.Artikolo", {
         // tradukoj estas {mrk1: array(), mrk2: ...}
         //for (trd in tradukoj) {
         var rx = this._regex_xml;
-        var xml = this.element.val().replace(rx._ent,'&amp;$1;'); // entities cannot be resolved...
+
+        const xmlarea = this.option("xmlarea");
+        var xml = xmlarea.syncedXml() //this.element.val();
+            .replace(rx._ent,'&amp;$1;'); // entities cannot be resolved...
         
         try {
             var artikolo = $("vortaro",$.parseXML(xml));
@@ -503,8 +538,11 @@ $.widget( "redaktilo.Artikolo", {
         
         var prologo = '<?xml version="1.0"?>\n<!DOCTYPE vortaro SYSTEM "../dtd/vokoxml.dtd">\n\n';
         xml = outerXML(artikolo[0]).replace(rx._amp,'&').replace(rx._spc,'');  // ĉi lasta aparte pro Edge, kiu eligas "<tld />"            
-        if (xml) this.element.val(prologo + xml);
-
+        //if (xml) this.element.val(prologo + xml);
+        if (xml) {
+            const xmlarea = this.option("xmlarea");
+            xmlarea.setText(prologo + xml);
+        }
         this.element.change();    
     },
 
@@ -528,7 +566,8 @@ $.widget( "redaktilo.Artikolo", {
         var radiko = this._radiko;
         var rx = this._regex_txt;
 
-        var t = (this.element.val()
+        const xmlarea = this.option("xmlarea");
+        var t = (xmlarea.syncedXml() //this.element.val()
             .replace(rx._tl0,radiko)
             .replace(rx._tld,'$1'+radiko.substr(1)));
 
@@ -588,6 +627,5 @@ $.widget( "redaktilo.Artikolo", {
         }
         return result;
     }
-
 });
 

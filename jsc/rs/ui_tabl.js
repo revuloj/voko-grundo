@@ -11,7 +11,6 @@ import { vikiSerĉo, citaĵoSerĉo, retoSerĉo, bildoSerĉo } from './ui_srch.js
 //var change_count = 0;
 var pozicio_xml = '';
 var pozicio_html = '';
-var xmlarea;
 
 console.debug("Instalante la ĉefan redaktilopaĝon...")
 
@@ -28,16 +27,7 @@ export default function() {
   //###### subpaĝoj
 
   //### XML-redaktilo
-    xmlarea = new Xmlarea("xml_text",
-        function(subt,index,selected) {
-            const sel_stru = document.getElementById("art_strukturo");
-            if (index == 0) sel_stru.textContent = ''; // malplenigu la liston ĉe aldono de unua ero...        
-            if (selected) {
-                sel_stru.append(ht_element('option',{value: subt.id, selected: 'selected'},subt.dsc));
-            } else {
-                sel_stru.append(ht_element('option',{value: subt.id},subt.dsc));
-            }
-        });
+    
     var artikolo = $("#xml_text").Artikolo({
         poziciŝanĝo: function() {
         var line_pos = $("#xml_text").getCursorLinePos();
@@ -48,10 +38,29 @@ export default function() {
             // evento "change" nur post forlaso de la XML-tekst-areo
             $("#collapse_outline").accordion({active:false});
             $("#rigardo").empty();
-        }
+        },
+        xmlarea: new Xmlarea("xml_text",
+            function(subt,index,selected) {
+                const sel_stru = document.getElementById("art_strukturo");
+                if (index == 0) sel_stru.textContent = ''; // malplenigu la liston ĉe aldono de unua ero...        
+                if (selected) {
+                    sel_stru.append(ht_element('option',{value: subt.id, selected: 'selected'},subt.dsc));
+                } else {
+                    sel_stru.append(ht_element('option',{value: subt.id},subt.dsc));
+                }
+            }
+        )        
     });
-
     $("#xml_text").keypress(xpress);
+    $("#art_strukturo").on("change", function(event) {
+        const val = event.target.value;
+    
+        // tio renovigas la strukturon pro eblaj intertempaj snc-/drv-aldonoj ks...
+        // do ni poste rekreos ĝin kaj devos ankaŭ marki la elektitan laŭ _item_
+        const xmlarea = $("#xml_text").Artikolo("option","xmlarea");
+        xmlarea.changeSubtext(val);
+        //show_pos();
+    });
     
     // outline
     $( "#collapse_outline" ).accordion({
@@ -393,17 +402,19 @@ export function activate_tab(event,ui) {
  * Montras la antaŭrigardon de la artikolo
  */
 function antaurigardo() {
-    var xml_text = $("#xml_text").val();
+    const xmlarea = $("#xml_text").Artikolo("option","xmlarea");
+    const xml_text = xmlarea.syncedXml(); //$("#xml_text").val();
     
       if (! xml_text ) {
           return;
       };
+
     
       $("body").css("cursor", "progress");
       $.post(
             "revo_rigardo", 
             //{ art: $("shargi_dosiero").val() },
-            { xml: $("#xml_text").val() })
+            { xml: xml_text })
         .done(
             function(data) {   
                 $("#rigardo").html(data);
@@ -467,7 +478,7 @@ function antaurigardo() {
                     }
                 });
 
-                // preparu la artikolo per ties JS!
+                // preparu la artikolon per ties JS!
                 restore_preferences();            
                 preparu_art();
                 
