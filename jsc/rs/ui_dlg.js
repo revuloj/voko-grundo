@@ -573,6 +573,7 @@ export default function() {
     });
     $("#rimarko_rim").keypress(xpress);
 
+    /*
     //>>>>>>>> dialogo: Kontroli > homonimojn
     $( "#homonimo_dlg" ).dialog({
         kampoj: {
@@ -591,7 +592,8 @@ export default function() {
         }
     });  
     $( "#homonimo_tabelo" ).on("click","td.hom_art",homonimo_tabelo_premo);
-              
+              */
+
     //>>>>>>>> surmetitta dialogo ekz. por deklaro pri datumprotekto, klarigoj/helpo ks
     $( "#surmetita_dlg" ).dialog({
         position: { my: "left top", at: "left+20 top+20", of: window },
@@ -690,6 +692,7 @@ export function shargi_artikolon(event) {
     download_art(values.dosiero,"#shargi_error");
 }*/
 
+/*
 function hom_art_shargi(event) {
      event.preventDefault();
 
@@ -698,6 +701,7 @@ function hom_art_shargi(event) {
      download_art(values.dosiero,"#homonimo_error",'#homonimo_dlg',do_close=false);
      //shargi_art_dosieron("#homonimo_dlg","#homonimo_dos","#homonimo_error",false)
 }
+*/
 
 function download_art(dosiero,err_to,dlg_id,do_close=true) {
     
@@ -1622,7 +1626,7 @@ function lastaj_tabelo_premo(event) {
     }
 }
 
-
+/*
 function plenigu_homonimo_liston() {
     $("body").css("cursor", "progress");
     $("#homonimo_error").show(); // montru la komentojn...
@@ -1664,3 +1668,4 @@ function homonimo_tabelo_premo(event) {
     var dosiero = $(event.target).text();
     $ ("#homonimo_dos").val(dosiero);
 }
+*/

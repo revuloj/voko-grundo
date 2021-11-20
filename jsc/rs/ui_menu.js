@@ -84,9 +84,11 @@ function menu_selected(event, ui) {
         case "indiko_menu_item":
             montri_indikojn();
             break;
+/*   nun en ĉefa Revo...         
         case "homonimoj_menu_item":
             $("#homonimo_dlg").dialog("open");
             break;
+            */
         case "datumprotekto_menu_item":
             surmetita_dialogo("static/datumprotekto.html","deklaro_teksto");
             //datumprotekto_dialogo();
