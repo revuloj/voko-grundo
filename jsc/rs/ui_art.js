@@ -4,6 +4,7 @@
 // (c) 2018 - 2019 - Wolfram Diestel
 // laŭ GPL 2.0
 
+console.debug("Instalante la artikolfunkciojn...")
 $.widget( "redaktilo.Artikolo", {
 
     options: {

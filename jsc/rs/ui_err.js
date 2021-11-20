@@ -4,6 +4,7 @@
 // (c) 2016 - 2019 - Wolfram Diestel
 // laŭ GPL 2.0
 
+console.debug("Instalante la erar- kaj kontrolfunkciojn...")
 $.widget( "redaktilo.Checks", {
 
     options: {

@@ -5,6 +5,7 @@
 // laŭ GPL 2.0
 
 //var sercho_focused_button = null;
+console.debug("Instalante la serĉfunkciojn...")
 
 function _serĉo_preparo() {
     if (! $("#sercho_sercho").validate()) return;

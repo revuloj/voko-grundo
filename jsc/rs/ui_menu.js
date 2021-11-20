@@ -12,6 +12,8 @@
 import { kontroli_artikolon, montri_indikojn } from './ui_tabl.js';
 import { surmetita_dialogo } from './ui_err.js';
 
+console.debug("Instalante la menuon...")
+
 export default function() {
       // menuo
       $( "#menu" ).menu({

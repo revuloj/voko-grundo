@@ -8,6 +8,7 @@ import { show_error_status, surmetita_dialogo } from './ui_err.js';
 
 // aldonu al jQuery UI dialog proprajn metodojn
 // bezonatajn en la redaktilaj dialogoj
+console.debug("Instalante la dialogfunkciojn...")
 $.widget( "ui.dialog", $.ui.dialog, {
 
     // Default options.

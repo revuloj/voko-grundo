@@ -4,7 +4,7 @@
 // (c) 2016 - 2018 - Wolfram Diestel
 // laŭ GPL 2.0
 
-
+console.debug("Instalante la klavarfunkciojn...")
 $.widget( "redaktilo.Klavaro", {
 
     // Default options.

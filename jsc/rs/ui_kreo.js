@@ -17,18 +17,19 @@ import tabl_init from './ui_tabl.js';
 
 var preflng='en';
 
+console.debug("Instalante la enirfunkcion...");
 $(document).ready(function () {
        
     // prepari la redaktilo-aranĝon
     $(function () {
-      
+      console.debug("Preparante la redaktilon...");
       tabl_init();
       menu_init();
       dlg_init();
 
       // mus-notoj
       $( document ).tooltip();
-    
+      console.debug("La redaktilo estas laborpreta!");   
     });
 });
 

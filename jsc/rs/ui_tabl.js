@@ -11,7 +11,14 @@ import { vikiSerĉo, citaĵoSerĉo, retoSerĉo, bildoSerĉo } from './ui_srch.js
 //var change_count = 0;
 var pozicio_xml = '';
 var pozicio_html = '';
+var xmlarea;
 
+console.debug("Instalante la ĉefan redaktilopaĝon...")
+
+/**
+ * Preparas la ĉefan laborfenestron kaj la unuopajn partojn
+ * uzante la rimedojn de jQuery UI
+ */
 export default function() {    
     $( "#tabs" ).tabs({
         activate: activate_tab,
@@ -21,6 +28,16 @@ export default function() {
   //###### subpaĝoj
 
   //### XML-redaktilo
+    xmlarea = new Xmlarea("xml_text",
+        function(subt,index,selected) {
+            const sel_stru = document.getElementById("art_strukturo");
+            if (index == 0) sel_stru.textContent = ''; // malplenigu la liston ĉe aldono de unua ero...        
+            if (selected) {
+                sel_stru.append(ht_element('option',{value: subt.id, selected: 'selected'},subt.dsc));
+            } else {
+                sel_stru.append(ht_element('option',{value: subt.id},subt.dsc));
+            }
+        });
     var artikolo = $("#xml_text").Artikolo({
         poziciŝanĝo: function() {
         var line_pos = $("#xml_text").getCursorLinePos();
@@ -33,6 +50,7 @@ export default function() {
             $("#rigardo").empty();
         }
     });
+
     $("#xml_text").keypress(xpress);
     
     // outline
@@ -199,14 +217,23 @@ export default function() {
 
 }
 
+/**
+ * Montras la panelon kun indiko-butonoj (oficialeco, fakoj, stiloj, vorspecoj...)
+ */
 export function montri_indikojn() {
     switch_dock_indikoj()
 }
 
+/**
+ * Montras la panelon kun la redaktobutonoj de elementoj, specialsignoj... 
+ */
 export function montri_kromklavaron() {
     switch_dock_klavaro_kontrolo()
 }
 
+/**
+ * Kontrolas la artikolon (sintakso, klarigoj, vortanalizo)
+ */
 export function kontroli_artikolon(){
     $("#dock_eraroj").empty();
     $("#dock_avertoj").empty();
@@ -218,6 +245,9 @@ export function kontroli_artikolon(){
     switch_dock_klavaro_kontrolo()
 }
 
+/**
+ * Montras la panelon kun la redaktobutonoj de elementoj, specialsignoj... 
+ */
 function switch_dock_indikoj() {
     $("#elekto_indikoj").show();
     $("#dock_kontrolo").hide();
@@ -225,6 +255,9 @@ function switch_dock_indikoj() {
     $("#kromklavaro").show();   
 }
 
+/**
+ * Montras la panelon kun la kromklavaro kaj la kontrolrezultoj
+ */
 function switch_dock_klavaro_kontrolo() {
     $("#elekto_indikoj").hide();
     $("#dock_kontrolo").show();
@@ -237,6 +270,9 @@ function switch_dock_klavaro_kontrolo() {
 //* Aktualigoj dum redaktado (pozicio, navigilo, tekstelekto, klavpremoj) 
 //*********************************************************************************************
 
+/**
+ * Plenigas liston kun alstireblaj derivaĵoj
+ */
 function fill_outline() {
     var drvoj = $("#xml_text").Artikolo("drv_markoj"); // drvMrkoj($("#xml_text").val());
 
@@ -258,6 +294,10 @@ function fill_outline() {
     $("#art_outline").html(outlineStr);
 }
 
+/**
+ * Iras al derivaĵo en la artikolo
+ * @param {string} drv 
+ */
 function iru_al(drv) {
     if (drv) {
         var page =  $( "#tabs" ).tabs( "option", "active");
@@ -286,7 +326,12 @@ function iru_al(drv) {
 //* Paĝoj (XML, Antaŭrigardo, Serĉo) 
 //*********************************************************************************************
 
-
+/**
+ * Agas antaŭ transiro al alia subpaĝo (redaktilo, antaŭrigardo, serĉo).
+ * Transirante al serĉo ni metos la momente markita tekston en la serĉkampon.
+ * @param {*} event 
+ * @param {*} ui 
+ */
 export function before_activate_tab(event,ui) {
     var old_p = ui.oldPanel[0].id;
     var new_p = ui.newPanel[0].id;
@@ -309,6 +354,11 @@ export function before_activate_tab(event,ui) {
     }
 }
 
+/**
+ * Aktivigas alian subpaĝon
+ * @param {*} event 
+ * @param {*} ui - enhavas informojn pri al paĝŝanĝo (oldPanel, newPanel)
+ */
 export function activate_tab(event,ui) {
     var old_p = ui.oldPanel[0].id;
     var new_p = ui.newPanel[0].id;
@@ -339,9 +389,11 @@ export function activate_tab(event,ui) {
 
 }
 
-// FARENDA: eble metu eraron en apartan kampon anst. uzi alert..., tiam vi povas uzi $.alportu
+/**
+ * Montras la antaŭrigardon de la artikolo
+ */
 function antaurigardo() {
-      var xml_text = $("#xml_text").val();
+    var xml_text = $("#xml_text").val();
     
       if (! xml_text ) {
           return;
@@ -422,6 +474,8 @@ function antaurigardo() {
                 iru_al(pozicio_html);
             })
         .fail (
+            // FARENDA: eble metu eraron en apartan kampon 
+            // anst. uzi alert..., tiam vi povas uzi $.alportu
             function(xhr) {
                 console.error(xhr.status + " " + xhr.statusText);
                 if (xhr.status == 400) {
@@ -448,8 +502,10 @@ function antaurigardo() {
 //*********************************************************************************************
 
 
+/**
+ * Plenigas la vinjetoklavojn por indikoj (oficialeco, fakoj, stiloj, vortspecoj)
+ */
 // FARENDA: ĉu ŝovi tion al ui_btn -> ui_klv
-
 function plenigu_elekto_indikoj() {
     //$("body").css("cursor", "progress");
     
@@ -554,7 +610,10 @@ function plenigu_elekto_indikoj() {
         });
 }
 
-
+/**
+ * Enmetas klakitan indikon en la XML-tekston
+ * @param {*} event 
+ */
 function indikon_enmeti(event) {
     event.preventDefault();
     var enmetu = '';

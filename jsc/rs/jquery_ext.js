@@ -6,6 +6,7 @@
  * lau GPL 2.0
  */
 
+console.debug("Etendante jQuery per kelkaj utilfunkcioj...");
 jQuery.extend({
 
     ricevu: function(url,error_to) {
