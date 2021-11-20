@@ -789,8 +789,8 @@ var redaktilo = function() {
   // elektas parton de la XML-teksto por redakti nur tiun
   function struktur_elekto(event) {
     const val = event.target.value;
-    const list = document.getElementById("r:art_strukturo");
-    const sel = list.querySelector('option[value="'+val+'"]').text;
+    //const list = document.getElementById("r:art_strukturo");
+    //const sel = list.querySelector('option[value="'+val+'"]').text;
 
     // tio renovigas la strukturon pro eblaj intertempaj snc-/drv-aldonoj ks...
     // do ni poste rekreos ĝin kaj devos ankaŭ marki la elektitan laŭ _item_
