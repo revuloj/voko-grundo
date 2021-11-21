@@ -33,6 +33,10 @@ export default function() {
         .removeClass( "ui-corner-top" )
         .addClass( "ui-corner-right" ); 
        
+
+    $(".menu_toggle").click(
+        () => $("#sidebar").toggle()
+    );
   //###### subpaĝoj
 
   //### XML-redaktilo
