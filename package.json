@@ -19,7 +19,7 @@
         "css_src": "stl/normalize.css stl/koloroj.css stl/piktogramoj.css stl/formularo.css stl/kadro.css stl/artikoloj.css stl/redaktilo.css",
         "jsc_src": "jsc/util.js jsc/transiroj.js jsc/preferoj.js jsc/artikolo.js jsc/kadro.js jsc/voko_entities.js jsc/xmlarea.js jsc/redaktilo.js",
         "lint": "jshint jsc/**.js jqu/**.js",
-        "doc": "jsdoc -d doc jsc/x/*.js",
+        "doc": "jsdoc -d doc jsc/*/*.js",
         "prebuild": "mkdir -p build",
         "build:mp": "bin/mp2png_svg.sh",
         "//prebuild:svg": "bin/mp2png_svg.sh",
