@@ -9,8 +9,10 @@ import { vikiSerĉo, citaĵoSerĉo, retoSerĉo, bildoSerĉo } from './ui_srch.js
 
 //var sercho_focused_button = null;
 //var change_count = 0;
+/*
 var pozicio_xml = '';
 var pozicio_html = '';
+*/
 
 console.debug("Instalante la ĉefan redaktilopaĝon...")
 
@@ -22,7 +24,14 @@ export default function() {
     $( "#tabs" ).tabs({
         activate: activate_tab,
         beforeActivate: before_activate_tab
-    });       
+    });
+    $( "#tabs" ).tabs()
+        .addClass( "ui-tabs-vertical ui-helper-clearfix" );
+    $( "#tabs ul" ).tabs()
+        .removeClass("ui-corner-all");
+    $( "#tabs li" )
+        .removeClass( "ui-corner-top" )
+        .addClass( "ui-corner-right" ); 
        
   //###### subpaĝoj
 
@@ -74,7 +83,10 @@ export default function() {
     });
 
     $("#kromklvr").button();
-    $("#kromklvr").click(() => $("#dock_klavaro").toggle());    
+    $("#kromklvr").click(() => {
+        //$("#dock_klavaro").toggle()
+        $("#dock").toggle()
+    });    
     
     // outline
     /*
@@ -150,7 +162,7 @@ export default function() {
     // kromklavarbutonon kaŝu komence
     $("#kromklavaro").hide();
     $("#kromklavaro").click(function() {    
-        switch_dock_klavaro_kontrolo()             
+        switch_dock_klavaro_kontrolo();            
     });
 
         // dock: elekto de indikoj
@@ -396,12 +408,14 @@ export function activate_tab(event,ui) {
     var old_p = ui.oldPanel[0].id;
     var new_p = ui.newPanel[0].id;
     
+    /*
     if (old_p == "xml" && new_p == "html") {
         // eltrovu, en kiu drv momente troviĝas...
         // kaj iru tien ankaŭ su antaŭrigardo...
         pozicio_xml = $("#xml_text").Artikolo("drv_before_cursor"); 
         pozicio_html = pozicio_xml;
     }
+    */
 
     // PLIBONIGU: necesas nur, ke teksto ŝanĝigis
     // kiel rimarki tion? -ŝargi, focus+change....
@@ -411,10 +425,12 @@ export function activate_tab(event,ui) {
         // devas esti en antuarigardo, pro nesinkroneco...: iru_al(pozicio_html);
     } else if (new_p == 'xml') {
         // (saltu en la XML-teksto nur se antaŭ saltiĝis en la HTML, aliokaze ĝi estis jam forgesita en iru_al...)
+        /*
         if (old_p == 'html' && pozicio_xml.mrk != pozicio_html.mrk) {
             pozicio_xml = pozicio_html;
             iru_al(pozicio_xml);  
         } 
+        */
         $('#xml_text').focus();
         // kaj forgesu...
         //lasta_salto = null;
@@ -505,8 +521,9 @@ function antaurigardo() {
                 // preparu la artikolon per ties JS!
                 restore_preferences();            
                 preparu_art();
-                
+                /*
                 iru_al(pozicio_html);
+                */
             })
         .fail (
             // FARENDA: eble metu eraron en apartan kampon 
