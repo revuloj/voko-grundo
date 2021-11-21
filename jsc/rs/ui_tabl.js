@@ -42,7 +42,9 @@ export default function() {
         tekstŝanĝo: function() {
             // fermu la navigilon, ĉar ĝi bezonas aktualigon, kio okazas per
             // evento "change" nur post forlaso de la XML-tekst-areo
+            /*
             $("#collapse_outline").accordion({active:false});
+            */
             $("#rigardo").empty();
         },
         xmlarea: new Xmlarea("xml_text",
@@ -70,8 +72,12 @@ export default function() {
         art.Artikolo("option","poziciŝanĝo")();        
         //show_pos();
     });
+
+    $("#kromklvr").button();
+    $("#kromklvr").click(() => $("#dock_klavaro").toggle());    
     
     // outline
+    /*
     $( "#collapse_outline" ).accordion({
         collapsible: true,
         heightStyle: "content",
@@ -80,6 +86,7 @@ export default function() {
                 fill_outline();
         }
     });
+    */
 
     // erarolistoj
     $("#dock_eraroj").Erarolisto({});
@@ -122,11 +129,13 @@ export default function() {
         akampo: "#xml_text",
         reĝimpremo: function(event,ui) {
             switch (ui.cmd) {
+                /*
                 case "fermu":
                     $("#dock_klavaro").hide();
                     //this.element.hide();
-                    $("#kromklavaro").show(); // butono por reaperigi ĝin poste
+                    //$("#kromklavaro").show(); // butono por reaperigi ĝin poste
                     break;
+                    */
                 case "indiko":
                     montri_indikojn();
                     break;
@@ -140,19 +149,21 @@ export default function() {
 
     // kromklavarbutonon kaŝu komence
     $("#kromklavaro").hide();
-    $( "#kromklavaro" ).click(function() {    
+    $("#kromklavaro").click(function() {    
         switch_dock_klavaro_kontrolo()             
     });
 
         // dock: elekto de indikoj
     //$("#elekto_indikoj").hide();
-    switch_dock_klavaro_kontrolo()
+    switch_dock_klavaro_kontrolo();
+    /*
     $("#dock_fermu").click(function(){
         $("#elekto_indikoj").hide();
         $("#dock_kontrolo").hide();
         $("#dock_klavaro").hide();
         $("#kromklavaro").show();
     });
+    */
     plenigu_elekto_indikoj();
     
   //### antaŭrigardo
@@ -288,9 +299,10 @@ function switch_dock_klavaro_kontrolo() {
 //* Aktualigoj dum redaktado (pozicio, navigilo, tekstelekto, klavpremoj) 
 //*********************************************************************************************
 
-/**
+/*
  * Plenigas liston kun alstireblaj derivaĵoj
  */
+/*
 function fill_outline() {
     var drvoj = $("#xml_text").Artikolo("drv_markoj"); // drvMrkoj($("#xml_text").val());
 
@@ -311,11 +323,13 @@ function fill_outline() {
     $("#art_outline").empty();
     $("#art_outline").html(outlineStr);
 }
+*/
 
-/**
+/*
  * Iras al derivaĵo en la artikolo
  * @param {string} drv 
  */
+/*
 function iru_al(drv) {
     if (drv) {
         var page =  $( "#tabs" ).tabs( "option", "active");
@@ -338,6 +352,7 @@ function iru_al(drv) {
 
     }
 }
+*/
 
 
 //*********************************************************************************************
@@ -566,8 +581,8 @@ function plenigu_elekto_indikoj() {
         function(stiloj_data,fakoj_data) {  
            var indikoj='';
             
-           indikoj += "<div class='reghim_btn' data-cmd='fermu' title='kaŝu la klavaron'><span>kaŝu<br/>&#x2b07;&#xFE0E;</span></div>"
-                    + "<div class='reghim_btn' data-cmd='klavaro' title='krom-klavaro'><span>&lt;&hellip;&gt;<br/>[&hellip;]</span></div>";
+           indikoj += /*<div class='reghim_btn' data-cmd='fermu' title='kaŝu la klavaron'><span>kaŝu<br/>&#x2b07;&#xFE0E;</span></div>"
+                    +*/ "<div class='reghim_btn' data-cmd='klavaro' title='krom-klavaro'><span>&lt;&hellip;&gt;<br/>[&hellip;]</span></div>";
 
            
             $("stilo",stiloj_data).each(

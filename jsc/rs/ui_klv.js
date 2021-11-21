@@ -87,9 +87,11 @@ $.widget( "redaktilo.Klavaro", {
                   html += '<div class="elm_btn" data-cmd="' + klv + '" title="' + elmj[klv] + '">' + klv + '</div>';
                 } else {
                   switch (klv) {
+                      /*
                     case '[fermu]':
                         html += '<div class="reghim_btn" data-cmd="fermu" title="kaŝu la klavaron">&#x2b07;&#xFE0E;</div>';
                         break;
+                        */
                     case '[indiko]':
                         html += '<div class="reghim_btn" data-cmd="indiko" title="indiko-klavaro">&#x2605;&#xFE0E;</div>';
                         break;
