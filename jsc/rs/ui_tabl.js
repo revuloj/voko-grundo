@@ -30,8 +30,14 @@ export default function() {
     
     var artikolo = $("#xml_text").Artikolo({
         poziciŝanĝo: function() {
-        var line_pos = $("#xml_text").getCursorLinePos();
-        $("#edit_position").text("linio " + (line_pos.line+1) + ", " + (line_pos.pos+1));
+            // tion ni povos forigi
+            var line_pos = $("#xml_text").getCursorLinePos();
+            $("#edit_position").text("linio " + (line_pos.line+1) + ", " + (line_pos.pos+1));
+            // tion ni uzu estonte:
+            // aktualigu pozicion
+            const xmlarea = $("#xml_text").Artikolo("option","xmlarea");
+            const pos = xmlarea.position();
+            $("#position").text((1+pos.line)+":"+(1+pos.pos));
         },
         tekstŝanĝo: function() {
             // fermu la navigilon, ĉar ĝi bezonas aktualigon, kio okazas per
@@ -57,8 +63,11 @@ export default function() {
     
         // tio renovigas la strukturon pro eblaj intertempaj snc-/drv-aldonoj ks...
         // do ni poste rekreos ĝin kaj devos ankaŭ marki la elektitan laŭ _item_
-        const xmlarea = $("#xml_text").Artikolo("option","xmlarea");
+        const art = $("#xml_text");
+        const xmlarea = art.Artikolo("option","xmlarea");
         xmlarea.changeSubtext(val);
+        // okazigu eventon poziciŝanĝo ĉe Artikolo...
+        art.Artikolo("option","poziciŝanĝo")();        
         //show_pos();
     });
     
@@ -655,6 +664,8 @@ function indikon_enmeti(event) {
       if (enmetu) $("#xml_text").insert(enmetu);
     }
 }
+
+
 
 
 

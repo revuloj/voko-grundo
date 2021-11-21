@@ -63,7 +63,7 @@ Xmlarea.prototype.getElekto = function() {
  * @param {string} select - se donita, la strukturelemento kun tiu .id estos poste la elektita
  */
 Xmlarea.prototype.sync = function(select = undefined) {
-  if (this.xml_elekto) {
+  if (this.elekto) {
     const old_id = this.elekto;
     const nstru = this.xmlstruct.strukturo.length;
 
@@ -374,7 +374,7 @@ Xmlarea.prototype.scrollPos = function(pos=undefined) {
  * @returns objekto {{line: number, pos: number}}
  */
 Xmlarea.prototype.position = function() {
-  const loff = this.xml_elekto? this.xml_elekto.ln : 0;
+  const loff = this.elekto? this.xmlstruct.getStructById(this.elekto).ln : 0;
 
     // kalkulu el la signoindekso la linion kaj la pozicion ene de la linio
     function get_line_pos(inx,text) {
