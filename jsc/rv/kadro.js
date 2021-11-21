@@ -26,6 +26,9 @@ const t_nav  = new Transiroj("nav","start",["ĉefindekso","subindekso","serĉo",
 const t_main = new Transiroj("main","start",["titolo","artikolo","red_xml","red_rigardo"]);
 const t_red  = new Transiroj("red","ne_redaktante",["ne_redaktante","redaktante","tradukante","sendita"]);
 
+/**
+ * kodlistoj agorditaj por Reta Vortaro: lingvoj, fakoj, stiloj
+ */
 const revo_codes = {
     lingvoj: new Codelist('lingvo', '/revo/cfg/lingvoj.xml'),
     fakoj: new Codelist('fako','/revo/cfg/fakoj.xml'),
@@ -34,7 +37,11 @@ const revo_codes = {
 revo_codes.lingvoj.load();
   
 
-// helpofunkcio, por instali klak-reagojn
+/**
+ * Helpofunkcio, por instali klak-reagojn
+ * @param {string} id - la id-atributo de HTML-elemento
+ * @param {function(event)} reaction - la reago al la klak-evento
+ */
 function onclick(id,reaction) {
     var nb;
     if (nb = document.getElementById(id)) {
@@ -52,7 +59,11 @@ function onclick(id,reaction) {
     navigado laŭ a href=... estas traktata per navigate_link()...
 */
 
-// instalu farendaĵojn por prepari la paĝon: evento-reagoj...
+
+/**
+ * Enira funkcio vokata post ŝarĝo de la kadra paĝo. Ĝi 
+ * finpreparas la paĝon: evento-reagoj...
+ */
 when_doc_ready(function() { 
 
     // dom_console();
@@ -335,16 +346,21 @@ when_doc_ready(function() {
     }
 });
 
+/**
+ * Por ebligi ŝargi freŝajn paĝojn ni altigas la version, kiu
+ * estas alpendigata al GET, tiel evitante ricevi paĝojn el la loka bufro.
+ */
 function aktualigilo() {
-    // Por ebligi ŝargi freŝajn paĝojn ni altigas la version, kiu
-    // estas alpendigata al GET, tiel evitante ricevi paĝojn el la loka bufro.
-    // Se ni uzus sessionStorage ni post remalfermo de la retumilo denove
-    // ricevus pli malnovajn paĝ-versiojn, do ni uzas localStorage
     const akt = window.localStorage.getItem("aktualigilo");
     const akt1 = (((akt && parseInt(akt,10)) || 0) + 1) % 30000; // +1, sed rekomencu ĉe 0 post 29999
+    // Se ni uzus sessionStorage ni post remalfermo de la retumilo denove
+    // ricevus pli malnovajn paĝ-versiojn, do ni uzas localStorage por memori la versi-numeron.
     window.localStorage.setItem("aktualigilo",akt1.toString());
 }
 
+/**
+ * Faldas-malfaldas la navigan panelon (tiu kun la indeksoj, serĉo...)
+ */
 function index_toggle() {
     document.getElementById("navigado").classList.toggle("eble_kasxita");
     toggle("x:nav_kashu_btn");
@@ -352,19 +368,34 @@ function index_toggle() {
     //document.querySelector("main").classList.toggle("kasxita");
 }
 
+/**
+ * Malfaldas la navigan panelon
+ */
 function index_spread() {
     document.getElementById("navigado").classList.remove("eble_kasxita");
     show("x:nav_kashu_btn");
     hide("x:nav_montru_btn");
 }
 
+/**
+ * Faldas la navigan panelon. Tiel estas pli da spaco por la artikolo
+ * aŭ redaktado.
+ */
 function index_collapse() {
     document.getElementById("navigado").classList.add("eble_kasxita");
     show("x:nav_montru_btn");
     hide("x:nav_kashu_btn");
 }
 
-// se la artikolo ŝargiĝis aparte de la kadro ni aldonu la kadron
+
+/**
+ * Se la artikolo ŝargiĝis aparte de la kadro ni aldonos la kadron.
+ * Provizore ni ne uzas tiun funkcion, ĉar alstirado de la artikolo
+ * post enkadrigo ankoraŭ ne fidinde funkcias. Estu la ebleco referenci 
+ * unuopan artikolon kaj esti gvidata bone al Revo prezentanta la artikolon.
+ * Provizore restas la referenco [^Revo] sub ĉiu arikolo por alstiri la
+ * ĉefan Revo-paĝon.
+ */
 function enkadrigu() {
 
     // preparu la ĉefan parton de la paĝo
@@ -394,7 +425,9 @@ function enkadrigu() {
     }
 }
 
-// vd. https://wiki.selfhtml.org/wiki/HTML/Tutorials/Navigation/Dropdown-Men%C3%BC
+/**
+ * vd. https://wiki.selfhtml.org/wiki/HTML/Tutorials/Navigation/Dropdown-Men%C3%BC
+ */
 function nav_toggle() {
     var menu = document.getElementById("navigado");
     if (menu.style.display == "") {
@@ -404,16 +437,13 @@ function nav_toggle() {
     }
 }
 
-/*
-Navigante ni devas distingi plurajn kazojn:
-
-1. int: temas pri interna referenco (href="#...")
-2. ext: temas pri alekstera referenco (href="http(s)://iu-retejo...")
-3. nav: temas pri referenco al alia indekso, t.e. inx: target="", art: target="indekso"    
-4. main: temas pri referenco al artikolo/ĉefpaĝo, t.e. inx: target="precipa", art: target=""    
-    
+/** 
+ * Helpfunkcio por navigado. Navigante ni devas distingi plurajn kazojn:
+ * 1. int: temas pri interna referenco (href="#...")
+ * 2. ext: temas pri alekstera referenco (href="http(s)://iu-retejo...")
+ * 3. nav: temas pri referenco al alia indekso, t.e. inx: target="", art: target="indekso"    
+ * 4. main: temas pri referenco al artikolo/ĉefpaĝo, t.e. inx: target="precipa", art: target=""    
 */
-
 function ref_target(a_el) {
     var href = a_el.getAttribute("href");
     var trg = a_el.getAttribute("target");   
@@ -442,13 +472,14 @@ function ref_target(a_el) {
     }
 }
 
-/* En la kazoj ref_target = main | nav, ni adaptos la originajn URL-ojn por Ajax:
-1. ../xxx -> /revo/xxx
-2. aliaj relativaj (t.e. ne ^/ aŭ ^http) -> /revo/art/xxxx | /revo/inx/xxx
-3. /cgi-bin/vokomail.pl?art=xxx -> /revo/dlg/redaktilo.html?art=xxx
-4. aliaj absolutaj (t.e. ^/ aŭ http) ni lasu
-*/
 
+/** 
+ * En la kazoj ref_target = main | nav, ni adaptos la originajn URL-ojn por Ajax:
+ * 1. ../xxx -> /revo/xxx
+ * 2. aliaj relativaj (t.e. ne ^/ aŭ ^http) -> /revo/art/xxxx | /revo/inx/xxx
+ * 3. /cgi-bin/vokomail.pl?art=xxx -> /revo/dlg/redaktilo.html?art=xxx
+ * 4. aliaj absolutaj (t.e. ^/ aŭ http) ni lasu
+*/
 function normalize_href(target, href) {
     // ĉu estas fidinde uzi "target" tie ĉi aŭ ĉu ni uzu "source"?
     const prefix = { main: "art/", nav: "inx/"};
@@ -469,6 +500,10 @@ function normalize_href(target, href) {
     }
 }   
 
+/**
+ * Kiam ni fone ŝargas ion ni montras tion per turniĝanta revo-fiŝo
+ * (la serĉbutono)
+ */
 function start_wait() {
     var s_btn = document.getElementById('x:revo_icon');
     if (s_btn) s_btn.classList.add('revo_icon_run');
@@ -476,6 +511,12 @@ function start_wait() {
     if (s_btn) s_btn.classList.add('revo_icon_run');
 }
 
+/**
+ * Post sukcesa fona ŝargo ni haltigas la turnigon de la revo-fiŝo
+ * Noto: Se ni fonŝarĝas plurajn aferojn samtempe, la unua preta haltigas
+ * la turniĝon. Se ni volus haltigi nur post la lasta, ni devus registri
+ * ĉiun ekŝarĝon kaj kontroli, kiam la lasta revenis.
+ */
 function stop_wait() {
     var s_btn = document.getElementById('x:revo_icon');
     if (s_btn) s_btn.classList.remove('revo_icon_run');
@@ -483,11 +524,22 @@ function stop_wait() {
     if (s_btn) s_btn.classList.remove('revo_icon_run');
 }
 
+/**
+ * Se mankas paĝo petata ni montros nian apartan 404-paĝon
+ * @param {*} request 
+ */
 function load_error(request) {
     if (request.status == 404)
         load_page("main",http_404_url);
 }
 
+/**
+ * Ŝargas paĝon
+ * @param {string} trg - la panelo (subpaĝo nav aŭ main) en kiu aperu la püetita paĝo
+ * @param {string} url - la URL de la petita paĝo
+ * @param {boolean} push_state - true: memoru la petitan paĝon en la hisotrio, tiel ni povos poste reiri
+ * @param {Function} whenLoaded - ago, farenda post fonŝargo de la paĝo
+ */
 function load_page(trg, url, push_state=true, whenLoaded=undefined) {
     function update_hash() {
         var hash;
@@ -674,6 +726,13 @@ function load_page(trg, url, push_state=true, whenLoaded=undefined) {
 }
 
 
+/**
+ * Faras necesajn adaptojn de la paĝo. Ni uzas statikajn paĝojn, kiuj iam funkciis
+ * memstare, sed nun devas funkcii en la javoskripta kadro. Precipe temas pri adaptoj de
+ * referencoj (href) kaj prezento (stilo).
+ * @param {Element} root_el 
+ * @param {string} url 
+ */
 function adaptu_paghon(root_el, url) {
     // adapto de atributoj img-atributoj
 
@@ -834,6 +893,11 @@ function adaptu_paghon(root_el, url) {
 //    }
 //}
 
+/**
+ * Navigado laŭ referenco depende de kie estas la celo (ext,int,nav,red,main).
+ * @param {*} event 
+ * @returns se estas elŝuto (XML) laŭ atributo 'download' ni ne navigas sed tuj revenas.
+ */
 function navigate_link(event) {
     var el = event.target.closest("a");
 
@@ -874,6 +938,10 @@ function navigate_link(event) {
     }
 }   
 
+/**
+ * Navigas laŭ la historio, do returne.
+ * @param {*} event 
+ */
 function navigate_history(event) {
     event.preventDefault();
     var state = event.state;
@@ -888,7 +956,10 @@ function navigate_history(event) {
     }
 }            
 
-
+/**
+ * La uzanto volas serĉi ion...
+ * @param {*} event 
+ */
 function serchu(event) {
     event.preventDefault();
     var serch_in = event.target.closest("form")
@@ -902,6 +973,10 @@ function serchu(event) {
     }
 }
 
+/**
+ * Serĉas per la transdonita serĉesprimo.
+ * @param {string} esprimo 
+ */
 function serchu_q(esprimo) {
 
     const srch = new Sercho();
@@ -1096,6 +1171,10 @@ function serchu_q(esprimo) {
     */
 }
 
+/**
+ * Montras arbitran artikolon. Ni elserĉas hazardan kapvorton en la datumbazo
+ * kaj montras la artikolon kaj la kapvorton en de tiu artikolo.
+ */
 function hazarda_art() {
 
     HTTPRequest('POST', sercho_url, {sercxata: "!iu ajn!"},
@@ -1113,6 +1192,10 @@ function hazarda_art() {
     );
 }
 
+
+/**
+ * Ricevas la nombrojn de kapvortoj kaj tradukoj kaj prezentas ilin en la titolpaĝo.
+ */
 function nombroj() {
 
     HTTPRequest('POST', nombroj_url, {x:0}, // sen parametroj POST ne funkcius, sed GET eble ne estus aktuala!
@@ -1135,6 +1218,10 @@ function nombroj() {
     );
 }
 
+/**
+ * Pridemandas erarojn pri mrk-atributoj de la servilo kaj prezentas ilin en
+ * la eraropaĝo.
+ */
 function mrk_eraroj() {
     HTTPRequest('POST', mrk_eraro_url, {x:1}, // ni sendu ion per POST por ĉiam havi aktualan liston
         function(data) {
@@ -1214,6 +1301,10 @@ function traduku(event,artikolo) {
 }
 */
 
+/**
+ * KOmencas redaktadon de la aktuala artikolo ŝargante la redaktopaĝon kaj -ilaron.
+ * @param {*} href 
+ */
 function redaktu(href) {
     const params = href.split('?')[1];
     //const art = getParamValue("art",params);
@@ -1222,6 +1313,11 @@ function redaktu(href) {
     load_page("nav",redaktmenu_url);
 }
 
+/**
+ * Pridemandas la submetitajn redaktojn kaj ties statojn
+ * de la aktuala redaktanto (laŭ ties donita retadreso)
+ * kaj prezentas ilin en la indekspaĝo.
+ */
 function viaj_submetoj() {
     if (redaktilo.get_preference("r:redaktanto")) {
         console.debug("+viaj submetoj");
