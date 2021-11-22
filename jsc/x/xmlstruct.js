@@ -175,7 +175,7 @@ XmlStruct.prototype.structure = function(selected = undefined) {
  * @returns La dosiernomon ekstraktitan el la trovita mrk-atributo
  */
 XmlStruct.prototype.art_drv_mrk = function() {
-  var match = this.xmlteksto.match(re_stru._dos);
+  var match = this.xmlteksto.match(this.re_stru._dos);
   if (match) return (match[1]? match[1] : match[2]);
 }
 
