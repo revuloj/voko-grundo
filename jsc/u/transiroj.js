@@ -118,7 +118,6 @@ Transiroj.prototype.forire = function(de,ago) {
  * @param {string} al - deira stato
  * @param {string} de - alira stato, se ne donita ni supozas la aktualan staton
  * @param {*} evento - argumento transdonata al la transira ago-funkcio
- * @returns 
  */
 Transiroj.prototype.transiro = function (al, de=undefined, evento=undefined) {
     // PLIBONIGU:

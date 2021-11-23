@@ -131,7 +131,9 @@ $.widget( "redaktilo.Erarolisto", {
 });
 
 export function xmlkontrolo() {
-    var xml_text = $("#xml_text").val();
+    const xmlarea = $("#xml_text").Artikolo("option","xmlarea");
+    const xml_text = xmlarea.syncedXml(); //$("#xml_text").val();
+
   
     if (! xml_text ) {
         alert('Vi ankoraŭ ne ŝargis artikolon por kontroli!');
@@ -142,7 +144,7 @@ export function xmlkontrolo() {
     $.post(
           "revo_kontrolo", 
           //{ art: $("shargi_dosiero").val() },
-          { xml: $("#xml_text").val() })
+          { xml: xml_text })
       .done(
           function(data) { 
               data = data.length? data : [{ msg: "XML estas en ordo (sintakso).", cls: "status_ok" }];
@@ -175,10 +177,12 @@ export function xmlkontrolo() {
 
 
 export function mrkkontrolo() {
-    var art = $("#xml_text");
-    var xml = art.val();
+    const art = $("#xml_text");
+    const xmlarea = art.Artikolo("option","xmlarea");
+    const xml = xmlarea.syncedXml(); //$("#xml_text").val();
+
     var mrkoj = art.Artikolo("markoj");
-    for (mrk in mrkoj) {
+    for (let mrk in mrkoj) {
         if (mrkoj[mrk] > 1) {
             //alert("" + mrkoj[mrk] + "-obla marko: "+ mrk);
             var err = get_line_pos(mrkoj[mrk],xml);
@@ -194,7 +198,7 @@ export function mrkkontrolo() {
         var drvoj = art.Artikolo("drv_markoj");
         var dmrk = 'xxx.0';
 
-        for (inx in sncoj) {
+        for (let inx in sncoj) {
             let snc = get_line_pos(inx,xml);
 
             // trovu derivaĵon antaŭ tiu senco
@@ -216,9 +220,10 @@ export function mrkkontrolo() {
 
 
 export function klrkontrolo() {
-    var art = $("#xml_text");
-    var xml = art.val();
-    var klroj = art.Artikolo("klr_ppp");
+    const art = $("#xml_text");
+    const xmlarea = art.Artikolo("option","xmlarea");
+    const xml = xmlarea.syncedXml(); //$("#xml_text").val();
+    const klroj = art.Artikolo("klr_ppp");
 
     if (klroj) {
         var avt = $("#dock_avertoj");

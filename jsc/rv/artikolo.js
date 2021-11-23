@@ -434,7 +434,7 @@ var artikolo = function() {
                 if (art.querySelector('div.tezauro')) return;
                                 
                 var json = 
-                    /** @type { {viki: Array<{m,v}>, tez: Array<{mrk,tip,cel}>} } VikiRef */
+                    /** @type { {viki: Array<{m,v}>, tez: Array<{mrk,tip,cel}>} } */
                     (JSON.parse(
                         /** @type {string} */ (data)
                     ));

@@ -60,8 +60,7 @@ export function vikiSerĉo(event) {
 }
 
 function _bib_url(source,bib) {
-    for (var i=0;i<source.length;i++) {
-        entry = source[i];
+    for (var entry of source) {
         if (entry.value == bib) {
             return entry.url
         }

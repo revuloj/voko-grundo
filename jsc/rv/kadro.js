@@ -40,7 +40,7 @@ revo_codes.lingvoj.load();
 /**
  * Helpofunkcio, por instali klak-reagojn
  * @param {string} id - la id-atributo de HTML-elemento
- * @param {function(event)} reaction - la reago al la klak-evento
+ * @param {function(MouseEvent)} reaction - la reago al la klak-evento
  */
 function onclick(id,reaction) {
     var nb;
