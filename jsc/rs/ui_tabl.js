@@ -44,8 +44,10 @@ export default function() {
     var artikolo = $("#xml_text").Artikolo({
         poziciŝanĝo: function() {
             // tion ni povos forigi
+            /*
             var line_pos = $("#xml_text").getCursorLinePos();
             $("#edit_position").text("linio " + (line_pos.line+1) + ", " + (line_pos.pos+1));
+            */
             // tion ni uzu estonte:
             // aktualigu pozicion
             const xmlarea = $("#xml_text").Artikolo("option","xmlarea");
@@ -89,7 +91,10 @@ export default function() {
     $("#kromklvr").button();
     $("#kromklvr").click(() => {
         //$("#dock_klavaro").toggle()
-        $("#dock").toggle()
+        if ($("#kromklvr").prop("checked"))
+            $("#dock").show()
+        else
+            $("#dock").hide()
     });    
     
     // outline
@@ -189,12 +194,35 @@ export default function() {
         antaurigardo()
     });
 
-  //### subpaĝo "serĉo"
-    $("#s_vikipedio").click(vikiSerĉo);
+    //### subpaĝo "serĉo"
     $("#s_klasikaj").click("klasikaj",citaĵoSerĉo);
     $("#s_postaj").click("postaj",citaĵoSerĉo);
+    $("#s_vikipedio").click(vikiSerĉo);
     $("#s_anaso").click(retoSerĉo);
     $("#s_bildoj").click(bildoSerĉo);
+
+    $("#regexes input").button();
+    $("#re_b").click(
+        () => $("#sercho_sercho")
+            .val("\\b"+$("#sercho_sercho").val())
+    );
+    $("#regexes input").click((event) => {
+        const srch = $("#sercho_sercho");
+        const v = srch.val();
+        const sele = srch[0].selectionEnd;
+        const re = event.target.id;
+        if (re == "re_b") {
+            srch.val(v);
+        } else {
+            const pos = (sele == v.length || v[sele] == " ")? sele : v.length;
+            const x = {
+                re_o: "oj?n?\\b", 
+                re_a: "aj?n?\\b", 
+                re_ntr: "([ao]s|[ui]s?|[aoi]ntaj?n?)\\b",
+                re_tr: "([ao]s|[ui]s?|[aoi]n?taj?n?)\\b"}[re];
+            srch.val(v.substring(0,pos)+x+v.substr(pos));
+        }
+    });
 
     $( "#sercho_butonoj").Klavaro({
         artikolo: $("#xml_text"),
@@ -384,6 +412,7 @@ function iru_al(drv) {
 export function before_activate_tab(event,ui) {
     var old_p = ui.oldPanel[0].id;
     var new_p = ui.newPanel[0].id;
+    var new_t = ui.newTab[0].id;
 
     // transirante al serĉo prenu markitan tekston kiel serĉaĵo
     if (old_p == "xml" && new_p == "sercho") {
@@ -400,6 +429,17 @@ export function before_activate_tab(event,ui) {
     } else if (old_p == "html" && new_p == "sercho") {
         var selection = $("#rigardo").selection();
         if ( selection.length>0 ) $("#sercho_sercho").val(selection);
+    }
+
+    // alirante la serĉon ni distingas internan kaj eksteran serĉadon
+    if (new_p == "sercho") {
+        if(new_t == "t_s_ext") {
+            $("#sercho_form .s_ext").show();
+            $("#sercho_form .s_int").hide();
+        } else {
+            $("#sercho_form .s_ext").hide();
+            $("#sercho_form .s_int").show();
+        }
     }
 }
 
