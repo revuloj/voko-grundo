@@ -27,7 +27,7 @@ $.widget( "ui.dialog", $.ui.dialog, {
     },
 
     valoroj: function(values) {
-        var kampoj = this.options.kampoj
+        const kampoj = this.options.kampoj
         if (values === undefined) {
             // return values
             let vals = {};
@@ -58,7 +58,7 @@ $.widget( "ui.dialog", $.ui.dialog, {
     },
 
     shrink: function() {
-        el = this.element;
+        const el = this.element;
         el.hide(); 
         el.prev(".ui-dialog-titlebar").hide();
         this._setOption("position",{
@@ -70,7 +70,7 @@ $.widget( "ui.dialog", $.ui.dialog, {
     },
 
     expand: function() {
-        el = this.element;
+        const el = this.element;
         el.show(); 
         el.prev(".ui-dialog-titlebar").show()
         this._setOption("position",{
@@ -1043,10 +1043,12 @@ function ekzemplo_enmeti(event, nur_fnt) {
     var xmlstr = '';
 
     if (nur_fnt) {
-        xmlstr = new XMLFonto(values).xml(indent=8);
+        const indent=8;
+        xmlstr = new XMLFonto(values).xml(indent);
     } else {
-        values.frazo = linirompo(values.frazo,indent=2);
-        xmlstr = new XMLEkzemplo(values).xml(indent=6);
+        const indent=2;
+        values.frazo = linirompo(values.frazo,indent);
+        xmlstr = new XMLEkzemplo(values).xml(indent+4);
     }
    
     // de kie vokiĝis la dialogo tien remetu la rezulton
@@ -1551,7 +1553,7 @@ function plenigu_lastaj_liston() {
                 var listo = '';
                 var previous = null; //{kap: '', art1: '', art2: ''};
                 
-                for (h=0; h< data.length; h++) {
+                for (let h=0; h< data.length; h++) {
                     var entry = data[h];
                     var status_icon;
                     switch (entry.rezulto) {

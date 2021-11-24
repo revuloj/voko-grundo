@@ -35,7 +35,7 @@ export function vikiSerĉo(event) {
                 var pages = data.query.pages
                 var ŝablono = new HTMLTrovoDt();
 
-                for (p in pages) {
+                for (let p in pages) {
                     var page = pages[p];
                     var url = 'https://eo.wikipedia.org/?curid=' + page.pageid;
 
@@ -130,7 +130,7 @@ export function retoSerĉo(event) {
     .done(
         function(data) {   
     
-        var last_link = '';
+        var last_link = '', last_title = '';
         var n = 0;
         var first_word = $("#sercho_sercho").val().split(' ')[0];
         // forigu bildojn (img) el la HTML, por ke ili ne automate elshutighu...
