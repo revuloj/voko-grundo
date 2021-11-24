@@ -1,5 +1,7 @@
 /* jshint esversion: 6 */
 
+// (c) 2020, 2021 Wolfram Diestel
+
 /*
     Ni difinos stato-transirojn "de1"->"al1", "de2"->"al1" ktp. 
     kiel strukturo, kiu aldone enhavas agojn forlasajn kaj alvenajn.

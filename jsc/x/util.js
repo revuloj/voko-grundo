@@ -1,6 +1,8 @@
 
 /* jshint esversion: 6 */
 
+// (c) 2021 Wolfram Diestel
+
 const help_base_url = 'https://revuloj.github.io/temoj/';
 
 /**
@@ -140,7 +142,7 @@ function HTTPRequest(method, url, params, onSuccess,
  * @returns { Object<string|Array<Object>> }
  */
 function group_by(key, array) {
-  var grouped = {}
+  var grouped = {};
   for (var el of array) {
     const v = el[key] || '<_sen_>';
     //if (v) {
@@ -197,7 +199,7 @@ function ref_tip_class(tip) {
     hom: "r_hom",
     lst: "r_lst", listo: "r_lst",
     ekz: "r_ekz", url: "r_url"
-  }[tip]
+  }[tip];
 }
 
 /**
@@ -216,7 +218,7 @@ function ref_tip_alt(tip) {
     hom: "HOM:",
     lst: "LST:", listo: "LST:",
     ekz: "EKZ:", url: "URL:"
-  }[tip]
+  }[tip];
 }
 
 /**
@@ -235,7 +237,7 @@ function ref_tip_title(tip) {
     hom: "homonimo",
     lst: "listo", listo: "listo",
     ekz: "ekzemplo", url: "retpaĝo"
-  }[tip]
+  }[tip];
 }
 
 
@@ -489,7 +491,11 @@ function ht_details(sum, det, det_callback=undefined, sum_callback=undefined) {
   } else {
     details.append(ht_element('summary',{},sum));
   }
-  det_callback? det_callback(details,det) : details.append(det);  
+  if (det_callback) {
+    det_callback(details,det);
+  } else { 
+    details.append(det);
+  }
   return details;
 }
 
@@ -610,7 +616,7 @@ function count_char(str,chr,from=undefined,to=undefined) {
   const f = from||0;
   const t = to||str.length;
   for (var i = f; i<t; i++) {
-    if (str[i] == chr) nc++
+    if (str[i] == chr) nc++;
   }
   return nc;
 }
@@ -787,7 +793,7 @@ function Codelist(xmlTag,url) {
             var doc = parser.parseFromString(this.response,"text/xml");
       
             for (var e of doc.getElementsByTagName(self.xmlTag)) {
-                var c = e.attributes['kodo'];
+                var c = e.attributes.kodo;
                 //console.log(c);
                 codes[c.value] = e.textContent;
             } 

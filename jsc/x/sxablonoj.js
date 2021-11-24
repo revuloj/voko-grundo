@@ -1,7 +1,7 @@
 
 /* jshint esversion: 6 */
 
-// (c) 2017  - 2019 Wolfram Diestel
+// (c) 2017  - 2021 Wolfram Diestel
 // laŭ GPL 2.0
 
 /**
@@ -169,7 +169,7 @@ var html_sxablonoj = {
   '!line && !pos:value="=)"\n' +
   'line         :title="linio {line}"\n' +
   '             :>{msg}</li>'
-}
+};
 
 /*
 if (bib) {
@@ -273,4 +273,4 @@ vegetaĵo:
       {e:<ekz>...</ekz>}
     </dif>
   </snc>`
-}
+};

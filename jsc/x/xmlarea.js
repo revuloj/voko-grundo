@@ -1,3 +1,8 @@
+
+/* jshint esversion: 6 */
+
+// (c) 2021 Wolfram Diestel
+
 /**
  * Administras la redaktatan tekston tiel, ke eblas redakti nur parton de ĝi, t.e. unuopan derivaĵon, sencon ktp.
  * @constructor
@@ -17,8 +22,8 @@ function Xmlarea(ta_id, onAddSub) {
     this.re_stru = {
       _trd: /^<trd(grp)?\s+lng\s*=\s*["']([a-z]{2,3})['"]\s*>([^]*?)<\/trd\1\s*>$/,
       _tr1: /<trd\s*>([^]*?)<\/trd\s*>/g
-    }
-};
+    };
+}
 
 /**
  * Metas la kompletan XML-tekston laŭ la argumento 'xml' kaj aktualigas la strukturon el ĝi
@@ -30,7 +35,7 @@ Xmlarea.prototype.setText = function(xml) {
   this.elekto = this.xmlstruct.strukturo[0].id;
   this.txtarea.value = this.xmlstruct.getSubtextById(this.elekto);
   this.resetCursor();   
-}
+};
 
 /**
  * La radiko de la kapvorto, kiel eltrovita dum strukturanalizo.
@@ -38,15 +43,15 @@ Xmlarea.prototype.setText = function(xml) {
  */
 Xmlarea.prototype.getRadiko = function() {
   return this.xmlstruct.radiko;
-}
+};
 
 /**
  * Redonas la dosiernomon ekstraktitan el mrk-atributo de art- aŭ drv-elemento
  * @returns la dosiernomo
  */
-XmlStruct.prototype.getDosiero = function() {
+Xmlarea.prototype.getDosiero = function() {
   return this.xmlstruct.art_drv_mrk();
-}
+};
 
 /**
  * Redonas la informojn pri aktuale elektita subteksto.
@@ -56,7 +61,7 @@ XmlStruct.prototype.getDosiero = function() {
  */
 Xmlarea.prototype.getElekto = function() {
   return this.xmlstruct.getStructById(this.elekto);
-}
+};
 
 /**
  * Aktualigas la tekstbufron per la redaktata subteksto, ankaŭ aktualigas la struktur-liston
@@ -67,7 +72,7 @@ Xmlarea.prototype.sync = function(select = undefined) {
     const old_id = this.elekto;
     const nstru = this.xmlstruct.strukturo.length;
 
-    this.xmlstruct.replaceSubtext(this.elekto,this.txtarea.value,select)
+    this.xmlstruct.replaceSubtext(this.elekto,this.txtarea.value,select);
 
     // aktualigu la elekton al 'select', kondiĉe ke ĝi troviĝas
     // se ne ni elektas la unuan subtekston
@@ -86,7 +91,7 @@ Xmlarea.prototype.sync = function(select = undefined) {
 
     this.synced = true;
   }
-}
+};
 
 
 /**
@@ -96,7 +101,7 @@ Xmlarea.prototype.sync = function(select = undefined) {
 Xmlarea.prototype.syncedXml = function() {
   if (! this.synced) this.sync(this.elekto); 
   return this.xmlstruct.xmlteksto;
-}
+};
 
 
 /**
@@ -129,7 +134,7 @@ Xmlarea.prototype.changeSubtext = function(id) {
     this.resetCursor();
     this.scrollPos(0);
   }
-}
+};
 
 
 /**
@@ -152,7 +157,7 @@ Xmlarea.prototype.changeSubtext = function(id) {
     this.collectTrd(lng,xml,true);
     p = this.xmlstruct.getParent(p.id);
   }
-}
+};
 
 
 /**
@@ -161,7 +166,7 @@ Xmlarea.prototype.changeSubtext = function(id) {
  * @param {string} xml - la XML-teksto
  * @param {boolean} shallow - true: ni serĉas nur en la unua strukturnivelo, false: ni serĉas strukturprofunde, do ĉiujn tradukojn
  */
- Xmlarea.prototype.collectTrd = function(lng, xml, shallow=false) {
+Xmlarea.prototype.collectTrd = function(lng, xml, shallow=false) {
   const re = this.xmlstruct.re_stru;
   if (!xml) {
     xml = this.txtarea.value;
@@ -180,7 +185,7 @@ Xmlarea.prototype.changeSubtext = function(id) {
     if (kadr) {
       spos = kadr.pos;
     } else {
-      throw("La subteksto ne finiĝas per </drv>, </subdrv>, </snc> aŭ </subsnc>!")
+      throw("La subteksto ne finiĝas per </drv>, </subdrv>, </snc> aŭ </subsnc>!");
     }
   } else {
     // find
@@ -226,8 +231,8 @@ Xmlarea.prototype.changeSubtext = function(id) {
     }
 
     te = find_etag(['trd','trdgrp','adm','rim'],xml,ta.pos);
-  };
-}
+  }
+};
 
 
 /**
@@ -235,7 +240,7 @@ Xmlarea.prototype.changeSubtext = function(id) {
  * @param {string} lng - la lingvokodo
  * @returns objekton kun la kampoj pos kaj elm
  */
- Xmlarea.prototype.findTrdPlace = function(lng) {
+Xmlarea.prototype.findTrdPlace = function(lng) {
   const xml = this.txtarea.value;
 
   const expect_etag = (elist,xml,from=undefined) => this.xmlstruct.travel_tag_bw (elist,true,true,xml,from);
@@ -265,16 +270,16 @@ Xmlarea.prototype.changeSubtext = function(id) {
             const l = m[2];
             if (l == lng) {
               // ni trovis jaman tradukon en la koncerna lingvo, redonu la lokon!
-              return {pos: t.pos, grp: m[1], trd: m[0], itr: m[3], elm: q.elm}
+              return {pos: t.pos, grp: m[1], trd: m[0], itr: m[3], elm: q.elm};
             } else if (l > lng) {
               // ni supozas ke la lingvoj estas ordigitaj, kaj se
               // ni ne trovos la koncernan lingvon jam inter la tradukoj ni enŝovos
               // ĝin laŭ alfabeto
-              lpos = t.pos
+              lpos = t.pos;
             } else {
               // ni trovis la alfabetan lokon po enŝovi 
               // (traduko kun lingvo antaŭ la koncerna):
-              return {pos: lpos, elm: lelm}
+              return {pos: lpos, elm: lelm};
             }
           }
         }
@@ -282,7 +287,7 @@ Xmlarea.prototype.changeSubtext = function(id) {
         // ni alvenis supre ĉe 'haltiga' elemento kiel dif/ekz/bld 
         // sen trovi laŭalfabetan enŝovejon,
         // ni redonos la lastan kovnenan lokon (supran trd-on)
-        return {pos: lpos, elm: lelm}
+        return {pos: lpos, elm: lelm};
       }
 
       lelm = q.elm;
@@ -293,9 +298,9 @@ Xmlarea.prototype.changeSubtext = function(id) {
     } while (t && t.elm);
 
     // ni ĝis nun ne trovis tradukojn, ĉe aŭ post kiu enmeti, do enmetu ĉe la lasta trovita pozicio
-    return {pos: (t.pos>-1? t.pos : p.pos), elm: lelm}
+    return {pos: (t.pos>-1? t.pos : p.pos), elm: lelm};
   }
-}
+};
 
 
 /**
@@ -304,7 +309,7 @@ Xmlarea.prototype.changeSubtext = function(id) {
  * @param {string} lng - la lingvokodo
  * @param {string} trd - la aldonenda traduko
  */
- Xmlarea.prototype.addTrd = function(lng,trd) {
+Xmlarea.prototype.addTrd = function(lng,trd) {
   const place = this.findTrdPlace(lng); // this.getCurrentLastTrd(lng);
   if (place) {
     // se jam estas .trd, ni anstataŭigu ĝin per la etendita trdgrp...,
@@ -340,7 +345,7 @@ Xmlarea.prototype.changeSubtext = function(id) {
       this.selection(nov);
     }
   }
-}
+};
 
 /**
  * Redonas aŭ metas la aktualan y-koordinaton de la videbla parto de this.xmlarea
@@ -366,7 +371,7 @@ Xmlarea.prototype.scrollPos = function(pos=undefined) {
     else /*if (document.body)*/
       return document.body.scrollTop;
   }
-}
+};
 
 
 /**
@@ -423,7 +428,7 @@ Xmlarea.prototype.select = function(pos,len) {
     txtarea.selectionStart = pos;
     txtarea.selectionEnd = pos + len;
   //}
-}
+};
 
 /**
  * Legas aŭ anstataŭigas la momente elektitan tekston en la redaktatat teksto
@@ -549,7 +554,7 @@ Xmlarea.prototype.indent = function(indent=undefined) {
     }
     return (str_repeat(" ", indent));  
   }
-}
+};
 
 
 /**

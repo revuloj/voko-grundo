@@ -21,14 +21,14 @@ jQuery.extend({
                   if (error_to) {
                       var msg = "Pardonu, okazis netandita eraro: ";
                           $(error_to).html( msg + xhr.status + " " + xhr.statusText + xhr.responseText);
-                          $(error_to).show()  
+                          $(error_to).show();
                   }
               })
             .always(
               function() {
                   $("body").css("cursor", "default");
               })
-          )
+          );
     },
 
     alportu: function(url,params,error_to) {
@@ -43,14 +43,14 @@ jQuery.extend({
                 if (error_to) {
                     var msg = "Pardonu, okazis netandita eraro: ";
                         $(error_to).html( msg + xhr.status + " " + xhr.statusText + xhr.responseText);
-                        $(error_to).show()  
+                        $(error_to).show();
                 }
             })
           .always(
             function() {
                 $("body").css("cursor", "default");
             })
-        )
+        );
     },
 
     alportu2: function(settings,error_to) {
@@ -61,23 +61,23 @@ jQuery.extend({
             this.post(settings)
             .fail (
               function(xhr) {
-                  console.error(xhr.status + " " + xhr.statusText);                
+                  console.error(xhr.status + " " + xhr.statusText); 
                   if (error_to) {
                     if (xhr.status == 404) {
-                        var msg = "Pardonu, la dosiero ne troviĝis sur la servilo: ";
+                        const msg = "Pardonu, la dosiero ne troviĝis sur la servilo: ";
                         $(error_to).html( msg + JSON.stringify(settings.data).replace(/"/g,''));
                     } else {
-                      var msg = "Pardonu, okazis netandita eraro: ";
+                      const msg = "Pardonu, okazis netandita eraro: ";
                       $(error_to).html( msg + xhr.status + " " + xhr.statusText + xhr.responseText);
                     }
-                    $(error_to).show()  
+                    $(error_to).show();  
                   }
               })
             .always(
               function() {
                   $("body").css("cursor", "default");
               })
-          )
+          );
       }
   
 });
@@ -91,10 +91,10 @@ jQuery.fn.extend({
         var el = this.get(0);
         if (window.getSelection) {
             // Firefox
-            return window.getSelection().toString()
+            return window.getSelection().toString();
         } else if (document.getSelection) {
             // IE?
-            return document.getSelection().toString()
+            return document.getSelection().toString();
         }
     },
 
@@ -113,14 +113,14 @@ jQuery.fn.extend({
             var endPos = el.selectionEnd;
             return el.value.substring(startPos, endPos);
           } else {
-              console.error("selection (preni markitan tekston) ne subtenita por tiu krozilo")
+              console.error("selection (preni markitan tekston) ne subtenita por tiu krozilo");
           }
     },
     
     // enmetu tekston ĉe la pozicio de kursoro, resp. anstataŭigu la nuna elekton per nova teksto
     insert: function(myValue){
-      var is_chrome = ((navigator.userAgent.toLowerCase().indexOf('chrome') > -1) 
-                       && (navigator.vendor.toLowerCase().indexOf("google") > -1));        
+      var is_chrome = ((navigator.userAgent.toLowerCase().indexOf('chrome') > -1) &&
+                       (navigator.vendor.toLowerCase().indexOf("google") > -1));        
         
       return this.each(function(i) {
         // provu unue per insertText-komando, Chrome nur tiel memoras por malfari per Stir+Z
@@ -171,11 +171,11 @@ jQuery.fn.extend({
               var range = document.selection.createRange();
               range.moveStart('character', - 200); 
               var selText = range.text;
-              var linestart = selText.lastIndexOf("\n");
+              const linestart = selText.lastIndexOf("\n");
               while (selText.charCodeAt(linestart+1+indent) == 32) {indent++;}
         } else if (txtarea.selectionStart || txtarea.selectionStart == '0') { // Mozilla
               var startPos = txtarea.selectionStart;
-              var linestart = txtarea.value.substring(0, startPos).lastIndexOf("\n");
+              const linestart = txtarea.value.substring(0, startPos).lastIndexOf("\n");
               while (txtarea.value.substring(0, startPos).charCodeAt(linestart+1+indent) == 32) {indent++;}
         }
         return (str_repeat(" ", indent));
@@ -267,7 +267,7 @@ jQuery.fn.extend({
             U: '\u016C',
             j: '\u0135',
             J: '\u0134'
-        }
+        };
 
         const cx2 = {
             '\u015D': 's',
@@ -282,7 +282,7 @@ jQuery.fn.extend({
             '\u016C': 'U',
             '\u0135': 'j',
             '\u0134': 'J'
-        }
+        };
         
         function cxigi(b, key) {
             var k=key; //String.fromCharCode(key);
@@ -302,7 +302,7 @@ jQuery.fn.extend({
             var range = document.selection.createRange();
             if (range.text != "") return true;
             range.moveStart('character', -1); 
-            var nova = cxigi(range.text, key);
+            const nova = cxigi(range.text, key);
             if (nova != "") {
                 range.text = nova;
                 return false;
@@ -312,7 +312,7 @@ jQuery.fn.extend({
             var end = el.selectionEnd;
             if (start != end || start == 0) return true; 
 
-            var nova = cxigi(el.value.substring(start-1, start), key);
+            const nova = cxigi(el.value.substring(start-1, start), key);
             if (nova != "") {
                 //save textarea scroll position
                 var textScroll = el.scrollTop;
@@ -332,7 +332,7 @@ jQuery.fn.extend({
         return this.each(function(i) {
             if ('selectionStart' in this) {
                 this.selectionStart=0;
-                this.selectionEnd = this.value.length
+                this.selectionEnd = this.value.length;
             }
             else if (this.select) {
             // Internet Explorer & al.
@@ -341,7 +341,7 @@ jQuery.fn.extend({
             }
             // Safari
             else if (this.selectionRange) {
-            this.setSelectionRange(0, this.value.length)
+            this.setSelectionRange(0, this.value.length);
             this.focus();
             }
         });
@@ -365,14 +365,14 @@ jQuery.fn.extend({
                 range.moveEnd('character', end);
                 range.moveStart('character', start);
                 range.select();
-            };
+            }
             this.blur();
             this.focus();
             
             // almenaŭ en IE necesas ruli al la ĝusta linio ankoraŭ, por ke ĝi estu videbla
             var text = $(this).val();
-            var scroll_to_line = Math.max(get_line_pos(start,text)["line"] - 5, 0);
-            var last_line = get_line_pos(text.length-1,text)["line"];
+            var scroll_to_line = Math.max(get_line_pos(start,text).line - 5, 0);
+            var last_line = get_line_pos(text.length-1,text).line;
             this.scrollTop = this.scrollHeight * scroll_to_line / last_line;
         });
     },
@@ -381,13 +381,13 @@ jQuery.fn.extend({
         var all_text = '';
         this.contents().each(function() {
             if ( this.nodeType === 3 ) {
-               all_text += this.textContent
+               all_text += this.textContent;
             } else if ( this.tagName == 'INPUT' ) {
-               all_text += $(this).val()
+               all_text += $(this).val();
             } else if ( this.nodeType === 1 ) {
-               all_text += $(this).form_text()
+               all_text += $(this).form_text();
             }
-        })
+        });
         return all_text;
     },
 
@@ -409,5 +409,3 @@ function xpress(event) {
         return $(this).xklavo(key);
     }
 };
-
-

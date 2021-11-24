@@ -3,7 +3,7 @@
 
 /*************************************************************************
 
-// (c) 2017 - 2019 Wolfram Diestel
+// (c) 2017 - 2021 Wolfram Diestel
 // laŭ GPL 2.0
 
 *****************************************************************************/
@@ -17,7 +17,7 @@
  */
 var XMLŜablono = function(sxablono) {
     this.sxablono = sxablono;
-}
+};
 
 XMLŜablono.prototype = {
 
@@ -25,13 +25,13 @@ XMLŜablono.prototype = {
         // args: Objekto kiu enhavas la anstataŭigendajn valorojn,  kiuj aperas kiel {...} 
         // en la ŝablono, ekz {rad: "hom", fin: "o",...}
         var sx = this.sxablono.split("\n");
-        var resultstr = '', ispaces='';
+        var resultstr = '', ispaces='', cond, str;
         for (var i=0; i<sx.length; i++) {
             var line = sx[i];
             var pos = line.indexOf(":");
             if (pos >= 0) {
-                var cond = line.slice(0,pos);
-                var str = line.slice(pos+1);
+                cond = line.slice(0,pos);
+                str = line.slice(pos+1);
             } else {
                 cond = '';
                 str = line;
@@ -50,13 +50,16 @@ XMLŜablono.prototype = {
 
     eval_condition: function(cond,args) {
         var c = cond.trim();
-        return c? new Function("return " + c.replace(/(\w+)/g,"this.$1")).call(args) : true;
+        if (c) {
+            return new Function("return " + c.replace(/(\w+)/g,"this.$1")).call(args);
+        }
+        return true;
     },
                 
     eval_varstring: function(str,args) {
-        return str.replace(/\{([a-z_]+)\}/g, function(_m,$1){ return args[$1]} );
+        return str.replace(/\{([a-z_]+)\}/g, function(_m,$1){ return args[$1]; } );
     }
-}
+};
 
 function extend(ChildCls, ParentCls) {
     /*
@@ -80,12 +83,12 @@ var XMLArtikolo = function(art) {
     XMLŜablono.call(this,xml_sxablonoj.art);
     art.dif = art.dif.replace(/~/g,'<tld/>');
     this.art = art;
-}   
+};   
 extend(XMLArtikolo,XMLŜablono);
 
 XMLArtikolo.prototype.xml = function(indent) {
     return XMLŜablono.prototype.xml.call(this,this.art,indent);
-}
+};
 
 
 /**
@@ -100,12 +103,12 @@ var XMLDerivaĵo = function(drv) {
     drv.mrk = alCx(drv.mrk + '.' + drv.kap.replace(/~/g,'0').replace(/ /g,'_'));
     drv.kap = drv.kap.replace(/~/g,'<tld/>');
     this.drv = drv;
-}   
+}; 
 extend(XMLDerivaĵo,XMLŜablono);
 
 XMLDerivaĵo.prototype.xml = function(indent) {
     return XMLŜablono.prototype.xml.call(this,this.drv,indent);
-}
+};
 
 
 /**
@@ -119,12 +122,12 @@ var XMLSenco = function(snc) {
     snc.dif = snc.dif.replace(/\n/g,"\n       ").replace(/~/g,'<tld/>');
     snc.mrk = snc.drvmrk + '.' + snc.mrk;     
     this.snc = snc;
-}  
+}; 
 extend(XMLSenco,XMLŜablono);
 
 XMLSenco.prototype.xml = function(indent=2) {
     return XMLŜablono.prototype.xml.call(this,this.snc,indent);
-}
+};
 
 
 /**
@@ -136,12 +139,12 @@ XMLSenco.prototype.xml = function(indent=2) {
 var XMLFonto = function(fnt) {
     XMLŜablono.call(this,xml_sxablonoj.fnt);
     this.fnt = fnt;
-}
+};
 extend(XMLFonto,XMLŜablono);
 
 XMLFonto.prototype.xml = function(indent) {
     return XMLŜablono.prototype.xml.call(this,this.fnt,indent);
-}
+};
 
 /**
  * Krei novan ekzemplon surbaze de ŝablono
@@ -154,13 +157,13 @@ var XMLEkzemplo = function(ekz) {
     this.fonto = new XMLFonto(ekz);
     ekz.frazo = ekz.frazo.replace(/~/g,'<tld/>');
     this.frazo = ekz.frazo;
-}
+};
 extend(XMLEkzemplo,XMLŜablono);
 
 XMLEkzemplo.prototype.xml = function(indent) {
     var ekz = {fnt:this.fonto.xml(2).trim(), frazo:this.frazo};
     return XMLŜablono.prototype.xml.call(this,ekz,indent);
-}
+};
 
 /**
  * Krei novan referencon surbaze de ŝablono
@@ -170,14 +173,14 @@ XMLEkzemplo.prototype.xml = function(indent) {
  */
 var XMLReferenco = function(ref) {
     XMLŜablono.call(this,xml_sxablonoj.ref);
-    if (ref.tip == 'nuda') { ref.tip = '' };
+    if (ref.tip == 'nuda') { ref.tip = ''; }
     this.ref = ref;
-}
+};
 extend(XMLReferenco,XMLŜablono);
 
 XMLReferenco.prototype.xml = function(indent=0) {
     return XMLŜablono.prototype.xml.call(this,this.ref,indent).replace(/\s+$/, '');
-}
+};
 
 /**
  * Krei novan referenc-grupon surbaze de ŝablono
@@ -188,14 +191,14 @@ XMLReferenco.prototype.xml = function(indent=0) {
 
 var XMLReferencGrupo = function(ref) {
     XMLŜablono.call(this,xml_sxablonoj.refgrp);
-    if (ref.tip == 'nuda') { ref.tip = '' };
+    if (ref.tip == 'nuda') { ref.tip = ''; }
     this.ref = ref;
-}
+};
 extend(XMLReferencGrupo,XMLŜablono);
 
 XMLReferencGrupo.prototype.xml = function(indent=4) {
     return XMLŜablono.prototype.xml.call(this,this.ref,indent);
-}
+};
 
 
 /**
@@ -208,12 +211,12 @@ XMLReferencGrupo.prototype.xml = function(indent=4) {
 var XMLRimarko = function(rim, tip='rim') {
     XMLŜablono.call(this,(tip=='rim'?xml_sxablonoj.rim:xml_sxablonoj.adm));
     this.rim = rim;
-}
+};
 extend(XMLRimarko,XMLŜablono);
 
 XMLRimarko.prototype.xml = function(indent) {
     return XMLŜablono.prototype.xml.call(this,this.rim,indent);
-}
+};
 
 
 /**
@@ -235,19 +238,19 @@ var XMLBildo = function(bld) {
             bld.url = '&WCU;/' + bld.url.substr(prefix_len);
         } else {
             bld.url = '&WCU;/thumb/' + bld.url.substr(prefix_len) + '/' + bld.lrg + 'px-' + imgname;
-            bld.lrg = ''
+            bld.lrg = '';
         }
     }
     bld.fnt = bld.fnt.replace("https://commons.wikimedia.org/wiki","&WCW;"); 
     bld.frazo = bld.frazo.replace(/~/g,'<tld/>');
     bld.prm = bld.prm.replace(/public domain/i,'PD');
     this.bld = bld;
-}
+};
 extend(XMLBildo,XMLŜablono);
 
 XMLBildo.prototype.xml = function(indent) {
     return XMLŜablono.prototype.xml.call(this,this.bld,indent);
-}
+};
 
 
 /**
@@ -261,14 +264,14 @@ var HTMLFonto = function(bib_src) {
     this.b = new XMLŜablono(html_sxablonoj.bib);
     this.vt = new XMLŜablono(html_sxablonoj.vrk_title);
     this.bt = new XMLŜablono(html_sxablonoj.bib_title);
-}
+};
 
 HTMLFonto.prototype = {
     bib_text: function(bib) {
         for (var i=0;i<this.source.length;i++) {
             const entry = this.source[i];
             if (entry.value == bib) {
-                return entry.label
+                return entry.label;
             }
         }
     },
@@ -282,7 +285,7 @@ HTMLFonto.prototype = {
            bib: this.b.xml(fnt).trim(),
            aut: fnt.aut,
            lok: fnt.lok
-        }
+        };
     
         f.vrk = this.vt.xml(f).trim();
         if (bib) {
@@ -294,7 +297,7 @@ HTMLFonto.prototype = {
 
         return _html;
     }
-}
+};
 
 
 /**
@@ -304,7 +307,7 @@ HTMLFonto.prototype = {
 var HTMLTrovoDt = function() {
     this.t = new XMLŜablono(html_sxablonoj.dt_trovo);
     this.tc = new XMLŜablono(html_sxablonoj.dt_trovo_cit);
-}
+};
 
 HTMLTrovoDt.prototype = {
     html: function(trv) {
@@ -314,7 +317,7 @@ HTMLTrovoDt.prototype = {
             return this.t.xml(trv).trim();
         }
     }
-}
+};
 
 /**
  * Krei novan trovon (DD-bildo-elemento 
@@ -323,13 +326,13 @@ HTMLTrovoDt.prototype = {
  */
 var HTMLTrovoDdBld = function() {
     this.dd = new XMLŜablono(html_sxablonoj.dd_trovo_bld);
-}
+};
 
 HTMLTrovoDdBld.prototype = {
     html: function(res) {
         return this.dd.xml(res).trim();
     }
-}
+};
 
 /**
  * Listero de eraro- kaj avertolisto
@@ -337,13 +340,13 @@ HTMLTrovoDdBld.prototype = {
  */
 var HTMLError = function() {
     this.li = new XMLŜablono(html_sxablonoj.err_msg);
-}
+};
 
 HTMLError.prototype = {
     html: function(err) {
         return this.li.xml(err).trim();
     }
-}
+};
 
 
 /**
@@ -353,7 +356,7 @@ HTMLError.prototype = {
  */
 var SncŜablono = function(sxbl) {
     this.sxablono = snc_sxablonoj[sxbl];
-}
+};
 
 SncŜablono.prototype = {
     form: function() {
@@ -380,18 +383,15 @@ SncŜablono.prototype = {
               var text_len = teksto.length;
               return '<span class="sxbl" id="' + id + '"><input type="text" size="' + 
                 text_len + '" id="' + iid + '" value="' + teksto + '" /></span></input></span>';
-              break;
           case 'r':
               return '<span class="sxbl" id="' + id + '">' + teksto + 
                 '</span><button class="ui-button ui-corner-all ui-button-icon-only">' +
                 '<span class="ui-icon ui-icon-search"></button>';
-              break;
           case 'e':
               return '<span class="sxbl" id="' + id + '">' + teksto + 
                 '</span><button class="ui-button ui-corner-all ui-button-icon-only">' +
                 '<span class="ui-icon ui-icon-search"></button>';
-              break;
       }    
     }
-}
+};
 

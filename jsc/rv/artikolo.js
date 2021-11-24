@@ -1,6 +1,9 @@
 
 /* jshint esversion: 6 */
 
+// (c) 2020, 2021 Wolfram Diestel
+
+
 const js_sojlo = 3; //30+3;
 const ekz_sojlo = 3;
 const sec_art = "s_artikolo";

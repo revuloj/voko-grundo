@@ -1,3 +1,8 @@
+
+/* jshint esversion: 6 */
+
+// (c) 2020, 2021 Wolfram Diestel
+
 // sendu vorton al la serĉ-CGI kaj redonu la rezultojn grupigite kaj porciumite
 
 // La rezultoj riceviĝas en la formo [mrk,kap,lng,ind,trd] kaj estas
@@ -64,7 +69,7 @@ Sercho.prototype.trovoj = function(lng) {
         // grupigu tradukojn laŭ lingvo            
         const t_grouped = (group_by(LNG,trdj) || {});
         const t_l = Object.entries(t_grouped)
-            .filter( ([lng,list]) => { return lng != '<_sen_>' } )
+            .filter( ([lng,list]) => { return lng != '<_sen_>'; } )
             .reduce( (obj,[lng,list]) => {
                 obj[lng] = 
                     // ĉenigu ĉiujn tradukojn de unu lingvo, se estas trd (lasta kampo)
@@ -77,7 +82,7 @@ Sercho.prototype.trovoj = function(lng) {
             v: kap,
             h: art_href(mrk),
             t: t_l
-        }
+        };
     }
 
     // strukturas unu ne-e-an trovon kun unika ind-mrk
@@ -87,12 +92,13 @@ Sercho.prototype.trovoj = function(lng) {
             { return {
                 k: ero[EKZ] || ero[KAP], 
                 h: art_href(ero[MRK])
-            } }
+              }; 
+            }
         );
         return {
             v: trd,
             t: e_l
-        }
+        };
     }
 
     // komenco de .trovoj()...
@@ -110,7 +116,7 @@ Sercho.prototype.trovoj = function(lng) {
                             .map( mrk => trovo_eo(kap,mrk,grouped[mrk]) ));    
                     }
                 }
-            };    
+            }    
         }
         return trvj.sort((a,b) =>
             a.v.localeCompare(b.v,'eo'));
@@ -121,7 +127,7 @@ Sercho.prototype.trovoj = function(lng) {
         // ...ni grupigos laŭ trd, sed devos plenigi ĝin per ind, kie ĝi mankas
         const trvj = this.trd[lng];
         if (Array.isArray(trvj)) {
-            for (let t of trvj) { if (! t[TRD]) t[TRD] = t[IND] };
+            for (let t of trvj) { if (! t[TRD]) t[TRD] = t[IND]; }
             const grouped = group_by(TRD,trvj); // ni grupigas laŭ 'ind'
             if (grouped)
                 return Object.keys(grouped)
@@ -129,17 +135,17 @@ Sercho.prototype.trovoj = function(lng) {
                     .map( trd => trovo_trd(trd,grouped[trd]) );
         }
     }
-}
+};
 
 // en kiuj lingvoj (krom eo) ni trovis ion?
 Sercho.prototype.lingvoj = function() {
     if (this.trd) return ( Object.keys(this.trd) );
-}
+};
 
 Sercho.prototype.malplena = function() {
     return ( (!this.eo || Object.keys(this.eo).length === 0) 
         && (!this.trd || Object.keys(this.trd).length === 0) );
-}
+};
 
 Sercho.prototype.sola = function() {
     return ( 
@@ -151,14 +157,14 @@ Sercho.prototype.sola = function() {
             && this.trd
             && Object.keys(this.trd).length === 1 
             && Object.values(this.trd)[0].length === 1 );
-}
+};
 
 Sercho.prototype.unua = function() {
     if (this.eo && this.trd) {
         var u = Object.values(this.eo)[0] || Object.values(this.trd)[0];
-        return { href: art_href(u[0][MRK]) }            
+        return { href: art_href(u[0][MRK]) };            
     }
-}
+};
 
 
 // Serĉo en universala vortreto, vd. http://www.lexvo.org/uwn/
@@ -177,4 +183,4 @@ Sercho.prototype.serchu_uwn = function(vorto,onSuccess,onStart,onStop) {
         start_wait,
         stop_wait
     );
-  }    
+};  

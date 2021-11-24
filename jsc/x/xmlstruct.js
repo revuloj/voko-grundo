@@ -1,3 +1,8 @@
+
+/* jshint esversion: 6 */
+
+// (c) 2021 Wolfram Diestel
+
 /**
  * Administras XML-tekston kiel strukturo de subtekstoj
  * @constructor
@@ -26,15 +31,15 @@ function XmlStruct(xml, onAddSub) {
       _tl1: /<tld\s+lit="(.)"[^>]*>/g,
       _tl2: /<tld[^>]*>/g,
       _tagend: /[>\s]/
-    }
+    };
   
     this.indents = {
       art: "", subart: "\u00a0", drv: "\u22ef ", subdrv: "\u22ef\u22ef ", 
       snc: "\u22ef\u22ef\u22ef ", subsnc: "\u22ef\u22ef\u22ef\u22ef "
-    }
+    };
 
     this.structure();
-};
+}
 
 /**
  * Metas la kompletan XML-tekston laŭ la argumento 'xml' kaj aktualigas la strukturon el ĝi
@@ -43,7 +48,7 @@ function XmlStruct(xml, onAddSub) {
 XmlStruct.prototype.setText = function(xml) {
   this.xmlteksto = xml;  
   this.structure();      
-}
+};
 
 
 /**
@@ -67,7 +72,7 @@ XmlStruct.prototype.structure = function(selected = undefined) {
     if (mrk && mrk.index < ghis) {          
       return (elm != 'art'? 
         mrk[1].substring(mrk[1].indexOf('.')+1) 
-        : (mrk[1].slice(mrk[1].indexOf(':')+2,-20)) || '<nova>')
+        : (mrk[1].slice(mrk[1].indexOf(':')+2,-20)) || '<nova>');
     }
   }
   function rad(de,ghis) {
@@ -101,7 +106,7 @@ XmlStruct.prototype.structure = function(selected = undefined) {
 
         return kap;
       }
-    };
+    }
   }
   function id(subt) {
     const rx = /[^A-Za-z]/g;
@@ -113,11 +118,11 @@ XmlStruct.prototype.structure = function(selected = undefined) {
             c[i%key.length] ^= str.charCodeAt(i);
         }
         return c.join('.');
-    }
+    };
     if (subt.mrk) {
-      return xor_str(subt.mrk)
+      return xor_str(subt.mrk);
     } else {
-      return xor_str(xmlteksto.substr(subt.de,120).replace(rx,''))
+      return xor_str(xmlteksto.substr(subt.de,120).replace(rx,''));
     }
   }
   function al(elm,de) {
@@ -132,9 +137,9 @@ XmlStruct.prototype.structure = function(selected = undefined) {
   }
 
   this.strukturo = [];
-  var m;
+  var m = re_stru._elm.exec(xmlteksto);
 
-  while (m = re_stru._elm.exec(xmlteksto)) {
+  while (m) {
     var subt = {de: m.index};
     // kiom da linioj antaŭ tio?
     subt.el = m[1];
@@ -162,13 +167,14 @@ XmlStruct.prototype.structure = function(selected = undefined) {
     this.strukturo.push(subt);
     //sel_stru.append(ht_element('option',{value: strukturo.length-1},item));
 
+    m = re_stru._elm.exec(xmlteksto);
   }
 
   // en la fino aldonu ankoraŭ elektilon por la tuta XML
   const tuto = {de: 0, ln: 0, al: xmlteksto.length, id: "x.m.l", dsc: 'tuta xml-fonto'};
   if (this.onaddsub) this.onaddsub(tuto,this.strukturo.length,tuto.id == selected);
   this.strukturo.push(tuto);
-}
+};
 
 /**
  * Redonas dosieronomon trovante ĝin en art-mrk aŭ drv-mrk
@@ -177,7 +183,7 @@ XmlStruct.prototype.structure = function(selected = undefined) {
 XmlStruct.prototype.art_drv_mrk = function() {
   var match = this.xmlteksto.match(this.re_stru._dos);
   if (match) return (match[1]? match[1] : match[2]);
-}
+};
 
 /**
  * Anstataŭigas donitan subtekston per nova, ankaŭ aktualigas la struktur-liston
@@ -194,7 +200,7 @@ XmlStruct.prototype.replaceSubtext = function(id, xml, select = undefined) {
       + this.xmlteksto.substring(elekto.al));
     // rekalkulu la strukturon pro ŝovitaj pozicioj...
     this.structure(select);  
-}
+};
 
 /**
  * Trovu la informojn de subtekston 'id' en la strukturlisto 
@@ -205,7 +211,7 @@ XmlStruct.prototype.getStructById = function(id) {
   for (let s of this.strukturo) {
     if (s.id == id) return s;
   }
-}
+};
 
 /**
  * Trovas la subtekston kun 'id' en la strukturlisto
@@ -215,7 +221,7 @@ XmlStruct.prototype.getStructById = function(id) {
 XmlStruct.prototype.getSubtextById = function(id) {
   const s = this.getStructById(id);
   return this.xmlteksto.slice(s.de,s.al);
-}
+};
 
 
 /**
@@ -230,7 +236,7 @@ XmlStruct.prototype.getParent = function(id) {
     const p = this.strukturo[n];
     if (p.de < s.de && p.al > s.al ) return p;  
   }
-}
+};
 
 /**
  * Trovas la plej proksiman parencon de la aktuale elektita subteksto, kiu havas XML-atributon 'mrk'
@@ -247,7 +253,7 @@ XmlStruct.prototype.getClosestWithMrk = function(id) {
       p = this.getParent(p.id);
     }
   }
-}
+};
 
 
 /**
@@ -258,7 +264,7 @@ XmlStruct.prototype.getCurrentMrk = function(id) {
   const c = this.getClosestWithMrk(id);
   if (c) return c.mrk;
   return '';
-}
+};
 
 
 /**
@@ -291,11 +297,11 @@ XmlStruct.prototype.getCurrentKap = function(id) {
   } else { // prenu kapvorton de unua drv
     for (let s of this.strukturo) {
       if (s.el == 'drv') {
-        return (kap(s))
+        return (kap(s));
       }
     }
   }
-}
+};
 
 
 /**
@@ -346,8 +352,4 @@ XmlStruct.prototype.travel_tag_bw = function(elements,end,stop_no_match,xml,from
     // trovu sekvan krampon < aŭ </
     pos = xml.lastIndexOf(mark,pos-1);
   }
-}
-
-
-
-
+};

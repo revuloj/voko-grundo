@@ -1,8 +1,9 @@
 /*************************************************************************
-// (c) 2008 - 2018 Wolfram Diestel, Wieland Pusch, Bart Demeyere & al.
+// (c) 2008 - 2021 Wolfram Diestel, Wieland Pusch, Bart Demeyere & al.
 // laŭ GPL 2.0
 *****************************************************************************/
 
+/* jshint esversion: 6 */
 
 //*********************************************************************************************
 // iloj por signaroj...
@@ -49,7 +50,7 @@ String.prototype.hashFnv32a = function(asString, seed) {
           return ("0000000" + (hval >>> 0).toString(16)).substr(-8);
       }
       return hval >>> 0;
- }  
+};
 
 /**
  * Tradukas en teksto supersignajn literoj la la x-formo, do Ĉ al Cx ktp. ... ŭ al ux 
@@ -95,7 +96,6 @@ function quoteattr(s, preserveCR=false) {
         */ 
         .replace(/\r\n/g, CR) /* Must be before the next replacement. */
         .replace(/[\r\n]/g, CR);
-        ;
 }
 
 /**

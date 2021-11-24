@@ -1,3 +1,9 @@
+
+/* jshint esversion: 6 */
+
+// (c) 2020, 2021 Wolfram Diestel
+
+
 var index_malnova_url = "/revo/index-malnova.html"; // poste index-malnova.html aŭ inx/_plena.html
 
 function isIE() {

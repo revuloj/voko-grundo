@@ -1,6 +1,9 @@
 
 /* jshint esversion: 6 */
 
+// (c) 2020, 2021 Wolfram Diestel
+
+
 const version="2b";
 const debug=false; //true; // ni bezonas provizore aparte por vidi erarojn en iOS Webkit, kie ni ne havas "console"
 const revo_url = "reta-vortaro.de";

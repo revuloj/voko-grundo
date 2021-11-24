@@ -1,3 +1,7 @@
+/* jshint esversion: 6 */
+
+// (c) 2020, 2021 Wolfram Diestel
+
 
 function checkCookieConsent() {
     var cookies = document.cookie;

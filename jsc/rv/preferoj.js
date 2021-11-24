@@ -1,6 +1,8 @@
 
 /* jshint esversion: 6 */
 
+// (c) 2020, 2021 Wolfram Diestel
+
 const lingvoj_xml = "../cfg/lingvoj.xml";
 
 // difinu ĉion sub nomprefikso "preferoj"

@@ -1,6 +1,8 @@
 
 /* jshint esversion: 6 */
 
+// (c) 2020, 2021 Wolfram Diestel
+
 // difinu ĉion sub nomprefikso "redaktilo"
 var redaktilo = function() {
 
@@ -745,7 +747,7 @@ var redaktilo = function() {
       HTTPRequest('GET','/revo/xml/'+art+'.xml',{},
       function(data) {
           // Success!
-          const xmlteksto = replace_entities(data)
+          const xmlteksto = replace_entities(data);
           document.getElementById("r:art").value = art;
           /*
           var titolo = document.getElementById("r:art_titolo");
@@ -871,7 +873,7 @@ var redaktilo = function() {
     document.getElementById("r:xmltxt")
       .addEventListener("input",show_pos);
     document.getElementById("r:xmltxt")
-      .addEventListener("input",() => { xmlarea.synced = false});
+      .addEventListener("input",() => { xmlarea.synced = false; });
     document.getElementById("r:xmltxt")
       .addEventListener("focus",show_pos);
     document.getElementById("r:xmltxt")
@@ -1004,7 +1006,7 @@ var redaktilo = function() {
           if (t.substr(0,2) == '?;') {
             li.append(ht_element('span',{class: 'dubinda'},'?'));
             t = t.substr(2);
-          };
+          }
           li.append(ht_element('span',{class: 'trd'},t));
     /*
           // se drv/snc estas elektita kaj la traduko ankoraŭ 
@@ -1100,7 +1102,7 @@ var redaktilo = function() {
                         if (preferoj.languages().indexOf(lng) < 0) {
                           cls.push('kasxita');
                           nkasxitaj++;
-                        };
+                        }
 
                         // se jam ekzistas tradukoj por tiu lingvo montru tion
                         // per CSS
@@ -1128,7 +1130,7 @@ var redaktilo = function() {
                         const dd = event.target.closest('dd');
                         // la traduko troivĝas rekte antaŭ la butono!
                         const sp = event.target.previousSibling;
-                        const lng = dd.getAttribute('lang')
+                        const lng = dd.getAttribute('lang');
                         console.log('aldonu ['+lng+'] '+sp.textContent);
                         xmlarea.addTrd(lng,sp.textContent);
 
@@ -1138,7 +1140,7 @@ var redaktilo = function() {
                         li.append(ht_element('span',{class: 'ekzistas'},'\u2713'));
                         li.querySelector('button')?.remove();
                       }
-                    })
+                    });
                     
                     // aldonu (+nn) - por videbligi la kasxitajn tradukojn
                     if (nkasxitaj) {

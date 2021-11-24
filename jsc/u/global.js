@@ -5,4 +5,4 @@
  */
 var global = function() {
     var preflng='en';
-}
+};

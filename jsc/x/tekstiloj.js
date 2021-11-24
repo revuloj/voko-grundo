@@ -3,7 +3,7 @@
 
 /*************************************************************************
 
-// (c) 2008 - 2018 Wolfram Diestel, Wieland Pusch, Bart Demeyere & al.
+// (c) 2008 - 2021 Wolfram Diestel, Wieland Pusch, Bart Demeyere & al.
 // laŭ GPL 2.0
 
 *****************************************************************************/
@@ -28,7 +28,7 @@ function get_line_pos(inx,text) {
         }
     }
     const pos = (lines == 0)? inx : (inx-last_pos-1);
-    return({line: lines, pos: pos})
+    return({line: lines, pos: pos});
 }
 
 /**
@@ -151,8 +151,8 @@ function insert_trd_lng(element,shov,lng,tradukoj) {
     } else {
         var lngj = Array();
         for (let e of element.querySelectorAll("trd[lng],trdgrp[lng]")) {
-            lngj.push(e.getAttribute("lng"))
-        };
+            lngj.push(e.getAttribute("lng"));
+        }
 
         // lingvo_post redonas la pozicion (lingvon) antaŭ kiu meti la tradukojn
         var lpost = lingvo_post(lng,lngj);
@@ -160,11 +160,11 @@ function insert_trd_lng(element,shov,lng,tradukoj) {
             var post_trd = element.querySelectorAll("trd[lng='"+lpost+"'],trdgrp[lng='"+lpost+"']");
             //post_trd.before(trdStr + '\n' + shov)
             //post_trd.before($(trdXML).find('xml').children)
-            beforeChildren(element,post_trd[0],trdXML.childNodes,'','\n' + shov)
+            beforeChildren(element,post_trd[0],trdXML.childNodes,'','\n' + shov);
         } else {
             // se ne estas lpost, metu kiel lasta elemento
             // unua traduko en tiu elemento aŭ "lng" estas lasta lingvo laŭ alfabeto
-            shov = shov.substr(2)
+            shov = shov.substr(2);
             //$(str2xml(shov + trdStr + '\n' + shov)).appendTo(element);
             //element.appendChild(str2xml(shov + trdStr + '\n' + shov));
             //$(element).append($(trdXML).find('xml').children);
@@ -184,7 +184,7 @@ function insert_trd_lng(element,shov,lng,tradukoj) {
 function replaceChildren(element,oldChild,newChildren,wsBefore=undefined,wsAfter=undefined) {
   if (wsBefore) element.insertBefore(element.ownerDocument.createTextNode(wsBefore),oldChild);
   for (var i=0; i<newChildren.length; i++) {
-        element.insertBefore(newChildren[i],oldChild)
+        element.insertBefore(newChildren[i],oldChild);
   }   
   if (wsAfter) element.insertBefore(element.ownerDocument.createTextNode(wsAfter),oldChild);
   element.removeChild(oldChild);
@@ -201,7 +201,7 @@ function replaceChildren(element,oldChild,newChildren,wsBefore=undefined,wsAfter
 function beforeChildren(element,before,children,wsBefore=undefined,wsAfter=undefined) {
     if (wsBefore) element.insertBefore(element.ownerDocument.createTextNode(wsBefore),before);
     for (var i=0; i<children.length; i++) {
-        element.insertBefore(children[i],before)
+        element.insertBefore(children[i],before);
     }  
     if (wsAfter) element.insertBefore(element.ownerDocument.createTextNode(wsAfter),before);
 }
@@ -216,7 +216,7 @@ function beforeChildren(element,before,children,wsBefore=undefined,wsAfter=undef
 function appendChildren(element,children,wsBefore=undefined,wsAfter=undefined) {
     if (wsBefore) element.appendChild(element.ownerDocument.createTextNode(wsBefore));
     for (var i=0; i<children.length; i++) {
-        element.appendChild(children[i])
+        element.appendChild(children[i]);
     }
     if (wsAfter) element.appendChild(element.ownerDocument.createTextNode(wsAfter));
 }
@@ -232,31 +232,31 @@ function appendChildren(element,children,wsBefore=undefined,wsAfter=undefined) {
 function trd_xml_dom(lng,shov,tradukoj) {
     const parser = new DOMParser();
     const xmlDoc = parser.parseFromString('<xml></xml>',"text/xml");
-    var root = xmlDoc.documentElement;
+    let root = xmlDoc.documentElement;
    // kunmetu la XML por la tradukoj
     if (tradukoj.length == 1 && tradukoj[0]) {
-        var trd = root.appendChild(xmlDoc.createElement('trd'));
+        let trd = root.appendChild(xmlDoc.createElement('trd'));
         trd.setAttribute('lng',lng);
-        var nodes = parseTrd(parser,tradukoj[0]);
-        for (var t=0; t<nodes.length; t++) {
-            var t1 = xmlDoc.importNode(nodes[t],true);
-            trd.appendChild(t1)
+        let nodes = parseTrd(parser,tradukoj[0]);
+        for (let t=0; t<nodes.length; t++) {
+            const t1 = xmlDoc.importNode(nodes[t],true);
+            trd.appendChild(t1);
         }
     } else {
-        var trdgrp = xmlDoc.createElement('trdgrp');
+        let trdgrp = xmlDoc.createElement('trdgrp');
         trdgrp.setAttribute('lng',lng);
         trdgrp.appendChild(xmlDoc.createTextNode('\n'));
-        for (var i=0; i<tradukoj.length; i++) {
+        for (let i=0; i<tradukoj.length; i++) {
             if (tradukoj[i]) { // evitu malplenajn tradukojn
-                var trd = xmlDoc.createElement('trd');
-                var nodes = parseTrd(parser,tradukoj[i]);
-                for (var t=0; t<nodes.length; t++) {
-                    var t1 = xmlDoc.importNode(nodes[t],true);
-                    trd.appendChild(t1)
+                let trd = xmlDoc.createElement('trd');
+                let nodes = parseTrd(parser,tradukoj[i]);
+                for (let t=0; t<nodes.length; t++) {
+                    const t1 = xmlDoc.importNode(nodes[t],true);
+                    trd.appendChild(t1);
                 }
                 trdgrp.appendChild(xmlDoc.createTextNode(shov + '  '));
                 trdgrp.appendChild(trd);
-                var nl = ((i < tradukoj.length-1)? xmlDoc.createTextNode(',\n') : xmlDoc.createTextNode('\n'));
+                const nl = ((i < tradukoj.length-1)? xmlDoc.createTextNode(',\n') : xmlDoc.createTextNode('\n'));
                 trdgrp.appendChild(nl);
             }
         }
@@ -275,12 +275,13 @@ function trd_xml_dom(lng,shov,tradukoj) {
  * @returns - la kreita XML-strukturo
  */
 function parseTrd(parser, traduko) {
+    var doc;
     try {
-        var doc = parser.parseFromString('<xml>'+traduko+'</xml>',"text/xml");
+        doc = parser.parseFromString('<xml>'+traduko+'</xml>',"text/xml");
         // che eraro enestas elemento "parseerror"
     } catch (e) {
         // IE ĵetas escepton
-        if (e.name = 'SyntaxError') {
+        if (e.name == 'SyntaxError') {
             throw "Nevalida XML en traduko: " + quoteattr(traduko);
         }
     }
@@ -341,7 +342,7 @@ function enshovo_antaua_linio(text, pos) {
         } else if (text[i] == '\n') {
             return enshovo.substr(p-pos);
         } else {
-            enshovo = ''
+            enshovo = '';
         }
     }
     return enshovo.substr(p-pos);
@@ -412,7 +413,7 @@ function linirompo(str, indent=0, linirompo=80) {
     var ispaces = '';
     if (indent) {
         ispaces = ' '.repeat(indent);
-    };
+    }
     str = str.replace(/[ \t\n]+/g,' ').trim();
     while (pos < str.length) {
         if (pos - lrpos > linirompo && bpos > lrpos) {
@@ -434,6 +435,3 @@ function linirompo(str, indent=0, linirompo=80) {
     }
     return str;
 }
-
-
-
