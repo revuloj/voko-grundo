@@ -12,7 +12,7 @@
 import { kontroli_artikolon, montri_indikojn } from './ui_tabl.js';
 import { surmetita_dialogo } from './ui_err.js';
 
-console.debug("Instalante la menuon...")
+console.debug("Instalante la menuon...");
 
 export default function() {
       // menuo
@@ -94,7 +94,7 @@ function menu_selected(event, ui) {
             //datumprotekto_dialogo();
             break;
         default:
-            alert('Neniu ago difinita por menuero '+id)
+            alert('Neniu ago difinita por menuero '+id);
     }
 }
 

@@ -43,11 +43,11 @@ revo_codes.lingvoj.load();
 /**
  * Helpofunkcio, por instali klak-reagojn
  * @param {string} id - la id-atributo de HTML-elemento
- * @param {function(MouseEvent)} reaction - la reago al la klak-evento
+ * @param {Function} reaction - la reago al la klak-evento
  */
 function onclick(id,reaction) {
-    var nb;
-    if (nb = document.getElementById(id)) {
+    var nb = document.getElementById(id);
+    if (nb) {
         nb.addEventListener("click", function(event) {
             event.preventDefault();
             if (debug) console.debug("clicked: "+id);
@@ -310,19 +310,19 @@ when_doc_ready(function() {
             //console.debug("which: "+event.which+" code:"+event.code + " key: "+ event.key);
             if (event.key == "x" || event.key == "Shift") { // x-klavo
                 if (document.getElementById("x:cx").value == "1") {
-                    var s = event.target.value;
-                    var s1 = ascii_eo(s);
+                    const s = event.target.value;
+                    const s1 = ascii_eo(s);
                     if (s != s1)
                         event.target.value = s1;
                 }
             // keycode fix for older Android Chrome 
             } else if ((event.keyCode == 0 || event.keyCode == 229) 
                 && document.getElementById("x:cx").value == "1") {
-                var s = event.target.value;
-                var key = s.charAt(s.length-1);
+                const s = event.target.value;
+                const key = s.charAt(s.length-1);
                 //alert("Android dbg: "+event.keyCode+ "s: "+s+" kcd: "+kCd);
                 if (key == "x" || key == "X") {
-                    var s1 = ascii_eo(s);
+                    const s1 = ascii_eo(s);
                     if (s != s1)
                         event.target.value = s1;    
                 }
@@ -829,11 +829,11 @@ function adaptu_paghon(root_el, url) {
             // keycode fix for older Android Chrome 
             else if ((event.keyCode == 0 || event.keyCode == 229) 
                 && document.getElementById("w:cx").value == "1") {
-                var s = event.target.value;
-                var key = s.charAt(s.length-1);
+                const s = event.target.value;
+                const key = s.charAt(s.length-1);
                 //alert("Android dbg: "+event.keyCode+ "s: "+s+" kcd: "+kCd);
                 if (key == "x" || key == "X") {
-                    var s1 = ascii_eo(s);
+                    const s1 = ascii_eo(s);
                     if (s != s1)
                         event.target.value = s1;    
                 }
@@ -1248,9 +1248,9 @@ function mrk_eraroj() {
                         ['li',{},
                             [['a',{href: art_href(m[0]), target: 'precipa'}, m[1]+' ['+m[0]+']']]
                         ]
-                    ])
+                    ]);
                     if (li) ul.append(...li);
-                };
+                }
             }
             // mrk nekongruaj kun drv@mrk
             if (json.snc && json.snc.length) {
@@ -1341,7 +1341,7 @@ function viaj_submetoj() {
                 aktualigilo(); // altigu aktualigilon por eventuale vidi la redaktitan artikolon
                                 // anstataŭ la bufritan!
             }
-        })
+        });
     }    
 }
 
@@ -1359,7 +1359,7 @@ function montru_submeto_staton(sj) {
             return decodeURIComponent(atob(str).split('').map(function(c) {
                 return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
             }).join(''));
-        };
+        }
         if (r) {
             return b64DecodeUnicode(r.split(':').slice(-1)).replace('[m ','[');
         } else {

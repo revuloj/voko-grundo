@@ -4,7 +4,7 @@
 // (c) 2018 - 2019 - Wolfram Diestel
 // laŭ GPL 2.0
 
-console.debug("Instalante la artikolfunkciojn...")
+console.debug("Instalante la artikolfunkciojn...");
 $.widget( "redaktilo.Artikolo", {
 
     options: {
@@ -27,7 +27,7 @@ $.widget( "redaktilo.Artikolo", {
 
         this._regex_klr = {
             _klr: new RegExp('<klr>\\.{3}</klr>','g')
-        }
+        };
 
         this._regex_drv = {
             _lbr: new RegExp('\n','g'),
@@ -65,7 +65,7 @@ $.widget( "redaktilo.Artikolo", {
             _spc: new RegExp('\\s+/>','g'),
             _amp: new RegExp('&amp;','g'),
             _ent: new RegExp('&([a-zA-Z0-9_]+);','g')
-        }
+        };
 
         this.restore();
         this._change_count = 0;
@@ -76,8 +76,8 @@ $.widget( "redaktilo.Artikolo", {
             keydown: this._keydown, // traktu TAB por enŝovoj
             //keypress: this._keypress, // traktu linirompon
             keyup: this._keyup, // traktu tekstŝanĝojn
-            focus: function(event) { this._trigger("poziciŝanĝo",event,null) }, 
-            click: function(event) { this._trigger("poziciŝanĝo",event,null) }, 
+            focus: function(event) { this._trigger("poziciŝanĝo",event,null); }, 
+            click: function(event) { this._trigger("poziciŝanĝo",event,null); }, 
             change:  this._change        
         }); // dum musalŝovo
     },
@@ -105,7 +105,7 @@ $.widget( "redaktilo.Artikolo", {
             // se ni certas, ke enestas mrk
             this.option.dosiero = art.nom;
             this._setRadiko();
-        };
+        }
     },
 
     nova: function(art) {
@@ -127,7 +127,7 @@ $.widget( "redaktilo.Artikolo", {
         //var e = this.element;
         //e.val(data);
         this.element.change();
-        this._setOption("reĝimo",'redakto')
+        this._setOption("reĝimo",'redakto');
         this._setOption("dosiero",dosiero);
     },
 
@@ -186,7 +186,7 @@ $.widget( "redaktilo.Artikolo", {
                 const xmlarea = art.option("xmlarea");
                 xmlarea.setText(xml);
                 art.option.reĝimo = 'redakto';
-            }
+            };
             // start reading the file data.
             reader.readAsText(file); 
         }       
@@ -285,7 +285,7 @@ $.widget( "redaktilo.Artikolo", {
             if (elektita == el.textarea_selection() || !elektita)
                 el.insert(insertion);
             else
-                console.warn("Ne estas la teksto '" + elektita +"' ĉe la elektita loko! Do ĝi ne estas anstatŭigata.")
+                console.warn("Ne estas la teksto '" + elektita +"' ĉe la elektita loko! Do ĝi ne estas anstatŭigata.");
         }
     },
 
@@ -295,7 +295,7 @@ $.widget( "redaktilo.Artikolo", {
         var pos = 0;
         
         for (var i=0; i<line; i++) {
-            pos += lines[i].length+1
+            pos += lines[i].length+1;
         }
         return pos;
     },
@@ -305,7 +305,7 @@ $.widget( "redaktilo.Artikolo", {
         var el = this.element;
         var pos = el.getCursorPosition();
         var text = this.element.val();
-        return enshovo_antaua_linio(text,pos + shift)
+        return enshovo_antaua_linio(text,pos + shift);
     },
 
     // eltrovu la signon antaŭ la nuna pozicio
@@ -425,7 +425,7 @@ $.widget( "redaktilo.Artikolo", {
                 var mrk = m[1]; // la unua vorto post <snc>... 
                 // se dua estas majusklo ni supozas mallongigon, aliokaze ni minuskligas
                 if (mrk.length>1 && mrk[1].toLowerCase() == mrk[1]) mrk = mrk.toLowerCase();
-                sncoj[m.index] = mrk
+                sncoj[m.index] = mrk;
             }
         }
         return sncoj;
@@ -442,7 +442,7 @@ $.widget( "redaktilo.Artikolo", {
             var rx = this._regex_klr;
             while ((m = rx._klr.exec(xmlStr)) !== null) {
                 var klr = m[1];
-                klroj[m.index] = klr
+                klroj[m.index] = klr;
             }
         }
         return klroj;
@@ -451,15 +451,16 @@ $.widget( "redaktilo.Artikolo", {
     // elprenas la tradukojn de certa lingvo el XML-artikolo
     // PLIBONIGU: uzu xmlarea por tiu funkcio!
     tradukoj: function(lng) {
-        var tradukoj = new Array();        
+        var tradukoj = [];        
         var rx = this._regex_xml;
 
         const xmlarea = this.option("xmlarea");
         var xml = xmlarea.syncedXml() //this.element.val();
             .replace(rx._ent,'?'); // entities cannot be resolved...
         
+        var artikolo;
         try {
-            var artikolo = $("vortaro",$.parseXML(xml));
+            artikolo = $("vortaro",$.parseXML(xml));
         } catch(e) {
             console.error("Pro nevalida XML ne eblas trovi tradukojn.");
             //console.error(e);
@@ -484,22 +485,22 @@ $.widget( "redaktilo.Artikolo", {
                 .contents()  
                 .each(function(){
                     if ( this.tagName == "tld" )
-                        kap += '~'
+                        kap += '~';
                     else if ( this.nodeType === 3 ) {
-                        kap += this.textContent.replace(',',',.. ')
+                        kap += this.textContent.replace(',',',.. ');
                     }
                 });
 
-            trdj = new Array();
+            trdj = [];
             $(this).children("trd[lng='"+lng+"']").each(
                 function() {
-                    trdj.push(innerXML(this))
+                    trdj.push(innerXML(this));
                         });
             $(this).children("trdgrp[lng='"+lng+"']").children("trd").each(
                 function() {
-                    trdj.push(innerXML(this))
+                    trdj.push(innerXML(this));
                 });
-            tradukoj.push({mrk: mrk, kap: kap, trd: trdj})
+            tradukoj.push({mrk: mrk, kap: kap, trd: trdj});
         });
         
         return tradukoj;
@@ -514,8 +515,9 @@ $.widget( "redaktilo.Artikolo", {
         var xml = xmlarea.syncedXml() //this.element.val();
             .replace(rx._ent,'&amp;$1;'); // entities cannot be resolved...
         
+        var artikolo;
         try {
-            var artikolo = $("vortaro",$.parseXML(xml));
+            artikolo = $("vortaro",$.parseXML(xml));
         } catch(e) {
             console.error("Pro nevalida XML ne eblas enŝovi tradukojn.");
             console.error(e);
@@ -528,9 +530,9 @@ $.widget( "redaktilo.Artikolo", {
             var shov = enshovo($(this)[0].previousSibling.nodeValue) + "  ";
             // ĉu estas tradukoj por enmeti en tiun elementon (drv/snc) ktp.
             if (tradukoj[mrk]) {
-                for (lng in tradukoj[mrk]) {
+                for (let lng in tradukoj[mrk]) {
                     // $(this).append(tradukoj[mrk][lng][0])
-                    insert_trd_lng(this,shov,lng,tradukoj[mrk][lng])
+                    insert_trd_lng(this,shov,lng,tradukoj[mrk][lng]);
                     //$(this).each(insert_trd_lng_2,[shov,lng,tradukoj[mrk][lng]])
                 }
             }
@@ -579,7 +581,7 @@ $.widget( "redaktilo.Artikolo", {
                 t += "[" + n + "]" + lines[i] + '\n';
                 n++;
             }
-        };
+        }
             // forigu komentojn
         t = t.replace(rx._comment,'')
             // forigu traukojn
@@ -605,8 +607,8 @@ $.widget( "redaktilo.Artikolo", {
     
         // forigu pluroblajn lini-numerojn post forigo de elementoj
         if (line_numbers) {
-            t = t.replace(rx._lineno,'')
-        };
+            t = t.replace(rx._lineno,'');
+        }
         return t;
     },
 
@@ -622,7 +624,7 @@ $.widget( "redaktilo.Artikolo", {
             var no = line.substr(1,d-1);
             var text = line.substr(d+1);
             if (text.trim().length > 1) {
-                result[no] = text
+                result[no] = text;
             }
         }
         return result;

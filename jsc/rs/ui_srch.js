@@ -5,7 +5,7 @@
 // laŭ GPL 2.0
 
 //var sercho_focused_button = null;
-console.debug("Instalante la serĉfunkciojn...")
+console.debug("Instalante la serĉfunkciojn...");
 
 function _serĉo_preparo() {
     if (! $("#sercho_sercho").validate()) return;
@@ -32,7 +32,7 @@ export function vikiSerĉo(event) {
         function(data) {   
             
             if (data.query && data.query.pages) {
-                var pages = data.query.pages
+                var pages = data.query.pages;
                 var ŝablono = new HTMLTrovoDt();
 
                 for (let p in pages) {
@@ -49,20 +49,20 @@ export function vikiSerĉo(event) {
                                 descr: page.extract,
                                 data: page
                             }
-                        },
+                        }
                     );
                 }
             } else {
                     $("#sercho_trovoj")
                         .append("<p>&nbsp;&nbsp;Neniuj trovoj.</p>");
             }
-        })
+        });
 }
 
 function _bib_url(source,bib) {
     for (var entry of source) {
         if (entry.value == bib) {
-            return entry.url
+            return entry.url;
         }
     }
 }
@@ -101,7 +101,7 @@ export function citaĵoSerĉo(event) {
                                 descr: trovo.cit.ekz,
                                 data: trovo
                             }
-                        },
+                        }
                     );
 
                     // sercho_rigardu_btn_reaction(i,url);
@@ -112,7 +112,7 @@ export function citaĵoSerĉo(event) {
                         .append("<p>&nbsp;&nbsp;Neniuj trovoj.</p>");
             }
         }
-    )
+    );
 }
 
 export function retoSerĉo(event) {
@@ -165,7 +165,7 @@ export function retoSerĉo(event) {
                                 descr: snippet,
                                 data: {url: url, title: last_title, snip: snippet}
                             }
-                        },
+                        }
                     );
 
                     n++;
@@ -177,7 +177,7 @@ export function retoSerĉo(event) {
             $("#sercho_trovoj")
                     .append("<p>&nbsp;&nbsp;Neniuj trovoj.</p>");
         }
-    })
+    });
 }
 
 
@@ -204,13 +204,13 @@ export function bildoSerĉo(event) {
             
             if (data.query && data.query.search 
                 && data.query.search.length) {
-                var results = data.query.search
+                var results = data.query.search;
 
 
                 var ŝablono = new HTMLTrovoDt();
                 var bld_ŝablono = new HTMLTrovoDdBld();
 
-                for (p in results) {
+                for (let p in results) {
                     var res =results[p];
                     //pageids += res.pageid + "|";
                     pageids.push(res.pageid);      
@@ -227,7 +227,7 @@ export function bildoSerĉo(event) {
                                 title: res.title,
                                 descr: res.snippet
                             }
-                        },
+                        }
                     );                       
 
                 }
@@ -244,7 +244,7 @@ export function bildoSerĉo(event) {
                 pageids = pageids.slice(chunk_size);
             }            
         }
-    )
+    );
 }
 
 function _bildo_info(pageids) {
@@ -266,11 +266,11 @@ function _bildo_info(pageids) {
                 data = datalist[d];
         
                 if (data.query && data.query.pages) {
-                let results = data.query.pages
+                let results = data.query.pages;
 
                 for (var p in results) {
                         let res = results[p];
-                        let trv = $("#trv_" + res.pageid)
+                        let trv = $("#trv_" + res.pageid);
                         let dosieroj = trv.Trovo("bildinfo",res,d==0,
                             function(event,data) {
                                 if (data) {                       
@@ -285,7 +285,7 @@ function _bildo_info(pageids) {
                     }
                 }
             }
-        })
+        });
 }
 
 function _bildeto_info(paghoj) {
@@ -306,7 +306,7 @@ function _bildeto_info(paghoj) {
             //    data = datalist[d];
         
             if (data.query && data.query.pages) {
-                var results = data.query.pages
+                var results = data.query.pages;
 
                 for (var p in results) {
                     var res = results[p];
@@ -319,7 +319,7 @@ function _bildeto_info(paghoj) {
                 }                  
         //      } 
             }
-        })
+        });
 }
 
 function _bildo_info_2(dosiero) {
@@ -336,7 +336,7 @@ function _bildo_info_2(dosiero) {
         //$("#sercho_trovoj").html('');
         
             if (data.query && data.query.pages) {
-                var results = data.query.pages
+                var results = data.query.pages;
 
                 for (var p in results) {
                     var res = results[p];
@@ -351,7 +351,7 @@ function _bildo_info_2(dosiero) {
                     if (res.imageinfo && res.imageinfo.length) {
                         let md = res.imageinfo[0].extmetadata;
                         aut = md.Attribution ? md.Attribution.value : (md.Artist ? md.Artist.value : '');
-                        if (md.Credit) { aut += ', ' + md.Credit.value.replace('Own work','propra verko') };
+                        if (md.Credit) { aut += ', ' + md.Credit.value.replace('Own work','propra verko'); }
                         if ( md.ImageDescription ) desc = md.ImageDescription.value;
                         prm = md.LicenseShortName.value;
                     } else {
@@ -372,7 +372,7 @@ function _bildo_info_2(dosiero) {
                     $("#bildeto_url").attr("href",values.fnt);
                 }
             }
-    })
+    });
 }
 
 
@@ -395,7 +395,7 @@ $.widget( "redaktilo.Trovo", {
         this._super();
 
         var o = this.options;
-        var v = o.valoroj
+        var v = o.valoroj;
         v.id = this.element.attr("id");
         var htmlstr = o.ŝablono.html(v);
         /*
@@ -427,9 +427,9 @@ $.widget( "redaktilo.Trovo", {
         }
     },
 
-    bildinfo: function(res, first=false, enmetu) {
+    bildinfo: function(res, first, enmetu) {
         var o = this.options;
-        var v = o.valoroj
+        var v = o.valoroj;
         var pageid = res.pageid;
 
         v.data = res;
@@ -479,7 +479,7 @@ $.widget( "redaktilo.Trovo", {
                 let ext = img.title.slice(-4).toLowerCase();
 
                 if (ext == '.jpg' || ext == '.png') {
-                    let iurl= "https://commons.wikimedia.org/wiki/" + img.title
+                    let iurl= "https://commons.wikimedia.org/wiki/" + img.title;
                     let title = img.title.slice(5,-4); // forigu File: kaj .xxx eble pli inteligente uzu Regex...
                     let li_item_id = res.pageid + "_" + img.title.hashFnv32a(true);
 
@@ -535,7 +535,7 @@ $.widget( "redaktilo.RigardoBtn", {
                     throw nedifinita_url;
                 }
             }
-        })
+        });
     }
 });
 
@@ -577,7 +577,7 @@ $.widget( "redaktilo.EkzemploBtn", {
                     values.frazo = data.snip;
                     values.url = data.url;        
                     values.vrk = data.title;
-                };
+                }
 
                 this._trigger("enmetu",event,values);
             }

@@ -27,7 +27,7 @@ var preferoj = function() {
             // kolekti la lingvojn unue, ni bezonos ordigi ilin...
             var _lingvoj = {};
             for (var e of doc.getElementsByTagName("lingvo")) {
-                var c = e.attributes['kodo'];
+                var c = e.attributes['kodo']; // jshint ignore:line
                 if (c.value != "eo") {
                     var ascii = eo_ascii(e.textContent);
                     _lingvoj[ascii] = {lc: c.value, ln: e.textContent};

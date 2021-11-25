@@ -4,7 +4,7 @@
 // (c) 2016 - 2019 - Wolfram Diestel
 // laŭ GPL 2.0
 
-console.debug("Instalante la erar- kaj kontrolfunkciojn...")
+console.debug("Instalante la erar- kaj kontrolfunkciojn...");
 $.widget( "redaktilo.Checks", {
 
     options: {
@@ -25,9 +25,10 @@ $.widget( "redaktilo.Checks", {
             var label = $("label[for='"+id+"']").text();
             this._nonempty_msg = label ? 'Necesas doni valoron por ' + label : 'Mankas necesa valoro.';
             */
-           this._nonempty_msg = this.options.nonempty
-        };
-        if (typeof this.options.pattern === 'regexp') {
+           this._nonempty_msg = this.options.nonempty;
+        }
+        //if (typeof this.options.pattern === 'regexp') {
+        if (this.options.pattern instanceof RegExp) {
             var label = $("label[for='"+id+"']").text();
             this._pattern  = this.options.pattern;
             this._pattern_msg = label ? 'La donita valoro por ' + label + 'ne estas valida' : 'Nevalida valoro.';
@@ -78,7 +79,7 @@ $.widget( "redaktilo.Erarolisto", {
 
         this._on({
             "click li": this._click,
-            "click a": function(event) { this._trigger("a_click",event,null) } 
+            "click a": function(event) { this._trigger("a_click",event,null); } 
         });
     }, 
 
@@ -111,7 +112,7 @@ $.widget( "redaktilo.Erarolisto", {
 
     aldonu_liston: function(entries) {
         for (var i=0; i<entries.length; i++) {
-            this.aldonu(entries[i])
+            this.aldonu(entries[i]);
         }
     },
 
@@ -138,7 +139,7 @@ export function xmlkontrolo() {
     if (! xml_text ) {
         alert('Vi ankoraŭ ne ŝargis artikolon por kontroli!');
         return;
-    };
+    }
  
     $("body").css("cursor", "progress");
     $.post(
@@ -152,7 +153,7 @@ export function xmlkontrolo() {
                 data.map(err => 
                     {
                         err.msg = quoteattr(err.msg); 
-                        return err
+                        return err;
                     })
                 );
           })
@@ -188,7 +189,7 @@ export function mrkkontrolo() {
             var err = get_line_pos(mrkoj[mrk],xml);
             err.line++; err.pos+=2;
             err.msg = "marko aperas plurfoje: "+ mrk;
-            $("#dock_eraroj").Erarolisto("aldonu",err)
+            $("#dock_eraroj").Erarolisto("aldonu",err);
         }
     }
     var sncoj = art.Artikolo("snc_sen_mrk");
@@ -213,7 +214,7 @@ export function mrkkontrolo() {
             snc.line++; snc.pos++;
             snc.msg = "senco sen marko, <span class='snc_mrk' title='aldonu'>aldonebla kiel: <a>"
                      + dmrk + "." + sncoj[inx] + "</a></span>";
-            avt.Erarolisto("aldonu",snc)
+            avt.Erarolisto("aldonu",snc);
         }
     }
 }
@@ -228,13 +229,13 @@ export function klrkontrolo() {
     if (klroj) {
         var avt = $("#dock_avertoj");
 
-        for (pos in klroj) {
+        for (let pos in klroj) {
             let klr = get_line_pos(pos,xml);
    
             klr.line++; klr.pos++;
             klr.msg = "klarigo sen krampoj, <span class='klr_ppp' title='anstataŭigu'>anstataŭigebla per: <a>" +
                 "&lt;klr&gt;[…]&lt;/klr&gt;</a></span>";
-            avt.Erarolisto("aldonu",klr)
+            avt.Erarolisto("aldonu",klr);
         }
     }
 }
@@ -248,7 +249,7 @@ export function vortokontrolo() {
     var i = 0;
     var l_ = {};
 
-    for (n in lines) {
+    for (let n in lines) {
         l_[n]  = lines[n];
         i++;
 
@@ -276,7 +277,7 @@ function kontrolu_liniojn(lines) {
     });
 
     // redonu nur kontrolendajn analiz-rezultojn    
-    lines["moduso"] = "kontrolendaj"; 
+    lines.moduso = "kontrolendaj"; 
     $.alportu2(
         {
             url: "analinioj",
@@ -304,7 +305,7 @@ function kontrolu_liniojn(lines) {
                 console.error(xhr.status + " " + xhr.statusText);
                 $("#"+id).html("Okazis erraro dum kontrolo: " + xhr.statusText);
           });
-};
+}
 
 export function surmetita_dialogo(url,root_el,loc) {
     
@@ -319,14 +320,14 @@ export function surmetita_dialogo(url,root_el,loc) {
                  console.debug(xhr.status + " " + xhr.statusText);
                  alert(xhr.status + " " + xhr.statusText); //'Seanco finiĝis. Bonvolu resaluti!');
               } else {
-                  $("#surmetita").html(data)
+                  $("#surmetita").html(data);
                   $("#surmetita_dlg").dialog("option", "title", $("#surmetita h1").text());
                   $("#surmetita h1").remove("h1");
               }
               // adaptu altecon de la dialogo, por ke la deklaro ruliĝu sed la titolo kaj reir-butono montriĝu...
               var dlg = $("#surmetita_dlg").parent();
               var view_h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
-              var decl_h = (view_h * .70) - dlg.children(".ui-dialog-titlebar").height(); // - dlg.children(".ui-dialog-buttonpane").height();
+              var decl_h = (view_h * 0.70) - dlg.children(".ui-dialog-titlebar").height(); // - dlg.children(".ui-dialog-buttonpane").height();
               $("#"+root_el).height(decl_h);
 
               $("#surmetita_dlg").dialog("open");
@@ -337,12 +338,12 @@ export function surmetita_dialogo(url,root_el,loc) {
           function(xhr) {
               console.error(xhr.status + " " + xhr.statusText);
               if (xhr.status == 400) {
-                  $("#surmetita_error").html('Pardonu, okazis eraro dum ŝargo de la dokumento.')
+                  $("#surmetita_error").html('Pardonu, okazis eraro dum ŝargo de la dokumento.');
               } else {
                   var msg = "Pardonu, okazis netandita eraro: ";
                   $("#surmetita_error").html( msg + xhr.status + " " + xhr.statusText + xhr.responseText);
-              };
-              $("#surmetita_error").show()  
+              }
+              $("#surmetita_error").show(); 
       })
       .always(
              function() {
@@ -362,14 +363,14 @@ export function show_error_status(error) {
 function _ana2txt(line) {
     var ana_arr = this[line]; 
     var txt = '';
-    for(i=0;i<ana_arr.length;i++) {
+    for(let i = 0; i<ana_arr.length; i++) {
         if (i>0) txt += "; ";
         ana = ana_arr[i];
-        txt += "<span class='" + ana["takso"] + "'>"
-        txt += ana["analizo"] || ana["vorto"];
-        txt += "</span>"
-        txt += " - kontrolinda ĉar <span class='ana_klarigo' data-takso='" + ana["takso"] + "'>";
-        txt += ana["takso"] + " <a>\u24D8</a></span>";
+        txt += "<span class='" + ana.takso + "'>";
+        txt += ana.analizo || ana.vorto;
+        txt += "</span>";
+        txt += " - kontrolinda ĉar <span class='ana_klarigo' data-takso='" + ana.takso + "'>";
+        txt += ana.takso + " <a>\u24D8</a></span>";
     }
-    return {line: line, msg: txt}
+    return {line: line, msg: txt};
 }

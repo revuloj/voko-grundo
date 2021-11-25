@@ -408,4 +408,4 @@ function xpress(event) {
     if (key == 'x' || key == 'X') {   // X or x
         return $(this).xklavo(key);
     }
-};
+}

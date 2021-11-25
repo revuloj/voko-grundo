@@ -7,6 +7,8 @@
 import { vortokontrolo, xmlkontrolo, klrkontrolo, surmetita_dialogo } from './ui_err.js';
 import { vikiSerĉo, citaĵoSerĉo, retoSerĉo, bildoSerĉo } from './ui_srch.js';
 
+const revo_url = 'https://retavortaro.de';
+
 //var sercho_focused_button = null;
 //var change_count = 0;
 /*
@@ -14,7 +16,7 @@ var pozicio_xml = '';
 var pozicio_html = '';
 */
 
-console.debug("Instalante la ĉefan redaktilopaĝon...")
+console.debug("Instalante la ĉefan redaktilopaĝon...");
 
 /**
  * Preparas la ĉefan laborfenestron kaj la unuopajn partojn
@@ -92,9 +94,9 @@ export default function() {
     $("#kromklvr").click(() => {
         //$("#dock_klavaro").toggle()
         if ($("#kromklvr").prop("checked"))
-            $("#dock").show()
+            $("#dock").show();
         else
-            $("#dock").hide()
+            $("#dock").hide();
     });    
     
     // outline
@@ -113,15 +115,15 @@ export default function() {
     $("#dock_eraroj").Erarolisto({});
     $("#dock_avertoj").Erarolisto({
         a_click: function(event) {
-            var a = $(event.currentTarget)
+            var a = $(event.currentTarget);
             var span = a.parent();
             if (span.hasClass('snc_mrk')) {
-                var art = $("#xml_text");
+                const art = $("#xml_text");
                 art.Artikolo("goto",span.parent().attr("value"),4);
                 art.Artikolo("elekto","<snc mrk=\"" + a.text() + "\"","<snc");
                 span.parent().remove();
             } else if (span.hasClass('klr_ppp')) {
-                var art = $("#xml_text");
+                const art = $("#xml_text");
                 art.Artikolo("goto",span.parent().attr("value"),14);
                 art.Artikolo("elekto",a.text(),"<klr>...</klr>");
                 span.parent().remove();
@@ -191,7 +193,7 @@ export default function() {
     $( "#re_antaurigardo" ).click(function() {                 
         $( "#tabs" ).tabs( "option", "active", 1 );
         //iru_al(pozicio_html);
-        antaurigardo()
+        antaurigardo();
     });
 
     //### subpaĝo "serĉo"
@@ -271,19 +273,16 @@ export default function() {
               '<li>Verbo ne markita kiel transitiva, ekz. "abol/it/a". ' +
               '<li>Vorto ne derivita/kunmetita laŭgramatike.' +
               '</ul>';
-              break;
             case "dubebla":
               return 'Vortoj <span class="dubebla">dubeblaj</span> ' +
                 'havas pli ol tri radikojn, kio estas relative malofte, kaj povas signi ' +
                 'misanalizitan vorton, sed eble ankaŭ tajperaron.';
-              break;
             case "kuntirita":
             return ' Vortoj <span class="kuntirita">kuntiritaj</span> ' +
                 'foje estas, depende de la vidpunkto, malĝustaj aŭ stile neglataj. ' +
                 'Ordinare oni ne kuntiras adverbon kun posta adjektivo "ĵusnaskita" anstataŭ "ĵus naskita", ' +
                 '"nebona" anstataŭ "ne bona". Sed multaj, eble influita de sia nasklingvo, tamen faras. ' +
                 'Mi rekomendas korekti tian uzon en difinoj, sed en citaĵoj marki per &lt;esc&gt;.';
-            break;
           }
         }
     });
@@ -294,14 +293,14 @@ export default function() {
  * Montras la panelon kun indiko-butonoj (oficialeco, fakoj, stiloj, vorspecoj...)
  */
 export function montri_indikojn() {
-    switch_dock_indikoj()
+    switch_dock_indikoj();
 }
 
 /**
  * Montras la panelon kun la redaktobutonoj de elementoj, specialsignoj... 
  */
 export function montri_kromklavaron() {
-    switch_dock_klavaro_kontrolo()
+    switch_dock_klavaro_kontrolo();
 }
 
 /**
@@ -315,7 +314,7 @@ export function kontroli_artikolon(){
     klrkontrolo();
     vortokontrolo();
 
-    switch_dock_klavaro_kontrolo()
+    switch_dock_klavaro_kontrolo();
 }
 
 /**
@@ -491,7 +490,7 @@ function antaurigardo() {
     
       if (! xml_text ) {
           return;
-      };
+      }
 
     
       $("body").css("cursor", "progress");
@@ -513,17 +512,17 @@ function antaurigardo() {
                     var href = $(this).attr('href');
                     if (href && href[0] != '#' && href.substr(0,4) != 'http') {
                         if (href[0] != '/' && href[0] != '.') {
-                            var newUrl = 'http://retavortaro.de/revo/art/'+href;
+                            var newUrl = revo_url + '/revo/art/' + href;
                             //console.debug(href+" -> "+newUrl);
                             $(this).attr('href', newUrl);
                             $(this).attr('target', '_new');
                         } else if (href.substr(0,3) == '../' ) {
-                            var newUrl = 'http://retavortaro.de/revo/'+href.substr(3)
+                            const newUrl = revo_url + '/revo/'+href.substr(3);
                             //console.debug(href+" -> "+newUrl);
                             $(this).attr('href', newUrl);
                             $(this).attr('target', '_new');
                         } else if (href[0] == '/' ) {
-                            var newUrl = 'http://retavortaro.de'+href
+                            const newUrl = revo_url + href;
                             //console.debug(href+" -> "+newUrl);
                             $(this).attr('href', newUrl);
                             $(this).attr('target', '_new');
@@ -537,7 +536,7 @@ function antaurigardo() {
                 $("#rigardo img").each(function() {
                     var src = $(this).attr('src');
                     if ( src.substr(0,7) == '../bld/' ) {
-                        $(this).attr('src','http://retavortaro.de/revo/bld/'+src.substr(7))
+                        $(this).attr('src',revo_url + '/revo/bld/'+src.substr(7));
                     }
                 });
                 /** anstataŭigo de URL ne funkcias, anst. servu de la redaktilo fone (kiel proxy)...
@@ -558,7 +557,7 @@ function antaurigardo() {
                 $("#rigardo source").each(function() {
                     var src = $(this).attr('srcset');
                     if ( src.substr(0,7) == '../bld/' ) {
-                        $(this).attr('srcset','http://retavortaro.de/revo/bld/'+src.substr(7))
+                        $(this).attr('srcset', revo_url + '/revo/bld/'+src.substr(7));
                     }
                 });
 
@@ -579,6 +578,11 @@ function antaurigardo() {
                     $("#rigardo").html("<p>Eraro dum transformado:</p><pre>" 
                         + quoteattr(xhr.responseText) + "</pre>");
                 } else {
+                    /* PLIBONIGU: ĉe HTTP-500 verŝajne la seanco ne plu ekzistas,
+                    ĉu ni povas distingi tion? eble mesaĝo: http_session `_53070' does not exist
+                    Ni traktu HTTP-500 iom unuece kaj konduku la uzanton kun iom da helpo
+                    al resaluto, ĉu?
+                    */
                     var msg = "Ho ve, okazis eraro: ";
                     alert(msg + xhr.status + " " + xhr.statusText + " " + xhr.responseText);
                 }
@@ -586,9 +590,8 @@ function antaurigardo() {
         .always(
                function() {
                    $("body").css("cursor", "default");
-        })
-};   
-
+        });
+}
 
 
 
@@ -719,7 +722,7 @@ function indikon_enmeti(event) {
       $("#elekto_indikoj").hide();
       $("#kromklavaro").show(); // butono por reaperigi kromklavaron poste
     } else if (cmd == "klavaro") {
-      montri_kromklavaron()    
+      montri_kromklavaron();
     }
     else {
       switch (this.className) {

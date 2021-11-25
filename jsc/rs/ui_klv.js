@@ -4,7 +4,7 @@
 // (c) 2016 - 2018 - Wolfram Diestel
 // laŭ GPL 2.0
 
-console.debug("Instalante la klavarfunkciojn...")
+console.debug("Instalante la klavarfunkciojn...");
 $.widget( "redaktilo.Klavaro", {
 
     // Default options.
@@ -29,7 +29,7 @@ $.widget( "redaktilo.Klavaro", {
         this._posedanto_el = $(this.options.posedanto);
         this._posedanto_el.on("blur","textarea,input",
             function(event) {
-                klavaro.data("last-focus",event.target.id)
+                klavaro.data("last-focus",event.target.id);
             });
 
         // kreu la klavojn
@@ -82,7 +82,7 @@ $.widget( "redaktilo.Klavaro", {
                     ind: "indeksero",   
                     var: "variaĵo de kapvorto",
                     frm: "formulo"                    
-                }
+                };
                 if (klv in elmj) {
                   html += '<div class="elm_btn" data-cmd="' + klv + '" title="' + elmj[klv] + '">' + klv + '</div>';
                 } else {
@@ -131,7 +131,7 @@ $.widget( "redaktilo.Klavaro", {
                   }
                 }
             }
-        };
+        }
         klavaro.html(html);
     },
 
@@ -173,19 +173,19 @@ $.widget( "redaktilo.Klavaro", {
 
             // majusklaj komencliteroj de vortoj
             } else if (cmd == "kamelo"){
-                var sel = element.textarea_selection();
+                const sel = element.textarea_selection();
                 //var rad = sel.includes('<tld')? xmlGetRad($("#xml_text").val()) : '';
                 var rad = sel.includes('<tld')? radiko : '';
                 element.insert(kameligo(sel,rad));
             
             // minuskligo
             } else if (cmd == "minuskloj"){
-                var sel = element.textarea_selection();
+                const sel = element.textarea_selection();
                 element.insert(minuskligo(sel,radiko));
 
             // aliajn kazojn traktu per _ekran_klavo...
             } else {
-                var sel = element.textarea_selection();
+                const sel = element.textarea_selection();
                 element.insert(this._ekran_klavo(text,cmd,sel));
             }
     },

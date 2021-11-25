@@ -762,4 +762,4 @@ const voko_entities={
 "ViVoTrd":"http://kono.be/cgi-bin/vivo/ViVo.cgi?pagxo=",
 "AdE":"http://www.akademio-de-esperanto.org",
 "WCU":"https://upload.wikimedia.org/wikipedia/commons",
-"WCW":"https://commons.wikimedia.org/wiki"}
+"WCW":"https://commons.wikimedia.org/wiki"};

@@ -28,6 +28,8 @@ var redaktilo = function() {
   const re_hex = /^#x[\da-f]+$/;
   const re_dec = /^#\d\d+$/;
 
+  function remove(element) { if (element) element.remove(); }
+
   const xml_shbl = {
     // la XML-ŝablonoj, el kiuj ni elektos laŭ nomo...
     // ili estas (eble nestitaj) listoj de la formo 
@@ -383,7 +385,7 @@ var redaktilo = function() {
       return;
     }
     
-    while (m = regex.exec(xml)) {
+    while ((m = regex.exec(xml))) {
       if ( m[1] && !list.codes[m[1]] ) {
         invalid.push(m);
         console.error("Nevalida kodo \""+m[1]+"\" ĉe: "+m.index);
@@ -397,7 +399,7 @@ var redaktilo = function() {
     var m; 
     var errors = [];
     
-    while (m = re_mrk.exec(xml)) {
+    while ((m = re_mrk.exec(xml))) {
       var el = m[1];
       var mrk = m[2];
       if ( mrk.indexOf(art+'.') != 0 ) {
@@ -418,7 +420,7 @@ var redaktilo = function() {
     
     // forigu bonajn trdgrp kaj trd FARENDA: tio ne trovas <trd lng="..."> ene de trdgrp!
     var x = xml.replace(re_trdgrp,'').replace(re_trd,'');
-    while (m = re_t2.exec(x)) {
+    while ((m = re_t2.exec(x))) {
       errors.push("Traduko sen lingvo: "+m[1]);
     }
 
@@ -431,7 +433,7 @@ var redaktilo = function() {
     var m; 
     var errors = [];
     
-    while (m = re_ref.exec(xml)) {
+    while ((m = re_ref.exec(xml))) {
       var ref = m[1];
       if (ref.search(re_refcel) < 0)
         errors.push("Mankas celo en referenco <ref" + ref + ">"+ m[2] +"</ref>.");
@@ -1138,7 +1140,7 @@ var redaktilo = function() {
                         const li = event.target.closest('li');
                         li.classList.remove('aldonebla');
                         li.append(ht_element('span',{class: 'ekzistas'},'\u2713'));
-                        li.querySelector('button')?.remove();
+                        remove(li.querySelector('button'));
                       }
                     });
                     
@@ -1153,7 +1155,7 @@ var redaktilo = function() {
               ); // ht_details
               if (details) s_trd.append(details);
 
-          };  // for t in json
+          }  // for t in json
 
           // aldonu hoketojn kaj +-butonojn...
           trad_ebloj();
@@ -1173,8 +1175,11 @@ var redaktilo = function() {
   // montras depende elektita (sub)drv|(sub)snc la jam ekzistantajn
   // tradukojn kaj +-butonoj por eblaj aldonoj
   function trad_ebloj() {
+
     const elekto = document.getElementById('r:trd_elekto');
-    const drv_snc = ('drv|snc'.indexOf(xmlarea.getElekto()?.el.substr(-3)) > -1);
+    const _ele_ = xmlarea.getElekto();
+    const drv_snc = (_ele_ && _ele_.el && (_ele_.el == 'snc' || _ele_.el == 'drv'));
+    //const drv_snc = ('drv|snc'.indexOf(_ele_?.el.substr(-3)) > -1);
 
     // se iu (sub)drv|(sub)snc estas elektita ni montras +-butonojn kaj hoketojn...
     if (elekto.querySelector('details')) {
@@ -1186,11 +1191,12 @@ var redaktilo = function() {
         // eltrovu kiujn tradukojn ni havas en la aktuala teksto
         xmlarea.collectTrdAll();
 
-        for (var dd of elekto.querySelectorAll('dd')) {
+        for (let dd of elekto.querySelectorAll('dd')) {
           const lng = dd.getAttribute('lang');
 
-          for (var li of dd.querySelectorAll('li')) {
-            const t = li.querySelector('.trd')?.textContent;
+          for (let li of dd.querySelectorAll('li')) {
+            const trd = li.querySelector('.trd');
+            const t = (trd)? trd.textContent : undefined;
             // se drv/snc estas elektita kaj la traduko ankoraŭ 
             // ne troviĝas tie, ni permesu aldoni ĝin
             if ( ! xmlarea.tradukoj[lng] 
@@ -1205,7 +1211,7 @@ var redaktilo = function() {
                   title: 'aldonu al XML-(sub)drv/snc'},
                   '+'));    
               }
-              li.querySelector('span.ekzistas')?.remove();
+              remove(li.querySelector('span.ekzistas'));
 
             } else {
               // montru per hoketo, ke ni jam havas la tradukon en XML
@@ -1213,7 +1219,7 @@ var redaktilo = function() {
               if (! li.querySelector('span.ekzistas')) {
                 li.append(ht_element('span',{class: 'ekzistas'},'\u2713'));
               }
-              li.querySelector('button')?.remove();
+              remove(li.querySelector('button'));
             }
 
           } // for li...
@@ -1223,12 +1229,12 @@ var redaktilo = function() {
           const dt = dd.previousSibling;
           if (xmlarea.tradukoj[lng]) {
             dt.classList.add('ekzistas');
-            dt.querySelector('span.aldonebla')?.remove();
+            remove(dt.querySelector('span.aldonebla'));
             if (! dt.querySelector('span.ekzistas'))
               dt.append(ht_element('span',{class: 'ekzistas'},'\u2713'));
           } else {
             dt.classList.remove('ekzistas');
-            dt.querySelector('span.ekzistas')?.remove();
+            remove(dt.querySelector('span.ekzistas'));
             if (! dt.querySelector('span.aldonebla'))
               dt.append(ht_element('span',{class: 'aldonebla'},'\u2026'));
           }         
@@ -1242,15 +1248,15 @@ var redaktilo = function() {
           + 'en la redaktilo, poste vi povas aldoni tie novajn tradukojn el la '
           + 'malsupraj faldlistoj per la +-butonoj.'));
 
-        for (var li of elekto.querySelectorAll('dd li')) {
-          li.querySelector('.ekzistas')?.remove();
-          li.querySelector('button')?.remove();
+        for (let li of elekto.querySelectorAll('dd li')) {
+          remove(li.querySelector('.ekzistas'));
+          remove(li.querySelector('button'));
         }
 
-        for (var dt of elekto.querySelectorAll('dt')) {
+        for (let dt of elekto.querySelectorAll('dt')) {
           dt.classList.remove('ekzistas');
-          dt.querySelector('span.ekzistas')?.remove();
-          dt.querySelector('span.aldonebla')?.remove();
+          remove(dt.querySelector('span.ekzistas'));
+          remove(dt.querySelector('span.aldonebla'));
         }
 
       } // if drv_snc

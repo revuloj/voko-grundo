@@ -350,7 +350,7 @@ var artikolo = function() {
 
 
         var div=ht_element("DIV",{id: "tez_btn"});
-        div.appendChild(ht_icon_button("i_tez",()=>{tezauro(artikolo)},"montru la tezaŭron"));
+        div.appendChild(ht_icon_button("i_tez", () => {tezauro(artikolo);}, "montru la tezaŭron"));
         div.appendChild(ht_icon_button("i_mtez kasxita",tezauro_kashu,"kaŝu la tezaŭron"));    
         art.appendChild(div);
 

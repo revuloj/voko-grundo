@@ -8,7 +8,7 @@ import { show_error_status, surmetita_dialogo } from './ui_err.js';
 
 // aldonu al jQuery UI dialog proprajn metodojn
 // bezonatajn en la redaktilaj dialogoj
-console.debug("Instalante la dialogfunkciojn...")
+console.debug("Instalante la dialogfunkciojn...");
 $.widget( "ui.dialog", $.ui.dialog, {
 
     // Default options.
@@ -27,7 +27,7 @@ $.widget( "ui.dialog", $.ui.dialog, {
     },
 
     valoroj: function(values) {
-        const kampoj = this.options.kampoj
+        const kampoj = this.options.kampoj;
         if (values === undefined) {
             // return values
             let vals = {};
@@ -53,7 +53,7 @@ $.widget( "ui.dialog", $.ui.dialog, {
                     }
                 }
             }
-            this._trigger("valorŝanĝo")
+            this._trigger("valorŝanĝo");
         }
     },
 
@@ -72,7 +72,7 @@ $.widget( "ui.dialog", $.ui.dialog, {
     expand: function() {
         const el = this.element;
         el.show(); 
-        el.prev(".ui-dialog-titlebar").show()
+        el.prev(".ui-dialog-titlebar").show();
         this._setOption("position",{
             my: "center center",
             at: "center center",
@@ -107,9 +107,9 @@ export default function() {
                 $("#xml_text").Artikolo("nova",art);
                 $("#dock_eraroj").empty();
                 $("#dock_avertoj").empty();
-                $(this).dialog("close") 
+                $(this).dialog("close") ;
             },
-            "\u2718": function() { $(this).dialog("close") }
+            "\u2718": function() { $(this).dialog("close"); }
         },
         open: function() {
             $("#krei_error").hide();  
@@ -144,7 +144,7 @@ export default function() {
                 $("#dock_avertoj").empty();
                 //$(this).dialog("close") 
             },
-            "\u2718": function() { $(this).dialog("close") } 
+            "\u2718": function() { $(this).dialog("close"); } 
         },
         open: function() {
             $("#shargi_error").hide();  
@@ -204,11 +204,11 @@ export default function() {
             },
             {
                 text: "\u25f1",
-                click: function() { $("#lastaj_dlg").dialog("toggle") }
+                click: function() { $("#lastaj_dlg").dialog("toggle"); }
             },
             {
                 text: "\u2718",
-                click: function() { $(this).dialog("close") }
+                click: function() { $(this).dialog("close"); }
             }
         ], 
         open: function() {
@@ -238,7 +238,7 @@ export default function() {
         buttons: { 
             "Submeti": sendi_artikolon_servile,
             "(Sendi)": sendi_artikolon_servile,
-            "\u2718": function() { $(this).dialog("close") }
+            "\u2718": function() { $(this).dialog("close"); }
         }, 
         open: function() {
             $("#sendiservile_error").hide();
@@ -272,8 +272,8 @@ export default function() {
         },
         buttons: { 
             "Enmeti la referencon": referenco_enmeti,
-            "\u25f1": function() { $("#referenco_dlg").dialog("toggle") },
-            "\u2718": function() { $(this).dialog( "close" ) }
+            "\u25f1": function() { $("#referenco_dlg").dialog("toggle") ;},
+            "\u2718": function() { $(this).dialog( "close" ); }
         }, 
         open: function() {
             $("#referenco_error").hide();
@@ -315,10 +315,10 @@ export default function() {
     $( "#referenco_listo" ).prop('disabled',( $( "#referenco_tipo" ).val() != 'lst') );
     $( "#referenco_tipo" ).change( function() {
         if ($( "#referenco_tipo" ).val() == 'lst') {
-            $( "#referenco_listo" ).prop('disabled',false)
+            $( "#referenco_listo" ).prop('disabled',false);
         } else {
             $( "#referenco_listo" ).val('');
-            $( "#referenco_listo" ).prop('disabled',true) 
+            $( "#referenco_listo" ).prop('disabled',true);
         }
     });    
     plenigu_referenco_listojn();
@@ -328,7 +328,7 @@ export default function() {
             var item = ui.item;
             var enhavo = item.num == "" ? item.kap : item.kap + "<sncref/>";
             $( "#referenco_celo" ).val(item.mrk);
-            $( "#referenco_enhavo" ).val(enhavo)
+            $( "#referenco_enhavo" ).val(enhavo);
         }   
     });
       
@@ -343,10 +343,10 @@ export default function() {
             lok: "#ekzemplo_lok"
         },
         buttons: {   
-            "Enmeti la ekzemplon": function(event) { ekzemplo_enmeti(event,false) },
-            "... nur la fonton": function(event) { ekzemplo_enmeti(event,true) },
-            "\u25f1": function() { $("#ekzemplo_dlg").dialog("toggle") },
-            "\u2718": function() { $(this).dialog( "close" ) }
+            "Enmeti la ekzemplon": function(event) { ekzemplo_enmeti(event,false); },
+            "... nur la fonton": function(event) { ekzemplo_enmeti(event,true); },
+            "\u25f1": function() { $("#ekzemplo_dlg").dialog("toggle"); },
+            "\u2718": function() { $(this).dialog( "close" ); }
         },
         open: function() {
             $("#ekzemplo_error").hide();
@@ -384,27 +384,27 @@ export default function() {
             frazo: "#bildo_frazo"
         },
         buttons: {   
-            "Enmeti la bildon": function(event) { bildo_enmeti(event,false) },
-            "\u25f1": function() { $("#bildo_dlg").dialog("toggle") },
-            "\u2718": function() { $(this).dialog("close") }
+            "Enmeti la bildon": function(event) { bildo_enmeti(event,false); },
+            "\u25f1": function() { $("#bildo_dlg").dialog("toggle"); },
+            "\u2718": function() { $(this).dialog("close"); }
         },
         open: function() {
             $("#bildo_error").hide();
             $("#bildo_dlg").dialog("expand"); // necesas, se la dialogo estis fermita en faldita stato...
 
             if (parseFloat($("#bildo_fmt").val()) > 1) {
-                bildo_larĝecoj([640,320],640) // eble ankaŭ 800?
+                bildo_larĝecoj([640,320],640); // eble ankaŭ 800?
             } else {
-                bildo_larĝecoj([576,360,180],360) // eble ankaŭ 450, 768?
-            };
+                bildo_larĝecoj([576,360,180],360); // eble ankaŭ 450, 768?
+            }
             $( "#bildo_lrg input" ).checkboxradio("refresh");
         },
         valorŝanĝo: function() {
             if (parseFloat($("#bildo_fmt").val()) > 1) {
-                bildo_larĝecoj([640,320],640) // eble ankaŭ 800?
+                bildo_larĝecoj([640,320],640); // eble ankaŭ 800?
             } else {
-                bildo_larĝecoj([576,360,180],360) // eble ankaŭ 450, 768?
-            };
+                bildo_larĝecoj([576,360,180],360); // eble ankaŭ 450, 768?
+            }
             $( "#bildo_lrg input" ).checkboxradio("refresh");
         }
     });
@@ -432,8 +432,8 @@ export default function() {
         },
         buttons: {   
             "Enmeti la derivaĵon": derivajho_enmeti, 
-            "\u25f1": function() { $("#derivajho_dlg").dialog("toggle") },
-            "\u2718": function() { $(this).dialog( "close" ) }
+            "\u25f1": function() { $("#derivajho_dlg").dialog("toggle"); },
+            "\u2718": function() { $(this).dialog( "close" ); }
         },
         open: function() {
             $("#derivajho_error").hide();
@@ -462,8 +462,8 @@ export default function() {
         },
         buttons: {   
             "Enmeti la sencon": senco_enmeti,
-            "\u25f1": function() { $("#senco_dlg").dialog("toggle") },
-            "\u2718": function() { $(this).dialog( "close" ) }
+            "\u25f1": function() { $("#senco_dlg").dialog("toggle"); },
+            "\u2718": function() { $(this).dialog( "close" ); }
         },
         open: function() {
             $("#senco_error").hide();
@@ -488,8 +488,8 @@ export default function() {
     $( "#traduko_dlg" ).dialog({
         position: { my: "top", at: "top+10", of: window },
         buttons: {   
-            "Enmeti la tradukojn": function(event) { tradukojn_enmeti(event) },
-            "\u2718": function() { $(this).dialog( "close" ) }
+            "Enmeti la tradukojn": function(event) { tradukojn_enmeti(event); },
+            "\u2718": function() { $(this).dialog( "close" ); }
         },
         open: function() {
             $("#traduko_error").hide();
@@ -502,7 +502,7 @@ export default function() {
             // adaptu altecon de la tabelo
             var view_h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
             var dlg = $("#traduko_dlg").parent();
-            var tab_h = (view_h * .80) - dlg.children(".ui-dialog-titlebar").height() - dlg.children(".ui-dialog-buttonpane").height();
+            var tab_h = (view_h * 0.80) - dlg.children(".ui-dialog-titlebar").height() - dlg.children(".ui-dialog-buttonpane").height();
             $(".dlg_tab_div").height(tab_h);        
         }
     }); 
@@ -518,8 +518,8 @@ export default function() {
     $( "#sxablono_dlg" ).dialog({
         buttons: {   
             "Enmeti la tekston": sxablono_enmeti,
-            "\u25f1": function() { $("#sxablono_dlg").dialog("toggle") },
-            "\u2718": function() { $( this ).dialog( "close" ) }
+            "\u25f1": function() { $("#sxablono_dlg").dialog("toggle"); },
+            "\u2718": function() { $( this ).dialog( "close" ); }
         },
         open: function() {
             $("#sxablono_error").hide();
@@ -550,10 +550,10 @@ export default function() {
                 var rimstr = new XMLRimarko(rim,tip=rim.elm).xml(indent=4);
                 $("#xml_text").Artikolo("insert",rimstr);
                 $("#rimarko_dlg").dialog("close");
-                $(this).dialog("close")
+                $(this).dialog("close");
             },
-            "\u25f1": function() { $("#rimarko_dlg").dialog("toggle") },
-            "\u2718": function() { $(this).dialog("close") }
+            "\u25f1": function() { $("#rimarko_dlg").dialog("toggle"); },
+            "\u2718": function() { $(this).dialog("close"); }
         },
         open: function() {
             $("#rimarko_error").hide();
@@ -643,11 +643,11 @@ export function shargi_sercho_autocomplete(request,response) {
                        results[i] = { 
                            value: label, 
                            art: data[i].art
-                       } 
+                       }; 
                     }
                 }
                 response(results);
-            })
+            });
 /*            
         .fail (
             function(xhr) {
@@ -731,10 +731,10 @@ function download_art(dosiero,err_to,dlg_id,do_close=true) {
                 }
             } else {
                 var msg = "Okazis neatendita eraro: ";
-                $(err_to).html("Okazis eraro, supozeble necesas resaluti.")
+                $(err_to).html("Okazis eraro, supozeble necesas resaluti.");
             }
-        })
-};
+        });
+}
 
 function download_url(url,dosiero,err_to,dlg_id,do_close=true) {
     
@@ -754,10 +754,10 @@ function download_url(url,dosiero,err_to,dlg_id,do_close=true) {
                 }
             } else {
                 var msg = "Okazis neatendita eraro: ";
-                $(err_to).html("Okazis eraro, supozeble necesas resaluti.")
+                $(err_to).html("Okazis eraro, supozeble necesas resaluti.");
             }
-        })
-};
+        });
+}
 
 
 function sendi_artikolon_servile(event) {
@@ -802,7 +802,7 @@ function sendi_artikolon_servile(event) {
         $("#sendiservile_dlg").dialog("close");
         $("#xml_text").val('');
         $("#shargi_dlg input").val("");
-    })
+    });
 /*
       $("body").css("cursor", "progress");
       $.post(
@@ -829,7 +829,7 @@ function sendi_artikolon_servile(event) {
                    $("body").css("cursor", "default");
                });
                */
-};
+}
 
 
 function plenigu_referenco_listojn() {
@@ -857,7 +857,7 @@ function plenigu_referenco_listojn() {
                         }).get(),
                     select: referenco_listo_elekto
                 });
-            })
+            });
 }
 
 function referenco_listo_elekto(event,ui) {
@@ -896,15 +896,15 @@ function referenco_sercho_autocomplete(request,response) {
                    // ĉe pluraj sencoj aldonu numeron kaj lastan parton de mrk por pli bone distingi
                    if (d.num) {                        
                       label += " " + d.num + " [" + d.mrk.split('.').slice(2) + "]";
-                   };
+                   }
                    results[i] = { 
                        value: label, 
                        mrk: d.mrk, 
                        kap: d.kap, 
-                       num: d.num } 
-                };
-                response(results)
-            })
+                       num: d.num };
+                }
+                response(results);
+            });
       /*
       $("body").css("cursor", "progress");
       $.post(
@@ -988,9 +988,9 @@ function referenco_enmeti(event) {
       
     // post refgrp venos nuda referenco sekvafoje...
     if (ref.grp) {
-        $("#referenco_dlg").dialog("valoroj",{grp: false, tip: "nuda"})
+        $("#referenco_dlg").dialog("valoroj",{grp: false, tip: "nuda"});
         $( "#referenco_listo" ).val('');
-        $( "#referenco_listo" ).prop('disabled',true) 
+        $( "#referenco_listo" ).prop('disabled',true);
         //$( "#referenco_grp" ).prop("checked",false);
         //$( "#referenco_tipo" ).val("nuda");
     }
@@ -1011,10 +1011,10 @@ function plenigu_ekzemplo_bib() {
                                 value: $(this).children("bib").text(),
                                 label: $(this).children("text").text(),
                                 url: $(this).children("url").text()
-                            }
+                            };
                         }).get()
                 });
-            })
+            });
 /*            
         .fail (
             function(xhr) {
@@ -1094,7 +1094,7 @@ function bildo_larĝecoj(lrg,chk) {
         } else {
             $("#bildo_lrg label[for='bildo_lrg_" + l + "']").hide();
         }
-    })
+    });
 }
 
 function derivajho_enmeti(event) {
@@ -1219,7 +1219,7 @@ function plenigu_lingvojn() {
                 $("#traduko_chiuj_t_z").append(lingvoj_t_z);
                 $( "#traduko_menuo" ).menu("refresh");
              }
-         )
+        );
 }
 
 // aldonu la traduk-lingojn de la ŝargita artikolo al la traduko-dialogo (lingvo-elekto)
@@ -1227,14 +1227,14 @@ function plenigu_lingvojn_artikolo() {
     var xml = $("#xml_text").val();
     lng_nomoj = {};
     for (var kodo in traduk_lingvoj(xml)) {
-        var lnomo = $("#trd_chiuj_"+kodo).children('div').text();
+        const lnomo = $("#trd_chiuj_"+kodo).children('div').text();
         lng_nomoj[lnomo] = kodo;
     }
     var lingvoj = Object.keys(lng_nomoj).sort(sort_lng);
     var lingvoj_html = '';
     for (var i=0; i<lingvoj.length; i++) {
-        var lnomo = lingvoj[i];
-        var kodo = lng_nomoj[lnomo];
+        const lnomo = lingvoj[i];
+        const kodo = lng_nomoj[lnomo];
         lingvoj_html += '<li id="trd_art_' + kodo + '"><div>' + lnomo + '</div></li>';
     }
     $("#traduko_artikolaj").empty();
@@ -1275,7 +1275,7 @@ function traduko_butono_premo(event) {
 
         element.insert(s_);
         
-        trd_input_shanghita(element[0])
+        trd_input_shanghita(element[0]);
     }
 }
 
@@ -1292,7 +1292,7 @@ function jsort_lng(a, b){
         var pos = 0,
           min = Math.min(at.length, bt.length);
         // ne perfekte sed pli bone ol ĉ, ĝ ... tute ĉe la fino...
-        var alphabet = 'AaBbCĈcĉDdEeFfGĜgĝHĤhĥIiJĴjĵKkLlMmNnOoPpRrSŜsŝTtUŬuŭVvZz'
+        var alphabet = 'AaBbCĈcĉDdEeFfGĜgĝHĤhĥIiJĴjĵKkLlMmNnOoPpRrSŜsŝTtUŬuŭVvZz';
 
         while(at.charAt(pos) === bt.charAt(pos) && pos < min) { pos++; }
         return alphabet.indexOf(at.charAt(pos)) > alphabet.indexOf(bt.charAt(pos)) ?
@@ -1308,7 +1308,7 @@ function sort_lng(at, bt){
         var pos = 0,
           min = Math.min(at.length, bt.length);
         // ne perfekte sed pli bone ol ĉ, ĝ ... tute ĉe la fino...
-        var alphabet = 'AaBbCĈcĉDdEeFfGĜgĝHĤhĥIiJĴjĵKkLlMmNnOoPpRrSŜsŝTtUŬuŭVvZz'
+        var alphabet = 'AaBbCĈcĉDdEeFfGĜgĝHĤhĥIiJĴjĵKkLlMmNnOoPpRrSŜsŝTtUŬuŭVvZz';
 
         while(at.charAt(pos) === bt.charAt(pos) && pos < min) { pos++; }
         return alphabet.indexOf(at.charAt(pos)) > alphabet.indexOf(bt.charAt(pos)) ?
@@ -1368,7 +1368,7 @@ function fill_tradukojn(lng,lingvo_nomo) {
             tableCnt += '</tr>';
         }
     }
-    $("#traduko_lingvo").text(lingvo_nomo +" ["+lng+"]")
+    $("#traduko_lingvo").text(lingvo_nomo +" ["+lng+"]");
     $("#traduko_dlg").data("lng",lng);
     $("#traduko_tradukoj").empty();
 
@@ -1389,8 +1389,8 @@ function trd_input_shanghita(element) {
         // prenu ĉiujn tradukojn kun tiu marko, ne nur la ĵus ŝanĝitan
         $("#traduko_tradukoj input[id^='trd\\:" + mrk + "\\:']").each( function(){
             var nro = this.id.split(':')[2];
-            trd_put(mrk,lng,nro,$(this).val())                                 
-        })
+            trd_put(mrk,lng,nro,$(this).val());                               
+        });
 }
 
 function trd_put(mrk,lng,no,trd) {
@@ -1404,7 +1404,7 @@ function trd_put(mrk,lng,no,trd) {
     } 
     */
     trd_shanghoj[mrk][lng][no] = trd;
-    $("#traduko_tradukoj").data("trd_shanghoj",trd_shanghoj)
+    $("#traduko_tradukoj").data("trd_shanghoj",trd_shanghoj);
 }
 
 function traduko_input_field(mrk,nro,trd) {
@@ -1433,7 +1433,7 @@ function shanghu_trd_lingvon(event,ui) {
     var id = ui.item.attr('id');
     if (id && id.substr(0,4) == "trd_") {
         var lng= id.split('_')[2];
-        var lingvo_nomo = ui.item.text()
+        var lingvo_nomo = ui.item.text();
         //alert($("#traduko_lingvoj").val())
         fill_tradukojn(lng,lingvo_nomo);
     }
@@ -1445,8 +1445,8 @@ function tradukojn_enmeti(event) {
     // prenu la shanghitajn tradukojn
     var trd_shanghoj = $("#traduko_tradukoj").data("trd_shanghoj"); 
     try {
-        $("#xml_text").Artikolo("insert_tradukojn",trd_shanghoj)
-        $("#traduko_dlg").dialog( "close" ) 
+        $("#xml_text").Artikolo("insert_tradukojn",trd_shanghoj);
+        $("#traduko_dlg").dialog( "close" );
     } catch (e) {
         $("#traduko_error").html(e.toString());
         $("#traduko_error").show();
@@ -1458,7 +1458,7 @@ function tradukojn_enmeti(event) {
 function plenigu_sxablonojn() {
     var sxbl_list = '';
     for (let nomo in snc_sxablonoj) {
-        sxbl_list += '<option>' + nomo + '</option>'
+        sxbl_list += '<option>' + nomo + '</option>';
     }
     $("#sxablono_elekto").append(sxbl_list);
 }
@@ -1591,7 +1591,7 @@ function plenigu_lastaj_liston() {
             //var view_h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
             //var decl_h = (view_h * .70) - dlg.children(".ui-dialog-titlebar").height(); // - dlg.children(".ui-dialog-buttonpane").height();
             //$("#lastaj_tabelo").height(decl_h);
-        })
+        });
 }
 
 
@@ -1607,10 +1607,10 @@ function lastaj_tabelo_premo(event) {
         $("#lastaj_rigardu").data("url",entry.html_url);
         $("#lastaj_dosiero").data("rezulto",entry.rezulto);
         if (entry.rezulto == 'eraro') {
-            $("#lastaj_reredakti").button("enable")
+            $("#lastaj_reredakti").button("enable");
         } else {
-            $("#lastaj_reredakti").button("disable")
-        };
+            $("#lastaj_reredakti").button("disable");
+        }
         $("#lastaj_mesagho").val('');
         if (entry.rez_url) {
             $.ricevu(entry.rez_url)
@@ -1621,7 +1621,7 @@ function lastaj_tabelo_premo(event) {
                         var msg = rez.mesagho.replace(/\|\| */g,"\n").replace('[m ','[');
                         $("#lastaj_mesagho").val(msg);
                     }
-                })
+                });
         } else if (! entry.rezulto) {
             $("#lastaj_mesagho").val('Atendante traktadon...');
         }

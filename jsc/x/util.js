@@ -793,7 +793,7 @@ function Codelist(xmlTag,url) {
             var doc = parser.parseFromString(this.response,"text/xml");
       
             for (var e of doc.getElementsByTagName(self.xmlTag)) {
-                var c = e.attributes.kodo;
+                var c = e.attributes['kodo']; // jshint ignore:line
                 //console.log(c);
                 codes[c.value] = e.textContent;
             } 
