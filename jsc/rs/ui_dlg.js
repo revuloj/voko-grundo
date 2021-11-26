@@ -1117,7 +1117,8 @@ function senco_enmeti(event) {
     $("#senco_error").hide();
 
     var snc = $("#senco_dlg").dialog("valoroj");
-    snc.dif = linirompo(snc.dif,indent=2);
+    const indent=2;
+    snc.dif = linirompo(snc.dif,indent);
 
     try{
         snc.drvmrk = $("#xml_text").Artikolo("drv_before_cursor").mrk;
@@ -1127,7 +1128,7 @@ function senco_enmeti(event) {
           // avertu pri la eraro
           show_error_status(e);
     }
-    sncxml = new XMLSenco(snc).xml();
+    const sncxml = new XMLSenco(snc).xml();
     
     $("#xml_text").insert(sncxml);
     $("#xml_text").change();
