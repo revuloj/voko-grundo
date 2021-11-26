@@ -35,9 +35,17 @@ export default function() {
         .removeClass( "ui-corner-top" )
         .addClass( "ui-corner-right" ); 
        
-
+    $(".menu_toggle").button();
     $(".menu_toggle").click(
-        () => $("#sidebar").toggle()
+        () => {
+            const sb = $("#xml_sidebar");
+            sb.toggle();
+            if (sb.is(":visible")) {
+                $("#menu_show_btn").text("\u00ab");
+            } else {
+                $("#menu_show_btn").text("\u2630");
+            }
+        }
     );
   //###### subpaĝoj
 

@@ -160,7 +160,7 @@ function group_by(key, array) {
  * @returns {string} URL-o por artikolo.
  */
 function art_href(mrk) {
-  return art_prefix + mrk.split('.')[0] + '.html#' + mrk;
+  return global.art_prefix + mrk.split('.')[0] + '.html#' + mrk;
 }
 
 
