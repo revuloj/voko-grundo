@@ -1224,8 +1224,10 @@ function plenigu_lingvojn() {
 
 // aldonu la traduk-lingojn de la ŝargita artikolo al la traduko-dialogo (lingvo-elekto)
 function plenigu_lingvojn_artikolo() {
-    var xml = $("#xml_text").val();
-    lng_nomoj = {};
+    const xmlarea = $("#xml_text").Artikolo("option","xmlarea");
+    const xml = xmlarea.syncedXml();
+
+    var lng_nomoj = {};
     for (var kodo in traduk_lingvoj(xml)) {
         const lnomo = $("#trd_chiuj_"+kodo).children('div').text();
         lng_nomoj[lnomo] = kodo;
@@ -1332,7 +1334,7 @@ function fill_tradukojn(lng,lingvo_nomo) {
     var tableCnt = '';
 
     if (trdoj) {
-        for (var i=0; i < trdoj.length; i++) {
+        for (let i=0; i < trdoj.length; i++) {
             var t = trdoj[i];
             var kap = '';
 
@@ -1356,7 +1358,7 @@ function fill_tradukojn(lng,lingvo_nomo) {
             }
             
             if ( trd && trd.length ) {
-                for (j=0; j<trd.length; j++) {
+                for (let j=0; j<trd.length; j++) {
                     tableCnt += traduko_input_field(t.mrk,j,quoteattr(trd[j]));
                     tableCnt += "<br/>";
                 }
