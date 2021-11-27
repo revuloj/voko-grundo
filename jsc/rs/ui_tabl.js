@@ -463,8 +463,8 @@ export function activate_tab(event,ui) {
     // PLIBONIGU: necesas nur, ke teksto ŝanĝigis
     // kiel rimarki tion? -ŝargi, focus+change....
     if (new_p == "html") {
-        if ($('#xml_text').val() && ! $("#rigardo").html())
-            antaurigardo();
+        // if ($('#xml_text').val() && ! $("#rigardo").html())
+        antaurigardo();
         // devas esti en antuarigardo, pro nesinkroneco...: iru_al(pozicio_html);
     } else if (new_p == 'xml') {
         // (saltu en la XML-teksto nur se antaŭ saltiĝis en la HTML, aliokaze ĝi estis jam forgesita en iru_al...)
@@ -486,12 +486,23 @@ export function activate_tab(event,ui) {
  */
 function antaurigardo() {
     const xmlarea = $("#xml_text").Artikolo("option","xmlarea");
+
+    /* teorie ni povos ŝapri remeti antaŭrigardon, se nenio
+    intertempe ŝanĝiĝis (xmlarea.synced...), sed estas malfacile fidinde
+    eltrovi tion pro kio en antaŭaj eldonoj ni havis manan refreŝbutonon...
+    'sync' ja okazas ekz-e ĉe kontrolo kaj tradukado sen ke la antaŭrigardo estas
+    refreŝigata. Do ni aldonu flagon ankoraŭ en xmlarea, kiu memoras, ĉu ni
+    iam kreis aktualan antaŭrigardon post la lasta efektiva ŝanĝo.
+    */
+    if ($("#rigardo").html() && xmlarea.synced) {
+        return;
+    }
+
     const xml_text = xmlarea.syncedXml(); //$("#xml_text").val();
     
       if (! xml_text ) {
           return;
       }
-
     
       $("body").css("cursor", "progress");
       $.post(
