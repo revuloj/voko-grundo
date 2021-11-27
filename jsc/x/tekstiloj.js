@@ -52,12 +52,13 @@ function replaceTld(radiko,str) {
 function traduk_lingvoj(xmlStr) {
     var lingvoj = {};
     var xml = xmlStr.replace(/&[a-zA-Z0-9_]+;/g,'?'); // entities cannot be resolved...
-    
+    var artikolo;
+
     try {
         //var artikolo = $("vortaro",$.parseXML(xml));
         const parser = new DOMParser();
         const doc = parser.parseFromString(xmlStr,"text/xml");
-        const artikolo = doc.querySelector("vortaro");
+        artikolo = doc.querySelector("vortaro");
 
     } catch(e) {
         console.error("Pro nevalida XML ne eblas trovi traduklingvojn.");

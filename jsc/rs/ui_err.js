@@ -365,7 +365,7 @@ function _ana2txt(line) {
     var txt = '';
     for(let i = 0; i<ana_arr.length; i++) {
         if (i>0) txt += "; ";
-        ana = ana_arr[i];
+        const ana = ana_arr[i];
         txt += "<span class='" + ana.takso + "'>";
         txt += ana.analizo || ana.vorto;
         txt += "</span>";
