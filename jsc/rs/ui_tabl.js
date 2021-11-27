@@ -502,14 +502,15 @@ function antaurigardo() {
     refreŝigata. Do ni aldonu flagon ankoraŭ en xmlarea, kiu memoras, ĉu ni
     iam kreis aktualan antaŭrigardon post la lasta efektiva ŝanĝo.
     */
-    if ($("#rigardo").html() && xmlarea.synced) {
+    if ($("#rigardo").html() && xmlarea.ra_in_sync) {
         return;
     }
 
     const xml_text = xmlarea.syncedXml(); //$("#xml_text").val();
     
-      if (! xml_text ) {
-          return;
+      if (! xml_text) {
+        // PLIBONIGU: eble aldone testu: xml.startsWith("<?xml")
+        return;
       }
     
       $("body").css("cursor", "progress");
@@ -520,6 +521,7 @@ function antaurigardo() {
         .done(
             function(data) {   
                 $("#rigardo").html(data);
+                xmlarea.ra_in_sync = true;
 
                 // refaru matematikajn formulojn, se estas
                 if (typeof(MathJax) != 'undefined' && MathJax.Hub) {

@@ -18,6 +18,7 @@ function Xmlarea(ta_id, onAddSub) {
     //this.radiko = '';
     this.onaddsub = onAddSub;
     this.synced = true;
+    this.ar_in_sync = false; // por scii, ĉu la lasta antaŭrigardo estas aktuala...
 
     this.re_stru = {
       _trd: /^<trd(grp)?\s+lng\s*=\s*["']([a-z]{2,3})['"]\s*>([^]*?)<\/trd\1\s*>$/,
@@ -102,6 +103,16 @@ Xmlarea.prototype.syncedXml = function() {
   if (! this.synced) this.sync(this.elekto); 
   return this.xmlstruct.xmlteksto;
 };
+
+
+/**
+ * Malvalidigas la sinkron-flagoj por signi, ke venontfoje necesas sinkronigo de Xml 
+ * resp. rekrei antaŭrigardon
+ */
+Xmlarea.prototype.setUnsynced = function() {
+  this.synced = false;
+  this.ra_in_sync = false;
+}
 
 
 /**
@@ -466,7 +477,7 @@ Xmlarea.prototype.selection = function(insertion=undefined, p_kursoro=0) {
     }
     // ni ŝangis la tekston, sed la evento "input" ne en ciu retumilo lanciĝas
     // se la klavaro ne estas tuŝita...:
-    this.synced = false;
+    this.setUnsynced();
 
   } else { // redonu la markitan tekston
     if (document.selection && document.selection.createRange) { // IE/Opera
@@ -535,7 +546,7 @@ Xmlarea.prototype.indent = function(indent=undefined) {
     } 
     // ni ŝangis la tekston, sed la evento "input" ne en ciu retumilo lanciĝas
     // se la klavaro ne estas tuŝita...:
-    this.synced = false;
+    this.setUnsynced();
 
   } else { // eltrovu la nunan enŝovon
     indent = 0;

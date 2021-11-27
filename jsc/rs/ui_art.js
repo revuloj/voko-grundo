@@ -263,6 +263,9 @@ $.widget( "redaktilo.Artikolo", {
         this._trigger("poziciŝanĝo",event,{});
         this._trigger("tekstŝanĝo",event,{});
 
+        const xmlarea = this.option("xmlarea");
+        xmlarea.setUnsynced();
+        
         // de tempo al tempo sekurigu la tekston
         this._change_count++; 
         if (this._change_count % 20) this.backup();        
