@@ -256,9 +256,11 @@ export default function() {
         err_to: "#sercho_error"
     });
 
-    $(window).on("unload", function() { 
+    // ne plu funkcias? $(window).on("unload", function() { 
+    do_before_unload(() => {
+        console.debug("sekurigante la aktualan XML-tekston...");
         $("#xml_text").Artikolo("backup");
-    });    
+    });
  
     // klarigo-notoj per muso elekteblaj
     $("#dock_avertoj").tooltip({

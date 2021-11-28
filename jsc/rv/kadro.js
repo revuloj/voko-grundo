@@ -333,14 +333,12 @@ when_doc_ready(function() {
         //document.getElementById("navigado")
             .addEventListener("click",navigate_link);
 
-        // tio vokiĝas, i.a. kiam la uzanto reŝargas la paĝon aŭ fermas la redaktilon.
-        window
-            .addEventListener('beforeunload', aktualigilo);
-        window // por iOS...:
-            .addEventListener('pagehide', aktualigilo);
             
         window
             .addEventListener('popstate', navigate_history);    
+
+        // tio vokiĝas, i.a. kiam la uzanto reŝargas la paĝon aŭ fermas la redaktilon.
+        do_before_unload(aktualigilo);
 
         // kondiĉe, ke serĉo-parametro (q) estis donita en URL ni tuj sercos
         // ĉu ni bezonos ankoraŭ originan staton "start" anstataŭ tuj "ĉefindekso"?

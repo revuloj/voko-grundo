@@ -129,6 +129,18 @@ function HTTPRequest(method, url, params, onSuccess,
     onStart, onFinish, onError);
 }
 
+/**
+ * Aldonas agon farendan ĉe forlaso de la paĝo (ekz-e pro reŝargo aŭ fermo).
+ * Utila ekz-e por memori preferatajn valoroj k.s.
+ * @param {Function} todo_cb - ago farenda
+ */
+function do_before_unload(todo_cb) {
+  // tio vokiĝas, i.a. kiam la uzanto reŝargas la paĝon aŭ fermas la redaktilon.
+  window.addEventListener('beforeunload', todo_cb);
+  // por iOS...:
+  window.addEventListener('pagehide', todo_cb); 
+}
+
 
 /**
  * Reordigas liston de objektoj havantaj komunan ŝlosilkampon
