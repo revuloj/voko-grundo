@@ -263,12 +263,17 @@ $.widget( "redaktilo.Artikolo", {
         this._trigger("poziciŝanĝo",event,{});
         this._trigger("tekstŝanĝo",event,{});
 
-        const xmlarea = this.option("xmlarea");
-        xmlarea.setUnsynced();
-        
         // de tempo al tempo sekurigu la tekston
         this._change_count++; 
         if (this._change_count % 20) this.backup();        
+        
+        /* tie ni uzas eventon "input" rekte en xmlarea mem
+        verŝajne ni devos la suprajn liniojn "tekstŝanĝo" pp ankaŭ
+        pendigi al "input" anst. "change"!
+        const xmlarea = this.option("xmlarea");
+        xmlarea.setUnsynced();
+        */
+        
     },
 
     // redonas la radikon de la artikolo

@@ -11,6 +11,8 @@
  */
 function Xmlarea(ta_id, onAddSub) {
     this.txtarea = document.getElementById(ta_id);
+    this.txtarea.addEventListener("input",() => { this.synced = false; });
+
     //this.structure_selection = document.getElementById(struc_sel);
     this.xmlstruct = undefined; // la tuta teksto
     this.elekto = undefined; // aktuale redaktata subteksto

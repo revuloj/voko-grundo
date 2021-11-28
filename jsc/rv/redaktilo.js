@@ -875,10 +875,8 @@ var redaktilo = function() {
     document.getElementById("r:xmltxt")
       //.addEventListener("selectionchange",show_pos); // movado de kursoro, ne kaŭzas input-eventon...!
       .addEventListener("keyup",show_pos); // movado de kursoro, ne kaŭzas input-eventon...!
-    document.getElementById("r:xmltxt")
-      .addEventListener("input",show_pos);
-    document.getElementById("r:xmltxt")
-      .addEventListener("input",() => { xmlarea.synced = false; });
+    //ni difinas rekte en xmlarea:...document.getElementById("r:xmltxt")
+    //  .addEventListener("input",show_pos);
     document.getElementById("r:xmltxt")
       .addEventListener("focus",show_pos);
     document.getElementById("r:xmltxt")

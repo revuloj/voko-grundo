@@ -256,8 +256,9 @@ export default function() {
         err_to: "#sercho_error"
     });
 
-    // ne plu funkcias? $(window).on("unload", function() { 
-    do_before_unload(() => {
+    // ne plu funkcias? 
+    $(window).on("unload", function() { 
+    //do_before_unload(() => {
         console.debug("sekurigante la aktualan XML-tekston...");
         $("#xml_text").Artikolo("backup");
     });
