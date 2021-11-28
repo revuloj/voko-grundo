@@ -565,9 +565,12 @@ var redaktilo = function() {
         fix_img_svg(article);
         fix_art_href(article);
 
+        // enmetu la artikolan HTML je la antaŭrigardo
         rigardo.textContent = '';
         rigardo.append(article);  
 
+        // ekipu ĝin per faldiloj ktp., se ne estas 'aldono' ni transdonos
+        // ankaŭ la artikolnomon el la kampo #r:art (por tezaŭro kaj piedlinio)
         const art = redakto=='redakto'? document.getElementById("r:art").value : null;
         artikolo.preparu_art(art);
 

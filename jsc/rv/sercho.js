@@ -37,7 +37,7 @@ Sercho.prototype.serchu = function(esprimo,onSuccess,onStart,onStop) {
         // almenaŭ 3 literoj
     }        
 
-    HTTPRequestFull('POST', global.sercho_url, 
+    HTTPRequestFull('POST', globalThis.sercho_url, 
         {"Accept-Language": preferoj.languages().join(',')},
         {sercxata: esprimo},
         function(data) {
@@ -171,7 +171,7 @@ Sercho.prototype.unua = function() {
 Sercho.prototype.serchu_uwn = function(vorto,onSuccess,onStart,onStop) {
     const self = this;
 
-    HTTPRequest('POST', global.trad_uwn_url, {sercho: vorto}, 
+    HTTPRequest('POST', globalThis.trad_uwn_url, {sercho: vorto}, 
         function(data) {
             if (data) {
                 const json = JSON.parse(data);

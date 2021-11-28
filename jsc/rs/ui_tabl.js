@@ -520,7 +520,11 @@ function antaurigardo() {
             { xml: xml_text })
         .done(
             function(data) {   
-                $("#rigardo").html(data);
+                // ial elektilo "article" ne funkcias tie ĉi !?
+                //const article = $( data ).find( "article" );
+                const article = $(data).find("#s_artikolo").parent();
+                //$("#rigardo").html(data);
+                $("#rigardo").empty().append(article);
                 xmlarea.ra_in_sync = true;
 
                 // refaru matematikajn formulojn, se estas
@@ -583,8 +587,12 @@ function antaurigardo() {
                 });
 
                 // preparu la artikolon per ties JS!
-                restore_preferences();            
-                preparu_art();
+                /// KOREKTU: ni elprenis <head>, do ni devos alie provitzi tion:
+                //restore_preferences();    
+                globalThis.lingvoj_xml = '../voko/lingvoj.xml'; // PLIBONIGU: distingu redaktilojn iel
+                             // anstataŭ manipuli tie ĉi centran agordon!
+                artikolo.preparu_art();
+                
                 /*
                 iru_al(pozicio_html);
                 */

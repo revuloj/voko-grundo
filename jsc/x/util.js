@@ -3,7 +3,7 @@
 
 // (c) 2021 Wolfram Diestel
 
-const help_base_url = 'https://revuloj.github.io/temoj/';
+//const help_base_url = 'https://revuloj.github.io/temoj/';
 
 /**
  * HTML-elemento-specifo, konsistanta el nomo:string, atributoj:Object kaj enhavo.
@@ -160,7 +160,7 @@ function group_by(key, array) {
  * @returns {string} URL-o por artikolo.
  */
 function art_href(mrk) {
-  return global.art_prefix + mrk.split('.')[0] + '.html#' + mrk;
+  return globalThis.art_prefix + mrk.split('.')[0] + '.html#' + mrk;
 }
 
 
@@ -322,7 +322,7 @@ function enable(id) {
  * @param {string} url - la pado de helpopaĝo, rilate al 'help_base_url'
  */
 function helpo_pagho(url) {
-    window.open(help_base_url+url);
+    window.open(globalThis.help_base_url+url);
 }
 
 /**

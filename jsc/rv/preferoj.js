@@ -3,7 +3,7 @@
 
 // (c) 2020, 2021 Wolfram Diestel
 
-const lingvoj_xml = "../cfg/lingvoj.xml";
+//const lingvoj_xml = "../cfg/lingvoj.xml";
 
 // difinu ĉion sub nomprefikso "preferoj"
 var preferoj = function() {  
@@ -13,7 +13,7 @@ var preferoj = function() {
     var dato = Date.now();
     
     function load_pref_lng() {
-        HTTPRequest('GET', lingvoj_xml, {},
+        HTTPRequest('GET', globalThis.lingvoj_xml, {},
         function() {
             // Success!
             var parser = new DOMParser();

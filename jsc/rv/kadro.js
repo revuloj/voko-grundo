@@ -3,7 +3,7 @@
 
 // (c) 2020, 2021 Wolfram Diestel
 /*
-const version = global.eldono;
+const version = globalThis.eldono;
 const debug = false; //true; // ni bezonas provizore aparte por vidi erarojn en iOS Webkit, kie ni ne havas "console"
 const revo_url = "reta-vortaro.de";
 const art_prefix = "/revo/art/";
@@ -50,7 +50,7 @@ function onclick(id,reaction) {
     if (nb) {
         nb.addEventListener("click", function(event) {
             event.preventDefault();
-            if (global.debug) console.debug("clicked: "+id);
+            if (globalThis.debug) console.debug("clicked: "+id);
             reaction(event);
             //event.stopPropagation();
         });
@@ -73,7 +73,7 @@ when_doc_ready(function() {
     console.log("kadro.when_doc_ready...");
 
     // sendu erarojn al aside#console - ŝaltu supre debug=true!
-    if (global.debug) {
+    if (globalThis.debug) {
         window.addEventListener("error", function(event) {
             // message,filename,lineno,error.message,error.stack
             const c = document.getElementById("console");
@@ -207,8 +207,8 @@ when_doc_ready(function() {
     t_red.alvene("ne_redaktante",()=>{
         // ni devos fari tion en "alvene", ĉar
         // load_page kontrolas t_red.stato por scii ĉu montri "x:redakt_btn"
-        load_page("main",global.titolo_url); // ĉu pli bone la ĵus redaktatan artikolon - sed povus konfuzi pro malapero de ŝangoj?
-        load_page("nav",global.inx_eo_url);
+        load_page("main",globalThis.titolo_url); // ĉu pli bone la ĵus redaktatan artikolon - sed povus konfuzi pro malapero de ŝangoj?
+        load_page("nav",globalThis.inx_eo_url);
     });
 
     t_red.alvene("sendita",()=>{
@@ -227,8 +227,8 @@ when_doc_ready(function() {
         // enkadrigu();
         if (document.getElementById("navigado")) {
             // anstataŭe ŝargu tiujn du el ĉefa indeks-paĝo
-            load_page("main",global.titolo_url);
-            load_page("nav",global.inx_eo_url);   
+            load_page("main",globalThis.titolo_url);
+            load_page("nav",globalThis.inx_eo_url);   
         }
 
         onclick("x:nav_montru_btn",index_spread);
@@ -237,13 +237,13 @@ when_doc_ready(function() {
         //onclick("x:nav_start_btn",()=>{ load_page("nav",inx_eo_url) });
         //t_nav.je("x:nav_start_btn","click","ĉefindekso");
         onclick("x:nav_start_btn",()=>{ 
-            load_page("nav",global.inx_eo_url);
+            load_page("nav",globalThis.inx_eo_url);
             //t_nav.transiro("ĉefindekso") 
         });
 
         //onclick("x:titol_btn",()=>{ load_page("main",titolo_url) });
         onclick("x:titol_btn",()=>{ 
-            load_page("main",global.titolo_url);
+            load_page("main",globalThis.titolo_url);
             //t_main.transiro("titolo") 
         });
         //t_main.je("x:titol_btn","click","titolo")
@@ -264,12 +264,12 @@ when_doc_ready(function() {
         */
         onclick("x:redakt_btn",()=>{ 
             if (t_nav.stato != "redaktilo")
-                load_page("nav",global.redaktmenu_url);
+                load_page("nav",globalThis.redaktmenu_url);
 
             // ni bezonas eble relegi la redaktilan kadron kaj
             // fine de tio relegi la artikolon!...
             if (t_main.stato != "red_xml" && t_main.stato != "red_rigardo")
-                load_page("main",global.redaktilo_url);
+                load_page("main",globalThis.redaktilo_url);
 
             // metu staton "red_xml" se ni venos de red_rigardo,
             // aliokaze ni faros tion en load_page - tie ĉi estus tro frue tiuokaze
@@ -407,7 +407,7 @@ function enkadrigu() {
         main.append(...document.body.children);
         document.body.appendChild(main);
     } else {
-        load_page("main",global.titolo_url);
+        load_page("main",globalThis.titolo_url);
     }
 
     // preparu la navigo-parton de la paĝo
@@ -424,7 +424,7 @@ function enkadrigu() {
         // ni bezonas unue revo-1b.js:
         load_page("nav",history.state.nav,false);
     } else {
-        load_page("nav",global.inx_eo_url);
+        load_page("nav",globalThis.inx_eo_url);
     }
 }
 
@@ -460,9 +460,9 @@ function ref_target(a_el) {
         return "int";
     } else if (
         href.startsWith('http://') 
-        && href.substring('http://'.length-1,global.revo_url.length) != global.revo_url ||
+        && href.substring('http://'.length-1,globalThis.revo_url.length) != globalThis.revo_url ||
         href.startsWith('https://') 
-        && href.substring('https://'.length-1,global.revo_url.length) != global.revo_url
+        && href.substring('https://'.length-1,globalThis.revo_url.length) != globalThis.revo_url
         ) {
         return "ext";
     } else if (href.indexOf("/cgi-bin/vokomail.pl")>=0) {
@@ -489,13 +489,13 @@ function normalize_href(target, href) {
     // ĉu estas fidinde uzi "target" tie ĉi aŭ ĉu ni uzu "source"?
     const prefix = { main: "art/", nav: "inx/"};
     if (href.endsWith('titolo.html')) {
-        return global.dlg_prefix + global.titolo_url;
+        return globalThis.dlg_prefix + globalThis.titolo_url;
     } else if (href.startsWith('../')) {
-        return global.revo_prefix + href.substr(3);
+        return globalThis.revo_prefix + href.substr(3);
     } else if (href.startsWith('tz_') || href.startsWith('vx_')) {
-        return global.tez_prefix + href;
+        return globalThis.tez_prefix + href;
     } else if (href[0] != '/' && ! href.startsWith('http')) {
-        return global.revo_prefix + prefix[target] + href;
+        return globalThis.revo_prefix + prefix[target] + href;
     /*} else if (href.startsWith('/cgi-bin/vokomail.pl')) {
         var query = href.substring(href.search('art='));
         return '/revo/dlg/redaktilo-1c.html?' + query
@@ -535,7 +535,7 @@ function stop_wait() {
  */
 function load_error(request) {
     if (request.status == 404)
-        load_page("main",global.http_404_url);
+        load_page("main",globalThis.http_404_url);
 }
 
 /**
@@ -687,9 +687,9 @@ function load_page(trg, url, push_state=true, whenLoaded=undefined) {
                 // PLIBONIGU: difinu load_page_nav kiel ago de transiro
                 load_page_nav(doc,nav);
 
-                if (url == global.redaktmenu_url)
+                if (url == globalThis.redaktmenu_url)
                     t_nav.transiro("redaktilo"); 
-                else if (url == global.inx_eo_url)
+                else if (url == globalThis.inx_eo_url)
                     t_nav.transiro("ĉefindekso"); 
                 else
                     t_nav.transiro("subindekso"); 
@@ -704,9 +704,9 @@ function load_page(trg, url, push_state=true, whenLoaded=undefined) {
 
                 // PLIBONIGU: difinu load_page_main kiel ago de transiro(?()
                 load_page_main(doc,main);
-                if (url == global.titolo_url)
+                if (url == globalThis.titolo_url)
                     t_main.transiro("titolo"); 
-                else if (url.startsWith(global.redaktilo_url))
+                else if (url.startsWith(globalThis.redaktilo_url))
                     t_main.transiro("red_xml");
                 else
                     t_main.transiro("artikolo");
@@ -794,7 +794,7 @@ function adaptu_paghon(root_el, url) {
         var a;
         for (a of root_el.querySelectorAll("a[href^='?']")){
             var href = a.getAttribute("href");
-            a.setAttribute("href",global.mx_trd_url+href);
+            a.setAttribute("href",globalThis.mx_trd_url+href);
         }
         for (a of root_el.querySelectorAll("a[target='_blank']")){
             a.removeAttribute("target");
@@ -1030,10 +1030,10 @@ function serchu_q(esprimo) {
                 var atr = {};
                 for (var n=0; n<trvj.length; n++) {
                     var t = trvj[n];
-                    if (n+1 > global.sercho_videblaj && trvj.length > global.sercho_videblaj+1) {
+                    if (n+1 > globalThis.sercho_videblaj && trvj.length > globalThis.sercho_videblaj+1) {
                         // enmetu +nn antaŭ la unua kaŝita elemento
-                        if (n - global.sercho_videblaj == 1) {
-                            const pli = ht_pli(trvj.length - global.sercho_videblaj);
+                        if (n - globalThis.sercho_videblaj == 1) {
+                            const pli = ht_pli(trvj.length - globalThis.sercho_videblaj);
                             if (pli) dl.append(...pli);
                         }                        
                         atr = {class: "kasxita"};
@@ -1133,7 +1133,7 @@ function serchu_q(esprimo) {
                             // kiun ref-mrk ni uzu - depende de kiu butono premita
                             const refmrk = event.target.value;
                             // revenu de trovlisto al redakto-menuo
-                            load_page("nav",global.redaktmenu_url,true,
+                            load_page("nav",globalThis.redaktmenu_url,true,
                                 () => {
                                     document.getElementById("r:refmrk").value = refmrk;
                                     redaktilo.fs_toggle("r:ref");
@@ -1182,14 +1182,14 @@ function serchu_q(esprimo) {
  */
 function hazarda_art() {
 
-    HTTPRequest('POST', global.sercho_url, {sercxata: "!iu ajn!"},
+    HTTPRequest('POST', globalThis.sercho_url, {sercxata: "!iu ajn!"},
         function(data) {
             // sukceso!
             var json = 
                 /** @type { {hazarda: Array<string>} } */
                 (JSON.parse(data));
             const mrk = json.hazarda[0];
-            const href = global.art_prefix + mrk.split('.')[0] + '.html#' + mrk;
+            const href = globalThis.art_prefix + mrk.split('.')[0] + '.html#' + mrk;
             if (href) load_page("main",href);
         }, 
         start_wait,
@@ -1203,7 +1203,7 @@ function hazarda_art() {
  */
 function nombroj() {
 
-    HTTPRequest('POST', global.nombroj_url, {x:0}, // sen parametroj POST ne funkcius, sed GET eble ne estus aktuala!
+    HTTPRequest('POST', globalThis.nombroj_url, {x:0}, // sen parametroj POST ne funkcius, sed GET eble ne estus aktuala!
         function(data) {
             // sukceso!
             var json = 
@@ -1228,7 +1228,7 @@ function nombroj() {
  * la eraropaĝo.
  */
 function mrk_eraroj() {
-    HTTPRequest('POST', global.mrk_eraro_url, {x:1}, // ni sendu ion per POST por ĉiam havi aktualan liston
+    HTTPRequest('POST', globalThis.mrk_eraro_url, {x:1}, // ni sendu ion per POST por ĉiam havi aktualan liston
         function(data) {
             var json = 
                 /** @type { {drv: Array<Array>, snc: Array<Array>, hom: Array<Array>} } */
@@ -1314,8 +1314,8 @@ function redaktu(href) {
     const params = href.split('?')[1];
     //const art = getParamValue("art",params);
     
-    load_page("main",global.redaktilo_url+'?'+params);
-    load_page("nav",global.redaktmenu_url);
+    load_page("main",globalThis.redaktilo_url+'?'+params);
+    load_page("nav",globalThis.redaktmenu_url);
 }
 
 /**
