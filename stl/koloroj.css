@@ -44,6 +44,7 @@
 
     --a-fnt-clr: darkblue;
  
+    /* h2-titolo (?) */
     --mh2-bgr-clr: #eAb530; /*goldenrod; */
     --mh2-act-fnt-clr: black; 
 
@@ -58,6 +59,9 @@
     --btn-act-brd-clr: black;
     --btn-dis-bgr-clr: #999;
 
+    --tab-bgr-clr: khaki;
+
+    /* input-elementoj */
     --input-bgr-clr: white;
     --input-fnt-clr: black;
 
@@ -144,6 +148,8 @@
     --btn-act-fnt-clr: black; 
     --btn-act-brd-clr: black;
  
+    --tab-bgr-clr: orange; 
+
     --input-bgr-clr: #070721; /*#00082f; #2f0800; #52090E; #82190E; #a2390E;*/
     --input-fnt-clr: palegoldenrod;
 

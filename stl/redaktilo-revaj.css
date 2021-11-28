@@ -1,0 +1,1023 @@
+@import 'koloroj.css';
+
+@font-face {
+    font-family: 'power_symbols';
+    src: url('Unicode_IEC_symbol.woff2') format('woff2'),
+         url('Unicode_IEC_symbol.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+html {
+    height: 100%
+}
+
+body {
+    /* la artikolo.css de la antaurigardo shanghus la atributojn tial uzi !important */
+    padding: 0 !important;
+    margin: 0 !important;
+    height: 100% !important;
+    overflow: hidden !important;
+
+    font-family: segoe ui,Arial,sans-serif;
+    font-size: 1.1em;
+    
+    display: flex;
+}
+
+.ui-dialog {
+    max-height: 95% !important;
+    overflow: auto !important;
+}
+
+.ui-tooltip {
+    max-width: 30em;
+}
+   
+
+@media only screen and (max-width: 768px) {
+    .ui-menu-item {
+        font-size: 120% !important;
+    }
+    .ui-dialog {
+        max-width: 95% !important;
+        max-height: 95% !important;
+        overflow: auto !important;
+    }
+    /*
+    #positions {
+        font-size: 100% !important;
+        overflow-x: visible
+    } */
+    #xml_text {
+        font-size: 110%
+    }
+}
+
+@media only screen and (max-width: 450px) {
+    #xml_sidebar {
+        width: 30% !important;        
+    }
+    .ui-dialog {
+        max-width: 95% !important;
+        max-height: 95% !important;
+        overflow: auto !important;
+    }    
+    .ui-menu-item {
+        font-size: 100% !important;
+    }
+    /*
+    #positions {
+        font-size: 90% !important;
+        overflow-x: visible
+    }
+    */
+    #xml_text {
+        font-size: 110%
+    }
+}
+
+@keyframes dock-font-color-change {
+    0% {color: #7f2f2f;}
+    50% {color: #f7cf94;}
+    0% {color: #7f2f2f;}
+}
+
+.ui-widget,
+.ui-widget-content {
+    background-color: var(--main-bgr-clr);
+    color: var(--main-fnt-clr);
+    border-color: var(--main-brd-clr);
+}
+
+.ui-widget.ui-widget-content {
+    /*border: none !important;*/
+    border-color: var(--main-brd-clr) !important;
+}
+
+.ui-widget-header {
+    background-color: var(--list-bgr-clr) !important;
+    padding: .1em;
+    border: none;
+}
+
+#kash_btn {
+    /* ni ŝovu pli maldekstren, ĉar dekstre jam
+    estas la ŝaltstrio...!*/
+    right: 3.75em !important; 
+}
+
+#tez_btn {
+    /* tezaŭro ne funkcius en alia retpaĝo ol reta-vortaro.de...!
+    aŭ ni devus provizi tie saman CGI-skripton */
+    display: none;
+}
+
+.ui-button,
+#tabs button {
+    background-color: var(--btn-bgr-clr);
+    border-color: var(--btn-brd-clr);
+    border-style: solid;
+}
+
+#sercho_trovoj button {
+    border-width: 1px;
+    border-radius: 3px;
+    margin-right: .1em;
+}
+
+
+input,
+select {
+    background-color: var(--input-bgr-clr) !important;
+    color: var(--input-fnt-clr) !important;
+}
+
+textarea {
+    resize: none;
+    overflow: auto;
+    font-size: 12pt !important;
+    background-color: var(--input-bgr-clr);
+    color: var(--input-fnt-clr);
+}
+
+.surxml {
+    position: absolute;
+    right: 4.2em;
+    opacity: .8;
+    background-color: silver;
+    margin: 0;
+    padding: 0;
+}
+#position {
+    top: 3.2em;
+    margin: .1em;
+    padding: .18em;
+    border-radius: 4px;
+}
+#dkromklvr {
+    top: 5.2em;
+    /*
+    border-radius: 4px;
+    padding: .18em;
+    margin: 2px;*/
+}
+label.kklvbtn {
+    border-radius: 4px;
+    padding: .18em;
+    margin: 0;  
+}
+.kklvbtn {
+    /*
+    background-color: silver;
+    border-radius: 4px;
+    padding: .18em;
+    margin: 2px;
+    */
+    margin: 0;
+    padding: 0;
+    color: black !important;
+    font-weight: normal !important;
+    box-shadow: none !important;
+
+    box-sizing: border-box;   
+    height: 100%;
+}
+
+
+fieldset {
+    border: 1px solid var(--main-brd-clr); /*#327e04;*/
+}
+
+#regexes, #serch_btnj {
+    display: inline-block;
+    margin-top: 2px;
+    margin-bottom: .5em;
+}
+
+dd {
+    margin-top: 0.1em;
+    margin-bottom: 0.2em;
+    padding: 0.5em;
+}
+
+#sercho_trovoj dt {
+   padding: 0.5em; 
+}
+
+#sercho_trovoj dt:hover {
+   background-color: #e5e3d5;  
+   /*border: 1px solid black;*/
+}
+
+#sercho_trovoj dt:hover button {
+   visibility: visible !important;  
+}
+
+#sercho_trovoj li:hover button {
+    visibility: visible !important;  
+ }
+
+#sercho_trovoj .bildstriero:hover button {
+    visibility: visible !important;  
+ } 
+
+#sercho_error {
+   margin: 0 !important;
+}
+
+#xml_sidebar {
+    /*display: inline-block;*/
+    /*float: left;*/
+    vertical-align: top;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 0;
+    margin: 0;
+    position: relative;
+    top: 0;
+    height: 100%;
+    flex: 0.1 0.1 10em;
+    -webkit-flex: 0.1 0.1 10em;
+    min-width: 8em;
+    width: 15%;
+    /*border: 0px solid red*/
+
+    border: none !important;
+    box-shadow: 0 0 4px black;
+    z-index: 100;
+}
+
+#tabs {
+    display: flex; 
+    flex-direction: row-reverse;
+    -webkit-flex-direction: row-reverse;
+
+    /* samsupre kiel la menuo */
+    vertical-align: top;
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    width: 100%;
+    flex: 1;
+    -webkit-flex: 1;
+    /*border: 1px solid blue;*/
+    border: none !important;
+}
+
+#tab-buttons {
+    box-shadow: 2px 1px 2px rgba(0,0,0,.4);
+    border-left: none;
+    margin-left: -1px;
+    margin-right: 5px;
+}
+
+.ui-tabs-nav li {
+    background-color: var(--tab-bgr-clr) !important;
+}
+
+.ui-tabs-nav li.ui-tabs-active,
+.ui-tabs-nav li.ui-state-active a {
+    background-color: var(--input-bgr-clr) !important;
+    color: var(--input-fnt-clr) !important;
+}
+
+.ui-tabs-vertical {
+    width: 3em; 
+}
+.ui-tabs-vertical .ui-tabs-nav { 
+    padding: 0.2em;
+    padding-left: 0; 
+    width: 2em; 
+}
+.ui-tabs-vertical .ui-tabs-nav li { 
+    width: 100%; 
+    border-bottom-width: 1px !important; 
+    border-left-width: 0 !important; 
+    margin: .1em .1em .1em 0;
+
+}
+.ui-tabs-vertical .ui-tabs-nav li a { 
+    padding: .5em .25em !important;
+    width: 100%;
+    display:block; 
+    box-sizing: border-box;   
+}
+.ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active { 
+    padding-bottom: 0; 
+    padding-left: .1em; 
+    border-left-width: 1px; 
+}
+/*
+.ui-tabs-vertical .ui-tabs-panel { 
+    padding: 1em; 
+    width: 40em;
+}
+*/
+
+#menu_show_btn {
+    width: 2.5em;
+    padding: .4em !important;
+    z-index: 110; /* kovru la ombron de la menuo! */
+    box-shadow: 0 0 4px black;
+}
+
+#right_side {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    background-color: var(--nav-bgr-clr);
+    box-shadow: inset 0 0 2px rgba(0,0,0,.4);
+}
+
+#right_side>* {
+    margin-bottom: 80%; /* tiom da suba spaco kiel larĝo */
+}
+
+.side_btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#help_btn,
+#logout_btn {
+    width: 2em; 
+    padding: .3em .1em;
+    margin-bottom: .2em;    
+}
+
+.logout_btn {
+    font-family: 'power_symbols';
+    font-style: normal;
+    /*
+    border-color: #327E04 !important;
+    background-color: #459e00 !important;
+    border-radius: 4px;
+    color: white !important;    
+    font-weight: bold !important;
+    padding-left: 0.7em;
+    padding-right: 0.7em;
+    */
+ }
+  
+
+#help_btn a {
+    text-decoration: none;
+}
+
+#menu {
+   height: 100%; /*99.8%;*/
+   border: none !important;
+
+   padding: 0;
+   margin: 0;
+
+   background-image: url(kaefer1.jpg);
+   background-repeat: repeat;
+   background-position: bottom
+}
+
+#menu li {
+  width: 100%;
+  color: var(--nav-fnt-clr);
+  border-radius: 0 !important;
+  background-color: var(--nav-bgr-clr);
+  border-color: var(--nav-brd-clr);
+}
+
+.ui-menu-item {
+    border-bottom: 1px solid silver;
+    font-size: 85%
+}
+
+.ui-state-error {
+    max-height: 10em;
+    overflow: auto
+}
+
+#elekto_menuo {
+    position: absolute;
+    top: 4em;
+    right: 2em;
+}
+
+#dock {
+    /*max-height: 40%;
+    overflow: auto;*/
+    position: relative;
+    justify-content: stretch;
+    -webkit-justify-content: stretch;
+}
+
+#dock_eraroj:empty,
+#dock_avertoj:empty {
+    display: none;
+}
+
+#dock_fermu {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 1.2em !important;
+    height: 1em !important;
+    padding: 0 !important;
+}
+
+#re_antaurigardo {
+   height: 1.6em !important;
+   width: 1.6em !important;
+   font-size: 1.2em;
+   color: #004400;
+   margin-top: 0.1em !important;
+   padding: 0 !important;
+}
+
+#dock_klavaro {
+    overflow: visible;
+}
+#dock_kontrolo {
+  max-height: 20ex;
+  overflow: auto
+}
+
+#dock_eraroj {
+    border-bottom: 1px solid #7f2f2f;
+    margin: 0;
+    background: #ffedad;
+    color: #7f2f2f;
+    padding-left: 0em;
+    margin-block-start: 0em;
+}
+
+#dock_avertoj {
+    border-bottom: 1px solid #7f2f2f;
+    margin: 0;
+    background: #fcf6d6;
+    color: #7f2f2f;
+    padding-left: 0em;
+    margin-block-start: 0em;
+}
+
+/*#kontroli_eraroj ul, #kontroli_vortoj ul {
+    margin: 0;
+    padding-left: 0.4em;
+}*/
+
+#dock_eraroj li, #dock_avertoj li {
+    list-style-type: none;
+    font-size: 80%;
+    margin-left: 0.4em;
+    padding: .1em;
+    border-top: 1px solid #e3a345;
+}
+
+#dock_eraroj li:hover, #dock_avertoj li:hover {
+    background-color: #e5e3d5; 
+}
+
+#dock_eraroj li:active, #dock_avertoj li:active {
+    background-color: #c5c3b5; 
+    color: white;
+}
+
+#dock_eraroj li::before, #dock_avertoj li::before {
+    content: attr(value) ": ";
+    font-weight: bold
+}
+
+#dock_avertoj .snc_mrk a:hover {
+    /* border-style: outset; */
+    border: 2px solid #327e04;
+    border-radius: 5px;
+    background: #edf8dc;
+}
+
+#dock_avertoj .snc_mrk a:active {
+    /*border-style: inset */
+    border: 2px solid #153501;
+    border-radius: 5px;
+    background: #b3a05d;
+}
+
+.status_ok {
+    background-color: #c0ffc0;
+}
+
+#elekto_indikoj {
+    max-height: 27ex;
+    overflow: auto; 
+    margin: 1px;
+    padding: 0px;
+}
+
+#elekto_indikoj div {
+    /*display: inline-block;*/ /*float; //inline-block; inline-block aldonas spaceton inter la linioj */
+    float: left;
+    height: 3em;
+    max-height: 3em;
+    width: 4em;
+    overflow: hidden;
+    border: 1px solid #e3a345;
+    color: var(--nav-fnt-clr); /* pli bone estus difini apartan var...*/
+    border-radius: 4px;
+    padding: 0.1em;
+    margin: 0;
+    font-size: small;
+    line-height: 1em;
+    text-align: center;
+}
+
+#elekto_indikoj .stl {
+  font-stretch: condensed;
+  background-color: burlywood; /*#e5e3c5;  */
+}
+
+#elekto_indikoj .fak {
+  background-color: khaki; /*#d5e3d5;  */
+}
+
+#elekto_indikoj .ofc {
+  background-color: blanchedalmond; /*#d5d3e5*/;  
+}
+
+#elekto_indikoj .gra {
+  background-color: beige; /*#e5d3e5;  */
+}
+
+
+#elekto_indikoj div:hover {
+   background-color: #f5f3e5; 
+   cursor: pointer
+}
+
+#elekto_indikoj div:active {
+   background-color: #c5c3b5; 
+   color: white;  
+   cursor: pointer
+}
+
+#elekto_indikoj div span {
+    line-height: 1.5em
+}
+
+
+#elekto_indikoj img {
+    height: 1.7em;
+    max-height: 1.7em;
+    overflow: hidden;
+}
+
+#bildo_eta {
+    border-color: #cccccc; 
+    border-width: 1px; 
+    background: #E0E0A0; 
+    border-style: solid; 
+    padding: 2px; 
+    margin: 0
+}
+
+.butonoj {
+    text-align: center;
+    margin-top: 0.5em;
+}
+
+.butonoj div {
+    display: inline-block; /* inline-block aldonas spaceton inter la linioj */
+    /* float: left; */
+    vertical-align: inherit;
+    height: 1.3em;
+    max-height: 1.6em;
+    min-width: 1.6em;
+    overflow: hidden;
+    border: 1px solid #e3a345;
+    color: var(--nav-fnt-clr); /* pli bone estus difini apartan var...*/
+    border-radius: 4px;
+    padding: 0.1em;
+    margin: 0 0.1em 0 0.1em;
+    padding-top: 0.5em;
+    line-height: 1em;
+    text-align: center;
+    /*
+    background-color: #e5e3c5;  
+    */
+    background-color: khaki;
+}
+
+.butonoj div:hover {
+    background-color: #f5f3e5; 
+    cursor: pointer
+}
+
+.butonoj div:active {
+   background-color: #c5c3b5; 
+   color: white;  
+   cursor: pointer
+}
+
+
+.elm_btn {
+    /*background-color: #d5e3d5 !important;*/
+    background-color: burlywood !important;
+}
+
+.reghim_btn {
+   background-color: var(--btn-bgr-clr) !important;
+   border-color: var(--btn-brd-clr) !important;
+   color: var(--main-fnt-clr) !important;
+   /*
+   border-color: #327E04 !important;
+   background-color: #459e00 !important;
+   color: white !important;    
+   */
+   font-weight: bold !important;
+}
+
+#xml {
+    display: flex;
+    flex-direction: row;
+    -webkit-flex-direction: row;
+    flex: 1;
+    margin: 0;
+    padding: 0;
+    border: none !important;
+}
+
+#vrt, #html, #sercho, #xml_redakto {
+    display: flex;
+    flex-direction: column;
+    -webkit-flex-direction: column;
+}
+
+#vrt, #xml_redakto, #html, #sercho {
+    /*border: 1px solid red;*/    
+    /*border-bottom: 1px solid var(--main-brd-clr);*/
+    border-right: 1px solid var(--main-brd-clr);
+    /*height: 80%; */
+    flex: 1;
+    -webkit-flex: 1;
+    width: 100%;
+    margin: 0 !important;
+    padding: 0;
+    overflow: hidden;
+    /*overflow: auto;*/
+}
+
+#html {
+    background-color: var(--main-bgr-clr); 
+    color: var(--main-fnt-clr); 
+}
+
+#rigardo {
+    margin-left: 1em;
+    margin-top: 0.1 em;
+    margin-bottom: 0.5 em;
+    margin-right: 0.5 em;
+
+    background-color: var(--main-bgr-clr); 
+    color: var(--main-fnt-clr); 
+
+    /*border: 1px solid blue;*/
+    
+    /*width: 100%;*/
+    height: 100%;
+    flex: 1;
+    -webkit-flex: 1;
+    align-content: stretch;
+    -webkit-align-content: stretch;
+    
+    overflow: auto;
+}
+
+#rigardo article {
+    border-bottom: 2px dotted var(--main-brd-clr);
+}
+
+#xml_text {
+    /*width: 100%;*/
+    flex: 1;
+    -webkit-flex: 1;
+    font-family: monospace;
+    margin: 1px;
+    /*height: 100%*/
+}
+
+#xml_supro {
+    display: flex;
+}
+
+#art_strukturo {
+    flex: 1;
+}
+
+#sercho_fono {
+    /*border: 1px solid blue;*/
+    display: flex;
+    flex-direction: column;
+    -webkit-flex-direction: column;
+
+    background-color: var(--main-bgr-clr); 
+    color: var(--main-fnt-clr); 
+    
+    /*border: 1px solid red;*/
+    
+    flex: 1;
+    -webkit-flex: 1;
+    margin-left: .5em;
+    margin-right: .5em;
+    
+    overflow: hidden;
+    /*height: 400px;*/
+}
+
+
+#sercho_form {
+    /*border: 1px solid #f5f3e5;*/
+    margin-top: 0.5em;
+}
+
+#sercho_form p {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+}
+
+#sercho_form .ui-button {
+    font-size: 88%;
+    padding: 0.3em;
+}
+
+#sercho_trovoj {
+    border: 1px solid silver;
+    border-radius: 6px;
+    /*padding: 1em;*/
+    margin-top: 0;
+    
+    /*border: 1px solid blue;*/
+    
+    flex: 1;
+    -webkit-flex: 1;
+    
+    margin-bottom: 0.5em;
+    overflow: auto;
+}
+
+.perc_bar {
+    color: #327e04;
+}
+
+.trovo_titolo {
+    font-weight: bold;
+    font-size: 90%;
+}
+
+.trovo_titolo a:link {
+    color: #312e25;
+}
+
+.trovo_titolo a:visited {
+    color: #615e55;
+}
+
+
+.versio {
+    position: absolute;
+    left: 1em;
+    bottom: 1em;
+    font-family: sans-serif;
+    font-size: small;
+    font-weight: bold;
+    color: whitesmoke;
+    text-align: center;
+}
+
+/*
+#positions {
+    position: absolute;
+    max-height: 90%;
+    right: 0;
+    bottom: 0;
+    overflow: auto;
+    padding: 0.2em;
+    font-size: small;
+    border-right: none;
+    border-bottom: none;
+}
+
+
+#collapse_outline {
+    //overflow: auto !important;
+    // max-height: 90% !important;
+}
+*/
+
+/*
+#art_outline {
+    margin-bottom: 0.3em;
+    padding: 0.1em !important;
+}
+
+#art_outline ol {
+    padding-top: 0;
+    margin-top: 0;
+    margin-right: 0.1em;
+    //padding-bottom: 0;
+    //margin-bottom: 0
+}
+
+#art_outline li:hover {
+   background-color: #e5e3d5;  
+}
+
+#art_outline li {
+  //  list-style-type: none
+}
+
+#edit_position {
+    //border-top: 1px solid #327e04;
+    font-weight: bold;
+    text-align: center
+}
+*/
+
+#ekzemplo_sercho_rezultoj {
+  max-height: 15em;
+  overflow: auto;  
+}
+
+.dlg_tab_div {
+    overflow-y: auto;
+    overflow-x: visible;
+}
+
+.dlg_tabelo {
+    border-collapse: collapse;
+    border: 1px solid #e3a345;
+    margin-left: 1em;
+    margin-right: 1em;
+    /*height: 900px;*/
+    /*border-radius: 4px;*/
+}
+
+.dlg_tabelo td {
+    border: 1px solid #e3a345;
+    /*border-radius: 4px;*/
+    padding: 0.2em;
+    vertical-align: top
+}
+
+#traduko_dlg {
+    padding-left: 0;
+}
+
+#traduko_sidebar {
+    /*display: inline-block; ne kuniras kun float: left*/
+    float: left;
+    vertical-align: top;
+    height: 100%;
+    flex: 0.1 0.1 10em;
+    -webkit-flex: 0.1 0.1 10em;
+    min-width: 8em;
+/*    
+    overflow-y: auto;
+    //overflow-x: hidden;
+    padding: 0;
+    margin: 0;
+    position: relative;
+    top: 0;
+    width: 15%;
+    */
+    border: 0px solid red
+}
+
+#traduko_menuo {
+    height: 100%
+}
+
+#traduko_tabelo {
+    display: flex; /*inline-block;*/
+    flex-direction: column;
+    -webkit-flex-direction: column;
+    vertical-align: top;
+    flex: 1;
+    -webkit-flex: 1;
+/*    
+    padding: 0;
+    margin: 0;
+    //height: 100%;
+    //width: 80%;
+    */
+    border: 0px solid blue
+}
+
+
+#sxablono_xml {
+    background-color: #e5e3d5;
+}
+
+pre.line {
+    margin: 0;
+}
+
+.sxbl {
+    /* margin: 0; */
+    background-color: #ffedad; /*darkseagreen; */
+}
+
+.sxbl:hover {
+    /* margin: 0; */
+    background-color: #e3a345; /* #e5e3d5; */
+    cursor: pointer;
+}
+
+.hom_art {
+    background-color: #ffedad; /*darkseagreen; */
+}
+
+.hom_art:hover {
+    background-color: #e3a345; /* #e5e3d5; */
+    cursor: pointer;
+}
+
+#hom_dos_div {
+    border-top: 1px solid #327e04;
+}
+
+/* stiloj por analizo (vort-kontrolo) */
+.malstrikte { color: black }
+.neanalizebla { color:red; font-weight: bold}
+.dubebla { color: #bb2222 }
+.verda { color: rgb(211, 51, 12) }
+.kuntirita { color: black }
+.redakti {font-size: larger; color: black}
+.mlg {font-weight: bold}
+
+.bildstrio {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+.bildstriero {
+    font-size: small;
+    height: 150px;
+    width: 130px;
+    margin: 0.2em;
+    border: 1px solid gray;
+    text-align: center;
+    background-color: silver;
+    padding: 2px;
+    overflow: hidden;
+}   
+
+.bildstriero p {
+    margin: 0px
+}
+
+.animated-dock-font {
+    animation: dock-font-color-change 3s infinite;
+}
+
+
+/**
+.bildstriero p.butonoj {
+    vertical-align: bottom
+}
+**/
+
+
+
+/***************************************
+   Supermetitaj dialogoj - jam en kadro.css, sed
+   ni momente tion ne kunpakas en stildifinoj por redaktilo Cetonio...
+****************************************/
+
+.overlay {
+    position: absolute;
+    z-index: 100;
+    max-width: 96vw;
+    max-height: 85vh;     
+    overflow: auto;
+    right: 0.5em;
+    top: 2.5em;
+    font-weight: normal;
+    font-size: 1rem;
+    background-color: var(--ovr-bgr-clr);
+
+    padding: 0.5em;
+    border: 2px dotted var(--ovr-brd-clr);
+    box-shadow: 5px 5px 10px;
+}
+
+.overlay .fermu {
+    position: absolute;
+    top: .2em;
+    right: .2em;
+    height: 1.6em;
+    padding: 0 .3em;
+    background-color: var(--ovr-bgr-clr);
+}
+
+
+.overlay button {
+    height: 2.2em;
+    padding: 0 .5em;
+}

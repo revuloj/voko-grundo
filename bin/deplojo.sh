@@ -24,6 +24,7 @@ target="${1:-helpo}"
 JSC=build/jsc/revo-${release}-min.js
 CSS=build/stl/revo-${release}-min.css
 RSJ=build/rsj/redaktilo-${release}-min.js
+RSC=build/stl/redaktilo-${release}-min.css
 
 KADRO=jsc/kadro.js
 PACKG=package.json
@@ -49,12 +50,12 @@ araneo|araneo:debug)
 
 cetonio:debug)
     npm run build:rsj:debug
-    #npm run build:css
+    npm run build:rsc
     ;;&
 cetonio|cetonio:debug)
     cetonio_id=$(docker ps --filter name=cetoniujo_cetonio -q)
     todir=/home/cetonio/pro
     docker cp ${RSJ} ${cetonio_id}:${todir}/web/static
-    #docker cp ${CSS} ${cetonio_id}:${todir}/stl
+    docker cp ${RSC} ${cetonio_id}:${todir}/web/static
     ;;
 esac
