@@ -544,10 +544,11 @@ export default function() {
         buttons: {   
             "Enmeti la rimarkon": function(event) { 
                 event.preventDefault();
+                const indent=2;
                 var rim = $("#rimarko_dlg").dialog("valoroj");
-                rim.rim = linirompo(rim.rim.replace(/~/g,'<tld/>'),indent=2);
+                rim.rim = linirompo(rim.rim.replace(/~/g,'<tld/>'),indent);
                 rim.elm = rim.adm ? 'adm' : 'rim';                   
-                var rimstr = new XMLRimarko(rim,tip=rim.elm).xml(indent=4);
+                var rimstr = new XMLRimarko(rim,rim.elm).xml(indent*2);
                 $("#xml_text").Artikolo("insert",rimstr);
                 $("#rimarko_dlg").dialog("close");
                 $(this).dialog("close");
