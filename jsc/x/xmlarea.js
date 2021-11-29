@@ -57,6 +57,20 @@ Xmlarea.prototype.getDosiero = function() {
 };
 
 /**
+ * Saltas al la aktuala derivaĵo (laŭ mrk)
+ */
+Xmlarea.prototype.saltu = function() {
+  const mrk = this.xmlstruct.getCurrentMrk(this.elekto);
+  if (mrk != '' && mrk.indexOf(',v') == -1) {
+    window.location.hash = this.getDosiero()+'.'+mrk;
+  } else {
+    window.location.hash = '';
+    // tio lasas malplenan '#', se ni volus forigi tion ankaŭ ni povus uzi
+    // history.pushState("", document.title, window.location.pathname);
+  }
+}; 
+
+/**
  * Redonas la informojn pri aktuale elektita subteksto.
  * Tio estas objekto kun parametroj 'id', 'el', 'de', 'al' kc.
  * 

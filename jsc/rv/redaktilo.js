@@ -575,9 +575,13 @@ var redaktilo = function() {
         artikolo.preparu_art(art);
 
         // saltu en la artikolo al la redaktata parto
-        const pref = document.getElementById("r:art").value;
+        /*
+        const prefix = document.getElementById("r:art").value;
         const mrk = xmlarea.xmlstruct.getCurrentMrk(xmlarea.elekto);
-        window.location.hash = pref+'.'+mrk;
+        window.location.hash = prefix+'.'+mrk;
+        */
+        xmlarea.saltu();
+
 
         // eble tio devas esti en preparu_art?
         // refaru matematikajn formulojn, se estas

@@ -506,6 +506,7 @@ function antaurigardo() {
     iam kreis aktualan antaŭrigardon post la lasta efektiva ŝanĝo.
     */
     if ($("#rigardo").html() && xmlarea.ra_in_sync) {
+        xmlarea.saltu();
         return;
     }
 
@@ -529,6 +530,7 @@ function antaurigardo() {
                 //$("#rigardo").html(data);
                 $("#rigardo").empty().append(article);
                 xmlarea.ra_in_sync = true;
+                xmlarea.saltu();
 
                 // refaru matematikajn formulojn, se estas
                 if (typeof(MathJax) != 'undefined' && MathJax.Hub) {
