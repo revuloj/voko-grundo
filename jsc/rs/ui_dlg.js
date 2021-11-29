@@ -1413,7 +1413,7 @@ function trd_put(mrk,lng,no,trd) {
 
 function traduko_input_field(mrk,nro,trd) {
     var id = "trd:" + mrk + ':' + nro; //.replace(/\./g,'\\\\.') + '_' + nro;
-    return '<input id="' + id + '" name="' + id + '" size="30" value="' + trd + '"/>';
+    return '<input id="' + id + '" type="text" name="' + id + '" size="30" value="' + trd + '"/>';
 }
 
 function traduko_add_btn(mrk) {
