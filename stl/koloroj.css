@@ -63,6 +63,7 @@
 
     /* input-elementoj */
     --input-bgr-clr: white;
+    --input-brd-clr: gray;
     --input-fnt-clr: black;
 
     --list-bgr-clr: #eAb530; /*#FFEEAA;*/
@@ -94,6 +95,8 @@
 
     --adm-fnt-clr: #303030;
     --label-fnt-clr: #104040;
+
+    /* vinjetoj kaj bildoj */
     --vnj-bgr-clr: lightgoldenrodyellow;
 
     --svg-bgr-clr: lightgoldenrodyellow; /* #ffffee; */
@@ -151,6 +154,7 @@
     --tab-bgr-clr: orange; 
 
     --input-bgr-clr: #070721; /*#00082f; #2f0800; #52090E; #82190E; #a2390E;*/
+    --input-brd-clr: cornflowerblue;
     --input-fnt-clr: palegoldenrod;
 
     --list-bgr-clr: chocolate; /*#894415; darkgoldenrod;*/
@@ -173,6 +177,8 @@
 
     --adm-fnt-clr: orange;
     --label-fnt-clr: orange;
+
+    /* vinjetoj kaj bildoj */
     --vnj-bgr-clr: #996600;
 
     --svg-bgr-clr: #ffffee; 
