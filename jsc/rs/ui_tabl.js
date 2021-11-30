@@ -123,16 +123,18 @@ export default function() {
     $("#dock_eraroj").Erarolisto({});
     $("#dock_avertoj").Erarolisto({
         a_click: function(event) {
-            var a = $(event.currentTarget);
-            var span = a.parent();
+            const a = $(event.currentTarget);
+            const span = a.parent();
             if (span.hasClass('snc_mrk')) {
                 const art = $("#xml_text");
-                art.Artikolo("goto",span.parent().attr("value"),4);
+                const xmlarea = art.Artikolo("option","xmlarea");
+                xmlarea.goto(span.parent().attr("value"),4);
                 art.Artikolo("elekto","<snc mrk=\"" + a.text() + "\"","<snc");
                 span.parent().remove();
             } else if (span.hasClass('klr_ppp')) {
                 const art = $("#xml_text");
-                art.Artikolo("goto",span.parent().attr("value"),14);
+                const xmlarea = art.Artikolo("option","xmlarea");
+                xmlarea.goto(span.parent().attr("value"),14);
                 art.Artikolo("elekto",a.text(),"<klr>...</klr>");
                 span.parent().remove();
             } else {

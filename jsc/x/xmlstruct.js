@@ -303,6 +303,26 @@ XmlStruct.prototype.getCurrentKap = function(id) {
   }
 };
 
+/**
+ * Redonas la plej mallongan subtekston, kiu enhavas linion
+ * @param {number} line - la koncerna linio
+ * @returns - la id de la subteksto, null - se neniu enhavas la linion
+ */
+XmlStruct.prototype.getLastSubtextWithLine = function(line) {
+  let slen = null, sid = null;
+  for (let s of this.strukturo) {
+    if (s.de <= line && s.al >= line) {
+      // ni trovis subtekston, kiu enhavas la linion, sed
+      // ni serĉas la plej malgrandan, ekze snc anstataŭ parencan drv
+      if (!slen || slen > s.al - s.de) {
+        slen = s.al - s.de;
+        sid = s.id;
+      }
+    }
+  };
+  return sid;
+}
+
 
 /**
  * Trovas la elemento-komencon (end=false) aŭ finon (end=true) en la XML-teksto.
