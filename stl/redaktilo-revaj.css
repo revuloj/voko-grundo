@@ -113,9 +113,28 @@ body {
     display: none;
 }
 
+
+input[type='text'],
+select {
+    background-color: var(--input-bgr-clr) !important;
+    color: var(--input-fnt-clr) !important;
+    border: 2px solid var(--input-brd-clr);
+}
+
+textarea {
+    resize: none;
+    overflow: auto;
+    font-size: 12pt !important;
+    background-color: var(--input-bgr-clr);
+    color: var(--input-fnt-clr);
+    border: 2px solid var(--input-brd-clr);
+}
+
 .ui-button,
+input[type='button'],
 #tabs button {
     background-color: var(--btn-bgr-clr);
+    color: var(--main-fnt-clr);
     border-color: var(--btn-brd-clr);
     border-style: solid;
 }
@@ -126,20 +145,6 @@ body {
     margin-right: .1em;
 }
 
-
-input,
-select {
-    background-color: var(--input-bgr-clr) !important;
-    color: var(--input-fnt-clr) !important;
-}
-
-textarea {
-    resize: none;
-    overflow: auto;
-    font-size: 12pt !important;
-    background-color: var(--input-bgr-clr);
-    color: var(--input-fnt-clr);
-}
 
 .surxml {
     position: absolute;
@@ -187,6 +192,11 @@ label.kklvbtn {
 
 fieldset {
     border: 1px solid var(--main-brd-clr); /*#327e04;*/
+}
+
+fieldset legend {
+    color: inherit;
+    background-color: inherit;
 }
 
 #regexes, #serch_btnj {
@@ -453,7 +463,7 @@ dd {
 #dock_avertoj {
     border-bottom: 1px solid #7f2f2f;
     margin: 0;
-    background: #fcf6d6;
+    background: khaki;
     color: #7f2f2f;
     padding-left: 0em;
     margin-block-start: 0em;
@@ -501,7 +511,7 @@ dd {
 }
 
 .status_ok {
-    background-color: #c0ffc0;
+    background-color: greenyellow;
 }
 
 #elekto_indikoj {
@@ -673,6 +683,8 @@ dd {
     margin-top: 0.1 em;
     margin-bottom: 0.5 em;
     margin-right: 0.5 em;
+
+    font-family: "DejaVu Sans",sans-serif; 
 
     background-color: var(--main-bgr-clr); 
     color: var(--main-fnt-clr); 
