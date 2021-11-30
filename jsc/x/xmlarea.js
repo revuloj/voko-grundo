@@ -178,6 +178,7 @@ Xmlarea.prototype.goto = function(line_pos,len = 1) {
     function pos_of_line(xml,line) {
       let pos = 0;
       let lin = 0;
+      var m;
 
       while ((m = re_line.exec(xml))) {
         pos += m[0].length;
