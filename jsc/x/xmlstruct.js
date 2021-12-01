@@ -208,7 +208,7 @@ XmlStruct.prototype.replaceSubtext = function(id, xml, select = undefined) {
 };
 
 /**
- * Trovu la informojn de subtekston 'id' en la strukturlisto 
+ * Trovu la informojn de subteksto 'id' en la strukturlisto 
  * @param {string} id 
  * @returns la detalojn kiel objekto
  */
@@ -309,23 +309,17 @@ XmlStruct.prototype.getCurrentKap = function(id) {
 };
 
 /**
- * Redonas la plej mallongan subtekston, kiu enhavas linion
+ * Redonas la informojn pri la lasta subteksto, kiu enhavas linion
  * @param {number} line - la koncerna linio
- * @returns - la id de la subteksto, null - se neniu enhavas la linion
+ * @returns - la serĉataj detaloj, null - se neniu enhavas la linion
  */
-XmlStruct.prototype.getLastSubtextWithLine = function(line) {
-  let slen = null, sid = null;
-  for (let s of this.strukturo) {
-    if (s.de <= line && s.al >= line) {
-      // ni trovis subtekston, kiu enhavas la linion, sed
-      // ni serĉas la plej malgrandan, ekze snc anstataŭ parencan drv
-      if (!slen || slen > s.al - s.de) {
-        slen = s.al - s.de;
-        sid = s.id;
-      }
+XmlStruct.prototype.getLastStructWithLine = function(line) {
+  for (let n = this.strukturo.length-1; n--; n>=0) {
+    const s = this.strukturo[n];
+    if (s.ln <= line) {
+      return s;
     }
-  };
-  return sid;
+  } 
 }
 
 
