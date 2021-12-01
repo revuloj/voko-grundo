@@ -1,8 +1,11 @@
 
 /* jshint esversion: 6 */
 
-// (c) 2016 - 2019 - Wolfram Diestel
+// (c) 2016 - 2022 - Wolfram Diestel
 // laŭ GPL 2.0
+
+import { show_xhr_error } from './ui_dlg.js';
+
 
 console.debug("Instalante la erar- kaj kontrolfunkciojn...");
 $.widget( "redaktilo.Checks", {
@@ -128,6 +131,8 @@ $.widget( "redaktilo.Erarolisto", {
             const line_pos = $(event.currentTarget).attr("value");
             const xmlarea = $("#xml_text").Artikolo("option","xmlarea");
             xmlarea.goto(line_pos);
+            // okazigu eventon poziciŝanĝo ĉe Artikolo...
+            $("#xml_text").Artikolo("option","poziciŝanĝo")(); 
         }
     }
 
@@ -165,8 +170,8 @@ export function xmlkontrolo() {
               if (xhr.status == 400) {
                    alert("Eraro dum kontrolado: " + xhr.responseText);
               } else {
-                  var msg = "Ho ve, okazis eraro: ";
-                  alert(msg + xhr.status + " " + xhr.statusText + " " + xhr.responseText);
+                  show_xhr_error(xhr,"Ho ve, okazis eraro:",
+                    "Supozeble via seanco forpasis kaj vi devas resaluti.");
               }
       })
       .always(
@@ -319,8 +324,7 @@ export function surmetita_dialogo(url,root_el,loc) {
           function(data, status, xhr) {   
               if (xhr.status == 302) {
                   // FIXME: When session ended the OpenID redirect 302 is handled behind the scenes and here we get openid/login with status 200
-                 console.debug(xhr.status + " " + xhr.statusText);
-                 alert(xhr.status + " " + xhr.statusText); //'Seanco finiĝis. Bonvolu resaluti!');
+                show_xhr_error(xhr,"Via seanco finiĝis. Bonvolu resaluti!");
               } else {
                   $("#surmetita").html(data);
                   $("#surmetita_dlg").dialog("option", "title", $("#surmetita h1").text());

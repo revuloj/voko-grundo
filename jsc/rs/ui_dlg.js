@@ -513,7 +513,7 @@ export default function() {
     $( "#traduko_tabelo" ).on("blur","input",traduko_memoru_fokuson);
     $( "#traduko_butonoj" ).on("click","div",traduko_butono_premo);
 
-    //>>>>>>>> dialogo: Enmeti ŝablono
+    //>>>>>>>> dialogo: Enmeti per ŝablono
     plenigu_sxablonojn();
     $( "#sxablono_dlg" ).dialog({
         buttons: {   
@@ -595,6 +595,16 @@ export default function() {
     $( "#homonimo_tabelo" ).on("click","td.hom_art",homonimo_tabelo_premo);
               */
 
+
+    //>>>>>>>> eraro-dialogo
+    $( "#error_dlg" ).dialog({
+        buttons: { 
+            "Resaluti": () => { location.href='../auth/logout'; },
+            "\u2718": () => { $(this).dialog("close"); }
+        },
+        open: () => { $("#krei_error").hide(); }
+    });
+
     //>>>>>>>> surmetitta dialogo ekz. por deklaro pri datumprotekto, klarigoj/helpo ks
     $( "#surmetita_dlg" ).dialog({
         position: { my: "left top", at: "left+20 top+20", of: window },
@@ -635,8 +645,7 @@ export function shargi_sercho_autocomplete(request,response) {
             function(data, status, xhr) {   
                 if (xhr.status == 302) {
                     // FIXME: When session ended the OpenID redirect 302 is handled behind the scenes and here we get openid/login with status 200
-                   console.debug(xhr.status + " " + xhr.statusText);
-                   alert('Seanco finiĝis. Bonvolu resaluti!');
+                    show_xhr_error(xhr,"Via seanco finiĝis. Bonvolu resaluti!");
                 } else {
                     var i;
                     for (i=0; i<data.length; i++) {
@@ -668,6 +677,17 @@ export function shargi_sercho_autocomplete(request,response) {
                });
                */
 }
+
+export function show_xhr_error(xhr,msg_prefix="Eraro:",msg_suffix='') {
+    const msg_infix = xhr.status + " " + xhr.statusText + " " + xhr.responseText.substring(0,100);
+    console.error(msg_infix);
+    // alert(xhr.status + " " + xhr.statusText); 
+    const msg = "Ho ve, okazis eraro: " 
+     + xhr.status + " " + xhr.statusText + " " + xhr.responseText;
+    $( "#errror_msg" ).text(msg_prefix +  " " + msg_infix + " " +  msg_suffix);
+    $( "#error_dlg" ).dialog("open");    
+}
+
 
 /*
 export function shargi_sercho_select(event,ui) {
@@ -1551,8 +1571,7 @@ function plenigu_lastaj_liston() {
             if (xhr.status == 302) {
                 // FIXME: When session ended the OpenID redirect 302 is handled 
                 // behind the scenes and here we get openid/login with status 200
-                console.debug(xhr.status + " " + xhr.statusText);
-                alert(xhr.status + " " + xhr.statusText); //'Seanco finiĝis. Bonvolu resaluti!');
+                show_xhr_error(xhr,"Via seanco finiĝis. Bonvolu resaluti!");
             } else {
                 var listo = '';
                 var previous = null; //{kap: '', art1: '', art2: ''};

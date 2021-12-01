@@ -4,6 +4,7 @@
 // (c) 2016 - 2019 Wolfram Diestel
 // laŭ GPL 2.0
 
+import { show_xhr_error } from './ui_dlg.js';
 import { vortokontrolo, xmlkontrolo, klrkontrolo, surmetita_dialogo } from './ui_err.js';
 import { vikiSerĉo, citaĵoSerĉo, retoSerĉo, bildoSerĉo } from './ui_srch.js';
 
@@ -619,8 +620,8 @@ function antaurigardo() {
                     Ni traktu HTTP-500 iom unuece kaj konduku la uzanton kun iom da helpo
                     al resaluto, ĉu?
                     */
-                    var msg = "Ho ve, okazis eraro: ";
-                    alert(msg + xhr.status + " " + xhr.statusText + " " + xhr.responseText);
+                   show_xhr_error(xhr,"Ho ve, okazis eraro:",
+                    "Supozeble via seanco forpasis kaj vi devas resaluti!");
                 }
         })
         .always(
