@@ -314,7 +314,7 @@ XmlStruct.prototype.getCurrentKap = function(id) {
  * @returns - la serĉataj detaloj, null - se neniu enhavas la linion
  */
 XmlStruct.prototype.getLastStructWithLine = function(line) {
-  for (let n = this.strukturo.length-1; n--; n>=0) {
+  for (let n = this.strukturo.length-1; n>=0; n--) {
     const s = this.strukturo[n];
     if (s.ln <= line) {
       return s;

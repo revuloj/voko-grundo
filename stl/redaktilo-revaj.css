@@ -132,6 +132,11 @@ textarea {
     border: 2px solid var(--input-brd-clr);
 }
 
+.ui-dialog input {
+    /* ni havas limigon en retavortaro.de, kiun ni forigas tie ĉi */
+    max-width: none;
+}
+
 .ui-button,
 input[type='button'],
 #tabs button {
@@ -330,7 +335,7 @@ dd {
 #menu_show_btn {
     width: 2.5em;
     padding: .4em !important;
-    z-index: 110; /* kovru la ombron de la menuo! */
+    z-index: 100; /* kovru la ombron de la menuo! */
     box-shadow: 0 0 4px black;
 }
 
@@ -1006,7 +1011,7 @@ pre.line {
 
 .overlay {
     position: absolute;
-    z-index: 100;
+    z-index: 110;
     max-width: 96vw;
     max-height: 85vh;     
     overflow: auto;

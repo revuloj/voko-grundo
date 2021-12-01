@@ -679,12 +679,13 @@ export function shargi_sercho_autocomplete(request,response) {
 }
 
 export function show_xhr_error(xhr,msg_prefix="Eraro:",msg_suffix='') {
-    const msg_infix = xhr.status + " " + xhr.statusText + " " + xhr.responseText.substring(0,100);
+    const msg_infix = xhr.status + " " + xhr.statusText + 
+        (xhr.responseText? " " + xhr.responseText.substring(0,100) : "");
     console.error(msg_infix);
     // alert(xhr.status + " " + xhr.statusText); 
     const msg = "Ho ve, okazis eraro: " 
      + xhr.status + " " + xhr.statusText + " " + xhr.responseText;
-    $( "#errror_msg" ).text(msg_prefix +  " " + msg_infix + " " +  msg_suffix);
+    $( "#error_msg" ).html(msg_prefix +  "<br/>" + msg_infix + "<br/>" +  msg_suffix);
     $( "#error_dlg" ).dialog("open");    
 }
 
