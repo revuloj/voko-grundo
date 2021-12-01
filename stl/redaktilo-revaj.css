@@ -124,6 +124,8 @@ select {
 textarea {
     resize: none;
     overflow: auto;
+    width: auto !important;
+    height: auto !important;
     font-size: 12pt !important;
     background-color: var(--input-bgr-clr);
     color: var(--input-fnt-clr);

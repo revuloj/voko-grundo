@@ -23,6 +23,7 @@ function Xmlarea(ta_id, onAddSub) {
     this.ar_in_sync = false; // por scii, ĉu la lasta antaŭrigardo estas aktuala...
 
     this.re_stru = {
+      _line: /^.*$/m,
       _trd: /^<trd(grp)?\s+lng\s*=\s*["']([a-z]{2,3})['"]\s*>([^]*?)<\/trd\1\s*>$/,
       _tr1: /<trd\s*>([^]*?)<\/trd\s*>/g
     };
@@ -57,7 +58,7 @@ Xmlarea.prototype.getDosiero = function() {
 };
 
 /**
- * Saltas al la aktuala derivaĵo (laŭ mrk)
+ * Saltas al la aktuala derivaĵo (laŭ mrk) en la antaŭrigardo (#...)
  */
 Xmlarea.prototype.saltu = function() {
   const mrk = this.xmlstruct.getCurrentMrk(this.elekto);
@@ -162,6 +163,52 @@ Xmlarea.prototype.changeSubtext = function(id) {
     this.scrollPos(0);
   }
 };
+
+
+/**
+ * Iras al pozicio indikita per "<line>:[<lpos>]"
+ * @param {*} line_pos - linio kaj eventuala pozicio en la linio kiel teksto
+ * @param {*} len - se donita, tiom da signoj ĉe la indikita poizico estos markitaj,
+ *                  se ne donita unu signo estos elektita
+ */
+Xmlarea.prototype.goto = function(line_pos,len = 1) {
+  const re_line = this.re_stru._line;
+  
+    // kalkulu la signoindekson por certa linio
+    function pos_of_line(xml,line) {
+      let pos = 0;
+      let lin = 0;
+      var m;
+
+      while ((m = re_line.exec(xml))) {
+        pos += m[0].length;
+        if (lin++ > line) return pos;
+      }
+      /*
+      var lines = this.element.val().split('\n');
+      var pos = 0;
+      
+      for (var i=0; i<line; i++) {
+          pos += lines[i].length+1;
+      }
+      return pos;*/
+    };
+
+  const p = line_pos.split(":");
+  const line = p[0] || 1;
+  const lpos = p[1] || 1;
+
+  if (! this.synced) this.sync(this.elekto); 
+  const sub_id = this.xmlstruct.getLastSubtextWithLine(line);
+
+  const xml = this.xmlstruct.getSubtextById(sub_id);
+  const pos = pos_of_line(xml,line-1) + ( lpos>0 ? lpos-1 : 0 );
+
+  this.changeSubtext(sub_id);
+  this.select(pos); // rulu al la pozicio
+  this.select(pos,len); // nur nun marku <len> signojn por pli bona videbleco
+};
+
 
 
 /**

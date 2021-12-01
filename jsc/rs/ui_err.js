@@ -125,7 +125,9 @@ $.widget( "redaktilo.Erarolisto", {
         // la atributo value de li donas la linion en la XML-teksto,
         // la atributo title de li donas line:pos
         if (event.target.localName != "a") {
-            $("#xml_text").Artikolo("goto",$(event.currentTarget).attr("value"));
+            const line_pos = $(event.currentTarget).attr("value");
+            const xmlarea = $("#xml_text").Artikolo("option","xmlarea");
+            xmlarea.goto(line_pos);
         }
     }
 

@@ -131,6 +131,7 @@ $.widget( "redaktilo.Artikolo", {
         this._setOption("dosiero",dosiero);
     },
 
+    /*
     goto: function(line_pos,len = 1) {
         var p = line_pos.split(":");
         var line = p[0] || 1;
@@ -139,7 +140,7 @@ $.widget( "redaktilo.Artikolo", {
         var pos = this.pos_of_line(line-1) + ( lpos>0 ? lpos-1 : 0 );
         e.selectRange(pos); // rulu al la pozicio
         e.selectRange(pos,pos+len); // nur nun marku <len> signojn por pli bona videbleco
-    },
+    },*/
 
     insert: function(xmlstr) {
         var e = this.element;
@@ -297,6 +298,7 @@ $.widget( "redaktilo.Artikolo", {
         }
     },
 
+    /*
     // kalkulu la signoindekson por certa linio
     pos_of_line(line) {
         var lines = this.element.val().split('\n');
@@ -307,6 +309,7 @@ $.widget( "redaktilo.Artikolo", {
         }
         return pos;
     },
+    */
 
     // eltrovu la enŝovon de la linio antaŭ la nuna pozicio
     current_indent(shift = 0) {
