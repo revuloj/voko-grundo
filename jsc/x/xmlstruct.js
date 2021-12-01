@@ -12,7 +12,6 @@
 function XmlStruct(xml, onAddSub) {
     this.xmlteksto = xml; // la tuta teksto
     this.strukturo = []; // la listo de subtekstoj [komenco,fino,nomo]
-    this.tradukoj = {}; // tradukoj trovitaj en la aktuala redaktata subteksto
     this.radiko = '';
     this.onaddsub = onAddSub;
 
@@ -372,3 +371,5 @@ XmlStruct.prototype.travel_tag_bw = function(elements,end,stop_no_match,xml,from
     pos = xml.lastIndexOf(mark,pos-1);
   }
 };
+
+
