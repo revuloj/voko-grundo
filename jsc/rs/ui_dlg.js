@@ -786,19 +786,20 @@ function sendi_artikolon_servile(event) {
     event.preventDefault();
     // $("#sendiservile_error").hide();
 
-    var metodo = ($(event.target).text() == 'Submeti'? 'api' : 'email');
+    const metodo = ($(event.target).text() == 'Submeti'? 'api' : 'email');
     
     // aldono (t.e. nova artikolo) aŭ redakto (t.e. ŝanĝo)
-    var reĝimo = $("#xml_text").Artikolo("option","reĝimo"); 
+    const reĝimo = $("#xml_text").Artikolo("option","reĝimo"); 
 
     // ĉe novaj artikoloj komento entenas la dosiernomon
     if (! $("#sendiservile_komento").validate()) return;
 
-    var komento = $("#sendiservile_komento").val();
-    var dosiero = (reĝimo == 'aldono')? komento: $("#xml_text").Artikolo("art_drv_mrk"); 
+    const komento = $("#sendiservile_komento").val();
+    const dosiero = (reĝimo == 'aldono')? komento: $("#xml_text").Artikolo("art_drv_mrk"); 
+    const xmlarea = $("#xml_text").Artikolo("option","xmlarea");
 
     $.alportu("revo_sendo", {
-        xml: $("#xml_text").val(),
+        xml: xmlarea.syncedXml(),
         shangho: komento,
         redakto: reĝimo,
         metodo: metodo,
