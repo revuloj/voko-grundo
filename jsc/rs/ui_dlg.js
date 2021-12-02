@@ -1347,52 +1347,48 @@ function fill_tradukojn(lng,lingvo_nomo) {
     $("#traduko_tradukoj").off("click");
     $("#traduko_tradukoj").off("change");
     
-
     // ĉar la tradukdialogo montras samtempe ĉiam nur tradukojn de unu lingvo
     // ni kunfandas tiujn el la artikolo, kaj tiujn, kiuj jam estas
     // aldonitaj aŭ ŝanĝitaj en la dialogo
-    var trdoj = $("#xml_text").Artikolo("tradukoj",lng); 
-    var trd_shanghoj = $("#traduko_tradukoj").data("trd_shanghoj") || {};
+    // var trdoj = $("#xml_text").Artikolo("tradukoj",lng); 
+    const xmlarea = $("#xml_text").Artikolo("option","xmlarea");
+    const trdoj = xmlarea.collectTrdAllStruct(lng);
+    const trd_shanghoj = $("#traduko_tradukoj").data("trd_shanghoj") || {};
 
     var tableCnt = '';
 
     if (trdoj) {
-        for (let i=0; i < trdoj.length; i++) {
-            var t = trdoj[i];
-            var kap = '';
 
-            // metu la kapvorton, se ekzistas 
-            if (t.kap ) {
-                kap = '<b>'+t.kap+'</b>';
-            // .. aŭ la snc-distingilon aliokaze
-            } else {
-                var s = t.mrk.split('.');
-                kap = "&nbsp;&nbsp;&nbsp;" + '..(' + s[s.length-1] + ')';
-            }
-            tableCnt += '<tr><td>' + kap + '</td><td>';
+        // PLIBONIGU: estas neelegante tie pridemandi
+        // .xmlstruct - pli bone xmlarea jam redonu la pretan
+        // bezonatan strukturon pro tradukprezento!
+        for (let s of xmlarea.xmlstruct.strukturo) {
+            if (['drv','subdrv','snc','subsnc'].indexOf(s.el) > -1) {
+                tableCnt += '<tr><td>' + s.dsc + '</td><td>';
             
-            var trd; 
-            try {
-                // preferu jam ŝanĝitajn tradukojn
-                trd = trd_shanghoj[t.mrk][lng];
-            } catch (e) {
-                // se ŝanĝoj ne ekzistas prenu tiujn el la XML-artikolo
-                trd = t.trd;
-            }
-            
-            if ( trd && trd.length ) {
-                for (let j=0; j<trd.length; j++) {
-                    tableCnt += traduko_input_field(t.mrk,j,quoteattr(trd[j]));
-                    tableCnt += "<br/>";
+                let trd; 
+                try {
+                    // preferu jam ŝanĝitajn tradukojn
+                    trd = trd_shanghoj[s.id][lng];
+                } catch (e) {
+                    // se ŝanĝoj ne ekzistas prenu tiujn el la XML-artikolo
+                    trd = trdoj[s.id];
                 }
-            } else {
-               tableCnt += traduko_input_field(t.mrk,0,'') + '<br/>';  
-            }
-            tableCnt += '</td>';
-            tableCnt += '<td>' + traduko_add_btn(t.mrk) + '</td>';
-            tableCnt += '</tr>';
-        }
-    }
+                
+                if ( trd && trd.length ) {
+                    for (let j=0; j<trd.length; j++) {
+                        tableCnt += traduko_input_field(s.id,j,quoteattr(trd[j]));
+                        tableCnt += "<br/>";
+                    }
+                } else {
+                   tableCnt += traduko_input_field(s.id,0,'') + '<br/>';  
+                }
+                tableCnt += '</td>';
+                tableCnt += '<td>' + traduko_add_btn(s.id) + '</td>';
+                tableCnt += '</tr>';
+            } // if drv..subsnc
+        } // for s...
+    } // if trdj
     $("#traduko_lingvo").text(lingvo_nomo +" ["+lng+"]");
     $("#traduko_dlg").data("lng",lng);
     $("#traduko_tradukoj").empty();

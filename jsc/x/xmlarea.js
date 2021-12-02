@@ -23,7 +23,7 @@ function Xmlarea(ta_id, onAddSub) {
     this.ar_in_sync = false; // por scii, ĉu la lasta antaŭrigardo estas aktuala...
 
     this.tradukoj = {}; // tradukoj kolektitaj profunde/kunparence por aktuale elektita subteksto, ŝlosilo estas lng
-    this.tradukoj_struct = {}; // tradukoj kolektitaj (malprofunde) por ĉiu subteksto, ŝlosilo estas .id
+    this.tradukoj_strukt = {}; // tradukoj kolektitaj (malprofunde) por ĉiu subteksto, ŝlosilo estas .id
                         // valoro estas objekto {<lng>:[<trdj>]}
 
     this.re_stru = {
@@ -215,13 +215,12 @@ Xmlarea.prototype.goto = function(line_pos,len = 1) {
 
 
 /**
- * Kolektas ĉiujn tradukojn de unu lingvo en XML-teksto
- * @param {string} lng - la lingvokodo, ekz-e en, de, fr ktp.
+ * Kolektas ĉiujn tradukojn en XML-teksto
  * @param {string} xml - la XML-teksto
  * @param {boolean} shallow - true: ni serĉas nur en la unua strukturnivelo, false: ni serĉas strukturprofunde, do ĉiujn tradukojn
  */
-Xmlarea.prototype.collectTrd = function(lng, xml, shallow=false) {
-  const re = this.xmlstruct.re_stru;
+Xmlarea.prototype.collectTrd = function(xml, shallow=false) {
+  const re = this.re_stru;
   if (!xml) {
     // KOREKTU: fakte ni nun kolektas en {<lng>: [trdj]}
     // do ĝuste estus this.tradukoj = {} aŭ this.tradukoj[lng] = [] !?
@@ -292,25 +291,23 @@ Xmlarea.prototype.collectTrd = function(lng, xml, shallow=false) {
 
 
 /**
- * Kolektas ĉiujn tradukojn de unu lingvo en la aktuale redaktata XML-subteksto.
- * La rezulto estos poste en la propra listo this.tradukoj
- * @param {string} lng - la lingvokodo: ar, en, de ktp.
+ * Kolektas ĉiujn tradukojn en la aktuale redaktata XML-subteksto.
+ * La rezulto estos poste en la propra listo this.tradukoj[lng]
  */
-Xmlarea.prototype.collectTrdAll = function(lng) {
+Xmlarea.prototype.collectTrdAll = function() {
   var xml = this.txtarea.value;
-  // KOREKTU: fakte ni nun kolektas en {<lng>: [trdj]}
-  // do ĝuste estus this.tradukoj = {} aŭ this.tradukoj[lng] = [] !?
-  this.tradukoj = [];
+  // ni kolektas en {<lng>: [trdj]}
+  this.tradukoj = {};
 
   // kolektu unue la tradukojn profunde en la aktuala subteksto
-  this.collectTrd(lng,xml,false); // profunde
+  this.collectTrd(xml,false); // profunde
 
   // se temas pri subdrv, snc, subsnc ni kolektu ankaŭ de la parencaj,
   // ĉar ekz-e la traduko de drv validas ankaŭ por ĉiu ena snc...
   var p = this.xmlstruct.getParent(this.elekto);
   while ( ['snc','subdrv','drv'].indexOf(p.el)>-1 ) {
     xml = this.xmlstruct.getSubtextById(p.id);
-    this.collectTrd(lng,xml,true); // malprofunde
+    this.collectTrd(xml,true); // malprofunde
     p = this.xmlstruct.getParent(p.id);
   }
 };
@@ -319,19 +316,30 @@ Xmlarea.prototype.collectTrdAll = function(lng) {
  * Kolektas tradukojn de unu lingvo malprofunde por ĉiu unuopa
  * subteksto laŭ la strukturo. Do por 'drv' en estas nur la rektaj tradukoj
  * dum la traudkoj de enhavataj 'snc' aperas por la sekvaj snc-subtekstoj
- * @param {string} lng - la lingvo por kiu kolekti tradukojn
+ * @param {string} lng - la lingvo por kiu redoni tradukojn
  */
 Xmlarea.prototype.collectTrdAllStruct = function(lng) {
   // PLIBONIGU: eble tio pli bone sidus en XmlStruct, sed
   // ni devos movi tiam ankaŭ .collectTrd tien!
-  this.tradukoj_struct = {};
+  if (! this.tradukoj_strukt) this.tradukoj_strukt = {};
+  this.tradukoj_strukt[lng] = {}; // se jam ekzistas, tamen malplenigu!
 
-  for (let s of this.xmlstruct.structure) {
-    const xml = this.xmlstruct.getSubtextById(s.id);
-    this.collectTrd(lng,xml,true); // malprofunde
-    this.tradukoj[s.id][lng] = this.tradukoj[lng];
+
+  for (let s of this.xmlstruct.strukturo) {
+    if (['drv','subdrv','snc','subsnc'].indexOf(s.el) > -1) {
+      // PLIBONIGU: ni unue kolektas en {<lng>: [trdj]} kaj poste kopias
+      // eble estonte ni povos eviti la kopiadon
+      this.tradukoj = {};
+
+      const xml = this.xmlstruct.getSubtextById(s.id);
+      this.collectTrd(xml,true); // malprofunde
+      this.tradukoj_strukt[lng][s.id] = this.tradukoj[lng];  
+    }
   }
+
+  return this.tradukoj_strukt[lng];
 };
+
 
 /**
  * Trovas la lokon kie enmeti tradukon de certa lingvo en la aktuala redaktata subteksto
