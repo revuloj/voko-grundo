@@ -18,7 +18,7 @@ function XmlStruct(xml, onAddSub) {
     this.re_stru = {
       _elm: /[ \t]*<((?:sub)?(?:art|drv|snc))[>\s]/g,
       _eoe: />[ \t]*\n?/g,
-      _mrk: /mrk\s*=\s*"([^>"]*?)"/g,
+      _mrk: /\s*mrk\s*=\s*(['"])([^>"']*?)\1/g,
       _kap: /<kap>([^]*)<\/kap>/,
       _rad: /<rad>([^<]+)<\/rad>/,
       _dos: /<art\s+mrk="\$Id:\s+([^\.]+)\.xml|<drv\s+mrk="([^\.]+)\.'/,
@@ -65,13 +65,18 @@ XmlStruct.prototype.structure = function(selected = undefined) {
    * @param {number} ghis - la fino de la subteksto en la tuta XML
    * @returns la atributon 'mrk'
    */
-  function mrk(elm,de,ghis) {
-    re_stru._mrk.lastIndex = de;
-    const mrk = re_stru._mrk.exec(xmlteksto);
-    if (mrk && mrk.index < ghis) {          
-      return (elm != 'art'? 
-        mrk[1].substring(mrk[1].indexOf('.')+1) 
-        : (mrk[1].slice(mrk[1].indexOf(':')+2,-20)) || '<nova>');
+  function mrk(elm,de) {
+    let i_start = xmlteksto.indexOf('<',de);
+    if (i_start > -1) {
+      i_start += 1 + elm.length + 1; // de:"<elm " 
+      re_stru._mrk.lastIndex = i_start;
+      const m = re_stru._mrk.exec(xmlteksto);
+      if (m && m.index == i_start) { 
+        const mrk = m[2];
+        return (elm != 'art'? 
+          mrk.substring(mrk.indexOf('.')+1) 
+          : (mrk.slice(mrk.indexOf(':')+2,-20)) || '<nova>');
+      }  
     }
   }
   function rad(de,ghis) {
@@ -150,7 +155,7 @@ XmlStruct.prototype.structure = function(selected = undefined) {
     subt.ln = count_char(xmlteksto,'\n',0,m.index);
     subt.al = al(subt.el,m.index+5);
 
-    subt.mrk = mrk(subt.el,subt.de,subt.al);
+    subt.mrk = mrk(subt.el,subt.de);
     subt.kap = kap(subt.el,subt.de,subt.al);
     subt.id = id(subt);
     subt.no = this.strukturo.length;
