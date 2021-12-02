@@ -1364,7 +1364,14 @@ function fill_tradukojn(lng,lingvo_nomo) {
         // bezonatan strukturon pro tradukprezento!
         for (let s of xmlarea.xmlstruct.strukturo) {
             if (['drv','subdrv','snc','subsnc'].indexOf(s.el) > -1) {
-                tableCnt += '<tr><td>' + s.dsc + '</td><td>';
+                const parts = s.dsc.split(':');
+                let dsc = parts[1] || parts[0];
+                if (s.el == 'snc' || s.el == 'subsnc' && parts[1]) {
+                    const p = dsc.indexOf('.');
+                    if (p>-1) dsc = dsc.substr(p);
+                }
+                if (s.el == 'drv') dsc = '<b>'+dsc+'</b>';
+                tableCnt += '<tr><td>' + dsc + '</td><td>';
             
                 let trd; 
                 try {
