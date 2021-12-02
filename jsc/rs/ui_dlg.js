@@ -1095,9 +1095,10 @@ function bildo_enmeti(event, nur_fnt) {
     bld.fnt_dec = bld.fnt;
     bld.fnt = encodeURI(bld.fnt);
     // ne kodigu duoble, ekz. % al %25: bld.url = encodeURI(bld.url);
-    bld.frazo = linirompo(bld.frazo,indent=4);
+    const indent = 4;
+    bld.frazo = linirompo(bld.frazo,indent);
 
-    var bldstr = new XMLBildo(bld).xml(indent=4);
+    var bldstr = new XMLBildo(bld).xml(indent);
     $("#xml_text").insert(bldstr);
     $("#xml_text").change();
     $("#bildo_dlg").dialog("close");
@@ -1125,7 +1126,8 @@ function derivajho_enmeti(event) {
     
     var values = $("#derivajho_dlg").dialog("valoroj");
     //values.mrk = xmlArtDrvMrk($("#xml_text").val()); 
-    values.dif = linirompo(values.dif,indent=2);
+    const indent = 2;
+    values.dif = linirompo(values.dif,indent);
     values.mrk = $("#xml_text").Artikolo("art_drv_mrk"); 
     
     var drvxml = new XMLDerivaĵo(values).xml();
