@@ -34,6 +34,7 @@
     --main-act-bgr-clr: #eAb530;
     --main-act-fnt-clr: black;
     --main-hov-fnt-clr: coral;
+    /* ombro-koloro */
     --main-shd-clr: gray;
 
     /* redaktilo */
@@ -59,7 +60,8 @@
     --btn-act-brd-clr: black;
     --btn-dis-bgr-clr: #999;
 
-    --tab-bgr-clr: khaki;
+    --tab-bgr-clr: #999;
+    --tab-act-bgr-clr: khaki;
 
     /* input-elementoj */
     --input-bgr-clr: white;
@@ -93,6 +95,9 @@
     --icn-hov-bgr-clr:  lightgoldenrodyellow; 
     --icn-act-bgr-clr:  lightgoldenrodyellow; 
 
+    --ibt-bgr-clr: lightgoldenrodyellow; /* icon btn en jQuery dlg */
+
+
     --adm-fnt-clr: #303030;
     --label-fnt-clr: #104040;
 
@@ -104,6 +109,11 @@
 
     --bld-bgr-clr: lightgoldenrodyellow;
     --bld-brd-clr: #cccccc;
+
+    /* ŝablonoj  */
+    --shb-bgr-clr: #e5e3d5;
+    --sh2-bgr-clr: #ffedad;
+    --shb-hov-bgr-clr: #e3a345;
 }
 
 
@@ -130,6 +140,7 @@
     --main-act-bgr-clr: #c2590E;
     --main-act-fnt-clr: palegoldenrod;
     --main-hov-fnt-clr: #EE6F40;
+    /* ombro-koloro */
     --main-shd-clr: palegoldenrod;
 
     --ovr-bgr-clr: #0f0800;
@@ -151,7 +162,8 @@
     --btn-act-fnt-clr: black; 
     --btn-act-brd-clr: black;
  
-    --tab-bgr-clr: orange; 
+    --tab-bgr-clr: #999; 
+    --tab-act-bgr-clr: orange; 
 
     --input-bgr-clr: #070721; /*#00082f; #2f0800; #52090E; #82190E; #a2390E;*/
     --input-brd-clr: cornflowerblue;
@@ -174,6 +186,7 @@
     --ref-fnt-clr: chocolate;
 
     --icn-fnt-clr: lightyellow; 
+    --ibt-bgr-clr: #552200; /* icon btn en jQuery dlg */
 
     --adm-fnt-clr: orange;
     --label-fnt-clr: orange;
@@ -183,5 +196,10 @@
 
     --svg-bgr-clr: #ffffee; 
     --svg-brd-clr: #cccccc;
+
+    /* ŝablonoj  */
+    --shb-bgr-clr: #070721;
+    --sh2-bgr-clr: navy;
+    --shb-hov-bgr-clr: #c2590E;
     }
 }

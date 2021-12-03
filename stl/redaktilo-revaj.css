@@ -121,6 +121,7 @@ select {
     border: 2px solid var(--input-brd-clr);
 }
 
+
 textarea {
     resize: none;
     overflow: auto;
@@ -137,6 +138,19 @@ textarea {
     max-width: none;
 }
 
+.ui-dialog input:focus,
+.ui-dialog textarea:focus {
+    outline: 2px solid;
+    outline-color: var(--input-brd-clr);
+}
+
+#xml input:focus,
+#xml textarea:focus {
+    outline: 1px dotted;
+    outline-color: (--main-act-brd-clr);
+}
+
+
 .ui-button,
 input[type='button'],
 #tabs button {
@@ -144,6 +158,17 @@ input[type='button'],
     color: var(--main-fnt-clr);
     border-color: var(--btn-brd-clr);
     border-style: solid;
+}
+
+.ui-button:focus,
+input[type='button']:focus,
+#tabs button:focus {
+    background-color: var(--btn-act-bgr-clr);
+}
+
+.ui-button-icon,
+.ui-button-icon-only {
+    background-color: var(--ibt-bgr-clr) !important;
 }
 
 #sercho_trovoj button {
@@ -295,8 +320,8 @@ dd {
 
 .ui-tabs-nav li.ui-tabs-active,
 .ui-tabs-nav li.ui-state-active a {
-    background-color: var(--input-bgr-clr) !important;
-    color: var(--input-fnt-clr) !important;
+    background-color: var(--tab-act-bgr-clr) !important;
+    color: black;
 }
 
 .ui-tabs-vertical {
@@ -800,13 +825,22 @@ dd {
 
 .versio {
     position: absolute;
-    left: 1em;
-    bottom: 1em;
+    bottom: 0;
+    background-color: rgba(0,0,0,.4);
+    padding: .2em;
+    margin: 0; 
+    width: 100%;
     font-family: sans-serif;
     font-size: small;
     font-weight: bold;
     color: whitesmoke;
     text-align: center;
+}
+
+.versio a:link,
+.versio a:visited {
+    text-decoration: none;
+    color: whitesmoke;
 }
 
 /*
@@ -930,7 +964,7 @@ dd {
 
 
 #sxablono_xml {
-    background-color: #e5e3d5;
+    background-color: var(--shb-bgr-clr);
 }
 
 pre.line {
@@ -939,27 +973,29 @@ pre.line {
 
 .sxbl {
     /* margin: 0; */
-    background-color: #ffedad; /*darkseagreen; */
+    background-color: var(--sh2-bgr-clr); 
 }
 
 .sxbl:hover {
     /* margin: 0; */
-    background-color: #e3a345; /* #e5e3d5; */
+    background-color: var(--shb-hov-bgr-clr); 
     cursor: pointer;
 }
 
+/*
 .hom_art {
-    background-color: #ffedad; /*darkseagreen; */
+    background-color: #ffedad; 
 }
 
 .hom_art:hover {
-    background-color: #e3a345; /* #e5e3d5; */
+    background-color: #e3a345; 
     cursor: pointer;
 }
 
 #hom_dos_div {
     border-top: 1px solid #327e04;
 }
+*/
 
 /* stiloj por analizo (vort-kontrolo) */
 .malstrikte { color: black }
