@@ -47,6 +47,7 @@ preparo)
     echo "Aktualigante skriptojn al nova eldono ${release}..."
     sed -i 's/globalThis.eldono = "[1-9][a-z]";/globalThis.eldono = "'${release}'";/' ${GLOBAL}
     sed -i 's,/revo-[1-9][a-z]-min\.,/revo-'${release}'-min\.,g' ${PACKG}
+    sed -i 's,/redaktilo-[1-9][a-z]-min\.,/redaktilo-'${release}'-min\.,g' ${PACKG}
     sed -i 's/"version": "[1-9].[0-9].[1-9]"/"version": "'${node_release}'"/' ${PACKG}
     ;;
 artikoloj)
