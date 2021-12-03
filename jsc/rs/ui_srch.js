@@ -153,7 +153,7 @@ export function retoSerĉo(event) {
                 if ( last_title.search(first_word) >= 0 || snippet.search(first_word) >= 0 ) {
 
                     $("#sercho_trovoj").append('<dd id="trv_' + n + '">');
-                    // DuckDuckGo alpendigas ŋenan parametron &rut
+                    // DuckDuckGo alpendigas ĝenan parametron &rut
                     let url = last_link.replace(/&rut=[a-f0-9]+/,'');        
 
                     $("#trv_"  + n).Trovo(

@@ -534,7 +534,16 @@ $.widget( "redaktilo.Artikolo", {
             console.error(e);
             return;
         }
+
+        for (let s of xmlarea.xmlstruct.strukturo) {
+            if (tradukoj[s.id]) {
+                for (let lng in tradukoj[s.id]) {
+                    // insert_trd_lng(this,shov,lng,tradukoj[mrk][lng]);
+                }
+            }
+        }
         
+        /*
         artikolo.find("[mrk]").each(function(index) {
             var mrk = $(this).attr("mrk");
             // kiom da spacsignojn metu komence?
@@ -548,6 +557,7 @@ $.widget( "redaktilo.Artikolo", {
                 }
             }
         });
+        */
         
         var prologo = '<?xml version="1.0"?>\n<!DOCTYPE vortaro SYSTEM "../dtd/vokoxml.dtd">\n\n';
         xml = outerXML(artikolo[0]).replace(rx._amp,'&').replace(rx._spc,'');  // ĉi lasta aparte pro Edge, kiu eligas "<tld />"            

@@ -1365,6 +1365,12 @@ function fill_tradukojn(lng,lingvo_nomo) {
         // PLIBONIGU: estas neelegante tie pridemandi
         // .xmlstruct - pli bone xmlarea jam redonu la pretan
         // bezonatan strukturon pro tradukprezento!
+        //
+        // Krom la uzo de semantikaj id-atributoj ne estas tro eleganta
+        // pli bone kreu propran tradukoj-objekton kun insert, update ktp
+        // kiu transprentas la administradon kaj aktualigadon...
+        // ŝangojn oni devus skribi tiam nur se oni ŝanĝas lingvon aŭ enmetas tradukojn
+        // en la dialogon ĝin fermante...
         for (let s of xmlarea.xmlstruct.strukturo) {
             if (['drv','subdrv','snc','subsnc'].indexOf(s.el) > -1) {
                 const parts = s.dsc.split(':');
@@ -1425,6 +1431,8 @@ function trd_input_shanghita(element) {
 }
 
 function trd_put(mrk,lng,no,trd) {
+    // PLIBONIGU: verŝajne estas pli efike meti aldonojn kaj ŝanĝojn 
+    // al Xmlarea.tradukoj nun anstataŭ en aparta dlg-alpendo trd_shanghoj...
     var trd_shanghoj = $("#traduko_tradukoj").data("trd_shanghoj") || {};
     if (! trd_shanghoj[mrk]) trd_shanghoj[mrk] = {};
     if (! trd_shanghoj[mrk][lng]) trd_shanghoj[mrk][lng] = Array();

@@ -29,7 +29,10 @@ function Xmlarea(ta_id, onAddSub) {
     this.re_stru = {
       /*_line: /^.*$/mg,*/
       _trd: /^<trd(grp)?\s+lng\s*=\s*["']([a-z]{2,3})['"]\s*>([^]*?)<\/trd\1\s*>$/,
-      _tr1: /<trd\s*>([^]*?)<\/trd\s*>/g
+      _tr1: /<trd\s*>([^]*?)<\/trd\s*>/g,
+      _ofc: /<ofc>[^]*<\/ofc>/g,
+      _klr: /<klr[^>]*>[^]*<\/klr>/g,
+      _ind: /<ind>([^]*)<\/ind>/g
     };
 }
 
@@ -212,6 +215,10 @@ Xmlarea.prototype.goto = function(line_pos,len = 1) {
   this.select(pos,len); // nur nun marku <len> signojn por pli bona videbleco
 };
 
+/******
+ * PLIBONIGU: administrado de tradukoj estas sufiĉe defia por meriti apartigon
+ * en propra objekto...
+ */
 
 
 /**
