@@ -180,14 +180,14 @@ input[type='button']:focus,
 
 .surxml {
     position: absolute;
-    right: 4.2em;
+    right: 3.7em;
     opacity: .8;
     background-color: silver;
     margin: 0;
     padding: 0;
 }
 #position {
-    top: 3.2em;
+    top: 2.7em;
     margin: .1em;
     padding: .18em;
     border-radius: 4px;

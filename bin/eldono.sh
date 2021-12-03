@@ -11,8 +11,8 @@
 #host=retavortaro.de
 # aldonu en /etc/hosts!
 host=revo
-release=2b
-node_release=2.0.2
+release=2c
+node_release=2.0.3
 revo=${host}:www/revo
 files=${host}:files
 
@@ -24,19 +24,10 @@ target="${1:-helpo}"
 JSC=build/jsc/revo-${release}-min.js
 CSS=build/stl/revo-${release}-min.css
 
-KADRO=jsc/kadro.js
+GLOBAL=jsc/u/global.js
 PACKG=package.json
 
 case $target in
-helpo)
-    echo "---------------------------------------------------------------------------"
-    echo "Tiu skripto servas por publikigi dosierojn loke preparitajn en la servilo."
-    echo "Tiucele ekzistas celoj 'servilo', 'artikoloj', 'historioj', 'indeksoj', 'fontoj'."
-    echo ""
-    echo "Per la aparta celo 'preparo' oni povas krei git-branĉon kun nova eldono por tie "
-    echo "komenci programadon de novaj funkcioj, ŝanĝoj ktp. Antaŭ adaptu en la kapo de ĉi-skripto"
-    echo "la variablojn 'release' kaj 'node_release' al la nova eldono."
-    ;;
 servilo)
     # ĉu ni supozu, ke ni jam kompilis JS kaj CSS ...? 
     npm run build:js
@@ -54,7 +45,7 @@ preparo)
     fi
 
     echo "Aktualigante skriptojn al nova eldono ${release}..."
-    sed -i 's/const version="[1-9][a-z]";/const version="'${release}'";/' ${KADRO}
+    sed -i 's/globalThis.eldono = "[1-9][a-z]";/globalThis.eldono = "'${release}'";/' ${GLOBAL}
     sed -i 's,/revo-[1-9][a-z]-min\.,/revo-'${release}'-min\.,g' ${PACKG}
     sed -i 's/"version": "[1-9].[0-9].[1-9]"/"version": "'${node_release}'"/' ${PACKG}
     ;;
@@ -73,4 +64,14 @@ indeksoj)
 fontoj)
     # kopiu ĉiujn XML-fontojn donitaj sur komandlinio (ekde dua argumento) al la servilo
     scp "${@:2}" ${revo}/xml/
+    ;;
+helpo | *)
+    echo "---------------------------------------------------------------------------"
+    echo "Tiu skripto servas por publikigi dosierojn loke preparitajn en la servilo."
+    echo "Tiucele ekzistas celoj 'servilo', 'artikoloj', 'historioj', 'indeksoj', 'fontoj'."
+    echo ""
+    echo "Per la aparta celo 'preparo' oni povas krei git-branĉon kun nova eldono por tie "
+    echo "komenci programadon de novaj funkcioj, ŝanĝoj ktp. Antaŭ adaptu en la kapo de ĉi-skripto"
+    echo "la variablojn 'release' kaj 'node_release' al la nova eldono."
+    ;;    
 esac
