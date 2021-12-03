@@ -54,6 +54,11 @@ body {
     }
 }
 
+/* la reguloj por IMG estas duobligitaj el kadro.css
+  ĉu meti ilin en pli centra loko, ekze. artikoloj?
+  Sed en reta-vortaro.de ili estas uzataj ankaŭ en la naviga kadro! 
+  Eble ni do bezonas iun aldonan centran CSS-dosieron...
+  */
 @media only screen and (max-width: 450px) {
     #xml_sidebar {
         width: 30% !important;        
@@ -75,6 +80,32 @@ body {
     #xml_text {
         font-size: 110%
     }
+}
+
+@media (prefers-color-scheme: dark) {
+    IMG.fak {
+        filter: invert(1) brightness(0.8) sepia(0.9);
+    }
+
+    /*
+    #navigado IMG.ref {
+        filter: brightness(8);
+    }
+    */
+}
+
+IMG.ref {
+    /* forŝovu flanken la originan bildon por
+    montri anstataŭe la SVG-fonon, donitan per 
+    .r_vid, .r_sin ktp. el piktogram.css */
+    position: relative;
+    overflow: hidden;
+    width: 16px;
+    height: 12px;
+    padding: 16px 12px 0 0;
+    margin-left: 6px;
+    margin-right: 6px;
+    box-sizing: border-box;
 }
 
 @keyframes dock-font-color-change {

@@ -572,6 +572,10 @@ function antaurigardo() {
                         $(this).attr('src',revo_url + '/revo/bld/'+src.substr(7));
                     }
                 });
+
+                // anstataŭigu GIF per SVG  
+                fix_img_svg(document.getElementById('rigardo'));
+
                 /** anstataŭigo de URL ne funkcias, anst. servu de la redaktilo fone (kiel proxy)...
                 $("#rigardo embed").each(function() {
                     var src = $(this).attr('src');
