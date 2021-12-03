@@ -32,6 +32,8 @@
     --main-brd-clr: goldenrod;
     --main-fnt-clr: black;
     --main-act-bgr-clr: #eAb530;
+    --main-ac2-bgr-clr: khaki; /* trovotitoloj en redaktial serĉo */
+
     --main-act-fnt-clr: black;
     --main-hov-fnt-clr: coral;
     /* ombro-koloro */
@@ -138,6 +140,7 @@
     --main-brd-clr: orange;
 
     --main-act-bgr-clr: #c2590E;
+    --main-ac2-bgr-clr: #552200; /* trovotitoloj en redaktial serĉo */
     --main-act-fnt-clr: palegoldenrod;
     --main-hov-fnt-clr: #EE6F40;
     /* ombro-koloro */
@@ -161,7 +164,7 @@
     --btn-act-bgr-clr: #FAC540 /*khaki*/;
     --btn-act-fnt-clr: black; 
     --btn-act-brd-clr: black;
- 
+   
     --tab-bgr-clr: #999; 
     --tab-act-bgr-clr: orange; 
 

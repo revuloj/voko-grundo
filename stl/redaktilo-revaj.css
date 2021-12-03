@@ -223,18 +223,6 @@ input[type='button']:focus,
     padding: .18em;
     border-radius: 4px;
 }
-#dkromklvr {
-    top: 5.2em;
-    /*
-    border-radius: 4px;
-    padding: .18em;
-    margin: 2px;*/
-}
-label.kklvbtn {
-    border-radius: 4px;
-    padding: .18em;
-    margin: 0;  
-}
 .kklvbtn {
     /*
     background-color: silver;
@@ -243,7 +231,8 @@ label.kklvbtn {
     margin: 2px;
     */
     margin: 0;
-    padding: 0;
+    margin-right: .1em;
+    padding: .18em;
     color: black !important;
     font-weight: normal !important;
     box-shadow: none !important;
@@ -251,7 +240,12 @@ label.kklvbtn {
     box-sizing: border-box;   
     height: 100%;
 }
-
+.kklvbtn[value='1'] {
+    background-color: var(--btn-act-bgr-clr) !important;
+}
+.kklvbtn[value='0'] {
+    background-color: var(--btn-dis-bgr-clr) !important;
+}
 
 fieldset {
     border: 1px solid var(--main-brd-clr); /*#327e04;*/
@@ -279,7 +273,8 @@ dd {
 }
 
 #sercho_trovoj dt:hover {
-   background-color: #e5e3d5;  
+   background-color: var(--main-ac2-bgr-clr); /*#e5e3d5;  */
+   color: var(--main-act-fnt-clr);
    /*border: 1px solid black;*/
 }
 
@@ -846,11 +841,17 @@ dd {
 }
 
 .trovo_titolo a:link {
-    color: #312e25;
+    color: var(--a-fnt-clr); /*#312e25;*/
 }
 
+/*
 .trovo_titolo a:visited {
     color: #615e55;
+}*/
+
+.trovo_titolo a:active,
+.trovo_titolo a:hover {
+    color: var(--main-act-fnt-clr) !important;
 }
 
 

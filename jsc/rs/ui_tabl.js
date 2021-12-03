@@ -101,11 +101,14 @@ export default function() {
 
     $("#kromklvr").button();
     $("#kromklvr").click(() => {
+        const pressed = 1 - $("#kromklvr").val();
+        $("#kromklvr").val(pressed);
         //$("#dock_klavaro").toggle()
-        if ($("#kromklvr").prop("checked"))
+        if (pressed) {
             $("#dock").show();
-        else
+        } else {
             $("#dock").hide();
+        }
     });    
     
     // outline
