@@ -11,7 +11,8 @@
  */
 function Xmlarea(ta_id, onAddSub) {
     this.txtarea = document.getElementById(ta_id);
-    this.txtarea.addEventListener("input",() => { this.synced = false; });
+    this.txtarea.addEventListener("input",() => { this.setUnsynced(); });
+    this.txtarea.addEventListener("change",() => { this.setUnsynced(); });
 
     //this.structure_selection = document.getElementById(struc_sel);
     this.xmlstruct = undefined; // la tuta teksto
@@ -135,7 +136,7 @@ Xmlarea.prototype.syncedXml = function() {
  */
 Xmlarea.prototype.setUnsynced = function() {
   this.synced = false;
-  this.ra_in_sync = false;
+  this.ar_in_sync = false;
 }
 
 
@@ -350,12 +351,13 @@ Xmlarea.prototype.collectTrdAllStruct = function(lng) {
 
 /**
  * Trovas la lokon kie enmeti tradukon de certa lingvo en la aktuala redaktata subteksto
+ * @param {!string} xml - la XML-teksto
  * @param {string} lng - la lingvokodo
- * @returns objekton kun la kampoj pos kaj elm
+ * @returns objekto kun la kampoj pos - la komenco de trd(grp)-elemento kaj elm - elemento (snc, drv, trd, trdgrp k.a.)
+ *       Se jam troviĝas traduko tie krome redoniĝas kampoj grp: 'grp' aŭ '', trd: - la kompleta traduko aŭ grupo, 
+ *       itr: la kompleta enhavo de la traduko aŭ tradukgrupo
  */
-Xmlarea.prototype.findTrdPlace = function(lng) {
-  const xml = this.txtarea.value;
-
+Xmlarea.prototype.findTrdPlace = function(xml,lng) {
   const expect_etag = (elist,xml,from=undefined) => this.xmlstruct.travel_tag_bw (elist,true,true,xml,from);
   //expect_stag = (elist,xml,from) => this.travel_tag_bw (elist,false,true,xml,from);
   const find_stag = (elist,xml,from=undefined) => this.xmlstruct.travel_tag_bw (elist,false,false,xml,from);
@@ -396,11 +398,15 @@ Xmlarea.prototype.findTrdPlace = function(lng) {
             }
           }
         }
-      } else {
+      } else if (!(q.elm == 'rim' || q.elm == 'adm')) {
         // ni alvenis supre ĉe 'haltiga' elemento kiel dif/ekz/bld 
         // sen trovi laŭalfabetan enŝovejon,
         // ni redonos la lastan kovnenan lokon (supran trd-on)
         return {pos: lpos, elm: lelm};
+      } else {
+        // sed temas pri rimarko ni iru al ties komenco kaj de
+        // tie plu serĉu tradukojn...
+        t = find_stag([q.elm],xml,q.pos);
       }
 
       lelm = q.elm;
@@ -423,7 +429,10 @@ Xmlarea.prototype.findTrdPlace = function(lng) {
  * @param {string} trd - la aldonenda traduko
  */
 Xmlarea.prototype.addTrd = function(lng,trd) {
-  const place = this.findTrdPlace(lng); // this.getCurrentLastTrd(lng);
+  //if (! this.synced) this.sync(this.elekto); 
+  const xml = this.txtarea.value;
+
+  const place = this.findTrdPlace(xml,lng); // this.getCurrentLastTrd(lng);
   if (place) {
     // se jam estas .trd, ni anstataŭigu ĝin per la etendita trdgrp...,
     // alie ni enmetos novan trd (len=0)
@@ -456,6 +465,68 @@ Xmlarea.prototype.addTrd = function(lng,trd) {
       const nov = iplus + '<trd lng="' + lng +'">' + trd + '</trd>\n' + ind;
       console.debug(' --> '+nov);
       this.selection(nov);
+    }
+  }
+};
+
+/**
+ * Anstataŭigas aŭ aldonas (se ne jam estas iuj) la tradukojn de unu lingvo en subteksto 
+ * @param {!string} id - .id de la subteksto
+ * @param {!string} lng - la lingvo
+ * @param {!Array<string>} trdj - listo de novaj tradukoj
+ */
+Xmlarea.prototype.replaceTrd = function(id,lng,trdj) {
+  if (! this.synced) this.sync(this.elekto); 
+  let xml = this.xmlstruct.getSubtextById(id);
+
+  function indent_at(pos) {
+    let ls = xml.lastIndexOf('\n',pos);
+    let ind = "";
+    if (ls != -1) {
+      while (xml[++ls] == " " && ls < pos) ind += " ";
+    }
+    return ind;
+  }
+
+  const place = this.findTrdPlace(xml,lng); // this.getCurrentLastTrd(lng);
+  if (place) {
+    const len = place.trd? place.trd.length : 0;
+    //this.select(place.pos, len);
+    const ind = indent_at(place.pos);
+    let nov;
+
+    // se estas unuopa traduko ni metas kiel <trd..>
+    if (trdj.length == 1) {
+      nov = ind + '  <trd>' + trd +'</trd>\n';
+      console.debug(' --> '+nov);
+      //this.selection(nov);
+    // se estas pluraj ni kreu <trdgrp...>
+    } else if (trdj.length > 1) {
+      nov = '<trdgrp lng="'+lng+'">\n' + ind + '  <trd>';
+      nov += trdj.join('</trd>,\n' + ind + '  <trd>');
+      nov += '</trd>\n' + ind + '</trdgrp>';
+      console.debug(' --> '+nov);
+      //this.selection(nov);
+    } 
+    /*else {
+      // antaŭ elementoj (sub)drv/snc ni aldonas du spacojn...
+      const iplus = place.elm[0] == 's' || place.elm[0] == 'd' ? '  ' : '';
+      // ankoraŭ neniu traduko, aldonu la unuan nun
+      const nov = iplus + '<trd lng="' + lng +'">' + trd + '</trd>\n' + ind;
+      console.debug(' --> '+nov);
+      this.selection(nov);
+    }*/
+
+    if (nov) {
+      xml = xml.substring(0,place.pos) + nov + xml.substring(place.pos+len);
+      // PLIBONIGU: ni ĉiufoje rekalkulas la strukturon post tio,
+      // do se ni aldonas tradukojn en pluraj sekcioj ni haltigu
+      // la aktualigadon ĝis la lasta...
+      this.xmlstruct.replaceSubtext(id,xml,this.elekto);
+      // aktualigu ankaŭ txtarea, ĉar eble ni aldonis en tiu tradukojn
+      // PLIBONIGU: pli bone faru tion nur se montriĝas ĉirkaŭa subteksto
+      // aŭ fine de aldoni ĉiujn tradukojn...
+      this.txtarea.value = this.xmlstruct.getSubtextById(this.elekto);
     }
   }
 };

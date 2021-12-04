@@ -505,13 +505,13 @@ function antaurigardo() {
     const xmlarea = $("#xml_text").Artikolo("option","xmlarea");
 
     /* teorie ni povos ŝapri remeti antaŭrigardon, se nenio
-    intertempe ŝanĝiĝis (xmlarea.synced...), sed estas malfacile fidinde
+    intertempe ŝanĝiĝis (xmlarea.ar_in_sync...), sed estas malfacile fidinde
     eltrovi tion pro kio en antaŭaj eldonoj ni havis manan refreŝbutonon...
     'sync' ja okazas ekz-e ĉe kontrolo kaj tradukado sen ke la antaŭrigardo estas
     refreŝigata. Do ni aldonu flagon ankoraŭ en xmlarea, kiu memoras, ĉu ni
     iam kreis aktualan antaŭrigardon post la lasta efektiva ŝanĝo.
     */
-    if ($("#rigardo").html() && xmlarea.ra_in_sync) {
+    if ($("#rigardo").html() && xmlarea.ar_in_sync) {
         xmlarea.saltu();
         return;
     }

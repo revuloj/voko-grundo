@@ -520,12 +520,13 @@ $.widget( "redaktilo.Artikolo", {
     insert_tradukojn: function (tradukoj) {
         // tradukoj estas {mrk1: array(), mrk2: ...}
         //for (trd in tradukoj) {
-        var rx = this._regex_xml;
+        //var rx = this._regex_xml;
 
         const xmlarea = this.option("xmlarea");
+        /*
         var xml = xmlarea.syncedXml() //this.element.val();
             .replace(rx._ent,'&amp;$1;'); // entities cannot be resolved...
-        
+                    
         var artikolo;
         try {
             artikolo = $("vortaro",$.parseXML(xml));
@@ -533,11 +534,12 @@ $.widget( "redaktilo.Artikolo", {
             console.error("Pro nevalida XML ne eblas enŝovi tradukojn.");
             console.error(e);
             return;
-        }
+        }*/
 
         for (let s of xmlarea.xmlstruct.strukturo) {
             if (tradukoj[s.id]) {
                 for (let lng in tradukoj[s.id]) {
+                    xmlarea.replaceTrd(s.id,lng,tradukoj[s.id][lng]);
                     // insert_trd_lng(this,shov,lng,tradukoj[mrk][lng]);
                 }
             }
@@ -558,7 +560,7 @@ $.widget( "redaktilo.Artikolo", {
             }
         });
         */
-        
+        /*
         var prologo = '<?xml version="1.0"?>\n<!DOCTYPE vortaro SYSTEM "../dtd/vokoxml.dtd">\n\n';
         xml = outerXML(artikolo[0]).replace(rx._amp,'&').replace(rx._spc,'');  // ĉi lasta aparte pro Edge, kiu eligas "<tld />"            
         //if (xml) this.element.val(prologo + xml);
@@ -566,6 +568,7 @@ $.widget( "redaktilo.Artikolo", {
             const xmlarea = this.option("xmlarea");
             xmlarea.setText(prologo + xml);
         }
+        */
         this.element.change();    
     },
 

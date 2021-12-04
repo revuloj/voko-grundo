@@ -823,7 +823,8 @@ function sendi_artikolon_servile(event) {
         });
         //alert("Sendita. Bv. kontroli ĉu vi ricevis kopion de la retpoŝto.\n(En tre esceptaj okazoj la spam-filtrilo povus bloki ĝin...)");
         $("#sendiservile_dlg").dialog("close");
-        $("#xml_text").val('');
+        //$("#xml_text").val('');
+        xmlarea.setText('');
         $("#shargi_dlg input").val("");
     });
 /*
