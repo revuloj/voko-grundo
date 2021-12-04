@@ -398,7 +398,7 @@ Xmlarea.prototype.findTrdPlace = function(xml,lng) {
             }
           }
         }
-      } else if (!(q.elm == 'rim' || q.elm == 'adm')) {
+      } else if (!q || (q && q.elm != 'rim' && q.elm != 'adm')) {
         // ni alvenis supre ĉe 'haltiga' elemento kiel dif/ekz/bld 
         // sen trovi laŭalfabetan enŝovejon,
         // ni redonos la lastan kovnenan lokon (supran trd-on)
@@ -497,7 +497,7 @@ Xmlarea.prototype.replaceTrd = function(id,lng,trdj) {
 
     // se estas unuopa traduko ni metas kiel <trd..>
     if (trdj.length == 1) {
-      nov = ind + '  <trd>' + trd +'</trd>\n';
+      nov = '<trd lng="'+lng+'">' + trdj[0] +'</trd>\n' + ind;
       console.debug(' --> '+nov);
       //this.selection(nov);
     // se estas pluraj ni kreu <trdgrp...>
