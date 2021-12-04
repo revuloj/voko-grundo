@@ -254,9 +254,8 @@ export default function() {
     $("#sendiservile_komento").Checks({
         nonemtpy: "Necesas doni mallongan priskribon de viaj ŝanĝoj. Kion vi redaktis?",
         pattern: {
-            regex: /^[\x20-\x7E]+$/,
-            message: "En la priskribo nur askiaj signoj (ekz. latinaj, sed ne ĉapelitaj literoj estas permesitaj). " +
-                 "La versiosistemo CVS ne subtenas unikodon en ŝanĝkomentoj. Do bv. anstataŭigu ekz. ĉ per ch ktp."
+            regex: /^[\x20-\x7E\xC0-\xFF\u0100-\u017F]+$/,
+            message: "En la priskribo nur latinaj signoj estas permesitaj."
         },
         err_to: "#sendiservile_error"
     });   
