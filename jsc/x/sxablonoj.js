@@ -68,8 +68,8 @@ var xml_sxablonoj = {
 
   refgrp:
   '    :<refgrp tip="{tip}">\n' +
-  'lst :   <ref lst="voko:{lst}" cel="{cel}">{enh}</ref>,\n' +
-  '!lst:   <ref cel="{cel}">{enh}</ref>,\n' +
+  'lst :  <ref lst="voko:{lst}" cel="{cel}">{enh}</ref>,\n' +
+  '!lst:  <ref cel="{cel}">{enh}</ref>,\n' +
   '    :</refgrp>\n'  ,
 
   fnt:
