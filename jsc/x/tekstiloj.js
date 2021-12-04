@@ -50,14 +50,16 @@ function replaceTld(radiko,str) {
  * @returns la lingvoj kiel objekto
  */
 function traduk_lingvoj(xmlStr) {
-    var lingvoj = {};
-    var xml = xmlStr.replace(/&[a-zA-Z0-9_]+;/g,'?'); // entities cannot be resolved...
-    var artikolo;
+    const rx_ent = /&[a-zA-Z0-9_]+;/g;
+    const xml = xmlStr.replace(rx_ent,'?'); // entities cannot be resolved...
+
+    let lingvoj = {};
+    let artikolo;
 
     try {
         //var artikolo = $("vortaro",$.parseXML(xml));
         const parser = new DOMParser();
-        const doc = parser.parseFromString(xmlStr,"text/xml");
+        const doc = parser.parseFromString(xml,"text/xml");
         artikolo = doc.querySelector("vortaro");
 
     } catch(e) {
