@@ -106,6 +106,9 @@ $.widget( "redaktilo.Artikolo", {
             this.option.dosiero = art.nom;
             this._setRadiko();
         }
+
+        // preferataj lingvoj
+        preferoj.restore();
     },
 
     nova: function(art) {
