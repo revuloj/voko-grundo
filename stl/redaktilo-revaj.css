@@ -262,7 +262,7 @@ fieldset legend {
     margin-bottom: .5em;
 }
 
-dd {
+#sercho_trovoj dd {
     margin-top: 0.1em;
     margin-bottom: 0.2em;
     padding: 0.5em;
@@ -334,6 +334,8 @@ dd {
 }
 
 #tab-buttons {
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
     box-shadow: 2px 1px 2px rgba(0,0,0,.4);
     border-left: none;
     margin-left: -1px;
@@ -342,12 +344,14 @@ dd {
 
 .ui-tabs-nav li {
     background-color: var(--tab-bgr-clr) !important;
+    box-shadow: inset 0 1px 2px;
 }
 
 .ui-tabs-nav li.ui-tabs-active,
 .ui-tabs-nav li.ui-state-active a {
     background-color: var(--tab-act-bgr-clr) !important;
     color: black;
+    box-shadow: 0 1px 2px rgba(0,0,0,.4);;
 }
 
 .ui-tabs-vertical {
@@ -481,6 +485,12 @@ dd {
 #dock_eraroj:empty,
 #dock_avertoj:empty {
     display: none;
+}
+
+.status_ok,
+.status_ok a:link,
+.status_ok a:visited {
+    color: black; /*#312e25;*/
 }
 
 #dock_fermu {

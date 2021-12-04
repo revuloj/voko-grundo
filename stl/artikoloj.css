@@ -95,6 +95,7 @@ div.drv-enh dd, div.subart-enh dd {
     grid-column-start: 2;
     margin-left: 0.5em;
     margin-top: .5em;
+    padding: 0;
 }
 
 div.drv-enh dl span, 
