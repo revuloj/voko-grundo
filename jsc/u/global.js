@@ -31,6 +31,8 @@ globalThis.sercho_videblaj = 7;
 
 // aliaj agordoj...
 globalThis.help_base_url = 'https://revuloj.github.io/temoj/';
+globalThis.help_regulesp = 'sercho#ser%C4%89i-per-regulesprimoj';
+
 globalThis.lingvoj_xml = "../cfg/lingvoj.xml";
 // en Cetonio: '../voko/lingvoj.xml'
 

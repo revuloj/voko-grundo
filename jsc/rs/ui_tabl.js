@@ -218,17 +218,20 @@ export default function() {
     $("#s_bildoj").click(bildoSerĉo);
 
     $("#regexes input").button();
+    /*
     $("#re_b").click(
         () => $("#sercho_sercho")
             .val("\\b"+$("#sercho_sercho").val())
-    );
+    );*/
     $("#regexes input").click((event) => {
         const srch = $("#sercho_sercho");
         const v = srch.val();
         const sele = srch[0].selectionEnd;
         const re = event.target.id;
-        if (re == "re_b") {
-            srch.val(v);
+        if (re == "re_helpo") {
+            window.open(globalThis.help_base_url + globalThis.help_regulesp);
+        } else if (re == "re_b") {
+            srch.val("\\b"+v);
         } else {
             const pos = (sele == v.length || v[sele] == " ")? sele : v.length;
             const x = {
