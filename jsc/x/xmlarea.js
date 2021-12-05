@@ -225,9 +225,10 @@ Xmlarea.prototype.goto = function(line_pos,len = 1) {
 /**
  * Kolektas ĉiujn tradukojn en XML-teksto
  * @param {string} xml - la XML-teksto
- * @param {boolean} shallow - true: ni serĉas nur en la unua strukturnivelo, false: ni serĉas strukturprofunde, do ĉiujn tradukojn
+ * @param {boolean} shallow - true: ni serĉas nur en la unua strukturnivelo, false: ni serĉas
+ * @param {boolean} normalize - true: ni forigas ofc, klr, ind el la traduko, false: ni ne tuŝas ĝian strukturon
  */
-Xmlarea.prototype.collectTrd = function(xml, shallow=false) {
+Xmlarea.prototype.collectTrd = function(xml, shallow=false, normalize=false) {
   const re = this.re_stru;
   if (!xml) {
     // KOREKTU: fakte ni nun kolektas en {<lng>: [trdj]}
@@ -260,11 +261,14 @@ Xmlarea.prototype.collectTrd = function(xml, shallow=false) {
 
     // nudigas la tradukon je ofc, klr ktp.
     function trd_norm(t) {
-      return (t.replace(re._ofc,'')
-       .replace(re._klr,'')
-       .replace(re._ind,'$1')
-       .replace(/\s+/,' ')
-       .trim());
+      if (!normalize) { return t.trim(); }
+      else {
+        return (t.replace(re._ofc,'')
+        .replace(re._klr,'')
+        .replace(re._ind,'$1')
+        .replace(/\s+/,' ')
+        .trim()); 
+      }
     }
 
   while (te) {    
@@ -308,14 +312,14 @@ Xmlarea.prototype.collectTrdAll = function() {
   this.tradukoj = {};
 
   // kolektu unue la tradukojn profunde en la aktuala subteksto
-  this.collectTrd(xml,false); // profunde
+  this.collectTrd(xml,false,true); // profunde, normigu
 
   // se temas pri subdrv, snc, subsnc ni kolektu ankaŭ de la parencaj,
   // ĉar ekz-e la traduko de drv validas ankaŭ por ĉiu ena snc...
   var p = this.xmlstruct.getParent(this.elekto);
   while ( ['snc','subdrv','drv'].indexOf(p.el)>-1 ) {
     xml = this.xmlstruct.getSubtextById(p.id);
-    this.collectTrd(xml,true); // malprofunde
+    this.collectTrd(xml,true,true); // malprofunde, normigu
     p = this.xmlstruct.getParent(p.id);
   }
 };
@@ -340,7 +344,7 @@ Xmlarea.prototype.collectTrdAllStruct = function(lng) {
       this.tradukoj = {};
 
       const xml = this.xmlstruct.getSubtextById(s.id);
-      this.collectTrd(xml,true); // malprofunde
+      this.collectTrd(xml,true,false); // malprofunde, ne normigu
       this.tradukoj_strukt[lng][s.id] = this.tradukoj[lng];  
     }
   }

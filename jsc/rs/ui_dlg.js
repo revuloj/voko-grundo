@@ -1580,7 +1580,7 @@ function sxablono_enmeti(event) {
 
 function plenigu_lastaj_liston() {
     $("body").css("cursor", "progress");
-    $.ricevu("revo_lastaj_redaktoj", "#lastaj_error")
+    $.ricevu("revo_lastaj_redaktoj", show_xhr_error)
       .done(
         function(data, status, xhr) {   
             if (xhr.status == 302) {

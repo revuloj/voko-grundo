@@ -95,8 +95,9 @@ $.widget( "redaktilo.Erarolisto", {
         var t = v? "linio "+v : ""; // atributo title
         var item =  '<li value="' + v + (t? '" title="' + t :"") + (err.id?' id="'+err.id+'"':'') + '">'  + err.msg  + '</li>';
         */
-        var li = new HTMLError().html(err);
-        var n_ = parseInt(err.line);
+        if (err && err.line && err.msg) {
+            const li = new HTMLError().html(err);
+            const n_ = parseInt(err.line);
         //$("#kontrolo_list").fadeOut("fast", function() {
             $("li",this.element).each(function(){
                 if ($(this).attr("value") > n_) {
@@ -110,6 +111,7 @@ $.widget( "redaktilo.Erarolisto", {
                 this.element.append(li);
             // $("#kontrolo_list").fadeIn("fast");
             }
+       }
         //});
     },
 
