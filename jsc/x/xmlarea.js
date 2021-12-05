@@ -616,6 +616,12 @@ Xmlarea.prototype.select = function(pos,len) {
     txtarea.selectionStart = pos;
     txtarea.selectionEnd = pos + len;
   //}
+
+  // necesas ruli al la ĝusta linio ankoraŭ, por ke ĝi estu videbla
+  const text = txtarea.value;
+  const scroll_to_line = Math.max(get_line_pos(pos,text).line - 5, 0);
+  const last_line = get_line_pos(text.length-1,text).line;
+  this.scrollPos(txtarea.scrollHeight * scroll_to_line / last_line);  
 };
 
 /**
