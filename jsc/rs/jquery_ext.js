@@ -10,7 +10,7 @@ console.debug("Etendante jQuery per kelkaj utilfunkcioj...");
 jQuery.extend({
 
     ricevu: function(url,error_to) {
-        $(error_to).hide();
+        if (error_to && typeof error_to == "string") $(error_to).hide();
         $("body").css("cursor", "progress");
     
         return (
@@ -34,7 +34,7 @@ jQuery.extend({
     },
 
     alportu: function(url,params,error_to) {
-      $(error_to).hide();
+      if (error_to && typeof error_to == "string") $(error_to).hide();
       $("body").css("cursor", "progress");
   
       return (
@@ -58,7 +58,7 @@ jQuery.extend({
     },
 
     alportu2: function(settings,error_to) {
-        $(error_to).hide();
+        if (error_to && typeof error_to == "string") $(error_to).hide();
         $("body").css("cursor", "progress");
     
         return (
