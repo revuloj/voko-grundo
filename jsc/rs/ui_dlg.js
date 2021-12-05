@@ -598,10 +598,10 @@ export default function() {
     //>>>>>>>> eraro-dialogo
     $( "#error_dlg" ).dialog({
         buttons: { 
-            "Resaluti": () => { location.href='../auth/logout'; },
-            "\u2718": () => { $(this).dialog("close"); }
+            "Resaluti": function() { location.href='../auth/logout'; },
+            "\u2718": function() { $(this).dialog("close"); }
         },
-        open: () => { $("#krei_error").hide(); }
+        open: () => { $("#error_msg").show(); }
     });
 
     //>>>>>>>> surmetitta dialogo ekz. por deklaro pri datumprotekto, klarigoj/helpo ks
@@ -639,7 +639,7 @@ export function shargi_sercho_autocomplete(request,response) {
             { 
                 sercho: sercho,
                 lng: "eo" 
-            }, "#shargi_error")
+            }, show_xhr_error) //"#shargi_error")
         .done(
             function(data, status, xhr) {   
                 if (xhr.status == 302) {

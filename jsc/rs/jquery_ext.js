@@ -2,7 +2,7 @@
 /* jshint esversion: 6 */
 
 /**
- * @license (c) 2008 - 2018 Wolfram Diestel, Wieland Pusch, Bart Demeyere & al.
+ * @license (c) 2008 - 2021 Wolfram Diestel, Wieland Pusch, Bart Demeyere & al.
  * lau GPL 2.0
  */
 
@@ -18,10 +18,12 @@ jQuery.extend({
             .fail (
               function(xhr) {
                   console.error(xhr.status + " " + xhr.statusText);
-                  if (error_to) {
-                      var msg = "Pardonu, okazis netandita eraro: ";
+                  if (error_to && typeof error_to == "string") {
+                      var msg = "Pardonu, okazis neatandita eraro: ";
                           $(error_to).html( msg + xhr.status + " " + xhr.statusText + xhr.responseText);
                           $(error_to).show();
+                  } else if (typeof error_to == "function") {
+                      error_to(xhr,"Okazis eraro dum ŝargo.");
                   }
               })
             .always(
@@ -40,10 +42,12 @@ jQuery.extend({
           .fail (
             function(xhr) {
                 console.error(xhr.status + " " + xhr.statusText);
-                if (error_to) {
+                if (error_to && typeof error_to == "string") {
                     var msg = "Pardonu, okazis netandita eraro: ";
                         $(error_to).html( msg + xhr.status + " " + xhr.statusText + xhr.responseText);
-                        $(error_to).show();
+                        $(error_to).show();                  
+                } else if (typeof error_to == "function") {
+                    error_to(xhr,"Okazis eraro dum ŝargo.");
                 }
             })
           .always(
@@ -62,7 +66,7 @@ jQuery.extend({
             .fail (
               function(xhr) {
                   console.error(xhr.status + " " + xhr.statusText); 
-                  if (error_to) {
+                  if (error_to && typeof error_to == "string") {
                     if (xhr.status == 404) {
                         const msg = "Pardonu, la dosiero ne troviĝis sur la servilo: ";
                         $(error_to).html( msg + JSON.stringify(settings.data).replace(/"/g,''));
@@ -70,8 +74,10 @@ jQuery.extend({
                       const msg = "Pardonu, okazis netandita eraro: ";
                       $(error_to).html( msg + xhr.status + " " + xhr.statusText + xhr.responseText);
                     }
-                    $(error_to).show();  
-                  }
+                    $(error_to).show();                      
+                } else if (typeof error_to == "function") {
+                    error_to(xhr,"Okazis eraro dum ŝargo.");
+                }                  
               })
             .always(
               function() {
