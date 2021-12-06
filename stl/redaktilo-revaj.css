@@ -132,6 +132,10 @@ IMG.ref {
     border: none;
 }
 
+#sercho_form .ui-button:hover {
+    border: none !important;
+}
+
 #kash_btn {
     /* ni ŝovu pli maldekstren, ĉar dekstre jam
     estas la ŝaltstrio...!*/
@@ -942,6 +946,7 @@ fieldset legend {
 .dlg_tab_div {
     overflow-y: auto;
     overflow-x: visible;
+    max-height: 30ex;
 }
 
 .dlg_tabelo {
