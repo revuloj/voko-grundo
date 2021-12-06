@@ -1159,7 +1159,7 @@ function senco_enmeti(event) {
     }
     const sncxml = new XMLSenco(snc).xml();
     
-    $("#xml_text").Artikolo("insert",sncstr);
+    $("#xml_text").Artikolo("insert",sncxml);
     // $("#xml_text").insert(sncxml);
     // $("#xml_text").change();
     $("#senco_dlg").dialog("close");
