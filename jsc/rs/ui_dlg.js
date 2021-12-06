@@ -1003,7 +1003,8 @@ function referenco_enmeti(event) {
     
     var enmetu_en = $("#referenco_dlg").dialog('option','enmetu_en') || "xml_text";
     if (enmetu_en == "xml_text") {
-        $("#"+enmetu_en).insert(refstr);
+        $("#xml_text").Artikolo("insert",refstr);
+        //$("#"+enmetu_en).insert(refstr);
     } else {
         $("#"+enmetu_en).text(refstr.trim());
     }
@@ -1077,7 +1078,8 @@ function ekzemplo_enmeti(event, nur_fnt) {
     // de kie vokiĝis la dialogo tien remetu la rezulton
     var enmetu_en = $("#ekzemplo_dlg").dialog('option','enmetu_en') || "xml_text";
     if (enmetu_en == "xml_text") {
-        $("#"+enmetu_en).insert(xmlstr);
+        $("#xml_text").Artikolo("insert",xmlstr);
+        // $("#"+enmetu_en).insert(xmlstr);
     } else {
         $("#"+enmetu_en).text(xmlstr.trim());
     }
@@ -1100,8 +1102,9 @@ function bildo_enmeti(event, nur_fnt) {
     bld.frazo = linirompo(bld.frazo,indent);
 
     var bldstr = new XMLBildo(bld).xml(indent);
-    $("#xml_text").insert(bldstr);
-    $("#xml_text").change();
+    $("#xml_text").Artikolo("insert",bldstr);
+    //$("#xml_text").insert(bldstr);    
+    //$("#xml_text").change();
     $("#bildo_dlg").dialog("close");
 }
 
@@ -1132,8 +1135,9 @@ function derivajho_enmeti(event) {
     values.mrk = $("#xml_text").Artikolo("art_drv_mrk"); 
     
     var drvxml = new XMLDerivaĵo(values).xml();
-    $("#xml_text").insert(drvxml);
-    $("#xml_text").change();
+    $("#xml_text").Artikolo("insert",drvstr);
+    // $("#xml_text").insert(drvxml);
+    // $("#xml_text").change();
     $("#derivajho_dlg").dialog("close");
 }
 
@@ -1155,8 +1159,9 @@ function senco_enmeti(event) {
     }
     const sncxml = new XMLSenco(snc).xml();
     
-    $("#xml_text").insert(sncxml);
-    $("#xml_text").change();
+    $("#xml_text").Artikolo("insert",sncstr);
+    // $("#xml_text").insert(sncxml);
+    // $("#xml_text").change();
     $("#senco_dlg").dialog("close");
 }
 
@@ -1460,12 +1465,11 @@ function traduko_add_btn(mrk) {
             var last_input_of_mrk = first_input_of_mrk.parent().children("input:last-of-type");
             var parts = last_input_of_mrk.attr('id').split(':');
             var next_id = parts[0] + ':' + parts[1] + ':' + (parseInt(parts[2]) + 1);
-            last_input_of_mrk.after('<br/><input id="' + next_id + '" name="' + next_id + '" size="30" value=""/>');
+            last_input_of_mrk.after('<br/><input id="' + next_id + '" type="text" name="' + next_id + '" size="30" value=""/>');
         } // else: estu ĉiam almenaŭ unu eĉ se malplena kampo....
     });
-    return '<button id="trdadd:' + id + '" class="ui-button ui-widget ui-corner-all ui-button-icon-only" title="Aldonu">' +
-                    '<span class="ui-icon ui-icon-plus"></span>' +
-                '</button>';    
+    return '<button id="trdadd:' + id 
+        + '" class="ui-button ui-widget ui-corner-all" title="Aldonu"><b>+</b></button>';
 }
 
 function shanghu_trd_lingvon(event,ui) {
@@ -1573,8 +1577,9 @@ function sxablono_enmeti(event) {
             text += pre.form_text() + "\n";
         }
     });
-    $("#xml_text").insert(text);
-    $("#xml_text").change();
+    $("#xml_text").Artikolo("insert",text);
+    // $("#xml_text").insert(text);
+    // $("#xml_text").change();
     $("#sxablono_dlg").dialog("close");
 }
 

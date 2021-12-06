@@ -145,10 +145,15 @@ $.widget( "redaktilo.Artikolo", {
         e.selectRange(pos,pos+len); // nur nun marku <len> signojn por pli bona videbleco
     },*/
 
+    /* PLIBONIGU: ĉu ni plu bezonas insert(), aŭ cu ni lasu
+    rekte voki al uzantaj funkcioj xmlarea.selection...?
+    */
     insert: function(xmlstr) {
-        var e = this.element;
-        e.insert(xmlstr);
-        e.change();    
+        const e = this.element;
+        //e.insert(xmlstr);
+        const xmlarea = this.option("xmlarea");
+        xmlarea.selection(xmlstr);
+        e.change();
     },
 
     _setOption: function( key, value ) {

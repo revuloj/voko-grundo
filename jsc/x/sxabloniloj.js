@@ -385,12 +385,10 @@ SncŜablono.prototype = {
                 text_len + '" id="' + iid + '" value="' + teksto + '" /></span></input></span>';
           case 'r':
               return '<span class="sxbl" id="' + id + '">' + teksto + 
-                '</span><button class="ui-button ui-corner-all ui-button-icon-only">' +
-                '<span class="ui-icon ui-icon-search"></button>';
+                '</span><button class="ui-button ui-corner-all">🔍︎</button>';
           case 'e':
               return '<span class="sxbl" id="' + id + '">' + teksto + 
-                '</span><button class="ui-button ui-corner-all ui-button-icon-only">' +
-                '<span class="ui-icon ui-icon-search"></button>';
+                '</span><button class="ui-button ui-corner-all">🔍︎</button>';
       }    
     }
 };

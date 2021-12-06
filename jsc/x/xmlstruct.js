@@ -62,7 +62,6 @@ XmlStruct.prototype.structure = function(selected = undefined) {
    * Ekstraktu la XML-atributon 'mrk' el la subteksto
    * @param {string} elm - la elemento de la subteksto (art,subart,drv,...,subsnc)
    * @param {number} de - la komenco de la subteksto en la tuta XML
-   * @param {number} ghis - la fino de la subteksto en la tuta XML
    * @returns la atributon 'mrk'
    */
   function mrk(elm,de) {

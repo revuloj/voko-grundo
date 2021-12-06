@@ -143,6 +143,12 @@ jQuery.fn.extend({
             //var chr = this.value.charCodeAt(this.selectionStart);
             //console.log("insert at "+chr+': '+myValue.charCodeAt(0)+'['+myValue.substr(0,10)+"]");
             // enmetu la tekston
+            /* execCommand estas malanoncita, vd
+            https://stackoverflow.com/questions/60581285/execcommand-is-now-obsolete-whats-the-alternative
+            https://stackoverflow.com/questions/12251629/is-there-something-better-than-document-execcommand
+            https://trix-editor.org/
+            k.a.
+            */ 
             document.execCommand("insertText", false, myValue);
             $(this).scrollTop(scrollPos);
         } else if (document.selection) {
