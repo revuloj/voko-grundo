@@ -1093,7 +1093,7 @@ function bildo_enmeti(event, nur_fnt) {
     event.preventDefault();
     $("#bildo_error").hide();
 
-    bld =  $("#bildo_dlg").dialog("valoroj");
+    let bld =  $("#bildo_dlg").dialog("valoroj");
     bld.lrg = $("#bildo_lrg input:checked").val() || 360;
     bld.fnt_dec = bld.fnt;
     bld.fnt = encodeURI(bld.fnt);
@@ -1110,7 +1110,7 @@ function bildo_enmeti(event, nur_fnt) {
 
 function bildo_larĝecoj(lrg,chk) {
     $("#bildo_lrg input").each(function(i) {
-        var el = $(this);
+        const el = $(this);
         el.prop("checked",false);
         let l = parseInt(el.attr("value"));
         if (lrg.indexOf(l) >=0 ) {

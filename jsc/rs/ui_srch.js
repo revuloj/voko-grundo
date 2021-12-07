@@ -249,7 +249,7 @@ export function bildoSerĉo(event) {
 
 function _bildo_info(pageids) {
 
-    var ids = pageids.join('|');
+    const ids = pageids.join('|');
 
     // alert(pageids);
     $.alportu(
@@ -262,8 +262,8 @@ function _bildo_info(pageids) {
     .done(
         function(datalist) {   
         //$("#sercho_trovoj").html('');
-            for (var d=0; d<datalist.length; d++) {          
-                data = datalist[d];
+            for (let d=0; d<datalist.length; d++) {          
+                const data = datalist[d];
         
                 if (data.query && data.query.pages) {
                 let results = data.query.pages;
@@ -289,7 +289,7 @@ function _bildo_info(pageids) {
 }
 
 function _bildeto_info(paghoj) {
-    var ps = paghoj.join('|');
+    const ps = paghoj.join('|');
 
     // alert(pageids);
     $.alportu(
@@ -308,9 +308,9 @@ function _bildeto_info(paghoj) {
             if (data.query && data.query.pages) {
                 var results = data.query.pages;
 
-                for (var p in results) {
-                    var res = results[p];
-                    pageid = res.pageid;
+                for (let p in results) {
+                    const res = results[p];
+                    const pageid = res.pageid;
 
                     if (res.thumbnail)
                         $('#sercho_trovoj div.bildstriero a[href$="' + quoteattr(res.title) + '"]')
@@ -336,11 +336,11 @@ function _bildo_info_2(dosiero) {
         //$("#sercho_trovoj").html('');
         
             if (data.query && data.query.pages) {
-                var results = data.query.pages;
+                const results = data.query.pages;
 
                 for (var p in results) {
-                    var res = results[p];
-                    pageid = res.pageid;
+                    const res = results[p];
+                    const pageid = res.pageid;
 
                     if (res.thumbnail) {
                         $('#bildo_eta').attr("src",res.thumbnail.source);
