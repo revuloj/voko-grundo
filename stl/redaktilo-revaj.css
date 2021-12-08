@@ -845,6 +845,10 @@ fieldset legend {
     overflow: auto;
 }
 
+#surmetita {
+    background-color: var(--ovr-bgr-clr);
+}
+
 .perc_bar {
     color: #327e04;
 }
