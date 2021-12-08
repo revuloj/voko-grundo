@@ -1135,7 +1135,7 @@ function derivajho_enmeti(event) {
     values.mrk = $("#xml_text").Artikolo("art_drv_mrk"); 
     
     var drvxml = new XMLDerivaĵo(values).xml();
-    $("#xml_text").Artikolo("insert",drvstr);
+    $("#xml_text").Artikolo("insert",drvxml);
     // $("#xml_text").insert(drvxml);
     // $("#xml_text").change();
     $("#derivajho_dlg").dialog("close");
