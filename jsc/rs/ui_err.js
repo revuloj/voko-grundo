@@ -87,7 +87,7 @@ $.widget( "redaktilo.Erarolisto", {
     }, 
 
     aldonu: function(err) { // err: {line: <l>, pos: <p>, msg: <text>}
-        var added = false;
+        let added = false;
         /*
         var l = err.line || 0; // linio
         var p = err.pos || 0;  // posicio
@@ -95,10 +95,11 @@ $.widget( "redaktilo.Erarolisto", {
         var t = v? "linio "+v : ""; // atributo title
         var item =  '<li value="' + v + (t? '" title="' + t :"") + (err.id?' id="'+err.id+'"':'') + '">'  + err.msg  + '</li>';
         */
-        if (err && err.line && err.msg) {
+        if (err && err.msg) {
             const li = new HTMLError().html(err);
-            const n_ = parseInt(err.line);
+            const n_ = err.line? parseInt(err.line) : -1;
         //$("#kontrolo_list").fadeOut("fast", function() {
+            // ni enŝovu la mesaĝon laŭ la ordo de linioj
             $("li",this.element).each(function(){
                 if ($(this).attr("value") > n_) {
                     $(this).before(li);
@@ -107,6 +108,7 @@ $.widget( "redaktilo.Erarolisto", {
                     return false;
                 }
             });
+            // se ni ne jam enŝovis ie, ni alpendigas en la fino
             if ( !added ) {
                 this.element.append(li);
             // $("#kontrolo_list").fadeIn("fast");
@@ -157,7 +159,12 @@ export function xmlkontrolo() {
           { xml: xml_text })
       .done(
           function(data) { 
-              data = data.length? data : [{ msg: "XML estas en ordo (sintakso).", cls: "status_ok" }];
+              // se la listo de eraroj estas malplena la sintakso estas bona
+              // malplena listo sendiĝas kiel [] aŭ [{}]
+              if ( data.length === 0
+                || data.length == 1 && Object.keys(data[0]).length === 0) {
+                  data = [{ msg: "XML estas en ordo (sintakso).", cls: "status_ok" }];
+              };
               $("#dock_eraroj").Erarolisto("aldonu_liston",
                 data.map(err => 
                     {
