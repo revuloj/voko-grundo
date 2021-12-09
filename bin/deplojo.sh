@@ -48,6 +48,10 @@ araneo|araneo:debug)
     docker cp ${CSS} ${araneo_id}:${todir}/stl
     ;;
 
+cetonio)
+    npm run build:rsj
+    npm run build:rsc
+    ;;&
 cetonio:debug)
     npm run build:rsj:debug
     npm run build:rsc
