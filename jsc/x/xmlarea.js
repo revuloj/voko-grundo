@@ -15,7 +15,7 @@ function Xmlarea(ta_id, onAddSub) {
     this.txtarea.addEventListener("change",() => { this.setUnsynced(); });
 
     //this.structure_selection = document.getElementById(struc_sel);
-    this.xmlstruct = undefined; // la tuta teksto
+    this.xmlstruct = new XmlStruct('',onAddSub); // la tuta teksto
     this.elekto = undefined; // aktuale redaktata subteksto
     //this.tradukoj = {}; // tradukoj trovitaj en la aktuala redaktata subteksto
     //this.radiko = '';
