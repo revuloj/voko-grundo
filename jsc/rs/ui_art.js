@@ -104,7 +104,7 @@ $.widget( "redaktilo.Artikolo", {
             // ni povus alternaitve demandi xmlarea.getDosiero(), 
             // se ni certas, ke enestas mrk
             this.option.dosiero = art.nom;
-            this._setRadiko();
+            //this._setRadiko();
         }
 
         // preferataj lingvoj
@@ -156,22 +156,26 @@ $.widget( "redaktilo.Artikolo", {
         e.change();
     },
 
+    /*
     _setOption: function( key, value ) {
         this._super(key,value);
+        
         if (key === "dosiero") {
             this._setRadiko();
         }
-    },
+    },*/
 
+    /*
     _setRadiko: function() {
-        /*
+        
         var xml = this.element.val();
         var m = xml.match(this._regex_mrk._rad);
         this._radiko = m ? m[1] : '';
-        */
+        ---
        const xmlarea = this.option("xmlarea");
        this._radiko = xmlarea.getRadiko();
     },
+    */
 
     _dragOver: function(event) {
         event.stopPropagation();
@@ -287,7 +291,9 @@ $.widget( "redaktilo.Artikolo", {
 
     // redonas la radikon de la artikolo
     radiko: function() {
-        return this._radiko;
+        //return this._radiko;
+        const xmlarea = this.option("xmlarea");
+        return xmlarea.getRadiko(); 
     },
 
     // redonas aŭ anstataŭigas la elektitan tekston
@@ -597,10 +603,11 @@ $.widget( "redaktilo.Artikolo", {
     // krome aldonas lininumeron en la formo [n] komence
     // de ĉiu linio
     plain_text: function(line_numbers=false) {
-        var radiko = this._radiko;
-        var rx = this._regex_txt;
+        //var radiko = this._radiko;
+        const rx = this._regex_txt;
 
         const xmlarea = this.option("xmlarea");
+        const radiko = xmlarea.getRadiko();
         var t = (xmlarea.syncedXml() //this.element.val()
             .replace(rx._tl0,radiko)
             .replace(rx._tld,'$1'+radiko.substr(1)));

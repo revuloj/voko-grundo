@@ -435,10 +435,14 @@ export function before_activate_tab(event,ui) {
 
     // transirante al serĉo prenu markitan tekston kiel serĉaĵo
     if (old_p == "xml" && new_p == "sercho") {
-
+        /*
         var art = $("#xml_text");
         var elektita = art.Artikolo("elekto");
         var radiko = art.Artikolo("radiko");
+        */
+        const xmlarea = $("#xml_text").Artikolo("option","xmlarea");
+        const elektita = xmlarea.selection();
+        const radiko = xmlarea.getRadiko();
        
         var sercho = replaceTld(radiko,elektita)
            .replace(/<[^>]+>/g,'')
