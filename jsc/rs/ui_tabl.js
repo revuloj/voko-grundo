@@ -273,6 +273,7 @@ export default function() {
     });
  
     // klarigo-notoj per muso elekteblaj
+    /* provizore malŝaltu ĉar ĝi kolizias kun .empty ĉe kontrolo...!
     $("#dock_avertoj").tooltip({
         items: "span.ana_klarigo",
         //content: "klarigoj..."
@@ -305,7 +306,7 @@ export default function() {
                 'Mi rekomendas korekti tian uzon en difinoj, sed en citaĵoj marki per &lt;esc&gt;.';
           }
         }
-    });
+    });*/
 
 }
 
