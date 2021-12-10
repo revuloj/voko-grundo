@@ -499,15 +499,20 @@ Xmlarea.prototype.replaceTrd = function(id,lng,trdj) {
     const ind = indent_at(place.pos);
     let nov;
 
+    const tf = trdj.filter(t => t.length>0);
     // se estas unuopa traduko ni metas kiel <trd..>
-    if (trdj.length == 1) {
-      nov = '<trd lng="'+lng+'">' + trdj[0] +'</trd>\n' + ind;
+    if (tf.length == 0) {
+      nov = '';
+      console.debug(' --> FORIGO');
+    } else if (tf.length == 1) {
+      nov = '<trd lng="'+lng+'">' + tf[0] +'</trd>\n' + ind;
       console.debug(' --> '+nov);
       //this.selection(nov);
     // se estas pluraj ni kreu <trdgrp...>
-    } else if (trdj.length > 1) {
+    } else if (tf.length > 1) {
       nov = '<trdgrp lng="'+lng+'">\n' + ind + '  <trd>';
-      nov += trdj.join('</trd>,\n' + ind + '  <trd>');
+      nov += tf
+        .join('</trd>,\n' + ind + '  <trd>');
       nov += '</trd>\n' + ind + '</trdgrp>';
       console.debug(' --> '+nov);
       //this.selection(nov);
@@ -521,7 +526,7 @@ Xmlarea.prototype.replaceTrd = function(id,lng,trdj) {
       this.selection(nov);
     }*/
 
-    if (nov) {
+    //if (nov) {
       xml = xml.substring(0,place.pos) + nov + xml.substring(place.pos+len);
       // PLIBONIGU: ni ĉiufoje rekalkulas la strukturon post tio,
       // do se ni aldonas tradukojn en pluraj sekcioj ni haltigu
@@ -531,7 +536,7 @@ Xmlarea.prototype.replaceTrd = function(id,lng,trdj) {
       // PLIBONIGU: pli bone faru tion nur se montriĝas ĉirkaŭa subteksto
       // aŭ fine de aldoni ĉiujn tradukojn...
       this.txtarea.value = this.xmlstruct.getSubtextById(this.elekto);
-    }
+    //}
   }
 };
 
