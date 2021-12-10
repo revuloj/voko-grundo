@@ -541,8 +541,10 @@ function antaurigardo() {
                 // ial elektilo "article" ne funkcias tie ĉi !?
                 //const article = $( data ).find( "article" );
                 const article = $(data).find("#s_artikolo").parent();
+                const footer = article.next();
+
                 //$("#rigardo").html(data);
-                $("#rigardo").empty().append(article);
+                $("#rigardo").empty().append(article).append(footer);
                 xmlarea.ra_in_sync = true;
                 xmlarea.saltu();
 
@@ -615,7 +617,16 @@ function antaurigardo() {
                 globalThis.lingvoj_xml = '../voko/lingvoj.xml'; // PLIBONIGU: distingu redaktilojn iel
                              // anstataŭ manipuli tie ĉi centran agordon!
                 artikolo.preparu_art();
-                
+ 
+                // ankoraŭ reduktu la piedlinion
+                // PLIBONIGU: eble permesu kaŝi ilin per CSS uzante apartajn
+                // klasojn en la elementoj de la piedlinio
+                if (footer) {
+                    $("#rigardo footer a[href*='/dok/']").replaceWith(".");
+                    $("#rigardo footer a[href*='/xml/']").replaceWith(".");
+                    $("#rigardo footer a[href*='/cgi-bin/']").replaceWith(".");
+                }
+
                 /*
                 iru_al(pozicio_html);
                 */
