@@ -117,8 +117,9 @@ export function citaĵoSerĉo(event) {
 
 export function retoSerĉo(event) {
     event.preventDefault();
-
     if (! _serĉo_preparo()) return;
+
+    const rx_img_link = /<(?:img|link)\b[^>]*>/ig;
 
     $.alportu(
         'citajho_sercho',
@@ -130,26 +131,26 @@ export function retoSerĉo(event) {
     .done(
         function(data) {   
     
-        var last_link = '', last_title = '';
-        var n = 0;
-        var first_word = $("#sercho_sercho").val().split(' ')[0];
-        // forigu bildojn (img) el la HTML, por ke ili ne automate elshutighu...
-        data = data.replace(/<img\b[^>]*>/ig, '');
-        var ŝablono = new HTMLTrovoDt();
+        let last_link = '', last_title = '';
+        let n = 0;
+        const first_word = $("#sercho_sercho").val().split(' ')[0];
+        // forigu bildojn (img) kaj <link...> el la HTML, por ke ili ne automate elshutighu...
+        data = data.replace(rx_img_link, '');
+        const ŝablono = new HTMLTrovoDt();
         
         $(data).find(".result-link,.result-snippet").filter(function() {
             var self = $(this);
 
             // memoru la url kiel last_link
             if ( self.is(".result-link") )   {
-                var href = self.attr("href");
-                var hpos = href.search('http');
+                const href = self.attr("href");
+                const hpos = href.search('http');
                 last_link = hpos>=0? decodeURIComponent(href.substr(hpos)) : href;
                 last_title = self.text();
 
             // kreu trov-eron
             } else if ( self.is(".result-snippet") ) {
-                var snippet = self.text();
+                const snippet = self.text();
                 if ( last_title.search(first_word) >= 0 || snippet.search(first_word) >= 0 ) {
 
                     $("#sercho_trovoj").append('<dd id="trv_' + n + '">');
