@@ -362,9 +362,9 @@ var artikolo = function() {
     }
 
     function piedlinio_modifo(artikolo) {
-        var pied = document.body.getElementsByTagName("FOOTER")[0];
+        const pied = document.body.getElementsByTagName("FOOTER")[0];
         if (pied) { // en la redeaktilo eble jam foriĝis...
-            var first_a = pied.querySelector("A");
+            const first_a = pied.querySelector("A");
             if (first_a) {                
                 var pref = ht_element("A",{class: "redakto", href: "#", title: "agordu preferatajn lingvojn"},"preferoj");
                 pref.addEventListener("click", () =>
@@ -376,17 +376,19 @@ var artikolo = function() {
             first_a.nextSibling.remove();
             first_a.remove();
             // mallongigu referencon xml kaj aldonu "download"
-            var xml = pied.querySelector("A[href^='../xml/']");
+            const xml = pied.querySelector("A[href^='../xml/']");
             if (xml) {
                 xml.textContent="xml";
                 xml.setAttribute("download","download");
             }
-            var hst = pied.querySelector("A[href^='../hst/']");
-            var ver = hst.nextSibling;
-            hst.textContent = ver.nodeValue
-                .split(/\s+/)[2]
-                .replace(/\//g,'-');
-            ver.remove();
+            const hst = pied.querySelector("A[href*='/hst/']");
+            if (hst) {
+                const ver = hst.nextSibling;
+                hst.textContent = ver.nodeValue
+                    .split(/\s+/)[2]
+                    .replace(/\//g,'-');
+                ver.remove();    
+            }
             // forigu finan <br>
             pied.querySelector("br").remove();
 

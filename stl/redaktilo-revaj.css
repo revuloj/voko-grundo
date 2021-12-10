@@ -773,9 +773,11 @@ fieldset legend {
     overflow: auto;
 }
 
-#rigardo article {
+/*
+#rigardo footer {
     border-bottom: 2px dotted var(--main-brd-clr);
 }
+*/
 
 #xml_text {
     /*width: 100%;*/
@@ -1016,6 +1018,43 @@ fieldset legend {
 
 #sxablono_xml {
     background-color: var(--shb-bgr-clr);
+}
+
+#sxablono_form button {
+    font-size: .7em;
+    margin: 0;
+    padding: .2em .6em;
+}
+
+#traduko_menuo .ui-menu-divider {
+    margin: 0;
+}
+
+#traduko_aliaj {
+    border: none;
+}
+
+#traduko_artikolaj {
+    columns: 2;
+}
+
+#traduko_chiuj_a_b,
+#traduko_chiuj_c_g,
+#traduko_chiuj_h_j,
+#traduko_chiuj_k_l,
+#traduko_chiuj_m_o,
+#traduko_chiuj_p_s,
+#traduko_chiuj_t_z {
+    columns: 4;
+}
+
+#traduko_tabelo {
+    border-bottom: 1px dotted var(--input-brd-clr);
+}
+
+#traduko_tabelo button {
+    margin: 0;
+    padding: .1em .6em;
 }
 
 pre.line {
