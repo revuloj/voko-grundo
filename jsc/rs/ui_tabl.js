@@ -181,7 +181,11 @@ export default function() {
                     $( "#tabs" ).tabs( "option", "active", 2 );
                     break;
             }
-        }      
+        },
+        postenmeto: function(event,ui) {
+            const xmlarea = $("#xml_text").Artikolo("option","xmlarea");
+            xmlarea.setUnsynced();
+        }
     });
 
     // kromklavarbutonon kaŝu komence
