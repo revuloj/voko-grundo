@@ -44,8 +44,8 @@ function Xmlarea(ta_id, onAddSub) {
 Xmlarea.prototype.setText = function(xml) {
   this.xmlstruct = new XmlStruct(xml,this.onaddsub);  
   // elektu la unuan (art)
-  this.elekto = this.xmlstruct.strukturo[0].id;
-  this.txtarea.value = this.xmlstruct.getSubtextById(this.elekto);
+  this.elekto = this.xmlstruct.strukturo[0];
+  this.txtarea.value = this.xmlstruct.getSubtext(this.elekto);
   this.resetCursor();   
 };
 
@@ -69,7 +69,7 @@ Xmlarea.prototype.getDosiero = function() {
  * Saltas al la aktuala derivaĵo (laŭ mrk) en la antaŭrigardo (#...)
  */
 Xmlarea.prototype.saltu = function() {
-  const mrk = this.xmlstruct.getCurrentMrk(this.elekto);
+  const mrk = this.xmlstruct.getMrk(this.elekto);
   if (mrk != '' && mrk.indexOf(',v') == -1) {
     window.location.hash = this.getDosiero()+'.'+mrk;
   } else {
@@ -80,39 +80,34 @@ Xmlarea.prototype.saltu = function() {
 }; 
 
 /**
- * Redonas la informojn pri aktuale elektita subteksto.
- * Tio estas objekto kun parametroj 'id', 'el', 'de', 'al' kc.
- * 
- * @returns la informoj de la aktuale elektita subteksto
- */
-Xmlarea.prototype.getElekto = function() {
-  return this.xmlstruct.getStructById(this.elekto);
-};
-
-/**
  * Aktualigas la tekstbufron per la redaktata subteksto, ankaŭ aktualigas la struktur-liston
- * @param {string} select - se donita, la strukturelemento kun tiu .id estos poste la elektita
+ * @param {{id:string}} select - se donita, la strukturelemento kun 
+ * tiu .id estos poste la elektita, se ĝi aldone havas .ln, .el tiuj povus esti
+ * uzataj por retrovi subtekston, kies .id ŝanĝiĝis, ekz-e pro aldono/ŝanĝo de mrk...
  */
 Xmlarea.prototype.sync = function(select = undefined) {
   if (this.elekto) {
-    const old_id = this.elekto;
+    const old_s = this.elekto;    
     const nstru = this.xmlstruct.strukturo.length;
 
-    this.xmlstruct.replaceSubtext(this.elekto,this.txtarea.value,select);
+    this.xmlstruct.replaceSubtext(this.elekto,this.txtarea.value,select.id);
 
-    // aktualigu la elekton al 'select', kondiĉe ke ĝi troviĝas
+    /* PLIBONIGU: anst. tuja refalo al [0] provu retrovi subtekston, eĉ
+    se .id ŝanĝiĝis, ekz-e per .ln: xmlstruct.find(select...)
+    */
+    // aktualigu la elekton al 'select', kondiĉe ke ĝi troviĝas,
     // se ne ni elektas la unuan subtekston
-    this.elekto = this.xmlstruct.strukturo[0].id; // fallback
-    const tbs = select?this.xmlstruct.getStructById(select):undefined;
-    if (tbs) {
-      this.elekto = tbs.id;
+    this.elekto = this.xmlstruct.strukturo[0]; // fallback
+    const tbs = select?this.xmlstruct.getStructById(select.id):undefined;
+    if (tbs) { // ni trovis novelektendan subtekston
+      this.elekto = tbs;
     }
 
     // se ni ne retrovas la antaŭan id, ekz. ĉar @mrk ŝanĝiĝis aŭ snc aldoniĝis....
     // ni devos aktualigi XML en la redaktilo per la nuna id (ekz-e <art>...</art>)
-    if (old_id != this.elekto || nstru != this.xmlstruct.strukturo.length) {
+    if (old_s.id != this.elekto.id || nstru != this.xmlstruct.strukturo.length) {
       // nun ni montras la celatan XML-parton por redaktado
-      this.txtarea.value = this.xmlstruct.getSubtextById(this.elekto);
+      this.txtarea.value = this.xmlstruct.getSubtext(this.elekto);
     }
 
     this.synced = true;
@@ -148,16 +143,19 @@ Xmlarea.prototype.setUnsynced = function() {
 Xmlarea.prototype.changeSubtext = function(id) {
   if (id) {
     // ni unue sekurigu la aktuale redaktatan parton...
-    this.sync(id); // ni transdonas ankaŭ la elektotan id por navigi tien en la elekto-listo
+    this.sync({id:id}); // ni transdonas ankaŭ la elektotan id por navigi tien en la elekto-listo
     
-    // ni trovu la celatan subtekston per ĝia nomo, ĉar eble la numeroj ŝanĝiĝis...
-    this.elekto = this.xmlstruct.strukturo[0]; // se ni ne trovos la celatan, ekz-e ĉar marko aŭ enhavo snc-aldono...) ŝanĝiĝis
+    /* ni trovu la celatan subtekston per ĝia id... */
+
+    // se ni ne trovos la celatan, ekz-e ĉar marko aŭ enhavo snc-aldono...) ŝanĝiĝis,
+    // ni elektos al la unuan (art)
+    this.elekto = this.xmlstruct.strukturo[0]; 
         // ni montro simple la unua subtekston, t.e. la artikolon
     
     // nun serĉu...
     const tbs = this.xmlstruct.getStructById(id);
     if (tbs) {
-      this.elekto = tbs.id;
+      this.elekto = tbs;
     }
 
     // komparu kun SYNC...
@@ -165,7 +163,7 @@ Xmlarea.prototype.changeSubtext = function(id) {
     //  +"("+(this.xml_elekto.al-this.xml_elekto.de)+")");
 
     // nun ni montras la celatan XML-parton por redaktado
-    this.txtarea.value = this.xmlstruct.getSubtextById(this.elekto);
+    this.txtarea.value = this.xmlstruct.getSubtext(this.elekto);
     // iru al la komenco!
     this.resetCursor();
     this.scrollPos(0);
@@ -208,13 +206,22 @@ Xmlarea.prototype.goto = function(line_pos,len = 1) {
   if (! this.synced) this.sync(this.elekto); 
   const sub = this.xmlstruct.getLastStructWithLine(line);
 
-  const xml = this.xmlstruct.getSubtextById(sub.id);
+  const xml = this.xmlstruct.getSubtext(sub);
   const pos = pos_of_line(xml,line-sub.ln-1) + ( lpos>0 ? lpos-1 : 0 );
 
   this.changeSubtext(sub.id);
   this.select(pos,0); // rulu al la pozicio
   this.select(pos,len); // nur nun marku <len> signojn por pli bona videbleco
 };
+
+/**
+ * Redonas la aktualan kapvorton, se ene de drv t.e. ties kapvorton, alie la kapvorton de la unua drv
+ * en la artikolo
+ * @returns la kapvorton, tildo estas anstataŭigita per la radiko, variaĵoj post komo forbalaita
+ */
+ Xmlarea.prototype.getCurrentKap = function() {
+   return this.xmlstruct.getClosestKap(this.elekto)
+ }
 
 /******
  * PLIBONIGU: administrado de tradukoj estas sufiĉe defia por meriti apartigon
@@ -318,7 +325,7 @@ Xmlarea.prototype.collectTrdAll = function() {
   // ĉar ekz-e la traduko de drv validas ankaŭ por ĉiu ena snc...
   var p = this.xmlstruct.getParent(this.elekto);
   while ( ['snc','subdrv','drv'].indexOf(p.el)>-1 ) {
-    xml = this.xmlstruct.getSubtextById(p.id);
+    xml = this.xmlstruct.getSubtext(p);
     this.collectTrd(xml,true,true); // malprofunde, normigu
     p = this.xmlstruct.getParent(p.id);
   }
@@ -343,7 +350,7 @@ Xmlarea.prototype.collectTrdAllStruct = function(lng) {
       // eble estonte ni povos eviti la kopiadon
       this.tradukoj = {};
 
-      const xml = this.xmlstruct.getSubtextById(s.id);
+      const xml = this.xmlstruct.getSubtext(s);
       this.collectTrd(xml,true,false); // malprofunde, ne normigu
       this.tradukoj_strukt[lng][s.id] = this.tradukoj[lng];  
     }
@@ -481,7 +488,7 @@ Xmlarea.prototype.addTrd = function(lng,trd) {
  */
 Xmlarea.prototype.replaceTrd = function(id,lng,trdj) {
   if (! this.synced) this.sync(this.elekto); 
-  let xml = this.xmlstruct.getSubtextById(id);
+  let xml = this.xmlstruct.getSubtext({id:id});
 
   function indent_at(pos) {
     let ls = xml.lastIndexOf('\n',pos);
@@ -531,11 +538,11 @@ Xmlarea.prototype.replaceTrd = function(id,lng,trdj) {
       // PLIBONIGU: ni ĉiufoje rekalkulas la strukturon post tio,
       // do se ni aldonas tradukojn en pluraj sekcioj ni haltigu
       // la aktualigadon ĝis la lasta...
-      this.xmlstruct.replaceSubtext(id,xml,this.elekto);
+      this.xmlstruct.replaceSubtext({id:id},xml,this.elekto);
       // aktualigu ankaŭ txtarea, ĉar eble ni aldonis en tiu tradukojn
       // PLIBONIGU: pli bone faru tion nur se montriĝas ĉirkaŭa subteksto
       // aŭ fine de aldoni ĉiujn tradukojn...
-      this.txtarea.value = this.xmlstruct.getSubtextById(this.elekto);
+      this.txtarea.value = this.xmlstruct.getSubtext(this.elekto);
     //}
   }
 };
@@ -572,7 +579,7 @@ Xmlarea.prototype.scrollPos = function(pos=undefined) {
  * @returns objekto {{line: number, pos: number}}
  */
 Xmlarea.prototype.position = function() {
-  const loff = this.elekto? this.xmlstruct.getStructById(this.elekto).ln : 0;
+  const loff = this.elekto? this.elekto.ln : 0;
 
     // kalkulu el la signoindekso la linion kaj la pozicion ene de la linio
     function get_line_pos(inx,text) {
@@ -632,7 +639,7 @@ Xmlarea.prototype.select = function(pos,len) {
 /**
  * Legas aŭ anstataŭigas la momente elektitan tekston en la redaktatat teksto
  * @param {string} insertion - se donita la enmetenda teksto (ĉe la aktuala pozicio aŭ anstataŭ la aktuala elekto)
- * @param {number} p_kursoro - se donita tiom da signoj ni moviĝas antataŭen antaŭ enmeti la tekston
+ * @param {number} p_kursoro - se donita, tiom da signoj ni moviĝas antataŭen antaŭ enmeti la tekston
  * @returns la momente elektita teksto, se ne estas donita enmetenda teksto
  */
 Xmlarea.prototype.selection = function(insertion=undefined, p_kursoro=0) {

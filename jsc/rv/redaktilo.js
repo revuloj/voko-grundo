@@ -575,11 +575,6 @@ var redaktilo = function() {
         artikolo.preparu_art(art);
 
         // saltu en la artikolo al la redaktata parto
-        /*
-        const prefix = document.getElementById("r:art").value;
-        const mrk = xmlarea.xmlstruct.getCurrentMrk(xmlarea.elekto);
-        window.location.hash = prefix+'.'+mrk;
-        */
         xmlarea.saltu();
 
 
@@ -1002,7 +997,7 @@ var redaktilo = function() {
     const s_trd = document.getElementById('r:trd_elekto');
     s_trd.textContent = '';
 
-    const sercho = xmlarea.xmlstruct.getCurrentKap(xmlarea.elekto); //'hundo';
+    const sercho = xmlarea.getCurrentKap(); //'hundo';
 
     // prezento de traduklisto kiel HTML-dd-elemento
     // enhavanta la tradukojn kiel ul-listo
@@ -1182,7 +1177,7 @@ var redaktilo = function() {
   function trad_ebloj() {
 
     const elekto = document.getElementById('r:trd_elekto');
-    const _ele_ = xmlarea.getElekto();
+    const _ele_ = xmlarea.elekto;
     const drv_snc = (_ele_ && _ele_.el && (_ele_.el == 'snc' || _ele_.el == 'drv'));
     //const drv_snc = ('drv|snc'.indexOf(_ele_?.el.substr(-3)) > -1);
 

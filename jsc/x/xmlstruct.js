@@ -195,12 +195,12 @@ XmlStruct.prototype.art_drv_mrk = function() {
 
 /**
  * Anstataŭigas donitan subtekston per nova, ankaŭ aktualigas la struktur-liston
- * @param {string} id - la identigilo de la anstataŭigenda subteksto
+ * @param {{id: string}} sd - la anstataŭigenda subteksto
  * @param {string} xml - la nova subteksto
  * @param {string} select - se donita, la strukturelemento kun tiu .id estos poste la elektita
  */
-XmlStruct.prototype.replaceSubtext = function(id, xml, select = undefined) {   
-    const elekto = this.getStructById(id);
+XmlStruct.prototype.replaceSubtext = function(sd, xml, select = undefined) {   
+    const elekto = this.getStructById(sd.id);
 
     this.xmlteksto = 
       (this.xmlteksto.substring(0, elekto.de) 
@@ -222,23 +222,23 @@ XmlStruct.prototype.getStructById = function(id) {
 };
 
 /**
- * Trovas la subtekston kun 'id' en la strukturlisto
- * @param {string} id 
+ * Trovas subtekston en la strukturlisto
+ * @param {{id: string}} sd - objekto kun .id kaj eventuala pliaj informoj .ln, .el por identigi la subtekston
  * @returns la konernan XML-tekston
  */
-XmlStruct.prototype.getSubtextById = function(id) {
-  const s = this.getStructById(id);
+XmlStruct.prototype.getSubtext = function(sd) {
+  const s = this.getStructById(sd.id);
   return this.xmlteksto.slice(s.de,s.al);
 };
 
 
 /**
- * Trovos la parencon de la struktur-elemento donita per 'id', ekzemple ĉe senco tio estas la enhavanta derivaĵo.
- * @param {string} id 
+ * Trovos la parencon de la struktur-elemento, ekzemple ĉe senco tio estas la enhavanta derivaĵo.
+ * @param {{id: string}} sd - objekto kun .id kaj eventuala pliaj informoj .ln, .el por identigi la subtekston
  * @returns la detalojn de la parenco kiel objekto
  */
-XmlStruct.prototype.getParent = function(id) {
-  const s = this.getStructById(id);
+XmlStruct.prototype.getParent = function(sd) {
+  const s = this.getStructById(sd.id);
   // parenco venas antaŭ la nuna kaj enhavas ĝin (subteksto al..de)
   for (var n = s.no-1; n>=0; n--) {
     const p = this.strukturo[n];
@@ -248,17 +248,18 @@ XmlStruct.prototype.getParent = function(id) {
 
 /**
  * Trovas la plej proksiman parencon de la aktuale elektita subteksto, kiu havas XML-atributon 'mrk'
+ * @param {{id: string}} sd - objekto kun .id por identigi la subtekston
  * @returns la detalojn de la parenco kiel objekto
  */
-XmlStruct.prototype.getClosestWithMrk = function(id) {
-  const elekto = this.getStructById(id);
+XmlStruct.prototype.getClosestWithMrk = function(sd) {
+  const elekto = this.getStructById(sd.id);
   if (elekto.mrk) {
     return elekto;
   } else {
-    var p = this.getParent(id);
+    var p = this.getParent(sd);
     while (p && p.no > 0) { // ni ne redonos art@mrk (0-a elemento)
       if (p.mrk) return p;
-      p = this.getParent(p.id);
+      p = this.getParent(p);
     }
   }
 };
@@ -266,21 +267,23 @@ XmlStruct.prototype.getClosestWithMrk = function(id) {
 
 /**
  * Redonas la XML-atributon 'mrk' de la aktuala subteksto, aŭ tiun de parenco, se ĝi ne havas mem
+ * @param {{id: string}} sd - objekto kun .id por identigi la subtekston
  * @returns la XML-atributon 'mrk'
  */
-XmlStruct.prototype.getCurrentMrk = function(id) {
-  const c = this.getClosestWithMrk(id);
+XmlStruct.prototype.getMrk = function(sd) {
+  const c = this.getClosestWithMrk(sd);
   if (c) return c.mrk;
   return '';
 };
 
 
 /**
- * Redonas la aktualan kapvorton, se ene de drv t.e. ties kapvorton, alie la kapvorton de la unua drv
+ * Redonas kapvorton, se ene de drv t.e. ties kapvorton, alie la kapvorton de la unua drv
  * en la artikolo
+ * @param {{id: string}} sd - objekto kun .id por identigi la subtekston
  * @returns la kapvorton, tildo estas anstataŭigita per la radiko, variaĵoj post komo forbalaita
  */
-XmlStruct.prototype.getCurrentKap = function(id) {
+XmlStruct.prototype.getClosestKap = function(sd) {
     function kap(e) {
       return e.kap
         .replace('~',rad)
@@ -288,7 +291,7 @@ XmlStruct.prototype.getCurrentKap = function(id) {
     }
 
   const rad = this.radiko;
-  const elekto = this.getStructById(id);
+  const elekto = this.getStructById(sd.id);
   
   if (elekto.el != 'art' && elekto.id != "x.m.l") {
 
