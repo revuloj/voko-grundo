@@ -15,7 +15,8 @@ $.widget( "redaktilo.Klavaro", {
             artikolo: {},
             posedanto: '', // dialogo, en kiu troviĝas
             akampo: '', // apriora kampo, al kiu klavoj efikas
-            reĝimpremo: null // evento kiam reĝimbuton premiĝis (fermu, indiko, serĉo)
+            reĝimpremo: null, // evento kiam reĝimbuton premiĝis (fermu, indiko, serĉo)
+            postenmeto: null // evento, vokita post kiam enmeto okazis
     },
 
     _create: function() {
@@ -171,6 +172,8 @@ $.widget( "redaktilo.Klavaro", {
                     }
                 }
 
+                this._trigger("postenmeto",event,{cmd: cmd});
+
             // majusklaj komencliteroj de vortoj
             } else if (cmd == "kamelo"){
                 const sel = element.textarea_selection();
@@ -178,15 +181,21 @@ $.widget( "redaktilo.Klavaro", {
                 var rad = sel.includes('<tld')? radiko : '';
                 element.insert(kameligo(sel,rad));
             
+                this._trigger("postenmeto",event,{cmd: cmd});
+
             // minuskligo
             } else if (cmd == "minuskloj"){
                 const sel = element.textarea_selection();
                 element.insert(minuskligo(sel,radiko));
 
+                this._trigger("postenmeto",event,{cmd: cmd});
+
             // aliajn kazojn traktu per _ekran_klavo...
             } else {
                 const sel = element.textarea_selection();
                 element.insert(this._ekran_klavo(text,cmd,sel));
+
+                this._trigger("postenmeto",event,{cmd: cmd});
             }
     },
 
