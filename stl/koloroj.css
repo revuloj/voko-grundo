@@ -10,6 +10,11 @@
     Ni ne distingas :focus de :active, sed por ambaŭ uzas -act-,
     same ni uzas por :visited la ordinaran koloron.
 
+
+    KONCIZIGU: ĉar tie ĉi ni havas nur kolorojn ni povos koncizigi la sufiksojn:
+    -fk = fonkoloro, -sk = skribkoloro, -lk = linikoloro, -ok = ombrokoloro3Korvoj
+    
+
 */
 
 :root {

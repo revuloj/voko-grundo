@@ -1135,7 +1135,7 @@ function derivajho_enmeti(event) {
     values.mrk = $("#xml_text").Artikolo("art_drv_mrk"); 
     
     var drvxml = new XMLDerivaĵo(values).xml();
-    $("#xml_text").Artikolo("insert",drvxml);
+    $("#xml_text").Artikolo("insert",drvxml,true);
     // $("#xml_text").insert(drvxml);
     // $("#xml_text").change();
     $("#derivajho_dlg").dialog("close");
@@ -1159,7 +1159,7 @@ function senco_enmeti(event) {
     }
     const sncxml = new XMLSenco(snc).xml();
     
-    $("#xml_text").Artikolo("insert",sncxml);
+    $("#xml_text").Artikolo("insert",sncxml,true);
     // $("#xml_text").insert(sncxml);
     // $("#xml_text").change();
     $("#senco_dlg").dialog("close");
@@ -1577,7 +1577,7 @@ function sxablono_enmeti(event) {
             text += pre.form_text() + "\n";
         }
     });
-    $("#xml_text").Artikolo("insert",text);
+    $("#xml_text").Artikolo("insert",text,true);
     // $("#xml_text").insert(text);
     // $("#xml_text").change();
     $("#sxablono_dlg").dialog("close");

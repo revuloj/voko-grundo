@@ -148,11 +148,13 @@ $.widget( "redaktilo.Artikolo", {
     /* PLIBONIGU: ĉu ni plu bezonas insert(), aŭ cu ni lasu
     rekte voki al uzantaj funkcioj xmlarea.selection...?
     */
-    insert: function(xmlstr) {
+    insert: function(xmlstr,sync=false) {
         const e = this.element;
         //e.insert(xmlstr);
         const xmlarea = this.option("xmlarea");
         xmlarea.selection(xmlstr);
+        // se postulate, tuj sinkronigu, eventuale rekreante la strukturon
+        if (sync) xmlarea.sync();
         e.change();
     },
 
