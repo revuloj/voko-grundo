@@ -261,7 +261,7 @@ XmlStruct.prototype.match = function(sd1,sd2) {
  */
 XmlStruct.prototype.getSubtext = function(sd) {
   const s = this.getStructById(sd.id);
-  return this.xmlteksto.slice(s.de,s.al);
+  return this.xmlteksto.slice(sd.de,sd.al);
 };
 
 
