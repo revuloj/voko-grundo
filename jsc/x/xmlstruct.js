@@ -221,6 +221,39 @@ XmlStruct.prototype.getStructById = function(id) {
   }
 };
 
+
+/**
+ * Trovas la informon de subteksto: aŭ identigante ĝin per sia .id aŭ
+ * per sama elemento kaj komenco devianta maksimume je unu linio
+ * @param {{id: string}} sd 
+ * @returns 
+ */
+XmlStruct.prototype.findStruct = function(sd) {
+  let s = this.getStructById(sd.id);
+
+  if(s) { return s; }
+  else if (sd.el && sd.ln) {
+    for (s of this.strukturo) {
+      if ( ( s.el == sd.el )  && ( Math.abs(s.ln-sd.ln) <= 1 ) ) {
+        return s;
+      }
+    }
+  }
+}
+
+
+/**
+XmlStruct.prototype.match = function(sd1,sd2) {
+  return (
+    sd1.id = sd2.id
+    || 
+    ( sd1.el && sd2.el && sd1.ln && sd2.ln 
+      && ( sd1.el == sd2.el ) 
+      && ( Math.abs(sd2.ln-sd1.ln) <= 1 ) )
+  );
+}
+ */
+
 /**
  * Trovas subtekston en la strukturlisto
  * @param {{id: string}} sd - objekto kun .id kaj eventuala pliaj informoj .ln, .el por identigi la subtekston

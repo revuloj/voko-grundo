@@ -90,26 +90,43 @@ Xmlarea.prototype.sync = function(select = undefined) {
     const old_s = this.elekto;    
     const nstru = this.xmlstruct.strukturo.length;
 
+    // unue ni legas la aktuale redaktatan subtekston kaj enŝovas en la kompletan
+    // tio ankaŭ rekreas la strukturon de subtekstoj!
     this.xmlstruct.replaceSubtext(this.elekto,this.txtarea.value,select.id);
 
-    /* PLIBONIGU: anst. tuja refalo al [0] provu retrovi subtekston, eĉ
-    se .id ŝanĝiĝis, ekz-e per .ln: xmlstruct.find(select...)
-    */
-    // aktualigu la elekton al 'select', kondiĉe ke ĝi troviĝas,
-    // se ne ni elektas la unuan subtekston
-    this.elekto = this.xmlstruct.strukturo[0]; // fallback
-    const tbs = select?this.xmlstruct.getStructById(select.id):undefined;
-    if (tbs) { // ni trovis novelektendan subtekston
+    // nun retrovu la elektendan subtekston en la rekreita strukturo
+    if (!select) select = this.elekto;
+
+    // trovu laŭ id
+    let tbs = this.xmlstruct.getStructById(select.id);
+
+    if (tbs) {
       this.elekto = tbs;
+    // se ni ne trovis la subtekston per sia id, sed ĝi estas la
+    // sama, kiun ni ĵus redaktis, eble la marko ŝanĝiĝis
+    // aŭ aldoniĝis snc/drv, ni provu trovi do per .ln kaj .el
+    } else if (select.id == old_s.id) {
+      tbs = this.xmlstruct.findStruct(select);
+      if (tbs) this.elekto = tbs;
+    } else {
+      // se tute ne retrovita, ni elektas la unuan subtekston (art)
+      this.elekto = this.xmlstruct.strukturo[0]; 
     }
 
-    // se ni ne retrovas la antaŭan id, ekz. ĉar @mrk ŝanĝiĝis aŭ snc aldoniĝis....
-    // ni devos aktualigi XML en la redaktilo per la nuna id (ekz-e <art>...</art>)
-    if (old_s.id != this.elekto.id || nstru != this.xmlstruct.strukturo.length) {
+    // se ni transiris al alia subteksto, aŭ aldoniĝis strukturero, ni devos ankoraŭ montri la
+    // novelektitan subtekston en Textarea
+    // PRIPENSU: se ni sube de subteksto snc/drv aldonis ion, kio ne apartenas
+    // tien (ekz-e komento), sed ne renovigas la montratan tekston,
+    // ĝi duobliĝos ĉe la venonta sinkronigado..., ĉu?
+    // Kiel ni povus testi tion? - ĉu rigardi, ke la teksto finiĝas per la
+    // responde ferma etikedo...?
+    if (old_s.id != this.elekto.id 
+      || old_s.ln != this.elekto.ln
+      || old_s.el != this.elekto.el
+      || nstru != this.xmlstruct.strukturo.length) {
       // nun ni montras la celatan XML-parton por redaktado
       this.txtarea.value = this.xmlstruct.getSubtext(this.elekto);
     }
-
     this.synced = true;
   }
 };
