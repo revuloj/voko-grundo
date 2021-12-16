@@ -480,13 +480,14 @@ $.widget( "redaktilo.Trovo", {
                 let ext = img.title.slice(-4).toLowerCase();
 
                 if (ext == '.jpg' || ext == '.png') {
-                    let iurl= "https://commons.wikimedia.org/wiki/" + img.title;
+                    let iurl= "https://commons.wikimedia.org/wiki/" + quoteattr(img.title);
                     let title = img.title.slice(5,-4); // forigu File: kaj .xxx eble pli inteligente uzu Regex...
                     let li_item_id = res.pageid + "_" + img.title.hashFnv32a(true);
 
                     $("#trv_" + pageid + " > div").append(
                         "<div class='bildstriero'><p class='butonoj'>" 
-                        + "<button id='r_" + li_item_id + "'/> <button id='e_" + li_item_id + "'/>" 
+                        + "<button id='r_" + li_item_id + "'></button> "
+                        + "<button id='e_" + li_item_id + "'></button>" 
                         + "</p><a target='_new' href='" + iurl + "'>" + title 
                         + "</a></div>");
 
