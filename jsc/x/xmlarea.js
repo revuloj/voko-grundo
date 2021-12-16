@@ -90,12 +90,13 @@ Xmlarea.prototype.sync = function(select = undefined) {
     const old_s = this.elekto;    
     const nstru = this.xmlstruct.strukturo.length;
 
+    if (!select) select = this.elekto;
+
     // unue ni legas la aktuale redaktatan subtekston kaj enŝovas en la kompletan
     // tio ankaŭ rekreas la strukturon de subtekstoj!
     this.xmlstruct.replaceSubtext(this.elekto,this.txtarea.value,select.id);
 
     // nun retrovu la elektendan subtekston en la rekreita strukturo
-    if (!select) select = this.elekto;
 
     // trovu laŭ id
     let tbs = this.xmlstruct.getStructById(select.id);
@@ -108,8 +109,10 @@ Xmlarea.prototype.sync = function(select = undefined) {
     } else if (select.id == old_s.id) {
       tbs = this.xmlstruct.findStruct(select);
       if (tbs) this.elekto = tbs;
-    } else {
-      // se tute ne retrovita, ni elektas la unuan subtekston (art)
+    };
+    
+    // se tute ne retrovita, ni elektas la unuan subtekston (art)
+    if (!tbs) {
       this.elekto = this.xmlstruct.strukturo[0]; 
     }
 
