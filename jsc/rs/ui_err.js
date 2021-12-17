@@ -168,7 +168,7 @@ export function xmlkontrolo() {
               $("#dock_eraroj").Erarolisto("aldonu_liston",
                 data.map(err => 
                     {
-                        err.msg = quoteattr(err.msg); 
+                        if (err.msg) err.msg = quoteattr(err.msg); 
                         return err;
                     })
                 );
