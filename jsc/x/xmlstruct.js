@@ -353,12 +353,15 @@ XmlStruct.prototype.getClosestKap = function(sd) {
  * @returns - la serĉataj detaloj, null - se neniu enhavas la linion
  */
 XmlStruct.prototype.getLastStructWithLine = function(line) {
-  for (let n = this.strukturo.length-1; n>=0; n--) {
+  for (let n = this.strukturo.length-2; n>=0; n--) {
     const s = this.strukturo[n];
     if (s.ln <= line) {
       return s;
     }
   } 
+
+  // ankoraŭ ne trovita? do redonu XML-tuta...
+  this.strukturo[this.strukturo.length-1]
 }
 
 
