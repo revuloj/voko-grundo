@@ -805,9 +805,13 @@ function indikon_enmeti(event) {
         case "gra":
             enmetu = '<gra><vspec>' + $(this).attr("data-vspec") + '</vspec></gra>';
             break;
-      }
-    
-      if (enmetu) $("#xml_text").insert(enmetu);
+        }
+        
+        if (enmetu) {
+            //$("#xml_text").insert(enmetu);
+            const xmlarea = $("#xml_text").Artikolo("option","xmlarea");
+            xmlarea.selection(enmetu);
+        }
     }
 }
 
