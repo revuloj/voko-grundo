@@ -39,9 +39,13 @@ function get_line_pos(inx,text) {
  * @returns la ŝanĝita teksto
  */
 function replaceTld(radiko,str) {
-    return (str
+    if (radiko) {
+        return (str
             .replace(/<tld\/>/g,radiko)
             .replace(regex_tld,'$1'+radiko.substr(1)));
+    } else {
+        return str;
+    }
 }
 
 /**
