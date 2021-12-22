@@ -361,7 +361,7 @@ XmlStruct.prototype.getLastStructWithLine = function(line) {
   } 
 
   // ankoraŭ ne trovita? do redonu XML-tuta...
-  this.strukturo[this.strukturo.length-1]
+  return this.strukturo[this.strukturo.length-1]
 }
 
 
