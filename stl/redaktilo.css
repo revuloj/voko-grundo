@@ -207,6 +207,45 @@ span.right {
     text-align: right;
 }
 
+.butonoj {
+    text-align: center;
+    margin-top: 0.5em;
+}
+
+.butonoj div {
+    display: inline-block; /* inline-block aldonas spaceton inter la linioj */
+    /* float: left; */
+    vertical-align: inherit;
+    height: 1.3em;
+    max-height: 1.6em;
+    min-width: 1.6em;
+    overflow: hidden;
+    border: 1px solid #e3a345;
+    color: var(--nav-fnt-clr); /* pli bone estus difini apartan var...*/
+    border-radius: 4px;
+    padding: 0.1em;
+    margin: 0 0.1em 0 0.1em;
+    padding-top: 0.5em;
+    line-height: 1em;
+    text-align: center;
+    /*
+    background-color: #e5e3c5;  
+    */
+    background-color: khaki;
+}
+
+.butonoj div:hover {
+    background-color: #f5f3e5; 
+    cursor: pointer
+}
+
+.butonoj div:active {
+   background-color: #c5c3b5; 
+   color: white;  
+   cursor: pointer
+}
+
+
 
 @media (min-width: 50em) {
     #r\:redaktilo {

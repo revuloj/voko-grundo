@@ -7,6 +7,7 @@
 var redaktilo = function() {
 
   var xmlarea = null;  
+  var xklavaro = null;
   var redakto = 'redakto'; // 'aldono' por nova artikolo
 
   const cgi_vokosubmx = '/cgi-bin/vokosubmx.pl';
@@ -855,10 +856,14 @@ var redaktilo = function() {
       //if (!xmlarea) 
 
       // ŝanĝu tekston al nurlege
-      document.getElementById("r:xmltxt").removeAttribute("readonly");
+      const xmltxt = document.getElementById("r:xmltxt");
+      xmltxt.removeAttribute("readonly");
 
       xmlarea = new Xmlarea("r:xmltxt",on_xml_add_sub);
       load_xml(params); // se doniĝis ?art=xxx ni fone ŝargas tiun artikolon
+
+      const klvr = document.getElementById("r:klavaro");
+      xklavaro = new XKlavaro(klvr,null,xmltxt,null,() => xmlarea.setUnsynced())
     }
 
     redakto = 'redakto'; // gravas post antaŭa aldono!
