@@ -26,19 +26,22 @@ console.debug("Instalante la klavarfunkciojn...");
  * @param {*} klavaro - la elemento enhavante la klavaron kiel HTML-elementoj
  * @param {*} dialogo - la kadra dialogo (kadra HTML-elemento) en kiu efiku la klavaro, forlasebla se vi havas nur 'apriora_kampo'
  * @param {*} apriora_kampo - la apriora teksto-elementon (input/textarea), al kiu efiku la klavoj
+ * @param {*} kiuradiko - revokfunkcio, por eltrovi la aktualan radikon de la artikolo
  * @param {*} reĝimpremo - revokfunkcio, vokata kiam reĝimklavo estas premata
  * @param {*} postenmeto - revokfunkcio, vokata post kiam tekstenmeta klavo estis premita
  */
-function XKlavaro(klavaro, dialogo, apriora_kampo, reĝimpremo, postenmeto) {
+function XKlavaro(klavaro, dialogo, apriora_kampo, kiuradiko, reĝimpremo, postenmeto) {
     this.klavaro = klavaro;
     this.dialogo = dialogo;
-    this.apriora_akmpo = apriora_kampo;
+    this.apriora_kampo = apriora_kampo;
+    this.kiuradiko = kiuradiko;
     this.reĝimpremo = reĝimpremo;
     this.postenmeto = postenmeto;
-    this.lasta_fokuso = this.apriora_kampo;
+    this.lasta_fokuso = this.apriora_kampo.id;
     
     // registru klak-reagon
-    this.klavaro.addEventListener("click", this.premo);
+    // vd. https://stackoverflow.com/questions/1338599/the-value-of-this-within-the-handler-using-addeventlistener
+    this.klavaro.addEventListener("click", (event) => this.premo(event));
 
     // certigu, ke fokus-ŝanĝoj en la posedanto (ekz. dialogo) memoriĝas
     if (this.dialogo) {
@@ -136,22 +139,20 @@ function XKlavaro(klavaro, dialogo, apriora_kampo, reĝimpremo, postenmeto) {
 }
 
 XKlavaro.prototype.celo = function() {
-    let el = this.apriora_kampo;
-    const form_element_id = this.lasta_fokuso;
     if (this.lasta_fokuso) {
-        el = this.dialogo.getElementById(this.lasta_fokuso);
+        return document.getElementById(this.lasta_fokuso);
     } 
-    return el;
+    return this.apriora_kampo;
 };
 
 XKlavaro.prototype.premo = function(event) {
-    const btn = event.currentTarget;
+    const btn = event.target;
     const text = btn.getAttribute("data-btn");
     const cmd = btn.getAttribute("data-cmd");
     const element = this.klavaro;
 
     // MANKAS ankoraŭ...
-    const radiko =  this.artikolo.Artikolo("radiko");
+    const radiko =  this.kiuradiko();
 
     if (btn.classList.contains("reghim_btn")) {
         this.reĝimpremo(event,{cmd: cmd});
@@ -227,7 +228,7 @@ XKlavaro.prototype.ekran_klavo = function(text,cmd,sel) {
  * @returns la elektitan tekston
  */
 XKlavaro.prototype.elekto = function() {
-    const element = this.celo;
+    const element = this.celo();
     /*
     if ('selection' in document) {
         // Internet Explorer
@@ -251,7 +252,7 @@ XKlavaro.prototype.elekto = function() {
  * @param {*} val - teksto por enmeti
  */
 XKlavaro.prototype.enmeto = function(val) {
-    const element = this.celo;
+    const element = this.celo();
 
     if (document.selection && document.selection.createRange) { // IE/Opera
         element.focus();
@@ -261,9 +262,9 @@ XKlavaro.prototype.enmeto = function(val) {
 
     } else if (element.selectionStart || element.selectionStart == '0') {
         // Firefox and Webkit based
-        const startPos = this.selectionStart;
-        const endPos = this.selectionEnd;
-        const scrollTop = this.scrollTop;
+        const startPos = element.selectionStart;
+        const endPos = element.selectionEnd;
+        const scrollTop = element.scrollTop;
         element.value = element.value.substring(0, startPos)
           + val
           + element.value.substring(endPos, element.value.length);

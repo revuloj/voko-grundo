@@ -863,7 +863,10 @@ var redaktilo = function() {
       load_xml(params); // se doniĝis ?art=xxx ni fone ŝargas tiun artikolon
 
       const klvr = document.getElementById("r:klavaro");
-      xklavaro = new XKlavaro(klvr,null,xmltxt,null,() => xmlarea.setUnsynced())
+      xklavaro = new XKlavaro(klvr,null,xmltxt,
+        () => xmlarea.getRadiko(),
+        null,
+        () => xmlarea.setUnsynced())
     }
 
     redakto = 'redakto'; // gravas post antaŭa aldono!
