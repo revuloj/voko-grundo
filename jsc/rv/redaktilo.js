@@ -59,10 +59,6 @@ var redaktilo = function() {
         "\n"
       ]],
     rim: ["rim",{},"$_"],
-    ofc: ["ofc",{},["$r:ofc"]],    
-    gra: ["gra",{},["$r:gra","$_"]],
-    uzo_fak: ["uzo",{tip:"fak"},"$r:sfak"],
-    uzo_stl: ["uzo",{tip:"stl"},"$r:sstl"],
     ekz: ["ekz",{},"$_"],
     nom: ["nom",{},"$_"],
     nac: ["nac",{},"$_"],
@@ -866,8 +862,12 @@ var redaktilo = function() {
       xklavaro = new XKlavaro(klvr,null,xmltxt,
         () => xmlarea.getRadiko(),
         (event,cmd) => { 
-          if (cmd.cmd == 'indiko') 
-            xklavaro.indiko_klavoj(revo_codes.stiloj,revo_codes.fakoj); },
+          if (cmd.cmd == 'indiko') {
+            xklavaro.indiko_klavoj(revo_codes.stiloj,revo_codes.fakoj);
+          } else if (cmd.cmd == 'klavaro') {
+            xklavaro.elemento_klavoj();
+          }
+        },
         () => xmlarea.setUnsynced())
     }
 

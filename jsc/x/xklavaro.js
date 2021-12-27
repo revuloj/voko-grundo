@@ -68,7 +68,8 @@ function XKlavaro(klavaro, dialogo, apriora_kampo, kiuradiko, reĝimpremo, poste
  */
 XKlavaro.prototype.elemento_klavoj = function(klavstr) {
     let html='';
-    const klavoj = klavstr.trim().split(/[ \n\r\t\f\v]+/);
+    const klavoj = (klavstr?klavstr:this.klavoj)
+        .trim().split(/[ \n\r\t\f\v]+/);
 
     for (let i=0; i<klavoj.length; i++) {
         let klv = klavoj[i];
@@ -218,10 +219,6 @@ XKlavaro.prototype.indiko_klavoj = function (stlList,fakList) {
     
     indikoj +"</div>";
     this.klavaro.innerHTML = indikoj;
-    
-    // registru klak-reagon ...?
-    this.klavaro.addEventListener("click", (event) => this.premo(event));
-    // $( "#elekto_indikoj" ).on("click","div",indikon_enmeti);        
 };
 
 
@@ -233,7 +230,8 @@ XKlavaro.prototype.celo = function() {
 };
 
 XKlavaro.prototype.premo = function(event) {
-    const btn = event.target;
+    event.stopPropagation();
+    const btn = event.target.closest(".klv");
     const text = btn.getAttribute("data-btn");
     const cmd = btn.getAttribute("data-cmd");
     const element = this.klavaro;
@@ -244,8 +242,25 @@ XKlavaro.prototype.premo = function(event) {
     if (btn.classList.contains("reghim_btn")) {
         this.reĝimpremo(event,{cmd: cmd});
 
+    } else if (btn.classList.contains("stl")) {
+        const stl = btn.getAttribute("data-stl");
+        this.enmeto('<uzo tip="stl">' + stl + '</uzo>');
+        this.postenmeto(event);
+    } else if (btn.classList.contains("fak")) {
+        const fak = btn.getAttribute("data-fak");
+        this.enmeto('<uzo tip="fak">' + fak + '</uzo>');
+        this.postenmeto(event);
+    } else if (btn.classList.contains("ofc")) {
+        const ofc = btn.getAttribute("data-ofc");
+        this.enmeto('<ofc>' + ofc + '</ofc>');
+        this.postenmeto(event);
+    } else if (btn.classList.contains("gra")) {
+        const vspec = btn.getAttribute("data-vspec");
+        this.enmeto('<gra><vspec>' + vspec + '</vspec></gra>');
+        this.postenmeto(event);
+
     } else if (cmd == "tld") { // anstataŭigo de tildo
-        const elektita = this.leketo(); 
+        const elektita = this.elekto(); 
         if (elektita == "~" || elektita == "") {
             this.enmeto("<tld/>");
         } else {
