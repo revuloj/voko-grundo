@@ -76,17 +76,17 @@ XKlavaro.prototype.elemento_klavoj = function(klavstr) {
         if (klv.length == 1) {
             switch (klv) {
                 case '\xa0':
-                    html += '<div data-btn="&nbsp;" title="spaco nerompebla">]&nbsp;[</div>';
+                    html += '<div class="klv" data-btn="&nbsp;" title="spaco nerompebla">]&nbsp;[</div>';
                     break;
                 case '\u202f':
-                    html += '<div data-btn="&#x202f;" title="spaceto nerompebla">][</div>';
+                    html += '<div class="klv" data-btn="&#x202f;" title="spaceto nerompebla">][</div>';
                     break;
                 default:
-                    html += '<div data-btn="' + klv + '">' + klv + '</div>';
+                    html += '<div class="klv" data-btn="' + klv + '">' + klv + '</div>';
             } 
         // duopa signo -> enkrampiga
         } else if (klv.length == 2) {
-            html += '<div class="elm_btn" data-cmd="'+klv+'">' + klv[0] + '&hellip;' + klv[1] +'</div>';
+            html += '<div class="klv elm_btn" data-cmd="'+klv+'">' + klv[0] + '&hellip;' + klv[1] +'</div>';
         // pli longaj estas elemento-butonoj k.s.
         } else {
             var elmj = {
@@ -99,7 +99,7 @@ XKlavaro.prototype.elemento_klavoj = function(klavstr) {
                 frm: "formulo"                    
             };
             if (klv in elmj) {
-                html += '<div class="elm_btn" data-cmd="' + klv + '" title="' + elmj[klv] + '">' + klv + '</div>';
+                html += '<div class="klv elm_btn" data-cmd="' + klv + '" title="' + elmj[klv] + '">' + klv + '</div>';
             } else {
                 switch (klv) {
                     /*
@@ -108,41 +108,41 @@ XKlavaro.prototype.elemento_klavoj = function(klavstr) {
                     break;
                     */
                 case '[indiko]':
-                    html += '<div class="reghim_btn" data-cmd="indiko" title="indiko-klavaro">&#x2605;&#xFE0E;</div>';
+                    html += '<div class="klv reghim_btn" data-cmd="indiko" title="indiko-klavaro">&#x2605;&#xFE0E;</div>';
                     break;
                 case '[serĉo]':
-                    html += '<div class="reghim_btn" data-cmd="sercho" title="Serĉi la elektitan tekston">&#x1F50D;&#xFE0E;</div>';
+                    html += '<div class="klv reghim_btn" data-cmd="sercho" title="Serĉi la elektitan tekston">&#x1F50D;&#xFE0E;</div>';
                     break;
                 case '[blank]':
-                    html += '<div class="reghim_btn" data-cmd="blankigo" title="Blankigu la kampojn">&#x232b;</div>';
+                    html += '<div class="klv reghim_btn" data-cmd="blankigo" title="Blankigu la kampojn">&#x232b;</div>';
                     break;
                 case 'tld': 
-                    html += '<div class="elm_btn" data-cmd="tld" title="tildo/tildigo">~</div>';
+                    html += '<div class="klv elm_btn" data-cmd="tld" title="tildo/tildigo">~</div>';
                     break;
                 case 'grase':
-                    html += '<div class="elm_btn" data-cmd="g" title="grase"><b>g</b></div>';
+                    html += '<div class="klv elm_btn" data-cmd="g" title="grase"><b>g</b></div>';
                     break;
                 case 'kursive':
-                    html += '<div class="elm_btn" data-cmd="k" title="kursive"><i>k</i></div>';
+                    html += '<div class="klv elm_btn" data-cmd="k" title="kursive"><i>k</i></div>';
                     break;
                 case 'emfaze':
-                    html += '<div class="elm_btn" data-cmd="em" title="emfazo"><strong>em</strong></div>';
+                    html += '<div class="klv elm_btn" data-cmd="em" title="emfazo"><strong>em</strong></div>';
                     break;
                 case 'sup':
-                    html += '<div class="elm_btn" data-cmd="sup" title="suprigite" ' +
+                    html += '<div class="klv elm_btn" data-cmd="sup" title="suprigite" ' +
                             'style="padding-top:0.25em; padding-bottom:0.35em ">a<sup>s</sup></div>';
                     break;
                 case 'sub':
-                    html += '<div class="elm_btn" data-cmd="sub" title="subigite">a<sub>s</sub></div>';
+                    html += '<div class="klv elm_btn" data-cmd="sub" title="subigite">a<sub>s</sub></div>';
                     break;
                 case 'minuskloj':
-                    html += '<div class="elm_btn" data-cmd="minuskloj" title="minuskligo">A&#x2192;a</div>';
+                    html += '<div class="klv elm_btn" data-cmd="minuskloj" title="minuskligo">A&#x2192;a</div>';
                     break;
                 case 'kamelo':
-                    html += '<div class="elm_btn" data-cmd="kamelo" title="komenc-majuskloj">&#x2192;Ab</div>';
+                    html += '<div class="klv elm_btn" data-cmd="kamelo" title="komenc-majuskloj">&#x2192;Ab</div>';
                     break;
                 default:
-                    html += '<div class="elm_btn" data-cmd="' + klv + '">' + klv + '</div>';
+                    html += '<div class="klv elm_btn" data-cmd="' + klv + '">' + klv + '</div>';
                 }
             }
         }
@@ -160,18 +160,18 @@ XKlavaro.prototype.elemento_klavoj = function(klavstr) {
 XKlavaro.prototype.indiko_klavoj = function (stlList,fakList) {
    
     let indikoj = /*<div class='reghim_btn' data-cmd='fermu' title='kaŝu la klavaron'><span>kaŝu<br/>&#x2b07;&#xFE0E;</span></div>"
-            +*/ "<div id='elekto_indikoj'><div class='reghim_btn' data-cmd='klavaro' title='krom-klavaro'><span>&lt;&hellip;&gt;<br/>[&hellip;]</span></div>";
+            +*/ "<div id='elekto_indikoj'><div class='klv reghim_btn' data-cmd='klavaro' title='krom-klavaro'><span>&lt;&hellip;&gt;<br/>[&hellip;]</span></div>";
 
     function stilKlavoHtml(kod,nom) {
         indikoj +=
-            "<div class='stl' data-stl='" + kod + "'"
+            "<div class='klv stl' data-stl='" + kod + "'"
             + " title='stilo: " + nom + "'>"
             + "<span>" + nom + "<br/>" + kod + "</span></div>";
     }
     
     function fakoKlavoHtml(kod,nom) {
         indikoj +=
-            "<div class='fak' data-fak='" + kod + "'"
+            "<div class='klv fak' data-fak='" + kod + "'"
             + " title='fako: " + nom + "'>"
             + "<img src='../smb/" + kod + ".png'"
             + " alt='" + kod + "'><br/>" + kod + "</div>";
@@ -194,27 +194,27 @@ XKlavaro.prototype.indiko_klavoj = function (stlList,fakList) {
     };
     */
     
-    indikoj += "<div class='ofc' data-ofc='*' title='fundamenta (*)'><span>funda-<br/>menta</span></div>";
+    indikoj += "<div class='klv ofc' data-ofc='*' title='fundamenta (*)'><span>funda-<br/>menta</span></div>";
     for (var i=1; i<10; i++) {
-        indikoj += "<div class='ofc' data-ofc='" + i + "' title='" + i + "a oficiala aldono'><span><b>" + i + "a</b> aldono" + "</span></div>";
+        indikoj += "<div class='klv ofc' data-ofc='" + i + "' title='" + i + "a oficiala aldono'><span><b>" + i + "a</b> aldono" + "</span></div>";
     }
     
-    indikoj += "<div class='gra' data-vspec='tr' title='vortspeco: transitiva verbo'><span>tr.<br/>verbo</span></div>";
-    indikoj += "<div class='gra' data-vspec='ntr' title='vortspeco: netransitiva verbo'><span>netr.<br/>verbo</span></div>";
-    indikoj += "<div class='gra' data-vspec='x' title='vortspeco: verbo (x)'><span>tr./ntr.<br/>verbo</span></div>";
-    indikoj += "<div class='gra' data-vspec='abs.' title='vortspeco: absoluta, senkomplementa verbo'><span>abs.<br/>verbo</span></div>";
-    indikoj += "<div class='gra' data-vspec='subst.' title='vortspeco: substantivo'><span>subs- tantivo</span></div>";
-    indikoj += "<div class='gra' data-vspec='adj.' title='vortspeco: substantivo'><span>adjek- tivo</span></div>";
-    indikoj += "<div class='gra' data-vspec='adv.' title='vortspeco: substantivo'><span>adver- bo</span></div>";
-    indikoj += "<div class='gra' data-vspec='artikolo' title='vortspeco: artikolo'><span>arti-<br/>kolo</span></div>";
-    indikoj += "<div class='gra' data-vspec='determinilo' title='vortspeco: determinilo'><span>deter- minilo</span></div>";
-    indikoj += "<div class='gra' data-vspec='interjekcio' title='vortspeco: interjekcio'><span>inter- jekcio</span></div>";
-    indikoj += "<div class='gra' data-vspec='konjunkcio' title='vortspeco: konjunkcio'><span>konjunk- cio</span></div>";
-    indikoj += "<div class='gra' data-vspec='prefikso' title='vortspeco: prefikso'><span>pre- fikso</span></div>";
-    indikoj += "<div class='gra' data-vspec='sufikso' title='vortspeco: sufikso'><span>su-<br/>fikso</span></div>";
-    indikoj += "<div class='gra' data-vspec='prepozicio' title='vortspeco: prepozicio'><span>prepo- zicio</span></div>";
-    indikoj += "<div class='gra' data-vspec='prepoziciaĵo' title='vortspeco: prepoziciaĵo'><span>prepo- ziciaĵo</span></div>";
-    indikoj += "<div class='gra' data-vspec='pronomo' title='vortspeco: pronomo'><span>pro- nomo</span></div>";
+    indikoj += "<div class='klv gra' data-vspec='tr' title='vortspeco: transitiva verbo'><span>tr.<br/>verbo</span></div>";
+    indikoj += "<div class='klv gra' data-vspec='ntr' title='vortspeco: netransitiva verbo'><span>netr.<br/>verbo</span></div>";
+    indikoj += "<div class='klv gra' data-vspec='x' title='vortspeco: verbo (x)'><span>tr./ntr.<br/>verbo</span></div>";
+    indikoj += "<div class='klv gra' data-vspec='abs.' title='vortspeco: absoluta, senkomplementa verbo'><span>abs.<br/>verbo</span></div>";
+    indikoj += "<div class='klv gra' data-vspec='subst.' title='vortspeco: substantivo'><span>subs- tantivo</span></div>";
+    indikoj += "<div class='klv gra' data-vspec='adj.' title='vortspeco: substantivo'><span>adjek- tivo</span></div>";
+    indikoj += "<div class='klv gra' data-vspec='adv.' title='vortspeco: substantivo'><span>adver- bo</span></div>";
+    indikoj += "<div class='klv gra' data-vspec='artikolo' title='vortspeco: artikolo'><span>arti-<br/>kolo</span></div>";
+    indikoj += "<div class='klv gra' data-vspec='determinilo' title='vortspeco: determinilo'><span>deter- minilo</span></div>";
+    indikoj += "<div class='klv gra' data-vspec='interjekcio' title='vortspeco: interjekcio'><span>inter- jekcio</span></div>";
+    indikoj += "<div class='klv gra' data-vspec='konjunkcio' title='vortspeco: konjunkcio'><span>konjunk- cio</span></div>";
+    indikoj += "<div class='klv gra' data-vspec='prefikso' title='vortspeco: prefikso'><span>pre- fikso</span></div>";
+    indikoj += "<div class='klv gra' data-vspec='sufikso' title='vortspeco: sufikso'><span>su-<br/>fikso</span></div>";
+    indikoj += "<div class='klv gra' data-vspec='prepozicio' title='vortspeco: prepozicio'><span>prepo- zicio</span></div>";
+    indikoj += "<div class='klv gra' data-vspec='prepoziciaĵo' title='vortspeco: prepoziciaĵo'><span>prepo- ziciaĵo</span></div>";
+    indikoj += "<div class='klv gra' data-vspec='pronomo' title='vortspeco: pronomo'><span>pro- nomo</span></div>";
     
     indikoj +"</div>";
     this.klavaro.innerHTML = indikoj;

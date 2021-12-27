@@ -127,6 +127,27 @@
     border-top: 1px dotted var(--main-brd-clr);
 }
 
+.xmlarea {
+    flex: 1; /* consume available width */  
+    position: relative;   
+}
+
+.xmlarea .position {
+    position: absolute;
+    background-color: var(--pos-bgr-clr);
+    border-radius: 3px;
+    padding: .2em;
+    top: 0.2em;
+    right: 1em;
+    opacity: .8;
+}
+
+.butonoj {
+    flex: 0;
+    text-align: center;
+    margin: 1px;
+}
+
 .rimarkoj ul {
     margin-block-start: .2em;
     margin-left: 0.1em;
@@ -209,12 +230,7 @@ span.right {
 
 /****************v duobla en redaktilo-revaj.css v**********/
 
-.butonoj {
-    text-align: center;
-    margin-top: 0.5em;
-}
-
-.butonoj div {
+.butonoj .klv {
     display: inline-block; /* inline-block aldonas spaceton inter la linioj */
     /* float: left; */
     vertical-align: inherit;
@@ -236,12 +252,12 @@ span.right {
     background-color: khaki;
 }
 
-.butonoj div:hover {
+.butonoj .klv:hover {
     background-color: #f5f3e5; 
     cursor: pointer
 }
 
-.butonoj div:active {
+.butonoj .klv:active {
    background-color: #c5c3b5; 
    color: white;  
    cursor: pointer
@@ -255,7 +271,7 @@ span.right {
     padding: 0px;
 }
 
-#elekto_indikoj div {
+#elekto_indikoj .klv {
     /*display: inline-block;*/ /*float; //inline-block; inline-block aldonas spaceton inter la linioj */
     float: left;
     height: 3em;
@@ -290,18 +306,18 @@ span.right {
 }
 
 
-#elekto_indikoj div:hover {
+#elekto_indikoj .klv:hover {
    background-color: #f5f3e5; 
    cursor: pointer
 }
 
-#elekto_indikoj div:active {
+#elekto_indikoj .klv:active {
    background-color: #c5c3b5; 
    color: white;  
    cursor: pointer
 }
 
-#elekto_indikoj div span {
+#elekto_indikoj .klv span {
     line-height: 1.5em
 }
 
