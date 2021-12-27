@@ -936,22 +936,9 @@ var redaktilo = function() {
   // preparu la redaktilo-elementojn en la naviga kadro: elekto-listojn (fakoj, stiloj...),
   // evento-traktiloj
   function preparu_menu() {
-    const fakelekto = document.getElementById("r:sfak")
-    const stilelekto = document.getElementById("r:sstl")
-
-    function fako(kod,nom) {
-      const opt = ht_element("option",{value: kod},kod + ' - ' + nom);
-      fakelekto.appendChild(opt);  
-    }
-    function stilo(kod,nom) {
-      const opt = ht_element("option",{value: kod},kod + ' - ' + nom);
-      stilelekto.appendChild(opt);  
-    }    
 
     // enlegu bezonaĵojn (listojn, XML-artikolon, preferojn)
     restore_preferences();
-    revo_codes.fakoj.load(fako);
-    revo_codes.stiloj.load(stilo);
 
     /******************
      *  preparu aktivajn elmentoj / eventojn
