@@ -207,6 +207,8 @@ span.right {
     text-align: right;
 }
 
+/****************v duobla en redaktilo-revaj.css v**********/
+
 .butonoj {
     text-align: center;
     margin-top: 0.5em;
@@ -216,8 +218,8 @@ span.right {
     display: inline-block; /* inline-block aldonas spaceton inter la linioj */
     /* float: left; */
     vertical-align: inherit;
-    height: 1.3em;
-    max-height: 1.6em;
+    height: 2em;
+    max-height: 2em;
     min-width: 1.6em;
     overflow: hidden;
     border: 1px solid #e3a345;
@@ -244,6 +246,73 @@ span.right {
    color: white;  
    cursor: pointer
 }
+
+#elekto_indikoj, r {
+    max-height: 27ex;
+    min-height: 3.6em;
+    overflow: auto; 
+    margin: 1px;
+    padding: 0px;
+}
+
+#elekto_indikoj div {
+    /*display: inline-block;*/ /*float; //inline-block; inline-block aldonas spaceton inter la linioj */
+    float: left;
+    height: 3em;
+    max-height: 3em;
+    width: 4em;
+    overflow: hidden;
+    border: 1px solid #e3a345;
+    color: var(--nav-fnt-clr); /* pli bone estus difini apartan var...*/
+    border-radius: 4px;
+    padding: 0.1em;
+    margin: 0;
+    font-size: small;
+    line-height: 1em;
+    text-align: center;
+}
+
+#elekto_indikoj .stl {
+  font-stretch: condensed;
+  background-color: burlywood; /*#e5e3c5;  */
+}
+
+#elekto_indikoj .fak {
+  background-color: khaki; /*#d5e3d5;  */
+}
+
+#elekto_indikoj .ofc {
+  background-color: blanchedalmond; /*#d5d3e5*/;  
+}
+
+#elekto_indikoj .gra {
+  background-color: beige; /*#e5d3e5;  */
+}
+
+
+#elekto_indikoj div:hover {
+   background-color: #f5f3e5; 
+   cursor: pointer
+}
+
+#elekto_indikoj div:active {
+   background-color: #c5c3b5; 
+   color: white;  
+   cursor: pointer
+}
+
+#elekto_indikoj div span {
+    line-height: 1.5em
+}
+
+
+#elekto_indikoj img {
+    height: 1.7em;
+    max-height: 1.7em;
+    overflow: hidden;
+}
+
+/**************** ^^ duobla en redaktilo-revaj.css ^^^**********/
 
 
 

@@ -38,7 +38,12 @@ function XKlavaro(klavaro, dialogo, apriora_kampo, kiuradiko, reĝimpremo, poste
     this.reĝimpremo = reĝimpremo;
     this.postenmeto = postenmeto;
     this.lasta_fokuso = this.apriora_kampo.id;
+    this.klavoj = this.klavaro.textContent;
     
+    // kreu la klavojn
+    if (this.klavoj)
+        this.elemento_klavoj(this.klavoj);
+
     // registru klak-reagon
     // vd. https://stackoverflow.com/questions/1338599/the-value-of-this-within-the-handler-using-addeventlistener
     this.klavaro.addEventListener("click", (event) => this.premo(event));
@@ -51,12 +56,19 @@ function XKlavaro(klavaro, dialogo, apriora_kampo, kiuradiko, reĝimpremo, poste
             });
         }    
     }
+}
 
-    // kreu la klavojn
-    const klavoj = this.klavaro.textContent
-        .trim().split(/[ \n\r\t\f\v]+/);
-
+/**
+ * Kreas elemento-klavojn laŭ tekstra priskribo. Ekz-e
+ * [indiko] &#x2015; &middot; &nbsp; &#x202f;
+ * tld [] () &#x201e;&#x201c; &sbquo;&#x2018; 
+ * ctl nom nac esc ind var frm
+ * grase kursive emfaze sup sub minuskloj kamelo
+ * @param {string} klavoj kiel teksto
+ */
+XKlavaro.prototype.elemento_klavoj = function(klavstr) {
     let html='';
+    const klavoj = klavstr.trim().split(/[ \n\r\t\f\v]+/);
 
     for (let i=0; i<klavoj.length; i++) {
         let klv = klavoj[i];
@@ -137,6 +149,81 @@ function XKlavaro(klavaro, dialogo, apriora_kampo, kiuradiko, reĝimpremo, poste
     }
     this.klavaro.innerHTML = html;
 }
+
+
+/**
+ * Kreas butonojn por stiloj, fakoj, gramatikaj indikoj
+ * @param {string} ujo_id 
+ * @param {Object} stiloj 
+ * @param {Object} fakoj 
+ */
+XKlavaro.prototype.indiko_klavoj = function (stlList,fakList) {
+   
+    let indikoj = /*<div class='reghim_btn' data-cmd='fermu' title='kaŝu la klavaron'><span>kaŝu<br/>&#x2b07;&#xFE0E;</span></div>"
+            +*/ "<div id='elekto_indikoj'><div class='reghim_btn' data-cmd='klavaro' title='krom-klavaro'><span>&lt;&hellip;&gt;<br/>[&hellip;]</span></div>";
+
+    function stilKlavoHtml(kod,nom) {
+        indikoj +=
+            "<div class='stl' data-stl='" + kod + "'"
+            + " title='stilo: " + nom + "'>"
+            + "<span>" + nom + "<br/>" + kod + "</span></div>";
+    }
+    
+    function fakoKlavoHtml(kod,nom) {
+        indikoj +=
+            "<div class='fak' data-fak='" + kod + "'"
+            + " title='fako: " + nom + "'>"
+            + "<img src='../smb/" + kod + ".png'"
+            + " alt='" + kod + "'><br/>" + kod + "</div>";
+    }            
+
+    stlList.load(stilKlavoHtml);
+    fakList.load(fakoKlavoHtml);
+    /*
+    for (const [kod, val] of Object.entries(stiloj)) {
+        indikoj += "<div class='stl' data-stl='" + kod + "'"
+            + " title='stilo: " + val + "'>"
+            + "<span>" + val + "<br/>" + kod + "</span></div>";        
+    };
+
+    for (const [kod, val] of Object.entries(fakoj)) {
+        indikoj += "<div class='fak' data-fak='" + kod + "'"
+            + " title='fako: " + val + "'>"
+            + "<img src='../smb/" + kod + ".png'"
+            + " alt='" + kod + "'><br/>" + kod + "</div>";        
+    };
+    */
+    
+    indikoj += "<div class='ofc' data-ofc='*' title='fundamenta (*)'><span>funda-<br/>menta</span></div>";
+    for (var i=1; i<10; i++) {
+        indikoj += "<div class='ofc' data-ofc='" + i + "' title='" + i + "a oficiala aldono'><span><b>" + i + "a</b> aldono" + "</span></div>";
+    }
+    
+    indikoj += "<div class='gra' data-vspec='tr' title='vortspeco: transitiva verbo'><span>tr.<br/>verbo</span></div>";
+    indikoj += "<div class='gra' data-vspec='ntr' title='vortspeco: netransitiva verbo'><span>netr.<br/>verbo</span></div>";
+    indikoj += "<div class='gra' data-vspec='x' title='vortspeco: verbo (x)'><span>tr./ntr.<br/>verbo</span></div>";
+    indikoj += "<div class='gra' data-vspec='abs.' title='vortspeco: absoluta, senkomplementa verbo'><span>abs.<br/>verbo</span></div>";
+    indikoj += "<div class='gra' data-vspec='subst.' title='vortspeco: substantivo'><span>subs- tantivo</span></div>";
+    indikoj += "<div class='gra' data-vspec='adj.' title='vortspeco: substantivo'><span>adjek- tivo</span></div>";
+    indikoj += "<div class='gra' data-vspec='adv.' title='vortspeco: substantivo'><span>adver- bo</span></div>";
+    indikoj += "<div class='gra' data-vspec='artikolo' title='vortspeco: artikolo'><span>arti-<br/>kolo</span></div>";
+    indikoj += "<div class='gra' data-vspec='determinilo' title='vortspeco: determinilo'><span>deter- minilo</span></div>";
+    indikoj += "<div class='gra' data-vspec='interjekcio' title='vortspeco: interjekcio'><span>inter- jekcio</span></div>";
+    indikoj += "<div class='gra' data-vspec='konjunkcio' title='vortspeco: konjunkcio'><span>konjunk- cio</span></div>";
+    indikoj += "<div class='gra' data-vspec='prefikso' title='vortspeco: prefikso'><span>pre- fikso</span></div>";
+    indikoj += "<div class='gra' data-vspec='sufikso' title='vortspeco: sufikso'><span>su-<br/>fikso</span></div>";
+    indikoj += "<div class='gra' data-vspec='prepozicio' title='vortspeco: prepozicio'><span>prepo- zicio</span></div>";
+    indikoj += "<div class='gra' data-vspec='prepoziciaĵo' title='vortspeco: prepoziciaĵo'><span>prepo- ziciaĵo</span></div>";
+    indikoj += "<div class='gra' data-vspec='pronomo' title='vortspeco: pronomo'><span>pro- nomo</span></div>";
+    
+    indikoj +"</div>";
+    this.klavaro.innerHTML = indikoj;
+    
+    // registru klak-reagon ...?
+    this.klavaro.addEventListener("click", (event) => this.premo(event));
+    // $( "#elekto_indikoj" ).on("click","div",indikon_enmeti);        
+};
+
 
 XKlavaro.prototype.celo = function() {
     if (this.lasta_fokuso) {
