@@ -558,7 +558,7 @@ Xmlarea.prototype.replaceTrd = function(id,lng,trdj) {
       // PLIBONIGU: ni ĉiufoje rekalkulas la strukturon post tio,
       // do se ni aldonas tradukojn en pluraj sekcioj ni haltigu
       // la aktualigadon ĝis la lasta...
-      this.xmlstruct.replaceSubtext({id:id},xml,this.elekto);
+      this.xmlstruct.replaceSubtext({id:id},xml,this.elekto.id);
       // aktualigu ankaŭ txtarea, ĉar eble ni aldonis en tiu tradukojn
       // PLIBONIGU: pli bone faru tion nur se montriĝas ĉirkaŭa subteksto
       // aŭ fine de aldoni ĉiujn tradukojn...
