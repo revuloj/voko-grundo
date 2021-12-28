@@ -328,6 +328,47 @@ span.right {
     overflow: hidden;
 }
 
+.elm_btn {
+    /*background-color: #d5e3d5 !important;*/
+    background-color: burlywood !important;
+}
+
+.reghim_btn {
+   background-color: var(--btn-bgr-clr) !important;
+   border-color: var(--btn-brd-clr) !important;
+   color: var(--main-fnt-clr) !important;
+   /*
+   border-color: #327E04 !important;
+   background-color: #459e00 !important;
+   color: white !important;    
+   */
+   font-weight: bold !important;
+}
+
+.kklvbtn {
+    /*
+    background-color: silver;
+    border-radius: 4px;
+    padding: .18em;
+    margin: 2px;
+    */
+    margin: 0;
+    margin-right: .1em;
+    padding: .18em;
+    color: black !important;
+    font-weight: normal !important;
+    box-shadow: none !important;
+
+    box-sizing: border-box;   
+    height: 100%;
+}
+.kklvbtn[value='1'] {
+    background-color: var(--btn-act-bgr-clr) !important;
+}
+.kklvbtn[value='0'] {
+    background-color: var(--btn-dis-bgr-clr) !important;
+}
+
 /**************** ^^ duobla en redaktilo-revaj.css ^^^**********/
 
 

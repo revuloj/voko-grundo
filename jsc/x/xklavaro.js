@@ -27,6 +27,7 @@ console.debug("Instalante la klavarfunkciojn...");
  * @param {Element} klavaro - la elemento enhavante la klavaron kiel HTML-elementoj
  * @param {Element} dialogo - la kadra dialogo (kadra HTML-elemento) en kiu efiku la klavaro, forlasebla se vi havas nur 'apriora_kampo'
  * @param {Element} apriora_kampo - la apriora teksto-elementon (input/textarea), al kiu efiku la klavoj
+ * @param {Function} kiuradiko - revokfunkcio, vokata por eltrovi la radikon de la artikolo
  * @param {Function} reĝimpremo - revokfunkcio, vokata kiam reĝimklavo estas premata
  * @param {Function} postenmeto - revokfunkcio, vokata post kiam tekstenmeta klavo estis premita
  */
@@ -41,8 +42,8 @@ function XKlavaro(klavaro, dialogo, apriora_kampo, kiuradiko, reĝimpremo, poste
     this.klavoj = this.klavaro.textContent;
     
     // kreu la klavojn
-    if (this.klavoj)
-        this.elemento_klavoj(this.klavoj);
+    //if (this.klavoj)
+    //    this.elemento_klavoj(this.klavoj);
 
     // registru klak-reagon
     // vd. https://stackoverflow.com/questions/1338599/the-value-of-this-within-the-handler-using-addeventlistener
@@ -64,9 +65,10 @@ function XKlavaro(klavaro, dialogo, apriora_kampo, kiuradiko, reĝimpremo, poste
  * tld [] () &#x201e;&#x201c; &sbquo;&#x2018; 
  * ctl nom nac esc ind var frm
  * grase kursive emfaze sup sub minuskloj kamelo
+ * @param {Element} klvrElm - elemento en kiun aranĝi la fakoklavojn
  * @param {string} klavstr klavaro-specifo kiel teksto
  */
-XKlavaro.prototype.elemento_klavoj = function(klavstr) {
+XKlavaro.prototype.elemento_klavoj = function(klvrElm, klavstr = null) {
     let html='';
     const klavoj = (klavstr?klavstr:this.klavoj)
         .trim().split(/[ \n\r\t\f\v]+/);
@@ -111,6 +113,9 @@ XKlavaro.prototype.elemento_klavoj = function(klavstr) {
                 case '[indiko]':
                     html += '<div class="klv reghim_btn" data-cmd="indiko" title="indiko-klavaro">&#x2605;&#xFE0E;</div>';
                     break;
+                case '[fako]':
+                    html += '<div class="klv reghim_btn" data-cmd="fako" title="fako-klavaro">&#x26CF;&#xFE0E;</div>';
+                    break;
                 case '[serĉo]':
                     html += '<div class="klv reghim_btn" data-cmd="sercho" title="Serĉi la elektitan tekston">&#x1F50D;&#xFE0E;</div>';
                     break;
@@ -148,16 +153,16 @@ XKlavaro.prototype.elemento_klavoj = function(klavstr) {
             }
         }
     }
-    this.klavaro.innerHTML = html;
+    klvrElm.innerHTML = html;
 }
 
 
 /**
  * Kreas butonojn por stiloj, fakoj, gramatikaj indikoj
+ * @param {Element} klvrElm - elemento en kiun aranĝi la fakoklavojn
  * @param {Object} stlList - Codelist kun stiloj
- * @param {Object} fakList - Codelist kun fakoj
  */
-XKlavaro.prototype.indiko_klavoj = function (stlList,fakList) {
+XKlavaro.prototype.indiko_klavoj = function (klvrElm,stlList) {
    
     let indikoj = /*<div class='reghim_btn' data-cmd='fermu' title='kaŝu la klavaron'><span>kaŝu<br/>&#x2b07;&#xFE0E;</span></div>"
             +*/ "<div id='elekto_indikoj'><div class='klv reghim_btn' data-cmd='klavaro' title='krom-klavaro'><span>&lt;&hellip;&gt;<br/>[&hellip;]</span></div>";
@@ -169,30 +174,7 @@ XKlavaro.prototype.indiko_klavoj = function (stlList,fakList) {
             + "<span>" + nom + "<br/>" + kod + "</span></div>";
     }
     
-    function fakoKlavoHtml(kod,nom) {
-        indikoj +=
-            "<div class='klv fak' data-fak='" + kod + "'"
-            + " title='fako: " + nom + "'>"
-            + "<img src='../smb/" + kod + ".png'"
-            + " alt='" + kod + "'><br/>" + kod + "</div>";
-    }            
-
     stlList.load(stilKlavoHtml);
-    fakList.load(fakoKlavoHtml);
-    /*
-    for (const [kod, val] of Object.entries(stiloj)) {
-        indikoj += "<div class='stl' data-stl='" + kod + "'"
-            + " title='stilo: " + val + "'>"
-            + "<span>" + val + "<br/>" + kod + "</span></div>";        
-    };
-
-    for (const [kod, val] of Object.entries(fakoj)) {
-        indikoj += "<div class='fak' data-fak='" + kod + "'"
-            + " title='fako: " + val + "'>"
-            + "<img src='../smb/" + kod + ".png'"
-            + " alt='" + kod + "'><br/>" + kod + "</div>";        
-    };
-    */
     
     indikoj += "<div class='klv ofc' data-ofc='*' title='fundamenta (*)'><span>funda-<br/>menta</span></div>";
     for (var i=1; i<10; i++) {
@@ -216,8 +198,29 @@ XKlavaro.prototype.indiko_klavoj = function (stlList,fakList) {
     indikoj += "<div class='klv gra' data-vspec='prepoziciaĵo' title='vortspeco: prepoziciaĵo'><span>prepo- ziciaĵo</span></div>";
     indikoj += "<div class='klv gra' data-vspec='pronomo' title='vortspeco: pronomo'><span>pro- nomo</span></div>";
     
-    indikoj += "</div>";
-    this.klavaro.innerHTML = indikoj;
+    klvrElm.innerHTML = indikoj;
+};
+
+/**
+ * Kreas butonojn por fakoj
+ * @param {Element} klvrElm - elemento en kiun aranĝi la fakoklavojn
+ * @param {Object} fakList - Codelist kun fakoj
+ */
+ XKlavaro.prototype.fako_klavoj = function (klvrElm,fakList) {
+   
+    let indikoj = /*<div class='reghim_btn' data-cmd='fermu' title='kaŝu la klavaron'><span>kaŝu<br/>&#x2b07;&#xFE0E;</span></div>"
+            +*/ "<div class='klv reghim_btn' data-cmd='klavaro' title='krom-klavaro'><span>&lt;&hellip;&gt;</span></div>";
+   
+    function fakoKlavoHtml(kod,nom) {
+        indikoj +=
+            "<div class='klv fak' data-fak='" + kod + "'"
+            + " title='fako: " + nom + "'>"
+            + "<img src='../smb/" + kod + ".png'"
+            + " alt='" + kod + "'><br/>" + kod + "</div>";
+    }            
+
+    fakList.load(fakoKlavoHtml);
+    klvrElm.innerHTML = indikoj;
 };
 
 /**

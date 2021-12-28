@@ -13,7 +13,7 @@
     this.codes = {};
   
     /**
-     * Plenigas HTML-elementon 'selection' per la kodlisto
+     * Plenigas ion per la kodlisto, vokante 'aldonilo' por ĉiu paro kodo-nomo
      * @param {Function} aldonilo - 'id' de HTML-elemento plenigenda per 'option'-elementoj 
      */
     this.fill = function(aldonilo) {   

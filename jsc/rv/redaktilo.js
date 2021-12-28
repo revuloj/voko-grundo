@@ -855,6 +855,20 @@ var redaktilo = function() {
       const xmltxt = document.getElementById("r:xmltxt");
       xmltxt.removeAttribute("readonly");
 
+      const xklvr = document.getElementById("r:xklvr");
+
+      xklvr.addEventListener("click",
+        () => {
+          const pressed = 1 - xklvr.value;
+          xklvr.value = pressed;
+          if (pressed) {
+            show("r:klavaro");
+          } else {
+            hide("r:klavaro");
+          }
+      });    
+
+
       xmlarea = new Xmlarea("r:xmltxt",on_xml_add_sub);
       load_xml(params); // se doniĝis ?art=xxx ni fone ŝargas tiun artikolon
 
@@ -862,14 +876,26 @@ var redaktilo = function() {
       xklavaro = new XKlavaro(klvr,null,xmltxt,
         () => xmlarea.getRadiko(),
         (event,cmd) => { 
+          // PLIBONIGU: tion ni povas ankaŭ meti en xklavaro.js!
           if (cmd.cmd == 'indiko') {
-            xklavaro.indiko_klavoj(revo_codes.stiloj,revo_codes.fakoj);
+            hide("r:klv_fak");
+            show("r:klv_ind");
+            hide("r:klv_elm");
+          } else if (cmd.cmd == 'fako') {
+            hide("r:klv_ind");
+            show("r:klv_fak");
+            hide("r:klv_elm");
           } else if (cmd.cmd == 'klavaro') {
-            xklavaro.elemento_klavoj();
+            hide("r:klv_fak");
+            show("r:klv_elm");
+            hide("r:klv_ind");
           }
         },
         () => xmlarea.setUnsynced())
     }
+    xklavaro.indiko_klavoj(document.getElementById("r:klv_ind"),revo_codes.stiloj);
+    xklavaro.fako_klavoj(document.getElementById("r:klv_fak"),revo_codes.fakoj);
+    xklavaro.elemento_klavoj(document.getElementById("r:klv_elm"));
 
     redakto = 'redakto'; // gravas post antaŭa aldono!
 
