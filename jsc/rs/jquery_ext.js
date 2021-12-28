@@ -235,6 +235,7 @@ jQuery.fn.extend({
         } 
     },
     
+    /* uzu xmlarea.position()!
     // pozicio de kursoro en elemento, ekz. textarea - n-ro de signo
     getCursorPosition: function() {
         var el = this.get(0);
@@ -250,6 +251,7 @@ jQuery.fn.extend({
         }
         return pos;
     },
+    */
     
     // redonu la linion kaj pozicion ene de linio el absoluta pozicio (index -> line:pos)
     getCursorLinePos: function() {

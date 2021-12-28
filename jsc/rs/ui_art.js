@@ -589,9 +589,13 @@ $.widget( "redaktilo.Artikolo", {
     },
 
     drv_before_cursor: function() {
-        var line_pos = this.element.getCursorLinePos();
-        var drvoj = this.drv_markoj();
-        for(var i=drvoj.length-1; i>=0; i--) {
+        //var line_pos = this.element.getCursorLinePos();
+
+        const xmlarea = this.option("xmlarea");
+        const line_pos = xmlarea.position();
+
+        const drvoj = this.drv_markoj();
+        for(let i=drvoj.length-1; i>=0; i--) {
             drv = drvoj[i];
             if (drv.line < line_pos.line) {
                 return drv;
