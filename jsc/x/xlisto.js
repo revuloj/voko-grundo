@@ -25,7 +25,7 @@
      * Ŝargas la kodliston de la donita URL.
      * @param {Function} aldonilo - se donita, revokfuncio ald(kodo,nomo) aldonante unuopan listeron al io
      */
-    this.load = function(aldonilo) {
+    this.load = function(aldonilo=undefined) {
       var self = this;
   
       // unuafoje ŝargu la tutan liston el XML-dosiero

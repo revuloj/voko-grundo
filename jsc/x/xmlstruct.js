@@ -226,7 +226,7 @@ XmlStruct.prototype.getStructById = function(id) {
  * Trovas la informon de subteksto: aŭ identigante ĝin per sia .id aŭ
  * per sama elemento kaj komenco devianta maksimume je unu linio
  * @param {{id: string}} sd 
- * @returns 
+ * @returns la informoj pri la subteksto kiel objekto
  */
 XmlStruct.prototype.findStruct = function(sd) {
   let s = this.getStructById(sd.id);

@@ -23,12 +23,12 @@ console.debug("Instalante la klavarfunkciojn...");
  * Kreas XML-ekran-klavaron. La klavaro efikas ene de kadra dialogo. Fokusŝanĝoj pri enhavataj input- kaj textarea-elementoj
  * estas memorataj. Se la lasta fokuso ne kuŝis en tia tekst-elemento la klavoj efikas al la donita apriora elemento.
  * la HTML-enhavo de klavaro povas esti plej simple io kiel 'ĉ ĝ ĥ ĵ ŝ ŭ'...
- * @param {*} klavaro - la elemento enhavante la klavaron kiel HTML-elementoj
- * @param {*} dialogo - la kadra dialogo (kadra HTML-elemento) en kiu efiku la klavaro, forlasebla se vi havas nur 'apriora_kampo'
- * @param {*} apriora_kampo - la apriora teksto-elementon (input/textarea), al kiu efiku la klavoj
- * @param {*} kiuradiko - revokfunkcio, por eltrovi la aktualan radikon de la artikolo
- * @param {*} reĝimpremo - revokfunkcio, vokata kiam reĝimklavo estas premata
- * @param {*} postenmeto - revokfunkcio, vokata post kiam tekstenmeta klavo estis premita
+ * @constructor
+ * @param {Element} klavaro - la elemento enhavante la klavaron kiel HTML-elementoj
+ * @param {Element} dialogo - la kadra dialogo (kadra HTML-elemento) en kiu efiku la klavaro, forlasebla se vi havas nur 'apriora_kampo'
+ * @param {Element} apriora_kampo - la apriora teksto-elementon (input/textarea), al kiu efiku la klavoj
+ * @param {Function} reĝimpremo - revokfunkcio, vokata kiam reĝimklavo estas premata
+ * @param {Function} postenmeto - revokfunkcio, vokata post kiam tekstenmeta klavo estis premita
  */
 function XKlavaro(klavaro, dialogo, apriora_kampo, kiuradiko, reĝimpremo, postenmeto) {
     this.klavaro = klavaro;
@@ -64,7 +64,7 @@ function XKlavaro(klavaro, dialogo, apriora_kampo, kiuradiko, reĝimpremo, poste
  * tld [] () &#x201e;&#x201c; &sbquo;&#x2018; 
  * ctl nom nac esc ind var frm
  * grase kursive emfaze sup sub minuskloj kamelo
- * @param {string} klavoj kiel teksto
+ * @param {string} klavstr klavaro-specifo kiel teksto
  */
 XKlavaro.prototype.elemento_klavoj = function(klavstr) {
     let html='';
@@ -154,9 +154,8 @@ XKlavaro.prototype.elemento_klavoj = function(klavstr) {
 
 /**
  * Kreas butonojn por stiloj, fakoj, gramatikaj indikoj
- * @param {string} ujo_id 
- * @param {Object} stiloj 
- * @param {Object} fakoj 
+ * @param {Object} stlList - Codelist kun stiloj
+ * @param {Object} fakList - Codelist kun fakoj
  */
 XKlavaro.prototype.indiko_klavoj = function (stlList,fakList) {
    
@@ -217,11 +216,14 @@ XKlavaro.prototype.indiko_klavoj = function (stlList,fakList) {
     indikoj += "<div class='klv gra' data-vspec='prepoziciaĵo' title='vortspeco: prepoziciaĵo'><span>prepo- ziciaĵo</span></div>";
     indikoj += "<div class='klv gra' data-vspec='pronomo' title='vortspeco: pronomo'><span>pro- nomo</span></div>";
     
-    indikoj +"</div>";
+    indikoj += "</div>";
     this.klavaro.innerHTML = indikoj;
 };
 
-
+/**
+ * Redonas la HTML-kampon, al kiu ni tajpas
+ * @returns la kampon, kiu laste havis la fokuson aŭ la aprioran kampon
+ */
 XKlavaro.prototype.celo = function() {
     if (this.lasta_fokuso) {
         return document.getElementById(this.lasta_fokuso);
@@ -229,6 +231,10 @@ XKlavaro.prototype.celo = function() {
     return this.apriora_kampo;
 };
 
+/**
+ * Reago al premo de X-klavo
+ * @param {Object} event 
+ */
 XKlavaro.prototype.premo = function(event) {
     event.stopPropagation();
     const btn = event.target.closest(".klv");
