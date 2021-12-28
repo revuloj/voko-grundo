@@ -20,7 +20,7 @@
     "scripts": {
         "env": "env",
         "lint": "jshint jsc/*/*.js",
-        "doc": "jsdoc -d doc jsc/*/*.js",
+        "doc": "jsdoc -d jsdoc jsc/*/*.js",
 
         "prebuild": "mkdir -p build",
         "//prebuild:svg": "bin/mp2png_svg.sh",
