@@ -228,7 +228,17 @@ span.right {
     text-align: right;
 }
 
-/****************v duobla en redaktilo-revaj.css v**********/
+/****************v simile enhavata en redaktilo-revaj.css 
+          PLIBONIGU: eble do metu en apartan xklavaro.css v**********/
+
+
+.butonoj {
+    max-height: 27ex;
+    min-height: 3.6em;
+    overflow: auto; 
+    margin: 1px;
+    padding: 0px;
+}
 
 .butonoj .klv {
     display: inline-block; /* inline-block aldonas spaceton inter la linioj */
@@ -252,26 +262,9 @@ span.right {
     background-color: khaki;
 }
 
-.butonoj .klv:hover {
-    background-color: #f5f3e5; 
-    cursor: pointer
-}
 
-.butonoj .klv:active {
-   background-color: #c5c3b5; 
-   color: white;  
-   cursor: pointer
-}
-
-#elekto_indikoj, r {
-    max-height: 27ex;
-    min-height: 3.6em;
-    overflow: auto; 
-    margin: 1px;
-    padding: 0px;
-}
-
-#elekto_indikoj .klv {
+#r\:klv_ind .klv, 
+#r\:klv_fak .klv {
     /*display: inline-block;*/ /*float; //inline-block; inline-block aldonas spaceton inter la linioj */
     float: left;
     height: 3em;
@@ -288,41 +281,39 @@ span.right {
     text-align: center;
 }
 
-#elekto_indikoj .stl {
-  font-stretch: condensed;
-  background-color: burlywood; /*#e5e3c5;  */
+.butonoj .klv:hover {
+    background-color: #f5f3e5; 
+    cursor: pointer
 }
 
-#elekto_indikoj .fak {
-  background-color: khaki; /*#d5e3d5;  */
-}
-
-#elekto_indikoj .ofc {
-  background-color: blanchedalmond; /*#d5d3e5*/;  
-}
-
-#elekto_indikoj .gra {
-  background-color: beige; /*#e5d3e5;  */
-}
-
-
-#elekto_indikoj .klv:hover {
-   background-color: #f5f3e5; 
-   cursor: pointer
-}
-
-#elekto_indikoj .klv:active {
+.butonoj .klv:active {
    background-color: #c5c3b5; 
    color: white;  
    cursor: pointer
 }
 
-#elekto_indikoj .klv span {
+.butonoj .stl {
+  font-stretch: condensed;
+  background-color: burlywood; /*#e5e3c5;  */
+}
+
+.butonoj .fak {
+  background-color: khaki; /*#d5e3d5;  */
+}
+
+.butonoj .ofc {
+  background-color: blanchedalmond; /*#d5d3e5*/;  
+}
+
+.butonoj .gra {
+  background-color: beige; /*#e5d3e5;  */
+}
+
+.butonoj .klv span {
     line-height: 1.5em
 }
 
-
-#elekto_indikoj img {
+.butonoj img {
     height: 1.7em;
     max-height: 1.7em;
     overflow: hidden;

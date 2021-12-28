@@ -110,6 +110,9 @@ XKlavaro.prototype.elemento_klavoj = function(klvrElm, klavstr = null) {
                     html += '<div class="reghim_btn" data-cmd="fermu" title="kaŝu la klavaron">&#x2b07;&#xFE0E;</div>';
                     break;
                     */
+                case '[elemento]':
+                    html += "<div class='klv reghim_btn' data-cmd='klavaro' title='krom-klavaro'><span>&lt;&hellip;&gt;</span></div>"                   
+                    break;
                 case '[indiko]':
                     html += '<div class="klv reghim_btn" data-cmd="indiko" title="indiko-klavaro">&#x2605;&#xFE0E;</div>';
                     break;
@@ -164,19 +167,10 @@ XKlavaro.prototype.elemento_klavoj = function(klvrElm, klavstr = null) {
  */
 XKlavaro.prototype.indiko_klavoj = function (klvrElm,stlList) {
    
-    let indikoj = /*<div class='reghim_btn' data-cmd='fermu' title='kaŝu la klavaron'><span>kaŝu<br/>&#x2b07;&#xFE0E;</span></div>"
-            +*/ "<div id='elekto_indikoj'><div class='klv reghim_btn' data-cmd='klavaro' title='krom-klavaro'><span>&lt;&hellip;&gt;<br/>[&hellip;]</span></div>";
+    this.elemento_klavoj(klvrElm,klvrElm.textContent);
+    const pos = klvrElm.children.length; // tie ni poste enŝovos la stilbutonojn!
 
-    function stilKlavoHtml(kod,nom) {
-        indikoj +=
-            "<div class='klv stl' data-stl='" + kod + "'"
-            + " title='stilo: " + nom + "'>"
-            + "<span>" + nom + "<br/>" + kod + "</span></div>";
-    }
-    
-    stlList.load(stilKlavoHtml);
-    
-    indikoj += "<div class='klv ofc' data-ofc='*' title='fundamenta (*)'><span>funda-<br/>menta</span></div>";
+    let indikoj = "<div class='klv ofc' data-ofc='*' title='fundamenta (*)'><span>funda-<br/>menta</span></div>";
     for (var i=1; i<10; i++) {
         indikoj += "<div class='klv ofc' data-ofc='" + i + "' title='" + i + "a oficiala aldono'><span><b>" + i + "a</b> aldono" + "</span></div>";
     }
@@ -198,7 +192,22 @@ XKlavaro.prototype.indiko_klavoj = function (klvrElm,stlList) {
     indikoj += "<div class='klv gra' data-vspec='prepoziciaĵo' title='vortspeco: prepoziciaĵo'><span>prepo- ziciaĵo</span></div>";
     indikoj += "<div class='klv gra' data-vspec='pronomo' title='vortspeco: pronomo'><span>pro- nomo</span></div>";
     
-    klvrElm.innerHTML = indikoj;
+    klvrElm.innerHTML += indikoj;
+
+    function stilKlavoHtml(kod,nom) {
+        const btn = ht_elements([
+            ['div',{
+                class: 'klv stl', 
+                'data-stl': kod,
+                title: 'stilo: ' + nom},
+                [['span',{},[nom,['br'],kod]]]
+            ]
+        ]);
+        klvrElm.children[pos-1]
+            .insertAdjacentElement('afterend',btn[0]);
+    }
+    
+    stlList.load(stilKlavoHtml);
 };
 
 /**
@@ -208,19 +217,23 @@ XKlavaro.prototype.indiko_klavoj = function (klvrElm,stlList) {
  */
  XKlavaro.prototype.fako_klavoj = function (klvrElm,fakList) {
    
-    let indikoj = /*<div class='reghim_btn' data-cmd='fermu' title='kaŝu la klavaron'><span>kaŝu<br/>&#x2b07;&#xFE0E;</span></div>"
-            +*/ "<div class='klv reghim_btn' data-cmd='klavaro' title='krom-klavaro'><span>&lt;&hellip;&gt;</span></div>";
-   
     function fakoKlavoHtml(kod,nom) {
-        indikoj +=
-            "<div class='klv fak' data-fak='" + kod + "'"
-            + " title='fako: " + nom + "'>"
-            + "<img src='../smb/" + kod + ".png'"
-            + " alt='" + kod + "'><br/>" + kod + "</div>";
+        const btn = ht_elements([
+            ['div',{
+                class: 'klv fak', 
+                'data-fak': kod,
+                title: 'fako: ' + nom},
+                [['img',{
+                    src: '../smb/' + kod + '.png',
+                    alt: kod}],
+                ['br'],kod]
+            ]
+        ]);
+        klvrElm.append(...btn);
     }            
 
+    this.elemento_klavoj(klvrElm,klvrElm.textContent);
     fakList.load(fakoKlavoHtml);
-    klvrElm.innerHTML = indikoj;
 };
 
 /**
