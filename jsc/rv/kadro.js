@@ -33,9 +33,9 @@ const t_red  = new Transiroj("red","ne_redaktante",["ne_redaktante","redaktante"
  * kodlistoj agorditaj por Reta Vortaro: lingvoj, fakoj, stiloj
  */
 const revo_codes = {
-    lingvoj: new Codelist('lingvo', '/revo/cfg/lingvoj.xml'),
-    fakoj: new Codelist('fako','/revo/cfg/fakoj.xml'),
-    stiloj: new Codelist('stilo','/revo/cfg/stiloj.xml')
+    lingvoj: new Xlist('lingvo', '/revo/cfg/lingvoj.xml'),
+    fakoj: new Xlist('fako','/revo/cfg/fakoj.xml'),
+    stiloj: new Xlist('stilo','/revo/cfg/stiloj.xml')
 };
 revo_codes.lingvoj.load();
   

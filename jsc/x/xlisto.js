@@ -7,7 +7,7 @@
  * @param {string} xmlTag - la XML-elemento de listero, ĝi havu atributon 'kodo'
  * @param {string} url  - la URL de kie ŝargi la XML-liston
  */
- function Codelist(xmlTag,url) {
+ function Xlist(xmlTag,url) {
     this.url = url;
     this.xmlTag = xmlTag;
     this.codes = {};

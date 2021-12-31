@@ -895,7 +895,8 @@ var redaktilo = function() {
     }
     xklavaro.indiko_klavoj(document.getElementById("r:klv_ind"),revo_codes.stiloj);
     xklavaro.fako_klavoj(document.getElementById("r:klv_fak"),revo_codes.fakoj);
-    xklavaro.elemento_klavoj(document.getElementById("r:klv_elm"));
+    const klv_elm = document.getElementById("r:klv_elm");
+    xklavaro.elemento_klavoj(klv_elm,klv_elm.textContent);
 
     redakto = 'redakto'; // gravas post antaŭa aldono!
 

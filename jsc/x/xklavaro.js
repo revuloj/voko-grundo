@@ -144,11 +144,17 @@ XKlavaro.prototype.elemento_klavoj = function(klvrElm, klavstr = null) {
                 case 'sub':
                     html += '<div class="klv elm_btn" data-cmd="sub" title="subigite">a<sub>s</sub></div>';
                     break;
-                case 'minuskloj':
+                case 'minuskle':
                     html += '<div class="klv elm_btn" data-cmd="minuskloj" title="minuskligo">A&#x2192;a</div>';
                     break;
-                case 'kamelo':
+                case 'kamele':
                     html += '<div class="klv elm_btn" data-cmd="kamelo" title="komenc-majuskloj">&#x2192;Ab</div>';
+                    break;
+                case 'dekstren':
+                    html += '<button value="+2i" class="klv tab_btn" title="Ŝovu la markitan tekston dekstren.">&#x21E5;</button>';
+                    break;
+                case 'maldekstren':
+                    html += '<button value="-2i" class="klv tab_btn" title="Ŝovu la markitan tekston maldekstren.">&#x21E4;</button>';
                     break;
                 default:
                     html += '<div class="klv elm_btn" data-cmd="' + klv + '">' + klv + '</div>';
@@ -163,7 +169,7 @@ XKlavaro.prototype.elemento_klavoj = function(klvrElm, klavstr = null) {
 /**
  * Kreas butonojn por stiloj, fakoj, gramatikaj indikoj
  * @param {Element} klvrElm - elemento en kiun aranĝi la fakoklavojn
- * @param {Object} stlList - Codelist kun stiloj
+ * @param {Object} stlList - Xlist kun stiloj
  */
 XKlavaro.prototype.indiko_klavoj = function (klvrElm,stlList) {
    
@@ -213,7 +219,7 @@ XKlavaro.prototype.indiko_klavoj = function (klvrElm,stlList) {
 /**
  * Kreas butonojn por fakoj
  * @param {Element} klvrElm - elemento en kiun aranĝi la fakoklavojn
- * @param {Object} fakList - Codelist kun fakoj
+ * @param {Object} fakList - Xlist kun fakoj
  */
  XKlavaro.prototype.fako_klavoj = function (klvrElm,fakList) {
    
