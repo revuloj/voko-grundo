@@ -211,7 +211,7 @@
      <li>
        <a>
          <xsl:attribute name="href">
-           <xsl:value-of select="concat($kls_url,'vx_)"/>
+           <xsl:value-of select="concat($kls_url,'vx_')"/>
            <xsl:call-template name="eo-kodigo">
              <xsl:with-param name="str"><xsl:value-of select="substring-after(@nom,'#')"/></xsl:with-param>
            </xsl:call-template>
