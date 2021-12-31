@@ -148,11 +148,12 @@ XmlStruct.prototype.structure = function(selected = undefined) {
   var m = re_stru._elm.exec(xmlteksto);
 
   while (m) {
-    var subt = {de: m.index};
+    var subt = {de: m.index}; // komenca signo
     // kiom da linioj antaŭ tio?
-    subt.el = m[1];
-    subt.ln = count_char(xmlteksto,'\n',0,m.index);
-    subt.al = al(subt.el,m.index+5);
+    subt.el = m[1]; // elemento
+    subt.ln = count_char(xmlteksto,'\n',0,m.index); // komenca linio
+    subt.al = al(subt.el,m.index+5); // fina signo
+    subt.lc = count_char(xmlteksto,'\n',m.index,subt.al); // lininombro
 
     subt.mrk = mrk(subt.el,subt.de);
     subt.kap = kap(subt.el,subt.de,subt.al);
@@ -355,7 +356,7 @@ XmlStruct.prototype.getClosestKap = function(sd) {
 XmlStruct.prototype.getLastStructWithLine = function(line) {
   for (let n = this.strukturo.length-2; n>=0; n--) {
     const s = this.strukturo[n];
-    if (s.ln <= line) {
+    if (s.ln <= line && s.ln+s.lc >= line) {
       return s;
     }
   } 
