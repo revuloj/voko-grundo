@@ -489,7 +489,7 @@ function normalize_href(target, href) {
     if (href.endsWith('titolo.html')) {
         return globalThis.dlg_prefix + globalThis.titolo_url;
     } else if (href.startsWith('../')) {
-        return globalThis.revo_prefix + href.substr(3);
+        return globalThis.revo_prefix + href.slice(3);
     } else if (href.startsWith('tz_') || href.startsWith('vx_')) {
         return globalThis.tez_prefix + href;
     } else if (href[0] != '/' && ! href.startsWith('http')) {
@@ -1379,7 +1379,7 @@ function montru_submeto_staton(sj) {
                 ["details",{},[
                     ["summary",{},[
                         ["span",{class:'s_stato'},(stat[s.state]||'--')],
-                        " ",s.time.substr(0,16)," ",
+                        " ",s.time.slice(0,16)," ",
                         ["a",{href: '/revo/art/'+s.fname+'.html', target: 'precipa'},s.fname]                        
                     ]],
                     ["div",{},[

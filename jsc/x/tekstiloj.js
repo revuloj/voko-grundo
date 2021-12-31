@@ -42,7 +42,7 @@ function replaceTld(radiko,str) {
     if (radiko) {
         return (str
             .replace(/<tld\/>/g,radiko)
-            .replace(regex_tld,'$1'+radiko.substr(1)));
+            .replace(regex_tld,'$1'+radiko.slice(1)));
     } else {
         return str;
     }
@@ -171,7 +171,7 @@ function insert_trd_lng(element,shov,lng,tradukoj) {
         } else {
             // se ne estas lpost, metu kiel lasta elemento
             // unua traduko en tiu elemento aŭ "lng" estas lasta lingvo laŭ alfabeto
-            shov = shov.substr(2);
+            shov = shov.slice(2);
             //$(str2xml(shov + trdStr + '\n' + shov)).appendTo(element);
             //element.appendChild(str2xml(shov + trdStr + '\n' + shov));
             //$(element).append($(trdXML).find('xml').children);
@@ -347,12 +347,12 @@ function enshovo_antaua_linio(text, pos) {
         if (text[i] == ' ') { 
             enshovo += ' ';
         } else if (text[i] == '\n') {
-            return enshovo.substr(p-pos);
+            return enshovo.slice(p-pos);
         } else {
             enshovo = '';
         }
     }
-    return enshovo.substr(p-pos);
+    return enshovo.slice(p-pos);
 }
 
 /** Kontrolas ĉu teksto konsistas nur el spacsignoj
@@ -374,15 +374,15 @@ function all_spaces(spaces) {
 function kameligo(str, rad='') {
     var kamelo = '';
     var vortoj = str.split(' ');
-    var komenclitero = rad ? rad.substr(0,1).toUpperCase() : '';
+    var komenclitero = rad ? rad.slice(0,1).toUpperCase() : '';
     for (var v=0; v<vortoj.length; v++) {
         if (vortoj[v].startsWith('<tld/>')) {
-            kamelo += ' <tld lit="'+ komenclitero + '"/>' + vortoj[v].substr(6);
+            kamelo += ' <tld lit="'+ komenclitero + '"/>' + vortoj[v].slice(6);
         } else {
-            kamelo += ' ' + vortoj[v].substr(0,1).toUpperCase() + vortoj[v].substr(1).toLowerCase();
+            kamelo += ' ' + vortoj[v].slice(0,1).toUpperCase() + vortoj[v].slice(1).toLowerCase();
         }
     }
-    return kamelo.substr(1);
+    return kamelo.slice(1);
 }
 
 /**

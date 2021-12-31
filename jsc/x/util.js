@@ -568,7 +568,7 @@ function getUrlFileName(url) {
  */
 function getHashParts() {
     var h = (location.hash[0] == '#' ?
-        location.hash.substr(1) :
+        location.hash.slice(1) :
         location.hash);
     var r = {};
     for (var p of h.split('&')) {
@@ -593,7 +593,7 @@ function getParamValue(param, params=undefined) {
   // sed ni povas kaŝi ilin ankaŭ post #, vd. supre getHashParts
     var result = null,
         tmp = [],
-        parstr = params || location.search.substr(1);
+        parstr = params || location.search.slice(1);
         parstr.split("&").forEach(function (item) {
           tmp = item.split("=");
           if (tmp[0] === param) result = decodeURIComponent(tmp[1]);

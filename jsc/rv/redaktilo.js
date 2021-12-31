@@ -1040,9 +1040,9 @@ var redaktilo = function() {
       return ht_list(trd,'ul',{},function(t) {
           //var t = s; // la traduko
           const li = ht_element('li');
-          if (t.substr(0,2) == '?;') {
+          if (t.slice(0,2) == '?;') {
             li.append(ht_element('span',{class: 'dubinda'},'?'));
-            t = t.substr(2);
+            t = t.slice(2);
           }
           li.append(ht_element('span',{class: 'trd'},t));
     /*
@@ -1214,7 +1214,7 @@ var redaktilo = function() {
     const elekto = document.getElementById('r:trd_elekto');
     const _ele_ = xmlarea.elekto;
     const drv_snc = (_ele_ && _ele_.el && (_ele_.el == 'snc' || _ele_.el == 'drv'));
-    //const drv_snc = ('drv|snc'.indexOf(_ele_?.el.substr(-3)) > -1);
+    //const drv_snc = ('drv|snc'.indexOf(_ele_?.el.slice(-3)) > -1);
 
     // se iu (sub)drv|(sub)snc estas elektita ni montras +-butonojn kaj hoketojn...
     if (elekto.querySelector('details')) {

@@ -739,7 +739,7 @@ function download_art(dosiero,err_to,dlg_id,do_close=true) {
       }, err_to)
      .done(
         function(data) {   
-            if (data.substr(0,5) == '<?xml') {
+            if (data.slice(0,5) == '<?xml') {
                 $("#xml_text").Artikolo("load",dosiero,data);
                 $("#collapse_outline").accordion("option","active",0);
                 $(err_to).hide();
@@ -762,7 +762,7 @@ function download_url(url,dosiero,err_to,dlg_id,do_close=true) {
     $.ricevu(url, err_to)
      .done(
         function(data) {   
-            if (data.substr(0,5) == '<?xml') {
+            if (data.slice(0,5) == '<?xml') {
                 $("#xml_text").Artikolo("load",dosiero,data);
                 $("#collapse_outline").accordion("option","active",0);
                 $(err_to).hide();
@@ -1382,7 +1382,7 @@ function fill_tradukojn(lng,lingvo_nomo) {
                 let dsc = parts[1] || parts[0];
                 if (s.el == 'snc' || s.el == 'subsnc' && parts[1]) {
                     const p = dsc.indexOf('.');
-                    if (p>-1) dsc = dsc.substr(p);
+                    if (p>-1) dsc = dsc.slice(p);
                 }
                 if (s.el == 'drv') dsc = '<b>'+dsc+'</b>';
                 tableCnt += '<tr><td>' + dsc + '</td><td>';
@@ -1474,7 +1474,7 @@ function traduko_add_btn(mrk) {
 
 function shanghu_trd_lingvon(event,ui) {
     var id = ui.item.attr('id');
-    if (id && id.substr(0,4) == "trd_") {
+    if (id && id.slice(0,4) == "trd_") {
         var lng= id.split('_')[2];
         var lingvo_nomo = ui.item.text();
         //alert($("#traduko_lingvoj").val())

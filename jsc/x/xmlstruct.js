@@ -130,7 +130,7 @@ XmlStruct.prototype.structure = function(selected = undefined) {
       // identigi, ja konsciante, ke tiuj povos ŝanĝiĝi, sed tiam
       // ni rekalkulas la strukturon kaj akceptas, ke ni ne
       // retrovas la antaŭan elekton...
-      return xor_str(xmlteksto.substr(subt.de,120).replace(rx,''));
+      return xor_str(xmlteksto.substring(subt.de,subt.de+120).replace(rx,''));
     }
   }
   function al(elm,de) {
@@ -394,8 +394,8 @@ XmlStruct.prototype.travel_tag_bw = function(elements,end,stop_no_match,xml,from
     // de interesantaj elementoj
     function match(p) {
       for (let e of elements) {
-        if ( xml.substr(p,e.length) == e 
-          && xml.substr(p+e.length,1).match(re_te) ) return e;
+        if ( xml.substring(p,p+e.length) == e 
+          && xml.substring(p+e.length,p+e.length+1).match(re_te) ) return e;
       }
     }
 

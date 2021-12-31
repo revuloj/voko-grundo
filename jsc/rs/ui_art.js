@@ -398,7 +398,7 @@ $.widget( "redaktilo.Artikolo", {
                     mrk = match[1];
                     var dpos = match.index;
                     // count lines till <cnt
-                    var lmatch2 = d.substr(0,dpos).match(rx._lbr);
+                    var lmatch2 = d.slice(0,dpos).match(rx._lbr);
                     var dline = lmatch2? lmatch2.length : 0;
                     // find kap
                     match = d.match(rx._kap); 
@@ -616,7 +616,7 @@ $.widget( "redaktilo.Artikolo", {
         const radiko = xmlarea.getRadiko();
         var t = (xmlarea.syncedXml() //this.element.val()
             .replace(rx._tl0,radiko)
-            .replace(rx._tld,'$1'+radiko.substr(1)));
+            .replace(rx._tld,'$1'+radiko.slice(1)));
 
         // line numbers?
         if (line_numbers) {
@@ -666,8 +666,8 @@ $.widget( "redaktilo.Artikolo", {
         for (i=0; i<lines.length; i++) {
             var line = lines[i];
             var d = line.indexOf(']');
-            var no = line.substr(1,d-1);
-            var text = line.substr(d+1);
+            var no = line.slice(1,d);
+            var text = line.slice(d+1);
             if (text.trim().length > 1) {
                 result[no] = text;
             }

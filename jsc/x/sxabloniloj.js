@@ -235,9 +235,9 @@ var XMLBildo = function(bld) {
         var parts = bld.url.split('/');
         var imgname = parts[parts.length -1];
         if (bld.url.endsWith('.svg')) {
-            bld.url = '&WCU;/' + bld.url.substr(prefix_len);
+            bld.url = '&WCU;/' + bld.url.slice(prefix_len);
         } else {
-            bld.url = '&WCU;/thumb/' + bld.url.substr(prefix_len) + '/' + bld.lrg + 'px-' + imgname;
+            bld.url = '&WCU;/thumb/' + bld.url.slice(prefix_len) + '/' + bld.lrg + 'px-' + imgname;
             bld.lrg = '';
         }
     }

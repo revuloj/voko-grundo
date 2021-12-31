@@ -296,7 +296,7 @@ XKlavaro.prototype.premo = function(event) {
             // traktu ankaŭ majusklan / minusklan formon de la radiko
             let first = radiko.charAt(0);
             first = (first == first.toUpperCase() ? first.toLowerCase() : first.toUpperCase());
-            const radiko2 = first + radiko.substr(1);
+            const radiko2 = first + radiko.slice(1);
                     
             if ( radiko ) {
                 const newtext = elektita.replace(radiko,'<tld/>').replace(radiko2,'<tld lit="'+first+'"/>');

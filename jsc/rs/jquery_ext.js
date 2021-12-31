@@ -141,7 +141,7 @@ jQuery.fn.extend({
             ///    this.selectionStart++;
             ///}
             //var chr = this.value.charCodeAt(this.selectionStart);
-            //console.log("insert at "+chr+': '+myValue.charCodeAt(0)+'['+myValue.substr(0,10)+"]");
+            //console.log("insert at "+chr+': '+myValue.charCodeAt(0)+'['+myValue.slice(0,10)+"]");
             // enmetu la tekston
             /* execCommand estas malanoncita, vd
             https://stackoverflow.com/questions/60581285/execcommand-is-now-obsolete-whats-the-alternative
