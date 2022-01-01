@@ -8,13 +8,7 @@
   extension-element-prefixes="saxon" 
 >
 
-<!-- xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                version="1.0"
-  xmlns:redirect="http://xml.apache.org/xalan/redirect"
-    extension-element-prefixes="redirect" -->
-
-
-<!-- (c) 2006-2020 ĉe Wolfram Diestel
+<!-- (c) 2006-2021 ĉe Wolfram Diestel
      laŭ permesilo GPL 2.0
 -->
 
@@ -25,14 +19,24 @@
 
 <xsl:param name="agordo-pado"/>
 
+<!-- la sekvajn listojn ni bezonas por krei la respektivajn indeksojn -->
 <xsl:variable name="lingvoj"><xsl:value-of select="concat($agordo-pado,'/lingvoj.xml')"/></xsl:variable>
 <xsl:variable name="fakoj"><xsl:value-of select="concat($agordo-pado,'/fakoj.xml')"/></xsl:variable>
 <xsl:variable name="enhavo"><xsl:value-of select="concat($agordo-pado,'/enhavo.xml')"/></xsl:variable>
 <xsl:variable name="klasoj"><xsl:value-of select="concat($agordo-pado,'/klasoj.xml')"/></xsl:variable>
 
+<!-- padprefiksoj por referencoj a@href -->
+<xsl:variable name="inx_url" select="'/revo/inx/'"/>
+<xsl:variable name="kls_url" select="'/revo/tez/'"/> <!-- por la klaslistoj (kategorioj kiel ĉefurboj, planedoj ktp.)-->
+<xsl:variable name="art_url" select="'/revo/art/'"/>
+<xsl:variable name="stl_url" select="'/revo/stl/'"/>
+
 <xsl:key name="trd-oj" match="//trd-oj/litero/v" use="concat(../../@lng,'-',../@name,'-',t)"/>
 
+<!-- ĉar ni kunigas informojn el pluraj XML-fontoj, ni devas ĉiam
+  scii la centran dokumenton enhavo.xml por povi elpreni enhavon dum ekz-e ni trakuras lingvo-, fako-liston kc -->
 <xsl:variable name="root" select="/"/>
+
 
 <xsl:template match="/">
   <xsl:text>XXXX</xsl:text> <!-- dosiero .tempo ne estu malplena -->
@@ -119,7 +123,7 @@
       <meta name="viewport" content="width=device-width,initial-scale=1"/>
       <title><xsl:value-of select="concat(../@nometo,'-indekso: ',@titolo)"/></title>
       <link title="indekso-stilo" type="text/css" 
-            rel="stylesheet" href="../stl/indeksoj.css"/>
+            rel="stylesheet" href="{$stl_url}indeksoj.css"/>
     </head>
     <body>
       <table id="{concat('x:',substring-before(@dosiero,'.html'))}" cellspacing="0">
@@ -184,21 +188,6 @@
   </p>
 </xsl:template>
 
-<!--
-<xsl:template match="TEZAURO">
-  <xsl:for-each select="$root//kap-oj/tez">
-    <xsl:call-template name="tezauro"/>
-  </xsl:for-each>
-</xsl:template>
-
-
-<xsl:template name="tezauro">
-  <xsl:for-each select="v">
-    <a href="{concat('../tez/tz_',translate(@mrk,'.','_'),'.html')}" 
-       style="font-weight: bold"><xsl:apply-templates/></a><br/>
-  </xsl:for-each>
-</xsl:template>
--->
 
 <xsl:template match="LISTOJ">
   <xsl:for-each select="document($klasoj)/klasoj/kls">
@@ -222,7 +211,7 @@
      <li>
        <a>
          <xsl:attribute name="href">
-           <xsl:text>../tez/vx_</xsl:text>
+           <xsl:value-of select="concat($kls_url,'vx_')"/>
            <xsl:call-template name="eo-kodigo">
              <xsl:with-param name="str"><xsl:value-of select="substring-after(@nom,'#')"/></xsl:with-param>
            </xsl:call-template>
@@ -256,7 +245,7 @@
   <xsl:for-each select="document($lingvoj)/lingvoj/lingvo[@kodo=current()/@lng]">
         <a>
           <xsl:attribute name="href">
-            <xsl:value-of select="concat('lx_',@kodo,'_',
+            <xsl:value-of select="concat($inx_url,'lx_',@kodo,'_',
               $root//trd-oj[@lng=current()/@kodo]/litero[v][1]/@name,
                       '.html')"/>
           </xsl:attribute>
@@ -281,7 +270,7 @@
         <xsl:when test="number($root//trd-oj[@lng=current()/@kodo]/@n) &gt; 1000">
         <a>
           <xsl:attribute name="href">
-            <xsl:value-of select="concat('lx_',@kodo,'_',
+            <xsl:value-of select="concat($inx_url,'lx_',@kodo,'_',
               $root//trd-oj[@lng=current()/@kodo]/litero[v][1]/@name,
                       '.html')"/>
           </xsl:attribute>
@@ -293,7 +282,7 @@
         <xsl:when test="$root//trd-oj[@lng=current()/@kodo]">
         <a>
          <xsl:attribute name="href">
-           <xsl:value-of select="concat('lx_',@kodo,'_',
+           <xsl:value-of select="concat($inx_url,'lx_',@kodo,'_',
               $root//trd-oj[@lng=current()/@kodo]/litero[v][1]/@name,
                       '.html')"/>
            </xsl:attribute>
@@ -309,7 +298,7 @@
 
 
 <xsl:template match="MANKOJ">
-  <a href="mankantaj.html"><xsl:value-of select="@titolo"/></a><br/>
+  <a href="{$inx_url}mankantaj.html"><xsl:value-of select="@titolo"/></a><br/>
 </xsl:template>
 
 <xsl:template name="MANKO-LISTOJ">
@@ -322,7 +311,7 @@
       <meta name="viewport" content="width=device-width,initial-scale=1"/>   
       <title><xsl:value-of select="concat(../@nometo,'-indekso: ',@titolo)"/></title>
       <link title="indekso-stilo" type="text/css" 
-            rel="stylesheet" href="../stl/indeksoj.css"/>
+            rel="stylesheet" href="{$stl_url}indeksoj.css"/>
     </head>
     <body>
       <table cellspacing="0">
@@ -341,7 +330,7 @@
               <xsl:if test="$root//mankoj[@lng=current()/@kodo]">
                 <a>
                   <xsl:attribute name="href">
-                    <xsl:value-of select="concat('mx_',@kodo,'.html')"/>
+                    <xsl:value-of select="concat($inx_url,'mx_',@kodo,'.html')"/>
                   </xsl:attribute>
                   <xsl:value-of select="."/>
                 </a>
@@ -368,7 +357,7 @@
                 <xsl:text>&#xa0;</xsl:text>
                 <a>
                   <xsl:attribute name="href">
-                    <xsl:value-of select="concat('fx_',@kodo,'.html')"/>
+                    <xsl:value-of select="concat($inx_url,'fx_',@kodo,'.html')"/>
                   </xsl:attribute>
                   <xsl:value-of select="."/>
                 </a><br/>
@@ -378,12 +367,12 @@
 
 
 <xsl:template match="MLG-OJ">
-  <a href="mallong.html" style="{@style}"><xsl:value-of select="@titolo"/></a><br/>
+  <a href="{$inx_url}mallong.html" style="{@style}"><xsl:value-of select="@titolo"/></a><br/>
 </xsl:template>
  
 
 <xsl:template match="BLD-OJ">
-  <a href="bildoj.html" style="{@style}"><xsl:value-of select="@titolo"/></a><br/>
+  <a href="{$inx_url}bildoj.html" style="{@style}"><xsl:value-of select="@titolo"/></a><br/>
 </xsl:template>
 
 
@@ -397,13 +386,13 @@
          <xsl:attribute name="style">margin-top: 0; margin-bottom: 0</xsl:attribute>
      </xsl:otherwise>
     </xsl:choose>
-    <a href="statistiko.html"><xsl:value-of select="@titolo"/></a><br/>
+    <a href="{$inx_url}statistiko.html"><xsl:value-of select="@titolo"/></a><br/>
   </p>
 </xsl:template>
 
 
 <xsl:template match="INV">
-  <a href="inv_{$root//inv/litero[v][1]/@name}.html" style="{@style}"><xsl:value-of select="@titolo"/></a><br/>
+  <a href="{$inx_url}inv_{$root//inv/litero[v][1]/@name}.html" style="{@style}"><xsl:value-of select="@titolo"/></a><br/>
 </xsl:template>
 
 
@@ -414,14 +403,14 @@
       <xsl:choose>
         <xsl:when test="@dosiero=$aktiva">
           <td class="aktiva">
-            <a href="../inx/{@dosiero}">
+            <a href="{$inx_url}{@dosiero}">
               <xsl:value-of select="@titolo"/>
             </a>
           </td>
         </xsl:when>
         <xsl:otherwise>
           <td class="fona">
-            <a href="../inx/{@dosiero}">
+            <a href="{$inx_url}/{@dosiero}">
               <xsl:value-of select="@titolo"/>
             </a>
           </td>
@@ -537,7 +526,7 @@
             </xsl:when>
           </xsl:choose>
       <link title="indekso-stilo" type="text/css" 
-            rel="stylesheet" href="../stl/indeksoj.css"/>
+            rel="stylesheet" href="{$stl_url}indeksoj.css"/>
     </head>
     <body>
       <table id="{concat('x:',$pref,$lit)}" cellspacing="0">
@@ -562,9 +551,6 @@
 
           <xsl:choose>
             <xsl:when test="self::fako">
-
-<!--              <b class="elektita">alfabete</b><xsl:text> </xsl:text>
-              <a href="../tez/fxs_{@fak}.html">strukture</a><xsl:text> </xsl:text> -->
 
               <h1><xsl:value-of 
                   select="document($fakoj)/fakoj/fako[@kodo=current()/@fak]"/>
@@ -651,13 +637,13 @@
                     <td>
                       <xsl:choose>
                         <xsl:when test="@t='derivaĵoj'">
-                          <a href="kap_a.html"><xsl:value-of select="@t"/></a>
+                          <a href="{$inx_url}kap_a.html"><xsl:value-of select="@t"/></a>
                         </xsl:when>
                         <xsl:when test="@t='bildoj'">
-                          <a href="bildoj.html"><xsl:value-of select="@t"/></a>
+                          <a href="{$inx_url}bildoj.html"><xsl:value-of select="@t"/></a>
                         </xsl:when>
                         <xsl:when test="@t='mallongigoj'">
-                          <a href="mallong.html"><xsl:value-of select="@t"/></a>
+                          <a href="{$inx_url}mallong.html"><xsl:value-of select="@t"/></a>
                         </xsl:when>
                         <xsl:otherwise>
                           <xsl:value-of select="@t"/>
@@ -686,7 +672,7 @@
                 <xsl:for-each select="../trd-oj">
                   <xsl:sort select="@n" data-type="number" order="descending"/>
                   <xsl:sort select="@lng"/>
-                  <xsl:variable name="index_start" select="concat('lx_',@lng,'_',litero[v][1]/@name,'.html')"/>
+                  <xsl:variable name="index_start" select="concat($inx_url,'lx_',@lng,'_',litero[v][1]/@name,'.html')"/>
                   <tr>
                     <xsl:for-each select="document($lingvoj)/lingvoj/lingvo[@kodo=current()/@lng]">
                       <td>
@@ -725,7 +711,7 @@
                       <td>
                         <a>
                           <xsl:attribute name="href">
-                            <xsl:value-of select="concat('fx_',@kodo,'.html')"/>
+                            <xsl:value-of select="concat($inx_url,'fx_',@kodo,'.html')"/>
                           </xsl:attribute>
                           <xsl:value-of select="."/>
                         </a>
@@ -792,13 +778,13 @@
 <xsl:template match="kap-oj/litero/v">
   <xsl:choose>
     <xsl:when test="contains(@mrk,'.')">
-      <a href="../art/{substring-before(@mrk,'.')}.html#{@mrk}" 
+      <a href="{$art_url}{substring-before(@mrk,'.')}.html#{@mrk}" 
         target="precipa">
         <xsl:apply-templates select="k"/>
       </a>
     </xsl:when>
     <xsl:otherwise>
-      <a href="../art/{@mrk}.html" target="precipa">
+      <a href="{$art_url}{@mrk}.html" target="precipa">
         <b><xsl:apply-templates select="k"/></b>
       </a>
     </xsl:otherwise>
@@ -806,32 +792,6 @@
   <br/>
 </xsl:template>
 
-
-<!-- xsl:template match="trd-oj/litero/v">
-  <xsl:choose>
-    <xsl:when test="t1">
-      <xsl:apply-templates select="t1"/><xsl:text>: </xsl:text>
-    </xsl:when>
-    <xsl:otherwise>
-      <xsl:apply-templates select="t"/><xsl:text>: </xsl:text>
-    </xsl:otherwise>
-  </xsl:choose>
-  <a target="precipa">
-    <xsl:attribute name="href">
-      <xsl:choose>
-        <xsl:when test="contains(@mrk,'.')">
-          <xsl:value-of select="concat('../art/',
-             substring-before(@mrk,'.'),'.html#',@mrk)"/> 
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="concat('../art/',@mrk,'.html')"/>
-        </xsl:otherwise>
-      </xsl:choose>
-    </xsl:attribute>
-    <xsl:apply-templates select="k"/>
-  </a>
-  <br/>
-</xsl:template -->
 
 <xsl:template match="trd-oj/litero/v">
 
@@ -863,11 +823,11 @@
         <xsl:attribute name="href">
           <xsl:choose>
             <xsl:when test="contains(@mrk,'.')">
-              <xsl:value-of select="concat('../art/',
+              <xsl:value-of select="concat($art_url,
                 substring-before(@mrk,'.'),'.html#',@mrk)"/> 
             </xsl:when>
             <xsl:otherwise>
-              <xsl:value-of select="concat('../art/',@mrk,'.html')"/>
+              <xsl:value-of select="concat($art_url,@mrk,'.html')"/>
             </xsl:otherwise>
           </xsl:choose>
         </xsl:attribute>
@@ -893,11 +853,11 @@
             <xsl:attribute name="href">
               <xsl:choose>
                 <xsl:when test="contains(@mrk,'.')">
-                  <xsl:value-of select="concat('../art/',
+                  <xsl:value-of select="concat($art_url,
                     substring-before(@mrk,'.'),'.html#',@mrk)"/> 
                 </xsl:when>
                 <xsl:otherwise>
-                  <xsl:value-of select="concat('../art/',@mrk,'.html')"/>
+                  <xsl:value-of select="concat($art_url,@mrk,'.html')"/>
                 </xsl:otherwise>
               </xsl:choose>
             </xsl:attribute>
@@ -920,11 +880,11 @@
           <xsl:attribute name="href">
             <xsl:choose>
               <xsl:when test="contains(@mrk,'.')">
-                <xsl:value-of select="concat('../art/',
+                <xsl:value-of select="concat($art_url,
                   substring-before(@mrk,'.'),'.html#',@mrk)"/> 
               </xsl:when>
               <xsl:otherwise>
-                <xsl:value-of select="concat('../art/',@mrk,'.html')"/>
+                <xsl:value-of select="concat($art_url,@mrk,'.html')"/>
               </xsl:otherwise>
             </xsl:choose>
           </xsl:attribute>
@@ -950,11 +910,11 @@
     <xsl:attribute name="href">
       <xsl:choose>
         <xsl:when test="contains(@mrk,'.')">
-          <xsl:value-of select="concat('../art/',
+          <xsl:value-of select="concat($art_url,
              substring-before(@mrk,'.'),'.html#',@mrk)"/> 
         </xsl:when>
         <xsl:otherwise>
-          <xsl:value-of select="concat('../art/',@mrk,'.html')"/>
+          <xsl:value-of select="concat($art_url,@mrk,'.html')"/>
         </xsl:otherwise>
       </xsl:choose>
     </xsl:attribute>
@@ -975,11 +935,11 @@
     <xsl:attribute name="href">
       <xsl:choose>
         <xsl:when test="contains(@mrk,'.')">
-          <xsl:value-of select="concat('../art/',
+          <xsl:value-of select="concat($art_url,
              substring-before(@mrk,'.'),'.html#',@mrk)"/> 
         </xsl:when>
         <xsl:otherwise>
-          <xsl:value-of select="concat('../art/',@mrk,'.html')"/>
+          <xsl:value-of select="concat($art_url,@mrk,'.html')"/>
         </xsl:otherwise>
       </xsl:choose>
     </xsl:attribute>
@@ -994,11 +954,11 @@
     <xsl:attribute name="href">
       <xsl:choose>
         <xsl:when test="contains(@mrk,'.')">
-          <xsl:value-of select="concat('../art/',
+          <xsl:value-of select="concat($art_url,
              substring-before(@mrk,'.'),'.html#',@mrk)"/> 
         </xsl:when>
         <xsl:otherwise>
-          <xsl:value-of select="concat('../art/',@mrk,'.html')"/>
+          <xsl:value-of select="concat($art_url,@mrk,'.html')"/>
         </xsl:otherwise>
       </xsl:choose>
     </xsl:attribute>
@@ -1015,11 +975,11 @@
     <xsl:attribute name="href">
       <xsl:choose>
         <xsl:when test="contains(@mrk,'.')">
-          <xsl:value-of select="concat('../art/',
+          <xsl:value-of select="concat($art_url,
              substring-before(@mrk,'.'),'.html#',@mrk)"/> 
         </xsl:when>
         <xsl:otherwise>
-          <xsl:value-of select="concat('../art/',@mrk,'.html')"/>
+          <xsl:value-of select="concat($art_url,@mrk,'.html')"/>
         </xsl:otherwise>
       </xsl:choose>
     </xsl:attribute>
@@ -1033,11 +993,11 @@
     <xsl:attribute name="href">
       <xsl:choose>
         <xsl:when test="contains(@mrk,'.')">
-          <xsl:value-of select="concat('../art/',
+          <xsl:value-of select="concat($art_url,
              substring-before(@mrk,'.'),'.html#',@mrk)"/> 
         </xsl:when>
         <xsl:otherwise>
-          <xsl:value-of select="concat('../art/',@mrk,'.html')"/>
+          <xsl:value-of select="concat($art_url,@mrk,'.html')"/>
         </xsl:otherwise>
       </xsl:choose>
     </xsl:attribute>
@@ -1071,7 +1031,7 @@
           </b><xsl:text> </xsl:text>
         </xsl:when>
         <xsl:otherwise>
-          <a href="../inx/{$pref}{@name}.html">
+          <a href="{$inx_url}{$pref}{@name}.html">
             <xsl:value-of select="@min"/>
           </a><xsl:text> </xsl:text>
         </xsl:otherwise>
