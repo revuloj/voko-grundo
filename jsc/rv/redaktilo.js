@@ -922,20 +922,6 @@ var redaktilo = function() {
     document.getElementById('r:art_strukturo')
       .addEventListener("change",struktur_elekto);
 
-    // butonoj por navigi inter drv kaj en-/elŝovo
-    var nav = document.getElementById("r:nav_btn");
-    nav.querySelectorAll("button").forEach(function (b) { 
-        var val = b.getAttribute("value");
-        if (val) {
-          var n = parseInt(val.substring(0,2),10);
-          var t = val.substring(2);
-          if ( t == "d") {
-            b.addEventListener("click", function() { nextTag('<drv',n); });
-          } else if (t == "i") {
-            b.addEventListener("click", function() { xmlarea.indent(n); });
-          }
-        }
-    });
     document.getElementById("r:cx")
       .addEventListener("click",function(event) {
         event.preventDefault();

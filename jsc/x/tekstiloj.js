@@ -409,7 +409,7 @@ function forigu_markup(xml) {
 }
 
 /**
- * Rompas tro lingajn liniojn
+ * Rompas tro longajn liniojn
  * @param {string} str - la traktenda teksto
  * @param {number} indent - se donita, nombro de spacsignoj aldonendaj ĉe ĉiu nova linio
  * @param {number} linirompo - la maksimuma linilongeco, 80 apriore
@@ -442,3 +442,76 @@ function linirompo(str, indent=0, linirompo=80) {
     }
     return str;
 }
+
+/**
+ * Redonas la spacojn (enŝovon) en la komenco de la markita liniode Textarea
+ * @param {object} txtarea 
+ * @returns la linikomencaj spacoj
+ */
+function get_indent(txtarea) {
+    let indent = 0;
+    if (txtarea.selectionStart || txtarea.selectionStart == '0') { // Mozilla
+        const startPos = txtarea.selectionStart;
+        const linestart = txtarea.value.substring(0, startPos).lastIndexOf("\n");
+        while (txtarea.value.substring(0, startPos).charCodeAt(linestart+1+indent) == 32) {indent++;}
+    } else if (document.selection && document.selection.createRange) { // IE/Opera
+        const range = document.selection.createRange();
+        range.moveStart('character', - 200); 
+        const selText = range.text;
+        const linestart = selText.lastIndexOf("\n");
+        while (selText.charCodeAt(linestart+1+indent) == 32) {indent++;}
+    }
+    return (str_repeat(" ", indent));
+};
+
+/**
+ * Enŝovas markitan liniaron je pliaj spacoj dekstren (offset>0) aŭ maldekstren (offset<0)
+ * @param {object} txtarea 
+ * @param {number} offset 
+ */
+function indent(txtarea, offset) {
+    let selText, isSample=false;
+    const ind = str_repeat(" ", Math.abs(offset))
+
+    if (document.selection && document.selection.createRange) { // IE/Opera
+        alert("tio ankoraux ne funkcias.");
+    } else if (txtarea.selectionStart || txtarea.selectionStart==0) { // Mozilla
+
+        //save textarea scroll position
+        const textScroll = txtarea.scrollTop;
+        //get current selection
+        txtarea.focus();
+        let startPos = txtarea.selectionStart;
+        if (startPos > 0) {
+            startPos--;
+        }
+        let endPos = txtarea.selectionEnd;
+        if (endPos > 0) {
+            endPos--;
+        }
+        selText = txtarea.value.substring(startPos, endPos);
+
+        if (selText=="") {
+            alert("Marku kion vi volas en-/elsxovi.");
+        } else {
+            let nt;
+            if (offset > 0)
+                nt = selText.replace(/\n/g, "\n"+ind);
+            else if (offset < 0) {
+                const re = new RegExp("\n"+ind,"g")            
+                nt = selText.replace(re, "\n");
+            }
+
+            txtarea.value = 
+                txtarea.value.substring(0, startPos)
+                + nt
+                + txtarea.value.substring(endPos, txtarea.value.length);
+
+            txtarea.selectionStart = startPos+1;
+            txtarea.selectionEnd = startPos + nt.length+1;
+
+            //restore textarea scroll position
+            txtarea.scrollTop = textScroll;
+        }
+    } 
+};

@@ -111,7 +111,7 @@ XKlavaro.prototype.elemento_klavoj = function(klvrElm, klavstr = null) {
                     break;
                     */
                 case '[elemento]':
-                    html += "<div class='klv reghim_btn' data-cmd='klavaro' title='krom-klavaro'><span>&lt;&hellip;&gt;</span></div>"                   
+                    html += "<div class='klv reghim_btn' data-cmd='klavaro' title='krom-klavaro'><span>&lt;&hellip;&gt;<br/>[&hellip;]</span></div>"                   
                     break;
                 case '[indiko]':
                     html += '<div class="klv reghim_btn" data-cmd="indiko" title="indiko-klavaro">&#x2605;&#xFE0E;</div>';
@@ -151,10 +151,10 @@ XKlavaro.prototype.elemento_klavoj = function(klvrElm, klavstr = null) {
                     html += '<div class="klv elm_btn" data-cmd="kamelo" title="komenc-majuskloj">&#x2192;Ab</div>';
                     break;
                 case 'dekstren':
-                    html += '<button value="+2i" class="klv tab_btn" title="Ŝovu la markitan tekston dekstren.">&#x21E5;</button>';
+                    html += '<div value="+2i" class="klv tab_btn" title="Ŝovu la markitan tekston dekstren.">&#x21E5;</div>';
                     break;
                 case 'maldekstren':
-                    html += '<button value="-2i" class="klv tab_btn" title="Ŝovu la markitan tekston maldekstren.">&#x21E4;</button>';
+                    html += '<div value="-2i" class="klv tab_btn" title="Ŝovu la markitan tekston maldekstren.">&#x21E4;</div>';
                     break;
                 default:
                     html += '<div class="klv elm_btn" data-cmd="' + klv + '">' + klv + '</div>';
@@ -287,6 +287,20 @@ XKlavaro.prototype.premo = function(event) {
         this.enmeto('<gra><vspec>' + vspec + '</vspec></gra>');
         this.postenmeto(event);
 
+    } else if (btn.classList.contains("tab_btn")) {
+        // butonoj por en-/elŝovo
+        const val = btn.getAttribute("value");
+        if (val) {
+          let n = parseInt(val.substring(0,2),10);
+          if (n) {
+            const ta = this.celo();
+            const i_ = get_indent(ta);
+            if (i_ % 2 == 1) n = n/2; // ŝovu nur unu (±2/2) ĉe momente nepara enŝovo!
+            indent(ta,n);
+            this.postenmeto(event);
+          }
+        }
+
     } else if (cmd == "tld") { // anstataŭigo de tildo
         const elektita = this.elekto(); 
         if (elektita == "~" || elektita == "") {
@@ -408,4 +422,3 @@ XKlavaro.prototype.enmeto = function(val) {
         element.focus();
     }
 };
-
