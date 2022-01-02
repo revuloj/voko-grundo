@@ -244,9 +244,9 @@ span.right {
     display: inline-block; /* inline-block aldonas spaceton inter la linioj */
     /* float: left; */
     vertical-align: inherit;
-    height: 2em;
-    max-height: 2em;
-    min-width: 1.6em;
+    height: 2.1em;
+    max-height: 2.1em;
+    min-width: 2em;
     overflow: hidden;
     border: 1px solid #e3a345;
     color: var(--nav-fnt-clr); /* pli bone estus difini apartan var...*/
@@ -276,9 +276,13 @@ span.right {
     border-radius: 4px;
     padding: 0.1em;
     margin: 0;
-    font-size: small;
-    line-height: 1em;
+    font-size: 75%;
+    line-height: 80%;
     text-align: center;
+}
+
+#r\:klv_fak .klv {
+    font-size: 70%;
 }
 
 .butonoj .klv:hover {
@@ -310,7 +314,7 @@ span.right {
 }
 
 .butonoj .klv span {
-    line-height: 1.5em
+    line-height: 1.3em
 }
 
 .butonoj img {
