@@ -445,7 +445,7 @@ function linirompo(str, indent=0, linirompo=80) {
 
 /**
  * Redonas la spacojn (enŝovon) en la komenco de la markita liniode Textarea
- * @param {object} txtarea 
+ * @param {Element} txtarea 
  * @returns la linikomencaj spacoj
  */
 function get_indent(txtarea) {
@@ -466,7 +466,7 @@ function get_indent(txtarea) {
 
 /**
  * Enŝovas markitan liniaron je pliaj spacoj dekstren (offset>0) aŭ maldekstren (offset<0)
- * @param {object} txtarea 
+ * @param {Element} txtarea 
  * @param {number} offset 
  */
 function indent(txtarea, offset) {

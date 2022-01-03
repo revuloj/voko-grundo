@@ -1,7 +1,7 @@
 
 /* jshint esversion: 6 */
 
-// (c) 2016 - 2021 - Wolfram Diestel
+// (c) 2016 - 2022 - Wolfram Diestel
 // laŭ GPL 2.0
 console.debug("Instalante la klavarfunkciojn...");
 
@@ -68,7 +68,7 @@ function XKlavaro(klavaro, dialogo, apriora_kampo, kiuradiko, reĝimpremo, poste
  * @param {Element} klvrElm - elemento en kiun aranĝi la fakoklavojn
  * @param {string} klavstr klavaro-specifo kiel teksto
  */
-XKlavaro.prototype.elemento_klavoj = function(klvrElm, klavstr = null) {
+XKlavaro.prototype.elemento_klavoj = function(klvrElm, klavstr = undefined) {
     let html='';
     const klavoj = (klavstr?klavstr:this.klavoj)
         .trim().split(/[ \n\r\t\f\v]+/);
@@ -210,7 +210,7 @@ XKlavaro.prototype.indiko_klavoj = function (klvrElm,stlList) {
             ]
         ]);
         klvrElm.children[pos-1]
-            .insertAdjacentElement('afterend',btn[0]);
+            .insertAdjacentElement('afterend',/**@type{Element}*/(btn[0]));
     }
     
     stlList.load(stilKlavoHtml);
@@ -235,7 +235,8 @@ XKlavaro.prototype.indiko_klavoj = function (klvrElm,stlList) {
                 ['br'],kod]
             ]
         ]);
-        klvrElm.append(...btn);
+        if (btn)
+            klvrElm.append(...btn);
     }            
 
     this.elemento_klavoj(klvrElm,klvrElm.textContent);
