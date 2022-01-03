@@ -1,21 +1,9 @@
 
 /* jshint esversion: 6 */
 
-// (c) 2021 Wolfram Diestel
+// (c) 2021-2022 Wolfram Diestel
 
 //const help_base_url = 'https://revuloj.github.io/temoj/';
-
-/**
- * HTML-elemento-specifo, konsistanta el nomo:string, atributoj:Object kaj enhavo.
- * Enhavo povas esti malplena, teksto aŭ listo de enhavataj HTML-elemento-specifoj.
- * La tipkontrolo de closure-compiler ne povas kontroli tro kompleksajn kaj refleksivajn
- * tipdifinojn kiel:
- * [string,Object<string,string>,string|Array<string|ElementSpec>]
- * Ni povas pripensi uzi ion kiel {tag: string, atr: Object<string,string>, cnt: ...}
- * anstatataŭ sed tio plilongigus nebezone niajn struktur-specifojn.
- * /@/typedef { Array<*> } ElementSpec; var ElementSpec;
- * /
- 
 
 
 /**

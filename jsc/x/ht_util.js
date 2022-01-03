@@ -130,18 +130,6 @@ function HTTPRequest(method, url, params, onSuccess,
 }
 
 /**
- * Aldonas agon farendan ĉe forlaso de la paĝo (ekz-e pro reŝargo aŭ fermo).
- * Utila ekz-e por memori preferatajn valoroj k.s.
- * @param {Function} todo_cb - ago farenda
- */
-function do_before_unload(todo_cb) {
-  // tio vokiĝas, i.a. kiam la uzanto reŝargas la paĝon aŭ fermas la redaktilon.
-  window.addEventListener('beforeunload', todo_cb);
-  // por iOS...:
-  window.addEventListener('pagehide', todo_cb); 
-}
-
-/**
  * Metas plurajn HTML-atributojn samtempe
  * @param {Element} el - la HTML-elemento
  * @param {Object<string,string>} attrs - Objekto, kies ŝlosiloj estas la atributnomoj, donantaj ties valorojn
