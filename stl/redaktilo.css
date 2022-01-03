@@ -192,9 +192,13 @@
 #r\:eraroj .Atentu::before,
 #r\:eraroj .Eraro::before {
     content: "\25b8\00a0";
-    font-weight: bold;
 }
 
+#r\:eraroj .Averto,
+#r\:eraroj .Atentu,
+#r\:eraroj .Eraro {
+    font-weight: bold;
+}
 
 .collapsed {
     display: none !important;
