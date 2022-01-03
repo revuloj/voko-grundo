@@ -36,7 +36,7 @@ FROM ubuntu as builder
 
 # vd: https://github.com/nodesource/distributions
 RUN apt-get update && apt-get install -y curl xsltproc \
- && curl -sL https://deb.nodesource.com/setup_16.x | bash -E - \
+ && curl -sL https://deb.nodesource.com/setup_17.x | bash -E - \
  && apt-get install -y nodejs
 
 WORKDIR /usr/app
