@@ -458,7 +458,7 @@ var redaktilo = function() {
   }
 
   function rantaurigardo() {
-    var eraroj = document.getElementById("r:eraroj");
+    let eraroj = document.getElementById("r:eraroj");
     const art = document.getElementById("r:art").value;
     const xml = xmlarea.syncedXml();
 
@@ -483,7 +483,7 @@ var redaktilo = function() {
 
   // kontrolo sen antaurigardo
   function rkontrolo() {
-    var eraroj = document.getElementById("r:eraroj");
+    let eraroj = document.getElementById("r:eraroj");
     const art = document.getElementById("r:art").value;
     const xml = xmlarea.syncedXml();
 
@@ -525,7 +525,7 @@ var redaktilo = function() {
     const art = document.getElementById("r:art").value;
     const xml = xmlarea.syncedXml();
 
-    var eraroj = document.getElementById("r:eraroj");
+    let eraroj = document.getElementById("r:eraroj");
     eraroj.textContent='';
     eraroj.classList.remove("collapsed"); // ĉu nur kiam certe estas eraroj?
     eraroj.parentNode.setAttribute("open","open");
@@ -616,19 +616,24 @@ var redaktilo = function() {
         command: command
       },
       function (data) {
+        const re_pos = /(pozicio\s+[\d:]+)/g;
+        const re_enk = /(Atentu|Averto|Eraro):/g;
         // Success!
-        var parser = new DOMParser();
-        var doc = parser.parseFromString(data,"text/html");
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(data,"text/html");
 
-        var err_list = document.getElementById("r:eraroj");
+        const err_list = document.getElementById("r:eraroj");
 
         //for (div of doc.body.getElementsByClassName("eraroj")) {
         for (var div of doc.body.querySelectorAll(".eraroj")) {
           // debugging...
           console.log("div id=" + div.id);
+          div.innerHTML = div.innerHTML
+            .replace(re_enk,'<span class="$1">$1</span>:')
+            .replace(re_pos,'<a href="#">$1</a>');
           err_list.appendChild(div);
         }
-        var konfirmo = doc.getElementById("konfirmo");
+        const konfirmo = doc.getElementById("konfirmo");
         if (konfirmo) {
           // debugging...
           console.log("div id=" + konfirmo.id);
@@ -968,6 +973,17 @@ var redaktilo = function() {
     // butono por konservi
     document.getElementById("r:konservu")
       .addEventListener("click",rkonservo);
+
+    // salto al eraroj
+    document.getElementById("r:eraroj").addEventListener("click", function(event) {
+      const trg = event.target;
+      if (trg.tagName == 'A') {
+        event.preventDefault();
+        const pos_str = trg.textContent.split(' ')[1];
+        xmlarea.goto(pos_str);
+        show_pos();
+      } 
+    });
 
     // remetu ŝanĝo-kampon en difinitan staton (necesa post aldono de nova artikolo)
     var shg = document.getElementById("r:sxangxo");

@@ -188,6 +188,14 @@
     border: 2px solid seagreen;
 }
 
+#r\:eraroj .Averto::before,
+#r\:eraroj .Atentu::before,
+#r\:eraroj .Eraro::before {
+    content: "\25b8\00a0";
+    font-weight: bold;
+}
+
+
 .collapsed {
     display: none !important;
     /*position: absolute;
