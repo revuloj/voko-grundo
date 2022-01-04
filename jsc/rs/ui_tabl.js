@@ -1,7 +1,7 @@
 
 /* jshint esversion: 6 */
 
-// (c) 2016 - 2019 Wolfram Diestel
+// (c) 2016 - 2022 Wolfram Diestel
 // laŭ GPL 2.0
 
 import { show_xhr_error } from './ui_dlg.js';

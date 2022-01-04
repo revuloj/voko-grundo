@@ -221,7 +221,7 @@ $.widget( "redaktilo.Artikolo", {
                 // indent
                 if (event.shiftKey == false)
                     this.element.indent(2);
-                    else
+                else
                     this.element.indent(-2);
             } else if ( !elekto ) {
                 // traktu enŝovojn linikomence...
@@ -235,14 +235,16 @@ $.widget( "redaktilo.Artikolo", {
                 }
             }
         } else if (keycode == 8) { // BACKSPACE
-            var spaces = this.chars_before_pos();
-            if (spaces.length > 0 && all_spaces(spaces) && 0 == spaces.length % 2) { // forigu du anstataŭ nur unu spacon
-                event.preventDefault(); 
-
-                var el = this.element;
-                var pos = el.getCursorPosition();
-                el.selectRange(pos-2, pos);
-                el.insert(''); 
+            if (this.elekto() == '') { // nur se nenio estas elektita!
+                var spaces = this.chars_before_pos();
+                if (spaces.length > 0 && all_spaces(spaces) && 0 == spaces.length % 2) { // forigu du anstataŭ nur unu spacon
+                    event.preventDefault(); 
+    
+                    var el = this.element;
+                    var pos = el.getCursorPosition();
+                    el.selectRange(pos-2, pos);
+                    el.insert(''); 
+                }    
             }
         }
     },
