@@ -630,12 +630,32 @@ Xmlarea.prototype.position = function() {
   return get_line_pos(pos,txtarea.value);
 };
 
+
+/**
+ * Redonas pozicion de kursoro kiel n-ro de signo
+ * @returns - la numero de la signo, kie staras la kursoro
+ */
+Xmlarea.prototype.positionNo = function() {
+    const txtarea = this.txtarea;
+    let pos = 0;
+    if('selectionStart' in txtarea) {
+        pos = txtarea.selectionStart;
+    } else if('selection' in document) {
+      txtarea.focus();
+      const sel = document.selection.createRange();
+      const selLength = document.selection.createRange().text.length;
+      sel.moveStart('character', -txtarea.value.length);
+      pos = sel.text.length - selLength;
+    }
+    return pos;
+};
+
 /**
  * Elektas tekstoparton en la redaktata teksto
  * @param {number} pos - la pozicio ekde kie elekti
  * @param {number} len - la nombro de elektendaj signoj
  */
-Xmlarea.prototype.select = function(pos,len) {
+Xmlarea.prototype.select = function(pos,len=0) {
   const txtarea = this.txtarea;
 
   // ne plu bezonata por aktualaj retumiloj
@@ -659,7 +679,7 @@ Xmlarea.prototype.select = function(pos,len) {
 /**
  * Legas aŭ anstataŭigas la momente elektitan tekston en la redaktatat teksto
  * @param {string} insertion - se donita la enmetenda teksto (ĉe la aktuala pozicio aŭ anstataŭ la aktuala elekto)
- * @param {number} p_kursoro - se donita, tiom da signoj ni moviĝas antataŭen antaŭ enmeti la tekston
+ * @param {number} p_kursoro - se donita, tiom da signoj ni moviĝas antaŭen antaŭ enmeti la tekston
  * @returns la momente elektita teksto, se ne estas donita enmetenda teksto
  */
 Xmlarea.prototype.selection = function(insertion=undefined, p_kursoro=0) {
@@ -680,7 +700,7 @@ Xmlarea.prototype.selection = function(insertion=undefined, p_kursoro=0) {
         txtarea.value.substring(0, startPos) +
         insertion +
         txtarea.value.substring(txtarea.selectionEnd, txtarea.value.length);
-      if (p_kursoro>-1) {
+      if (p_kursoro > 0) { // ni antaŭe havis > -1, sed tio ne funkciis por enŝovoj per spacoj
         // movu la kursoron al startPost+p_kursoro
         txtarea.selectionStart = startPos + p_kursoro;
         txtarea.selectionEnd = txtarea.selectionStart;
@@ -690,6 +710,7 @@ Xmlarea.prototype.selection = function(insertion=undefined, p_kursoro=0) {
         txtarea.selectionEnd = txtarea.selectionStart;
       }
     }
+
     // ni ŝangis la tekston, sed la evento "input" ne en ciu retumilo lanciĝas
     // se la klavaro ne estas tuŝita...:
     this.setUnsynced();
@@ -710,26 +731,27 @@ Xmlarea.prototype.selection = function(insertion=undefined, p_kursoro=0) {
 /**
  * Ŝovas la markitan tekston 'indent' signojn dekstren aŭ maldekstren
  * sen argumento 'indent' ĝi eltrovas la enŝovon en la aktuala linio
- * @param {number} indent - la nombro de ŝovendaj spacoj
+ * @param {number} ind - la nombro de ŝovendaj spacoj
  * @returns - la enŝovo de la aktuala linio (la spacsignoj en ties komenco)
  */
-Xmlarea.prototype.indent = function(indent=undefined) {
+Xmlarea.prototype.indent = function(ind=undefined) {
   //var txtarea = document.getElementById('r:xmltxt');
   var txtarea = this.txtarea;
   var selText;
   var startPos;
 
-  if (typeof indent == "number") { // enŝovu
-
+  if (typeof ind == "number") { // enŝovu
+    txtarea.focus();
+    /*
     if (document.selection  && document.selection.createRange) { // IE/Opera
       alert("enŝovado por malnova retumilo IE aŭ Opera ne funkcias.");
     } else if (txtarea.selectionStart || txtarea.selectionStart==0) { // Mozilla
+*/
+      // memoru aktualan rul-pozicion de textarea
+      //var scrollPos = this.scrollPos();
 
-      //save textarea scroll position
-      var scrollPos = this.scrollPos();
-
-      //get current selection
-      txtarea.focus();
+      // legu la nunan elekton
+      /*
       startPos = txtarea.selectionStart;
       //if (startPos > 0) {
       //  startPos--;
@@ -742,6 +764,12 @@ Xmlarea.prototype.indent = function(indent=undefined) {
       if (selText=="") {
         alert("Marku kion vi volas en-/elŝovi.");
       } else {
+        */
+        // uzu get_indent / indent el tekstiloj
+        const i_ = get_indent(txtarea);
+        if (i_ % 2 == 1) ind = ind/2; // ŝovu nur ±1 (±2/2) ĉe momente nepara enŝovo!
+        indent(txtarea,ind);
+/*
         var nt;
         if (indent == 2)
           nt = selText.replace(/\n/g, "\n  ");
@@ -749,22 +777,17 @@ Xmlarea.prototype.indent = function(indent=undefined) {
           nt = selText.replace(/\n  /g, "\n");
 
         this.selection(nt);
-        // txtarea.value = txtarea.value.substring(0, startPos)
-        //       + nt
-        //       + txtarea.value.substring(endPos, txtarea.value.length);
-        // txtarea.selectionStart = startPos+1;
-        // txtarea.selectionEnd = startPos + nt.length+1;
-
+        */
         //restore textarea scroll position
-        this.scrollPos(scrollPos);
-      }
-    } 
+        //this.scrollPos(scrollPos);
+      /*}
+    } */
     // ni ŝangis la tekston, sed la evento "input" ne en ciu retumilo lanciĝas
     // se la klavaro ne estas tuŝita...:
     this.setUnsynced();
 
   } else { // eltrovu la nunan enŝovon
-    indent = 0;
+    ind = 0;
     var linestart;
 
     if (document.selection  && document.selection.createRange) { // IE/Opera
@@ -772,13 +795,13 @@ Xmlarea.prototype.indent = function(indent=undefined) {
       range.moveStart('character', - 200); 
       selText = range.text;
       linestart = selText.lastIndexOf("\n");
-      while (selText.charCodeAt(linestart+1+indent) == 32) {indent++;}
+      while (selText.charCodeAt(linestart+1+ind) == 32) {ind++;}
     } else if (txtarea.selectionStart || txtarea.selectionStart == '0') { // Mozilla
       startPos = txtarea.selectionStart;
       linestart = txtarea.value.substring(0, startPos).lastIndexOf("\n");
-      while (txtarea.value.substring(0, startPos).charCodeAt(linestart+1+indent) == 32) {indent++;}
+      while (txtarea.value.substring(0, startPos).charCodeAt(linestart+1+ind) == 32) {ind++;}
     }
-    return (str_repeat(" ", indent));  
+    return (str_repeat(" ", ind));  
   }
 };
 
@@ -790,31 +813,42 @@ Xmlarea.prototype.indent = function(indent=undefined) {
 Xmlarea.prototype.charBefore = function() {
   //var txtarea = document.getElementById('r:xmltxt');
   var txtarea = this.txtarea;
-  if (document.selection  && document.selection.createRange) { // IE/Opera  
+  if (document.selection && document.selection.createRange) { // IE/Opera  
     txtarea.focus();
     var range = document.selection.createRange();
     range.moveStart('character', - 1); 
     return range.text;
   } else {
     var startPos = txtarea.selectionStart;
-    txtarea.setSelectionRange(startPos-1,startPos);
+    //txtarea.setSelectionRange(startPos-1,startPos);
     return txtarea.value.substring(startPos - 1, startPos);
   }
 };
+
+   // eltrovu la signojn antaŭ la nuna pozicio (ĝis la linikomenco)
+Xmlarea.prototype.charsFromLineStart = function() {
+  const txtarea = this.txtarea;
+  const pos = this.positionNo();
+  const val = txtarea.value;
+  let p = pos;
+  while (p>0 && val[p] != '\n') p--;
+  return val.substring(p+1,pos);
+};
+
 
 
 /**
  * Metas la kursoron al la komenco de la redaktejo kaj fokusas ĝin
  */
 Xmlarea.prototype.resetCursor = function() { 
-  var txtarea = this.txtarea;
+  const txtarea = this.txtarea;
   if (txtarea.setSelectionRange) { 
       txtarea.focus(); 
       //txtarea.setSelectionRange(0, 0); // problemo en Chrome?
       txtarea.selectionStart = 0;
       txtarea.selectionEnd = 0;
   } else if (txtarea.createTextRange) { 
-      var range = txtarea.createTextRange();  
+      const range = txtarea.createTextRange();  
       range.moveStart('character', 0); 
       range.select(); 
   } 

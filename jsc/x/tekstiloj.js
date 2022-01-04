@@ -446,23 +446,25 @@ function linirompo(str, indent=0, linirompo=80) {
 /**
  * Redonas la spacojn (enŝovon) en la komenco de la markita liniode Textarea
  * @param {Element} txtarea 
+ * @param {number} shift - se donita, ŝoviĝu tiom da signoj antaŭ eltrovi (ekz-e shift=-1)
  * @returns la linikomencaj spacoj
  */
-function get_indent(txtarea) {
+function get_indent(txtarea,shift = 0) {
     let indent = 0;
     if (txtarea.selectionStart || txtarea.selectionStart == '0') { // Mozilla
-        const startPos = txtarea.selectionStart;
+        const startPos = txtarea.selectionStart+shift;
         const linestart = txtarea.value.substring(0, startPos).lastIndexOf("\n");
         while (txtarea.value.substring(0, startPos).charCodeAt(linestart+1+indent) == 32) {indent++;}
     } else if (document.selection && document.selection.createRange) { // IE/Opera
         const range = document.selection.createRange();
-        range.moveStart('character', - 200); 
+        range.moveStart('character', -200); 
         const selText = range.text;
-        const linestart = selText.lastIndexOf("\n");
+        const linestart = selText.lastIndexOf("\n",selText.length+shift);
         while (selText.charCodeAt(linestart+1+indent) == 32) {indent++;}
     }
     return (str_repeat(" ", indent));
 };
+
 
 /**
  * Enŝovas markitan liniaron je pliaj spacoj dekstren (offset>0) aŭ maldekstren (offset<0)
@@ -474,12 +476,12 @@ function indent(txtarea, offset) {
     const ind = str_repeat(" ", Math.abs(offset))
 
     if (document.selection && document.selection.createRange) { // IE/Opera
-        alert("tio ankoraux ne funkcias.");
+        alert("tio ne funkcias por IE/Opera.");
     } else if (txtarea.selectionStart || txtarea.selectionStart==0) { // Mozilla
 
-        //save textarea scroll position
+        // sekurigu nunan rulpozicion
         const textScroll = txtarea.scrollTop;
-        //get current selection
+        // legu nunan elekton
         txtarea.focus();
         let startPos = txtarea.selectionStart;
         if (startPos > 0) {
@@ -492,9 +494,9 @@ function indent(txtarea, offset) {
         selText = txtarea.value.substring(startPos, endPos);
 
         if (selText=="") {
-            alert("Marku kion vi volas en-/elsxovi.");
+            alert("Marku kion vi volas en-/elŝovi.");
         } else {
-            let nt;
+            let nt; // var por nova teksto
             if (offset > 0)
                 nt = selText.replace(/\n/g, "\n"+ind);
             else if (offset < 0) {
@@ -514,4 +516,39 @@ function indent(txtarea, offset) {
             txtarea.scrollTop = textScroll;
         }
     } 
+};
+
+     
+    
+/**
+ * Elektas regionon en Input, Textarea inter signoj start kaj end
+ * @param {Element} element 
+ * @param {number} start 
+ * @param {number} end 
+ */
+function selectRange(element, start, end) {
+    if (end === undefined) {
+        end = start;
+    }
+    //element.focus();
+    if ('selectionStart' in element) {
+        element.selectionStart = start;
+        element.selectionEnd = end;
+    } else if (element.setSelectionRange) {
+        element.setSelectionRange(start, end);
+    } else if (element.createTextRange) {
+        var range = element.createTextRange();
+        range.collapse(true);
+        range.moveEnd('character', end);
+        range.moveStart('character', start);
+        range.select();
+    }
+    element.blur();
+    element.focus();
+    
+    // almenaŭ en IE necesas ruli al la ĝusta linio ankoraŭ, por ke ĝi estu videbla
+    var text = element.value;
+    var scroll_to_line = Math.max(get_line_pos(start,text).line - 5, 0);
+    var last_line = get_line_pos(text.length-1,text).line;
+    element.scrollTop = element.scrollHeight * scroll_to_line / last_line;
 };

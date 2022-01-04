@@ -148,7 +148,6 @@ var redaktilo = function() {
   ),p_kursoro,p_lines];} 
 
 
-
   function klavo(event) {
     var key = event.keyCode ? event.keyCode : event.which ? event.which : event.charCode;
     //  alert(key);
@@ -193,6 +192,52 @@ var redaktilo = function() {
     } else if (key == 84 || key == 116 || key == 1090 || key == 1058) {   
       if (event.altKey) {	// shortcut alt-t  --> trd
         insert_xml("trd_lng");
+      }
+    }
+  }
+
+  function tab_bsp(event) {
+    const keycode = event.keyCode || event.which; 
+
+    // traktu TAB por ŝovi dekstren aŭ maldekstren plurajn liniojn
+    if (keycode == 9) {  // TAB
+      event.preventDefault(); 
+
+      const elekto = xmlarea.selection();
+
+      // se pluraj linioj estas elektitaj
+      if (elekto.indexOf('\n') > -1) {
+        // indent
+        if (event.shiftKey == false)
+          xmlarea.indent(2);
+        else
+          xmlarea.indent(-2);
+      
+      // elekto nur ene de unu linio
+      } else if ( !elekto ) {
+        // traktu enŝovojn linikomence...
+        const before = xmlarea.charBefore();
+        if (before == '\n') {
+          const indent = get_indent(xmlarea.txtarea,-1) || '  ';
+          xmlarea.selection(indent); 
+        } else if (before == ' ') {
+          const indent = '  ';
+          // aldonu du spacojn
+          xmlarea.selection(indent);
+        }
+      }
+
+    } else if (keycode == 8) { // BACKSPACE
+      if (xmlarea.selection() == '') { // aparta trakto nur se nenio estas elektita!
+        const spaces = xmlarea.charsFromLineStart();
+        if (spaces.length > 0 && all_spaces(spaces) && 0 == spaces.length % 2) { 
+            // forigu du anstataŭ nur unu spacon
+            event.preventDefault(); 
+
+            const pos = xmlarea.positionNo();
+            xmlarea.select(pos-2,2); //selectRange(xmlarea.txtarea,pos-2, pos);
+            xmlarea.selection(''); 
+        }
       }
     }
   }
@@ -912,6 +957,8 @@ var redaktilo = function() {
     // klav-premoj en XML-redaktilo
     document.getElementById("r:xmltxt")
       .addEventListener("keypress",klavo);
+    document.getElementById("r:xmltxt")
+      .addEventListener("keydown",tab_bsp);
 
     document.getElementById("r:xmltxt")
       //.addEventListener("selectionchange",show_pos); // movado de kursoro, ne kaŭzas input-eventon...!
