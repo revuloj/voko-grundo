@@ -1,7 +1,9 @@
 
 /* jshint esversion: 6 */
 
-// (c) 2020, 2021 Wolfram Diestel
+// (c) 2020 - 2022 Wolfram Diestel
+// laŭ GPL 2.0
+
 /*
 const version = globalThis.eldono;
 const debug = false; //true; // ni bezonas provizore aparte por vidi erarojn en iOS Webkit, kie ni ne havas "console"
@@ -30,7 +32,7 @@ const t_main = new Transiroj("main","start",["titolo","artikolo","red_xml","red_
 const t_red  = new Transiroj("red","ne_redaktante",["ne_redaktante","redaktante","tradukante","sendita"]);
 
 /**
- * kodlistoj agorditaj por Reta Vortaro: lingvoj, fakoj, stiloj
+ * Kodlistoj agorditaj por Reta Vortaro: lingvoj, fakoj, stiloj
  */
 const revo_codes = {
     lingvoj: new Xlist('lingvo', '/revo/cfg/lingvoj.xml'),
@@ -1076,8 +1078,13 @@ function serchu_q(esprimo) {
         } // ...nofindings
 
         function serch_lng() {
-            const div = ht_element("div",{class:"s_lng"},srch.s_lng.join(', '));
-            return div;
+            const div = ht_elements([["div",{class:"s_lng"},
+                [
+                    ["span",{class: "llbl"},"serĉlingvoj: "],
+                    ["span",{class: "llst"},srch.s_lng.join(', ')]
+                ]
+            ]]);
+            return div[0];
         }
 
         index_spread();
@@ -1111,12 +1118,10 @@ function serchu_q(esprimo) {
                     btn.addEventListener("click",(event)=>{                         
                         // kiun ref-mrk ni uzu - depende de kiu butono premita
                         const refmrk = event.target.value;
+                        const refstr = event.target.previousSibling.textContent;
                         // revenu de trovlisto al redakto-menuo
                         load_page("nav",globalThis.redaktmenu_url,true,
-                            () => {
-                                document.getElementById("r:refmrk").value = refmrk;
-                                redaktilo.fs_toggle("r:ref");
-                            });        
+                            () => redaktilo.load_ref(refmrk,refstr));        
                     });
                 }           
             }     
@@ -1272,7 +1277,7 @@ function traduku(event,artikolo) {
 */
 
 /**
- * KOmencas redaktadon de la aktuala artikolo ŝargante la redaktopaĝon kaj -ilaron.
+ * Komencas redaktadon de la aktuala artikolo ŝargante la redaktopaĝon kaj -ilaron.
  * @param {*} href 
  */
 function redaktu(href) {
