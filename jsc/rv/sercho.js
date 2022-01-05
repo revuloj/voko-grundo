@@ -27,6 +27,13 @@ function Sercho() {
     this.s_lng = [];
 }
 
+/**
+ * Rulas la sercon demandante la servilon
+ * @param {string} esprimo - la serĉesprimo
+ * @param {Function} onSuccess 
+ * @param {Function} onStart 
+ * @param {Function} onStop 
+ */
 Sercho.prototype.serchu = function(esprimo,onSuccess,onStart,onStop) {
     const self = this;
 
@@ -58,10 +65,14 @@ Sercho.prototype.serchu = function(esprimo,onSuccess,onStart,onStop) {
 };
 
 
-// redoni la trovojn de unu lingvo kiel listo de objektoj
-// {v - vorto, h - href, t - <trdj>} - lng = eo <trdj> estas objekto 
-// de la formo {de: "trdj", en: "trdj"...}
-// por aliaj lingvoj estas nur signaro kun esperanta traduko, do ne objekto
+/**
+ * Redoni la trovojn de unu lingvo kiel listo de objektoj
+ * {v - vorto, h - href, t - <trdj>} - lng = eo; 
+ * <trdj> estas objekto de la formo {de: "trdj", en: "trdj"...}
+ * por aliaj lingvoj estas nur signaro kun esperanta traduko, do ne objekto 
+ * @param {string} lng - la lingvo kies trovojn ni volas
+ * @returns - la trovoj en la supre priskribita formo
+ */
 Sercho.prototype.trovoj = function(lng) {
 
     // strukturas unu e-an trovon kun unika kap-mrk
@@ -139,16 +150,29 @@ Sercho.prototype.trovoj = function(lng) {
     }
 };
 
-// en kiuj lingvoj (krom eo) ni trovis ion?
+
+/**
+ * Redonas, en kiuj lingvoj (krom eo) ni trovis ion
+ * @returns - listo de nacilingvoj
+ */
 Sercho.prototype.lingvoj = function() {
     if (this.trd) return ( Object.keys(this.trd) );
 };
 
+/**
+ * Testas, ĉu la trovoj estas malplenaj, t.e. nek e-a nek nacilingva rezulto
+ * @returns true: malplena
+ */
 Sercho.prototype.malplena = function() {
     return ( (!this.eo || Object.keys(this.eo).length === 0) 
         && (!this.trd || Object.keys(this.trd).length === 0) );
 };
 
+/**
+ * Tastas, ĉu ni ricevis unusolan rezulton, tiuokzae ni povos tuj
+ * ŝargi kaj prezenti la trovitan artikolon
+ * @returns true: unusola rezulto
+ */
 Sercho.prototype.sola = function() {
     return ( 
             this.eo 
@@ -161,6 +185,10 @@ Sercho.prototype.sola = function() {
             && Object.values(this.trd)[0].length === 1 );
 };
 
+/**
+ * Redonas la unuan rezulton.
+ * @returns {{href}} la pretigita HTML-referenco al la unua trovaĵo
+ */
 Sercho.prototype.unua = function() {
     if (this.eo && this.trd) {
         var u = Object.values(this.eo)[0] || Object.values(this.trd)[0];
@@ -169,7 +197,14 @@ Sercho.prototype.unua = function() {
 };
 
 
-// Serĉo en universala vortreto, vd. http://www.lexvo.org/uwn/
+
+/**
+ * Serĉas en universala vortreto, vd. http://www.lexvo.org/uwn/
+ * @param {string} vorto 
+ * @param {Function} onSuccess 
+ * @param {Function} onStart 
+ * @param {Function} onStop 
+ */
 Sercho.prototype.serchu_uwn = function(vorto,onSuccess,onStart,onStop) {
     const self = this;
 

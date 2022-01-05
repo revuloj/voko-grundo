@@ -2,7 +2,10 @@
 
 // (c) 2020, 2021 Wolfram Diestel
 
-
+/**
+ * Kontrolas la konsenton de la uzanto pri kuketoj. Tio
+ * siavice memoriĝas en la retumilo kiel kuketo 'revo-konsento'
+ */
 function checkCookieConsent() {
     var cookies = document.cookie;
     console.log(cookies);
@@ -14,6 +17,9 @@ function checkCookieConsent() {
     }
 }
 
+/**
+ * Notas la konsenton pri kuketoj kreante kuketon 'revo-konsento=jes'+ aktuala dato.
+ */
 function setCookieConsent() {
     var CookieDate = new Date();
     var ExpireDate = new Date(); ExpireDate.setFullYear(CookieDate.getFullYear() + 50);
