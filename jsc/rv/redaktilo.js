@@ -71,11 +71,11 @@ var redaktilo = function() {
     klr_tip: ["klr",{tip:"$r:klrtip"},["(","$_",")"]],
     klr_ppp: ["klr",{},"[&#x2026;]"],
     ind: ["ind",{},"$_"],
-    ref_tip: ["ref",{tip:"$r:reftip",cel:"$r:refmrk"},"$_"],
-    ref_lst: ["ref",{tip:"lst",lst:"voko:",cel:"$r:refmrk"},"$_"],
-    ref: ["ref",{cel:"$r:refmrk"},"$_"],
+    ref_tip: ["ref",{tip:"$r:reftip",cel:"$r:refmrk"},"$_|$r:refstr"],
+    ref_lst: ["ref",{tip:"lst",lst:"voko:",cel:"$r:refmrk"},"$_|$r:refstr"],
+    ref: ["ref",{cel:"$r:refmrk"},"$_|$r:refstr"],
     refgrp: ["refgrp",{tip:"$r:reftip"},[
-        "\n  ",["ref",{cel:"$r:refmrk"},"$_"],
+        "\n  ",["ref",{cel:"$r:refmrk"},"$_|$r:refstr"],
         ",\n  ",["ref",{cel:""}],
         "\n"
       ]],
@@ -130,6 +130,21 @@ var redaktilo = function() {
           document.getElementById(v.substring(1)).value 
           : v);
       }
+      function str(s) {
+        if (p_kursoro < 0 && s.indexOf("\n")>-1) p_lines++;
+        // povas esti alternativo
+        const sp = s.split('|');
+        for (s1 of sp) {
+          if (s1 == "$_") p_kursoro = xml.length;
+          const v = val(s1);
+          if (v) {
+            // en alternativo la unua
+            // efektiva valoro haltigas la valorigadon!
+            xml += v;
+            return;
+          }
+        }
+      }
       if (!jlist || !jlist[0]) {
         console.error("Nedifinita ŝablono: \""+name+"\"");
         return;
@@ -138,9 +153,7 @@ var redaktilo = function() {
       for (var el of jlist) {
         // string content
         if (typeof el == "string") {
-          if (p_kursoro < 0 && el.indexOf("\n")>-1) p_lines++;
-          if (el == "$_") p_kursoro = xml.length;
-          xml += val(el);
+          str(el);
         } else {
           // tag name
           xml += "<" + el[0];
@@ -159,8 +172,11 @@ var redaktilo = function() {
               xml += x;
               
             } else {
+              str(el[2]);
+              /*
               if (el[2] == "$_") p_kursoro = xml.length;
               xml += val(el[2]);
+              */
             } 
           }
           // closing tag
@@ -1108,8 +1124,11 @@ var redaktilo = function() {
           const rm = document.getElementById("r:refmrk");
           rm.textContent = '';
   
+          // la drv
+          rm.append(ht_element("option",{},art+_mrk));
+          // ĉio ene (snc, subsnc, rim)
           for (const mrk of mrkj) {
-            if (mrk[0].startsWith(_mrk)) {
+            if (mrk[0].startsWith(_mrk+'.')) {
               rm.append(ht_element("option",{},art+mrk[0]));
             }
           }  
