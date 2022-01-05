@@ -24,6 +24,7 @@ function Sercho() {
     //komence malplena
     this.eo = [];
     this.trd = []; 
+    this.s_lng = [];
 }
 
 Sercho.prototype.serchu = function(esprimo,onSuccess,onStart,onStop) {
@@ -41,13 +42,14 @@ Sercho.prototype.serchu = function(esprimo,onSuccess,onStart,onStop) {
         {"Accept-Language": preferoj.languages().join(',')},
         {sercxata: esprimo},
         function(data) {
-            var json = JSON.parse(data);
+            const json = JSON.parse(data);
             self.eo = json.eo ? 
                 group_by(KAP,json.eo) // ordigu laŭ kapvorto
                 : undefined;
             self.trd = json.trd ? 
                 group_by(LNG,json.trd) // ordigu laŭ lingvo
                 : undefined; 
+            self.s_lng = json.lng; // la serĉlingvoj, eble reduktitaj se estis tro en preferoj
             onSuccess.call(self);
         },
         onStart,
