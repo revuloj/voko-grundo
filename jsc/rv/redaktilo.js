@@ -113,16 +113,18 @@ var redaktilo = function() {
    * @memberof redaktilo
    * @param {string} name - la nomo de la ŝablono
    * @param {string} selection - la momente elektita teksto, gi anstataŭas variablon '$_'
-   * @returns La XML-testo kreita per la ŝablono
+   * @returns Liston kun: la XML-teksto kreita per la ŝablono; la relativan pozicio de la kursoro; la lininombro
    */
   function shablono(name,selection) {    
-    var p_kursoro = -1;
-    var p_lines = 0;
+    let p_kursoro = -1;
+    let p_lines = 0;
 
     //function xmlstr(jlist) {
     return [(function xmlstr(jlist) {
+
       // $_ ni anstataŭigos per la elektita teksto, 
       // $<var> per la valoro de elemento kun id="var"
+      // alian tekstenhavon ni redonas nemodifite
       function val(v) {
         return v == "$_"? 
           selection 
@@ -130,11 +132,16 @@ var redaktilo = function() {
           document.getElementById(v.substring(1)).value 
           : v);
       }
+
       function str(s) {
         if (p_kursoro < 0 && s.indexOf("\n")>-1) p_lines++;
+
         // povas esti alternativo
         const sp = s.split('|');
         for (s1 of sp) {
+          // se la esprimo enhavas la variablon $_,
+          // kiu enmetas la aktualan tekston, 
+          // ni metas la kursoron tien.
           if (s1 == "$_") p_kursoro = xml.length;
           const v = val(s1);
           if (v) {
@@ -149,26 +156,26 @@ var redaktilo = function() {
         console.error("Nedifinita ŝablono: \""+name+"\"");
         return;
       }
-      var xml = "";
-      for (var el of jlist) {
-        // string content
+      let xml = "";
+      for (const el of jlist) {
+        // tekstenhavo
         if (typeof el == "string") {
           str(el);
         } else {
-          // tag name
+          // elementkomenco
           xml += "<" + el[0];
-          // attributes
+          // atributoj
           if (el[1]) {
             for (var atr in el[1]) {
               xml += " " + atr + "=\"" + val(el[1][atr]) + "\"";
             }
           }
           xml += ">";
-          // content
+          // elementenhavo
           if (el[2]) {
             if (el[2] instanceof Array) {
               const x = xmlstr(el[2]);
-              if (p_kursoro > -1) p_kursoro += xml.length;
+              // kial ni meti tion? eble x.length?: if (p_kursoro > -1) p_kursoro += xml.length;
               xml += x;
               
             } else {
@@ -179,7 +186,7 @@ var redaktilo = function() {
               */
             } 
           }
-          // closing tag
+          // elementfino
           if ("/" != el[0].slice(-1)) {
             //if (p_kursoro < 0) p_kursoro = xml.length;
             xml += "</" + el[0] + ">"; 
@@ -1043,9 +1050,9 @@ var redaktilo = function() {
     if (index == 0) sel_stru.textContent = ''; // malplenigu la liston ĉe aldono de unua ero...
 
     if (selected) {
-      sel_stru.append(ht_element('option',{value: subt.id, selected: 'selected'},subt.dsc));
+      sel_stru.append(ht_element('option',{value: subt.id, class: subt.el, selected: 'selected'},subt.dsc));
     } else {
-      sel_stru.append(ht_element('option',{value: subt.id},subt.dsc));
+      sel_stru.append(ht_element('option',{value: subt.id, class: subt.el},subt.dsc));
     }
   }
 
@@ -1094,7 +1101,7 @@ var redaktilo = function() {
     if (m) {
       const art = m[1];
       const _mrk = m[2];
-      document.getElementById("r:refmrk").value = refmrk;
+      //document.getElementById("r:refmrk").value = refmrk;
       document.getElementById("r:refstr").value = refstr;
       load_ref_sub(art,_mrk); // ŝargu la (sub)sencojn ks por la vorto
     }
@@ -1131,7 +1138,9 @@ var redaktilo = function() {
             if (mrk[0].startsWith(_mrk+'.')) {
               rm.append(ht_element("option",{},art+mrk[0]));
             }
-          }  
+          }
+
+          show("r:refmrk");
         }
       });
   }
