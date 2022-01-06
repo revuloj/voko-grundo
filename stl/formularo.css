@@ -90,6 +90,9 @@ button:disabled, input[type="button"]:disabled, input[type="checkbox"]:disabled 
 
 fieldset button, fieldset select {
     padding: .1em;
+    line-height: 1.5;
+    min-width: 1.8em;
+    margin: .2em 0;
 }
 
 .tabs {

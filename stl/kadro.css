@@ -353,8 +353,13 @@ nav a:active {
     vertical-align: text-top;*/
 }
 
-#navigado .enhavo details a[href^='lx_la_'] {
+#navigado .enhavo details a[href*='lx_la_'] {
     border-bottom: 1px dotted var(--nav-brd-clr);
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
 }
 
 #navigado .icon_btn {

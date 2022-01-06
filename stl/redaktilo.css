@@ -2,7 +2,8 @@
 #r\:redaktilo {
     display: flex;
     flex-direction: column;
-    height: 105%; /* piedlinio rajtas ŝoviĝi malsupren */
+    height: 100%; 
+    /* 105% - piedlinio rajtas ŝoviĝi malsupren ? */
     /*overflow: auto; */
 }
 
@@ -130,6 +131,14 @@
     border-top: 1px dotted var(--main-brd-clr);
 }
 
+/* funkcias nur kun select multiple!
+#r\:art_strukturo option.drv {
+    background-color: gray;
+    color: red;
+    font-weight: bold;
+}
+*/
+
 .xmlarea {
     flex: 1; /* consume available width */  
     position: relative;   
@@ -145,11 +154,12 @@
     opacity: .8;
 }
 
+/*
 .butonoj {
     flex: 0;
     text-align: center;
     margin: 1px;
-}
+}*/
 
 .rimarkoj ul {
     margin-block-start: .2em;
@@ -248,6 +258,15 @@ span.right {
 
 
 .butonoj {
+    flex: 0;
+    
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    /*align-content: stretch;*/
+    gap: 1px;
+    row-gap: 1px;
+
     max-height: 27ex;
     min-height: 3.6em;
     overflow: auto; 
@@ -256,6 +275,7 @@ span.right {
 }
 
 .butonoj .klv {
+    flex: 0 0 auto;
     display: inline-block; /* inline-block aldonas spaceton inter la linioj */
     /* float: left; */
     vertical-align: inherit;
