@@ -37,6 +37,10 @@ helpo)
     echo ""
     echo "(Por fina publikgo al la servilo uzu la skripton eldono.sh)"
     ;;
+araneo)
+    npm run build:js
+    npm run build:css
+    ;;&
 araneo:debug)
     npm run build:js:debug
     npm run build:css
