@@ -58,7 +58,9 @@ var artikolo = function() {
      */
     when_doc_ready(function() {
         console.log("artikolo.when_doc_ready...:" + location.href);
-        preparu_art();
+        const fn = getUrlFileName(location.href);
+        const art = fn.substring(0,fn.lastIndexOf('.')); 
+        if (art) preparu_art(art);
         //enkadrigu();
     });
 
@@ -69,7 +71,7 @@ var artikolo = function() {
      * @memberof artikolo
      * @param {string} artikolo - la doserinomo de la artikolo
      */
-    function preparu_art(artikolo = undefined) {
+    function preparu_art(artikolo) {
         // evitu preparon, se ni troviĝas en la redaktilo kaj
         // la artikolo ne ĉeestas!
         if (! document.getElementById(sec_art)) return;
@@ -86,7 +88,7 @@ var artikolo = function() {
         /* aktivigu nur por longaj artikoloj... */
         var d = document.getElementsByClassName("kasxebla");
          //if (d.length > js_sojlo) {
-        piedlinio_modifo(artikolo);
+        piedlinio_modifo();
         preparu_kashu_sekciojn();
         preparu_malkashu_fontojn();
         preparu_maletendu_sekciojn();
@@ -137,11 +139,11 @@ var artikolo = function() {
             
             // provizore ne bezonata: el.addEventListener("kashu", function(event) { kashu_drv(event.currentTarget) });
             el.addEventListener("malkashu", function(event) { 
-                malkashu_drv(event.currentTarget);
+                malkashu_drv(/** @type {Element}*/(event.currentTarget));
                 event.stopPropagation();
             });
             el.addEventListener("komutu", function(event) { 
-                kashu_malkashu_drv(event.currentTarget);
+                kashu_malkashu_drv(/** @type {Element}*/(event.currentTarget));
                 event.stopPropagation();
             });           
 
@@ -463,9 +465,8 @@ var artikolo = function() {
      * necesas ilin iom koncizigi kaj adapti por la nova fasado.
      * @memberof artikolo
      * @inner
-     * @param {string} artikolo  - la dosiernomo de la artikolo
      */
-    function piedlinio_modifo(artikolo) {
+    function piedlinio_modifo() {
         const pied = document.body.getElementsByTagName("FOOTER")[0];
         if (pied) { // en la redeaktilo eble jam foriĝis...
             const first_a = pied.querySelector("A");

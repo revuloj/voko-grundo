@@ -187,7 +187,7 @@ Sercho.prototype.sola = function() {
 
 /**
  * Redonas la unuan rezulton.
- * @returns {{href}} la pretigita HTML-referenco al la unua trovaĵo
+ * @returns {{href}|undefined} la pretigita HTML-referenco al la unua trovaĵo
  */
 Sercho.prototype.unua = function() {
     if (this.eo && this.trd) {

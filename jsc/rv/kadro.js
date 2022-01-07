@@ -631,8 +631,9 @@ function load_page(trg, url, push_state=true, whenLoaded=undefined) {
             update_hash();
 
             const fn = getUrlFileName(url);
-            const art = fn.substring(0,fn.lastIndexOf('.'));   
-            artikolo.preparu_art(art);                      
+            const art = fn.substring(0,fn.lastIndexOf('.')); 
+            if (art)  
+                artikolo.preparu_art(art);                      
             
             var s_artikolo = document.getElementById("s_artikolo");
             // refaru matematikajn formulojn, se estas

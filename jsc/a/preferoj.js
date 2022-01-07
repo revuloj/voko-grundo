@@ -202,27 +202,29 @@ var preferoj = function() {
      * @inner
      * @param {Element} parent - la parenca elemento por la opcioj
      * @param {string} name - la nevidebla nomo (atributo 'name') 
-     * @param {string} glabel - la videbla nomo de la grupo
-     * @param {Array<string>} radios - listo de HTML-id por la opcioj
+     * @param {string|null} glabel - la videbla nomo de la grupo
+     * @param {Array<{id,label}>} radios - listo de HTML-id por la opcioj
      * @param {Function} handler - reago al elekto-eventoj
      */
     function add_radios(parent,name,glabel,radios,handler) {
         if (glabel) {
-            var gl = document.createElement("LABEL");
+            const gl = document.createElement("LABEL");
             gl.appendChild(document.createTextNode(glabel));
             parent.appendChild(gl);   
         }
-        var first = true;
-        for (var r of radios) {
-            var span = document.createElement("SPAN");
-            var input = first?
-                ht_element("INPUT",{name: name, type: "radio", id: r.id, checked: "checked", value: r.id}) :
-                ht_element("INPUT",{name: name, type: "radio", id: r.id, value: r.id});
-            first = false;
-            var label = ht_element("LABEL",{for: r.id}, r.label);
-            span.appendChild(input);
-            span.appendChild(label);
-            parent.appendChild(span);
+        let first = true;
+        if (radios) {
+            for (const r of radios) {
+                const span = document.createElement("SPAN");
+                const input = first?
+                    ht_element("INPUT",{name: name, type: "radio", id: r.id, checked: "checked", value: r.id}) :
+                    ht_element("INPUT",{name: name, type: "radio", id: r.id, value: r.id});
+                first = false;
+                const label = ht_element("LABEL",{for: r.id}, r.label);
+                span.appendChild(input);
+                span.appendChild(label);
+                parent.appendChild(span);
+            }    
         }
         if(handler) {
             parent.addEventListener("click",handler);

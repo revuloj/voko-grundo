@@ -138,7 +138,7 @@ var redaktilo = function() {
 
         // povas esti alternativo
         const sp = s.split('|');
-        for (s1 of sp) {
+        for (const s1 of sp) {
           // se la esprimo enhavas la variablon $_,
           // kiu enmetas la aktualan tekston, 
           // ni metas la kursoron tien.
@@ -538,9 +538,11 @@ var redaktilo = function() {
   function add_err_msg(msg, matches) {
     let errors = [];
 
-    for (const m of matches) {
-      errors.push(msg+m[1]);
-    }
+    if (matches)
+      for (const m of matches) {
+        errors.push(msg+m[1]);
+      };
+
     if (errors.length)
       listigu_erarojn(errors);
   }
@@ -981,7 +983,7 @@ var redaktilo = function() {
    * Ŝargas XML-artikolon por redaktado de la servilo
    * @memberof redaktilo
    * @inner
-   * @param {Object} params - HTTP-parametroj, ni ekstraktas parametron 'art', kiu donas la dosiernomon de la artikolo
+   * @param {string} params - HTTP-parametroj, ni ekstraktas parametron 'art', kiu donas la dosiernomon de la artikolo
    */
   function load_xml(params) {
     var art = getParamValue("art",params);
@@ -1567,8 +1569,9 @@ var redaktilo = function() {
    * @inner
    */
   function trad_ebloj() {
-
     const elekto = document.getElementById('r:trd_elekto');
+    if (!elekto) return;
+
     const _ele_ = xmlarea.elekto;
     const drv_snc = (_ele_ && _ele_.el && (_ele_.el == 'snc' || _ele_.el == 'drv'));
     //const drv_snc = ('drv|snc'.indexOf(_ele_?.el.slice(-3)) > -1);
