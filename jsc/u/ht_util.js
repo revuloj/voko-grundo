@@ -18,30 +18,15 @@
  
 
 /**
- * pri elturnoj de specifo de revokfunkcioj por closure-compiler *kaj* JSDoc
- * vd. ekz-e https://stackoverflow.com/questions/49582691/how-do-i-document-complex-callback-requirement-in-jsdoc-while-keeping-jsdocs-ge
- * 
- * Respondo de XMLHttpRequest, ĉe malsukcesa 'response' estas nedeifinita
- * @typedef {function(string)} RequestResult
- */ var RequestResult;
-
-/**
- * Evento okazanta antaŭ kaj post XMLHttpRequest, tio ebligas ekz-e ŝalti kaj malŝalti
- * atendovinjeton
- *  @typedef {function()} RequestStartStop
- */ var RequestStartStop;
-
-
-/**
  * Ŝargas fonan dokumenton de la servilo per XMLHttpRequest
  * @param {string} method - la HTTP-metodo
  * @param {string} url - la URL
  * @param {Object<string,string>} headers - la HTTP-kapoj
  * @param {Object<string,string>} params - la HTTP-parametroj
- * @param {RequestResult} onSuccess - vokata post sukceso
- * @param {RequestStartStop} onStart - vokata antaŭ la ŝargo
- * @param {RequestStartStop} onFinish - vokata fine
- * @param {function(XMLHttpRequest)} onError - vokata kiam okazas eraro
+ * @param {Function} onSuccess - vokata post sukceso
+ * @param {Function} onStart - vokata antaŭ la ŝargo
+ * @param {Function} onFinish - vokata fine
+ * @param {Function} onError - vokata kiam okazas eraro
  */
 function HTTPRequestFull(method, url, headers, params, onSuccess, 
     onStart = undefined, onFinish = undefined, onError = undefined) {  // onStart, onFinish, onError vi povas ellasi!
@@ -118,10 +103,10 @@ function HTTPRequestFull(method, url, headers, params, onSuccess,
  * @param {string} method - la HTTP-metodo
  * @param {string} url - la URL
  * @param {Object<string,string>} params - la HTTP-parametroj
- * @param {RequestResult} onSuccess - vokata post sukceso
- * @param {RequestStartStop} onStart - vokata antaŭ la ŝargo
- * @param {RequestStartStop} onFinish - vokata fine
- * @param {function(XMLHttpRequest)} onError - vokata kiam okazas eraro
+ * @param {Function} onSuccess - vokata post sukceso
+ * @param {Function} onStart - vokata antaŭ la ŝargo
+ * @param {Function} onFinish - vokata fine
+ * @param {Function} onError - vokata kiam okazas eraro
  */
 function HTTPRequest(method, url, params, onSuccess, 
   onStart=undefined, onFinish=undefined, onError=undefined) {  // onStart, onFinish, onError vi povas ellasi!
