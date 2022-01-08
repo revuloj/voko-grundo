@@ -174,21 +174,20 @@ var redaktilo = function() {
           // elementenhavo
           if (el[2]) {
             if (el[2] instanceof Array) {
+              // ni transformas la enhav-liston al XML per rekursiva voko de xmlstr
               const x = xmlstr(el[2]);
-              // kial ni meti tion? eble x.length?: if (p_kursoro > -1) p_kursoro += xml.length;
+              // se tio enhavis variablon $_ la pozicio de la kursoro
+              // staras tie kalkulita de la komenco de la enhavo
+              // sed ni devas ankoraŭ adicii ĉiujn signojn antaŭ la komenco:
+              if (p_kursoro > -1) p_kursoro += xml.length;
+              // nun ni kunigas la enhavon kun ĉio antaŭe          
               xml += x;
-              
             } else {
               str(el[2]);
-              /*
-              if (el[2] == "$_") p_kursoro = xml.length;
-              xml += val(el[2]);
-              */
             } 
           }
           // elementfino
           if ("/" != el[0].slice(-1)) {
-            //if (p_kursoro < 0) p_kursoro = xml.length;
             xml += "</" + el[0] + ">"; 
           }
         }  
