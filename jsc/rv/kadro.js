@@ -4,27 +4,6 @@
 // (c) 2020 - 2022 Wolfram Diestel
 // laŭ GPL 2.0
 
-/*
-const version = globalThis.eldono;
-const debug = false; //true; // ni bezonas provizore aparte por vidi erarojn en iOS Webkit, kie ni ne havas "console"
-const revo_url = "reta-vortaro.de";
-const art_prefix = "/revo/art/";
-const tez_prefix = "/revo/tez/";
-const sercho_url = "/cgi-bin/sercxu-json-"+version+".pl";
-const trad_uwn_url = "/cgi-bin/traduku-uwn.pl";
-//const hazarda_url = "/cgi-bin/hazarda_art.pl";
-const titolo_url = "titolo-"+version+".html";
-const redaktilo_url = "redaktilo-"+version+".html";
-const redaktmenu_url = "redaktmenu-"+version+".html";
-//const inx_eo_url = "/revo/inx/_eo.html";
-
-const inx_eo_url = "/revo/inx/_plena.html";
-const mx_trd_url = "/cgi-bin/mx_trd.pl";
-const nombroj_url = "/cgi-bin/nombroj.pl";
-const mrk_eraro_url = "/cgi-bin/mrk_eraroj.pl";
-const http_404_url = "/revo/dlg/404.html";
-const sercho_videblaj = 7;
-*/
 
 // statoj kaj transiroj
 const t_nav  = new Transiroj("nav","start",["ĉefindekso","subindekso","serĉo","redaktilo"]);

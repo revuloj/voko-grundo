@@ -34,7 +34,7 @@ function XmlStruct(xml, onAddSub) {
   
     this.indents = {
       art: "", subart: "\u25b8\u00a0", drv: "\u2014 ", subdrv: "\u00a0\u2014 ", 
-      snc: "\u00a0\u22ef ", subsnc: "\u00a0\u22ef\u22ef "
+      snc: "\u00a0\u00a0\u00a0\u22ef ", subsnc: "\u00a0\u00a0\u00a0\u22ef\u22ef "
     };
 
     this.elements = {
