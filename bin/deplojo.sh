@@ -11,8 +11,8 @@
 #host=retavortaro.de
 # aldonu en /etc/hosts!
 host=revo
-release=2c
-node_release=2.0.3
+release=2e
+node_release=2.0.5
 revo=${host}:www/revo
 files=${host}:files
 
@@ -37,6 +37,10 @@ helpo)
     echo ""
     echo "(Por fina publikgo al la servilo uzu la skripton eldono.sh)"
     ;;
+araneo)
+    npm run build:js
+    npm run build:css
+    ;;&
 araneo:debug)
     npm run build:js:debug
     npm run build:css

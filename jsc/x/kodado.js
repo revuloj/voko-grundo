@@ -47,7 +47,7 @@ String.prototype.hashFnv32a = function(asString, seed) {
       }
       if( asString ){
           // Convert to 8 digit hex string
-          return ("0000000" + (hval >>> 0).toString(16)).substr(-8);
+          return ("0000000" + (hval >>> 0).toString(16)).slice(-8);
       }
       return hval >>> 0;
 };

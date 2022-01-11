@@ -40,8 +40,7 @@ alinomojn por literoj, libroj de la biblio ks.
 
 1. STL - la stiloj por prezenti Revon en la reto, uzataj en la fasado kaj antaŭrigardoj de la redaktiloj.
 
-1. JSC - Javoskriptoj. Konsiderinda parto de ili estas nur uzata en la retservo (`voko-araneo`), sed transportiĝis origine tien tra `voko-formiko`. Verŝajne ili iam translokiĝos al `voko-araneo`.
-Tamen iujn kiel `util.js` ni eble uzos en ambaŭ redaktiloj.
+1. JSC - Javoskriptoj. Ili estas uzataj por la fasado de Reta Vortaro retservo (`voko-araneo`) kaj la aparta redaktilo Cetonio  (`voko-cetonio`). Vi povas krei dokumentajn paĝojn en `jsdoc/` per la komando `npm run doc`.
 
 1. SQL - la skemo de la datumbazo `SQlite3`, kiun ni provizas en la ĉiutagaj eldonoj kaj uzas en la komforta redaktilo por serĉado, referencado ktp.
 

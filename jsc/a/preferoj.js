@@ -1,17 +1,31 @@
 
 /* jshint esversion: 6 */
 
-// (c) 2020, 2021 Wolfram Diestel
+// (c) 2020 - 2022 Wolfram Diestel
+// laŭ GPL 2.0
 
 //const lingvoj_xml = "../cfg/lingvoj.xml";
 
 // difinu ĉion sub nomprefikso "preferoj"
+
+/**
+ * La nomspaco 'preferoj' enhavas funkciojn kaj variablojn por
+ * konservi, legi, ŝangi la preferojn de la uzanto.
+ * @namespace {Function} preferoj
+ */
 var preferoj = function() {  
     
     var lingvoj = [];
     var seanco = {};
     var dato = Date.now();
     
+    /**
+     * Ŝargas la lingvo-liston de la servilo, dividas ilin en 
+     * preferataj kaj aliaj kaj preparas la prezenton kiel
+     * listoj en la prefero-adapata dialogo
+     * @memberof preferoj
+     * @inner
+     */
     function load_pref_lng() {
         HTTPRequest('GET', globalThis.lingvoj_xml, {},
         function() {
@@ -62,6 +76,12 @@ var preferoj = function() {
         });     
     }
 
+    /**
+     * Kaŝas / malkaŝas  preferatajn lingvojn post
+     * unuopa adapto en la listo de aliaj lingvoj.
+     * @memberof preferoj
+     * @inner
+     */
     function change_pref_lng() {
         var selection = document.getElementById("preferoj")
             .querySelector('input[name="pref_lingvoj"]:checked').value.split('_');
@@ -75,7 +95,12 @@ var preferoj = function() {
         }
     }
 
-     
+    /**
+     * Reagas al evento por aldoni lingvon al preferataj
+     * @memberof preferoj
+     * @inner
+     * @param {Event} event 
+     */
     function aldonuLingvon(event) {
         var el = event.target; 
 
@@ -92,6 +117,12 @@ var preferoj = function() {
         }
     }
 
+    /**
+     * Reagas al evento por forigi lingvon el la preferataj
+     * @memberof preferoj
+     * @inner
+     * @param {Event} event 
+     */
     function foriguLingvon(event) {
         var el = event.target; 
 
@@ -110,6 +141,12 @@ var preferoj = function() {
     }
 
 
+    /**
+     * Prezentas dialogon kun ĉiuj difinitaj lingvoj kaj la momente
+     * prefertaj por ebligi adapti tiujn.
+     * @memberof preferoj
+     * @param {Function} sePreta 
+     */
     function dialog(sePreta) {
         var pref = document.getElementById("pref_dlg");
         var inx = [['a','b'],['c','g'],['h','j'],['k','l'],['m','o'],['p','s'],['t','z']];
@@ -157,32 +194,47 @@ var preferoj = function() {
     }
 
 
-    // kreas grupon de opcioj (radio), donu ilin kiel vektoro da {id,label}
+    /**
+     * Kreas grupon de opcioj (radio), donu 
+     * ilin kiel vektoro da {id,label}. Ni uzas tion por grupigi la
+     * lingvoj laŭ alfabeto ĉar ni ne povas montri ciujn samtempe
+     * @memberof preferoj
+     * @inner
+     * @param {Element} parent - la parenca elemento por la opcioj
+     * @param {string} name - la nevidebla nomo (atributo 'name') 
+     * @param {string|null} glabel - la videbla nomo de la grupo
+     * @param {Array<{id,label}>} radios - listo de HTML-id por la opcioj
+     * @param {Function} handler - reago al elekto-eventoj
+     */
     function add_radios(parent,name,glabel,radios,handler) {
         if (glabel) {
-            var gl = document.createElement("LABEL");
+            const gl = document.createElement("LABEL");
             gl.appendChild(document.createTextNode(glabel));
             parent.appendChild(gl);   
         }
-        var first = true;
-        for (var r of radios) {
-            var span = document.createElement("SPAN");
-            var input = first?
-                ht_element("INPUT",{name: name, type: "radio", id: r.id, checked: "checked", value: r.id}) :
-                ht_element("INPUT",{name: name, type: "radio", id: r.id, value: r.id});
-            first = false;
-            var label = ht_element("LABEL",{for: r.id}, r.label);
-            span.appendChild(input);
-            span.appendChild(label);
-            parent.appendChild(span);
+        let first = true;
+        if (radios) {
+            for (const r of radios) {
+                const span = document.createElement("SPAN");
+                const input = first?
+                    ht_element("INPUT",{name: name, type: "radio", id: r.id, checked: "checked", value: r.id}) :
+                    ht_element("INPUT",{name: name, type: "radio", id: r.id, value: r.id});
+                first = false;
+                const label = ht_element("LABEL",{for: r.id}, r.label);
+                span.appendChild(input);
+                span.appendChild(label);
+                parent.appendChild(span);
+            }    
         }
         if(handler) {
             parent.addEventListener("click",handler);
         }
     }
 
-
-    // memoras valorojn de preferoj en la loka memoro de la retumilo
+    /**
+     * Konservas valorojn de preferoj en la loka memoro de la retumilo.
+     * @memberof preferoj
+     */    
     function store() {
         if (lingvoj.length > 0) {
             var prefs = {};
@@ -193,7 +245,12 @@ var preferoj = function() {
     }
 
 
-    // reprenas memorigitajn valorojn de preferoj el la loka memoro de la retumilo
+    
+    /**
+     * Reprenas memorigitajn valorojn de preferoj el la 
+     * loka memoro de la retumilo.
+     * @memberof preferoj
+     */
     function restore() {
         var str = window.localStorage.getItem("revo_preferoj");            
         var prefs = (str? JSON.parse(str) : null);
@@ -203,22 +260,44 @@ var preferoj = function() {
         dato = (prefs && prefs["w:prefdat"])? prefs["w:prefdat"] : Date.now();
     }
 
-    // memoras staton de la seanco - forgesota kiam la seanco finiĝas/retumilo fermiĝas
+    
+    /**
+     * Memoras staton de la seanco - forgesota 
+     * kiam la seanco finiĝas/retumilo fermiĝas
+     * @memberof preferoj
+     * @inner
+     */
     function storeSession() {
         window.sessionStorage.setItem("revo_seanco",JSON.stringify(seanco));     
     }
 
-    // reprenas memorigitajn valorojn de seanco el la seanco-memoro de la retumilo
+
+    /**
+     * Reprenas memorigitajn valorojn de seanco el 
+     * la seanco-memoro de la retumilo.
+     * @memberof preferoj
+     * @inner
+     */
     function restoreSession() {
         var str = window.sessionStorage.getItem("revo_seanco");            
         seanco = (str? JSON.parse(str) : null);
     }
 
+    /**
+     * Redonas la kompletan lingvoliston.
+     * @memberof preferoj
+     * @returns la lingvolisto
+     */
     function languages() {
         return lingvoj;
     }
 
-
+    /**
+     * Redonas la daton de la preferoj. (En la unuaj tagoj ni ebligas
+     * adapti lingvojn en la traduklistoj de la sekcioj, poste plu nur en la piedlinio.)
+     * @memberof preferoj
+     * @returns la dato kiam ni metis la preferojn
+     */
     function date() {
         return dato;
     }

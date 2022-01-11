@@ -145,7 +145,7 @@ export function retoSerĉo(event) {
             if ( self.is(".result-link") )   {
                 const href = self.attr("href");
                 const hpos = href.search('http');
-                last_link = hpos>=0? decodeURIComponent(href.substr(hpos)) : href;
+                last_link = hpos>=0? decodeURIComponent(href.slice(hpos)) : href;
                 last_title = self.text();
 
             // kreu trov-eron
