@@ -253,6 +253,7 @@ input[type='button']:focus,
 
 fieldset {
     border: 1px solid var(--main-brd-clr); /*#327e04;*/
+    border-radius: 3px;
 }
 
 fieldset legend {
@@ -832,9 +833,11 @@ fieldset legend {
     padding: 0.3em;
 }
 
-#sercho_trovoj {
+#sercho_trovoj,
+#sercho_klasikaj,
+#sercho_postaj {
     border: 1px solid silver;
-    border-radius: 6px;
+    border-radius: 4px;
     /*padding: 1em;*/
     margin-top: 0;
     
@@ -845,6 +848,19 @@ fieldset legend {
     
     margin-bottom: 0.5em;
     overflow: auto;
+}
+
+#sercho_klasikaj,
+#sercho_postaj {
+    flex: 3
+}
+
+#sercho_klasikaj label,
+#sercho_postaj label {
+    width: 70ex;
+    text-align: left;
+    padding-left: 4.5ex;
+    text-indent: -2.5ex;
 }
 
 #surmetita {

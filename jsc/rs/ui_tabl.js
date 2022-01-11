@@ -6,7 +6,7 @@
 
 import { show_xhr_error } from './ui_dlg.js';
 import { vortokontrolo, xmlkontrolo, klrkontrolo, surmetita_dialogo } from './ui_err.js';
-import { vikiSerĉo, citaĵoSerĉo, retoSerĉo, bildoSerĉo } from './ui_srch.js';
+import { vikiSerĉo, citaĵoSerĉo, verkoListo, retoSerĉo, bildoSerĉo } from './ui_srch.js';
 
 const revo_url = 'https://retavortaro.de';
 
@@ -217,6 +217,9 @@ export default function() {
     //### subpaĝo "serĉo"
     $("#s_klasikaj").click("klasikaj",citaĵoSerĉo);
     $("#s_postaj").click("postaj",citaĵoSerĉo);
+    $("#sa_klasikaj").click("klasikaj",verkoListo);
+    $("#sa_postaj").click("postaj",verkoListo);
+
     $("#s_vikipedio").click(vikiSerĉo);
     $("#s_anaso").click(retoSerĉo);
     $("#s_bildoj").click(bildoSerĉo);

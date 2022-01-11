@@ -7,6 +7,10 @@
 //var sercho_focused_button = null;
 console.debug("Instalante la serĉfunkciojn...");
 
+/**
+ * Preparas la serĉon, kontrolante, ĉu estas valida serĉesprimo, malplenigante
+ * la trovokampon.
+ */
 function _serĉo_preparo() {
     if (! $("#sercho_sercho").validate()) return;
 
@@ -16,6 +20,10 @@ function _serĉo_preparo() {
     return true;
 }
 
+/**
+ * Vokas la serĉon en Vikipedio kaj prezentas la rezultojn
+ * @param {Event} event
+ */
 export function vikiSerĉo(event) {
     event.preventDefault();
 
@@ -59,6 +67,12 @@ export function vikiSerĉo(event) {
         });
 }
 
+/**
+ * Redonas la URL-on, kiu apartenas al bibliografiero.
+ * @param {Array<{label,value}>} source - la bibliografia listo 
+ * @param {string} bib - la mallongigo de la serĉata bibliografiero
+ * @returns la URL 
+ */
 function _bib_url(source,bib) {
     for (var entry of source) {
         if (entry.value == bib) {
@@ -67,16 +81,25 @@ function _bib_url(source,bib) {
     }
 }
 
+/**
+ * Vokas la citaĵo-serĉon kaj prezentas la trovojn en la trovo-kampo.
+ * @param {Event} event
+ */
 export function citaĵoSerĉo(event) {
     event.preventDefault();
+    const vlist = event.data;
 
     if (! _serĉo_preparo()) return;
+
+    // eltrovu ĉu la verko-listo estas limigita
+    const vrkj = elektitajVerkoj(vlist).join(',');
 
     $.alportu(
         'citajho_sercho',
         { 
             sercho: $("#sercho_sercho").val(),
-            kie: event.data
+            kie: vlist,
+            vrk: vrkj
         }, 
         '#sercho_error')
     .done(
@@ -115,6 +138,70 @@ export function citaĵoSerĉo(event) {
     );
 }
 
+
+/**
+ * Vokas la verko-liston kaj prezentas ĝin por limigeblo de posta citaĵo-serĉo.
+ * @param {Event} event
+ */
+export function verkoListo(event) {
+    event.preventDefault();
+    const vlist = event.data;
+    const vdiv = $("#sercho_"+vlist);
+
+    if (vdiv.children().length) {
+        // listo jam plenigita, ni nur devas remontri ĝin
+        vdiv.removeClass('kasxita');
+    } else {
+        // ni ŝargas la verkoliston...
+        $.alportu(
+            'verkaro',
+            { 
+                kiu: vlist
+            }, 
+            '#sercho_error')
+        .done(
+            function(data) {
+                if (data.length && data[0].vrk) {
+                    const vl = vdiv.append('<div></div>').children().first();
+                    const vrkj = data.sort((a,b)=>(a.jar-b.jar||0))
+                    for (const v of vrkj) {
+                        const id = "vl_"+v.vrk;
+                        let txt = v.aut? v.aut+': ':'';
+                        txt += v.tit? v.tit : v.nom;
+                        txt += v.jar? ' ('+v.jar+')' : '';
+                        vl.append('<label for="'+ id + '">' + txt + '</label>'
+                            + '<input id="'+ id +'" type="checkbox" checked '
+                            + 'name="cvl_' + vlist + '" value="' + v.vrk + '"></input><br/>')
+                    }
+                    vl.children("input").checkboxradio();
+                    vdiv.removeClass('kasxita');
+                }
+            }
+        );
+    }
+}
+
+/**
+ * Eltrovas, kiuj verkoj estas elektitaj
+ * @param {string} vlist - 'klasikaj' au 'postaj'
+ * @returns liston de verkoj (ties identigiloj)
+ */
+export function elektitajVerkoj(vlist) {
+    let vl = [];
+    if (vlist == 'klasikaj' || vlist == 'postaj') {
+        const vdiv = $("#sercho_"+vlist);
+        vdiv.find(":checked").each((i,e) => {
+            const v = e.value;
+            vl.push(v)
+        });
+    }
+    return vl;
+}
+
+/**
+ * Vokas la TTT-serĉon kaj prezentas la trovojn
+ * @param {Event} event
+ */
 export function retoSerĉo(event) {
     event.preventDefault();
     if (! _serĉo_preparo()) return;
@@ -181,7 +268,10 @@ export function retoSerĉo(event) {
     });
 }
 
-
+/**
+ * Vokas la bildo-serĉon (en Wikimedia) kaj prezentas la rezultojn.
+ * @param {Event} event
+ */
 export function bildoSerĉo(event) {
     event.preventDefault();
 
@@ -248,6 +338,11 @@ export function bildoSerĉo(event) {
     );
 }
 
+/**
+ * Akiras la informojn pri bildoj el Wikimedia laŭ ties paĝ-indentigiloj
+ * kaj prezentas enŝovas la rezultojn en la bildoprezento.
+ * @param {Array<string>} pageids
+ */
 function _bildo_info(pageids) {
 
     const ids = pageids.join('|');
@@ -289,6 +384,12 @@ function _bildo_info(pageids) {
         });
 }
 
+
+
+/**
+ * Akiras bildeto-informojn (antaŭrigardoj de la bildoj)
+ * @param {Array<string>} paghoj
+ */
 function _bildeto_info(paghoj) {
     const ps = paghoj.join('|');
 
@@ -323,6 +424,10 @@ function _bildeto_info(paghoj) {
         });
 }
 
+/** 
+ * Akiras aldonajn informojn pri bildo (aŭtoro/fonto, permesilo ks)
+ * @param {string} dosiero
+ */
 function _bildo_info_2(dosiero) {
 
     $.alportu(
@@ -376,7 +481,9 @@ function _bildo_info_2(dosiero) {
     });
 }
 
-
+/**
+ * Difinas jqueryui-elementon por prezenti unuopan trovon.
+ */
 $.widget( "redaktilo.Trovo", {
     options: {
         type: "teksto",
@@ -513,6 +620,10 @@ $.widget( "redaktilo.Trovo", {
     }
 });
 
+
+/**
+ * Difinas jqueryui-elementon por la butono de fonto-rigardo.
+ */
 $.widget( "redaktilo.RigardoBtn", {
     options: {
         url: null
@@ -542,6 +653,11 @@ $.widget( "redaktilo.RigardoBtn", {
 });
 
 
+
+/**
+ * Difinas jqueryui-elementon por lanĉi ekzemplo-dialogon
+ * kiu helpas al uzanto enmeti la trovaĵon en la XML-artikolon.
+ */
 $.widget( "redaktilo.EkzemploBtn", {
     options: {
         data: null,
@@ -589,6 +705,10 @@ $.widget( "redaktilo.EkzemploBtn", {
 
 
 
+/**
+ * Difinas jqueryui-elementon por lanĉi bildo-dialogon
+ * kiu helpas al uzanto enmeti la trovaĵon en la XML-artikolon.
+ */
 $.widget( "redaktilo.BildoBtn", {
     options: {
         data: null,
