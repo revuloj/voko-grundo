@@ -11,12 +11,19 @@
 
 <stilo kodo="FRAZ">frazaĵo</stilo>
 <stilo kodo="FIG">figure</stilo>
-<stilo kodo="VULG">vulgare</stilo>
-<stilo kodo="RAR">malofte</stilo>
-<stilo kodo="POE">poezie</stilo>
-<stilo kodo="ARK">arkaismo</stilo>
-<stilo kodo="EVI">evitinde</stilo>
+<!-- ĉu FIG ni komprenu kiel "stilfigure" aŭ nur
+kiel "metafore", en la lasta interpreto ni eble bezonas
+ankoraŭ:
+<stilo kodo="METN">metonimie</stilo>
+<stilo kodo="SNKD">sinekdoĥe</stilo>
+-->
 <stilo kodo="KOMUNE">komune</stilo>
+<stilo kodo="VULG">vulgare</stilo>
+<stilo kodo="FAK">fake</stilo>
+<stilo kodo="POE">poezie</stilo>
+<stilo kodo="EVI">evitinde</stilo>
+<stilo kodo="RAR">malofte</stilo>
+<stilo kodo="ARK">arkaismo</stilo>
 <stilo kodo="NEO">neologismo</stilo>
 
 </stiloj>
