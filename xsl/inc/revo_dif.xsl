@@ -215,6 +215,9 @@ kaj stiloj (em,ctl,sup...)
     <xsl:when test=".='FIG'">
       <xsl:text>(figure) </xsl:text>
     </xsl:when>
+    <xsl:when test=".='FAK'">
+      <xsl:text>(fake) </xsl:text>
+    </xsl:when>
     <xsl:when test=".='ARK'">
       <xsl:text>(arkaismo) </xsl:text>
     </xsl:when>
