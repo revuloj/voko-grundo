@@ -138,6 +138,228 @@ export function citaĵoSerĉo(event) {
     );
 }
 
+/**
+ * Almetas regulesprimon al la serĉvorto
+ * @param {Event} event
+ */
+export function regulEsprimo(event) {
+
+    // eble traktu la helpopeton en aparta metodo!
+    const re = event.target.id;
+    if (re == "re_helpo") {
+        window.open(globalThis.help_base_url + globalThis.help_regulesp);
+        return;
+    }
+
+    // ordigas la afiksoj laŭ la vortspecoj (i,a,o), al
+    // kiuj ili estas aplikeblaj kaj kiu vortspeco povas
+    // rezulti, ekz-e "o-a", signifas aplikebla al substantivo kaj
+    // rezultanta al adjektivo, "?" signifas ciuj tri vortspecoj...
+    // PLIBONIGU: ĉar ni fine ciuokaze elfiltras laŭ radikkaraktero kaj
+    // celvortspeco, ni povas limiĝi al preparo de trafaj paroj...
+    function preparu(afiksoj) {
+        let r = {
+            a:{a:[],i:[],o:[]},
+            i:{a:[],i:[],o:[]},
+            o:{a:[],i:[],o:[]},
+            n:{a:[],i:[],o:[]}};
+
+        // alpendigas afikson af al listoj de objekto obj laŭ
+        // celvortspeco al 
+        function push(af,al,obj) {
+            const push_no_dup = (el,arr) => { if (arr.indexOf(el)==-1) arr.push(el);};            
+            if (al == '?') {
+                push_no_dup(af,obj.a);
+                push_no_dup(af,obj.i);
+                push_no_dup(af,obj.o);
+            } else {
+                push_no_dup(af,obj[al]);
+            }
+        }
+
+        for (const [affix,sk] of Object.entries(afiksoj)) {
+            const skemoj = sk.split('|');
+            for (const s of skemoj) {
+                const de = s[0];
+                const al= s[2];
+                if (de == '?') {
+                    push(affix,al,r.a);
+                    push(affix,al,r.i);
+                    push(affix,al,r.o);
+                } else {
+                    push(affix,al,r[de]);
+                }
+            }
+        }
+
+        return r;
+    }
+
+    // redonu sufiksojn aplikeblajn 
+    // al radikkaraktero rk kun rezulta vortspeco vs
+    function sufiksoj(rk,vs) {
+        const sufiksoj = preparu({
+        "[aio]n?t": "i-o|i-a",
+        "aĉ": "?-?",
+        "ad": "i-?",
+        "aĵ": "?-o",
+        "a[nr]": "o-o",
+        "ebl": "i-a",
+        "ec": "a-o|o-o",
+        "eg": "?-?",
+        "ej": "?-o",
+        "em": "i-a|a-a|i-o|a-o",
+        "end": "i-a",
+        "er": "o-o",
+        "estr": "o-o",
+        "et": "?-?",
+        "id": "o-o",
+        "i[gĝ]": "i-?|n-i",
+        "il": "i-o",
+        "in": "o-o|o-a",
+        "[ei]nd": "i-a|i-o",
+        "ing": "o-o",
+        "is[mt]": "o-o|o-a",
+        "obl": "n-o|n-a",
+        "o[np]": "n-o|n-a",
+        "uj": "o-o",
+        "ul": "?-o",
+        "um": "?-?",
+        });
+        return sufiksoj[rk][vs=='e'?'a':vs];
+    };
+    
+    // redonu prefiksojn aplikeblajn 
+    // al radikkaraktero rk kun rezulta vortspeco vs
+    function prefiksoj(rk,vs) {
+        const prefiksoj = preparu({
+        // bazaj prefiksoj
+        "bo": "o-o|o-a",
+        "ĉef": "o-o|o-a",
+        "dis": "i-?",
+        "ek": "i-?",
+        "eks": "o-o|o-a",
+        "fi": "?-?",
+        "ge": "o-o|o-a",
+        "mal": "?-?",
+        "mis": "i-?",
+        "pra": "o-o|o-a",
+        "pseŭdo": "?-?",
+        "re": "i-?",
+
+        // prepozicioj kiel prefiksoj aŭ kunderivado
+        "al": "i-?",
+        "antaŭ": "i-?|o-a",
+        "pri": "i-?",
+        "apud": "i-?|o-a",
+        "ĉe": "i-?|o-a",
+        "ĉirkaŭ": "i-?|o-a",        
+        "de": "i-?",
+        "dum": "i-a|o-a",
+        "ekster": "a-a|o-a",
+        "el": "i-?",
+        "en": "i-?|o-a",
+        "ĝis": "i-?",
+        "inter": "i-?|o-a|o-o",
+        "kontraŭ": "i-?|o-a",
+        "krom": "i-?|o-o",
+        "kun": "i-?",
+        "laŭ": "i-?|?-a",
+        "per": "i-?|o-a",
+        "por": "i-?",
+        "post": "i-?",
+        "preter": "i-?",
+        "pri": "i-?|o-a",
+        "pro": "i-?",
+        "sen": "?-a",
+        "sub": "o-o|o-a|i-?",
+        "super": "o-o|o-a|a-a|i-?",
+        "sur": "i-?|o-a",
+        "tra": "i-?|o-a",
+        "trans": "i-?|o-a",        
+
+        // adverboj kiel prefiksoj aŭ en kunderivado
+        "ambaŭ": "o-a|i-a",
+        "ĉi": "a-a",
+        "ĉiam": "a-a",
+        "pli": "a-a",
+        "plu": "i-?",
+        "for": "i-?",
+        "ne": "a-a|o-a",
+        "tiel": "a-a",
+        "nun": "o-o|o-a",
+        "mem": "i-?",
+        "kvazaŭ": "?-?",
+        "tro": "a-?",
+
+        // tabelvortoj uzataj en kunderivado        
+        "[ĉtk]?iu": "o-a",
+        "neniu": "o-a",
+        "[ĉtk]?ia": "o-a",
+        "nenia": "o-a"
+        });
+        return prefiksoj[rk][vs=='e'?'a':vs];
+    }
+
+    const srch = $("#sercho_sercho");
+    const v = srch.val();
+    const sele = srch[0].selectionEnd;
+
+    // kiu radikkaraktero estis elektita?
+    const rk = $("#regexes input[name='re_rk']:checked").val();
+    // kiun vortspecon ni sercu?
+    const vs = $("#regexes input[name='re_vs']:checked").val();
+    // ĉu prefikso/sufikso estu aplikataj
+    const prf = $("#re_pref").prop("checked");
+    const suf = $("#re_suf").prop("checked");
+    
+    const prfj = (prf&&rk&&vs? '('+prefiksoj(rk,vs).join('|')+')' : '');
+    // PLIBONIGU: ni elektas tie ĉi la sufiksojn laŭ radikkaraktero,
+    // sed eble ni devus uzi ciujn, kiuj rezultas el prefiksa apliko
+    // aliflanke ne klaras ĉu unue la prefikso aŭ la sufikso aplikiĝas
+    // al la radiko, sed verŝajne pli kutime unue la prefikso...
+    const sufj = (suf&&rk&&vs? '('+sufiksoj(rk,vs).join('|')+')' : '');
+
+    const fin = {
+        o: "oj?n?\\b", 
+        a: "aj?n?\\b", 
+        e: "en?\\b", 
+        i: "([ao]s|[ui]s?)\\b"
+    }[vs];
+
+    $("#re_esprimo").text(prfj+v+sufj+fin);
+
+/*
+    const re = event.target.id;
+    if (re == "re_helpo") {
+        window.open(globalThis.help_base_url + globalThis.help_regulesp);
+    } else if (re == "re_b") {
+        srch.val("\\b"+v);
+    } else if ( re == "re_pref") {
+        const x = {
+            re_opref: "(ambaŭ|bo|ĉef|eks|ekster|en|fi|ge|kvazaŭ|mal|ne|pra|sub|super)",
+            re_ipref: "(al|antaŭ|apud|ĉe|ĉirkaŭ|dis|de|ek|e[ln]|for|ĝis|inter|kontraŭ|krom|kun|kvazaŭ"
+                +"|laŭ|mal|mem|mis|re|per|plu|por|post|preter|pr[io]|sub|super|tra|trans)",
+            re_apref: "(ekster|kvazaŭ|ne|pli|sub|super|tro)"}[re];
+        srch.val(v.startsWith("\\b")? 
+            "\\b"+x+v.substring(2) 
+            : x+v);
+    } else {
+        const pos = (sele == v.length || v[sele] == " ")? sele : v.length;
+        const x = {
+            re_isuf: "(a[dĉĵ]|e[jgtm]|[aio]n?t|ebl|[ie]nd|i[lgĝ]|u[lm])",
+            re_asuf: "(e[cgtjm]|u[lm]|a[ĵĉ]|estr|i[gĝ])",
+            re_osuf: "(a[nĉĵ]|e[rcgjt]|i[ndgĝ]|ind|is[mt]|u[jlm])",
+            re_nsuf: "(o[np]|obl)",
+            re_o: "oj?n?\\b", 
+            re_a: "aj?n?\\b", 
+            re_e: "en?\\b", 
+            re_i: "([ao]s|[ui]s?|[aoi]n?taj?n?)\\b"
+        }[re];
+        srch.val(v.substring(0,pos)+x+v.slice(pos));
+    }
+    */
+}
 
 /**
  * Vokas la verko-liston kaj prezentas ĝin por limigeblo de posta citaĵo-serĉo.
@@ -147,8 +369,9 @@ export function verkoListo(event) {
     event.preventDefault();
     const vlist = event.data;
     const vdiv = $("#sercho_"+vlist);
+    const vl = $("#sercho_"+vlist+"_vl");
 
-    if (vdiv.children().length) {
+    if (vl.children().length) {
         // listo jam plenigita, ni nur devas remontri ĝin
         vdiv.removeClass('kasxita');
     } else {
@@ -162,7 +385,6 @@ export function verkoListo(event) {
         .done(
             function(data) {
                 if (data.length && data[0].vrk) {
-                    const vl = vdiv.append('<div></div>').children().first();
                     const vrkj = data.sort((a,b)=>(a.jar-b.jar||0))
                     for (const v of vrkj) {
                         const id = "vl_"+v.vrk;
@@ -178,6 +400,36 @@ export function verkoListo(event) {
                 }
             }
         );
+    }
+}
+
+/**
+ * Elektas/malektas verkojn en la verko-listo.
+ * Per butono "preta" la elekto kaŝiĝas.
+ * @param {Event} event
+ */
+export function verkElekto(event) {
+    const btn = event.target;
+    const kadr = $(btn).parent();
+    const val = btn.value;
+    const id = btn.id;
+
+    function check_uncheck(v) {
+        // (mal)elektu ĉiujn
+        const inputs = kadr.find("input");
+        inputs.prop("checked",v);
+        inputs.checkboxradio("refresh");
+    }
+
+    if (val == "1") {
+        // elektu ĉiujn
+        check_uncheck(true);
+    } else if (val == "0") {
+        // elektu ĉiujn
+        check_uncheck(false);
+    } else if (val == "preta") {
+        // kaŝu la liston
+        kadr.addClass("kasxita");
     }
 }
 

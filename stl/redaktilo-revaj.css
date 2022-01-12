@@ -133,7 +133,7 @@ IMG.ref {
 }
 
 #sercho_form .ui-button:hover {
-    border: none !important;
+    border: 1px hidden !important;
 }
 
 #kash_btn {
@@ -828,14 +828,15 @@ fieldset legend {
     margin-bottom: 0.5em;
 }
 
-#sercho_form .ui-button {
+#sercho_form .ui-button,
+#sercho_klasikaj button,
+#sercho_postaj button {
     font-size: 88%;
     padding: 0.3em;
+    margin: .2em;
 }
 
-#sercho_trovoj,
-#sercho_klasikaj,
-#sercho_postaj {
+#sercho_trovoj {
     border: 1px solid silver;
     border-radius: 4px;
     /*padding: 1em;*/
@@ -852,12 +853,28 @@ fieldset legend {
 
 #sercho_klasikaj,
 #sercho_postaj {
-    flex: 3
+    border: 1px solid silver;
+    border-radius: 4px;
+    /*padding: 1em;*/
+    margin-top: 0;
+    
+    flex: 2;
+    -webkit-flex: 1;
+    overflow: hidden;
+    
+    margin-bottom: 0.5em;
 }
 
-#sercho_klasikaj label,
-#sercho_postaj label {
-    width: 70ex;
+#sercho_klasikaj_vl,
+#sercho_postaj_vl {
+    height: 100%;
+    max-width: 55em;
+    overflow: auto;
+} 
+
+#sercho_klasikaj_vl label,
+#sercho_postaj_vl label {
+    width: 50em;
     text-align: left;
     padding-left: 4.5ex;
     text-indent: -2.5ex;

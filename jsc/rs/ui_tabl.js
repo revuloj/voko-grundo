@@ -6,7 +6,7 @@
 
 import { show_xhr_error } from './ui_dlg.js';
 import { vortokontrolo, xmlkontrolo, klrkontrolo, surmetita_dialogo } from './ui_err.js';
-import { vikiSerĉo, citaĵoSerĉo, verkoListo, retoSerĉo, bildoSerĉo } from './ui_srch.js';
+import { vikiSerĉo, citaĵoSerĉo, regulEsprimo, verkoListo, verkElekto, retoSerĉo, bildoSerĉo } from './ui_srch.js';
 
 const revo_url = 'https://retavortaro.de';
 
@@ -219,36 +219,22 @@ export default function() {
     $("#s_postaj").click("postaj",citaĵoSerĉo);
     $("#sa_klasikaj").click("klasikaj",verkoListo);
     $("#sa_postaj").click("postaj",verkoListo);
+    $("#sercho_klasikaj button").click(verkElekto);
+    $("#sercho_postaj button").click(verkElekto);
 
     $("#s_vikipedio").click(vikiSerĉo);
     $("#s_anaso").click(retoSerĉo);
     $("#s_bildoj").click(bildoSerĉo);
 
-    $("#regexes input").button();
+    //$("#regexes input[type='button']").button();
+    $("#regexes input[type='radio']").checkboxradio();
+    $("#regexes input[type='checkbox']").checkboxradio();
     /*
     $("#re_b").click(
         () => $("#sercho_sercho")
             .val("\\b"+$("#sercho_sercho").val())
     );*/
-    $("#regexes input").click((event) => {
-        const srch = $("#sercho_sercho");
-        const v = srch.val();
-        const sele = srch[0].selectionEnd;
-        const re = event.target.id;
-        if (re == "re_helpo") {
-            window.open(globalThis.help_base_url + globalThis.help_regulesp);
-        } else if (re == "re_b") {
-            srch.val("\\b"+v);
-        } else {
-            const pos = (sele == v.length || v[sele] == " ")? sele : v.length;
-            const x = {
-                re_o: "oj?n?\\b", 
-                re_a: "aj?n?\\b", 
-                re_ntr: "([ao]s|[ui]s?|[aoi]ntaj?n?)\\b",
-                re_tr: "([ao]s|[ui]s?|[aoi]n?taj?n?)\\b"}[re];
-            srch.val(v.substring(0,pos)+x+v.slice(pos));
-        }
-    });
+    $("#regexes input").click(regulEsprimo);
 
     $( "#sercho_butonoj").Klavaro({
         artikolo: $("#xml_text"),
