@@ -189,6 +189,9 @@ montru tie, cxar ili estas esenca parto de tiuj -->
 
 </xsl:template>
 
+<xsl:template match="ofc" mode="tradukoj">
+  <sup class="ofc"><xsl:value-of select="."/>
+</sup></xsl:template>
 
 <!--
 <xsl:template match="trdgrp/trd">

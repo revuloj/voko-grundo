@@ -47,7 +47,11 @@ araneo|araneo:debug)
     docker cp ${JSC} ${araneo_id}:${todir}/jsc
     docker cp ${CSS} ${araneo_id}:${todir}/stl
     ;;
-
+araneo-xsl)
+    araneo_id=$(docker ps --filter name=araneujo_araneo -q)
+    todir=/hp/af/ag/ri/files/xsl/inc
+    docker cp xsl/inc/revo_trd.xsl ${araneo_id}:${todir}
+    ;;    
 cetonio)
     npm run build:rsj
     npm run build:rsc
