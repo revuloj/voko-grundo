@@ -836,6 +836,18 @@ fieldset legend {
     margin: .2em;
 }
 
+#re_esprimo:empty {
+    display: none;
+}
+#re_esprimo {
+    word-break: break-all;
+    padding: .5em;
+    border-radius: 4px;
+    background-color: var(--main-ac2-bgr-clr);
+    border-left: 2px dotted var(--main-brd-clr);
+    margin-top: .2em;
+}
+
 #sercho_trovoj {
     border: 1px solid silver;
     border-radius: 4px;

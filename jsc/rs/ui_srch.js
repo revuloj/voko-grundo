@@ -21,6 +21,163 @@ function _serĉo_preparo() {
 }
 
 /**
+ * Preparas afiksojn laŭ la vortspecoj (i,a,o), al
+ * kiuj ili estas aplikeblaj kaj kiu vortspeco povas
+ * rezulti, ekz-e "o-a", signifas aplikebla al substantivo kaj
+ * rezultanta al adjektivo, "?" signifas ciuj tri vortspecoj...
+ * Alternativoj estas apartigitaj per '|', ekz-e "o-a|a-a"
+ * 
+ * @returns {{prefiksoj:{a,i,o},sufiksoj:{a,i,o,n}}}
+ */
+const afiksoj = function() {
+
+    // redonu sufiksojn aplikeblajn 
+    // al radikkaraktero rk kun rezulta vortspeco vs
+    const _sufiksoj = {
+        "[aio]n?t": "i-u|i-a",
+        "aĉ": "?-?",
+        "ad": "i-?",
+        "aĵ": "?-o",
+        "an": "o-u",
+        "ar": "o-o",
+        "ebl": "i-a",
+        "ec": "a-o|o-o",
+        "eg": "?-?",
+        "ej": "?-o",
+        "em": "i-a|a-a|i-o|a-o",
+        "end": "i-a",
+        "er": "o-o",
+        "estr": "o-u",
+        "et": "?-?",
+        "id": "u-u|o-o",
+        "i[gĝ]": "i-?|n-i",
+        "il": "i-o",
+        "in": "u-u|u-a",
+        "[ei]nd": "i-a|i-o",
+        "ing": "o-o",
+        "ism": "o-o|o-a",
+        "ist": "o-u|o-a",
+        "obl": "n-o|n-a",
+        "o[np]": "n-o|n-a",
+        "uj": "o-o",
+        "ul": "?-u",
+        "um": "?-?",
+    };
+    
+    const _prefiksoj = {
+        // bazaj prefiksoj
+        "bo": "u-u|u-a",
+        "ĉef": "o-o|o-a",
+        "dis": "i-?",
+        "ek": "i-?",
+        "eks": "o-o|o-a",
+        "fi": "?-?",
+        "ge": "u-u|u-a",
+        "mal": "?-?",
+        "mis": "i-?",
+        "pra": "o-o|o-a",
+        "pseŭdo": "?-?",
+        "re": "i-?",
+
+        // prepozicioj kiel prefiksoj aŭ kunderivado
+        "al": "i-?",
+        "antaŭ": "i-?|o-a",
+        "pri": "i-?",
+        "apud": "i-?|o-a",
+        "ĉe": "i-?|o-a",
+        "ĉirkaŭ": "i-?|o-a",        
+        "de": "i-?",
+        "dum": "i-a|o-a",
+        "ekster": "a-a|o-a",
+        "el": "i-?",
+        "en": "i-?|o-a",
+        "ĝis": "i-?",
+        "inter": "i-?|o-a|o-o",
+        "kontraŭ": "i-?|o-a",
+        "krom": "i-?|o-o",
+        "kun": "i-?",
+        "laŭ": "i-?|?-a",
+        "per": "i-?|o-a",
+        "por": "i-?",
+        "post": "i-?",
+        "preter": "i-?",
+        "pri": "i-?|o-a",
+        "pro": "i-?",
+        "sen": "?-a",
+        "sub": "o-o|o-a|i-?",
+        "super": "o-o|o-a|a-a|i-?",
+        "sur": "i-?|o-a",
+        "tra": "i-?|o-a",
+        "trans": "i-?|o-a",        
+
+        // adverboj kiel prefiksoj aŭ en kunderivado
+        "ambaŭ": "o-a|i-a",
+        "ĉi": "a-a",
+        "ĉiam": "a-a",
+        "pli": "a-a",
+        "plu": "i-?",
+        "for": "i-?",
+        "ne": "a-a|o-a",
+        "tiel": "a-a",
+        "nun": "o-o|o-a",
+        "mem": "i-?",
+        "kvazaŭ": "?-?",
+        "tro": "a-?",
+
+        // tabelvortoj uzataj en kunderivado        
+        "[ĉtk]?iu": "o-a",
+        "neniu": "o-a",
+        "[ĉtk]?ia": "o-a",
+        "nenia": "o-a"
+    };
+
+    function _preparo(afiksoj) {
+
+        let r = {
+          "?":{"?":[],a:[],i:[],o:[]},
+            a:{"?":[],a:[],i:[],o:[]},
+            i:{"?":[],a:[],i:[],o:[]},
+            o:{"?":[],a:[],i:[],o:[]},
+            u:{"?":[],a:[],i:[],o:[]},
+            n:{"?":[],a:[],i:[],o:[]}};
+
+        const push_no_dup = (el,arr) => 
+            { if (arr.indexOf(el)==-1) arr.push(el);};            
+
+        // alpendigas afikson af al listoj de objekto obj laŭ
+        // celvortspeco al 
+        /*
+        function push(af,al,obj) {
+            if (al == '?') {
+                push_no_dup(af,obj.a);
+                push_no_dup(af,obj.i);
+                push_no_dup(af,obj.o);
+            } else {
+                push_no_dup(af,obj[al]);
+            }
+        }*/
+
+        for (const [affix,sk] of Object.entries(afiksoj)) {
+            const skemoj = sk.split('|');
+            for (const s of skemoj) {
+                const de = s[0];
+                const al = (s[2]=='u'? 'o' : s[2]); // la celon ulo ni bildigas al -o
+                                // dumlonge ni ne uzas duŝtupan aplikadon pref/ul...
+                push_no_dup(affix,r[de][al]);
+            }
+        }
+
+        return r;
+    }
+
+    return {
+        sufiksoj: _preparo(_sufiksoj),
+        prefiksoj: _preparo(_prefiksoj)
+    }
+}(); // tuj preparu!
+
+
+/**
  * Vokas la serĉon en Vikipedio kaj prezentas la rezultojn
  * @param {Event} event
  */
@@ -91,13 +248,16 @@ export function citaĵoSerĉo(event) {
 
     if (! _serĉo_preparo()) return;
 
+    // serĉesprimo: ŝablone kreita regulesprimo aŭ tajpita serĉvorto...?
+    const esprimo = $("#re_esprimo").text() || $("#sercho_sercho").val();
+
     // eltrovu ĉu la verko-listo estas limigita
     const vrkj = elektitajVerkoj(vlist).join(',');
 
     $.alportu(
         'citajho_sercho',
         { 
-            sercho: $("#sercho_sercho").val(),
+            sercho: esprimo,
             kie: vlist,
             vrk: vrkj
         }, 
@@ -151,154 +311,31 @@ export function regulEsprimo(event) {
         return;
     }
 
-    // ordigas la afiksoj laŭ la vortspecoj (i,a,o), al
-    // kiuj ili estas aplikeblaj kaj kiu vortspeco povas
-    // rezulti, ekz-e "o-a", signifas aplikebla al substantivo kaj
-    // rezultanta al adjektivo, "?" signifas ciuj tri vortspecoj...
-    // PLIBONIGU: ĉar ni fine ciuokaze elfiltras laŭ radikkaraktero kaj
-    // celvortspeco, ni povas limiĝi al preparo de trafaj paroj...
-    function preparu(afiksoj) {
-        let r = {
-            a:{a:[],i:[],o:[]},
-            i:{a:[],i:[],o:[]},
-            o:{a:[],i:[],o:[]},
-            n:{a:[],i:[],o:[]}};
+    // redonu prefiksoj aŭ sufiksojn aplikeblajn 
+    // al radikkaraktero rkar kun rezulta vortspeco vspec
+    // se ankoraŭ ne elektiĝis rkar/vspec ni povas
+    // elekti afiksojn kun '?'...
+    function re_afx(pref_suf,rkar,vspec) {
+        const vs = (vspec?(vspec=='e'?'a':vspec):'?');
+        const rk = (rkar?rkar:'?');
 
-        // alpendigas afikson af al listoj de objekto obj laŭ
-        // celvortspeco al 
-        function push(af,al,obj) {
-            const push_no_dup = (el,arr) => { if (arr.indexOf(el)==-1) arr.push(el);};            
-            if (al == '?') {
-                push_no_dup(af,obj.a);
-                push_no_dup(af,obj.i);
-                push_no_dup(af,obj.o);
-            } else {
-                push_no_dup(af,obj[al]);
-            }
+        let afxj = afiksoj[pref_suf][rk][vs];
+        // se rkar = 'u' ni ankaŭ inkluzivas 'o', ĉar
+        // afiksoj aplikeblaj al ulo, ankaŭ estas al aĵo
+        if (rk == 'u') {
+            afxj = afxj.concat(afiksoj[pref_suf]['o'][vs]);
+            // forigu duoblajn
+            afxj = afxj.filter((i,p)=>afxj.indexOf(i)===p);
         }
+        // se vs = 'u' ni ankaŭ inkluzivas 'o', ĉar
+        // o-finaĵo same bone aplikiĝas al uloj kiel al aĵoj
+        // if (vs == 'u')
+        //    afxj = afxj.concat(afiksoj[pref_suf][rk]['o']);
+        // PRIPENSU: ĉu ni devas ankaŭ testi, ĉu ambaŭ rkar, vs = 'u'
+        // kaj tiam inkluzivi o-o por tiuj (?)
 
-        for (const [affix,sk] of Object.entries(afiksoj)) {
-            const skemoj = sk.split('|');
-            for (const s of skemoj) {
-                const de = s[0];
-                const al= s[2];
-                if (de == '?') {
-                    push(affix,al,r.a);
-                    push(affix,al,r.i);
-                    push(affix,al,r.o);
-                } else {
-                    push(affix,al,r[de]);
-                }
-            }
-        }
-
-        return r;
-    }
-
-    // redonu sufiksojn aplikeblajn 
-    // al radikkaraktero rk kun rezulta vortspeco vs
-    function sufiksoj(rk,vs) {
-        const sufiksoj = preparu({
-        "[aio]n?t": "i-o|i-a",
-        "aĉ": "?-?",
-        "ad": "i-?",
-        "aĵ": "?-o",
-        "a[nr]": "o-o",
-        "ebl": "i-a",
-        "ec": "a-o|o-o",
-        "eg": "?-?",
-        "ej": "?-o",
-        "em": "i-a|a-a|i-o|a-o",
-        "end": "i-a",
-        "er": "o-o",
-        "estr": "o-o",
-        "et": "?-?",
-        "id": "o-o",
-        "i[gĝ]": "i-?|n-i",
-        "il": "i-o",
-        "in": "o-o|o-a",
-        "[ei]nd": "i-a|i-o",
-        "ing": "o-o",
-        "is[mt]": "o-o|o-a",
-        "obl": "n-o|n-a",
-        "o[np]": "n-o|n-a",
-        "uj": "o-o",
-        "ul": "?-o",
-        "um": "?-?",
-        });
-        return sufiksoj[rk][vs=='e'?'a':vs];
-    };
-    
-    // redonu prefiksojn aplikeblajn 
-    // al radikkaraktero rk kun rezulta vortspeco vs
-    function prefiksoj(rk,vs) {
-        const prefiksoj = preparu({
-        // bazaj prefiksoj
-        "bo": "o-o|o-a",
-        "ĉef": "o-o|o-a",
-        "dis": "i-?",
-        "ek": "i-?",
-        "eks": "o-o|o-a",
-        "fi": "?-?",
-        "ge": "o-o|o-a",
-        "mal": "?-?",
-        "mis": "i-?",
-        "pra": "o-o|o-a",
-        "pseŭdo": "?-?",
-        "re": "i-?",
-
-        // prepozicioj kiel prefiksoj aŭ kunderivado
-        "al": "i-?",
-        "antaŭ": "i-?|o-a",
-        "pri": "i-?",
-        "apud": "i-?|o-a",
-        "ĉe": "i-?|o-a",
-        "ĉirkaŭ": "i-?|o-a",        
-        "de": "i-?",
-        "dum": "i-a|o-a",
-        "ekster": "a-a|o-a",
-        "el": "i-?",
-        "en": "i-?|o-a",
-        "ĝis": "i-?",
-        "inter": "i-?|o-a|o-o",
-        "kontraŭ": "i-?|o-a",
-        "krom": "i-?|o-o",
-        "kun": "i-?",
-        "laŭ": "i-?|?-a",
-        "per": "i-?|o-a",
-        "por": "i-?",
-        "post": "i-?",
-        "preter": "i-?",
-        "pri": "i-?|o-a",
-        "pro": "i-?",
-        "sen": "?-a",
-        "sub": "o-o|o-a|i-?",
-        "super": "o-o|o-a|a-a|i-?",
-        "sur": "i-?|o-a",
-        "tra": "i-?|o-a",
-        "trans": "i-?|o-a",        
-
-        // adverboj kiel prefiksoj aŭ en kunderivado
-        "ambaŭ": "o-a|i-a",
-        "ĉi": "a-a",
-        "ĉiam": "a-a",
-        "pli": "a-a",
-        "plu": "i-?",
-        "for": "i-?",
-        "ne": "a-a|o-a",
-        "tiel": "a-a",
-        "nun": "o-o|o-a",
-        "mem": "i-?",
-        "kvazaŭ": "?-?",
-        "tro": "a-?",
-
-        // tabelvortoj uzataj en kunderivado        
-        "[ĉtk]?iu": "o-a",
-        "neniu": "o-a",
-        "[ĉtk]?ia": "o-a",
-        "nenia": "o-a"
-        });
-        return prefiksoj[rk][vs=='e'?'a':vs];
+        if (afxj.length) return '(' + afxj.join('|') + ')';        
+        else return '';
     }
 
     const srch = $("#sercho_sercho");
@@ -309,25 +346,31 @@ export function regulEsprimo(event) {
     const rk = $("#regexes input[name='re_rk']:checked").val();
     // kiun vortspecon ni sercu?
     const vs = $("#regexes input[name='re_vs']:checked").val();
+
+    // vortkomenco?
+    const vk = $("#re_b:checked").val();
     // ĉu prefikso/sufikso estu aplikataj
     const prf = $("#re_pref").prop("checked");
     const suf = $("#re_suf").prop("checked");
     
-    const prfj = (prf&&rk&&vs? '('+prefiksoj(rk,vs).join('|')+')' : '');
+    const prfj = prf? re_afx('prefiksoj',rk,vs)+"<br>" : '';
     // PLIBONIGU: ni elektas tie ĉi la sufiksojn laŭ radikkaraktero,
-    // sed eble ni devus uzi ciujn, kiuj rezultas el prefiksa apliko
+    // sed eble ni devus uzi ĉiujn, kiuj rezultas el prefiksa apliko
     // aliflanke ne klaras ĉu unue la prefikso aŭ la sufikso aplikiĝas
     // al la radiko, sed verŝajne pli kutime unue la prefikso...
-    const sufj = (suf&&rk&&vs? '('+sufiksoj(rk,vs).join('|')+')' : '');
+    const sufj = suf? re_afx('sufiksoj',rk,vs)+"<br>" : '';
 
-    const fin = {
+    const fin = vs? {
         o: "oj?n?\\b", 
         a: "aj?n?\\b", 
         e: "en?\\b", 
         i: "([ao]s|[ui]s?)\\b"
-    }[vs];
+    }[vs] : '';
 
-    $("#re_esprimo").text(prfj+v+sufj+fin);
+    $("#re_rad").val(v);
+    $("#re_esprimo").html(
+        (vk?'\\b':'')
+        + prfj + "<b>" + v + "</b><br>" + sufj + fin);
 
 /*
     const re = event.target.id;
@@ -360,6 +403,25 @@ export function regulEsprimo(event) {
     }
     */
 }
+
+export function verkoPeriodo(periodilo,montrilo) {
+    const min = periodilo.attr("data-min");
+    const max = periodilo.attr("data-max");
+    periodilo.slider({
+        range: true,
+        min: +min,
+        max: +max,
+        values: [ +min, +max ],
+        slide: function(event, ui) {
+            // aktualigu la montratan periodon
+            montrilo.val( +ui.values[0] + " - " + +ui.values[1] );
+            // aktualigu la videblon de verkoj
+            //...
+        }
+    });
+    // komence montru la tutan periodon
+    montrilo.val( +min + ' - ' + +max );
+};
 
 /**
  * Vokas la verko-liston kaj prezentas ĝin por limigeblo de posta citaĵo-serĉo.

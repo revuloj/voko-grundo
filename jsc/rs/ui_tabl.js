@@ -6,7 +6,7 @@
 
 import { show_xhr_error } from './ui_dlg.js';
 import { vortokontrolo, xmlkontrolo, klrkontrolo, surmetita_dialogo } from './ui_err.js';
-import { vikiSerĉo, citaĵoSerĉo, regulEsprimo, verkoListo, verkElekto, retoSerĉo, bildoSerĉo } from './ui_srch.js';
+import { vikiSerĉo, citaĵoSerĉo, regulEsprimo, verkoListo, verkoPeriodo, verkElekto, retoSerĉo, bildoSerĉo } from './ui_srch.js';
 
 const revo_url = 'https://retavortaro.de';
 
@@ -221,6 +221,8 @@ export default function() {
     $("#sa_postaj").click("postaj",verkoListo);
     $("#sercho_klasikaj button").click(verkElekto);
     $("#sercho_postaj button").click(verkElekto);
+    verkoPeriodo($("#s_klasikaj_periodilo"),$("#s_klasikaj_periodo"));
+    verkoPeriodo($("#s_postaj_periodilo"),$("#s_postaj_periodo"));
 
     $("#s_vikipedio").click(vikiSerĉo);
     $("#s_anaso").click(retoSerĉo);
