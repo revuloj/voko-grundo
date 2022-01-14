@@ -152,6 +152,11 @@ nav {
     background-position-y: -.15em;
 }
 
+.s_lng {
+    font-style: italic;
+    text-align: right;
+}
+
 #r\:trd_elekto button {
     float: right;
     height: 1.3rem;
@@ -348,8 +353,13 @@ nav a:active {
     vertical-align: text-top;*/
 }
 
-#navigado .enhavo details a[href^='lx_la_'] {
+#navigado .enhavo details a[href*='lx_la_'] {
     border-bottom: 1px dotted var(--nav-brd-clr);
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
 }
 
 #navigado .icon_btn {
@@ -906,8 +916,10 @@ footer {
 
     padding: 2em;
     padding-top: 0;
+    border-radius: 3px;
     box-shadow: 0 .3em .5em rgba(10, 0, 0);
 }
+
 
 .titolmalfono footer {
     padding: .5em;
@@ -931,10 +943,10 @@ footer {
 }
 
 .titolpagho details p {
-    margin-left: 2em;
+    margin-left: 1em;
     max-width: 30em;
     border-left: 2px dotted var(--main-fnt-clr);
-    padding-left: .7em;
+    padding: 1em;
 }
 
 
@@ -947,6 +959,18 @@ footer {
         background: rgba(10, 0, 0, 40%);
         box-shadow: none;
 /*        box-shadow: 0 0 1em rgba(210, 200, 200);*/
+    }
+
+}
+
+@media (prefers-color-scheme: light) {
+    .titolpagho details p {
+        background: rgba(190, 200, 200, 50%);
+        border-radius: 3px;
+        /*
+        border-top-right-radius: 4px;
+        border-bottom-right-radius: 4px;
+        */
     }
 }
 

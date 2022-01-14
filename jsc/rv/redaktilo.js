@@ -1,17 +1,27 @@
 
 /* jshint esversion: 6 */
 
-// (c) 2020, 2021 Wolfram Diestel
+// (c) 2020 - 2022 Wolfram Diestel
+// laŭ GPL 2.0
 
+/**
+ * La nomspaco 'redaktilo' kunigas ĉiujn variablojn kaj funkciojn bezonataj
+ * aparte por la redaktado en la retpaĝo de Reta Vortaro.
+ * @namespace {Function} redaktilo
+ */
 // difinu ĉion sub nomprefikso "redaktilo"
 var redaktilo = function() {
 
   var xmlarea = null;  
+  var xklavaro = null;
   var redakto = 'redakto'; // 'aldono' por nova artikolo
 
   const cgi_vokosubmx = '/cgi-bin/vokosubmx.pl';
   const cgi_vokohtmlx = '/cgi-bin/vokohtmlx.pl';
   const cgi_vokosubm_json = '/cgi-bin/vokosubm-json.pl';
+
+  const tez_url = '/revo/tez/';
+  const xml_url = '/revo/xml/';
 
   const uwn_url = 'http://www.lexvo.org/uwn/';
 
@@ -19,6 +29,7 @@ var redaktilo = function() {
   const re_fak = /<uzo\s+tip\s*=\s*"fak"\s*>([^]*?)</mg; 
   const re_stl = /<uzo\s+tip\s*=\s*"stl"\s*>([^]*?)</mg; 
   const re_mrk = /<(drv|snc) mrk="([^]*?)">/mg;
+  const re_mrk_split = /^([a-z0-9]+)(\..*)$/;
 
   const re_trdgrp = /<trdgrp\s+lng\s*=\s*"[^"]+"\s*>[^]*?<\/trdgrp/mg;	
   const re_trd = /<trd\s+lng\s*=\s*"[^"]+"\s*>[^]*?<\/trd/mg;	
@@ -28,14 +39,25 @@ var redaktilo = function() {
   const re_hex = /^#x[\da-f]+$/;
   const re_dec = /^#\d\d+$/;
 
+  /**
+   * Utilfunkcio por forigi elementon, kondiĉe ke gi ekzistas.
+   * Se ĝi ne ekzistas okazas nenio (do neniu escepto!)
+   * @memberof redaktilo
+   * @inner
+   * @param {Element} element 
+   */
   function remove(element) { if (element) element.remove(); }
 
+  /**
+   * La XML-ŝablonoj, el kiuj ni elektos laŭ nomo...
+   * Ili estas (eble ingitaj) listoj de la formo 
+   * [string,Object,Array|string] = [elemento,atributoj,enhavo];
+   * $r:... referencas al formular-elemento en la redaktilo (input.value);
+   * $_ anstataŭiĝos per la momente elektita teksto aŭ ""
+   * @memberof redaktilo
+   * @inner
+   */
   const xml_shbl = {
-    // la XML-ŝablonoj, el kiuj ni elektos laŭ nomo...
-    // ili estas (eble nestitaj) listoj de la formo 
-    // [string,Object,List|string] = [elemento,atributoj,enhavo]
-    // $r:... referencas al formular-elemento en la redaktilo (input.value)
-    // $_ anstataŭiĝos per la momente elektita teksto aŭ ""
     trd: ["trd",{},"$_"],
     trd_lng: ["trd",{lng:"$r:trdlng"},"$_"],
     trdgrp: ["trdgrp",{lng:"$r:trdlng"},[
@@ -49,19 +71,15 @@ var redaktilo = function() {
     klr_tip: ["klr",{tip:"$r:klrtip"},["(","$_",")"]],
     klr_ppp: ["klr",{},"[&#x2026;]"],
     ind: ["ind",{},"$_"],
-    ref_tip: ["ref",{tip:"$r:reftip",cel:"$r:refmrk"},"$_"],
-    ref_lst: ["ref",{tip:"lst",lst:"voko:",cel:"$r:refmrk"},"$_"],
-    ref: ["ref",{cel:"$r:refmrk"},"$_"],
+    ref_tip: ["ref",{tip:"$r:reftip",cel:"$r:refmrk"},"$_|$r:refstr"],
+    ref_lst: ["ref",{tip:"lst",lst:"voko:",cel:"$r:refmrk"},"$_|$r:refstr"],
+    ref: ["ref",{cel:"$r:refmrk"},"$_|$r:refstr"],
     refgrp: ["refgrp",{tip:"$r:reftip"},[
-        "\n  ",["ref",{cel:"$r:refmrk"},"$_"],
+        "\n  ",["ref",{cel:"$r:refmrk"},"$_|$r:refstr"],
         ",\n  ",["ref",{cel:""}],
         "\n"
       ]],
     rim: ["rim",{},"$_"],
-    ofc: ["ofc",{},["$r:ofc"]],    
-    gra: ["gra",{},["$r:gra","$_"]],
-    uzo_fak: ["uzo",{tip:"fak"},"$r:sfak"],
-    uzo_stl: ["uzo",{tip:"stl"},"$r:sstl"],
     ekz: ["ekz",{},"$_"],
     nom: ["nom",{},"$_"],
     nac: ["nac",{},"$_"],
@@ -89,14 +107,24 @@ var redaktilo = function() {
     dif: ["dif",{},"$_"]       
   };
 
+  /**
+   * Kreas XML-tekston el ŝablono, anstataŭigante variablo-lokojn per
+   * la valoroj de la respektivaj kampoj
+   * @memberof redaktilo
+   * @param {string} name - la nomo de la ŝablono
+   * @param {string} selection - la momente elektita teksto, gi anstataŭas variablon '$_'
+   * @returns Liston kun: la XML-teksto kreita per la ŝablono; la relativan pozicio de la kursoro; la lininombro
+   */
   function shablono(name,selection) {    
-    var p_kursoro = -1;
-    var p_lines = 0;
+    let p_kursoro = -1;
+    let p_lines = 0;
 
     //function xmlstr(jlist) {
     return [(function xmlstr(jlist) {
+
       // $_ ni anstataŭigos per la elektita teksto, 
       // $<var> per la valoro de elemento kun id="var"
+      // alian tekstenhavon ni redonas nemodifite
       function val(v) {
         return v == "$_"? 
           selection 
@@ -104,42 +132,62 @@ var redaktilo = function() {
           document.getElementById(v.substring(1)).value 
           : v);
       }
+
+      function str(s) {
+        if (p_kursoro < 0 && s.indexOf("\n")>-1) p_lines++;
+
+        // povas esti alternativo
+        const sp = s.split('|');
+        for (const s1 of sp) {
+          // se la esprimo enhavas la variablon $_,
+          // kiu enmetas la aktualan tekston, 
+          // ni metas la kursoron tien.
+          if (s1 == "$_") p_kursoro = xml.length;
+          const v = val(s1);
+          if (v) {
+            // en alternativo la unua
+            // efektiva valoro haltigas la valorigadon!
+            xml += v;
+            return;
+          }
+        }
+      }
       if (!jlist || !jlist[0]) {
         console.error("Nedifinita ŝablono: \""+name+"\"");
         return;
       }
-      var xml = "";
-      for (var el of jlist) {
-        // string content
+      let xml = "";
+      for (const el of jlist) {
+        // tekstenhavo
         if (typeof el == "string") {
-          if (p_kursoro < 0 && el.indexOf("\n")>-1) p_lines++;
-          if (el == "$_") p_kursoro = xml.length;
-          xml += val(el);
+          str(el);
         } else {
-          // tag name
+          // elementkomenco
           xml += "<" + el[0];
-          // attributes
+          // atributoj
           if (el[1]) {
             for (var atr in el[1]) {
               xml += " " + atr + "=\"" + val(el[1][atr]) + "\"";
             }
           }
           xml += ">";
-          // content
+          // elementenhavo
           if (el[2]) {
             if (el[2] instanceof Array) {
+              // ni transformas la enhav-liston al XML per rekursiva voko de xmlstr
               const x = xmlstr(el[2]);
+              // se tio enhavis variablon $_ la pozicio de la kursoro
+              // staras tie kalkulita de la komenco de la enhavo
+              // sed ni devas ankoraŭ adicii ĉiujn signojn antaŭ la komenco:
               if (p_kursoro > -1) p_kursoro += xml.length;
+              // nun ni kunigas la enhavon kun ĉio antaŭe          
               xml += x;
-              
             } else {
-              if (el[2] == "$_") p_kursoro = xml.length;
-              xml += val(el[2]);
+              str(el[2]);
             } 
           }
-          // closing tag
+          // elementfino
           if ("/" != el[0].slice(-1)) {
-            //if (p_kursoro < 0) p_kursoro = xml.length;
             xml += "</" + el[0] + ">"; 
           }
         }  
@@ -150,7 +198,13 @@ var redaktilo = function() {
     ([ xml_shbl[name] ]) // ni transdonas ĝin kiel unu-elementa listo 
   ),p_kursoro,p_lines];} 
 
-
+  /**
+   * Traktas klaveventojn en la XML-teksto: RET aldonas spacojn en la komenco de nova linio,
+   * Alt+X (mal)ŝaltas la cx-butonon, Alt+T enmetas traduk-ŝablonon en la aktuala lingvo,
+   * X/x aplikas kun aktiva cx-ŝaltilo la transformas cx -> ĉ, ĉx -> cx ktp.
+   * @memberof redaktilo
+   * @param {Event} event 
+   */
 
   function klavo(event) {
     var key = event.keyCode ? event.keyCode : event.which ? event.which : event.charCode;
@@ -200,7 +254,67 @@ var redaktilo = function() {
     }
   }
 
+  /**
+   * Traktas la TAB- kaj la RETRO-klavojn. La TAB-klavo servas por ŝovi 
+   * plurlinian markitaĵon dekstren aŭ maldekstren (je 2 spacoj) kaj la
+   * RETRO-klavo en la komenco de linio forigas por 2 spacoj.
+   * @memberof redaktilo
+   * @inner
+   * @param {Event} event 
+   */
+  function tab_bsp(event) {
+    const keycode = event.keyCode || event.which; 
 
+    // traktu TAB por ŝovi dekstren aŭ maldekstren plurajn liniojn
+    if (keycode == 9) {  // TAB
+      event.preventDefault(); 
+
+      const elekto = xmlarea.selection();
+
+      // se pluraj linioj estas elektitaj
+      if (elekto.indexOf('\n') > -1) {
+        // indent
+        if (event.shiftKey == false)
+          xmlarea.indent(2);
+        else
+          xmlarea.indent(-2);
+      
+      // elekto nur ene de unu linio
+      } else if ( !elekto ) {
+        // traktu enŝovojn linikomence...
+        const before = xmlarea.charBefore();
+        if (before == '\n') {
+          const indent = get_indent(xmlarea.txtarea,-1) || '  ';
+          xmlarea.selection(indent); 
+        } else if (before == ' ') {
+          const indent = '  ';
+          // aldonu du spacojn
+          xmlarea.selection(indent);
+        }
+      }
+
+    } else if (keycode == 8) { // BACKSPACE
+      if (xmlarea.selection() == '') { // aparta trakto nur se nenio estas elektita!
+        const spaces = xmlarea.charsFromLineStart();
+        if (spaces.length > 0 && all_spaces(spaces) && 0 == spaces.length % 2) { 
+            // forigu du anstataŭ nur unu spacon
+            event.preventDefault(); 
+
+            const pos = xmlarea.positionNo();
+            xmlarea.select(pos-2,2); //selectRange(xmlarea.txtarea,pos-2, pos);
+            xmlarea.selection(''); 
+        }
+      }
+    }
+  }
+
+  /**
+   * Enmetas XML-tekston per aplikata ŝablono.
+   * 
+   * @memberof redaktilo
+   * @inner
+   * @param {string} shabl - la nomo de la XML-ŝablono
+   */
   function insert_xml(shabl) {
     //var txtarea = document.getElementById('r:xmltxt');
     //var selText;
@@ -217,7 +331,13 @@ var redaktilo = function() {
     xmlarea.scrollPos(pos);
   }
 
-    
+  /**
+   * Saltigas la kursoron al la sekva komenco de XML-elemento 'tag'
+   * @memberof redaktilo
+   * @inner
+   * @param {string} tag - la nomo de la serĉata XML-elemento
+   * @param {number} dir - la direkto: &gt;0 antaŭen, &lt;0 malantaŭen
+   */
   function nextTag(tag, dir) {
         
       function lines(str){
@@ -261,7 +381,12 @@ var redaktilo = function() {
       }
   }
 
-  // memoras valorojn de kelkaj kampoj en la loka memoro de la retumilo
+  
+  /**
+   * Konservas la valorojn de kelkaj kampoj (redaktanto, traduklingvo kc) 
+   * en la loka memoro de la retumilo.
+   * @memberof redaktilo
+   */
   function store_preferences() {
     var prefs = {};
     for (var key of ['r:redaktanto','r:trdlng','r:klrtip','r:reftip','r:sxangxo','r:cx']) {
@@ -271,7 +396,13 @@ var redaktilo = function() {
     window.localStorage.setItem("redaktilo_preferoj",JSON.stringify(prefs));  
   }
 
-  // reprenas memorigitajn valorojn de kelkaj kampoj el la loka memoro de la retumilo
+  /**
+   * Legas la memorigitajn valorojn de kelkaj kampoj en la redaktilo-menuo (maldekstra naviga parto)
+   * el la loka memoro de la retumilo
+   * kaj metas ilin en la respektivajn kampojn de la redaktilo.
+   * @memberof redaktilo
+   * @inner
+   */
   function restore_preferences() {
     var str = window.localStorage.getItem("redaktilo_preferoj");
     var prefs = (str? JSON.parse(str) : {});
@@ -282,6 +413,12 @@ var redaktilo = function() {
     }
   }
 
+  /**
+   * Legas unuopan valoron el la el la loka memoro de la retumilo.
+   * @memberof redaktilo
+   * @param {string} key - la ŝlosilo de la legenda valoro.
+   * @returns - la valoro el preferoj
+   */
   function get_preference(key) {
     var str = window.localStorage.getItem("redaktilo_preferoj");
     var prefs = (str? JSON.parse(str) : {});
@@ -290,13 +427,22 @@ var redaktilo = function() {
     }
   }
 
+  /**
+   * Legas valorojn de preferoj por la dekstra XML-parto de la redaktilo 
+   * el la loka memoro de la retumilo. Momente tio estas nur la stato de la cx-ŝaltilo
+   * @memberof redaktilo
+   * @inner
+   */
   function restore_preferences_xml() {
     var str = window.localStorage.getItem("redaktilo_preferoj");
     var prefs = (str? JSON.parse(str) : {});
     document.getElementById('r:cx').value = prefs['r:cx'] || 0;
   }
 
-  // sekurigi la XML-tekston al loka retumila memoro
+  /** Konservas la nomon kaj la XML-tekston de la aktuale redaktata artikolo
+   * en la loka memoro de la retumilo. 
+   * @memberof redaktilo
+   */
   function store_art() {
     window.localStorage.setItem("red_artikolo",JSON.stringify({
       'xml': xmlarea.syncedXml(), //document.getElementById("r:xmltxt").value,
@@ -305,7 +451,12 @@ var redaktilo = function() {
     }));
   }
 
-  // restarigi XML-tekston el loka retumila memoro
+  
+  /**
+   * Restarigas XML-tekston kaj la artikolnomon el loka retumila memoro.
+   * @memberof redaktilo
+   * @inner
+   */
   function restore_art() {
     var str = window.localStorage.getItem("red_artikolo");
     var art = (str? JSON.parse(str) : null);
@@ -317,7 +468,11 @@ var redaktilo = function() {
     }
   }
 
-
+  /**
+   * Iras al alia panelo de la redaktomenuo (referencoj, tradukoj, difinoj...preta)
+   * @memberof redaktilo
+   * @param {string} id - la HTMLL-id de la panelo
+   */
   function fs_toggle(id) {
     var el = document.getElementById(id);
     var fs_id;
@@ -349,6 +504,12 @@ var redaktilo = function() {
     FUNKCIOJ POR KONTROLADO, ANTAŬRIGARDO KAJ SUBMETO DE REDAKTITA ARTIKOLO
   **************************************************************************/
 
+  /**
+   * Metas erarojn liste en la keston por eraroj (sub la redakto-menuo)
+   * @memberof redaktilo
+   * @inner
+   * @param err {Array<string>} - la listo de eraroj
+   */
   function listigu_erarojn(err) {
     var el = document.getElementById("r:eraroj");
     var elch = el.children;
@@ -365,16 +526,35 @@ var redaktilo = function() {
     }
   }
 
+  /**
+   * Tradukas erarojn trovitaj per regulesprimoj al eraro-mesaĝo kaj
+   * prezentas ilin liste en la erarokesto al la uzanto
+   * @memberof redaktilo
+   * @inner
+   * @param {string} msg - mesaĝo, kiu montrigu en la komenco de ĉiu unuopa trovo
+   * @param {Array<Array>} matches - la trovoj, la trovita eraro estas la unua elmento den ĉiu trovo
+   */
   function add_err_msg(msg, matches) {
-    var errors = [];
+    let errors = [];
 
-    for (var m of matches) {
-      errors.push(msg+m[1]);
-    }
+    if (matches)
+      for (const m of matches) {
+        errors.push(msg+m[1]);
+      };
+
     if (errors.length)
       listigu_erarojn(errors);
   }
 
+  /**
+   * Kontrolas en la XML-teksto per regulesprimo, ĉu la uzitaj kodoj (lingvoj, stiloj, fakoj)
+   * esas validaj. Uzoj de nevalidaj kodoj estas redonataj kiel rezultoj de la regulesprimo
+   * @memberof redaktilo
+   * @inner
+   * @param {string} clist - la nomo de la kodlisto kontraŭ kiu ni kontrolas
+   * @param {Object} regex - la regulesprimo per kiu ni serĉas la uzojn
+   * @returns la listo de nevalidaj koduzoj - kiel trovoj per regulesprimo
+   */
   function kontrolu_kodojn(clist,regex) {
     var xml = xmlarea.syncedXml(); //document.getElementById("r:xmltxt").value;
     var m; var invalid = [];
@@ -394,6 +574,12 @@ var redaktilo = function() {
     return invalid;
   }
 
+  /**
+   * Kontrolas per regulesprimo (re_mrk), ĉu la markoj aperantaj en la XML-teksto estas validaj
+   * @memberof redaktilo
+   * @inner
+   * @param {string} art - la nomo de la artikolo, t.e. la unua parto de marko antaŭ la unua punkto
+   */
   function kontrolu_mrk(art) {
     var xml = xmlarea.syncedXml(); // document.getElementById("r:xmltxt").value;
     var m; 
@@ -412,14 +598,19 @@ var redaktilo = function() {
       listigu_erarojn(errors); 
   }
 
-  // trovu tradukojn sen lingvo
+  /**
+   * Trovas artikolojn sen lingvo en la XML-teksto
+   * @memberof redaktilo
+   * @inner
+   */
   function kontrolu_trd() {
-    var xml = xmlarea.syncedXml(); //document.getElementById("r:xmltxt").value;
-    var m, re_t2 = /(<trd.*?<\/trd>)/g;
-    var errors = [];
+    const xml = xmlarea.syncedXml(); //document.getElementById("r:xmltxt").value;
+    let m;
+    const re_t2 = /(<trd.*?<\/trd>)/g;
+    let errors = [];
     
     // forigu bonajn trdgrp kaj trd FARENDA: tio ne trovas <trd lng="..."> ene de trdgrp!
-    var x = xml.replace(re_trdgrp,'').replace(re_trd,'');
+    const x = xml.replace(re_trdgrp,'').replace(re_trd,'');
     while ((m = re_t2.exec(x))) {
       errors.push("Traduko sen lingvo: "+m[1]);
     }
@@ -428,6 +619,12 @@ var redaktilo = function() {
       listigu_erarojn(errors); 
   }
 
+  /** 
+   * Kontrolas per regulesprimo (re_ref) la referencojn en la XML-teksto: 
+   * ĉu celo estas donita.
+   * @memberof redaktilo
+   * @inner
+   */
   function kontrolu_ref() {
     var xml = xmlarea.syncedXml(); //document.getElementById("r:xmltxt").value;
     var m; 
@@ -442,6 +639,15 @@ var redaktilo = function() {
       listigu_erarojn(errors); 
   }
 
+  /**
+   * Kontrolas la XML-tekston kaj trovas eventualajn erarojn. Ĝi aplikas nur la
+   * lokan kontrolon (trd, ref, mrk, kodoj...) - La ĝenerala sintakso devas esti
+   * kontrolata en la servilo!
+   * @memberof redaktilo
+   * @inner
+   * @param {string} art - la artikolnomo
+   * @param {string} xml - la XML-teksto
+   */
   function kontrolu_xml_loke(art,xml) {
     if (xml.startsWith("<?xml")) {
       kontrolu_mrk(art);
@@ -460,8 +666,13 @@ var redaktilo = function() {
     }
   }
 
+  /**
+   * Petas antaŭrigardon kiel HTML de la servilo. La XML ankaŭ estas kontrolata samtempe
+   * kaj trovitaj eraroj prezentataj al la uzanto en la eraro-kesto.
+   * @memberof redaktilo
+   */
   function rantaurigardo() {
-    var eraroj = document.getElementById("r:eraroj");
+    let eraroj = document.getElementById("r:eraroj");
     const art = document.getElementById("r:art").value;
     const xml = xmlarea.syncedXml();
 
@@ -484,9 +695,13 @@ var redaktilo = function() {
     }
   }
 
-  // kontrolo sen antaurigardo
+  /**
+   * Kontrolas la XML-tekston sen peti antaŭrigardon samtempe.
+   * @memberof redaktilo
+   * @inner
+   */
   function rkontrolo() {
-    var eraroj = document.getElementById("r:eraroj");
+    let eraroj = document.getElementById("r:eraroj");
     const art = document.getElementById("r:art").value;
     const xml = xmlarea.syncedXml();
 
@@ -500,6 +715,12 @@ var redaktilo = function() {
     }
   }
 
+  /**
+   * Submetas la XML-redakton. Antaŭe la XML-teksto estas kontrolata. Se troviĝas eraroj
+   * ili estas montrataj kaj la artikolo ne estas submetata.
+   * @memberof redaktilo
+   * @inner
+   */
   function rkonservo() {
     // PLIBONIGU: estas ioma risko ke tiel oni retrovas unuon en la ŝlosilnomo de jam anstataŭigita unuo
     // do eble estus plibone trakuri la tekston signon post signo, ignori dume xml-nomoj sed
@@ -528,7 +749,7 @@ var redaktilo = function() {
     const art = document.getElementById("r:art").value;
     const xml = xmlarea.syncedXml();
 
-    var eraroj = document.getElementById("r:eraroj");
+    let eraroj = document.getElementById("r:eraroj");
     eraroj.textContent='';
     eraroj.classList.remove("collapsed"); // ĉu nur kiam certe estas eraroj?
     eraroj.parentNode.setAttribute("open","open");
@@ -546,8 +767,10 @@ var redaktilo = function() {
       }
   }
 
-  
-
+  /**
+   * Vokas la servilan skripton vokohtmlx.pl por ricevi antaŭrigardon de la artikolo.
+   * @param {string} xml - la sendota XML-teksto
+   */
   function vokohtmlx(xml) {
     HTTPRequest('POST',cgi_vokohtmlx,
     {
@@ -598,7 +821,15 @@ var redaktilo = function() {
     });
   }
 
-
+  /**
+   * Vokas la servilan skripton vokomailx.pl por kontroli sintakson kaj eventuale submeti
+   * la redakton.
+   * @memberof redaktilo
+   * @inner
+   * @param {string} command - parametro 'command' por la skripto
+   * @param {string} art - la artikonomo (dosiernomo)
+   * @param {string} xml - la XML-teksto
+   */
   function vokomailx(command,art,xml) {
 
     var red = document.getElementById("r:redaktanto").value;
@@ -619,19 +850,24 @@ var redaktilo = function() {
         command: command
       },
       function (data) {
+        const re_pos = /(pozicio\s+[\d:]+)/g;
+        const re_enk = /(Atentu|Averto|Eraro):/g;
         // Success!
-        var parser = new DOMParser();
-        var doc = parser.parseFromString(data,"text/html");
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(data,"text/html");
 
-        var err_list = document.getElementById("r:eraroj");
+        const err_list = document.getElementById("r:eraroj");
 
         //for (div of doc.body.getElementsByClassName("eraroj")) {
         for (var div of doc.body.querySelectorAll(".eraroj")) {
           // debugging...
           console.log("div id=" + div.id);
+          div.innerHTML = div.innerHTML
+            .replace(re_enk,'<span class="$1">$1</span>:')
+            .replace(re_pos,'<a href="#">$1</a>');
           err_list.appendChild(div);
         }
-        var konfirmo = doc.getElementById("konfirmo");
+        const konfirmo = doc.getElementById("konfirmo");
         if (konfirmo) {
           // debugging...
           console.log("div id=" + konfirmo.id);
@@ -659,9 +895,17 @@ var redaktilo = function() {
   }
 
 
-  // submetitaj redaktoj estas en datumbazo, la stato indikas ĉu ili
-  // jam estas traktitaj de la redaktoservo kaj ĉu sukcese aŭ kun eraro
-  // CGI-skripto redonas la liston de submetoj kun stato de la personaj redaktoj
+
+  /**
+   * Petas la staton de submetoj de la servilo.
+   * Submetitaj redaktoj estas en datumbazo, la stato indikas ĉu ili
+   * jam estas traktitaj de la redaktoservo kaj ĉu sukcese aŭ kun eraro.
+   * CGI-skripto redonas la liston de submetoj kun stato de la personaj redaktoj
+   * @memberof redaktilo
+   * @param {Function} subm_callback 
+   * @param {Function} onstart 
+   * @param {Function} onstop 
+   */
   function submetoj_stato(subm_callback,onstart,onstop) {
     const red = get_preference('r:redaktanto');
     if (!red) return;
@@ -689,7 +933,12 @@ var redaktilo = function() {
     FUNKCIOJ POR EKREDAKTO DE ARTIKOLO
   **********************************************************/
 
-    // kreu novan artikolon per la sekva ŝablono
+    
+    /**
+     * Kreas novan XML-artikolon
+     * @memberof redaktilo
+     * @inner
+     */
     function create_new_art() {
       var art = document.getElementById("r:nova_art").value;
       //var ta = document.getElementById("r:xmltxt");
@@ -728,7 +977,13 @@ var redaktilo = function() {
     }
 
 
-  // ŝargu XML-artikolon por redaktado per HTTP-GET
+  
+  /**
+   * Ŝargas XML-artikolon por redaktado de la servilo
+   * @memberof redaktilo
+   * @inner
+   * @param {string} params - HTTP-parametroj, ni ekstraktas parametron 'art', kiu donas la dosiernomon de la artikolo
+   */
   function load_xml(params) {
     var art = getParamValue("art",params);
 
@@ -748,7 +1003,7 @@ var redaktilo = function() {
 
     if (art) {
 
-      HTTPRequest('GET','/revo/xml/'+art+'.xml',{},
+      HTTPRequest('GET',xml_url+art+'.xml',{},
       function(data) {
           // Success!
           const xmlteksto = replace_entities(data);
@@ -781,18 +1036,34 @@ var redaktilo = function() {
     }
   }
 
+  /**
+   * Reagas al ekstraktado de la XML-strukturo: ĉiam kiam troviĝas subteksto ni
+   * ricevas en ci tiu revokfunkcio la koncernajn informojn kaj povas aldoni listeron
+   * en la elekto de subtekstoj, kiu troviĝas super la XML-redaktilo.
+   * @memberof redaktilo
+   * @inner
+   * @param {{id,dsc}} subt - la informoj pri la subteksto
+   * @param {number} index - la nombro de la subteksto (0-art, 1..n-1 - drv/snc..., n - tuta XML)
+   * @param {boolean} selected - true: temas pri la aktive redaktata subteksto, ni elektu gin en la listo
+   */
   function on_xml_add_sub(subt,index,selected) {
     const sel_stru = document.getElementById("r:art_strukturo");
     if (index == 0) sel_stru.textContent = ''; // malplenigu la liston ĉe aldono de unua ero...
 
     if (selected) {
-      sel_stru.append(ht_element('option',{value: subt.id, selected: 'selected'},subt.dsc));
+      sel_stru.append(ht_element('option',{value: subt.id, class: subt.el, selected: 'selected'},subt.dsc));
     } else {
-      sel_stru.append(ht_element('option',{value: subt.id},subt.dsc));
+      sel_stru.append(ht_element('option',{value: subt.id, class: subt.el},subt.dsc));
     }
   }
 
-  // elektas parton de la XML-teksto por redakti nur tiun
+  
+  /**
+   * Reagas al elekto de subteksto en la listo. Ni ekredaktas nun tiun parton.
+   * @memberof redaktilo
+   * @inner
+   * @param {Event} event 
+   */
   function struktur_elekto(event) {
     const val = event.target.value;
     //const list = document.getElementById("r:art_strukturo");
@@ -819,7 +1090,71 @@ var redaktilo = function() {
     */
   }
 
-  // metu elekton kaj fokuson ĝuste por ekredakto
+  /**
+   * Ni notas referencon transprenante gin el la trovlisto post serĉo (kiam
+   * la uzanto tie premas la sago-butonon)
+   * @memberof redaktilo
+   * @param {string} refmrk - la marko de la referenco
+   * @param {string} refstr - la vorto, al kiu la referenco montras
+   */
+  function load_ref(refmrk,refstr) {
+    const m = re_mrk_split.exec(refmrk);
+    if (m) {
+      const art = m[1];
+      const _mrk = m[2];
+      //document.getElementById("r:refmrk").value = refmrk;
+      document.getElementById("r:refstr").value = refstr;
+      load_ref_sub(art,_mrk); // ŝargu la (sub)sencojn ks por la vorto
+    }
+    redaktilo.fs_toggle("r:ref");
+  }
+
+  /**
+   * Ŝargas la JSON-strukturon de la artikolo, al kiu montras referenco.
+   * Ni elprenas la markojn de (sub)sencoj por povi pli precize referenci.
+   * Ili montrigos en elekto-listo en la redaktomenuo - panelo 'referencoj'
+   * @memberof redaktilo
+   * @inner
+   * @param {string} art - la dosiernomo de la referencata artikolo
+   * @param {string} _mrk - la marko de la referencata vorto
+   */
+  function load_ref_sub(art,_mrk) {
+
+    HTTPRequest('GET',tez_url+art+'.json',{},
+      function (data) {
+        const json = 
+          /** @type { {mrk: Array<Array>} } */
+          (JSON.parse(data));
+
+        const mrkj = json[art].mrk;
+
+        if (mrkj) {
+          const rm = document.getElementById("r:refmrk");
+          rm.textContent = '';
+  
+          // la drv
+          rm.append(ht_element("option",{},art+_mrk));
+          // ĉio ene (snc, subsnc, rim)
+          for (const mrk of mrkj) {
+            if (mrk[0].startsWith(_mrk+'.')) {
+              rm.append(ht_element("option",{},art+mrk[0]));
+            }
+          }
+
+          show("r:refmrk");
+        }
+      });
+  }
+
+  
+  /**
+   * Metas elekton kaj fokuson ĝuste por ekredakto.
+   * @memberof redaktilo
+   * @inner
+   * @param {number} pos 
+   * @param {number} line 
+   * @param {number} lastline 
+   */
   function sf(pos, line, lastline) {
     document.getElementById("r:xmltxt").focus();
     var txtarea = document.getElementById('r:xmltxt');
@@ -838,14 +1173,24 @@ var redaktilo = function() {
     }
   }
 
+  /**
+   * Montras la pozicion de la kursoro en la malgranda 
+   * surmetita kampo
+   * @memberof redaktilo
+   * @inner
+   */
   function show_pos() {
     // aktualigu pozicion
     const pos = xmlarea.position();
     document.getElementById("r:position").textContent=(1+pos.line)+":"+(1+pos.pos);
   }
 
-  // preparu la redaktilon en la dekstra kadro: preferojn kaj XML-tekston, 
-  // alligu evento-traktilojn
+  /**
+   * Preparas la redaktilon en la dekstra kadro: preferojn kaj XML-tekston, 
+   * alligas evento-traktilojn
+   * @memberof redaktilo
+   * @param {string} params - HTTP-parametroj, el kiu ni ekstraktas la parametron 'art' por sargi la XML-fonton
+   */
   function preparu_red(params) {
 
     // enlegu bezonaĵojn (listojn, XML-artikolon, preferojn)
@@ -855,11 +1200,51 @@ var redaktilo = function() {
       //if (!xmlarea) 
 
       // ŝanĝu tekston al nurlege
-      document.getElementById("r:xmltxt").removeAttribute("readonly");
+      const xmltxt = document.getElementById("r:xmltxt");
+      xmltxt.removeAttribute("readonly");
+
+      const xklvr = document.getElementById("r:xklvr");
+
+      xklvr.addEventListener("click",
+        () => {
+          const pressed = 1 - xklvr.value;
+          xklvr.value = pressed;
+          if (pressed) {
+            show("r:klavaro");
+          } else {
+            hide("r:klavaro");
+          }
+      });    
+
 
       xmlarea = new Xmlarea("r:xmltxt",on_xml_add_sub);
       load_xml(params); // se doniĝis ?art=xxx ni fone ŝargas tiun artikolon
+
+      const klvr = document.getElementById("r:klavaro");
+      xklavaro = new XKlavaro(klvr,null,xmltxt,
+        () => xmlarea.getRadiko(),
+        (event,cmd) => { 
+          // PLIBONIGU: tion ni povas ankaŭ meti en xklavaro.js!
+          if (cmd.cmd == 'indiko') {
+            hide("r:klv_fak");
+            show("r:klv_ind");
+            hide("r:klv_elm");
+          } else if (cmd.cmd == 'fako') {
+            hide("r:klv_ind");
+            show("r:klv_fak");
+            hide("r:klv_elm");
+          } else if (cmd.cmd == 'klavaro') {
+            hide("r:klv_fak");
+            show("r:klv_elm");
+            hide("r:klv_ind");
+          }
+        },
+        () => xmlarea.setUnsynced())
     }
+    xklavaro.indiko_klavoj(document.getElementById("r:klv_ind"),revo_codes.stiloj);
+    xklavaro.fako_klavoj(document.getElementById("r:klv_fak"),revo_codes.fakoj);
+    const klv_elm = document.getElementById("r:klv_elm");
+    xklavaro.elemento_klavoj(klv_elm,klv_elm.textContent);
 
     redakto = 'redakto'; // gravas post antaŭa aldono!
 
@@ -870,6 +1255,8 @@ var redaktilo = function() {
     // klav-premoj en XML-redaktilo
     document.getElementById("r:xmltxt")
       .addEventListener("keypress",klavo);
+    document.getElementById("r:xmltxt")
+      .addEventListener("keydown",tab_bsp);
 
     document.getElementById("r:xmltxt")
       //.addEventListener("selectionchange",show_pos); // movado de kursoro, ne kaŭzas input-eventon...!
@@ -885,20 +1272,6 @@ var redaktilo = function() {
     document.getElementById('r:art_strukturo')
       .addEventListener("change",struktur_elekto);
 
-    // butonoj por navigi inter drv kaj en-/elŝovo
-    var nav = document.getElementById("r:nav_btn");
-    nav.querySelectorAll("button").forEach(function (b) { 
-        var val = b.getAttribute("value");
-        if (val) {
-          var n = parseInt(val.substring(0,2),10);
-          var t = val.substring(2);
-          if ( t == "d") {
-            b.addEventListener("click", function() { nextTag('<drv',n); });
-          } else if (t == "i") {
-            b.addEventListener("click", function() { xmlarea.indent(n); });
-          }
-        }
-    });
     document.getElementById("r:cx")
       .addEventListener("click",function(event) {
         event.preventDefault();
@@ -923,14 +1296,15 @@ var redaktilo = function() {
     */
   }
 
-  // preparu la redaktilo-elementojn en la naviga kadro: elekto-listojn (fakoj, stiloj...),
-  // evento-traktiloj
+  /**
+   * Preparas la redaktilo-elementojn en la naviga kadro: elekto-listojn (fakoj, stiloj...),
+   * evento-traktiloj
+   * @memberof redaktilo
+   */
   function preparu_menu() {
 
     // enlegu bezonaĵojn (listojn, XML-artikolon, preferojn)
     restore_preferences();
-    revo_codes.fakoj.load("r:sfak");
-    revo_codes.stiloj.load("r:sstl");
 
     /******************
      *  preparu aktivajn elmentoj / eventojn
@@ -947,6 +1321,17 @@ var redaktilo = function() {
     // butono por konservi
     document.getElementById("r:konservu")
       .addEventListener("click",rkonservo);
+
+    // salto al eraroj
+    document.getElementById("r:eraroj").addEventListener("click", function(event) {
+      const trg = event.target;
+      if (trg.tagName == 'A') {
+        event.preventDefault();
+        const pos_str = trg.textContent.split(' ')[1];
+        xmlarea.goto(pos_str);
+        show_pos();
+      } 
+    });
 
     // remetu ŝanĝo-kampon en difinitan staton (necesa post aldono de nova artikolo)
     var shg = document.getElementById("r:sxangxo");
@@ -992,6 +1377,10 @@ var redaktilo = function() {
     }
   }  
 
+  /**
+   * Ŝargas tradukproponojn el Universala Vort-Reto (UWN)
+   * @param {Event} event 
+   */
   function trad_uwn(event) {
     event.preventDefault();
     const s_trd = document.getElementById('r:trd_elekto');
@@ -1005,9 +1394,9 @@ var redaktilo = function() {
       return ht_list(trd,'ul',{},function(t) {
           //var t = s; // la traduko
           const li = ht_element('li');
-          if (t.substr(0,2) == '?;') {
+          if (t.slice(0,2) == '?;') {
             li.append(ht_element('span',{class: 'dubinda'},'?'));
-            t = t.substr(2);
+            t = t.slice(2);
           }
           li.append(ht_element('span',{class: 'trd'},t));
     /*
@@ -1172,14 +1561,19 @@ var redaktilo = function() {
     );
   }
 
-  // montras depende elektita (sub)drv|(sub)snc la jam ekzistantajn
-  // tradukojn kaj +-butonoj por eblaj aldonoj
+  /**
+   * Montras depende de elektita (sub)drv|(sub)snc la jam ekzistantajn
+   * tradukojn kaj +-butonoj por eblaj aldonoj
+   * @memberof redaktilo
+   * @inner
+   */
   function trad_ebloj() {
-
     const elekto = document.getElementById('r:trd_elekto');
+    if (!elekto) return;
+
     const _ele_ = xmlarea.elekto;
     const drv_snc = (_ele_ && _ele_.el && (_ele_.el == 'snc' || _ele_.el == 'drv'));
-    //const drv_snc = ('drv|snc'.indexOf(_ele_?.el.substr(-3)) > -1);
+    //const drv_snc = ('drv|snc'.indexOf(_ele_?.el.slice(-3)) > -1);
 
     // se iu (sub)drv|(sub)snc estas elektita ni montras +-butonojn kaj hoketojn...
     if (elekto.querySelector('details')) {
@@ -1282,6 +1676,7 @@ var redaktilo = function() {
     get_preference: get_preference,
     submetoj_stato: submetoj_stato,
     klavo: klavo,
+    load_ref: load_ref,
     fs_toggle: fs_toggle,
     rantaurigardo: rantaurigardo,
     shablono: shablono,

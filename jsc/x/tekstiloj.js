@@ -42,7 +42,7 @@ function replaceTld(radiko,str) {
     if (radiko) {
         return (str
             .replace(/<tld\/>/g,radiko)
-            .replace(regex_tld,'$1'+radiko.substr(1)));
+            .replace(regex_tld,'$1'+radiko.slice(1)));
     } else {
         return str;
     }
@@ -171,7 +171,7 @@ function insert_trd_lng(element,shov,lng,tradukoj) {
         } else {
             // se ne estas lpost, metu kiel lasta elemento
             // unua traduko en tiu elemento aŭ "lng" estas lasta lingvo laŭ alfabeto
-            shov = shov.substr(2);
+            shov = shov.slice(2);
             //$(str2xml(shov + trdStr + '\n' + shov)).appendTo(element);
             //element.appendChild(str2xml(shov + trdStr + '\n' + shov));
             //$(element).append($(trdXML).find('xml').children);
@@ -347,12 +347,12 @@ function enshovo_antaua_linio(text, pos) {
         if (text[i] == ' ') { 
             enshovo += ' ';
         } else if (text[i] == '\n') {
-            return enshovo.substr(p-pos);
+            return enshovo.slice(p-pos);
         } else {
             enshovo = '';
         }
     }
-    return enshovo.substr(p-pos);
+    return enshovo.slice(p-pos);
 }
 
 /** Kontrolas ĉu teksto konsistas nur el spacsignoj
@@ -374,15 +374,15 @@ function all_spaces(spaces) {
 function kameligo(str, rad='') {
     var kamelo = '';
     var vortoj = str.split(' ');
-    var komenclitero = rad ? rad.substr(0,1).toUpperCase() : '';
+    var komenclitero = rad ? rad.slice(0,1).toUpperCase() : '';
     for (var v=0; v<vortoj.length; v++) {
         if (vortoj[v].startsWith('<tld/>')) {
-            kamelo += ' <tld lit="'+ komenclitero + '"/>' + vortoj[v].substr(6);
+            kamelo += ' <tld lit="'+ komenclitero + '"/>' + vortoj[v].slice(6);
         } else {
-            kamelo += ' ' + vortoj[v].substr(0,1).toUpperCase() + vortoj[v].substr(1).toLowerCase();
+            kamelo += ' ' + vortoj[v].slice(0,1).toUpperCase() + vortoj[v].slice(1).toLowerCase();
         }
     }
-    return kamelo.substr(1);
+    return kamelo.slice(1);
 }
 
 /**
@@ -409,7 +409,7 @@ function forigu_markup(xml) {
 }
 
 /**
- * Rompas tro lingajn liniojn
+ * Rompas tro longajn liniojn
  * @param {string} str - la traktenda teksto
  * @param {number} indent - se donita, nombro de spacsignoj aldonendaj ĉe ĉiu nova linio
  * @param {number} linirompo - la maksimuma linilongeco, 80 apriore
@@ -442,3 +442,113 @@ function linirompo(str, indent=0, linirompo=80) {
     }
     return str;
 }
+
+/**
+ * Redonas la spacojn (enŝovon) en la komenco de la markita liniode Textarea
+ * @param {Element} txtarea 
+ * @param {number} shift - se donita, ŝoviĝu tiom da signoj antaŭ eltrovi (ekz-e shift=-1)
+ * @returns la linikomencaj spacoj
+ */
+function get_indent(txtarea,shift = 0) {
+    let indent = 0;
+    if (txtarea.selectionStart || txtarea.selectionStart == '0') { // Mozilla
+        const startPos = txtarea.selectionStart+shift;
+        const linestart = txtarea.value.substring(0, startPos).lastIndexOf("\n");
+        while (txtarea.value.substring(0, startPos).charCodeAt(linestart+1+indent) == 32) {indent++;}
+    } else if (document.selection && document.selection.createRange) { // IE/Opera
+        const range = document.selection.createRange();
+        range.moveStart('character', -200); 
+        const selText = range.text;
+        const linestart = selText.lastIndexOf("\n",selText.length+shift);
+        while (selText.charCodeAt(linestart+1+indent) == 32) {indent++;}
+    }
+    return (str_repeat(" ", indent));
+};
+
+
+/**
+ * Enŝovas markitan liniaron je pliaj spacoj dekstren (offset>0) aŭ maldekstren (offset<0)
+ * @param {Element} txtarea 
+ * @param {number} offset 
+ */
+function indent(txtarea, offset) {
+    let selText, isSample=false;
+    const ind = str_repeat(" ", Math.abs(offset))
+
+    if (document.selection && document.selection.createRange) { // IE/Opera
+        alert("tio ne funkcias por IE/Opera.");
+    } else if (txtarea.selectionStart || txtarea.selectionStart==0) { // Mozilla
+
+        // sekurigu nunan rulpozicion
+        const textScroll = txtarea.scrollTop;
+        // legu nunan elekton
+        txtarea.focus();
+        let startPos = txtarea.selectionStart;
+        if (startPos > 0) {
+            startPos--;
+        }
+        let endPos = txtarea.selectionEnd;
+        if (endPos > 0) {
+            endPos--;
+        }
+        selText = txtarea.value.substring(startPos, endPos);
+
+        if (selText=="") {
+            alert("Marku kion vi volas en-/elŝovi.");
+        } else {
+            let nt; // var por nova teksto
+            if (offset > 0)
+                nt = selText.replace(/\n/g, "\n"+ind);
+            else if (offset < 0) {
+                const re = new RegExp("\n"+ind,"g")            
+                nt = selText.replace(re, "\n");
+            }
+
+            txtarea.value = 
+                txtarea.value.substring(0, startPos)
+                + nt
+                + txtarea.value.substring(endPos, txtarea.value.length);
+
+            txtarea.selectionStart = startPos+1;
+            txtarea.selectionEnd = startPos + nt.length+1;
+
+            //restore textarea scroll position
+            txtarea.scrollTop = textScroll;
+        }
+    } 
+};
+
+     
+    
+/**
+ * Elektas regionon en Input, Textarea inter signoj start kaj end
+ * @param {Element} element 
+ * @param {number} start 
+ * @param {number} end 
+ */
+function selectRange(element, start, end) {
+    if (end === undefined) {
+        end = start;
+    }
+    //element.focus();
+    if ('selectionStart' in element) {
+        element.selectionStart = start;
+        element.selectionEnd = end;
+    } else if (element.setSelectionRange) {
+        element.setSelectionRange(start, end);
+    } else if (element.createTextRange) {
+        var range = element.createTextRange();
+        range.collapse(true);
+        range.moveEnd('character', end);
+        range.moveStart('character', start);
+        range.select();
+    }
+    element.blur();
+    element.focus();
+    
+    // almenaŭ en IE necesas ruli al la ĝusta linio ankoraŭ, por ke ĝi estu videbla
+    var text = element.value;
+    var scroll_to_line = Math.max(get_line_pos(start,text).line - 5, 0);
+    var last_line = get_line_pos(text.length-1,text).line;
+    element.scrollTop = element.scrollHeight * scroll_to_line / last_line;
+};

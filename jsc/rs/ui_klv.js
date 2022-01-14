@@ -164,7 +164,7 @@ $.widget( "redaktilo.Klavaro", {
                     // traktu ankaŭ majusklan / minusklan formon de la radiko
                     var first = radiko.charAt(0);
                     first = (first == first.toUpperCase() ? first.toLowerCase() : first.toUpperCase());
-                    var radiko2 = first + radiko.substr(1);
+                    var radiko2 = first + radiko.slice(1);
                             
                     if ( radiko ) {
                         var newtext = elektita.replace(radiko,'<tld/>').replace(radiko2,'<tld lit="'+first+'"/>');

@@ -221,7 +221,7 @@ $.widget( "redaktilo.Artikolo", {
                 // indent
                 if (event.shiftKey == false)
                     this.element.indent(2);
-                    else
+                else
                     this.element.indent(-2);
             } else if ( !elekto ) {
                 // traktu enŝovojn linikomence...
@@ -235,14 +235,16 @@ $.widget( "redaktilo.Artikolo", {
                 }
             }
         } else if (keycode == 8) { // BACKSPACE
-            var spaces = this.chars_before_pos();
-            if (spaces.length > 0 && all_spaces(spaces) && 0 == spaces.length % 2) { // forigu du anstataŭ nur unu spacon
-                event.preventDefault(); 
-
-                var el = this.element;
-                var pos = el.getCursorPosition();
-                el.selectRange(pos-2, pos);
-                el.insert(''); 
+            if (this.elekto() == '') { // nur se nenio estas elektita!
+                var spaces = this.chars_before_pos();
+                if (spaces.length > 0 && all_spaces(spaces) && 0 == spaces.length % 2) { // forigu du anstataŭ nur unu spacon
+                    event.preventDefault(); 
+    
+                    var el = this.element;
+                    var pos = el.getCursorPosition();
+                    el.selectRange(pos-2, pos);
+                    el.insert(''); 
+                }    
             }
         }
     },
@@ -398,7 +400,7 @@ $.widget( "redaktilo.Artikolo", {
                     mrk = match[1];
                     var dpos = match.index;
                     // count lines till <cnt
-                    var lmatch2 = d.substr(0,dpos).match(rx._lbr);
+                    var lmatch2 = d.slice(0,dpos).match(rx._lbr);
                     var dline = lmatch2? lmatch2.length : 0;
                     // find kap
                     match = d.match(rx._kap); 
@@ -616,7 +618,7 @@ $.widget( "redaktilo.Artikolo", {
         const radiko = xmlarea.getRadiko();
         var t = (xmlarea.syncedXml() //this.element.val()
             .replace(rx._tl0,radiko)
-            .replace(rx._tld,'$1'+radiko.substr(1)));
+            .replace(rx._tld,'$1'+radiko.slice(1)));
 
         // line numbers?
         if (line_numbers) {
@@ -666,8 +668,8 @@ $.widget( "redaktilo.Artikolo", {
         for (i=0; i<lines.length; i++) {
             var line = lines[i];
             var d = line.indexOf(']');
-            var no = line.substr(1,d-1);
-            var text = line.substr(d+1);
+            var no = line.slice(1,d);
+            var text = line.slice(d+1);
             if (text.trim().length > 1) {
                 result[no] = text;
             }

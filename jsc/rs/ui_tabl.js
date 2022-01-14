@@ -1,7 +1,7 @@
 
 /* jshint esversion: 6 */
 
-// (c) 2016 - 2019 Wolfram Diestel
+// (c) 2016 - 2022 Wolfram Diestel
 // laŭ GPL 2.0
 
 import { show_xhr_error } from './ui_dlg.js';
@@ -243,7 +243,7 @@ export default function() {
                 re_a: "aj?n?\\b", 
                 re_ntr: "([ao]s|[ui]s?|[aoi]ntaj?n?)\\b",
                 re_tr: "([ao]s|[ui]s?|[aoi]n?taj?n?)\\b"}[re];
-            srch.val(v.substring(0,pos)+x+v.substr(pos));
+            srch.val(v.substring(0,pos)+x+v.slice(pos));
         }
     });
 
@@ -560,14 +560,14 @@ function antaurigardo() {
                 // korektu ligilojn en <a href...
                 $("#rigardo a").each( function() {
                     var href = $(this).attr('href');
-                    if (href && href[0] != '#' && href.substr(0,4) != 'http') {
+                    if (href && href[0] != '#' && href.slice(0,4) != 'http') {
                         if (href[0] != '/' && href[0] != '.') {
                             var newUrl = revo_url + '/revo/art/' + href;
                             //console.debug(href+" -> "+newUrl);
                             $(this).attr('href', newUrl);
                             $(this).attr('target', '_new');
-                        } else if (href.substr(0,3) == '../' ) {
-                            const newUrl = revo_url + '/revo/'+href.substr(3);
+                        } else if (href.slice(0,3) == '../' ) {
+                            const newUrl = revo_url + '/revo/'+href.slice(3);
                             //console.debug(href+" -> "+newUrl);
                             $(this).attr('href', newUrl);
                             $(this).attr('target', '_new');
@@ -585,8 +585,8 @@ function antaurigardo() {
                 
                 $("#rigardo img").each(function() {
                     var src = $(this).attr('src');
-                    if ( src.substr(0,7) == '../bld/' ) {
-                        $(this).attr('src',revo_url + '/revo/bld/'+src.substr(7));
+                    if ( src.slice(0,7) == '../bld/' ) {
+                        $(this).attr('src',revo_url + '/revo/bld/'+src.slice(7));
                     }
                 });
 
@@ -596,22 +596,22 @@ function antaurigardo() {
                 /** anstataŭigo de URL ne funkcias, anst. servu de la redaktilo fone (kiel proxy)...
                 $("#rigardo embed").each(function() {
                     var src = $(this).attr('src');
-                    if ( src.substr(0,7) == '../bld/' ) {
-                        $(this).attr('src','http://retavortaro.de/revo/bld/'+src.substr(7))
+                    if ( src.slice(0,7) == '../bld/' ) {
+                        $(this).attr('src','http://retavortaro.de/revo/bld/'+src.slice(7))
                     }
                 });
                 $("#rigardo object").each(function() {
                     var src =$(this).attr('data');
-                    if ( src.substr(0,7) == '../bld/' ) {
+                    if ( src.slice(0,7) == '../bld/' ) {
                         $(this).replaceWith('<object data="http://retavortaro.de/revo/bld/'
-                            +src.substr(7)+'" type="image/svg+xml"></object>');
+                            +src.slice(7)+'" type="image/svg+xml"></object>');
                     }
                 });
                  */
                 $("#rigardo source").each(function() {
                     var src = $(this).attr('srcset');
-                    if ( src.substr(0,7) == '../bld/' ) {
-                        $(this).attr('srcset', revo_url + '/revo/bld/'+src.substr(7));
+                    if ( src.slice(0,7) == '../bld/' ) {
+                        $(this).attr('srcset', revo_url + '/revo/bld/'+src.slice(7));
                     }
                 });
 

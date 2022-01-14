@@ -1,28 +1,9 @@
 
 /* jshint esversion: 6 */
 
-// (c) 2020, 2021 Wolfram Diestel
-/*
-const version = globalThis.eldono;
-const debug = false; //true; // ni bezonas provizore aparte por vidi erarojn en iOS Webkit, kie ni ne havas "console"
-const revo_url = "reta-vortaro.de";
-const art_prefix = "/revo/art/";
-const tez_prefix = "/revo/tez/";
-const sercho_url = "/cgi-bin/sercxu-json-"+version+".pl";
-const trad_uwn_url = "/cgi-bin/traduku-uwn.pl";
-//const hazarda_url = "/cgi-bin/hazarda_art.pl";
-const titolo_url = "titolo-"+version+".html";
-const redaktilo_url = "redaktilo-"+version+".html";
-const redaktmenu_url = "redaktmenu-"+version+".html";
-//const inx_eo_url = "/revo/inx/_eo.html";
+// (c) 2020 - 2022 Wolfram Diestel
+// laŭ GPL 2.0
 
-const inx_eo_url = "/revo/inx/_plena.html";
-const mx_trd_url = "/cgi-bin/mx_trd.pl";
-const nombroj_url = "/cgi-bin/nombroj.pl";
-const mrk_eraro_url = "/cgi-bin/mrk_eraroj.pl";
-const http_404_url = "/revo/dlg/404.html";
-const sercho_videblaj = 7;
-*/
 
 // statoj kaj transiroj
 const t_nav  = new Transiroj("nav","start",["ĉefindekso","subindekso","serĉo","redaktilo"]);
@@ -30,12 +11,12 @@ const t_main = new Transiroj("main","start",["titolo","artikolo","red_xml","red_
 const t_red  = new Transiroj("red","ne_redaktante",["ne_redaktante","redaktante","tradukante","sendita"]);
 
 /**
- * kodlistoj agorditaj por Reta Vortaro: lingvoj, fakoj, stiloj
+ * Kodlistoj agorditaj por Reta Vortaro: lingvoj, fakoj, stiloj
  */
 const revo_codes = {
-    lingvoj: new Codelist('lingvo', '/revo/cfg/lingvoj.xml'),
-    fakoj: new Codelist('fako','/revo/cfg/fakoj.xml'),
-    stiloj: new Codelist('stilo','/revo/cfg/stiloj.xml')
+    lingvoj: new Xlist('lingvo', '/revo/cfg/lingvoj.xml'),
+    fakoj: new Xlist('fako','/revo/cfg/fakoj.xml'),
+    stiloj: new Xlist('stilo','/revo/cfg/stiloj.xml')
 };
 revo_codes.lingvoj.load();
   
@@ -489,7 +470,7 @@ function normalize_href(target, href) {
     if (href.endsWith('titolo.html')) {
         return globalThis.dlg_prefix + globalThis.titolo_url;
     } else if (href.startsWith('../')) {
-        return globalThis.revo_prefix + href.substr(3);
+        return globalThis.revo_prefix + href.slice(3);
     } else if (href.startsWith('tz_') || href.startsWith('vx_')) {
         return globalThis.tez_prefix + href;
     } else if (href[0] != '/' && ! href.startsWith('http')) {
@@ -629,8 +610,9 @@ function load_page(trg, url, push_state=true, whenLoaded=undefined) {
             update_hash();
 
             const fn = getUrlFileName(url);
-            const art = fn.substring(0,fn.lastIndexOf('.'));   
-            artikolo.preparu_art(art);                      
+            const art = fn.substring(0,fn.lastIndexOf('.')); 
+            if (art)  
+                artikolo.preparu_art(art);                      
             
             var s_artikolo = document.getElementById("s_artikolo");
             // refaru matematikajn formulojn, se estas
@@ -776,13 +758,13 @@ function adaptu_paghon(root_el, url) {
             event.stopPropagation(); // ne voku navigate_link!
         });
         // en la lingva indekso metu preferatajn lingvojn supren
-        const lingvoj = root_el.querySelector("a[href^='lx_la_']").closest('details');
+        const lingvoj = root_el.querySelector("a[href*='lx_la_']").closest('details');
         const p = lingvoj.querySelector('p');
         var jam = [];
         for (let l of preferoj.languages()) {
             let l_ = l.split(/-/)[0];
             if (jam.indexOf(l_)<0) { // evitu duoblaĵojn!
-                let a = lingvoj.querySelector("a[href^='lx_"+l_+"_']");
+                let a = lingvoj.querySelector("a[href*='lx_"+l_+"_']");
                 if (a) p.prepend(a.cloneNode(true));
                 jam.push(l_);
             }
@@ -985,193 +967,163 @@ function serchu_q(esprimo) {
     const srch = new Sercho();
     srch.serchu(esprimo, function() {
 
-            // la rezulto estas listo de objektoj po lingvo kiu enhavas po unu trov-liston:
-            // [
-            //     {
-            //    "lng1":"eo","lng2":"de","titolo":"esperante (de)", "trovoj": [
-            //         {"art":"cxeval","mrk1":"cxeval.0o","vrt1":"ĉevalo","mrk2":"lng_de","vrt2":"Gaul, Pferd, Ross, Springer"} 
-            //     ]}
-            // ]
-            /*
-            function make_pli(n_kasxitaj) {
-                var pli = ht_elements([
-                    ["dt",{},
-                        [["a",{href: "#"},"(+"+(n_kasxitaj)+")"]]
-                    ],
-                    ["dd"]
-                ]);
-                // funkcio por malkaŝi la reston...
-                pli[0].addEventListener("click",function(event) {
-                    var dl = event.target.closest("dl");
-                    for (var ch of dl.childNodes) {
-                        ch.classList.remove("kasxita");
-                    }
-                    event.target.closest("dt").classList.add("kasxita");
-                    var p = dl.parentElement.querySelector("p");
-                    if (p) p.classList.remove("kasxita");
-                });
-                return pli;
-            }
-            */
+        function findings(lng) {
+            var div = ht_elements([
+                ["div",{},
+                    [["h1",{}, revo_codes.lingvoj.codes[lng]||lng ]]
+                ]
+            ])[0];
+            var dl = ht_element("dl");
 
-            function findings(lng) {
-                var div = ht_elements([
-                    ["div",{},
-                        [["h1",{}, revo_codes.lingvoj.codes[lng]||lng ]]
-                    ]
-                ])[0];
-                var dl = ht_element("dl");
+            const trvj = srch.trovoj(lng);
+            // console.log(trvj);
 
-                const trvj = srch.trovoj(lng);
-                // console.log(trvj);
+            var atr = {};
+            for (var n=0; n<trvj.length; n++) {
+                var t = trvj[n];
+                if (n+1 > globalThis.sercho_videblaj && trvj.length > globalThis.sercho_videblaj+1) {
+                    // enmetu +nn antaŭ la unua kaŝita elemento
+                    if (n - globalThis.sercho_videblaj == 1) {
+                        const pli = ht_pli(trvj.length - globalThis.sercho_videblaj);
+                        if (pli) dl.append(...pli);
+                    }                        
+                    atr = {class: "kasxita"};
+                }
 
-                var atr = {};
-                for (var n=0; n<trvj.length; n++) {
-                    var t = trvj[n];
-                    if (n+1 > globalThis.sercho_videblaj && trvj.length > globalThis.sercho_videblaj+1) {
-                        // enmetu +nn antaŭ la unua kaŝita elemento
-                        if (n - globalThis.sercho_videblaj == 1) {
-                            const pli = ht_pli(trvj.length - globalThis.sercho_videblaj);
-                            if (pli) dl.append(...pli);
-                        }                        
-                        atr = {class: "kasxita"};
-                    }
+                const dt = ht_element("dt",atr);
 
-                    const dt = ht_element("dt",atr);
+                if ( lng == 'eo' ) {
+                    // tradukojn oni momente ne povas ne povas rekte alsalti,
+                    // do ni provizore uzas t.eo.mrk anst. t[l].mrk
+                    const a = ht_element("a",{target: "precipa", href: t.h}, t.v);
+                    dt.append(a);
+                } else {
+                    const s = ht_element("span",{lang: lng}, t.v);
+                    dt.append(s);
+                }
 
-                    if ( lng == 'eo' ) {
-                        // tradukojn oni momente ne povas ne povas rekte alsalti,
-                        // do ni provizore uzas t.eo.mrk anst. t[l].mrk
-                        const a = ht_element("a",{target: "precipa", href: t.h}, t.v);
-                        dt.append(a);
-                    } else {
-                        const s = ht_element("span",{lang: lng}, t.v);
-                        dt.append(s);
-                    }
+                // dum redakto ni aldonas transprenan butonon por kreado de referencoj
+                if ( lng == 'eo' && t_red.stato == "redaktante") {
+                    const ref_btn = ht_element("button",{
+                        class: "icon_btn r_vid", 
+                        value: t.h.split('#')[1], // mrk
+                        title:"transprenu kiel referenco"
+                    });
+                    dt.append(ref_btn);
+                }                            
 
-                    // dum redakto ni aldonas transprenan butonon por kreado de referencoj
-                    if ( lng == 'eo' && t_red.stato == "redaktante") {
-                        const ref_btn = ht_element("button",{
-                            class: "icon_btn r_vid", 
-                            value: t.h.split('#')[1], // mrk
-                            title:"transprenu kiel referenco"
-                        });
-                        dt.append(ref_btn);
-                    }                            
+                const dd = ht_element("dd",atr);
 
-                    const dd = ht_element("dd",atr);
-   
-                    if ( lng == 'eo' ) {
-                        // trovitaj tradukoj de tiu e-a vorto
-                        for ( let [l,trd] of Object.entries(t.t) ) { // ni trairu ĉiujn lingvojn....
-                            // tradukojn oni momente ne povas rekte alsalti,
-                            // do ni (provizore?) uzas href (el drv-mrk) 
-                            const a = ht_elements([
-                                    ["a",{target: "precipa", href: t.h},
-                                        [["code",{}, l + ":"],["span",{lang: l}, trd]]
-                                    ],["br"]
-                                ]);    
-                            if (a) dd.append(...a);
-                        } // for lng,trd ...
-                    } else {
-                        // trovitaj esperantaj tradukoj de tiu nacilingva vorto
-                        for (let e of t.t) {
-                            const a = ht_elements([
-                                ["a",{target: "precipa", href: e.h},
-                                    e.k
+                if ( lng == 'eo' ) {
+                    // trovitaj tradukoj de tiu e-a vorto
+                    for ( let [l,trd] of Object.entries(t.t) ) { // ni trairu ĉiujn lingvojn....
+                        // tradukojn oni momente ne povas rekte alsalti,
+                        // do ni (provizore?) uzas href (el drv-mrk) 
+                        const a = ht_elements([
+                                ["a",{target: "precipa", href: t.h},
+                                    [["code",{}, l + ":"],["span",{lang: l}, trd]]
                                 ],["br"]
                             ]);    
-                            if (a) dd.append(...a);
-                        } // for e
-                    }
-                    dl.append(dt,dd);
+                        if (a) dd.append(...a);
+                    } // for lng,trd ...
+                } else {
+                    // trovitaj esperantaj tradukoj de tiu nacilingva vorto
+                    for (let e of t.t) {
+                        const a = ht_elements([
+                            ["a",{target: "precipa", href: e.h},
+                                e.k
+                            ],["br"]
+                        ]);    
+                        if (a) dd.append(...a);
+                    } // for e
                 }
-                div.append(dl);
-
-                // atentigo pri limo
-                //if (lng.max == lng.trovoj.length) {
-                //    const noto = ht_element("p",{class: "kasxita"},"noto: por trovi ankoraŭ pli, bv. precizigu la serĉon!");
-                //    div.append(noto);
-                //}
-                return div;
+                dl.append(dt,dd);
             }
+            div.append(dl);
 
-            function nofindings() {
-                return ht_elements([
-                    ["p",{},
-                        [["strong",{},"Nenio troviĝis!"]]
-                    ]
-                ])[0];
-            }
+            // atentigo pri limo
+            //if (lng.max == lng.trovoj.length) {
+            //    const noto = ht_element("p",{class: "kasxita"},"noto: por trovi ankoraŭ pli, bv. precizigu la serĉon!");
+            //    div.append(noto);
+            //}
+            return div;
+        } // ...findings
 
-            index_spread();
-            const nav = document.getElementById("navigado");
-            const inx_enh = nav.querySelector(".enhavo");
-            const trovoj = ht_element("div",{id: "x:trovoj"},"");
+        function nofindings() {
+            return ht_elements([
+                ["p",{},
+                    [["strong",{},"Nenio troviĝis!"]]
+                ]
+            ])[0];
+        } // ...nofindings
 
-            // se nenio troviĝis...
-            if ( srch.malplena() ) {
-                trovoj.append(nofindings());
+        function serch_lng() {
+            const div = ht_elements([["div",{class:"s_lng"},
+                [
+                    ["span",{class: "llbl"},"serĉlingvoj: "],
+                    ["span",{class: "llst"},srch.s_lng.join(', ')]
+                ]
+            ]]);
+            return div[0];
+        }
 
-            // se troviĝis ekzakte unu kaj ni ne redaktas, iru tuj al tiu paĝo
-            } else if ( srch.sola() && t_red.stato != "redaktante" ) {
-                load_page("main",srch.unua().href);
-            }
+        index_spread();
+        const nav = document.getElementById("navigado");
+        const inx_enh = nav.querySelector(".enhavo");
+        const trovoj = ht_element("div",{id: "x:trovoj"},"");
 
-            if ( !srch.malplena() ) {
-                trovoj.append(findings('eo'));
-                for (let lng of srch.lingvoj()) {
-                    trovoj.append(findings(lng));
-                }    
+        // serĉlingvoj
+        if ( srch.s_lng ) {
+            trovoj.append(serch_lng());
+        }
 
-                // aldonu la reagon por ref-enmetaj butonoj
-                if (t_red.stato == "redaktante") {
-                    for (let btn of trovoj.querySelectorAll("button.r_vid")) {
-                        btn.addEventListener("click",(event)=>{                         
-                            // kiun ref-mrk ni uzu - depende de kiu butono premita
-                            const refmrk = event.target.value;
-                            // revenu de trovlisto al redakto-menuo
-                            load_page("nav",globalThis.redaktmenu_url,true,
-                                () => {
-                                    document.getElementById("r:refmrk").value = refmrk;
-                                    redaktilo.fs_toggle("r:ref");
-                                });        
-                        });
-                    }           
-                }     
-            }
-   
+        // se nenio troviĝis...
+        if ( srch.malplena() ) {
+            trovoj.append(nofindings());
 
-            // montru butonon por reveni al ĉefa indekso
-            //index_home_btn(trovoj.children[0]);
-            //show("x:nav_start_btn");
-            t_nav.transiro("serĉo");
+        // se troviĝis ekzakte unu kaj ni ne redaktas, iru tuj al tiu paĝo
+        } else if ( srch.sola() && t_red.stato != "redaktante" ) {
+            load_page("main",srch.unua().href);
+        }
 
-            inx_enh.textContent = "";
-            //inx_enh.append(...s_form,trovoj);
-            inx_enh.append(trovoj);
-            // forigu ankaŭ eventualan "viaj submetoj", ĝi estu nur en ĉefindekso por
-            // eviti konfuzojn
-            const subm = nav.querySelector("#submetoj");
-            if (subm) nav.removeChild(subm);
-        },
-        start_wait,
-        stop_wait 
+        if ( !srch.malplena() ) {
+            trovoj.append(findings('eo'));
+            for (let lng of srch.lingvoj()) {
+                trovoj.append(findings(lng));
+            }    
+
+            // aldonu la reagon por ref-enmetaj butonoj
+            if (t_red.stato == "redaktante") {
+                for (let btn of trovoj.querySelectorAll("button.r_vid")) {
+                    btn.addEventListener("click",(event)=>{                         
+                        // kiun ref-mrk ni uzu - depende de kiu butono premita
+                        const refmrk = event.target.value;
+                        const refstr = event.target.previousSibling.textContent;
+                        // revenu de trovlisto al redakto-menuo
+                        load_page("nav",globalThis.redaktmenu_url,true,
+                            () => redaktilo.load_ref(refmrk,refstr));        
+                    });
+                }           
+            }     
+        }
+
+        // montru butonon por reveni al ĉefa indekso
+        //index_home_btn(trovoj.children[0]);
+        //show("x:nav_start_btn");
+        t_nav.transiro("serĉo");
+
+        inx_enh.textContent = "";
+        //inx_enh.append(...s_form,trovoj);
+        inx_enh.append(trovoj);
+        // forigu ankaŭ eventualan "viaj submetoj", ĝi estu nur en ĉefindekso por
+        // eviti konfuzojn
+        const subm = nav.querySelector("#submetoj");
+        if (subm) nav.removeChild(subm);
+    },
+    start_wait,
+    stop_wait 
     );
 
-    /*
-    
-    $.getJSON("/cgi-bin/sercxu-json.pl",
-        { 
-            sercxata: $("#serchteksto").val() 
-        })
-    .done(function(data) {
-        //alert( "Data Loaded: " + data );
-        for (tr of data) {
-            cosole.log(tr);
-        }
-    });
-    */
 }
 
 /**
@@ -1305,7 +1257,7 @@ function traduku(event,artikolo) {
 */
 
 /**
- * KOmencas redaktadon de la aktuala artikolo ŝargante la redaktopaĝon kaj -ilaron.
+ * Komencas redaktadon de la aktuala artikolo ŝargante la redaktopaĝon kaj -ilaron.
  * @param {*} href 
  */
 function redaktu(href) {
@@ -1379,7 +1331,7 @@ function montru_submeto_staton(sj) {
                 ["details",{},[
                     ["summary",{},[
                         ["span",{class:'s_stato'},(stat[s.state]||'--')],
-                        " ",s.time.substr(0,16)," ",
+                        " ",s.time.slice(0,16)," ",
                         ["a",{href: '/revo/art/'+s.fname+'.html', target: 'precipa'},s.fname]                        
                     ]],
                     ["div",{},[

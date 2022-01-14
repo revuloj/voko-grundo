@@ -1,6 +1,6 @@
 {
     "name": "voko-grundo",
-    "version": "2.0.3",
+    "version": "2.0.4",
     "license": "GPL 2.0",
     "repository": {
         "type": "git",
@@ -20,7 +20,7 @@
     "scripts": {
         "env": "env",
         "lint": "jshint jsc/*/*.js",
-        "doc": "jsdoc -d doc jsc/*/*.js",
+        "doc": "jsdoc -d jsdoc jsc/*/*.js",
 
         "prebuild": "mkdir -p build",
         "//prebuild:svg": "bin/mp2png_svg.sh",
@@ -29,8 +29,8 @@
         "build:mp": "bin/mp2png_svg.sh",
         "build:svg": "bin/svg2css.sh build/smb/[ir]_*.svg > build/stl/piktogramoj.css",
 
-        "build:css": "npm run build:svg && cat stl/normalize.css stl/koloroj.css build/stl/piktogramoj.css stl/formularo.css stl/kadro.css stl/artikoloj.css stl/redaktilo.css | cssmin > build/stl/revo-2c-min.css && cp stl/artikolo-1b.css build/stl",
-        "build:rsc": "npm run build:svg && cat stl/normalize.css stl/koloroj.css build/stl/piktogramoj.css stl/formularo.css stl/artikoloj.css stl/redaktilo-revaj.css | cssmin > build/stl/redaktilo-2c-min.css",
+        "build:css": "npm run build:svg && cat stl/normalize.css stl/koloroj.css build/stl/piktogramoj.css stl/formularo.css stl/kadro.css stl/artikoloj.css stl/redaktilo.css | cssmin > build/stl/revo-2d-min.css && cp stl/artikolo-1b.css build/stl",
+        "build:rsc": "npm run build:svg && cat stl/normalize.css stl/koloroj.css build/stl/piktogramoj.css stl/formularo.css stl/artikoloj.css stl/redaktilo-revaj.css | cssmin > build/stl/redaktilo-2d-min.css",
 
         "prebuild:dok": "mkdir -p build/dok",
         "build:dok": "bin/compile-dok.sh",       
@@ -38,11 +38,11 @@
         "prebuild:js": "mkdir -p build/jsc && node js_util/vokosgn2x.js",
         "prebuild:rsj": "mkdir -p build/rsj",
 
-        "build:js": "google-closure-compiler -W VERBOSE --compilation_level SIMPLE --js_module_root ./jsc/rv --entry_point ./kadro.js --js_output_file build/jsc/revo-2c-min.js --js='jsc/u/*.js' --js='jsc/x/*.js' --js='jsc/a/*.js' --js='jsc/rv/*.js' && cp jsc/revo-art-1b.js build/jsc",
-        "build:js:debug": "google-closure-compiler -W VERBOSE --compilation_level BUNDLE --js_module_root ./jsc --entry_point ./jsc/kadro.js --js_output_file build/jsc/revo-2c-min.js --js='jsc/u/*.js' --js='jsc/x/*.js' --js='jsc/a/*.js' --js='jsc/rv/*.js'",
+        "build:js": "google-closure-compiler -W VERBOSE --compilation_level SIMPLE --js_module_root ./jsc/rv --entry_point ./kadro.js --js_output_file build/jsc/revo-2d-min.js --js='jsc/u/*.js' --js='jsc/x/*.js' --js='jsc/a/*.js' --js='jsc/rv/*.js' && cp jsc/revo-art-1b.js build/jsc",
+        "build:js:debug": "google-closure-compiler -W VERBOSE --compilation_level BUNDLE --js_module_root ./jsc --entry_point ./jsc/kadro.js --js_output_file build/jsc/revo-2d-min.js --js='jsc/u/*.js' --js='jsc/x/*.js' --js='jsc/a/*.js' --js='jsc/rv/*.js'",
 
-        "build:rsj": "google-closure-compiler --compilation_level SIMPLE --process_common_js_modules --js_module_root ./jsc/rs --entry_point ./ui_kreo.js --js_output_file build/rsj/redaktilo-2c-min.js --js='jsc/u/*.js' --js='jsc/x/*.js' --js='jsc/a/*.js' --js='jsc/rs/*.js'",
-        "build:rsj:debug": "google-closure-compiler -W VERBOSE --compilation_level BUNDLE --js_module_root ./jsc/rs --entry_point ./ui_kreo.js --js_output_file build/rsj/redaktilo-2c-min.js --js='jsc/u/*.js' --js='jsc/x/*.js' --js='jsc/a/*.js' --js='jsc/rs/*.js' ",
+        "build:rsj": "google-closure-compiler --compilation_level SIMPLE --process_common_js_modules --js_module_root ./jsc/rs --entry_point ./ui_kreo.js --js_output_file build/rsj/redaktilo-2d-min.js --js='jsc/u/*.js' --js='jsc/x/*.js' --js='jsc/a/*.js' --js='jsc/rs/*.js'",
+        "build:rsj:debug": "google-closure-compiler -W VERBOSE --compilation_level BUNDLE --js_module_root ./jsc/rs --entry_point ./ui_kreo.js --js_output_file build/rsj/redaktilo-2d-min.js --js='jsc/u/*.js' --js='jsc/x/*.js' --js='jsc/a/*.js' --js='jsc/rs/*.js' ",
         
         "build": "npm run build:css && npm run build:dok && npm run build:js && npm run build:rsc && npm run build:rsj"
     },

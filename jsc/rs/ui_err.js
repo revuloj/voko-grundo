@@ -369,7 +369,7 @@ export function surmetita_dialogo(url,root_el,loc) {
 }
 
 export function show_error_status(error) {
-    plenigu_xmleraro_liston([{"line": "nekonata", "msg": error.toString().substr(0,256)+'...'}]);
+    plenigu_xmleraro_liston([{"line": "nekonata", "msg": error.toString().slice(0,256)+'...'}]);
     $("#elekto_indikoj").hide();
     $("#dock_klavaro").show();
     $("#dock_kontrolo").show();

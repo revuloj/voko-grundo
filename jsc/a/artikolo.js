@@ -1,7 +1,8 @@
 
 /* jshint esversion: 6 */
 
-// (c) 2020, 2021 Wolfram Diestel
+// (c) 2020 - 2022 Wolfram Diestel
+// laŭ GPL 2.0
 
 
 const js_sojlo = 3; //30+3;
@@ -39,19 +40,38 @@ window.addEventListener("hashchange", function() {
     }
 });
 
-// difinu ĉion sub nomprefikso "artikolo"
 
+/**
+ * La nomspaco 'artikolo' kunigas ĉiujn funkciojn kaj variablojn, kiujn
+ * ni uzas en la prezento de unuopa artikolo en Reta Vortaro.
+ * @namespace {Function} artikolo
+ */
 var artikolo = function() {
 
-    // tio vokiĝas ĉe izolita prezento de la artikolo
-    // kio fakte momente ne okazas, ĉar artikoloj referencas plu al v1b
+    /**
+     * Tio vokiĝas ĉe izolita prezento de la artikolo
+     * kio fakte momente ne okazas, ĉar artikoloj referencas plu al v1b kaj ne al tiu ĉi
+     * pli nova JS. Ni poste povos uzi tion por prepari la artikolon ĉe unuopa prezento
+     * eble aŭtomate ankadrigante / transirante al la plenkadra prezento.
+     * @memberof artikolo
+     * @inner
+     */
     when_doc_ready(function() {
         console.log("artikolo.when_doc_ready...:" + location.href);
-        preparu_art();
+        const fn = getUrlFileName(location.href);
+        const art = fn.substring(0,fn.lastIndexOf('.')); 
+        if (art) preparu_art(art);
         //enkadrigu();
     });
 
-    function preparu_art(artikolo = undefined) {
+    /**
+     * Preparas la artikolon: kaŝas kaseblajn aferojn, t.e. kunfaldas derivajojn krom unu, kaŝas 
+     * ekzemploj krom po tri, kaŝas tradukojn krom preferatajn. Alligas la kodon por aktivaj elementoj
+     * uzata por faldi-malfaldi.
+     * @memberof artikolo
+     * @param {string} artikolo - la doserinomo de la artikolo
+     */
+    function preparu_art(artikolo) {
         // evitu preparon, se ni troviĝas en la redaktilo kaj
         // la artikolo ne ĉeestas!
         if (! document.getElementById(sec_art)) return;
@@ -68,7 +88,7 @@ var artikolo = function() {
         /* aktivigu nur por longaj artikoloj... */
         var d = document.getElementsByClassName("kasxebla");
          //if (d.length > js_sojlo) {
-        piedlinio_modifo(artikolo);
+        piedlinio_modifo();
         preparu_kashu_sekciojn();
         preparu_malkashu_fontojn();
         preparu_maletendu_sekciojn();
@@ -78,14 +98,26 @@ var artikolo = function() {
         //}
     }
 
+    /**
+     * Trovas la plej proksiman H2-titolelementon (do la derivajon, en kiu ni troviĝas)
+     * @memberof artikolo
+     * @inner
+     * @param {Element} element 
+     * @returns La trovitan H2-elementon
+     */
     function getPrevH2(element) {
         var prv = element.previousSibling;
         while ( prv && prv.nodeName != "H2") { prv = prv.previousSibling; }
         return prv;
     }
 
-    /* kaŝu sekciojn de derivaĵoj, se la artikolo estas tro longa
-    kaj provizu ilin per ebleco remalkaŝi */
+    
+    /**
+     * Kaŝas sekciojn de derivaĵoj, se la artikolo estas tro longa
+     * kaj provizas ilin per ebleco remalkaŝi 
+     * @memberof artikolo
+     * @inner
+     */
     function preparu_kashu_sekciojn() {
         var d = document.getElementsByClassName("kasxebla");
 
@@ -107,11 +139,11 @@ var artikolo = function() {
             
             // provizore ne bezonata: el.addEventListener("kashu", function(event) { kashu_drv(event.currentTarget) });
             el.addEventListener("malkashu", function(event) { 
-                malkashu_drv(event.currentTarget);
+                malkashu_drv(/** @type {Element}*/(event.currentTarget));
                 event.stopPropagation();
             });
             el.addEventListener("komutu", function(event) { 
-                kashu_malkashu_drv(event.currentTarget);
+                kashu_malkashu_drv(/** @type {Element}*/(event.currentTarget));
                 event.stopPropagation();
             });           
 
@@ -147,6 +179,12 @@ var artikolo = function() {
         }    
     }
 
+    /**
+     * Kaŝas la piednotajn fontindikojn de la ekzemploj. Oni povas aperigi ilin
+     * per klako sur la piednota signo.
+     * @memberof artikolo
+     * @inner
+     */
     function preparu_malkashu_fontojn() {
         var d = document.getElementsByClassName("fontoj kasxita");
         for (var el of d) {
@@ -157,8 +195,12 @@ var artikolo = function() {
         }
     }
 
-    /* kelkajn sekciojn kiel ekzemploj, tradukoj, rimarkoj ni maletendas, por eviti troan amplekson.
-    Ili ricevas eblecon por reetendi ilin per "pli..." */
+    /**
+     * Kelkajn sekciojn kiel ekzemploj, tradukoj, rimarkoj ni maletendas, por eviti troan amplekson.
+     * Ili ricevas eblecon por reetendi ilin per "pli..." 
+     * @memberof artikolo
+     * @inner
+     */
     function preparu_maletendu_sekciojn() {
         var d = document.getElementsByClassName("etendebla");
     //    var sojlo = 3+2; // ekde tri drv + trd + fnt, au du drv kaj adm
@@ -178,7 +220,11 @@ var artikolo = function() {
         }
     }
 
-    /** kaŝu ĉiujn derivaĵojn **/
+    /** 
+     * Kaŝas ĉiujn derivaĵojn 
+     * @memberof artikolo
+     * @inner
+     */
     function kashu_chiujn_drv() {
         for (var el of document.getElementsByClassName("kasxebla")) 
             if (el.parentElement.classList.contains("drv") ||
@@ -186,7 +232,11 @@ var artikolo = function() {
                 kashu_drv(el);
     }
 
-    /** malkaŝu ĉiujn derivaĵojn **/
+    /** 
+     * Malkaŝas ĉiujn derivaĵojn 
+     * @memberof artikolo
+     * @inner
+     */
     function malkashu_chiujn_drv() {
         for (var el of document.getElementsByClassName("kasxebla")) 
             if (el.parentElement.classList.contains("drv") ||
@@ -194,6 +244,12 @@ var artikolo = function() {
                 malkashu_drv(el);
     }
 
+    /**
+     * Kaŝas unuopan derivaĵon
+     * @memberof artikolo
+     * @inner
+     * @param {Element} el 
+     */
     function kashu_drv(el) {
         el.classList.add("kasxita");
         var h2 = getPrevH2(el);
@@ -203,6 +259,12 @@ var artikolo = function() {
         }
     }
 
+    /** 
+     * Malkaŝas unopan derivaĵon
+     * @memberof artikolo
+     * @inner
+     * @param {Element} el 
+     */
     function malkashu_drv(el) {
         // console.log("malkaŝu drv");
         el.classList.remove("kasxita");
@@ -213,6 +275,12 @@ var artikolo = function() {
         }
     }
 
+    /**
+     * Kaŝas unuopan derivaĵon,s e gi estas malkasita kaj malkaŝas ĝin, se gi estas kasita momente.
+     * @memberof artikolo
+     * @inner
+     * @param {Element} el 
+     */
     function kashu_malkashu_drv(el) {
         //event.stopPropagation();
         //var div = section.getElementsByClassName("kasxebla")[0];
@@ -226,6 +294,12 @@ var artikolo = function() {
             kashu_drv(div);
     }
 
+    /**
+     * Maletendas tradukojn en unu sekcio
+     * @memberof artikolo
+     * @inner
+     * @param {Element} element 
+     */
     function maletendu_trd(element) {
         //var nav_lng = navigator.languages || [navigator.language];
         var eo;
@@ -277,6 +351,12 @@ var artikolo = function() {
         }
     }
 
+    /**
+     * Regas la evento por etendi kasitajn tradukojn
+     * @memberof artikolo
+     * @inner
+     * @param {Event} event 
+     */
     function etendu_trd(event) {
         event.preventDefault();
         var div_trd = event.target.closest("DL");
@@ -293,6 +373,12 @@ var artikolo = function() {
     }
 
 
+    /**
+     * Maletendas ekzemplojn ene de dfinio
+     * @memberof artikolo
+     * @inner
+     * @param {Element} dif 
+     */
     function maletendu_ekz(dif) {
         var ekz_cnt = 0;
         for (var ch of dif.childNodes) {
@@ -323,6 +409,12 @@ var artikolo = function() {
         }    
     }
 
+    /**
+     * Reagas al evento por etendi kasitajn ekzemplojn
+     * @memberof artikolo
+     * @inner
+     * @param {Event} event 
+     */
     function etendu_ekz(event) {
         var dif = event.target.closest("span.dif");
         for (var ch of dif.querySelectorAll(".ekz")) {
@@ -343,6 +435,12 @@ var artikolo = function() {
         return span;
     }*/
 
+    /**
+     * Aldonas butonojn por kasi kaj malkasi sekciojn
+     * @memberof artikolo
+     * @inner
+     * @param {string} artikolo - la dosiernomo de la artikolo
+     */
     function kashu_malkashu_butonoj(artikolo) {
         // aldonu kasho/malkasho-butonojn  
         //var art = document.getElementById(sec_art);
@@ -361,7 +459,14 @@ var artikolo = function() {
         art.appendChild(div);
     }
 
-    function piedlinio_modifo(artikolo) {
+    /**
+     * Adaptas la piedlinion por la aktuala prezento. 
+     * La piedlinioj ankoraŭ havas la malnovan aranĝon kaj 
+     * necesas ilin iom koncizigi kaj adapti por la nova fasado.
+     * @memberof artikolo
+     * @inner
+     */
+    function piedlinio_modifo() {
         const pied = document.body.getElementsByTagName("FOOTER")[0];
         if (pied) { // en la redeaktilo eble jam foriĝis...
             const first_a = pied.querySelector("A");
@@ -402,6 +507,13 @@ var artikolo = function() {
         }        
     }
 
+    /**
+     * Montras la informojn de la tezaŭro por la artikolo. Se ili ankoraŭ ne ŝarĝigis ili
+     * estas petataj de la servilo
+     * @memberof artikolo
+     * @inner
+     * @param {string} artikolo - la dosiernomo de la artikolo
+     */
     function tezauro(artikolo) {
         if (!artikolo) return;
 
@@ -585,6 +697,11 @@ var artikolo = function() {
         );        
     }
 
+    /**
+     * Kaŝas la tezaŭron
+     * @memberof artikolo
+     * @inner
+     */
     function tezauro_kashu() {
         const art = document.getElementById(sec_art);
         for (var t of art.querySelectorAll('div.tezauro')) {
@@ -598,7 +715,7 @@ var artikolo = function() {
     }
 
 
-   // eksportu publikajn funkction
+   // eksportu publikajn funkciojn
    return {
         preparu_art: preparu_art
    };

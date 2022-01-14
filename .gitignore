@@ -1,7 +1,7 @@
 *~
 tmp/
 build/
-doc/
+jsdoc/
 # nun en build:
 #smb/*.svg
 #smb/*.log

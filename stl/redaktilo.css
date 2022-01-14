@@ -2,7 +2,8 @@
 #r\:redaktilo {
     display: flex;
     flex-direction: column;
-    height: 105%; /* piedlinio rajtas ŝoviĝi malsupren */
+    height: 100%; 
+    /* 105% - piedlinio rajtas ŝoviĝi malsupren ? */
     /*overflow: auto; */
 }
 
@@ -98,6 +99,9 @@
     letter-spacing: -.16em;
     flex: 0 1 2.4em;
     width: 2.4em;
+
+    height: 100%;
+    margin-left: 1px;
 }
 
 /*
@@ -126,6 +130,36 @@
     /*text-decoration: underline;*/
     border-top: 1px dotted var(--main-brd-clr);
 }
+
+/* funkcias nur kun select multiple!
+#r\:art_strukturo option.drv {
+    background-color: gray;
+    color: red;
+    font-weight: bold;
+}
+*/
+
+.xmlarea {
+    flex: 1; /* consume available width */  
+    position: relative;   
+}
+
+.xmlarea .position {
+    position: absolute;
+    background-color: var(--pos-bgr-clr);
+    border-radius: 3px;
+    padding: .2em;
+    top: 0.2em;
+    right: 1em;
+    opacity: .8;
+}
+
+/*
+.butonoj {
+    flex: 0;
+    text-align: center;
+    margin: 1px;
+}*/
 
 .rimarkoj ul {
     margin-block-start: .2em;
@@ -162,6 +196,18 @@
 
 #r\:eraroj.konfirmo {
     border: 2px solid seagreen;
+}
+
+#r\:eraroj .Averto::before,
+#r\:eraroj .Atentu::before,
+#r\:eraroj .Eraro::before {
+    content: "\25b8\00a0";
+}
+
+#r\:eraroj .Averto,
+#r\:eraroj .Atentu,
+#r\:eraroj .Eraro {
+    font-weight: bold;
 }
 
 .collapsed {
@@ -206,6 +252,149 @@ span.right {
 .rubriko {
     text-align: right;
 }
+
+/****************v simile enhavata en redaktilo-revaj.css 
+          PLIBONIGU: eble do metu en apartan xklavaro.css v**********/
+
+
+.butonoj {
+    flex: 0;
+    
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    /*align-content: stretch;*/
+    gap: 1px;
+    row-gap: 1px;
+
+    max-height: 27ex;
+    min-height: 3.6em;
+    overflow: auto; 
+    margin: 1px;
+    padding: 0px;
+}
+
+.butonoj .klv {
+    flex: 0 0 auto;
+    display: inline-block; /* inline-block aldonas spaceton inter la linioj */
+    /* float: left; */
+    vertical-align: inherit;
+    height: 2.1em;
+    max-height: 2.1em;
+    min-width: 2em;
+    overflow: hidden;
+    border: 1px solid #e3a345;
+    color: var(--nav-fnt-clr); /* pli bone estus difini apartan var...*/
+    border-radius: 4px;
+    padding: 0.1em;
+    margin: 0 0.1em 0 0.1em;
+    padding-top: 0.5em;
+    line-height: 1em;
+    text-align: center;
+    /*
+    background-color: #e5e3c5;  
+    */
+    background-color: khaki;
+}
+
+
+#r\:klv_ind .klv, 
+#r\:klv_fak .klv {
+    /*display: inline-block;*/ /*float; //inline-block; inline-block aldonas spaceton inter la linioj */
+    float: left;
+    height: 3em;
+    max-height: 3em;
+    width: 4em;
+    overflow: hidden;
+    border: 1px solid #e3a345;
+    color: var(--nav-fnt-clr); /* pli bone estus difini apartan var...*/
+    border-radius: 4px;
+    padding: 0.1em;
+    margin: 0;
+    font-size: 75%;
+    line-height: 80%;
+    text-align: center;
+}
+
+#r\:klv_fak .klv {
+    font-size: 70%;
+}
+
+.butonoj .klv:hover {
+    background-color: #f5f3e5; 
+    cursor: pointer
+}
+
+.butonoj .klv:active {
+   background-color: #c5c3b5; 
+   color: white;  
+   cursor: pointer
+}
+
+.butonoj .stl {
+  font-stretch: condensed;
+  background-color: burlywood; /*#e5e3c5;  */
+}
+
+.butonoj .fak {
+  background-color: khaki; /*#d5e3d5;  */
+}
+
+.butonoj .ofc {
+  background-color: blanchedalmond; /*#d5d3e5*/;  
+}
+
+.butonoj .gra {
+  background-color: beige; /*#e5d3e5;  */
+}
+
+.butonoj .klv span {
+    line-height: 1.3em
+}
+
+.butonoj img {
+    height: 1.7em;
+    max-height: 1.7em;
+    overflow: hidden;
+}
+
+.elm_btn {
+    /*background-color: #d5e3d5 !important;*/
+    background-color: burlywood !important;
+}
+
+.reghim_btn {
+   background-color: var(--btn-bgr-clr) !important;
+   border-color: var(--btn-brd-clr) !important;
+   color: var(--main-fnt-clr) !important;
+   /*
+   border-color: #327E04 !important;
+   background-color: #459e00 !important;
+   color: white !important;    
+   */
+   font-weight: bold !important;
+}
+
+.kklvbtn {
+    margin: 0;
+    /*margin-right: .1em;*/
+    padding: .18em;
+    color: black !important;
+    font-weight: normal !important;
+    /*box-shadow: none !important;*/
+
+    box-sizing: border-box;   
+    /*height: 100%;*/
+}
+.kklvbtn[value='1'] {
+    background-color: var(--btn-act-bgr-clr) !important;
+}
+.kklvbtn[value='0'] {
+    background-color: var(--btn-dis-bgr-clr) !important;
+}
+
+/**************** ^^ duobla en redaktilo-revaj.css ^^^**********/
+
 
 
 @media (min-width: 50em) {

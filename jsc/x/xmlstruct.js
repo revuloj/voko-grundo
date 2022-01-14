@@ -33,9 +33,14 @@ function XmlStruct(xml, onAddSub) {
     };
   
     this.indents = {
-      art: "", subart: "\u00a0", drv: "\u22ef ", subdrv: "\u22ef\u22ef ", 
-      snc: "\u22ef\u22ef\u22ef ", subsnc: "\u22ef\u22ef\u22ef\u22ef "
+      art: "", subart: "\u25b8\u00a0", drv: "\u2014 ", subdrv: "\u00a0\u2014 ", 
+      snc: "\u00a0\u00a0\u00a0\u22ef ", subsnc: "\u00a0\u00a0\u00a0\u22ef\u22ef "
     };
+
+    this.elements = {
+      subart: "\u24d0",
+      drv: "\u24b9", subdrv: "\u24d3", snc: "\u24c8", subsnc: "\u24e2"
+    }
 
     this.structure();
 }
@@ -130,7 +135,7 @@ XmlStruct.prototype.structure = function(selected = undefined) {
       // identigi, ja konsciante, ke tiuj povos ŝanĝiĝi, sed tiam
       // ni rekalkulas la strukturon kaj akceptas, ke ni ne
       // retrovas la antaŭan elekton...
-      return xor_str(xmlteksto.substr(subt.de,120).replace(rx,''));
+      return xor_str(xmlteksto.substring(subt.de,subt.de+120).replace(rx,''));
     }
   }
   function al(elm,de) {
@@ -164,7 +169,7 @@ XmlStruct.prototype.structure = function(selected = undefined) {
     const suff = subt.kap ? subt.kap : subt.mrk||'';
     subt.dsc = this.indents[subt.el] + (
       subt.el!='art'? 
-        subt.el+ (suff?':'+suff:'') 
+        this.elements[subt.el]+ (suff?' '+suff:' ('+subt.el+')') 
         : suff);
 
     // ĉe la kapvorto de la artikolo ekstraktu la radikon
@@ -227,7 +232,7 @@ XmlStruct.prototype.getStructById = function(id) {
  * Trovas la informon de subteksto: aŭ identigante ĝin per sia .id aŭ
  * per sama elemento kaj komenco devianta maksimume je unu linio
  * @param {{id: string}} sd 
- * @returns 
+ * @returns la informoj pri la subteksto kiel objekto
  */
 XmlStruct.prototype.findStruct = function(sd) {
   let s = this.getStructById(sd.id);
@@ -394,8 +399,8 @@ XmlStruct.prototype.travel_tag_bw = function(elements,end,stop_no_match,xml,from
     // de interesantaj elementoj
     function match(p) {
       for (let e of elements) {
-        if ( xml.substr(p,e.length) == e 
-          && xml.substr(p+e.length,1).match(re_te) ) return e;
+        if ( xml.substring(p,p+e.length) == e 
+          && xml.substring(p+e.length,p+e.length+1).match(re_te) ) return e;
       }
     }
 
