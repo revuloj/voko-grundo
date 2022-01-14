@@ -837,6 +837,7 @@ fieldset legend {
 }
 
 .periodilo {
+    display: inline-block;
     min-width: 30em;
     margin: .5em;
 }

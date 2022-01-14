@@ -318,14 +318,26 @@ export function regulEsprimo(event) {
         const vs = (vspec?(vspec=='e'?'a':vspec):'?');
         const rk = (rkar?rkar:'?');
 
-        let afxj = afiksoj[pref_suf][rk][vs];
+        function concat_no_dup(a,b) {
+            return (a.concat(b))
+                .filter((i,p,self)=>self.indexOf(i)===p);
+        }
+
+        let afxj = afiksoj[pref_suf]['?']['?'];
+
+        if (vs != '?')
+            afxj = concat_no_dup(afxj,afiksoj[pref_suf]['?'][vs]);
+        if (rk != '?')
+            afxj = concat_no_dup(afxj,afiksoj[pref_suf][rk]['?']);
+        if (rk != '?' && vs != '?')
+            afxj = concat_no_dup(afxj,afiksoj[pref_suf][rk][vs]);
+
         // se rkar = 'u' ni ankaŭ inkluzivas 'o', ĉar
         // afiksoj aplikeblaj al ulo, ankaŭ estas al aĵo
         if (rk == 'u') {
-            afxj = afxj.concat(afiksoj[pref_suf]['o'][vs]);
-            // forigu duoblajn
-            afxj = afxj.filter((i,p)=>afxj.indexOf(i)===p);
+            afxj = concat_no_dup(afxj,afiksoj[pref_suf]['o'][vs]);
         }
+
         // se vs = 'u' ni ankaŭ inkluzivas 'o', ĉar
         // o-finaĵo same bone aplikiĝas al uloj kiel al aĵoj
         // if (vs == 'u')
