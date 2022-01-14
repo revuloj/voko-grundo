@@ -53,7 +53,7 @@ preparo)
 etikedo)
     echo "Provizante la aktualan staton per etikedo (git tag) v${release}"
     echo "kaj puŝante tiun staton al la centra deponejo"
-    git tag -f v${release} && git push --tags -f
+    git tag -f v${release} && git push && git push --tags -f
     ;;
 artikoloj)
     # kopiu ĉiujn artikolojn donitaj sur komandlinio (ekde dua argumento) al la servilo

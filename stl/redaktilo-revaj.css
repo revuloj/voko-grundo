@@ -836,10 +836,26 @@ fieldset legend {
     margin: .2em;
 }
 
-#re_esprimo:empty {
+.periodilo {
+    min-width: 30em;
+    margin: .5em;
+}
+
+.manilo {
+    width: 3em !important;
+    height: 1.6em !important;
+    top: 50% !important;
+    margin-top: -.8em;
+    text-align: center;
+    line-height: 1.6em;
+}
+
+#re_esprimo:empty,
+#re_radiko:empty {
     display: none;
 }
-#re_esprimo {
+#re_esprimo,
+#re_radiko {
     word-break: break-all;
     padding: .5em;
     border-radius: 4px;

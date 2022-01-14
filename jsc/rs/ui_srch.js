@@ -366,7 +366,7 @@ export function regulEsprimo(event) {
         i: "([ao]s|[ui]s?)\\b"
     }[vs] : '';
 
-    $("#re_rad").val(v);
+    $("#re_radiko").html("<b>" + v +"</b>");
     $("#re_esprimo").html(
         (vk?'\\b':'')
         + prfj + "<b>" + v + "</b><br>" + sufj + fin);
@@ -407,20 +407,29 @@ export function verkoPeriodo(periodilo,montrilo) {
     const min = periodilo.attr("data-min");
     const max = periodilo.attr("data-max");
     const val = periodilo.attr("data-val");
+    const values = val.split('-').map((x)=>+x); // "min-max" kiel dunombra listo
+    const handle1 = $( "#periodilo_manilo_1" );
+    const handle2 = $( "#periodilo_manilo_2" );
     periodilo.slider({
         range: true,
         min: +min,
         max: +max,
-        values: val.split('-').map((x)=>+x), // transdonu "min-max" kiel dunombra listo
+        values: values, 
+        create: function() {
+           handle1.text( values[0] );
+           handle2.text( values[1] );
+        },
         slide: function(event, ui) {
             // aktualigu la montratan periodon
-            montrilo.val( ui.values[0] + " - " + +ui.values[1] );
+            handle1.text( ui.values[0] );
+            handle2.text( ui.values[1] );
+            //montrilo.val( ui.values[0] + " - " + +ui.values[1] );
             // aktualigu la videblon de verkoj
             //...
         }
     });
     // komence montru la tutan periodon
-    montrilo.val( val );
+    //montrilo.val( val );
 };
 
 /**
@@ -453,11 +462,11 @@ export function verkoListo(event) {
                         let txt = v.aut? v.aut+': ':'';
                         txt += v.tit? v.tit : v.nom;
                         txt += v.jar? ' ('+v.jar+')' : '';
-                        vl.append('<label for="'+ id + '">' + txt + '</label>'
+                        vl.append('<div><label for="'+ id + '">' + txt + '</label>'
                             + '<input id="'+ id +'" type="checkbox" checked '
-                            + 'name="cvl_' + vlist + '" value="' + v.vrk + '"></input><br/>')
+                            + 'name="cvl_' + vlist + '" value="' + v.vrk + '"></input></div>')
                     }
-                    vl.children("input").checkboxradio();
+                    vl.find("input").checkboxradio();
                     vdiv.removeClass('kasxita');
                 }
             }
