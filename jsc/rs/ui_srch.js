@@ -82,7 +82,6 @@ const afiksoj = function() {
         // prepozicioj kiel prefiksoj aŭ kunderivado
         "al": "i-?",
         "antaŭ": "i-?|o-a",
-        "pri": "i-?",
         "apud": "i-?|o-a",
         "ĉe": "i-?|o-a",
         "ĉirkaŭ": "i-?|o-a",        
@@ -407,20 +406,21 @@ export function regulEsprimo(event) {
 export function verkoPeriodo(periodilo,montrilo) {
     const min = periodilo.attr("data-min");
     const max = periodilo.attr("data-max");
+    const val = periodilo.attr("data-val");
     periodilo.slider({
         range: true,
         min: +min,
         max: +max,
-        values: [ +min, +max ],
+        values: val.split('-').map((x)=>+x), // transdonu "min-max" kiel dunombra listo
         slide: function(event, ui) {
             // aktualigu la montratan periodon
-            montrilo.val( +ui.values[0] + " - " + +ui.values[1] );
+            montrilo.val( ui.values[0] + " - " + +ui.values[1] );
             // aktualigu la videblon de verkoj
             //...
         }
     });
     // komence montru la tutan periodon
-    montrilo.val( +min + ' - ' + +max );
+    montrilo.val( val );
 };
 
 /**
@@ -441,7 +441,7 @@ export function verkoListo(event) {
         $.alportu(
             'verkaro',
             { 
-                kiu: vlist
+                kiu: 'chiuj' //vlist
             }, 
             '#sercho_error')
         .done(

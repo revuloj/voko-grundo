@@ -50,6 +50,11 @@ preparo)
     sed -i 's,/redaktilo-[1-9][a-z]-min\.,/redaktilo-'${release}'-min\.,g' ${PACKG}
     sed -i 's/"version": "[1-9].[0-9].[1-9]"/"version": "'${node_release}'"/' ${PACKG}
     ;;
+etikedo)
+    echo "Provizante la aktualan staton per etikedo (git tag) v${release}"
+    echo "kaj puŝante tiun staton al la centra deponejo"
+    git tag -f v${release} && git push --tags -f
+    ;;
 artikoloj)
     # kopiu ĉiujn artikolojn donitaj sur komandlinio (ekde dua argumento) al la servilo
     scp "${@:2}" ${revo}/art/
@@ -74,5 +79,7 @@ helpo | *)
     echo "Per la aparta celo 'preparo' oni povas krei git-branĉon kun nova eldono por tie "
     echo "komenci programadon de novaj funkcioj, ŝanĝoj ktp. Antaŭ adaptu en la kapo de ĉi-skripto"
     echo "la variablojn 'release' kaj 'node_release' al la nova eldono."
+    echo "Per la celo 'etikedo' vi provizas aktualan staton per 'git tag', necesa por "
+    echo "ke kompiliĝu ĉe Github nova eldono de procezujo 'docker' kiel bazo por Cetonio kaj Araneo."
     ;;    
 esac
