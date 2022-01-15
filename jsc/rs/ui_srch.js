@@ -250,16 +250,23 @@ export function citaĵoSerĉo(event) {
     // serĉesprimo: ŝablone kreita regulesprimo aŭ tajpita serĉvorto...?
     const esprimo = $("#re_esprimo").text() || $("#sercho_sercho").val();
 
-    // eltrovu ĉu la verko-listo estas limigita
-    const vrkj = elektitajVerkoj(vlist).join(',');
+    let sspec = {sercho: esprimo};
+    if (vlist == 'klasikaj') {
+        sspec.kie = 'klasikaj'
+    } else {
+        // eltrovu ĉu la verko-listo estas limigita
+        sspec.kie = 'vrk';
+        sspec.vrk = elektitajVerkoj().join(',');
+
+        if (! sspec.vrk) {
+            console.error('malplena verklisto');
+            alert("Neniuj verkoj elektitaj por trarigardi!");
+            return;
+        }
+    }
 
     $.alportu(
-        'citajho_sercho',
-        { 
-            sercho: esprimo,
-            kie: vlist,
-            vrk: vrkj
-        }, 
+        'citajho_sercho', sspec,
         '#sercho_error')
     .done(
         function(data) {   
@@ -422,26 +429,44 @@ export function verkoPeriodo(periodilo,montrilo) {
     const values = val.split('-').map((x)=>+x); // "min-max" kiel dunombra listo
     const handle1 = $( "#periodilo_manilo_1" );
     const handle2 = $( "#periodilo_manilo_2" );
+
+    function adaptuVerkliston(de,ghis) {
+        $("#sercho_verklisto_vl div").each((i,e) => {
+            const el = $(e);
+            const jar = +el.attr('data-jar');
+            if (jar < de || jar > ghis) {
+                el.addClass('kasxita');
+            } else {
+                el.removeClass('kasxita');
+            }
+        });
+    }
+
     periodilo.slider({
         range: true,
         min: +min,
         max: +max,
         values: values, 
         create: function() {
-           handle1.text( values[0] );
-           handle2.text( values[1] );
+           const de = values[0];
+           const ghis = values[1];
+           handle1.text( de );
+           handle2.text( ghis );
+           adaptuVerkliston(de,ghis);
         },
         slide: function(event, ui) {
             // aktualigu la montratan periodon
-            handle1.text( ui.values[0] );
-            handle2.text( ui.values[1] );
+            const de = ui.values[0];
+            const ghis = ui.values[1];
+            handle1.text( de );
+            handle2.text( ghis );
+
+            adaptuVerkliston(de,ghis);
             //montrilo.val( ui.values[0] + " - " + +ui.values[1] );
             // aktualigu la videblon de verkoj
             //...
         }
     });
-    // komence montru la tutan periodon
-    //montrilo.val( val );
 };
 
 /**
@@ -451,8 +476,8 @@ export function verkoPeriodo(periodilo,montrilo) {
 export function verkoListo(event) {
     event.preventDefault();
     const vlist = event.data;
-    const vdiv = $("#sercho_"+vlist);
-    const vl = $("#sercho_"+vlist+"_vl");
+    const vdiv = $("#sercho_verklisto");
+    const vl = $("#sercho_verklisto_vl");
 
     if (vl.children().length) {
         // listo jam plenigita, ni nur devas remontri ĝin
@@ -474,7 +499,7 @@ export function verkoListo(event) {
                         let txt = v.aut? v.aut+': ':'';
                         txt += v.tit? v.tit : v.nom;
                         txt += v.jar? ' ('+v.jar+')' : '';
-                        vl.append('<div><label for="'+ id + '">' + txt + '</label>'
+                        vl.append('<div data-jar="' + +v.jar + '"><label for="'+ id + '">' + txt + '</label>'
                             + '<input id="'+ id +'" type="checkbox" checked '
                             + 'name="cvl_' + vlist + '" value="' + v.vrk + '"></input></div>')
                     }
@@ -518,18 +543,15 @@ export function verkElekto(event) {
 
 /**
  * Eltrovas, kiuj verkoj estas elektitaj
- * @param {string} vlist - 'klasikaj' au 'postaj'
  * @returns liston de verkoj (ties identigiloj)
  */
-export function elektitajVerkoj(vlist) {
+export function elektitajVerkoj() {
     let vl = [];
-    if (vlist == 'klasikaj' || vlist == 'postaj') {
-        const vdiv = $("#sercho_"+vlist);
-        vdiv.find(":checked").each((i,e) => {
-            const v = e.value;
-            vl.push(v)
-        });
-    }
+    const vdiv = $("#sercho_verklisto");
+    vdiv.find(":not(.kasxita)>:checked").each((i,e) => {
+        const v = e.value;
+        vl.push(v)            
+    });
     return vl;
 }
 

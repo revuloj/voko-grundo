@@ -829,8 +829,7 @@ fieldset legend {
 }
 
 #sercho_form .ui-button,
-#sercho_klasikaj button,
-#sercho_postaj button {
+#sercho_verklisto button {
     font-size: 88%;
     padding: 0.3em;
     margin: .2em;
@@ -880,8 +879,7 @@ fieldset legend {
     overflow: auto;
 }
 
-#sercho_klasikaj,
-#sercho_postaj {
+#sercho_verklisto {
     border: 1px solid silver;
     border-radius: 4px;
     /*padding: 1em;*/
@@ -894,15 +892,13 @@ fieldset legend {
     margin-bottom: 0.5em;
 }
 
-#sercho_klasikaj_vl,
-#sercho_postaj_vl {
+#sercho_verklisto_vl {
     height: 100%;
     max-width: 55em;
     overflow: auto;
 } 
 
-#sercho_klasikaj_vl label,
-#sercho_postaj_vl label {
+#sercho_verklisto_vl label {
     width: 50em;
     text-align: left;
     padding-left: 4.5ex;
