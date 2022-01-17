@@ -878,6 +878,7 @@ $.widget( "redaktilo.Trovo", {
         if (v.descr) this.element.text(v.descr);
 
         if (o.type == "teksto") {
+            $("#k_" + v.id).KuntekstoBtn({fno: v.data.cit.fno});
             $("#r_" + v.id).RigardoBtn({url: v.url});
             $("#e_" + v.id).EkzemploBtn({
                 data: v.data,
@@ -977,6 +978,50 @@ $.widget( "redaktilo.Trovo", {
     }
 });
 
+/**
+ * Difinas jqueryui-elementon por la butono de citaĵo-kunteksto.
+ */
+ $.widget( "redaktilo.KuntekstoBtn", {
+    options: {
+        fno: null // frazo-numero per kiu peti kuntekston
+    },
+
+    _create: function() {
+        this._super();
+
+        var e = this.element;
+        e.attr("style","visibility: hidden");
+        e.attr("type","button");
+        e.attr("title","plia kunteksto");
+        e.html("Kunteksto");
+
+        this._on({
+            click: function(event) {
+                if (this.options.fno) {
+                    event.preventDefault();
+
+                    $.alportu(
+                        'kunteksto',
+                            { 
+                                frazo: this.options.fno,
+                                n: 2
+                            },
+                            '#sercho_error')
+                        .done(
+                            function(data) {   
+                            //$("#sercho_trovoj").html('');
+                            if (data.length) {
+                                console.debug(data[0]);
+                            }
+                        });
+
+                } else {
+                    throw nedifinita_fno;
+                }
+            }
+        });
+    }
+});
 
 /**
  * Difinas jqueryui-elementon por la butono de fonto-rigardo.
@@ -1008,8 +1053,6 @@ $.widget( "redaktilo.RigardoBtn", {
         });
     }
 });
-
-
 
 /**
  * Difinas jqueryui-elementon por lanĉi ekzemplo-dialogon

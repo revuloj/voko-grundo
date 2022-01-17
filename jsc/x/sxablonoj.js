@@ -143,6 +143,7 @@ var html_sxablonoj = {
   'url    :  <a href="{url}" target="_new" >{title}</a>\n' +
   '!url   :  {title}\n' +
   '       :  </span>\n' +
+  '       :  <button id="k_{id}"/>\n' +
   '       :  <button id="r_{id}"/>\n' +
   'enm_btn:  <button id="e_{id}"/>\n' +
   '       :</dt>\n',
@@ -151,6 +152,7 @@ var html_sxablonoj = {
   '       :<dt>{prompt} <span class="trovo_titolo">\n' +
   '       :  {title}\n' +
   '       :  </span>\n' +
+  '       :  <button id="k_{id}"/>\n' +
   '       :  <button id="r_{id}"/>\n' +
   'enm_btn:  <button id="e_{id}"/>\n' +
   '       :</dt>\n',
