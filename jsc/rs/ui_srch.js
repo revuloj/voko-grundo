@@ -390,36 +390,6 @@ export function regulEsprimo(event) {
         (vk?'\\b':'')
         + prfj + "<b>" + v + "</b><br>" + sufj + fin);
 
-/*
-    const re = event.target.id;
-    if (re == "re_helpo") {
-        window.open(globalThis.help_base_url + globalThis.help_regulesp);
-    } else if (re == "re_b") {
-        srch.val("\\b"+v);
-    } else if ( re == "re_pref") {
-        const x = {
-            re_opref: "(ambaŭ|bo|ĉef|eks|ekster|en|fi|ge|kvazaŭ|mal|ne|pra|sub|super)",
-            re_ipref: "(al|antaŭ|apud|ĉe|ĉirkaŭ|dis|de|ek|e[ln]|for|ĝis|inter|kontraŭ|krom|kun|kvazaŭ"
-                +"|laŭ|mal|mem|mis|re|per|plu|por|post|preter|pr[io]|sub|super|tra|trans)",
-            re_apref: "(ekster|kvazaŭ|ne|pli|sub|super|tro)"}[re];
-        srch.val(v.startsWith("\\b")? 
-            "\\b"+x+v.substring(2) 
-            : x+v);
-    } else {
-        const pos = (sele == v.length || v[sele] == " ")? sele : v.length;
-        const x = {
-            re_isuf: "(a[dĉĵ]|e[jgtm]|[aio]n?t|ebl|[ie]nd|i[lgĝ]|u[lm])",
-            re_asuf: "(e[cgtjm]|u[lm]|a[ĵĉ]|estr|i[gĝ])",
-            re_osuf: "(a[nĉĵ]|e[rcgjt]|i[ndgĝ]|ind|is[mt]|u[jlm])",
-            re_nsuf: "(o[np]|obl)",
-            re_o: "oj?n?\\b", 
-            re_a: "aj?n?\\b", 
-            re_e: "en?\\b", 
-            re_i: "([ao]s|[ui]s?|[aoi]n?taj?n?)\\b"
-        }[re];
-        srch.val(v.substring(0,pos)+x+v.slice(pos));
-    }
-    */
 }
 
 export function verkoPeriodo(periodilo,montrilo) {
@@ -999,6 +969,7 @@ $.widget( "redaktilo.Trovo", {
             click: function(event) {
                 if (this.options.fno) {
                     event.preventDefault();
+                    const dd_id = event.target.id.substring(2); // fortranĉu 'k_'
 
                     $.alportu(
                         'kunteksto',
@@ -1011,7 +982,9 @@ $.widget( "redaktilo.Trovo", {
                             function(data) {   
                             //$("#sercho_trovoj").html('');
                             if (data.length) {
-                                console.debug(data[0]);
+                                //console.debug(data[0]);
+                                const text = data.map(e => e.ekz).join('<br/>');
+                                $('#'+dd_id).html(text);
                             }
                         });
 
