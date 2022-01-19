@@ -838,7 +838,9 @@ fieldset legend {
 .periodilo {
     display: inline-block;
     min-width: 30em;
-    margin: .5em;
+    margin: 0;
+    margin-left: 1em;
+    margin-right: 2.5em;
 }
 
 .manilo {
@@ -893,7 +895,7 @@ fieldset legend {
 }
 
 #sercho_verklisto_vl {
-    height: 100%;
+    height: 90%; /* pli bone uzu flexbox a.s. */
     max-width: 55em;
     overflow: auto;
 } 
