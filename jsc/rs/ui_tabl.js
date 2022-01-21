@@ -216,14 +216,10 @@ export default function() {
 
     //### subpaĝo "serĉo"
     $("#s_klasikaj").click("klasikaj",citaĵoSerĉo);
-    $("#s_postaj").click("postaj",citaĵoSerĉo);
-    //$("#sa_klasikaj").click("klasikaj",verkoListo);
-    //$("#sa_postaj").click("postaj",verkoListo);
+    $("#s_elektitaj").click("elektitaj",citaĵoSerĉo);
     $("#sercho_det_verklisto").on("toggle",verkoListo);
-    //$("#sercho_klasikaj button").click(verkElekto);
     $("#sercho_verklisto button").click(verkElekto);
-    //verkoPeriodo($("#s_klasikaj_periodilo"),$("#s_klasikaj_periodo"));
-    verkoPeriodo($("#s_postaj_periodilo"),$("#s_postaj_periodo"));
+    verkoPeriodo($("#s_elektitaj_periodilo"),$("#s_elektitaj_periodo"));
 
     $("#s_vikipedio").click(vikiSerĉo);
     $("#s_anaso").click(retoSerĉo);

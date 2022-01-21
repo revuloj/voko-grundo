@@ -881,26 +881,33 @@ fieldset legend {
     overflow: auto;
 }
 
+#sercho_det_verklisto {
+    flex: 0;
+    -webkit-flex: 0;
+
+    /* evitu ke verkolisto plilongiĝu ol la videbla paĝo */
+    box-sizing: border-box;
+    max-height: 100%;
+    /*
+    display: flex; 
+    flex-direction: column; 
+    */
+}
+
 #sercho_verklisto {
     border: 1px solid silver;
     border-radius: 4px;
     /*padding: 1em;*/
     margin-top: 0;
-    
-    flex: 2;
-    -webkit-flex: 1;
-    overflow: hidden;
-    
+    overflow: auto; 
     margin-bottom: 0.5em;
+
+    /* evitu ke verkolisto plilongiĝu ol la videbla paĝo */
+    box-sizing: border-box;
+    max-height: 60vh;
 }
 
-#sercho_verklisto_vl {
-    height: 90%; /* pli bone uzu flexbox a.s. */
-    max-width: 55em;
-    overflow: auto;
-} 
-
-#sercho_verklisto_vl label {
+#sercho_verklisto label {
     width: 50em;
     text-align: left;
     padding-left: 4.5ex;

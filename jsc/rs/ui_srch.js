@@ -253,7 +253,7 @@ export function citaĵoSerĉo(event) {
     let sspec = {sercho: esprimo};
     if (vlist == 'klasikaj') {
         sspec.kie = 'klasikaj'
-    } else if (! $("#sercho_verklisto_vl").children().length) {
+    } else if (! $("#sercho_verklisto").children().length) {
         const handle1 = $( "#periodilo_manilo_1" );
         const handle2 = $( "#periodilo_manilo_2" );
         sspec.kie = 'jar';
@@ -265,8 +265,8 @@ export function citaĵoSerĉo(event) {
         sspec.vrk = elektitajVerkoj().join(',');
 
         if (! sspec.vrk) {
-            console.error('malplena verklisto');
-            alert("Neniuj verkoj elektitaj por trarigardi!");
+            $("#sercho_error").html("Neniuj verkoj elektitaj por trarigardi!");
+            $("#sercho_error").show(); 
             return;
         }
     }
@@ -407,7 +407,7 @@ export function verkoPeriodo(periodilo,montrilo) {
     const handle2 = $( "#periodilo_manilo_2" );
 
     function adaptuVerkliston(de,ghis) {
-        $("#sercho_verklisto_vl div").each((i,e) => {
+        $("#sercho_verklisto div").each((i,e) => {
             const el = $(e);
             const jar = +el.attr('data-jar');
             if (jar < de || jar > ghis) {
@@ -451,22 +451,20 @@ export function verkoPeriodo(periodilo,montrilo) {
  */
 export function verkoListo(event) {
     event.preventDefault();
-    //const vlist = event.data;
     const vdiv = $("#sercho_verklisto");
-    const vl = $("#sercho_verklisto_vl");
 
-    if (! vl.children().length) {
+    if (! vdiv.children().length) {
         // ni ŝargas la verkoliston...
         $.alportu(
             'verkaro',
             { 
-                kiu: 'chiuj' //vlist
+                kiu: 'chiuj'
             }, 
             '#sercho_error')
         .done(
             function(data) {
                 if (data.length && data[0].vrk) {                    
-                    vl.append('<div id="vl_chiuj_"><label for="vl__chiuj__">ĈIUJN malelekti/elekti</label>'
+                    vdiv.append('<div id="vl_chiuj_"><label for="vl__chiuj__">ĈIUJN malelekti/elekti</label>'
                     + '<input id="vl__chiuj__" type="checkbox" checked '
                     + 'name="cvl_chiuj" value="e_chiuj"></input></div>');
 
@@ -480,15 +478,15 @@ export function verkoListo(event) {
                         txt += v.tit? v.tit : v.nom;
                         txt += v.jar? ' ('+v.jar+')' : '';
                         const cls = v.jar >= jar_de && v.jar <= jar_ghis? '' : ' class="kasxita"';
-                        vl.append('<div data-jar="' + +v.jar + '"' + cls +'><label for="'+ id + '">' 
+                        vdiv.append('<div data-jar="' + +v.jar + '"' + cls +'><label for="'+ id + '">' 
                             + txt + '</label>'
                             + '<input id="'+ id +'" type="checkbox" checked '
                             + 'name="cvl_elekto" value="' + v.vrk + '"></input></div>')
                     }
-                    vl.find("input").checkboxradio();
+                    vdiv.find("input").checkboxradio();
                     $("#vl__chiuj__").on("change", (event) => {
                         const check = $(event.target).is( ":checked");
-                        vl.find("input[name='cvl_elekto']").each( (i,e) => {
+                        vdiv.find("input[name='cvl_elekto']").each((i,e) => {
                             $(e).prop("checked",check);
                             $(e).checkboxradio("refresh");
                         });
