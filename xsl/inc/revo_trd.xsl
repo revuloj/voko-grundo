@@ -138,7 +138,7 @@ montru tie, cxar ili estas esenca parto de tiuj -->
   -->
 
   <!-- skribu la tradukon mem --> 
-  <xsl:text> </xsl:text>
+  <xsl:text> </xsl:text> <!-- plibonigu: uzu spacon ĉe ekz/bld, 0xA0 aliokaze -->
 
   <span lang="{@lng}">
     <xsl:if test="@lng = 'ar' or
