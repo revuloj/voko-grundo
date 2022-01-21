@@ -253,6 +253,12 @@ export function citaĵoSerĉo(event) {
     let sspec = {sercho: esprimo};
     if (vlist == 'klasikaj') {
         sspec.kie = 'klasikaj'
+    } else if (! $("#sercho_verklisto_vl").children().length) {
+        const handle1 = $( "#periodilo_manilo_1" );
+        const handle2 = $( "#periodilo_manilo_2" );
+        sspec.kie = 'jar';
+        sspec.jar_de = +handle1.text();
+        sspec.jar_ghis = +handle2.text();
     } else {
         // eltrovu ĉu la verko-listo estas limigita
         sspec.kie = 'vrk';
@@ -445,14 +451,11 @@ export function verkoPeriodo(periodilo,montrilo) {
  */
 export function verkoListo(event) {
     event.preventDefault();
-    const vlist = event.data;
+    //const vlist = event.data;
     const vdiv = $("#sercho_verklisto");
     const vl = $("#sercho_verklisto_vl");
 
-    if (vl.children().length) {
-        // listo jam plenigita, ni nur devas remontri ĝin
-        vdiv.removeClass('kasxita');
-    } else {
+    if (! vl.children().length) {
         // ni ŝargas la verkoliston...
         $.alportu(
             'verkaro',
@@ -462,19 +465,34 @@ export function verkoListo(event) {
             '#sercho_error')
         .done(
             function(data) {
-                if (data.length && data[0].vrk) {
-                    const vrkj = data.sort((a,b)=>(a.jar-b.jar||0))
+                if (data.length && data[0].vrk) {                    
+                    vl.append('<div id="vl_chiuj_"><label for="vl__chiuj__">ĈIUJN malelekti/elekti</label>'
+                    + '<input id="vl__chiuj__" type="checkbox" checked '
+                    + 'name="cvl_chiuj" value="e_chiuj"></input></div>');
+
+                    const jar_de = +$( "#periodilo_manilo_1" ).text();
+                    const jar_ghis = +$( "#periodilo_manilo_2" ).text();            
+
+                    const vrkj = data.sort((a,b)=>(a.jar-b.jar||0));                  
                     for (const v of vrkj) {
                         const id = "vl_"+v.vrk;
                         let txt = v.aut? v.aut+': ':'';
                         txt += v.tit? v.tit : v.nom;
                         txt += v.jar? ' ('+v.jar+')' : '';
-                        vl.append('<div data-jar="' + +v.jar + '"><label for="'+ id + '">' + txt + '</label>'
+                        const cls = v.jar >= jar_de && v.jar <= jar_ghis? '' : ' class="kasxita"';
+                        vl.append('<div data-jar="' + +v.jar + '"' + cls +'><label for="'+ id + '">' 
+                            + txt + '</label>'
                             + '<input id="'+ id +'" type="checkbox" checked '
-                            + 'name="cvl_' + vlist + '" value="' + v.vrk + '"></input></div>')
+                            + 'name="cvl_elekto" value="' + v.vrk + '"></input></div>')
                     }
                     vl.find("input").checkboxradio();
-                    vdiv.removeClass('kasxita');
+                    $("#vl__chiuj__").on("change", (event) => {
+                        const check = $(event.target).is( ":checked");
+                        vl.find("input[name='cvl_elekto']").each( (i,e) => {
+                            $(e).prop("checked",check);
+                            $(e).checkboxradio("refresh");
+                        });
+                    });
                 }
             }
         );
