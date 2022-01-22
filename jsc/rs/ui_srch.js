@@ -321,6 +321,12 @@ export function regulEsprimo(event) {
     if (re == "re_helpo") {
         window.open(globalThis.help_base_url + globalThis.help_regulesp);
         return;
+    } else if (re == "sercho_det_regexes") {
+        // enmetu radikon, se ankoraŭ malplena
+        if (event.target.open && ! $("#re_radiko").val()) {
+            const xmlarea = $("#xml_text").Artikolo("option","xmlarea");
+            $("#re_radiko").val(xmlarea.getRadiko());
+        }
     }
 
     // redonu prefiksoj aŭ sufiksojn aplikeblajn 
@@ -363,7 +369,7 @@ export function regulEsprimo(event) {
     }
 
     const srch = $("#sercho_sercho");
-    const v = srch.val();
+    //const v = srch.val();
     const sele = srch[0].selectionEnd;
 
     // kiu radikkaraktero estis elektita?
@@ -391,7 +397,7 @@ export function regulEsprimo(event) {
         i: "([ao]s|[ui]s?)\\b"
     }[vs] : '';
 
-    $("#re_radiko").html("<b>" + v +"</b>");
+    const v = $("#re_radiko").val();
     $("#re_esprimo").html(
         (vk?'\\b':'')
         + prfj + "<b>" + v + "</b><br>" + sufj + fin);

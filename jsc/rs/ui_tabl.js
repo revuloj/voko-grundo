@@ -217,6 +217,8 @@ export default function() {
     //### subpaĝo "serĉo"
     $("#s_klasikaj").click("klasikaj",citaĵoSerĉo);
     $("#s_elektitaj").click("elektitaj",citaĵoSerĉo);
+
+    $("#sercho_det_regexes").on("toggle",regulEsprimo);
     $("#sercho_det_verklisto").on("toggle",verkoListo);
     $("#sercho_verklisto button").click(verkElekto);
     verkoPeriodo($("#s_elektitaj_periodilo"),$("#s_elektitaj_periodo"));

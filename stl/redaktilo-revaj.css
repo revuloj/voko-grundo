@@ -852,8 +852,8 @@ fieldset legend {
     line-height: 1.6em;
 }
 
-#re_esprimo:empty,
-#re_radiko:empty {
+#re_esprimo:empty
+{
     display: none;
 }
 #re_esprimo,
