@@ -248,7 +248,7 @@ export function citaĵoSerĉo(event) {
     if (! _serĉo_preparo()) return;
 
     // serĉesprimo: ŝablone kreita regulesprimo aŭ tajpita serĉvorto...?
-    const esprimo = $("#re_esprimo").text() || $("#sercho_sercho").val();
+    const esprimo = $("#sercho_sercho").val();
 
     let sspec = {sercho: esprimo};
     if (vlist == 'klasikaj') {
@@ -321,13 +321,14 @@ export function regulEsprimo(event) {
     if (re == "re_helpo") {
         window.open(globalThis.help_base_url + globalThis.help_regulesp);
         return;
-    } else if (re == "sercho_det_regexes") {
+    };
+    /* else if (re == "sercho_det_regexes") {
         // enmetu radikon, se ankoraŭ malplena
         if (event.target.open && ! $("#re_radiko").val()) {
             const xmlarea = $("#xml_text").Artikolo("option","xmlarea");
             $("#re_radiko").val(xmlarea.getRadiko());
         }
-    }
+    }*/
 
     // redonu prefiksoj aŭ sufiksojn aplikeblajn 
     // al radikkaraktero rkar kun rezulta vortspeco vspec
@@ -370,7 +371,7 @@ export function regulEsprimo(event) {
 
     const srch = $("#sercho_sercho");
     //const v = srch.val();
-    const sele = srch[0].selectionEnd;
+    //const sele = srch[0].selectionEnd;
 
     // kiu radikkaraktero estis elektita?
     const rk = $("#regexes input[name='re_rk']:checked").val();
@@ -383,12 +384,12 @@ export function regulEsprimo(event) {
     const prf = $("#re_pref").prop("checked");
     const suf = $("#re_suf").prop("checked");
     
-    const prfj = prf? re_afx('prefiksoj',rk,vs)+"<br>" : '';
+    const prfj = prf? re_afx('prefiksoj',rk,vs) : '';
     // PLIBONIGU: ni elektas tie ĉi la sufiksojn laŭ radikkaraktero,
     // sed eble ni devus uzi ĉiujn, kiuj rezultas el prefiksa apliko
     // aliflanke ne klaras ĉu unue la prefikso aŭ la sufikso aplikiĝas
     // al la radiko, sed verŝajne pli kutime unue la prefikso...
-    const sufj = suf? re_afx('sufiksoj',rk,vs)+"<br>" : '';
+    const sufj = suf? re_afx('sufiksoj',rk,vs) : '';
 
     const fin = vs? {
         o: "oj?n?\\b", 
@@ -400,8 +401,12 @@ export function regulEsprimo(event) {
     const v = $("#re_radiko").val();
     $("#re_esprimo").html(
         (vk?'\\b':'')
-        + prfj + "<b>" + v + "</b><br>" + sufj + fin);
+        + (prfj? prfj+"<br>":"") 
+        + "<b>" + v + "</b><br>" 
+        + (sufj? sufj+"<br>" : "") 
+        + fin);
 
+    srch.val((vk?'\\b':'') + prfj + v + sufj + fin);
 }
 
 export function verkoPeriodo(periodilo,montrilo) {
