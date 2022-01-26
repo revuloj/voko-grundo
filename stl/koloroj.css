@@ -38,6 +38,7 @@
     --main-fnt-clr: black;
     --main-act-bgr-clr: #eAb530;
     --main-ac2-bgr-clr: khaki; /* trovotitoloj en redaktial serĉo */
+    --main-ac3-bgr-clr: #F0F0AA; /* details/summary en redaktilo-serĉo */
 
     --main-act-fnt-clr: black;
     --main-hov-fnt-clr: coral;
@@ -146,6 +147,7 @@
 
     --main-act-bgr-clr: #c2590E;
     --main-ac2-bgr-clr: #552200; /* trovotitoloj en redaktial serĉo */
+    --main-ac3-bgr-clr: #221100; /* trovotitoloj en redaktial serĉo */
     --main-act-fnt-clr: palegoldenrod;
     --main-hov-fnt-clr: #EE6F40;
     /* ombro-koloro */

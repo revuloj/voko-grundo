@@ -261,7 +261,7 @@ fieldset legend {
     background-color: inherit;
 }
 
-#regexes, #serch_btnj {
+#regexes {
     display: inline-block;
     margin-top: 2px;
     margin-bottom: .5em;
@@ -880,6 +880,28 @@ fieldset legend {
     margin-bottom: 0.5em;
     overflow: auto;
 }
+
+#sercho details {
+    background-color: var(--main-ac3-bgr-clr);
+}
+
+#sercho summary {
+    margin: .3em;
+}
+
+#serch_btnj {
+    margin-top: .2em;
+    background-color: var(--main-ac3-bgr-clr);
+}
+
+#sercho_det_regexes {
+    margin-top: .4em;
+    margin-bottom: .4em;
+    /*border-top: 1px dotted var(--main-brd-clr);*/
+    border-bottom: 1px dotted var(--main-brd-clr);    
+}
+
+
 
 #sercho_det_verklisto {
     flex: 0;
