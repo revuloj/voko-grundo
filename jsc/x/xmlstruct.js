@@ -21,7 +21,7 @@ function XmlStruct(xml, onAddSub) {
       _mrk: /\s*mrk\s*=\s*(['"])([^>"']*?)\1/g,
       _kap: /<kap>([^]*)<\/kap>/,
       _rad: /<rad>([^<]+)<\/rad>/,
-      _dos: /<art\s+mrk="\$Id:\s+([^\.]+)\.xml|<drv\s+mrk="([^\.]+)\.'/,
+      _dos: /<art\s+mrk="\$Id:\s+([^\.]+)\.xml|<drv\s+mrk="([^\.]+)\./,
       _var: /<var>[^]*<\/var>/g,
       _ofc: /<ofc>[^]*<\/ofc>/g,
       _klr: /<klr[^>]*>[^]*<\/klr>/g,

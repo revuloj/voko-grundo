@@ -489,9 +489,10 @@ var artikolo = function() {
             const hst = pied.querySelector("A[href*='/hst/']");
             if (hst) {
                 const ver = hst.nextSibling;
-                hst.textContent = ver.nodeValue
-                    .split(/\s+/)[2]
-                    .replace(/\//g,'-');
+                const hst_parts = ver.nodeValue.split(/\s+/);
+                if (hst_parts.length>2) { // nova artikolo ne havas jam daton!
+                    hst.textContent = hst_parts[2].replace(/\//g,'-');
+                }
                 ver.remove();    
             }
             // forigu finan <br>

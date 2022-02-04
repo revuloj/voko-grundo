@@ -105,6 +105,7 @@ export default function() {
             "Krei": function() { 
                 var art = $("#krei_dlg").dialog("valoroj");
                 $("#xml_text").Artikolo("nova",art);
+                $("#re_radiko").val();
                 $("#dock_eraroj").empty();
                 $("#dock_avertoj").empty();
                 $(this).dialog("close") ;
@@ -741,6 +742,7 @@ function download_art(dosiero,err_to,dlg_id,do_close=true) {
         function(data) {   
             if (data.slice(0,5) == '<?xml') {
                 $("#xml_text").Artikolo("load",dosiero,data);
+                $("#re_radiko").val();
                 $("#collapse_outline").accordion("option","active",0);
                 $(err_to).hide();
                 $("#tabs").tabs( "option", "active", 0);
@@ -1127,14 +1129,21 @@ function bildo_larĝecoj(lrg,chk) {
 function derivajho_enmeti(event) {
     event.preventDefault();
     $("#derivajho_error").hide();
+
+    const xmlarea = $("#xml_text").Artikolo("option","xmlarea");    
     
     var values = $("#derivajho_dlg").dialog("valoroj");
     //values.mrk = xmlArtDrvMrk($("#xml_text").val()); 
     const indent = 2;
     values.dif = linirompo(values.dif,indent);
-    values.mrk = $("#xml_text").Artikolo("art_drv_mrk"); 
+    values.mrk = xmlarea.getDosiero(); 
     
     var drvxml = new XMLDerivaĵo(values).xml();
+
+    // PLIBONIGU: pro la sinkronigado se ni estas sur nivelo de alia drv
+    // la nova ŝajnas malaperi (ĝi estas super aŭ sub la aktuala)
+    // do eble pli bone aldonu la novan derivaĵon rekte en la xmlstrukturon(?)
+    // kaj/aŭ navigu al la nova derivaĵo, se ni estas sur nivelo art/subart/xml
     $("#xml_text").Artikolo("insert",drvxml,true);
     // $("#xml_text").insert(drvxml);
     // $("#xml_text").change();

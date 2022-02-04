@@ -828,12 +828,20 @@ fieldset legend {
     margin-bottom: 0.5em;
 }
 
-#sercho_form .ui-button,
+#sercho_form .ui-button {
+    border: 1px hidden !important;
+    /*font-size: 88%;*/
+    padding: 0.3em;
+    margin: .3em;
+}
+
+/*
 #sercho_verklisto button {
     font-size: 88%;
     padding: 0.3em;
     margin: .2em;
 }
+*/
 
 .periodilo {
     display: inline-block;
@@ -929,10 +937,19 @@ fieldset legend {
     max-height: 60vh;
 }
 
+/*
+#sercho_verklisto .ui-button {
+    padding: 0;
+}
+*/
+
 #sercho_verklisto label {
     width: 50em;
     text-align: left;
-    padding-left: 4.5ex;
+    border: 1px solid gray !important;
+    margin: 1px !important;
+    padding: 0.1em !important;
+    padding-left: 4.5ex !important;
     text-indent: -2.5ex;
 }
 

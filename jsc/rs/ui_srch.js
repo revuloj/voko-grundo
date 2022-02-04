@@ -875,7 +875,13 @@ $.widget( "redaktilo.Trovo", {
         if (v.descr) this.element.text(v.descr);
 
         if (o.type == "teksto") {
-            $("#k_" + v.id).KuntekstoBtn({fno: v.data.cit.fno});
+            // citaĵonumero por kunteksto estas nur en citaĵoserĉo, ne en retserĉo...:
+            if (v.data.cit) {
+                $("#k_" + v.id).KuntekstoBtn({fno: v.data.cit.fno});
+            } else {
+                $("#k_" + v.id).remove();
+            }
+
             $("#r_" + v.id).RigardoBtn({url: v.url});
             $("#e_" + v.id).EkzemploBtn({
                 data: v.data,
