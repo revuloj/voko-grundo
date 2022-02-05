@@ -345,16 +345,16 @@ export function regulEsprimo(event) {
 
         let afxj = afiksoj[pref_suf]['?']['?'];
 
-        if (vs != '?')
+        if (vs != '?') // vortspeco (finaĵo) ne donita
             afxj = concat_no_dup(afxj,afiksoj[pref_suf]['?'][vs]);
-        if (rk != '?')
+        if (rk != '?') // radikkaraktero ne donita
             afxj = concat_no_dup(afxj,afiksoj[pref_suf][rk]['?']);
-        if (rk != '?' && vs != '?')
+        if (rk != '?' && vs != '?') // ambaŭ ne donitaj
             afxj = concat_no_dup(afxj,afiksoj[pref_suf][rk][vs]);
 
         // se rkar = 'u' ni ankaŭ inkluzivas 'o', ĉar
         // afiksoj aplikeblaj al ulo, ankaŭ estas al aĵo
-        if (rk == 'u') {
+        if (rk == 'u') { // ula
             afxj = concat_no_dup(afxj,afiksoj[pref_suf]['o'][vs]);
         }
 
@@ -395,7 +395,8 @@ export function regulEsprimo(event) {
         o: "oj?n?\\b", 
         a: "aj?n?\\b", 
         e: "en?\\b", 
-        i: "([ao]s|[ui]s?)\\b"
+        i: "([ao]s|[ui]s?)\\b",
+        '?': ''
     }[vs] : '';
 
     const v = $("#re_radiko").val();

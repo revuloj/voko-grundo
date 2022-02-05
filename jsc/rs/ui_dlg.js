@@ -105,7 +105,7 @@ export default function() {
             "Krei": function() { 
                 var art = $("#krei_dlg").dialog("valoroj");
                 $("#xml_text").Artikolo("nova",art);
-                $("#re_radiko").val();
+                $("#re_radiko").val(art.rad);
                 $("#dock_eraroj").empty();
                 $("#dock_avertoj").empty();
                 $(this).dialog("close") ;
@@ -742,7 +742,8 @@ function download_art(dosiero,err_to,dlg_id,do_close=true) {
         function(data) {   
             if (data.slice(0,5) == '<?xml') {
                 $("#xml_text").Artikolo("load",dosiero,data);
-                $("#re_radiko").val();
+                const xmlarea = $("#xml_text").Artikolo("option","xmlarea");
+                $("#re_radiko").val(xmlarea.getRadiko());
                 $("#collapse_outline").accordion("option","active",0);
                 $(err_to).hide();
                 $("#tabs").tabs( "option", "active", 0);
