@@ -241,6 +241,7 @@ export default function() {
             .val("\\b"+$("#sercho_sercho").val())
     );*/
     $("#regexes input").click(regulEsprimo);
+    $("#re_radiko").on("input",regulEsprimo);
 
     $( "#sercho_butonoj").Klavaro({
         artikolo: $("#xml_text"),
