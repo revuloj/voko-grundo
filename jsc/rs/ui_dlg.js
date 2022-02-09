@@ -1395,7 +1395,7 @@ function fill_tradukojn(lng,lingvo_nomo) {
                     if (p>-1) dsc = dsc.slice(p);
                 }
                 if (s.el == 'drv') dsc = '<b>'+dsc+'</b>';
-                tableCnt += '<tr><td>' + dsc + '</td><td>';
+                tableCnt += '<tr class="tr_' + s.el + '"><td>' + dsc + '</td><td>';
             
                 let trd; 
                 try {
