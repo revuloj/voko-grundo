@@ -226,7 +226,7 @@ export default function() {
     });
     $("#sercho_det_verklisto").on("toggle",verkoListo);
     $("#sercho_verklisto button").click(verkElekto);
-    verkoPeriodo($("#s_elektitaj_periodilo"),$("#s_elektitaj_periodo"));
+    verkoPeriodo();
 
     $("#s_vikipedio").click(vikiSerĉo);
     $("#s_anaso").click(retoSerĉo);

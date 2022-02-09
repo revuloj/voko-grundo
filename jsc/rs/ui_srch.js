@@ -410,22 +410,29 @@ export function regulEsprimo(event) {
     srch.val((vk?'\\b':'') + prfj + v + sufj + fin);
 }
 
-export function verkoPeriodo(periodilo,montrilo) {
+/**
+ * Adaptas la liston de verkoj videblaj en la listo laŭ la 
+ * periodo komenca jaro - fina jaro en la ŝovelektilo.
+ */
+export function verkoPeriodo() {
+    const periodilo = $("#s_elektitaj_periodilo");
     const min = periodilo.attr("data-min");
     const max = periodilo.attr("data-max");
     const val = periodilo.attr("data-val");
-    const values = val.split('-').map((x)=>+x); // "min-max" kiel dunombra listo
+    const values = val.split('-').map((x)=>+x); // "min-max" kiel du-nombra listo
     const handle1 = $( "#periodilo_manilo_1" );
     const handle2 = $( "#periodilo_manilo_2" );
 
     function adaptuVerkliston(de,ghis) {
         $("#sercho_verklisto div").each((i,e) => {
-            const el = $(e);
-            const jar = +el.attr('data-jar');
-            if (jar < de || jar > ghis) {
-                el.addClass('kasxita');
-            } else {
-                el.removeClass('kasxita');
+            if (e.id != "vl_chiuj_") {
+                const el = $(e);
+                const jar = +el.attr('data-jar');
+                if (jar < de || jar > ghis) {
+                    el.addClass('kasxita');
+                } else {
+                    el.removeClass('kasxita');
+                }   
             }
         });
     }
@@ -449,16 +456,29 @@ export function verkoPeriodo(periodilo,montrilo) {
             handle1.text( de );
             handle2.text( ghis );
 
+            // aktualigu la videblon de verkoj
             adaptuVerkliston(de,ghis);
             //montrilo.val( ui.values[0] + " - " + +ui.values[1] );
-            // aktualigu la videblon de verkoj
+            verkinformo();
             //...
         }
     });
 };
 
+function verkinformo() {
+    const periodilo = $("#s_elektitaj_periodilo");
+    const periodo = periodilo.slider("option","values").join(' - ');
+    const montrilo = $("#sercho_verkinfo");
+    const n = $("#sercho_verklisto")
+        .find(":not(.kasxita) input[name='cvl_elekto']:checked").length;
+
+    montrilo.text(' ' + periodo + ', ' + n + ' titolo' + (n!=1?'j':''));
+}
+
 /**
- * Vokas la verko-liston kaj prezentas ĝin por limigeblo de posta citaĵo-serĉo.
+ * Vokas la verko-liston kaj prezentas ĝin 
+ * por limigeblo de posta citaĵo-serĉo.
+ * 
  * @param {Event} event
  */
 export function verkoListo(event) {
@@ -496,13 +516,16 @@ export function verkoListo(event) {
                             + 'name="cvl_elekto" value="' + v.vrk + '"></input></div>')
                     }
                     vdiv.find("input").checkboxradio();
+                    vdiv.find("input").on("change",verkinformo);
                     $("#vl__chiuj__").on("change", (event) => {
-                        const check = $(event.target).is( ":checked");
+                        const check = $(event.target).is(":checked");
                         vdiv.find("input[name='cvl_elekto']").each((i,e) => {
-                            $(e).prop("checked",check);
-                            $(e).checkboxradio("refresh");
-                        });
-                    });
+                            const el = $(e);
+                            el.prop("checked",check); 
+                            el.checkboxradio("refresh");
+                        });                        
+                        verkinformo();   
+                });
                 }
             }
         );
