@@ -897,12 +897,14 @@ $.widget( "redaktilo.Trovo", {
             */
         this.element.before(htmlstr);
         if (v.descr) this.element.text(v.descr);
-
+        
         if (o.type == "teksto") {
             // citaĵonumero por kunteksto estas nur en citaĵoserĉo, ne en retserĉo...:
             if (v.data.cit) {
+                // en citaĵoserĉo ebligu kuntekston
                 $("#k_" + v.id).KuntekstoBtn({fno: v.data.cit.fno});
             } else {
+                // trovoj de retserĉo ne havu kunteksto-butonon
                 $("#k_" + v.id).remove();
             }
 
@@ -917,6 +919,9 @@ $.widget( "redaktilo.Trovo", {
                     $("#tabs").tabs( "option", "active", 0);
                 }
             });
+        } else {
+            // bildoj ne havu kunteksto-butonon
+            $("#k_" + v.id).remove();
         }
     },
 
@@ -1026,7 +1031,8 @@ $.widget( "redaktilo.Trovo", {
             click: function(event) {
                 if (this.options.fno) {
                     event.preventDefault();
-                    const dd_id = event.target.id.substring(2); // fortranĉu 'k_'
+                    const id = event.target.id;
+                    const dd_id = id.substring(2); // fortranĉu 'k_'
 
                     $.alportu(
                         'kunteksto',
@@ -1037,13 +1043,16 @@ $.widget( "redaktilo.Trovo", {
                             '#sercho_error')
                         .done(
                             function(data) {   
-                            //$("#sercho_trovoj").html('');
-                            if (data.length) {
-                                //console.debug(data[0]);
-                                const text = data.map(e => e.ekz).join('<br/>');
-                                $('#'+dd_id).html(text);
-                            }
-                        });
+                                //$("#sercho_trovoj").html('');
+                                if (data.length) {
+                                    //console.debug(data[0]);
+                                    const text = data.map(e => e.ekz).join('<br/>');
+                                    $('#'+dd_id).html(text);
+                                }
+                                // momente ni nur unufoje povas montri pli da kunteksto
+                                // poste eble ebligu laŭŝtupan plion...
+                                $("#"+id).remove();
+                            });
 
                 } else {
                     throw nedifinita_fno;
