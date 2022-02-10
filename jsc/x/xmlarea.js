@@ -535,12 +535,13 @@ Xmlarea.prototype.replaceTrd = function(id,lng,trdj) {
       nov = '<trd lng="'+lng+'">' + tf[0] +'</trd>\n' + ind;
       console.debug(' --> '+nov);
       //this.selection(nov);
+
     // se estas pluraj ni kreu <trdgrp...>
     } else if (tf.length > 1) {
       nov = '<trdgrp lng="'+lng+'">\n' + ind + '  <trd>';
       nov += tf
         .join('</trd>,\n' + ind + '  <trd>');
-      nov += '</trd>\n' + ind + '</trdgrp>';
+      nov += '</trd>\n' + ind + '</trdgrp>\n' + ind;
       console.debug(' --> '+nov);
       //this.selection(nov);
     } 
