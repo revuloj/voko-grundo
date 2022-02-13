@@ -466,13 +466,23 @@ export function verkoPeriodo() {
 };
 
 function verkinformo() {
+    const montrilo = $("#sercho_verkinfo");
+
+    // jarperiodo
     const periodilo = $("#s_elektitaj_periodilo");
     const periodo = periodilo.slider("option","values").join(' - ');
-    const montrilo = $("#sercho_verkinfo");
-    const n = $("#sercho_verklisto")
-        .find(":not(.kasxita) input[name='cvl_elekto']:checked").length;
 
-    montrilo.text(' ' + periodo + ', ' + n + ' titolo' + (n!=1?'j':''));
+    let info = ' ' + periodo;
+    
+    // titoloj, subpremu, se verkoj ankoraŭ ne ŝargitaj kaj do 
+    // ankaŭ ne adaptitaj
+    if ($("#sercho_verklisto").children().length) {
+        const n = $("#sercho_verklisto")
+        .find(":not(.kasxita) input[name='cvl_elekto']:checked").length;
+        info += ', ' + n + ' titolo' + (n!=1?'j':'');
+    }
+
+    montrilo.text(info);
 }
 
 /**
