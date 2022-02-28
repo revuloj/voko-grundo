@@ -32,7 +32,7 @@ function _serĉo_preparo() {
 const afiksoj = function() {
 
     // redonu sufiksojn aplikeblajn 
-    // al radikkaraktero rk kun rezulta vortspeco vs
+    // al radikkaraktero rk kun rezulta vortspeco vs (rk-vs|...)
     const _sufiksoj = {
         "[aio]n?t": "i-u|i-a",
         "aĉ": "?-?",
@@ -50,7 +50,7 @@ const afiksoj = function() {
         "estr": "o-u",
         "et": "?-?",
         "id": "u-u|o-o",
-        "i[gĝ]": "i-?|n-i",
+        "i[gĝ]": "?-?|n-?",
         "il": "i-o",
         "in": "u-u|u-a",
         "[ei]nd": "i-a|i-o",

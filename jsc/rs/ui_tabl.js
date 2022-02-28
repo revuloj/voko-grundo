@@ -254,6 +254,7 @@ export default function() {
         }
     });
     $("#sercho_sercho").keypress(xpress);
+    $("#re_radiko").keypress(xpress);
 
     $("#sercho_error").hide();
     $("#sercho_sercho").Checks({
