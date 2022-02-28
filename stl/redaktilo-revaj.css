@@ -267,6 +267,12 @@ fieldset legend {
     margin-bottom: .5em;
 }
 
+#regexes fieldset {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
 #sercho_trovoj dd {
     margin-top: 0.1em;
     margin-bottom: 0.2em;
