@@ -449,11 +449,17 @@ export function before_activate_tab(event,ui) {
         var sercho = replaceTld(radiko,elektita)
            .replace(/<[^>]+>/g,'')
            .replace(/\s\s+/g,' ');
-        if (sercho.length>0)
+        if ( sercho.length > 0 ) {
             $("#sercho_sercho").val(sercho);
+            $("#sercho_det_regexes").removeAttr("open");
+        }
+
     } else if (old_p == "html" && new_p == "sercho") {
         var selection = $("#rigardo").selection();
-        if ( selection.length>0 ) $("#sercho_sercho").val(selection);
+        if ( selection.length > 0 ) {
+            $("#sercho_sercho").val(selection);
+            $("#sercho_det_regexes").removeAttr("open");
+        }
     }
 
     // alirante la serĉon ni distingas internan kaj eksteran serĉadon

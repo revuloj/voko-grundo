@@ -271,6 +271,7 @@ fieldset legend {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    align-items: flex-start;
 }
 
 #sercho_trovoj dd {
