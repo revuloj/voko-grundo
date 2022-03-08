@@ -250,8 +250,7 @@ jQuery.fn.extend({
         }
         return pos;
     },
-    
-        /* prefere uzu xmlarea.position()! 
+        /* uzu xmlarea.position()!
 
     // redonu la linion kaj pozicion ene de linio el absoluta pozicio (index -> line:pos)
     getCursorLinePos: function() {

@@ -435,7 +435,7 @@ Xmlarea.prototype.findTrdPlace = function(xml,lng) {
         // ni redonos la lastan kovnenan lokon (supran trd-on)
         return {pos: lpos, elm: lelm};
       } else {
-        // sed temas pri rimarko ni iru al ties komenco kaj de
+        // se temas pri rimarko ni iru al ties komenco kaj de
         // tie plu serĉu tradukojn...
         t = find_stag([q.elm],xml,q.pos);
       }
@@ -519,6 +519,20 @@ Xmlarea.prototype.replaceTrd = function(id,lng,trdj) {
     return ind;
   }
 
+  function duobla_linirompo_for(pos) {
+    let p = pos;
+    // forigu spacojn antaŭe...
+    while ("\t ".indexOf(xml[--p]) >=0);
+    xml = xml.substring(0,p) + xml.substring(pos);
+    // forigu spacojn kaj linirompon malantaŭe
+    while ("\n\t ".indexOf(xml[++p]) >=0) {
+      if (xml[p] == "\n") {
+        xml = xml.substring(0,pos) + xml.substring(p+1);
+        break;
+      }
+    }
+  }
+
   const place = this.findTrdPlace(xml,lng); // this.getCurrentLastTrd(lng);
   if (place) {
     const len = place.trd? place.trd.length : 0;
@@ -527,20 +541,25 @@ Xmlarea.prototype.replaceTrd = function(id,lng,trdj) {
     let nov;
 
     const tf = trdj.filter(t => t.length>0);
-    // se estas unuopa traduko ni metas kiel <trd..>
+    // se estas neniu traduko temas pri forigo
     if (tf.length == 0) {
       nov = '';
       console.debug(' --> FORIGO');
+
+    // se estas unuopa traduko ni metas kiel <trd..>
     } else if (tf.length == 1) {
-      nov = '<trd lng="'+lng+'">' + tf[0] +'</trd>\n' + ind;
+      nov = '<trd lng="'+lng+'">' + tf[0] +'</trd>' 
+        + (!len? '\n'+ind : ''); // alpendigu linirompon kaj enŝovon se antaŭe estis neniu trd
       console.debug(' --> '+nov);
       //this.selection(nov);
+
     // se estas pluraj ni kreu <trdgrp...>
     } else if (tf.length > 1) {
       nov = '<trdgrp lng="'+lng+'">\n' + ind + '  <trd>';
       nov += tf
         .join('</trd>,\n' + ind + '  <trd>');
-      nov += '</trd>\n' + ind + '</trdgrp>';
+      nov += '</trd>\n' + ind + '</trdgrp>'
+        + (!len? '\n'+ind : ''); // alpendigu linirompon kaj enŝovon se antaŭe estis neniu trd;
       console.debug(' --> '+nov);
       //this.selection(nov);
     } 
@@ -554,14 +573,24 @@ Xmlarea.prototype.replaceTrd = function(id,lng,trdj) {
     }*/
 
     //if (nov) {
+      // anstataŭigi malnovan traduko(j)n per nova(j)
       xml = xml.substring(0,place.pos) + nov + xml.substring(place.pos+len);
+      // se temas pri tuta forigo, restas du linirompoj, unu antaŭe unu poste
+      // ni do testas ĉu post place.pos aperas \n
+      // eventuale kun antaŭaj spacsignoj kaj tiam forigas ĝin,
+      // same spacsignojn antaŭe place.pos
+      if (len && !nov) {
+        duobla_linirompo_for(place.pos);
+      }
+
+      // enŝovu la ŝanĝitan subtekston en la kompletan XML-tekston
       // PLIBONIGU: ni ĉiufoje rekalkulas la strukturon post tio,
       // do se ni aldonas tradukojn en pluraj sekcioj ni haltigu
       // la aktualigadon ĝis la lasta...
       this.xmlstruct.replaceSubtext({id:id},xml,this.elekto.id);
       // aktualigu ankaŭ txtarea, ĉar eble ni aldonis en tiu tradukojn
       // PLIBONIGU: pli bone faru tion nur se montriĝas ĉirkaŭa subteksto
-      // aŭ fine de aldoni ĉiujn tradukojn...
+      // aŭ fine, post aldoni ĉiujn tradukojn...
       this.txtarea.value = this.xmlstruct.getSubtext(this.elekto);
     //}
   }

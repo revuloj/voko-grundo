@@ -137,9 +137,16 @@ montru tie, cxar ili estas esenca parto de tiuj -->
   </xsl:if>
   -->
 
-  <!-- skribu la tradukon mem --> 
-  <xsl:text> </xsl:text>
+  <xsl:choose> <!-- uzu spacon ĉe ekz/bld, 0xA0 aliokaze -->
+    <xsl:when test="ancestor::node()[self::ekz or self::bld]">
+      <xsl:text> </xsl:text>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:text>&#xa0;</xsl:text>
+    </xsl:otherwise>
+  </xsl:choose>
 
+  <!-- skribu la tradukon mem --> 
   <span lang="{@lng}">
     <xsl:if test="@lng = 'ar' or
                   @lng = 'fa' or
@@ -160,7 +167,23 @@ montru tie, cxar ili estas esenca parto de tiuj -->
   </span>
 
   <xsl:if test="not(position()=last())">
+
+    <!-- malĝusta loko, ni havs tiun nur ĉe pluraj trd en trdgrp...:
+         do ni metas punkton malsupre.
+    <xsl:if test="ancestor::node()[self::ekz or self::bld]">
+      <xsl:text>;</xsl:text>
+    </xsl:if>
+     -->
+
     <xsl:text> </xsl:text>
+  </xsl:if>
+
+  <!-- finu pli longajn tradukojn de ekz/bld per
+        punkto ĉar aparte se sekvas tradukoj de unusola sencoj
+        mankus apartigo.
+  -->
+  <xsl:if test="ancestor::node()[self::ekz or self::bld]">
+    <xsl:text>.</xsl:text>
   </xsl:if>
 
 </xsl:template>

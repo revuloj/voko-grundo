@@ -6,7 +6,7 @@
 
 import { show_xhr_error } from './ui_dlg.js';
 import { vortokontrolo, xmlkontrolo, klrkontrolo, surmetita_dialogo } from './ui_err.js';
-import { vikiSerĉo, citaĵoSerĉo, retoSerĉo, bildoSerĉo } from './ui_srch.js';
+import { vikiSerĉo, citaĵoSerĉo, regulEsprimo, verkoListo, verkoPeriodo, verkElekto, retoSerĉo, bildoSerĉo } from './ui_srch.js';
 
 const revo_url = 'https://retavortaro.de';
 
@@ -216,36 +216,32 @@ export default function() {
 
     //### subpaĝo "serĉo"
     $("#s_klasikaj").click("klasikaj",citaĵoSerĉo);
-    $("#s_postaj").click("postaj",citaĵoSerĉo);
+    $("#s_elektitaj").click("elektitaj",citaĵoSerĉo);
+
+    $("#sercho_det_regexes").on("toggle",() => {
+        if (! $("#re_radiko").val()) {
+            const xmlarea = $("#xml_text").Artikolo("option","xmlarea");
+            $("#re_radiko").val(xmlarea.getRadiko());
+        }
+    });
+    $("#sercho_det_verklisto").on("toggle",verkoListo);
+    $("#sercho_verklisto button").click(verkElekto);
+    verkoPeriodo();
+
     $("#s_vikipedio").click(vikiSerĉo);
     $("#s_anaso").click(retoSerĉo);
     $("#s_bildoj").click(bildoSerĉo);
 
-    $("#regexes input").button();
+    //$("#regexes input[type='button']").button();
+    $("#regexes input[type='radio']").checkboxradio();
+    $("#regexes input[type='checkbox']").checkboxradio();
     /*
     $("#re_b").click(
         () => $("#sercho_sercho")
             .val("\\b"+$("#sercho_sercho").val())
     );*/
-    $("#regexes input").click((event) => {
-        const srch = $("#sercho_sercho");
-        const v = srch.val();
-        const sele = srch[0].selectionEnd;
-        const re = event.target.id;
-        if (re == "re_helpo") {
-            window.open(globalThis.help_base_url + globalThis.help_regulesp);
-        } else if (re == "re_b") {
-            srch.val("\\b"+v);
-        } else {
-            const pos = (sele == v.length || v[sele] == " ")? sele : v.length;
-            const x = {
-                re_o: "oj?n?\\b", 
-                re_a: "aj?n?\\b", 
-                re_ntr: "([ao]s|[ui]s?|[aoi]ntaj?n?)\\b",
-                re_tr: "([ao]s|[ui]s?|[aoi]n?taj?n?)\\b"}[re];
-            srch.val(v.substring(0,pos)+x+v.slice(pos));
-        }
-    });
+    $("#regexes input").click(regulEsprimo);
+    $("#re_radiko").on("input",regulEsprimo);
 
     $( "#sercho_butonoj").Klavaro({
         artikolo: $("#xml_text"),
@@ -258,6 +254,7 @@ export default function() {
         }
     });
     $("#sercho_sercho").keypress(xpress);
+    $("#re_radiko").keypress(xpress);
 
     $("#sercho_error").hide();
     $("#sercho_sercho").Checks({
@@ -452,11 +449,17 @@ export function before_activate_tab(event,ui) {
         var sercho = replaceTld(radiko,elektita)
            .replace(/<[^>]+>/g,'')
            .replace(/\s\s+/g,' ');
-        if (sercho.length>0)
+        if ( sercho.length > 0 ) {
             $("#sercho_sercho").val(sercho);
+            $("#sercho_det_regexes").removeAttr("open");
+        }
+
     } else if (old_p == "html" && new_p == "sercho") {
         var selection = $("#rigardo").selection();
-        if ( selection.length>0 ) $("#sercho_sercho").val(selection);
+        if ( selection.length > 0 ) {
+            $("#sercho_sercho").val(selection);
+            $("#sercho_det_regexes").removeAttr("open");
+        }
     }
 
     // alirante la serĉon ni distingas internan kaj eksteran serĉadon

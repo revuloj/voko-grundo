@@ -133,7 +133,7 @@ IMG.ref {
 }
 
 #sercho_form .ui-button:hover {
-    border: none !important;
+    border: 1px hidden !important;
 }
 
 #kash_btn {
@@ -253,6 +253,7 @@ input[type='button']:focus,
 
 fieldset {
     border: 1px solid var(--main-brd-clr); /*#327e04;*/
+    border-radius: 3px;
 }
 
 fieldset legend {
@@ -260,10 +261,17 @@ fieldset legend {
     background-color: inherit;
 }
 
-#regexes, #serch_btnj {
+#regexes {
     display: inline-block;
     margin-top: 2px;
     margin-bottom: .5em;
+}
+
+#regexes fieldset {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
 }
 
 #sercho_trovoj dd {
@@ -828,13 +836,54 @@ fieldset legend {
 }
 
 #sercho_form .ui-button {
+    border: 1px hidden !important;
+    /*font-size: 88%;*/
+    padding: 0.3em;
+    margin: .3em;
+}
+
+/*
+#sercho_verklisto button {
     font-size: 88%;
     padding: 0.3em;
+    margin: .2em;
+}
+*/
+
+.periodilo {
+    display: inline-block;
+    min-width: 30em;
+    margin: 0;
+    margin-left: 1em;
+    margin-right: 2.5em;
+}
+
+.manilo {
+    width: 3em !important;
+    height: 1.6em !important;
+    top: 50% !important;
+    margin-top: -.8em;
+    text-align: center;
+    line-height: 1.6em;
+}
+
+#re_esprimo:empty
+{
+    display: none;
+}
+#re_esprimo,
+#re_radiko {
+    word-break: break-all;
+    padding: .5em;
+    border-radius: 4px;
+    background-color: var(--main-ac2-bgr-clr);
+    border-left: 2px dotted var(--main-brd-clr);
+    margin-top: .2em;
 }
 
 #sercho_trovoj {
     border: 1px solid silver;
-    border-radius: 6px;
+    border-radius: 4px;
     /*padding: 1em;*/
     margin-top: 0;
     
@@ -845,6 +894,70 @@ fieldset legend {
     
     margin-bottom: 0.5em;
     overflow: auto;
+}
+
+#sercho details {
+    background-color: var(--main-ac3-bgr-clr);
+}
+
+#sercho summary {
+    margin: .3em;
+}
+
+#serch_btnj {
+    margin-top: .2em;
+    background-color: var(--main-ac3-bgr-clr);
+}
+
+#sercho_det_regexes {
+    margin-top: .4em;
+    margin-bottom: .4em;
+    /*border-top: 1px dotted var(--main-brd-clr);*/
+    border-bottom: 1px dotted var(--main-brd-clr);    
+}
+
+
+
+#sercho_det_verklisto {
+    flex: 0;
+    -webkit-flex: 0;
+
+    /* evitu ke verkolisto plilongiĝu ol la videbla paĝo */
+    box-sizing: border-box;
+    max-height: 100%;
+    /*
+    display: flex; 
+    flex-direction: column; 
+    */
+}
+
+#sercho_verklisto {
+    border: 1px solid silver;
+    border-radius: 4px;
+    /*padding: 1em;*/
+    margin-top: 0;
+    overflow: auto; 
+    margin-bottom: 0.5em;
+
+    /* evitu ke verkolisto plilongiĝu ol la videbla paĝo */
+    box-sizing: border-box;
+    max-height: 60vh;
+}
+
+/*
+#sercho_verklisto .ui-button {
+    padding: 0;
+}
+*/
+
+#sercho_verklisto label {
+    width: 50em;
+    text-align: left;
+    border: 1px solid gray !important;
+    margin: 1px !important;
+    padding: 0.1em !important;
+    padding-left: 4.5ex !important;
+    text-indent: -2.5ex;
 }
 
 #surmetita {
@@ -973,6 +1086,10 @@ fieldset legend {
 
 #traduko_dlg {
     padding-left: 0;
+}
+
+#traduko_dlg tr.tr_drv {
+    background-color: var(--main-ac3-bgr-clr);
 }
 
 #traduko_sidebar {

@@ -305,8 +305,8 @@ HTMLFonto.prototype = {
  * @constructor
  */
 var HTMLTrovoDt = function() {
-    this.t = new XMLŜablono(html_sxablonoj.dt_trovo);
-    this.tc = new XMLŜablono(html_sxablonoj.dt_trovo_cit);
+    this.t = new XMLŜablono(html_sxablonoj.dt_trovo); // sen URL
+    this.tc = new XMLŜablono(html_sxablonoj.dt_trovo_cit); // kun URL
 };
 
 HTMLTrovoDt.prototype = {
