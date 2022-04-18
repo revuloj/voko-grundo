@@ -35,7 +35,8 @@ RUN bin/mp2png_svg.sh
 FROM ubuntu as builder
 
 # vd: https://github.com/nodesource/distributions
-RUN apt-get update && apt-get install -y curl xsltproc \
+# rxp, jre kaj saxonb ni bezonas nur por testoj (xml-test.sh)
+RUN apt-get update && apt-get install -y curl xsltproc rxp default-jre libsaxonb-java \
  && curl -sL https://deb.nodesource.com/setup_17.x | bash -E - \
  && apt-get install -y nodejs
 
@@ -46,7 +47,8 @@ COPY --from=metapost /build/ /usr/app/build/
 # aldonu eble:  npm audit fix, kelkfoje ni devas uzi -g npm@next - se ekzistas posta eldono
 # mi ne scias npm sufiĉe bone por forumli aktualigan komandon, kiu fidinde ĉiam funkcias...
 
-RUN npm install -g npm@latest && npm ci && npm run build
+RUN npm install -g npm@latest && npm ci && npm run build && tst/xml-test.sh
+
 
 # staĝo 3 kopiu nur la kreitajn rezultojn al nova malplena ujo
 FROM scratch
