@@ -32,7 +32,7 @@ RUN bin/mp2png_svg.sh
 
 # staĝo 2: nodejs: kompilu CSS kaj JS
 
-FROM ubuntu as builder
+FROM ubuntu:focal as builder
 
 # vd: https://github.com/nodesource/distributions
 # rxp, jre kaj saxonb ni bezonas nur por testoj (xml-test.sh)
