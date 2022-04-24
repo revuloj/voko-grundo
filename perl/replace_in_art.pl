@@ -32,8 +32,8 @@ sub process_art {
     my $chg = 0;
     
     # apliku anstataŭigojn
-    $chg ||= ($xml =~ s/trd(grp)?\s+"jw"/trd$1 "jv"/g);
-    $chg ||= ($xml =~ s/trd(grp)?\s+"tp"/trd$1 "tok"/g);
+    $chg ||= ($xml =~ s/lng\s*=\s*"jw"/lng="jv"/g);
+    $chg ||= ($xml =~ s/lng\s*=\s*"tp"/lng="tok"/g);
     #...
     $chg ||= ($xml =~ s|https?://www\.monato\.be|&Monato;|g);
     $chg ||= ($xml =~ s|https?://esperanto\.cri\.cn/|&CRI;|g);
@@ -52,7 +52,7 @@ sub process_art {
     $chg ||= ($xml =~ s|https?://esperanto-ondo\.ru/|&LOdE;|g);
     $chg ||= ($xml =~ s|https?://sezonoj\.ru/|&Sezonoj;|g);
     $chg ||= ($xml =~ s|https?://www\.gutenberg\.org/|&Gutenberg;|g);
-    $chg ||= ($xml =~ s|https?://www\.steloj\.de/esperanto/|&Steloj;|g);
+    $chg ||= ($xml =~ s|https?://(?:www\.)?steloj\.de/esperanto/|&Steloj;|g);
     $chg ||= ($xml =~ s|https?://upload\.wikimedia\.org/wikipedia/commons|&WCU;|g);
     $chg ||= ($xml =~ s|https?://commons\.wikimedia\.org/wiki|&WCW;|g);
 
