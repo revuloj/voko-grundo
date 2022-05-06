@@ -81,7 +81,7 @@
   <lingvo kodo="ja">japana</lingvo>
   <lingvo kodo="jbo">loĵbana</lingvo>
   <lingvo kodo="jv">java</lingvo>
-  <lingvo kodo="jw">java</lingvo> <!-- forigi kiam neuzata -->
+  <!-- lingvo kodo="jw">java</lingvo> anst. per jv -->
   <lingvo kodo="ka">kartvela</lingvo>
   <lingvo kodo="kek">kekĉia</lingvo>
   <lingvo kodo="kg">konga</lingvo>
@@ -172,7 +172,7 @@
   <lingvo kodo="tn">cvana</lingvo>
   <lingvo kodo="to">tongaa</lingvo>
   <lingvo kodo="tok">tokipona</lingvo>
-  <lingvo kodo="tp">tokipona</lingvo> <!-- forigi kiam neuzata -->
+  <!-- <lingvo kodo="tp">tokipona</lingvo> anst. per tok -->
   <lingvo kodo="tr">turka</lingvo>
   <lingvo kodo="ts">conga</lingvo>
   <lingvo kodo="tt">tatara</lingvo>
