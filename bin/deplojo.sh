@@ -11,8 +11,8 @@
 #host=retavortaro.de
 # aldonu en /etc/hosts!
 host=revo
-release=2e
-node_release=2.0.5
+release=2f
+node_release=2.0.6
 revo=${host}:www/revo
 files=${host}:files
 
@@ -67,6 +67,7 @@ cetonio:debug)
 cetonio|cetonio:debug)
     cetonio_id=$(docker ps --filter name=cetoniujo_cetonio -q)
     todir=/home/cetonio/pro
+    echo "kopiante ${RSJ} kaj ${RSC} al ${cetonio_id}:${todir}/web/static"
     docker cp ${RSJ} ${cetonio_id}:${todir}/web/static
     docker cp ${RSC} ${cetonio_id}:${todir}/web/static
     ;;

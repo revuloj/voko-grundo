@@ -8,7 +8,7 @@
 
 
 // rigardataj kiel konstantoj:
-globalThis.eldono = "2e";
+globalThis.eldono = "2f";
 globalThis.debug = false;
 
 // agordoj pri reta-vortaro.de
