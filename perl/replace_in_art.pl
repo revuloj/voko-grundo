@@ -56,6 +56,10 @@ sub process_art {
     $chg += ($xml =~ s|https?://upload\.wikimedia\.org/wikipedia/commons|&WCU;|g);
     $chg += ($xml =~ s|https?://commons\.wikimedia\.org/wiki|&WCW;|g);
 
+    $chg += ($xml =~ s|https?://www\.uea\.org/|&UEA;|g);
+    $chg += ($xml =~ s|https?://tekstaro\.com/t|&Tekstaro;|g);
+
+
     if ($chg) {
         process::write_file(">",$art,$xml);
 
