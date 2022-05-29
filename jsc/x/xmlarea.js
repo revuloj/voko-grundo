@@ -522,8 +522,9 @@ Xmlarea.prototype.replaceTrd = function(id,lng,trdj) {
   function duobla_linirompo_for(pos) {
     let p = pos;
     // forigu spacojn antaŭe...
-    while ("\t ".indexOf(xml[--p]) >=0);
+    while ("\t ".indexOf(xml[--p]) >=0) {};
     xml = xml.substring(0,p) + xml.substring(pos);
+    
     // forigu spacojn kaj linirompon malantaŭe
     while ("\n\t ".indexOf(xml[++p]) >=0) {
       if (xml[p] == "\n") {
