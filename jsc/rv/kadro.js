@@ -76,18 +76,6 @@ when_doc_ready(function() {
     //// kaj adapto de videbleco / stato de butonoj, sed rezignu pri tro komplikaj
     //// agoj kiel ŝargi paĝojn ktp. (?)
 
-
-    // difinu agojn por transiroj al cel-statoj
-    //t_nav.alvene("ĉefindekso",()=>{ load_page("nav",inx_eo_url) })
-    //t_nav.alvene("serĉo",(event)=>{ serchu(event) });
-    //t_nav.alvene("serĉo",serchu,(event)=>{event.key == "Enter"});
-
-    
-    const srch = getParamValue("q");
-    if (srch) serchu_q(srch);
-    
-    ////t_nav.alvene("serĉo",()=>{ const s=getParamValue("q"); serchu_q(s) },getParamValue("q"));
-
     t_nav.alvene("ĉefindekso",()=>{ 
         if (t_main.stato != "titolo") 
             show("x:titol_btn");
@@ -204,12 +192,33 @@ when_doc_ready(function() {
 
     // ni ne kreas la kadron, se ni estas en (la malnova) "frameset"
     if (! top.frames.length) {
+
+        // ĉe URL-parametro 'q' ni rekte lanĉu sercon
         // provizore rezignu pri tia preparo, aparte la aŭtomata enkadrigo de artikoloj
         // enkadrigu();
         if (document.getElementById("navigado")) {
-            // anstataŭe ŝargu tiujn du el ĉefa indeks-paĝo
-            load_page("main",globalThis.titolo_url);
-            load_page("nav",globalThis.inx_eo_url);   
+
+            const srch = getParamValue("q");
+            const art = getParamValue("a");
+    
+            if (art) {
+                // ĉe URL-parametro 'a' ni rekte iru al artikolo
+                load_page("main",globalThis.art_prefix+art+'.html');   
+                load_page("nav",globalThis.inx_eo_url);   
+            } else if (srch) {
+                // ĉe URL-parametro 'q' ni tuj lanĉu serĉon
+                // ni devas certigi, ke la naviga kaj titolpaĝo antaŭ la
+                // serĉo ŝargiĝu, por ke depende de la rezulto la vortaro 
+                // tamen aperu bona! Tial la ĉenigo!
+                load_page("nav",globalThis.inx_eo_url,true,()=>{
+                    load_page("main",globalThis.titolo_url,true,
+                        ()=>serchu_q(srch));
+                });
+            } else {
+                // anstataŭe ŝargu tiujn du el ĉefa indeks-paĝo
+                load_page("main",globalThis.titolo_url);
+                load_page("nav",globalThis.inx_eo_url);   
+            }
         }
 
         onclick("x:nav_montru_btn",index_spread);
