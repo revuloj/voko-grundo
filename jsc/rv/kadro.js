@@ -43,6 +43,20 @@ function onclick(id,reaction) {
     navigado laŭ a href=... estas traktata per navigate_link()...
 */
 
+/**
+ * Eblas doni en la Revo-URL por rekta aliro artikolon/derivaĵon/sencon ekzemple per #hund.0o.dombesto
+ * Tion ni transformas al /revo/art/hund.html#hund.0o.dombesto por ebligi navigi tien.
+ * @param {*} hash - la valoro de loka URL-marko, ekz-e #hund.0o.dombesto
+ */
+function hash2art(hash) {
+    if (hash) {
+        const art = hash.substring(1).split('.')[0];
+        if (art)
+            return (
+                globalThis.art_prefix + art + '.html' + hash
+            );
+    }
+}
 
 /**
  * Enira funkcio vokata post ŝarĝo de la kadra paĝo. Ĝi 
@@ -199,11 +213,12 @@ when_doc_ready(function() {
         if (document.getElementById("navigado")) {
 
             const srch = getParamValue("q");
-            const art = getParamValue("a");
+            const art = window.location.hash;
     
             if (art) {
                 // ĉe URL-parametro 'a' ni rekte iru al artikolo
-                load_page("main",globalThis.art_prefix+art+'.html');   
+                const art_url = hash2art(art);
+                load_page("main",art_url);   
                 load_page("nav",globalThis.inx_eo_url);   
             } else if (srch) {
                 // ĉe URL-parametro 'q' ni tuj lanĉu serĉon
