@@ -43,6 +43,20 @@ function onclick(id,reaction) {
     navigado laŭ a href=... estas traktata per navigate_link()...
 */
 
+/**
+ * Eblas doni en la Revo-URL por rekta aliro artikolon/derivaĵon/sencon ekzemple per #hund.0o.dombesto
+ * Tion ni transformas al /revo/art/hund.html#hund.0o.dombesto por ebligi navigi tien.
+ * @param {*} hash - la valoro de loka URL-marko, ekz-e #hund.0o.dombesto
+ */
+function hash2art(hash) {
+    if (hash) {
+        const art = hash.substring(1).split('.')[0];
+        if (art)
+            return (
+                globalThis.art_prefix + art + '.html' + hash
+            );
+    }
+}
 
 /**
  * Enira funkcio vokata post ŝarĝo de la kadra paĝo. Ĝi 
@@ -75,18 +89,6 @@ when_doc_ready(function() {
     //// PLIBONIGU: provizore limigu Transiroj-n al memorado de la momenta stato
     //// kaj adapto de videbleco / stato de butonoj, sed rezignu pri tro komplikaj
     //// agoj kiel ŝargi paĝojn ktp. (?)
-
-
-    // difinu agojn por transiroj al cel-statoj
-    //t_nav.alvene("ĉefindekso",()=>{ load_page("nav",inx_eo_url) })
-    //t_nav.alvene("serĉo",(event)=>{ serchu(event) });
-    //t_nav.alvene("serĉo",serchu,(event)=>{event.key == "Enter"});
-
-    
-    const srch = getParamValue("q");
-    if (srch) serchu_q(srch);
-    
-    ////t_nav.alvene("serĉo",()=>{ const s=getParamValue("q"); serchu_q(s) },getParamValue("q"));
 
     t_nav.alvene("ĉefindekso",()=>{ 
         if (t_main.stato != "titolo") 
@@ -204,12 +206,34 @@ when_doc_ready(function() {
 
     // ni ne kreas la kadron, se ni estas en (la malnova) "frameset"
     if (! top.frames.length) {
+
+        // ĉe URL-parametro 'q' ni rekte lanĉu sercon
         // provizore rezignu pri tia preparo, aparte la aŭtomata enkadrigo de artikoloj
         // enkadrigu();
         if (document.getElementById("navigado")) {
-            // anstataŭe ŝargu tiujn du el ĉefa indeks-paĝo
-            load_page("main",globalThis.titolo_url);
-            load_page("nav",globalThis.inx_eo_url);   
+
+            const srch = getParamValue("q");
+            const art = window.location.hash;
+    
+            if (art) {
+                // ĉe URL-parametro 'a' ni rekte iru al artikolo
+                const art_url = hash2art(art);
+                load_page("main",art_url);   
+                load_page("nav",globalThis.inx_eo_url);   
+            } else if (srch) {
+                // ĉe URL-parametro 'q' ni tuj lanĉu serĉon
+                // ni devas certigi, ke la naviga kaj titolpaĝo antaŭ la
+                // serĉo ŝargiĝu, por ke depende de la rezulto la vortaro 
+                // tamen aperu bona! Tial la ĉenigo!
+                load_page("nav",globalThis.inx_eo_url,true,()=>{
+                    load_page("main",globalThis.titolo_url,true,
+                        ()=>serchu_q(srch));
+                });
+            } else {
+                // anstataŭe ŝargu tiujn du el ĉefa indeks-paĝo
+                load_page("main",globalThis.titolo_url);
+                load_page("nav",globalThis.inx_eo_url);   
+            }
         }
 
         onclick("x:nav_montru_btn",index_spread);

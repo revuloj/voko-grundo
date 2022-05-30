@@ -48,12 +48,14 @@ araneo:debug)
 araneo|araneo:debug)
     araneo_id=$(docker ps --filter name=araneujo_araneo -q)
     todir=/usr/local/apache2/htdocs/revo
+    echo "kopiante JS+CSS al ${araneo_id}:${todir}..."
     docker cp ${JSC} ${araneo_id}:${todir}/jsc
     docker cp ${CSS} ${araneo_id}:${todir}/stl
     ;;
 araneo-xsl)
     araneo_id=$(docker ps --filter name=araneujo_araneo -q)
     todir=/hp/af/ag/ri/files/xsl/inc
+    echo "kopiante XSL-dosierojn al ${araneo_id}:${todir}..."
     docker cp xsl/inc/revo_trd.xsl ${araneo_id}:${todir}
     ;;    
 cetonio)

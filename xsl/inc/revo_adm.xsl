@@ -73,7 +73,7 @@ reguloj por prezentado de la administraj notoj
           select="substring-before(substring-after(@mrk,'$Id: '),',v')"/>
 
 	        <a class="redakto" title="al la enirpaĝo" 
-  	          href="../index.html" target="_top">&#x211B;evo</a> |
+  	          href="../index.html#{substring-before($xml,'.xml')}" target="_top">&#x211B;evo</a> |
 	        <a class="redakto" title="Datumprotekta deklaro" 
               href="../dok/datumprotekto.html">datumprotekto</a> |	  
           <a class="redakto" target="_new" title="fontoteksto de la artikolo"
