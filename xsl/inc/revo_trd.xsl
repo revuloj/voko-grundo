@@ -93,7 +93,10 @@ reguloj por prezentado de la tradukoj
     </xsl:when>
     <!-- TRADUKOJ NE ENE DE drv, do fakte subart -->
     <xsl:otherwise>
-      <xsl:if test="trd[@lng=$lng]|trdgrp[@lng=$lng]|snc/trd[@lng=$lng]|snc/trdgrp[@lng=$lng]">
+      <!-- ni ne traktas tradukojn ene de subart/drv, ĉar tiuj jam traktiĝas per la ĉi-supra regulo -->
+      <xsl:if test="trd[@lng=$lng]|trdgrp[@lng=$lng]
+        |snc/trd[@lng=$lng]|snc/trdgrp[@lng=$lng]
+        |snc//ekz/trd[@lng=$lng]|snc//ekz/trdgrp[@lng=$lng]">
         <dt lang="eo" class="lng"><xsl:value-of select="$lingvo"/>:</dt>
         <dd lang="{$lng}">
         <!--
@@ -105,7 +108,7 @@ reguloj por prezentado de la tradukoj
         -->
           <xsl:for-each select="trd[@lng=$lng]|trdgrp[@lng=$lng]
             |snc/trd[@lng=$lng]|snc/trdgrp[@lng=$lng]
-            |snc/ekz/trd[@lng=$lng]|snc/ekz/trdgrp[@lng=$lng]">
+            |snc//ekz/trd[@lng=$lng]|snc//ekz/trdgrp[@lng=$lng]">
             <!-- pri ordigo vd. supre -->
             <xsl:sort select="count(ancestor::node()[
               self::snc or 
