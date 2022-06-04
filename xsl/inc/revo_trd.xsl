@@ -126,8 +126,9 @@ reguloj por prezentado de la tradukoj
 </xsl:template>  
 
 
-<!-- traktas unuopan tradukon au tradukgrupon -->
-
+<!-- traktas unuopan tradukon au tradukgrupon
+   (tio inkluzivas ankaŭ dif/trd, kiu montriĝas krom
+     en la difino mem ankaŭ en la listo sube de drv) -->
 <xsl:template match="trd[@lng]|trdgrp" mode="tradukoj">
 
   <!-- rigardu, al kiu subarbo apartenas la traduko kaj skribu la
@@ -200,7 +201,7 @@ reguloj por prezentado de la tradukoj
 </xsl:template>
 
 
-<xsl:template match="trdgrp/trd|dif/trd" mode="tradukoj">
+<xsl:template match="trdgrp/trd" mode="tradukoj">
   <xsl:apply-templates mode="tradukoj"/>
 
   <xsl:variable name="komo">
