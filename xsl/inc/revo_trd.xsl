@@ -134,29 +134,36 @@ reguloj por prezentado de la tradukoj
   <!-- rigardu, al kiu subarbo apartenas la traduko kaj skribu la
 	 tradukitan vorton/sencon -->
 
-  <strong lang="eo" class="trdeo">
-    <xsl:apply-templates 
-      select="ancestor::node()[
-        self::snc or 
-        self::subsnc or
-        self::ekz or
-        self::bld][1]" mode="kaptrd"/>
-  </strong>
+  <xsl:if test="not(parent::drv
+     or count(ancestor::node()[self::drv or self::subart][1]//snc)=1)">
 
-  <!--
-  <xsl:if test="string-length($n)>0">
-    <span class="trdeo"><xsl:value-of select="$n"/></span>
+    <strong lang="eo" class="trdeo">
+      <xsl:apply-templates 
+        select="ancestor::node()[
+          self::snc or 
+          self::subsnc or
+          self::ekz or
+          self::bld][1]" mode="kaptrd"/>
+    </strong>
+
+    <!--
+    <xsl:if test="string-length($n)>0">
+      <span class="trdeo"><xsl:value-of select="$n"/></span>
+    </xsl:if>
+    -->
+
+    <xsl:choose> <!-- uzu spacon ĉe ekz/bld, 0xA0 aliokaze -->
+      <!-- ne metu spacon antaŭ tradukon en drv aŭ unuopa snc, do se ne aperas antaŭe 
+          snc-numero ktp. -->
+      <xsl:when test="ancestor::node()[self::ekz or self::bld]">
+        <xsl:text> </xsl:text>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:text>&#xa0;</xsl:text>
+      </xsl:otherwise>
+    </xsl:choose>
+
   </xsl:if>
-  -->
-
-  <xsl:choose> <!-- uzu spacon ĉe ekz/bld, 0xA0 aliokaze -->
-    <xsl:when test="ancestor::node()[self::ekz or self::bld]">
-      <xsl:text> </xsl:text>
-    </xsl:when>
-    <xsl:otherwise>
-      <xsl:text>&#xa0;</xsl:text>
-    </xsl:otherwise>
-  </xsl:choose>
 
   <!-- skribu la tradukon mem --> 
   <span lang="{@lng}">
