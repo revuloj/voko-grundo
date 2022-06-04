@@ -50,6 +50,10 @@ preparo)
     sed -i 's,/redaktilo-[1-9][a-z]-min\.,/redaktilo-'${release}'-min\.,g' ${PACKG}
     sed -i 's/"version": "[1-9].[0-9].[1-9]"/"version": "'${node_release}'"/' ${PACKG}
     ;;
+kreo)
+    echo "Kreante lokan procezujon (por docker) voko-grundo"
+    docker build -t voko-grundo .
+    ;;    
 etikedo)
     echo "Provizante la aktualan staton per etikedo (git tag) v${release}"
     echo "kaj puŝante tiun staton al la centra deponejo"
