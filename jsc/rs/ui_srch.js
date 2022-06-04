@@ -330,7 +330,7 @@ export function regulEsprimo(event) {
         }
     }*/
 
-    // redonu prefiksoj aŭ sufiksojn aplikeblajn 
+    // redonu prefiksojn aŭ sufiksojn aplikeblajn 
     // al radikkaraktero rkar kun rezulta vortspeco vspec
     // se ankoraŭ ne elektiĝis rkar/vspec ni povas
     // elekti afiksojn kun '?'...

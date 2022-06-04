@@ -47,3 +47,90 @@ alinomojn por literoj, libroj de la biblio ks.
 1. DOK - manlibroj kc. La plej multaj intertempe transiris al `revuloj.github.io` kaj estu plu felgataj tie. Restas tie ĉi ekz-e la dokumento Datumprotekto.
 
 1. OWL - la kategoria sistemo de la kategoria indekso. Ni forigos tion post adapti ankoraŭ kelkajn lokojn kaj plu uzos nur `cfg/klasoj.xml`. RDF kaj OWL estus precipe utilaj uzante apartajn programojn por rezonado, sed post kelkaj jaroj da eksperimentado tio montriĝis ne sufiĉe utila por ĉiutaga uzo.
+
+
+## Kiel krei novan eldonon
+
+La centraj dosieroj el voko-grundo (agordo, DTD, XSL, vinjetoj) estas uzataj de pluraj aliaj subprojektoj kaj ties procezujoj, aparte: voko-formiko (la redaktoservo), voko-araneo (la vortara retpaĝaro), voko-cetonio (la komforta redaktilo). Eldonoj de tiuj povas referenci al certa eldono de voko-grundo (precipe en ties Dockerfile).
+Kelkaj uzas nur la kunpakitan font-arĥivon de voko-grundo, kelkaj la procezujon ĉar ili bezonas ankaŭ kompilaĵon (CSS, JS, vinjetoj).
+
+Helpas la skripto bin/eldono.sh kaj bin/deplojo.sh por organizi la novan eldonon. Eldono kreiĝas en sia aparta git-branĉo, kiun vi kreas komence. Eldonojn ni nomas cifero+litero, ekzemple `2f`, sed malsupre montras per ĵokero `<ELD>`. La eldonnumero aperas en pluraj fontdosiero. La eldono por la pakaĵo `nodejs` tamen toleras nur ciferojn,
+do ni tradukas la literon al cifero en la tria pozicio: `2f` => `2.0.6`. 
+La celo `preparo` poste aŭtomate aktualigas ilin en la fontodosieroj.
+
+Jen konciza paŝaro:
+
+1. Prepari novan eldonon en aparta git-branĉo
+
+Krei novan branĉon:
+```
+git checkout -b <ELD>
+```
+
+Prepari la eldonon, skribante la nomon supre en la helpskriptojn:
+```
+vi bin/eldono.sh
+release=<ELD>
+node_release=<ELDn>
+
+vi bin/deplojo.sh
+release=<ELD>
+node_release=<ELDn>
+```
+
+Aktualigu la novan eldonnumeron en diversajn fontdosierojn:
+
+```
+bin/eldono.sh preparo
+```
+
+2. Fari kaj konservi ŝanĝojn por la nova eldono
+
+Faru ĉiujn bezonatajn ŝanĝojn en la kodo. Kompletan novan procezujon `voko-grundo` vi povas krei loke per:
+
+```
+bin/eldono.sh kreo
+```
+
+Kutime vi volas nur kompili kaj elprovi novan JS/CSS k.s. vi uzos por tio la diversajn celojn en `package.json`, ekz-e:
+
+```
+npm run build
+npm run build:js:debug
+```
+
+La skripto `bin/deplojo.sh` helpas rekompili kaj kopii la rezulton al loka procezujo 
+(vd. `revo-medioj/araneujo` kaj `revo-medioj/cetoniujo` k.a.) 
+Por povi tuj elprovi ŝanĝojn loke, enrigardu tiun skripton por pliaj detaloj.
+```
+bin/deplojo.sh araneo:debug
+bin/deplojo.sh cetonio:debug
+```
+
+Por sendi viajn ŝanĝojn al la centra deponejo,
+konfirmu kaj puŝu viajn ŝanĝojn:
+```
+git add <dosieroj>
+git commit -m"<kion vi ŝanĝis>"
+git push --set-upstream origin <ELD>
+```
+
+3. Marki la eldonon per etikedo (git tag)
+
+Donu aŭ ŝovu etikedon `<ELD>` al la nuna stato de la kodo.
+Tio puŝas la etikedon ankaŭ al github kaj tie kreiĝas nova procezujo kun tiu etikedo (vd. ago-skripton sub `.github/workflows`)
+```
+bin/eldono.sh etikedo
+```
+
+4. Integrigi la eldonon en la ĉefan branĉon
+
+Fine, kiam vi ne plu faras ŝanĝojn en la eldono vi povas movi ĉion al la ĉefa branĉo, etikedi la eldonon tie kaj forigi la flankan branĉon:
+```
+git checkout master
+git merge <ELD>
+git tag v<ELD>
+git push --tags
+git -d <ELD>
+git push --delete origin <ELD>
+```
