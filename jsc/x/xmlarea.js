@@ -347,7 +347,7 @@ Xmlarea.prototype.collectTrdAll = function() {
   while ( ['snc','subdrv','drv'].indexOf(p.el)>-1 ) {
     xml = this.xmlstruct.getSubtext(p);
     this.collectTrd(xml,true,true); // malprofunde, normigu
-    p = this.xmlstruct.getParent(p.id);
+    p = this.xmlstruct.getParent(p);
   }
 };
 
