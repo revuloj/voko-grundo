@@ -1,7 +1,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 		version="1.0">
 
-<!-- (c) 1999-2020 ĉe Wolfram Diestel
+<!-- (c) 1999-2022 ĉe Wolfram Diestel, laŭ GPL 2.0
 
 reguloj pri prisklribaj elementoj (dif, ekz, gra ktp.) 
 kaj stiloj (em,ctl,sup...)
@@ -294,6 +294,12 @@ kaj stiloj (em,ctl,sup...)
   <xsl:text>&#x201e;</xsl:text>
   <xsl:apply-templates/>
   <xsl:text>&#x201c;</xsl:text>
+</xsl:template>
+
+<xsl:template match="mis">
+  <xsl:text>&#x29da;</xsl:text>
+  <xsl:apply-templates/>
+  <xsl:text>&#x29db;</xsl:text>
 </xsl:template>
 
 <xsl:template match="frm[@am]">
