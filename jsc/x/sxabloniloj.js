@@ -155,13 +155,21 @@ XMLFonto.prototype.xml = function(indent) {
 var XMLEkzemplo = function(ekz) {
     XMLŜablono.call(this,xml_sxablonoj.ekz);
     this.fonto = new XMLFonto(ekz);
-    ekz.frazo = ekz.frazo.replace(/~/g,'<tld/>');
+    // anstataŭigu tildojn 
+    ekz.frazo = ekz.frazo
+        .replace(/~/g,'<tld/>');
     this.frazo = ekz.frazo;
 };
 extend(XMLEkzemplo,XMLŜablono);
 
 XMLEkzemplo.prototype.xml = function(indent) {
     var ekz = {fnt:this.fonto.xml(2).trim(), frazo:this.frazo};
+    // se la frazo finiĝas per ! aŭ ?, ŝovu post </fnt>
+    if (ekz.frazo.endsWith('!') || ekz.frazo.endsWith('?')) {
+        const fsign = ekz.frazo.slice(-1);
+        ekz.frazo = ekz.frazo.slice(0,-1);
+        ekz.fnt = ekz.fnt.slice(0,-1) + fsign;
+    }
     return XMLŜablono.prototype.xml.call(this,ekz,indent);
 };
 
