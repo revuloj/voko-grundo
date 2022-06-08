@@ -87,7 +87,7 @@ Aliaj elementoj klarigo kaj tildo kaj sencreferenco same povas esti
 multloke, do ankaŭ ili estas listigitaj tie ĉi. -->
 
 <!-- tekst-stiloj -->
-<!ENTITY % tekst-stiloj "tld|sncref|klr|em|sup|sub|ctl|frm|nom|nac|esc">
+<!ENTITY % tekst-stiloj "tld|sncref|klr|em|sup|sub|ctl|mis|frm|nom|nac|esc">
 
 <!-- [art] Unuopa artikolo de la vortaro. Ĝi povas okazi en
 <dfn>vortaro</dfn> (se ne ekzistas precipa-parto),
@@ -426,7 +426,10 @@ en la fontoj.
 <!ELEMENT sub (#PCDATA|g|k)*>
 
 <!-- [ctl] citilita teksto, ekz. memindika uzo de vorto -->
-<!ELEMENT ctl (#PCDATA|tld|em|frm)*>
+<!ELEMENT ctl (#PCDATA|tld|em|frm|nom|nac|esc)*>
+
+<!-- [mis] mislingva teksto, ni prezentos inter asteriskoj -->
+<!ELEMENT mis (#PCDATA|tld|em|frm|nom|nac|esc)*>
 
 <!-- [url] Referenco al iu ekstera dosiero. En la HTML-versio de vortaro
 tio fariĝas &lt;a href=...&gt; Anstataŭ la TTT-ejo prefere uzu
