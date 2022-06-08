@@ -94,6 +94,7 @@ XKlavaro.prototype.elemento_klavoj = function(klvrElm, klavstr = undefined) {
         } else {
             var elmj = {
                 ctl: "citilo-elemento",
+                mis: "misstilo-elemento",
                 nom: "nomo (ne-e-a)",
                 nac: "nacilingva vorto",
                 esc: "escepta vorto",
@@ -349,7 +350,7 @@ XKlavaro.prototype.ekran_klavo = function(text,cmd,sel) {
     if (text) {
         return text;
     // citiloj
-    } else if (cmd == "\u201e\u201c" || cmd =="\u201a\u2018") {
+    } else if (cmd == "\u201e\u201c" || cmd =="\u201a\u2018" || cmd == "\u29da\u29db") {
         s_ = sel || "\u2026";
         return (cmd[0] + s_ + cmd[1]);
     // klarigoj en krampoj
