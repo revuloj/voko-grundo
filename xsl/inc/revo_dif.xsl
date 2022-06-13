@@ -290,6 +290,14 @@ kaj stiloj (em,ctl,sup...)
 </xsl:template>
 
 
+<xsl:template match="ts">
+  <del>
+  <xsl:apply-templates/>
+  </del>
+</xsl:template>
+
+
+
 <xsl:template match="ctl">
   <xsl:text>&#x201e;</xsl:text>
   <xsl:apply-templates/>
@@ -297,9 +305,10 @@ kaj stiloj (em,ctl,sup...)
 </xsl:template>
 
 <xsl:template match="mis">
-  <xsl:text>&#x29da;</xsl:text>
+  <sup>x</sup>
+  <!--<xsl:text>&#x29da;</xsl:text>-->
   <xsl:apply-templates/>
-  <xsl:text>&#x29db;</xsl:text>
+ <!-- <xsl:text>&#x29db;</xsl:text>-->
 </xsl:template>
 
 <xsl:template match="frm[@am]">
