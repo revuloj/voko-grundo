@@ -85,8 +85,7 @@
 <!ENTITY leftquot  "&#x201e;">
 <!ENTITY rightquot "&#x201c;">
 
-<!ENTITY leftfenc  "&#x29da;">
-<!ENTITY rightfenc "&#x29db;">
+<!ENTITY parsl      "&#x2AFD;">
 
 <!--ENTITY ring      "&#x00b0;"-->
 <!ENTITY deg       "&#x00b0;">

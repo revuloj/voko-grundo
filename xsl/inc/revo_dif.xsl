@@ -297,7 +297,6 @@ kaj stiloj (em,ctl,sup...)
 </xsl:template>
 
 
-
 <xsl:template match="ctl">
   <xsl:text>&#x201e;</xsl:text>
   <xsl:apply-templates/>
@@ -305,10 +304,11 @@ kaj stiloj (em,ctl,sup...)
 </xsl:template>
 
 <xsl:template match="mis">
-  <sup>x</sup>
+  <sup>&#x02e3;</sup>
   <!--<xsl:text>&#x29da;</xsl:text>-->
   <xsl:apply-templates/>
  <!-- <xsl:text>&#x29db;</xsl:text>-->
+  <sup>&#x02e3;</sup>
 </xsl:template>
 
 <xsl:template match="frm[@am]">
