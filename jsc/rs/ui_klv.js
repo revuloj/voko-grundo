@@ -115,6 +115,9 @@ $.widget( "redaktilo.Klavaro", {
                     case 'emfaze':
                         html += '<div class="elm_btn" data-cmd="em" title="emfazo"><strong>em</strong></div>';
                         break;
+                    case 'strekite':
+                        html += '<div class="klv elm_btn" data-cmd="ts" title="trastreko"><del>ts</del></div>';
+                        break;                        
                     case 'sup':
                         html += '<div class="elm_btn" data-cmd="sup" title="suprigite" ' +
                                 'style="padding-top:0.25em; padding-bottom:0.35em ">a<sup>s</sup></div>';
