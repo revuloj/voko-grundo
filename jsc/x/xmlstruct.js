@@ -273,7 +273,7 @@ XmlStruct.prototype.getSubtext = function(sd) {
 
 /**
  * Trovos la parencon de la struktur-elemento, ekzemple ĉe senco tio estas la enhavanta derivaĵo.
- * @param {{id: string}} sd - objekto kun .id kaj eventuala pliaj informoj .ln, .el por identigi la subtekston
+ * @param {{id: string}} sd - objekto kun .id kaj eventuale pliaj informoj .ln, .el por identigi la subtekston
  * @returns la detalojn de la parenco kiel objekto
  */
 XmlStruct.prototype.getParent = function(sd) {
@@ -337,10 +337,10 @@ XmlStruct.prototype.getClosestKap = function(sd) {
     if (elekto.kap) {
       return kap(elekto);
     } else {
-      var p = this.getParent(elekto.id);
+      var p = this.getParent(elekto);
       while (p && p.no > 0) { // ni ne redonos art@mrk (0-a elemento)
         if (p.kap) return kap(p);
-        p = this.getParent(p.id);
+        p = this.getParent(p);
       }
     }
 

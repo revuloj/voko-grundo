@@ -69,6 +69,7 @@ const voko_entities={
 "second":"″",
 "leftquot":"„",
 "rightquot":"“",
+"parsl":"⫽",
 "deg":"°",
 "Celsius":"℃",
 "Fahrenheit":"℉",
@@ -762,6 +763,7 @@ const voko_entities={
 "dbp":"https://dbpedia.org/",
 "dbpr":"https://dbpedia.org/resource/",
 "SCE":"https://groups.google.com/g/soc.culture.esperanto?hl=eo",
+"UEA":"https://uea.org/",
 "ViVo":"http://kono.be/cgi-bin/vivo/",
 "ViVoTrd":"http://kono.be/cgi-bin/vivo/ViVo.cgi?pagxo=",
 "AdE":"https://www.akademio-de-esperanto.org",
@@ -773,6 +775,7 @@ const voko_entities={
 "Sezonoj":"https://sezonoj.ru/",
 "Gutenberg":"https://www.gutenberg.org/",
 "Steloj":"https://www.steloj.de/esperanto/",
+"Tekstaro":"https://tekstaro.com/t",
 "WCU":"https://upload.wikimedia.org/wikipedia/commons",
 "WCW":"https://commons.wikimedia.org/wiki",
 "WA":"https://web.archive.org/web"}

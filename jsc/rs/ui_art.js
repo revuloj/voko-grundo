@@ -116,6 +116,7 @@ $.widget( "redaktilo.Artikolo", {
         //this.element.val();
         const xmlarea = this.option("xmlarea");
         xmlarea.setText(nova_art);
+        this._change_count = 0;
 
         // notu, ke temas pri nova artikolo (aldono),
         // tion ni bezonas scii ĉe forsendo poste
@@ -127,9 +128,11 @@ $.widget( "redaktilo.Artikolo", {
     load: function(dosiero,data) {
         const xmlarea = this.option("xmlarea");
         xmlarea.setText(data);
+
         //var e = this.element;
         //e.val(data);
         this.element.change();
+        this._change_count = 0;
         this._setOption("reĝimo",'redakto');
         this._setOption("dosiero",dosiero);
     },
@@ -266,6 +269,7 @@ $.widget( "redaktilo.Artikolo", {
         this._trigger("poziciŝanĝo",event,{});
         
         var keycode = event.keyCode || event.which; 
+        // klavoj, kiuj efektive ŝanĝas la tekston notu tian ŝangon...
         if ( keycode < 16 
             || keycode == 32 
             || (keycode > 40 && keycode < 91) 
@@ -273,6 +277,10 @@ $.widget( "redaktilo.Artikolo", {
             || keycode > 145 ) {
 
             this._trigger("tekstŝanĝo",event,{});
+            this._change_count++; 
+            // se tio daŭras tro longe, t.e. konfuzas la tajpadon de la uzanto
+            // alternative ni povas fari nur if(!this._change_count)this._change_count=1;
+            if (this._change_count % 20) this.backup();        
         }
     },
 
@@ -291,6 +299,10 @@ $.widget( "redaktilo.Artikolo", {
         xmlarea.setUnsynced();
         */
         
+    },
+
+    change_count: function() {
+        return this._change_count;
     },
 
     // redonas la radikon de la artikolo

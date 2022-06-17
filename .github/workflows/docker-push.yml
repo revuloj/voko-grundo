@@ -29,8 +29,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # https://github.com/actions/checkout
       - name: Ricevi la aktualan kodon
-        uses: actions/checkout@v1
+        uses: actions/checkout@v3
 
 #      - name: Run tests
 #        run: |
@@ -52,8 +53,9 @@ jobs:
         run: |
            docker image save -o ${IMAGE_NAME}.tar ${IMAGE_NAME}
 
+      # https://github.com/actions/upload-artifact
       - name: Konservo de ${{ env.IMAGE_NAME }} por la sekvonta tasko
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v2
         with:
           name: ${{ env.IMAGE_NAME }}
           path: ${{ env.IMAGE_NAME }}.tar
@@ -68,9 +70,9 @@ jobs:
     if: github.event_name == 'push'
 
     steps:
-
+      # https://github.com/actions/download-artifact
       - name: Reakiro de ${{ env.IMAGE_NAME }}
-        uses: actions/download-artifact@v1
+        uses: actions/download-artifact@v2
         with:
           name: ${{ env.IMAGE_NAME }}
           path: image

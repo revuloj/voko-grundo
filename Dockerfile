@@ -1,11 +1,13 @@
 # Vi povas krei JS+CSS per
 #   docker build -t voko-grundo .
 # poste vi povas elpreni ĝin per
+# 1)
 #   docker run -it voko-grundo bash
 #   docker ps
 #   docker cp <cnt-id>:build/css/.. ./tmp/
 #
-# au uzi la tutan ujon ene de alia per:
+# aŭ uzi la tutan ujon ene de alia per:
+# 2)
 # FROM voko-grundo as source
 # FROM xyz
 # COPY --from=source build/ ./
@@ -15,7 +17,7 @@
 # staĝo 1: Ni bezonas TeX kaj metapost por konverti simbolojn al png
 #######################################################
 FROM silkeh/latex:small as metapost
-LABEL Author=<diestel@steloj.de>
+LABEL maintainer=<diestel@steloj.de>
 
 #ARG VG_BRANCH=master
 
