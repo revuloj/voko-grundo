@@ -1563,7 +1563,7 @@ var redaktilo = function() {
 
   /**
    * Montras depende de elektita (sub)drv|(sub)snc la jam ekzistantajn
-   * tradukojn kaj +-butonoj por eblaj aldonoj
+   * tradukojn kaj +-butonojn por eblaj aldonoj
    * @memberof redaktilo
    * @inner
    */

@@ -15,11 +15,13 @@
     },
     "config": {},
     "jshintConfig": {
-        "laxbreak": true
+        "laxbreak": true,
+        "esversion": 6
     },
     "scripts": {
         "env": "env",
         "lint": "jshint jsc/*/*.js",
+        "build:lint": "jshint build/rsj/*-2f-min.js",
         "doc": "jsdoc -d jsdoc jsc/*/*.js",
         "prebuild": "mkdir -p build",
         "//prebuild:svg": "bin/mp2png_svg.sh",
