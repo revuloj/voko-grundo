@@ -81,7 +81,7 @@ INSERT INTO nodo(mrk,art,kap,num) VALUES('</xsl:text>
   </xsl:for-each>
 
   <xsl:for-each select="gra/vspec">
-    <xsl:call-template name="vorto-speco">
+    <xsl:call-template name="vortspeco">
       <xsl:with-param name="mrk" select="$mrk"/>
     </xsl:call-template>
   </xsl:for-each>
@@ -128,7 +128,7 @@ INSERT INTO nodo(mrk,art,kap,num) VALUES('</xsl:text>
   </xsl:for-each>
   
   <xsl:for-each select="gra/vspec">
-    <xsl:call-template name="vorto-speco">
+    <xsl:call-template name="vortspeco">
       <xsl:with-param name="mrk" select="$mrk"/>
     </xsl:call-template>
   </xsl:for-each>
@@ -266,10 +266,10 @@ INSERT INTO referenco(mrk,cel,tip) VALUES('</xsl:text>
 <xsl:text>');</xsl:text>
 </xsl:template>
 
-<xsl:template name="vorto-speco">
+<xsl:template name="vortspeco">
   <xsl:param name="mrk"/>
 <xsl:text>                                                                                                             
-INSERT INTO vorto_speco(mrk, speco) VALUES('</xsl:text>
+INSERT INTO vortspeco(mrk, vsp) VALUES('</xsl:text>
 <xsl:value-of select="$mrk"/>
 <xsl:text>','</xsl:text>
 <xsl:value-of select="."/>

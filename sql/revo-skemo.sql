@@ -40,9 +40,9 @@ CREATE TABLE artikolo (
   txt TEXT
 );
 
-CREATE TABLE vorto_speco (
+CREATE TABLE vortspeco (
   mrk TEXT PRIMARY KEY NOT NULL,
-  speco TEXT NOT NULL
+  vsp TEXT NOT NULL
 );
 
 CREATE TABLE agordo (
