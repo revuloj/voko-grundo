@@ -101,6 +101,9 @@ reguloj por prezentado de la tradukoj
             <!-- 4. ordigu laŭ pozicio, t.e. ekz-o-tradukojn laŭ apero en la artikolo, verŝajne jam aŭtomate(?)
             <xsl:sort select="position()" data-type="number"/> -->
 
+            <!-- PRIPENSU: ĉar temas pri nombroj oni povus ankaŭ adicii kaj ordigi en unu paŝo:
+                -100*o + 2*p - r (necesus mezuri, ĉu tiel plirapidiĝus, verŝajne apenaŭ...)-->
+
 <!--
               {o<xsl:value-of select="-string-length(substring-before('|snc|subdrv',local-name((ancestor::drv|ancestor::subdrv|ancestor::snc)[last()])))"/>
               p<xsl:value-of select="count(preceding::snc | preceding::subsnc | preceding::subdrv)"/>
@@ -147,6 +150,10 @@ reguloj por prezentado de la tradukoj
 
             <!-- 4. ordigu laŭ pozicio, t.e. ekz-o-tradukojn laŭ apero en la artikolo, verŝajne jam aŭtomate(?)
             <xsl:sort select="position()" data-type="number"/> -->
+
+            <!-- PRIPENSU: ĉar temas pri nombroj oni povus ankaŭ adicii kaj ordigi en unu paŝo:
+                -100*o + 2*p - r (necesus mezuri, ĉu tiel plirapidiĝus, verŝajne apenaŭ...)-->
+
 
 <!--
               {o<xsl:value-of select="-string-length(substring-before('|snc|subdrv',local-name((ancestor::drv|ancestor::subdrv|ancestor::snc)[last()])))"/>
