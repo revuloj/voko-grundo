@@ -76,15 +76,37 @@ reguloj por prezentado de la tradukoj
         -->
           <xsl:for-each select=".//trdgrp[@lng=$lng]|.//trd[@lng=$lng]">
             <!-- Ni ordigas la tradukojn laŭ profundeco en la strukturo, tiel ke ekz-e 
-                 tradukoj de drv aperu antaŭ tiuj de drv/snc -->
+                 tradukoj de drv aperu antaŭ tiuj de drv/snc 
             <xsl:sort select="count(ancestor::node()[
               self::snc or 
               self::subsnc or
               self::drv or
               self::subdrv])" data-type="number"/>
-            <!-- ene de la profundecniveloj ni ordigas laŭ la ordo de apero, ĉar por la profundeco
-                 supre ni ne kunkalkulas ekz, ties tradukoj aperas antaŭ tiuj de snc, ĉu bone? -->
-            <xsl:sort select="position()" data-type="number"/>
+            - - ene de la profundecniveloj ni ordigas laŭ la ordo de apero, ĉar por la profundeco
+                 supre ni ne kunkalkulas ekz, ties tradukoj aperas antaŭ tiuj de snc, ĉu bone? - - 
+            <xsl:sort select="position()" data-type="number"/> -->
+
+            <!-- 1. ordigu laŭ ĉefa vicordo ene de la strukturo: drv unue, snc laste -->
+            <xsl:sort select="string-length(substring-before('|snc|subdrv',local-name((ancestor::drv|ancestor::subdrv|ancestor::snc)[last()])))" 
+              data-type="number" order ="descending"/>
+
+            <!-- 2. ordigu snc/subsnc laŭ la ordo en kiu ili aperas en la dokumento -->
+            <xsl:sort select="count(preceding::snc | preceding::subsnc | preceding::subdrv)" 
+              data-type="number"/>
+
+            <!-- 3. ordigu rektajn tradukojn (drv, snc dif) antaŭ nerektaj (bld/ekz) -->
+            <xsl:sort select="count(parent::drv|parent::subdrv|parent::snc|parent::subsnc|parent::dif)" 
+              data-type="number" order ="descending"/>
+
+            <!-- 4. ordigu laŭ pozicio, t.e. ekz-o-tradukojn laŭ apero en la artikolo, verŝajne jam aŭtomate(?)
+            <xsl:sort select="position()" data-type="number"/> -->
+
+<!--
+              {o<xsl:value-of select="-string-length(substring-before('|snc|subdrv',local-name((ancestor::drv|ancestor::subdrv|ancestor::snc)[last()])))"/>
+              p<xsl:value-of select="count(preceding::snc | preceding::subsnc | preceding::subdrv)"/>
+              r<xsl:value-of select="-count(parent::drv|parent::subdrv|parent::snc|parent::subsnc|parent::dif)"/>}
+-->
+
             <xsl:apply-templates select="." mode="tradukoj"/>
             <xsl:text> </xsl:text>
           </xsl:for-each>
@@ -109,13 +131,39 @@ reguloj por prezentado de la tradukoj
           <xsl:for-each select="trd[@lng=$lng]|trdgrp[@lng=$lng]
             |snc/trd[@lng=$lng]|snc/trdgrp[@lng=$lng]
             |snc//ekz/trd[@lng=$lng]|snc//ekz/trdgrp[@lng=$lng]">
-            <!-- pri ordigo vd. supre -->
+
+            <!-- 1. ordigu laŭ ĉefa vicordo ene de la strukturo: subart unue, snc laste -->
+            <xsl:sort select="string-length(substring-before('|snc|subdrv|subart',
+              local-name((ancestor::subart|ancestor::drv|ancestor::subdrv|ancestor::snc)[last()])))" 
+              data-type="number" order ="descending"/>
+
+            <!-- 2. ordigu snc/subsnc laŭ la ordo en kiu ili aperas en la dokumento -->
+            <xsl:sort select="count(preceding::snc | preceding::subsnc | preceding::subdrv | preceding::drv)" 
+              data-type="number"/>
+
+            <!-- 3. ordigu rektajn tradukojn (drv, snc dif) antaŭ nerektaj (bld/ekz) -->
+            <xsl:sort select="count(parent::subart|parent::drv|parent::subdrv|parent::snc|parent::subsnc|parent::dif)" 
+              data-type="number" order ="descending"/>
+
+            <!-- 4. ordigu laŭ pozicio, t.e. ekz-o-tradukojn laŭ apero en la artikolo, verŝajne jam aŭtomate(?)
+            <xsl:sort select="position()" data-type="number"/> -->
+
+<!--
+              {o<xsl:value-of select="-string-length(substring-before('|snc|subdrv',local-name((ancestor::drv|ancestor::subdrv|ancestor::snc)[last()])))"/>
+              p<xsl:value-of select="count(preceding::snc | preceding::subsnc | preceding::subdrv)"/>
+              r<xsl:value-of select="-count(parent::drv|parent::subdrv|parent::snc|parent::subsnc|parent::dif)"/>}
+-->
+
+<!--            
+            <! - - pri ordigo vd. supre - - >
             <xsl:sort select="count(ancestor::node()[
               self::snc or 
               self::subsnc or
               self::drv or
               self::subdrv])" data-type="number"/>
             <xsl:sort select="position()" data-type="number"/>
+
+            -->
             <xsl:apply-templates select="." mode="tradukoj"/>
             <xsl:text> </xsl:text>
           </xsl:for-each>
