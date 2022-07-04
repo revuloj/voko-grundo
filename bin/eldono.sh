@@ -59,6 +59,14 @@ etikedo)
     echo "kaj puŝante tiun staton al la centra deponejo"
     git tag -f v${release} && git push && git push --tags -f
     ;;
+xsl)
+    # kopiu ĉiujn xsl-dosierojn donitaj sur komandlinio (ekde dua argumento) al la servilo
+    scp "${@:2}" ${files}/xsl/
+    ;;     
+xsl-inc)
+    # kopiu ĉiujn xsl-dosierojn donitaj sur komandlinio (ekde dua argumento) al la servilo
+    scp "${@:2}" ${files}/xsl/inc/
+    ;;    
 artikoloj)
     # kopiu ĉiujn artikolojn donitaj sur komandlinio (ekde dua argumento) al la servilo
     scp "${@:2}" ${revo}/art/
