@@ -215,7 +215,7 @@ var redaktilo = function() {
     if (key == 13) {  
       scrollPos = xmlarea.scrollPos();        
       const indent = xmlarea.indent();
-      xmlarea.selection("\n"+indent,-1);
+      xmlarea.selection("\n"+indent);
       xmlarea.scrollPos(scrollPos);
       event.preventDefault();
 
