@@ -31,7 +31,7 @@ uzata kun XSLT1-transformilo
 	<xsl:text>//--&gt;</xsl:text>
       </script>
       <script src="{$jscdir}/{$art-jsc}"></script> 
-     
+      <meta name="format-detection" content="telephone=no">
     </head>
     <body>
       <xsl:apply-templates/>

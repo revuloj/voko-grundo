@@ -22,7 +22,8 @@ uzata kun XSLT2-transformilo
 	      <link title="artikolo-stilo" type="text/css" rel="stylesheet" href="{$cssdir}/{$art-css}" />
       </xsl:if>
       <title><xsl:apply-templates select="//art/kap[1]" mode="titolo"/></title>
-      <script src="{$jscdir}/{$art-jsc}"></script> 
+      <script src="{$jscdir}/{$art-jsc}"></script>
+      <meta name="format-detection" content="telephone=no">
   </head>
   <body>
     <xsl:apply-templates/>
