@@ -23,7 +23,7 @@ uzata kun XSLT2-transformilo
       </xsl:if>
       <title><xsl:apply-templates select="//art/kap[1]" mode="titolo"/></title>
       <script src="{$jscdir}/{$art-jsc}"></script>
-      <meta name="format-detection" content="telephone=no">
+      <meta name="format-detection" content="telephone=no"/>
   </head>
   <body>
     <xsl:apply-templates/>
