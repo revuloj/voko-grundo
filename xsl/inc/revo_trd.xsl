@@ -190,7 +190,7 @@ reguloj por prezentado de la tradukoj
 	 tradukitan vorton/sencon -->
 
   <xsl:if test="not(parent::drv
-     or count(ancestor::node()[self::drv or self::subart][1]//snc)=1)">
+     or count(ancestor::node()[self::drv or self::subart][1]//snc)=1) or parent::subsnc">
 
     <strong lang="eo" class="trdeo">
       <xsl:apply-templates 
