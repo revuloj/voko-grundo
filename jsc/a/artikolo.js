@@ -1,9 +1,8 @@
 
 /* jshint esversion: 6 */
 
-// (c) 2020 - 2022 Wolfram Diestel
+// (c) 2020 - 2023 ĉe Wolfram Diestel
 // laŭ GPL 2.0
-
 
 const js_sojlo = 3; //30+3;
 const ekz_sojlo = 3;
@@ -88,7 +87,7 @@ var artikolo = function() {
         /* aktivigu nur por longaj artikoloj... */
         var d = document.getElementsByClassName("kasxebla");
          //if (d.length > js_sojlo) {
-        piedlinio_modifo();
+        piedlinio_modifo(artikolo);
         preparu_kashu_sekciojn();
         preparu_malkashu_fontojn();
         preparu_maletendu_sekciojn();
@@ -466,12 +465,48 @@ var artikolo = function() {
      * @memberof artikolo
      * @inner
      */
-    function piedlinio_modifo() {
+    function piedlinio_modifo(artikolo) {
         const pied = document.body.getElementsByTagName("FOOTER")[0];
+
+        function ref_dlg(r) {
+            let dlg = document.getElementById('dlg_referenco');
+            if (!dlg) {
+                dlg = ht_elements([
+                    ['dialog',{id: 'dlg_referenco',class: 'overlay'},[
+                        ['a',{href: r.url},r.title],' ',
+                        ['input',{id: 'dlg_ref_url', type: 'hidden'},r.url],
+                        ['button',{id: 'dlg_ref_kopiu', title: 'kopiu'},'\u2398'],' ',                      
+                        ['button',{id: 'dlg_ref_fermu'},'fermu']
+                    ]]
+                ])[0];            
+                pied.prepend(dlg);
+                // reagoj al butonoj [fermu] kaj [kopiu]
+                const fermu = document.getElementById('dlg_ref_fermu');
+                fermu.addEventListener("click", () => {
+                    dlg.close();
+                });
+                const kopiu = document.getElementById('dlg_ref_kopiu');
+                kopiu.addEventListener("click", () => {
+                    navigator.permissions.query({name: "clipboard-write"}).then((result) => {
+                        if (result.state === "granted" || result.state === "prompt") {
+                            navigator.clipboard.writeText(r.url);
+                            return;
+                        }
+                    });
+                    // se la supra ne funkcias, kopiu laŭ malnova maniero
+                    const url = document.getElementById('dlg_ref_url');
+                    url.select();
+                    document.execCommand("copy");
+                });
+            }
+            dlg.show();
+        }
+
         if (pied) { // en la redeaktilo eble jam foriĝis...
+            // aldonu ligilon "preferoj"
             const first_a = pied.querySelector("A");
             if (first_a) {                
-                var pref = ht_element("A",{class: "redakto", href: "#", title: "agordu preferatajn lingvojn"},"preferoj");
+                const pref = ht_element("A",{class: "redakto", href: "#", title: "agordu preferatajn lingvojn"},"preferoj");
                 pref.addEventListener("click", () =>
                     preferoj.dialog(preparu_maletendu_sekciojn));
                 first_a.insertAdjacentElement("afterend",pref);
@@ -486,6 +521,24 @@ var artikolo = function() {
                 xml.textContent="xml";
                 xml.setAttribute("download","download");
             }
+            // antaŭ xml aldonu "referenci..."
+            if (xml) {
+                const ref = ht_element("A",{class: "redakto", href: "#", title: "refrenci al tiu ĉi artikolo"},"referenci...");
+                ref.addEventListener("click", () => {
+                    const referenco = {
+                        title: document.title,
+                        url: 'https://reta-vortaro.de/revo/art/'+artikolo+'.html'
+                    };
+                    if (navigator.share && Navigator.canShare(referenco)) {
+                        navigator.share(referenco);
+                    } else {
+                        ref_dlg(referenco);
+                    }
+                });                 
+                xml.insertAdjacentElement("beforebegin",ref);
+                xml.insertAdjacentText("beforebegin"," | ");
+            }
+            // mallongigu artikolversion al nura dato
             const hst = pied.querySelector("A[href*='/hst/']");
             if (hst) {
                 const ver = hst.nextSibling;
