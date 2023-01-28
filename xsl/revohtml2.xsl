@@ -44,12 +44,13 @@ transform-reguloj
 <xsl:variable name="xmldir">../xml</xsl:variable> 
 <xsl:variable name="cssdir">../stl</xsl:variable>
 <xsl:variable name="jscdir">../jsc</xsl:variable>
+<xsl:variable name="hstdir">../hst</xsl:variable>
 
 <xsl:variable name="redcgi">/cgi-bin/vokomail.pl?art=</xsl:variable>
 <xsl:variable name="vivocgi">http://kono.be/cgi-bin/vivo/ViVo.cgi?tradukiReVon=</xsl:variable>
 <xsl:variable name="bibliogrhtml">../dok/bibliogr.html</xsl:variable>
 <xsl:variable name="revo">/home/revo/revo</xsl:variable>
-<xsl:variable name="arhhivo" select="'http://www.reta-vortaro.de/cgi-bin/historio.pl?art='"/>
+<xsl:variable name="retadreso">https://www.reta-vortaro.de</xsl:variable>
 
 <!-- ilustrite por HTML kun grafikoj ktp.
      simple por HTML tauga por konverto al simpla teksto -->
