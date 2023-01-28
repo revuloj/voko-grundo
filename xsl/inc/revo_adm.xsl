@@ -83,7 +83,7 @@ reguloj por prezentado de la administraj notoj
           <a class="redakto" target="_new" title="ViVo-tradukilo" 
               href="{$vivocgi}{substring-before($xml,'.xml')}.html">traduki...</a> |
           <a class="redakto" target="_new" title="al la artikolohistorio"
-              href="="{$hstdir}/{substring-before($xml,'.xml')}.html">artikolversio</a>:
+              href="{$hstdir}/{substring-before($xml,'.xml')}.html">artikolversio</a>:
       </xsl:when>
       <xsl:otherwise>
         <a href="../index.html">Revo</a> | artikolversio:
