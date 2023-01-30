@@ -479,27 +479,29 @@ var artikolo = function() {
                         ['button',{id: 'dlg_ref_fermu'},'fermu']
                     ]]
                 ])[0];            
-                pied.prepend(dlg);
-                // reagoj al butonoj [fermu] kaj [kopiu]
-                const fermu = document.getElementById('dlg_ref_fermu');
-                fermu.addEventListener("click", () => {
-                    dlg.close();
-                });
-                const kopiu = document.getElementById('dlg_ref_kopiu');
-                kopiu.addEventListener("click", () => {
-                    navigator.permissions.query({name: "clipboard-write"}).then((result) => {
-                        if (result.state === "granted" || result.state === "prompt") {
-                            navigator.clipboard.writeText(r.url);
-                            return;
-                        }
+                if (dlg) {
+                    pied.prepend(dlg);
+                    // reagoj al butonoj [fermu] kaj [kopiu]
+                    const fermu = document.getElementById('dlg_ref_fermu');
+                    fermu.addEventListener("click", () => {
+                        dlg.close();
                     });
-                    // se la supra ne funkcias, kopiu laŭ malnova maniero
-                    const url = document.getElementById('dlg_ref_url');
-                    url.select();
-                    document.execCommand("copy");
-                });
+                    const kopiu = document.getElementById('dlg_ref_kopiu');
+                    kopiu.addEventListener("click", () => {
+                        navigator.permissions.query({name: "clipboard-write"}).then((result) => {
+                            if (result.state === "granted" || result.state === "prompt") {
+                                navigator.clipboard.writeText(r.url);
+                                return;
+                            }
+                        });
+                        // se la supra ne funkcias, kopiu laŭ malnova maniero
+                        const url = document.getElementById('dlg_ref_url');
+                        url.select();
+                        document.execCommand("copy");
+                    });
+                }
+                dlg.show();
             }
-            dlg.show();
         }
 
         if (pied) { // en la redeaktilo eble jam foriĝis...
@@ -529,7 +531,7 @@ var artikolo = function() {
                         title: document.title,
                         url: 'https://reta-vortaro.de/revo/art/'+artikolo+'.html'
                     };
-                    if (navigator.share && Navigator.canShare(referenco)) {
+                    if (navigator.share && navigator.canShare(referenco)) {
                         navigator.share(referenco);
                     } else {
                         ref_dlg(referenco);
