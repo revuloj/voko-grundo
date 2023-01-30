@@ -478,28 +478,28 @@ var artikolo = function() {
                         ['button',{id: 'dlg_ref_kopiu', title: 'kopiu'},'\u2398'],' ',                      
                         ['button',{id: 'dlg_ref_fermu'},'fermu']
                     ]]
-                ])[0];            
-                if (dlg) {
-                    pied.prepend(dlg);
-                    // reagoj al butonoj [fermu] kaj [kopiu]
-                    const fermu = document.getElementById('dlg_ref_fermu');
-                    fermu.addEventListener("click", () => {
-                        dlg.close();
+                ])[0];  
+            }          
+            if (dlg) {
+                pied.prepend(dlg);
+                // reagoj al butonoj [fermu] kaj [kopiu]
+                const fermu = document.getElementById('dlg_ref_fermu');
+                fermu.addEventListener("click", () => {
+                    dlg.close();
+                });
+                const kopiu = document.getElementById('dlg_ref_kopiu');
+                kopiu.addEventListener("click", () => {
+                    navigator.permissions.query({name: "clipboard-write"}).then((result) => {
+                        if (result.state === "granted" || result.state === "prompt") {
+                            navigator.clipboard.writeText(r.url);
+                            return;
+                        }
                     });
-                    const kopiu = document.getElementById('dlg_ref_kopiu');
-                    kopiu.addEventListener("click", () => {
-                        navigator.permissions.query({name: "clipboard-write"}).then((result) => {
-                            if (result.state === "granted" || result.state === "prompt") {
-                                navigator.clipboard.writeText(r.url);
-                                return;
-                            }
-                        });
-                        // se la supra ne funkcias, kopiu laŭ malnova maniero
-                        const url = document.getElementById('dlg_ref_url');
-                        url.select();
-                        document.execCommand("copy");
-                    });
-                }
+                    // se la supra ne funkcias, kopiu laŭ malnova maniero
+                    const url = document.getElementById('dlg_ref_url');
+                    url.select();
+                    document.execCommand("copy");
+                });
                 dlg.show();
             }
         }
