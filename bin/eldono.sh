@@ -66,6 +66,10 @@ xsl)
 xsl-inc)
     # kopiu ĉiujn xsl-dosierojn donitaj sur komandlinio (ekde dua argumento) al la servilo
     scp "${@:2}" ${files}/xsl/inc/
+    ;;
+smb)
+    # kopiu ĉiujn smb-dosierojn donitaj sur komandlinio (ekde dua argumento) al la servilo
+    scp "${@:2}" ${revo}/smb/
     ;;    
 artikoloj)
     # kopiu ĉiujn artikolojn donitaj sur komandlinio (ekde dua argumento) al la servilo
