@@ -118,7 +118,7 @@ XmlStruct.prototype.structure = function(selected = undefined) {
   }
   function id(subt) {
     const rx = /[^A-Za-z]/g;
-    const key = [111,222,33,44]; // ne tro gravas...
+    const key = [111,222,33,44,55]; // ne tro gravas...
     const xor_str = (str) => // kondensigi signoĉenon al cifera identigilo
       { 
           var c = key;
