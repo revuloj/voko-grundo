@@ -119,7 +119,7 @@ XmlStruct.prototype.structure = function(selected = undefined) {
   function id(subt) {
     const rx = /[^A-Za-z]/g;
     const key = [123,45,67,89,102,43,69]; // enhavo ne tro gravas sed estu ne tro mallonga...
-    const hast_str = (str) => // kondensigi signoĉenon al identigilo
+    const hash_str = (str) => // kondensigi signoĉenon al identigilo
       { 
           var c = key;
           for(let i=0; i<str.length; i++) { 
@@ -130,7 +130,7 @@ XmlStruct.prototype.structure = function(selected = undefined) {
       };
     if (subt.mrk) {
       // se la elemento havas markon, tio estas la plej bona identigilo
-      return hast_str(subt.mrk);
+      return hash_str(subt.mrk);
     } else {
       // se ne, ni uzas la unuajn aperantajn latinajn literojn por
       // identigi, ja konsciante, ke tiuj povos ŝanĝiĝi, sed tiam
