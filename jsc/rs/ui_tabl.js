@@ -8,7 +8,7 @@ import { show_xhr_error } from './ui_dlg.js';
 import { vortokontrolo, xmlkontrolo, klrkontrolo, surmetita_dialogo } from './ui_err.js';
 import { vikiSerĉo, citaĵoSerĉo, regulEsprimo, verkoListo, verkoPeriodo, verkElekto, retoSerĉo, bildoSerĉo } from './ui_srch.js';
 
-//const revo_url = 'https://reta-vortaro.de';
+const revo_url = 'https://'+globalThis.revo_url; //reta-vortaro.de';
 
 //var sercho_focused_button = null;
 //var change_count = 0;
@@ -565,17 +565,17 @@ function antaurigardo() {
                     var href = $(this).attr('href');
                     if (href && href[0] != '#' && href.slice(0,4) != 'http') {
                         if (href[0] != '/' && href[0] != '.') {
-                            var newUrl = globalThis.revo_url + '/revo/art/' + href;
+                            var newUrl = revo_url + '/revo/art/' + href;
                             //console.debug(href+" -> "+newUrl);
                             $(this).attr('href', newUrl);
                             $(this).attr('target', '_new');
                         } else if (href.slice(0,3) == '../' ) {
-                            const newUrl = globalThis.revo_url + '/revo/'+href.slice(3);
+                            const newUrl = revo_url + '/revo/'+href.slice(3);
                             //console.debug(href+" -> "+newUrl);
                             $(this).attr('href', newUrl);
                             $(this).attr('target', '_new');
                         } else if (href[0] == '/' ) {
-                            const newUrl = globalThis.revo_url + href;
+                            const newUrl = revo_url + href;
                             //console.debug(href+" -> "+newUrl);
                             $(this).attr('href', newUrl);
                             $(this).attr('target', '_new');
@@ -589,7 +589,7 @@ function antaurigardo() {
                 $("#rigardo img").each(function() {
                     var src = $(this).attr('src');
                     if ( src.slice(0,7) == '../bld/' ) {
-                        $(this).attr('src',globalThis.revo_url + '/revo/bld/'+src.slice(7));
+                        $(this).attr('src',revo_url + '/revo/bld/'+src.slice(7));
                     }
                 });
 
@@ -614,7 +614,7 @@ function antaurigardo() {
                 $("#rigardo source").each(function() {
                     var src = $(this).attr('srcset');
                     if ( src.slice(0,7) == '../bld/' ) {
-                        $(this).attr('srcset', globalThis.revo_url + '/revo/bld/'+src.slice(7));
+                        $(this).attr('srcset', revo_url + '/revo/bld/'+src.slice(7));
                     }
                 });
 
