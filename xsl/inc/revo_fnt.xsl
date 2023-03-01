@@ -49,6 +49,12 @@ reguloj por la prezentado de la fontindikoj
   </sup>
 </xsl:template>
 
+<xsl:template match="rim/fnt">
+  <span class="fntref">
+    <xsl:apply-templates/>
+  </span>
+</xsl:template>
+
 <xsl:template match="bib">
    <a class="fntref" href="{$bibliogrhtml}#{.}" target="indekso"
         title="al la bibliografio">
