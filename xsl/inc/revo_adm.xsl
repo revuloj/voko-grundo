@@ -76,14 +76,14 @@ reguloj por prezentado de la administraj notoj
   	          href="../index.html#{substring-before($xml,'.xml')}" target="_top">&#x211B;evo</a> |
 	        <a class="redakto" title="Datumprotekta deklaro" 
               href="../dok/datumprotekto.html">datumprotekto</a> |	  
-          <a class="redakto" target="_new" title="fontoteksto de la artikolo"
-              href="{$xmldir}/{$xml}"><xsl:value-of select="$xml"/></a> |
+          <a class="redakto" target="_new" title="fontoteksto de la artikolo" download="download"
+              href="{$xmldir}/{$xml}">xml</a> |
           <a class="redakto" title="al la redaktilo"
               href="{$redcgi}{substring-before($xml,'.xml')}">redakti...</a> |
           <a class="redakto" target="_new" title="ViVo-tradukilo" 
               href="{$vivocgi}{substring-before($xml,'.xml')}.html">traduki...</a> |
           <a class="redakto" target="_new" title="al la artikolohistorio"
-              href="../hst/{substring-before($xml,'.xml')}.html">artikolversio</a>:
+              href="{$hstdir}/{substring-before($xml,'.xml')}.html">artikolversio</a>:
       </xsl:when>
       <xsl:otherwise>
         <a href="../index.html">Revo</a> | artikolversio:

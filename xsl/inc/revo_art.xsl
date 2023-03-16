@@ -11,6 +11,8 @@ uzata kun XSLT1-transformilo
 <!-- kruda artikolstrukturo -->
 
 <xsl:template match="/">
+  <xsl:variable name="dosiero" select="substring-after(substring-before(//art/@mrk,'.xml'),'Id: ')"/>
+
   <html lang="eo">
     <head>
       <meta charset="utf-8"/>
@@ -31,7 +33,8 @@ uzata kun XSLT1-transformilo
 	<xsl:text>//--&gt;</xsl:text>
       </script>
       <script src="{$jscdir}/{$art-jsc}"></script> 
-     
+      <meta name="format-detection" content="telephone=no" />
+      <link rel="canonical" href="{$retadreso}/revo/art/{$dosiero}.html" />
     </head>
     <body>
       <xsl:apply-templates/>

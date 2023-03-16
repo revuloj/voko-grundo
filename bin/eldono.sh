@@ -11,8 +11,8 @@
 #host=retavortaro.de
 # aldonu en /etc/hosts!
 host=revo
-release=2f
-node_release=2.0.6
+release=2g
+node_release=2.0.7
 revo=${host}:www/revo
 files=${host}:files
 
@@ -66,6 +66,10 @@ xsl)
 xsl-inc)
     # kopiu ĉiujn xsl-dosierojn donitaj sur komandlinio (ekde dua argumento) al la servilo
     scp "${@:2}" ${files}/xsl/inc/
+    ;;
+smb)
+    # kopiu ĉiujn smb-dosierojn donitaj sur komandlinio (ekde dua argumento) al la servilo
+    scp "${@:2}" ${revo}/smb/
     ;;    
 artikoloj)
     # kopiu ĉiujn artikolojn donitaj sur komandlinio (ekde dua argumento) al la servilo

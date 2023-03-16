@@ -39,7 +39,7 @@ FROM ubuntu:focal as builder
 # vd: https://github.com/nodesource/distributions
 # rxp, jre kaj saxonb ni bezonas nur por testoj (xml-test.sh)
 RUN apt-get update && apt-get install -y curl xsltproc rxp default-jre libsaxonb-java \
- && curl -sL https://deb.nodesource.com/setup_17.x | bash -E - \
+ && curl -sL https://deb.nodesource.com/setup_19.x | bash -E - \
  && apt-get install -y nodejs
 
 WORKDIR /usr/app

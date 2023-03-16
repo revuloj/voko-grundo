@@ -11,6 +11,8 @@ uzata kun XSLT2-transformilo
 <!-- kruda artikolstrukturo -->
 
 <xsl:template match="/">
+  <xsl:variable name="dosiero" select="substring-after(substring-before(art/@mrk,'.xml'),'Id: ')"/>
+
   <html lang="eo">
     <head>
       <meta charset="utf-8"/>
@@ -22,7 +24,9 @@ uzata kun XSLT2-transformilo
 	      <link title="artikolo-stilo" type="text/css" rel="stylesheet" href="{$cssdir}/{$art-css}" />
       </xsl:if>
       <title><xsl:apply-templates select="//art/kap[1]" mode="titolo"/></title>
-      <script src="{$jscdir}/{$art-jsc}"></script> 
+      <script src="{$jscdir}/{$art-jsc}"></script>
+      <meta name="format-detection" content="telephone=no"/>
+      <link rel="canoncial" href="{$retadreso}/revo/art/{$dosiero}.html" />
   </head>
   <body>
     <xsl:apply-templates/>

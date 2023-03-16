@@ -8,7 +8,7 @@ import { show_xhr_error } from './ui_dlg.js';
 import { vortokontrolo, xmlkontrolo, klrkontrolo, surmetita_dialogo } from './ui_err.js';
 import { vikiSerĉo, citaĵoSerĉo, regulEsprimo, verkoListo, verkoPeriodo, verkElekto, retoSerĉo, bildoSerĉo } from './ui_srch.js';
 
-const revo_url = 'https://retavortaro.de';
+const revo_url = 'https://'+globalThis.revo_url; //reta-vortaro.de';
 
 //var sercho_focused_button = null;
 //var change_count = 0;

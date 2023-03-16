@@ -118,24 +118,25 @@ XmlStruct.prototype.structure = function(selected = undefined) {
   }
   function id(subt) {
     const rx = /[^A-Za-z]/g;
-    const key = [111,222,33,44]; // ne tro gravas...
-    const xor_str = (str) => // kondensigi signoĉenon al cifera identigilo
+    const key = [123,45,67,89,102,43,69]; // enhavo ne tro gravas sed estu ne tro mallonga...
+    const hash_str = (str) => // kondensigi signoĉenon al identigilo
       { 
           var c = key;
           for(let i=0; i<str.length; i++) { 
               c[i%key.length] ^= str.charCodeAt(i);
           }
-          return c.join('.');
+          //return c.join('.');
+          return c.map(v=>(v%36).toString(36)).join('')
       };
     if (subt.mrk) {
       // se la elemento havas markon, tio estas la plej bona identigilo
-      return xor_str(subt.mrk);
+      return hash_str(subt.mrk);
     } else {
       // se ne, ni uzas la unuajn aperantajn latinajn literojn por
       // identigi, ja konsciante, ke tiuj povos ŝanĝiĝi, sed tiam
       // ni rekalkulas la strukturon kaj akceptas, ke ni ne
       // retrovas la antaŭan elekton...
-      return xor_str(xmlteksto.substring(subt.de,subt.de+120).replace(rx,''));
+      return hash_str(xmlteksto.substring(subt.de,subt.de+120).replace(rx,''));
     }
   }
   function al(elm,de) {
