@@ -29,6 +29,7 @@ RSC=build/stl/redaktilo-${release}-min.css
 DTD="dtd/*.dtd"
 XSL_INC="xsl/inc/*.xsl"
 XSL="xsl/revo*.xsl"
+INXXSL="xsl/inx_*.xsl"
 
 KADRO=jsc/kadro.js
 PACKG=package.json
@@ -101,6 +102,21 @@ cetonio-xsl)
     for file in ${XSL_INC}; do
         echo ${file}
         docker cp ${file} ${cetonio_id}:${incdir}
+    done
+    ;;        
+formiko-xsl)
+    formiko_id=$(docker ps --filter name=formikujo_formiko -q)
+    xsldir=/home/formiko/voko/xsl
+    incdir=/home/formiko/voko/xsl/inc
+    echo "kopiante XSL-dosierojn al ${formiko_id}:${xsldir}..."
+    for file in ${XSL} ${INXXSL}; do
+        echo ${file}
+        docker cp ${file} ${formiko_id}:${xsldir}
+    done
+    echo "kopiante XSL-dosierojn al ${formiko_id}:${incdir}..."
+    for file in ${XSL_INC}; do
+        echo ${file}
+        docker cp ${file} ${formiko_id}:${incdir}
     done
     ;;        
 manlibro)
