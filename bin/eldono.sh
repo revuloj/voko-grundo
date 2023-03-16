@@ -11,8 +11,8 @@
 #host=retavortaro.de
 # aldonu en /etc/hosts!
 host=revo
-release=2e
-node_release=2.0.5
+release=2f
+node_release=2.0.6
 revo=${host}:www/revo
 files=${host}:files
 
@@ -50,11 +50,23 @@ preparo)
     sed -i 's,/redaktilo-[1-9][a-z]-min\.,/redaktilo-'${release}'-min\.,g' ${PACKG}
     sed -i 's/"version": "[1-9].[0-9].[1-9]"/"version": "'${node_release}'"/' ${PACKG}
     ;;
+kreo)
+    echo "Kreante lokan procezujon (por docker) voko-grundo"
+    docker build -t voko-grundo .
+    ;;    
 etikedo)
     echo "Provizante la aktualan staton per etikedo (git tag) v${release}"
     echo "kaj puŝante tiun staton al la centra deponejo"
     git tag -f v${release} && git push && git push --tags -f
     ;;
+xsl)
+    # kopiu ĉiujn xsl-dosierojn donitaj sur komandlinio (ekde dua argumento) al la servilo
+    scp "${@:2}" ${files}/xsl/
+    ;;     
+xsl-inc)
+    # kopiu ĉiujn xsl-dosierojn donitaj sur komandlinio (ekde dua argumento) al la servilo
+    scp "${@:2}" ${files}/xsl/inc/
+    ;;    
 artikoloj)
     # kopiu ĉiujn artikolojn donitaj sur komandlinio (ekde dua argumento) al la servilo
     scp "${@:2}" ${revo}/art/

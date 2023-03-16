@@ -198,13 +198,13 @@ sekva-parto =
 ## [_tekst-stiloj_]
 ## La unuo <dfn>tekst-stiloj</dfn> 
 ## listigas ĉiujn strukturilojn, kiuj donas stilon al tekstoparto,
-## ekz. <dfn>em</dfn>fazita, citilita (<dfn>ctl</dfn>), altigita (<dfn>sup</dfn>)
+## ekz. <dfn>em</dfn>fazita, citilita (<dfn>ctl</dfn>), <dfn>mis</dfn>a, altigita (<dfn>sup</dfn>)
 ## aŭ malaltigita (<dfn>sub</dfn>) teksto kaj formulo (<dfn>frm</dfn>).
 ## Aliaj elementoj klarigo (<dfn>klr</dfn>), tildo (<dfn>tld</dfn>), 
 ## sencreferenco (<dfn>sncref</dfn>), <dfn>nom</dfn>o aŭ <dfn>nac</dfn>ilingva esprimo
 ## same povas esti multloke, do ankaŭ ili estas listigitaj tie ĉi.
 
-tekst-stiloj = tld | sncref | klr | em | sup | sub | ctl | frm | nom | nac
+tekst-stiloj = tld | sncref | klr | em | ts | sup | sub | ctl | mis| frm | nom | nac
 
 ## [art]
 ## Unuopa artikolo de la vortaro. Ĝi povas okazi en
@@ -755,6 +755,11 @@ attlist-k &= empty
 em = element em { attlist-em, (text | tld)* }
 attlist-em &= empty
 
+## [ts]
+## Trastrekita teksto, ekz-e por montri korekton en misskribita citaĵo.
+ts = element ts { attlist-ts, (text | tld)* }
+attlist-ts &= empty
+
 
 ## [sup]
 ## Altigita teksto, ekz. en ĥemiaj formuloj
@@ -770,8 +775,13 @@ attlist-sub &= empty
 
 ## [ctl]
 ## Citilita teksto, ekz. memindika uzo de vorto
-ctl = element ctl { attlist-ctl, (text | tld | em | frm)* }
+ctl = element ctl { attlist-ctl, (text | tld | em | ts | frm | nom | nac | esc)* }
 attlist-ctl &= empty
+
+## [mis]
+## Misstila teksto, ekz. malĝusta, arĥaika kc
+mis = element mis { attlist-mis, (text | tld | em | ts | frm | nom | nac | esc)* }
+attlist-mis &= empty
 
 ## [nom]
 ## Nomo ne-esperantigita, ignorata dum vortkontrolo

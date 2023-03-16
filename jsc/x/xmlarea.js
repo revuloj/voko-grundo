@@ -347,7 +347,7 @@ Xmlarea.prototype.collectTrdAll = function() {
   while ( ['snc','subdrv','drv'].indexOf(p.el)>-1 ) {
     xml = this.xmlstruct.getSubtext(p);
     this.collectTrd(xml,true,true); // malprofunde, normigu
-    p = this.xmlstruct.getParent(p.id);
+    p = this.xmlstruct.getParent(p);
   }
 };
 
@@ -522,8 +522,9 @@ Xmlarea.prototype.replaceTrd = function(id,lng,trdj) {
   function duobla_linirompo_for(pos) {
     let p = pos;
     // forigu spacojn antaŭe...
-    while ("\t ".indexOf(xml[--p]) >=0);
+    while ("\t ".indexOf(xml[--p]) >=0) {};
     xml = xml.substring(0,p) + xml.substring(pos);
+    
     // forigu spacojn kaj linirompon malantaŭe
     while ("\n\t ".indexOf(xml[++p]) >=0) {
       if (xml[p] == "\n") {
@@ -706,9 +707,9 @@ Xmlarea.prototype.select = function(pos,len=0) {
 };
 
 /**
- * Legas aŭ anstataŭigas la momente elektitan tekston en la redaktatat teksto
+ * Legas aŭ anstataŭigas la momente elektitan tekston en la redaktata teksto
  * @param {string} insertion - se donita la enmetenda teksto (ĉe la aktuala pozicio aŭ anstataŭ la aktuala elekto)
- * @param {number} p_kursoro - se donita, tiom da signoj ni moviĝas antaŭen antaŭ enmeti la tekston
+ * @param {number} p_kursoro - se negativa tiom da signoj ni moviĝas antaŭen antaŭ enmeti la tekston, se pozitiva, tiom da signoj ni movas antaŭen la kursoron post enmeto (ekz-e tekstenŝovo)
  * @returns la momente elektita teksto, se ne estas donita enmetenda teksto
  */
 Xmlarea.prototype.selection = function(insertion=undefined, p_kursoro=0) {
@@ -725,13 +726,16 @@ Xmlarea.prototype.selection = function(insertion=undefined, p_kursoro=0) {
       range.select();   
     } else {
       startPos = txtarea.selectionStart;
+      if (p_kursoro < 0) startPos += p_kursoro; // -1: anstataŭigo kun x-klavo forigu la antaŭan literon!
       txtarea.value = 
         txtarea.value.substring(0, startPos) +
         insertion +
         txtarea.value.substring(txtarea.selectionEnd, txtarea.value.length);
       if (p_kursoro > 0) { // ni antaŭe havis > -1, sed tio ne funkciis por enŝovoj per spacoj
-        // movu la kursoron al startPost+p_kursoro
-        txtarea.selectionStart = startPos + p_kursoro;
+        // movu la kursoron al startPost+p_kursoro, por
+        // ekz-e transsalti tekstenŝovon post enmetita snc/ekz/ref
+        // vd. redaktilo.insert_xml
+        txtarea.selectionStart = startPos + p_kursoro; 
         txtarea.selectionEnd = txtarea.selectionStart;
       } else {
         // movu la kursoron post la aldonita teksto

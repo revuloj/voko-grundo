@@ -1,14 +1,15 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 		version="1.0">
 
-<!-- (c) 1999-2020 ĉe Wolfram Diestel laŭ GPLv2
+<!-- (c) 1999-2022 ĉe Wolfram Diestel 
+     laŭ GPLv2
 
 reguloj por prezentado de la tradukoj
 
 -->
 
 <!-- lingvo-informojn memoru en variablo por pli facila aliro -->
-<!-- kauzas problemon kun sort en xalan : 
+<!-- tio kaŭzas problemon kun sort en xalan : 
 <xsl:variable name="lingvoj" select="document($lingvoj_cfg)/lingvoj"/ -->
 
 
@@ -17,24 +18,24 @@ reguloj por prezentado de la tradukoj
 <!-- ne montru tradukojn en la teksto, sed malsupre en propra alineo -->
 <xsl:template match="trdgrp|trd"/>
 
-<!-- nur tradukojn ene de difino kaj bildo 
-montru tie, cxar ili estas esenca parto de tiuj --> 
+<!-- nur tradukojn ene de difino kaj bildo montru tie, ĉar ili estas esenca parto de tiuj,
+    aliajn ni kunkolektas piede de la derivaĵo --> 
 
 <xsl:template match="dif/trd|bld/trd">
   <i><xsl:apply-templates/></i>
 </xsl:template>
 
-
-
+<!-- tion ni vokas per sia nomo el la transformregulo por drv kaj subart -->
 <xsl:template name="tradukoj">
   <xsl:if test=".//trd">
     <xsl:variable name="self" select="."/>
     <section class="tradukoj">
       <dl class="tradukoj etendebla">
-        <!-- elektu por chiu lingvo unu reprezentanton -->
+        <!-- elektu por ĉiu lingvo unu reprezentanton -->
         <xsl:for-each select="document($lingvoj_cfg)/lingvoj/lingvo">
           <xsl:sort lang="eo"/>
           <xsl:variable name="lng" select="@kodo"/>
+          <!-- adverbigita lingvonomo -->
           <xsl:variable name="lingvo" select="concat(substring(.,1,string-length(.)-1),'e')"/>
                     
           <xsl:for-each select="$self">
@@ -54,60 +55,125 @@ montru tie, cxar ili estas esenca parto de tiuj -->
   </xsl:if>
 </xsl:template>
 
-<!-- traktas unuopan lingvon -->
+<!-- traktas la tradukojn de unuopa lingvo -->
 
 <xsl:template name="lingvo">
   <xsl:param name="lng"/>
   <xsl:param name="lingvo"/>
 
   <xsl:choose>
+    <!-- TRADUKOJ ENE DE drv -->
     <xsl:when test="self::drv">
       <xsl:if test=".//trd[@lng=$lng]|.//trdgrp[@lng=$lng]">
         <dt lang="eo" class="lng"><xsl:value-of select="$lingvo"/>:</dt>
         <dd lang="{$lng}">
-        <!--
+        <!--          
           eta ĝenaĵo: se senco kaj ekzemplo ene havas tradukojn, ili aperas kun cifero de la senco,
           se nur ekzemplo aperas, la cifero mankas.
-          Oni povus solvi tion demandante ĉu la senco havas samlingvan tradukon, 
+          Oni povus solvi tion, demandante ĉu la senco havas samlingvan tradukon, 
           sed necesus parametrigi la ŝablonojn vokatajn ene de la malsupra <strong>...</strong>
           per lingvo-parametro por atingi tion...
         -->
           <xsl:for-each select=".//trdgrp[@lng=$lng]|.//trd[@lng=$lng]">
+            <!-- Ni ordigas la tradukojn laŭ profundeco en la strukturo, tiel ke ekz-e 
+                 tradukoj de drv aperu antaŭ tiuj de drv/snc 
             <xsl:sort select="count(ancestor::node()[
               self::snc or 
               self::subsnc or
               self::drv or
               self::subdrv])" data-type="number"/>
-            <xsl:sort select="position()" data-type="number"/>
+            - - ene de la profundecniveloj ni ordigas laŭ la ordo de apero, ĉar por la profundeco
+                 supre ni ne kunkalkulas ekz, ties tradukoj aperas antaŭ tiuj de snc, ĉu bone? - - 
+            <xsl:sort select="position()" data-type="number"/> -->
+
+            <!-- 1. ordigu laŭ ĉefa vicordo ene de la strukturo: drv unue, snc laste -->
+            <xsl:sort select="string-length(substring-before('|snc|subdrv',local-name((ancestor::drv|ancestor::subdrv|ancestor::snc)[last()])))" 
+              data-type="number" order ="descending"/>
+
+            <!-- 2. ordigu snc/subsnc laŭ la ordo en kiu ili aperas en la dokumento -->
+            <xsl:sort select="count(preceding::snc | preceding::subsnc | preceding::subdrv)" 
+              data-type="number"/>
+
+            <!-- 3. ordigu rektajn tradukojn (drv, snc dif) antaŭ nerektaj (bld/ekz) -->
+            <xsl:sort select="count(parent::drv|parent::subdrv|parent::snc|parent::subsnc|parent::dif)" 
+              data-type="number" order ="descending"/>
+
+            <!-- 4. ordigu laŭ pozicio, t.e. ekz-o-tradukojn laŭ apero en la artikolo, verŝajne jam aŭtomate(?)
+            <xsl:sort select="position()" data-type="number"/> -->
+
+            <!-- PRIPENSU: ĉar temas pri nombroj oni povus ankaŭ adicii kaj ordigi en unu paŝo:
+                -100*o + 2*p - r (necesus mezuri, ĉu tiel plirapidiĝus, verŝajne apenaŭ...)-->
+
+<!--
+              {o<xsl:value-of select="-string-length(substring-before('|snc|subdrv',local-name((ancestor::drv|ancestor::subdrv|ancestor::snc)[last()])))"/>
+              p<xsl:value-of select="count(preceding::snc | preceding::subsnc | preceding::subdrv)"/>
+              r<xsl:value-of select="-count(parent::drv|parent::subdrv|parent::snc|parent::subsnc|parent::dif)"/>}
+-->
+
             <xsl:apply-templates select="." mode="tradukoj"/>
             <xsl:text> </xsl:text>
           </xsl:for-each>
-
         </dd>
       </xsl:if>
     </xsl:when>
+    <!-- TRADUKOJ NE ENE DE drv, do fakte subart -->
     <xsl:otherwise>
-      <xsl:if test="trd[@lng=$lng]|trdgrp[@lng=$lng]|snc/trd[@lng=$lng]|snc/trdgrp[@lng=$lng]">
+      <!-- ni ne traktas tradukojn ene de subart/drv, ĉar tiuj jam traktiĝas per la ĉi-supra regulo -->
+      <xsl:if test="trd[@lng=$lng]|trdgrp[@lng=$lng]
+        |snc/trd[@lng=$lng]|snc/trdgrp[@lng=$lng]
+        |snc//ekz/trd[@lng=$lng]|snc//ekz/trdgrp[@lng=$lng]">
         <dt lang="eo" class="lng"><xsl:value-of select="$lingvo"/>:</dt>
         <dd lang="{$lng}">
         <!--
           eta ĝenaĵo: se senco kaj ekzemplo ene havas tradukojn, ili aperas kun cifero de la senco,
           se nur ekzemplo aperas, la cifero mankas.
-          Oni povus solvi tion demandante ĉu la senco havas samlingvan tradukon, 
+          Oni povus solvi tion, demandante ĉu la senco havas samlingvan tradukon, 
           sed necesus parametrigi la ŝablonojn vokatajn ene de la malsupra <strong>...</strong>
           per lingvo-parametro por atingi tion...
         -->
-          <xsl:for-each select="trd[@lng=$lng]|trdgrp[@lng=$lng]|snc/trd[@lng=$lng]|snc/trdgrp[@lng=$lng]">
+          <xsl:for-each select="trd[@lng=$lng]|trdgrp[@lng=$lng]
+            |snc/trd[@lng=$lng]|snc/trdgrp[@lng=$lng]
+            |snc//ekz/trd[@lng=$lng]|snc//ekz/trdgrp[@lng=$lng]">
+
+            <!-- 1. ordigu laŭ ĉefa vicordo ene de la strukturo: subart unue, snc laste -->
+            <xsl:sort select="string-length(substring-before('|snc|subdrv|subart',
+              local-name((ancestor::subart|ancestor::drv|ancestor::subdrv|ancestor::snc)[last()])))" 
+              data-type="number" order ="descending"/>
+
+            <!-- 2. ordigu snc/subsnc laŭ la ordo en kiu ili aperas en la dokumento -->
+            <xsl:sort select="count(preceding::snc | preceding::subsnc | preceding::subdrv | preceding::drv)" 
+              data-type="number"/>
+
+            <!-- 3. ordigu rektajn tradukojn (drv, snc dif) antaŭ nerektaj (bld/ekz) -->
+            <xsl:sort select="count(parent::subart|parent::drv|parent::subdrv|parent::snc|parent::subsnc|parent::dif)" 
+              data-type="number" order ="descending"/>
+
+            <!-- 4. ordigu laŭ pozicio, t.e. ekz-o-tradukojn laŭ apero en la artikolo, verŝajne jam aŭtomate(?)
+            <xsl:sort select="position()" data-type="number"/> -->
+
+            <!-- PRIPENSU: ĉar temas pri nombroj oni povus ankaŭ adicii kaj ordigi en unu paŝo:
+                -100*o + 2*p - r (necesus mezuri, ĉu tiel plirapidiĝus, verŝajne apenaŭ...)-->
+
+
+<!--
+              {o<xsl:value-of select="-string-length(substring-before('|snc|subdrv',local-name((ancestor::drv|ancestor::subdrv|ancestor::snc)[last()])))"/>
+              p<xsl:value-of select="count(preceding::snc | preceding::subsnc | preceding::subdrv)"/>
+              r<xsl:value-of select="-count(parent::drv|parent::subdrv|parent::snc|parent::subsnc|parent::dif)"/>}
+-->
+
+<!--            
+            <! - - pri ordigo vd. supre - - >
             <xsl:sort select="count(ancestor::node()[
               self::snc or 
               self::subsnc or
               self::drv or
               self::subdrv])" data-type="number"/>
             <xsl:sort select="position()" data-type="number"/>
+
+            -->
             <xsl:apply-templates select="." mode="tradukoj"/>
             <xsl:text> </xsl:text>
           </xsl:for-each>
-
         </dd>
       </xsl:if>
     </xsl:otherwise>
@@ -115,36 +181,44 @@ montru tie, cxar ili estas esenca parto de tiuj -->
 </xsl:template>  
 
 
-<!-- traktas unuopan tradukon au tradukgrupon -->
-
+<!-- traktas unuopan tradukon au tradukgrupon
+   (tio inkluzivas ankaŭ dif/trd, kiu montriĝas krom
+     en la difino mem ankaŭ en la listo sube de drv) -->
 <xsl:template match="trd[@lng]|trdgrp" mode="tradukoj">
 
   <!-- rigardu, al kiu subarbo apartenas la traduko kaj skribu la
 	 tradukitan vorton/sencon -->
 
-  <strong lang="eo" class="trdeo">
-    <xsl:apply-templates 
-      select="ancestor::node()[
-        self::snc or 
-        self::subsnc or
-        self::ekz or
-        self::bld][1]" mode="kaptrd"/>
-  </strong>
+  <xsl:if test="not(parent::drv
+     or count(ancestor::node()[self::drv or self::subart][1]//snc)=1)">
 
-  <!--
-  <xsl:if test="string-length($n)>0">
-    <span class="trdeo"><xsl:value-of select="$n"/></span>
+    <strong lang="eo" class="trdeo">
+      <xsl:apply-templates 
+        select="ancestor::node()[
+          self::snc or 
+          self::subsnc or
+          self::ekz or
+          self::bld][1]" mode="kaptrd"/>
+    </strong>
+
+    <!--
+    <xsl:if test="string-length($n)>0">
+      <span class="trdeo"><xsl:value-of select="$n"/></span>
+    </xsl:if>
+    -->
+
+    <xsl:choose> <!-- uzu spacon ĉe ekz/bld, 0xA0 aliokaze -->
+      <!-- ne metu spacon antaŭ tradukon en drv aŭ unuopa snc, do se ne aperas antaŭe 
+          snc-numero ktp. -->
+      <xsl:when test="ancestor::node()[self::ekz or self::bld]">
+        <xsl:text> </xsl:text>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:text>&#xa0;</xsl:text>
+      </xsl:otherwise>
+    </xsl:choose>
+
   </xsl:if>
-  -->
-
-  <xsl:choose> <!-- uzu spacon ĉe ekz/bld, 0xA0 aliokaze -->
-    <xsl:when test="ancestor::node()[self::ekz or self::bld]">
-      <xsl:text> </xsl:text>
-    </xsl:when>
-    <xsl:otherwise>
-      <xsl:text>&#xa0;</xsl:text>
-    </xsl:otherwise>
-  </xsl:choose>
 
   <!-- skribu la tradukon mem --> 
   <span lang="{@lng}">
@@ -189,7 +263,7 @@ montru tie, cxar ili estas esenca parto de tiuj -->
 </xsl:template>
 
 
-<xsl:template match="trdgrp/trd|dif/trd" mode="tradukoj">
+<xsl:template match="trdgrp/trd" mode="tradukoj">
   <xsl:apply-templates mode="tradukoj"/>
 
   <xsl:variable name="komo">

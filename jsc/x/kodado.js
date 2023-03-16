@@ -103,6 +103,7 @@ function quoteattr(s, preserveCR=false) {
  * @param {number} x 
  * @param {number} nbDec 
  * @returns la teksta prezento de la nombro
+ * 
  */
 function formatFloat(x,nbDec) { 
     if (!nbDec) nbDec = 100;

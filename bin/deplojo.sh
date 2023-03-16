@@ -11,8 +11,8 @@
 #host=retavortaro.de
 # aldonu en /etc/hosts!
 host=revo
-release=2e
-node_release=2.0.5
+release=2f
+node_release=2.0.6
 revo=${host}:www/revo
 files=${host}:files
 
@@ -26,17 +26,14 @@ CSS=build/stl/revo-${release}-min.css
 RSJ=build/rsj/redaktilo-${release}-min.js
 RSC=build/stl/redaktilo-${release}-min.css
 
+DTD="dtd/*.dtd"
+XSL_INC="xsl/inc/*.xsl"
+XSL="xsl/revo*.xsl"
+
 KADRO=jsc/kadro.js
 PACKG=package.json
 
 case $target in
-helpo)
-    echo "---------------------------------------------------------------------------"
-    echo "Tiu skripto servas por sendi loke preparitajn dosierojn en la docker-procezujoj"
-    echo "por elprovi kaj sencimigi ilin tie."
-    echo ""
-    echo "(Por fina publikgo al la servilo uzu la skripton eldono.sh)"
-    ;;
 araneo)
     npm run build:js
     npm run build:css
@@ -48,13 +45,33 @@ araneo:debug)
 araneo|araneo:debug)
     araneo_id=$(docker ps --filter name=araneujo_araneo -q)
     todir=/usr/local/apache2/htdocs/revo
+    echo "kopiante JS+CSS al ${araneo_id}:${todir}..."
     docker cp ${JSC} ${araneo_id}:${todir}/jsc
     docker cp ${CSS} ${araneo_id}:${todir}/stl
     ;;
+araneo-dtd)
+    araneo_id=$(docker ps --filter name=araneujo_araneo -q)
+    todir=/usr/local/apache2/htdocs/revo/dtd
+    echo "kopiante DTD al ${araneo_id}:${todir}..."
+    for file in ${DTD}; do
+        echo ${file}
+        docker cp ${file} ${araneo_id}:${todir}
+    done
+    ;;    
 araneo-xsl)
     araneo_id=$(docker ps --filter name=araneujo_araneo -q)
-    todir=/hp/af/ag/ri/files/xsl/inc
-    docker cp xsl/inc/revo_trd.xsl ${araneo_id}:${todir}
+    xsldir=/hp/af/ag/ri/files/xsl
+    incdir=/hp/af/ag/ri/files/xsl/inc
+    echo "kopiante XSL-dosierojn al ${araneo_id}:${xsldir}..."
+    for file in ${XSL}; do
+        echo ${file}
+        docker cp ${file} ${araneo_id}:${xsldir}
+    done
+    echo "kopiante XSL-dosierojn al ${araneo_id}:${incdir}..."
+    for file in ${XSL_INC}; do
+        echo ${file}
+        docker cp ${file} ${araneo_id}:${incdir}
+    done
     ;;    
 cetonio)
     npm run build:rsj
@@ -67,7 +84,37 @@ cetonio:debug)
 cetonio|cetonio:debug)
     cetonio_id=$(docker ps --filter name=cetoniujo_cetonio -q)
     todir=/home/cetonio/pro
+    echo "kopiante ${RSJ} kaj ${RSC} al ${cetonio_id}:${todir}/web/static"
     docker cp ${RSJ} ${cetonio_id}:${todir}/web/static
     docker cp ${RSC} ${cetonio_id}:${todir}/web/static
+    ;;
+cetonio-xsl)
+    cetonio_id=$(docker ps --filter name=cetoniujo_cetonio -q)
+    xsldir=/home/cetonio/voko/xsl
+    incdir=/home/cetonio/voko/xsl/inc
+    echo "kopiante XSL-dosierojn al ${cetonio_id}:${xsldir}..."
+    for file in ${XSL}; do
+        echo ${file}
+        docker cp ${file} ${cetonio_id}:${xsldir}
+    done
+    echo "kopiante XSL-dosierojn al ${cetonio_id}:${incdir}..."
+    for file in ${XSL_INC}; do
+        echo ${file}
+        docker cp ${file} ${cetonio_id}:${incdir}
+    done
+    ;;        
+manlibro)
+    echo "aktuligi RNC-manlibron..."
+    perl perl/rnc2md.pl > ../revuloj.github.io/_temoj/rnc.md
+    ;;
+*)    
+    echo "Nevalida celo, enrigaru ĉi-skripton por vidi la eblajn celojn, ekz-e araneo:debug)"    
+    ;;&
+helpo|*)
+    echo "---------------------------------------------------------------------------"
+    echo "Tiu ĉi skripto servas por sendi loke preparitajn dosierojn"
+    echo "en la docker-procezujojn, por elprovi kaj sencimigi ilin tie."
+    echo ""
+    echo "(Por fina publikgo al la servilo uzu la skripton eldono.sh)"
     ;;
 esac

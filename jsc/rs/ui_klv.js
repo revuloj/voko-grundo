@@ -77,6 +77,7 @@ $.widget( "redaktilo.Klavaro", {
             } else {
                 var elmj = {
                     ctl: "citilo-elemento",
+                    mis: "misstilo-elemento",
                     nom: "nomo (ne-e-a)",
                     nac: "nacilingva vorto",
                     esc: "escepta vorto",
@@ -114,6 +115,9 @@ $.widget( "redaktilo.Klavaro", {
                     case 'emfaze':
                         html += '<div class="elm_btn" data-cmd="em" title="emfazo"><strong>em</strong></div>';
                         break;
+                    case 'strekite':
+                        html += '<div class="klv elm_btn" data-cmd="ts" title="trastreko"><del>ts</del></div>';
+                        break;                        
                     case 'sup':
                         html += '<div class="elm_btn" data-cmd="sup" title="suprigite" ' +
                                 'style="padding-top:0.25em; padding-bottom:0.35em ">a<sup>s</sup></div>';
@@ -205,7 +209,7 @@ $.widget( "redaktilo.Klavaro", {
         if (text) {
             return text;
         // citiloj
-        } else if (cmd == "\u201e\u201c" || cmd =="\u201a\u2018") {
+        } else if (cmd == "\u201e\u201c" || cmd =="\u201a\u2018" || cmd == "\u29da\u29db") {
             s_ = sel || "\u2026";
             return (cmd[0] + s_ + cmd[1]);
         // klarigoj en krampoj

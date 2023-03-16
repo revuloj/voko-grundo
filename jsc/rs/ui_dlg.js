@@ -113,7 +113,14 @@ export default function() {
             "\u2718": function() { $(this).dialog("close"); }
         },
         open: function() {
-            $("#krei_error").hide();  
+            // ĉar tiu change_count ankaŭ sen vera ŝanĝo altiĝas, 
+            // ni permesu ĝis 2 lastajn ŝanĝojn sen averti
+            if ($("#xml_text").Artikolo("change_count") > 2) {
+                $("#krei_error").html("Averto: ankoraŭ ne senditaj ŝanĝoj en la nuna artikolo perdiĝos kreante novan.")
+                $("#krei_error").show();
+            } else {
+                $("#krei_error").hide();
+            }
         }
     });
     $( "#krei_butonoj").Klavaro({
@@ -148,7 +155,15 @@ export default function() {
             "\u2718": function() { $(this).dialog("close"); } 
         },
         open: function() {
-            $("#shargi_error").hide();  
+            // ĉar tiu change_count ankaŭ sen vera ŝanĝo altiĝas, 
+            // ni permesu ĝis 2 lastajn ŝanĝojn sen averti
+            if ($("#xml_text").val() && $("#xml_text").val() && $("#xml_text").Artikolo("change_count") > 2) {
+                $("#shargi_error").html("Averto: ankoraŭ ne senditaj ŝanĝoj en la nuna artikolo perdiĝos kreante novan.")
+                $("#shargi_error").show();
+            } else {
+                $("#shargi_error").hide();
+            }
+
             $("#shargi_sercho").selectAll();
         }
     });
@@ -812,6 +827,8 @@ function sendi_artikolon_servile(event) {
        function(data) {   
         // Montru sukceson...
         var dosiero = $("#xml_text").Artikolo("option","dosiero");
+        $("#xml_text").Artikolo("change_count",0);
+
         var url=data.html_url;
         var msg = "<b>'" + dosiero  + "'</b> sendita. " +
         (metodo == 'api'

@@ -215,7 +215,7 @@ var redaktilo = function() {
     if (key == 13) {  
       scrollPos = xmlarea.scrollPos();        
       const indent = xmlarea.indent();
-      xmlarea.selection("\n"+indent,-1);
+      xmlarea.selection("\n"+indent);
       xmlarea.scrollPos(scrollPos);
       event.preventDefault();
 
@@ -389,7 +389,7 @@ var redaktilo = function() {
    */
   function store_preferences() {
     var prefs = {};
-    for (var key of ['r:redaktanto','r:trdlng','r:klrtip','r:reftip','r:sxangxo','r:cx']) {
+    for (var key of ['r:redaktanto','r:trdlng','r:klrtip','r:reftip','r:sxangxo','r:cx','r:xklvr']) {
       const el = document.getElementById(key);
       if (el) prefs[key] = el.value;
     }
@@ -398,8 +398,7 @@ var redaktilo = function() {
 
   /**
    * Legas la memorigitajn valorojn de kelkaj kampoj en la redaktilo-menuo (maldekstra naviga parto)
-   * el la loka memoro de la retumilo
-   * kaj metas ilin en la respektivajn kampojn de la redaktilo.
+   * el la loka memoro de la retumilo kaj metas ilin en la respektivajn kampojn de la redaktilo.
    * @memberof redaktilo
    * @inner
    */
@@ -429,7 +428,8 @@ var redaktilo = function() {
 
   /**
    * Legas valorojn de preferoj por la dekstra XML-parto de la redaktilo 
-   * el la loka memoro de la retumilo. Momente tio estas nur la stato de la cx-ŝaltilo
+   * el la loka memoro de la retumilo. Momente tio estas la stato de la cx-ŝaltilo
+   * kaj de la kromklavaro.
    * @memberof redaktilo
    * @inner
    */
@@ -437,6 +437,13 @@ var redaktilo = function() {
     var str = window.localStorage.getItem("redaktilo_preferoj");
     var prefs = (str? JSON.parse(str) : {});
     document.getElementById('r:cx').value = prefs['r:cx'] || 0;
+    if (prefs['r:cx']) {
+      document.getElementById('r:xklvr').value = 1;
+      show("r:klavaro");
+    } else {
+      document.getElementById('r:xklvr').value = 0;
+      hide("r:klavaro");
+    }
   }
 
   /** Konservas la nomon kaj la XML-tekston de la aktuale redaktata artikolo
@@ -1563,7 +1570,7 @@ var redaktilo = function() {
 
   /**
    * Montras depende de elektita (sub)drv|(sub)snc la jam ekzistantajn
-   * tradukojn kaj +-butonoj por eblaj aldonoj
+   * tradukojn kaj +-butonojn por eblaj aldonoj
    * @memberof redaktilo
    * @inner
    */
