@@ -76,7 +76,7 @@
 
   <!-- radikoj -->
   <xsl:for-each select="//art/kap[ofc=$ofc]/rad|//art/kap/var/kap[ofc=$ofc]/rad">
-    <xsl:sort collation="http://saxon.sf.net/collation?class=de.steloj.respiro.EsperantoCollator" lang="eo" select="."/>
+    <xsl:sort lang="eo" select="."/>
     <xsl:variable name="kap">
       <xsl:apply-templates/>
     </xsl:variable>
