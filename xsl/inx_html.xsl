@@ -312,7 +312,7 @@
       <title><xsl:value-of select="concat(../@nometo,'-indekso: ',@titolo)"/></title>
       <link title="indekso-stilo" type="text/css" 
             rel="stylesheet" href="{$stl_url}indeksoj.css"/>
-      <meta name="format-detection" content="telephone=no">            
+      <meta name="format-detection" content="telephone=no"/>            
     </head>
     <body>
       <table cellspacing="0">
