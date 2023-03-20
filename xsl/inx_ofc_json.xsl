@@ -87,7 +87,19 @@
     <xsl:text>"],
   </xsl:text>
   </xsl:for-each>
-  <!-- derivaĵoj -->
+  <!-- unuaj derivaĵoj de artikoloj sen aparta ofc -->
+  <xsl:for-each select="//art[kap/ofc=$ofc]//drv[position()=1 and not(kap/ofc)]/kap">
+    <!-- xsl:sort collation="http://saxon.sf.net/collation?class=de.steloj.respiro.EsperantoCollator" lang="eo" select="text()|tld"/ -->
+    <xsl:variable name="kap">
+      <xsl:apply-templates select="text()|tld"/>
+    </xsl:variable>
+    <xsl:text>["</xsl:text>
+    <xsl:value-of select="ancestor::drv/@mrk"/>
+    <xsl:text>","</xsl:text>
+    <xsl:value-of select="normalize-space($kap)"/>
+    <xsl:text>"],
+  </xsl:text>  
+  <!-- derivaĵoj kun aparta ofc -->
   <xsl:for-each select="//art//drv/kap[ofc=$ofc]|//art//drv//var/kap[ofc=$ofc]">
     <!-- xsl:sort collation="http://saxon.sf.net/collation?class=de.steloj.respiro.EsperantoCollator" lang="eo" select="text()|tld"/ -->
     <xsl:variable name="kap">
@@ -99,6 +111,7 @@
     <xsl:value-of select="normalize-space($kap)"/>
     <xsl:text>"],
   </xsl:text>
+  </xsl:for-each>
   </xsl:for-each>
 
   <xsl:text>[]],
