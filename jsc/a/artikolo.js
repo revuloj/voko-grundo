@@ -651,7 +651,7 @@ var artikolo = function() {
                                 ['img',{  
                                     //src: '../smb/i_wiki.svg', 
                                     src: '../smb/i_ofc.svg', 
-                                    class: 'i_ofc',
+                                    class: 'ref i_ofc',
                                     alt: 'Oficialaj',
                                     title: 'al FdE/OA'}]
                                 ]]
