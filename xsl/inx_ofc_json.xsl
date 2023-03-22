@@ -142,10 +142,11 @@
   </xsl:choose>
 </xsl:template>
 
-
+<!--
 <xsl:template match="text()">
   <xsl:value-of select="normalize-space(translate(.,',',''))"/>
 </xsl:template>
+-->
 
 <xsl:template match="fnt|ofc"/>
 
