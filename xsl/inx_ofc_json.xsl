@@ -97,7 +97,7 @@
     <xsl:text>["</xsl:text>
     <xsl:value-of select="ancestor::drv/@mrk"/>
     <xsl:text>","</xsl:text>
-    <xsl:value-of select="normalize-space($kap)"/>
+    <xsl:value-of select="normalize-space(translate($kap,',',''))"/>
     <xsl:text>"],
 </xsl:text>
   </xsl:for-each>
@@ -111,7 +111,7 @@
     <xsl:text>["</xsl:text>
     <xsl:value-of select="ancestor::drv/@mrk"/>
     <xsl:text>","</xsl:text>
-    <xsl:value-of select="normalize-space($kap)"/>
+    <xsl:value-of select="normalize-space(translate($kap,',',''))"/>
     <xsl:text>"],
 </xsl:text>
   </xsl:for-each>
