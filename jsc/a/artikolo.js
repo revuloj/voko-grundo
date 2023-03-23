@@ -630,16 +630,24 @@ var artikolo = function() {
                     var refs = [];
                     var oj = [];
 
+                    var pas = {}; // ni memoras la unuopajn, ĉar ni povas havi 
+                    // duoblaĵojn en ofc-referencoj kaj viki-referencoj, pro art/drv-mrk
+                    // kaj pri minuklaj/majusklaj alinomoj de Viki-titoloj (internaj referencoj de V.)
+
                     // oficialeco-referencoj (FdE, OA1..9)
                     if(json.ofc) {
                         for (let r of json.ofc) {
                             if (r.m == mrk || 
                                 (first_drv && r.m == mrk.substring(0,mrk.indexOf('.')))
                             ) { 
-                                const o = ht_elements([
-                                    ['a',{ href: ofc_url(r.f,r.r) }, r.s],', '
-                                ]);
-                                if (o) oj.push(...o); 
+                                if (! pas[r.s] ) {
+                                    pas[r.s] = true;  // memoru
+
+                                    const o = ht_elements([
+                                        ['a',{ href: ofc_url(r.f,r.r) }, r.s],', '
+                                    ]);
+                                    if (o) oj.push(...o); 
+                                }
                             }
                         }
                     }
@@ -660,11 +668,8 @@ var artikolo = function() {
                         refs.push(...p); 
                     }
 
-                    var vj = [];
                     // viki-referencoj
-                    var pas = {}; // ni memoras la unuopajn, ĉar ni povas havi duoblaĵojn pro art/drv-mrk
-                                  // kaj pri minuklaj/majusklaj alinomoj de Viki-titoloj (internaj referencoj de V.)
-
+                    var vj = []; pas = {};
                     if (json.viki) {
                         for (let r of json.viki) {
                             if (r.m == mrk || 
