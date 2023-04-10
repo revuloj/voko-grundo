@@ -20,7 +20,7 @@ $debug = 0;
 $verbose=1;
 @artikoloj = @ARGV;
 
-my $shanghoj = "aktualigo Monato-URL";
+my $shanghoj = "revo: aktualigo Monato-URL";
 
 for $art (@artikoloj) {
     process_art($art);
