@@ -9,6 +9,8 @@ const ekz_sojlo = 3;
 const sec_art = "s_artikolo";
 const vokoref_url = "/cgi-bin/vokoref-json.pl";
 const vikipedio_url = "https://eo.wikipedia.org/wiki/";
+const fundamento_url = "https://www.steloj.de/esperanto/fundamento/";
+const ofcaldonoj_url = "https://www.steloj.de/esperanto/ofcaldonoj/";
 const art_path = "../art/";
 
 //const KashEvento = new Event("kashu", {bubbles: true});
@@ -607,7 +609,7 @@ var artikolo = function() {
                 if (art.querySelector('div.tezauro')) return;
                                 
                 var json = 
-                    /** @type { {viki: Array<{m,v}>, tez: Array<{mrk,tip,cel}>} } */
+                    /** @type { {viki: Array<{m,v}>, tez: Array<{mrk,tip,cel}>, ofc: Array<{s,m,r,f}>} } */
                     (JSON.parse(
                         /** @type {string} */ (data)
                     ));
@@ -620,14 +622,54 @@ var artikolo = function() {
                 function tip_fixed(tip) {
                     return ({sup: 'super', mal: 'malprt'}[tip] || tip);
                 }
+                function ofc_url(f,r) {
+                    return ((f=='fe')? fundamento_url:ofcaldonoj_url) + r;
+                }
+                // kreas la div-keston sub derivaĵo kun la tezaŭro-referencoj
                 function kreu_ref_div(mrk, first_drv = false) {
                     var refs = [];
+                    var oj = [];
+
+                    var pas = {}; // ni memoras la unuopajn, ĉar ni povas havi 
+                    // duoblaĵojn en ofc-referencoj kaj viki-referencoj, pro art/drv-mrk
+                    // kaj pri minuklaj/majusklaj alinomoj de Viki-titoloj (internaj referencoj de V.)
+
+                    // oficialeco-referencoj (FdE, OA1..9)
+                    if(json.ofc) {
+                        for (let r of json.ofc) {
+                            if (r.m == mrk || 
+                                (first_drv && r.m == mrk.substring(0,mrk.indexOf('.')))
+                            ) { 
+                                if (! pas[r.s] ) {
+                                    pas[r.s] = true;  // memoru
+
+                                    const o = ht_elements([
+                                        ['a',{ href: ofc_url(r.f,r.r) }, r.s],', '
+                                    ]);
+                                    if (o) oj.push(...o); 
+                                }
+                            }
+                        }
+                    }
+
+                    if (oj.length) {
+                        oj.splice(oj.length-1,1,ht_element("br")); // anstataŭigu lastan komon per <br/>
+                        const p = ht_elements([
+                            ['p',{},[
+                                ['img',{  
+                                    //src: '../smb/i_wiki.svg', 
+                                    src: '../smb/i_ofc.svg', 
+                                    class: 'ref i_ofc',
+                                    alt: 'Oficialaj',
+                                    title: 'al FdE/OA'}]
+                                ]]
+                        ]);
+                        p[0].append(...oj);
+                        refs.push(...p); 
+                    }
 
                     // viki-referencoj
-                    var pas = {}; // ni memoras la unuopajn, ĉar ni povas havi duoblaĵojn pro art/drv-mrk
-                                  // kaj pri minuklaj/majusklaj alinomoj de Viki-titoloj (internaj referencoj de V.)
-
-                    var vj = [];
+                    var vj = []; pas = {};
                     if (json.viki) {
                         for (let r of json.viki) {
                             if (r.m == mrk || 

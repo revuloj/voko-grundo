@@ -8,13 +8,15 @@
   extension-element-prefixes="saxon" 
 >
 
-<!-- (c) 2020 ĉe Wolfram Diestel
+<!-- (c) 2020-2023 ĉe Wolfram Diestel
      permesilo GPL 2.0
+
+     kreas retapaĝojn de artikolhistorioj el XML-dosiero kun la ŝanĝoj.
 -->
 
 <!-- variabloj por referencoj -->
 <xsl:variable name="repo" select="'https://github.com/revuloj/revo-fonto/commit/'"/>
-<xsl:variable name="revo" select="'http://reta-vortaro.de/revo'"/>
+<xsl:variable name="revo" select="'/revo/index.html'"/>
 
 <xsl:output method="html" encoding="utf-8" use-character-maps="fix-characters"/>
 
@@ -91,7 +93,8 @@
       <link rel="stylesheet" type="text/css" href="../stl/artikolo.css"/>
     </head>
     <body>
-      <h1>Historio de  <a href="{$revo}/art/{$dos}.html"><xsl:value-of select="$dos"/></a>.xml</h1>
+      <h1>Historio de  <a href="{$revo}#{$dos}"><xsl:value-of select="$dos"/></a>.xml</h1>
+      ➜ <a href="{$revo}">al Revo</a>
       <table class="art-hist">
    
       <xsl:for-each select="//entry[file/name=$name]">
