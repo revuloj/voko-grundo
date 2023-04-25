@@ -14,13 +14,17 @@
     extension-element-prefixes="redirect" -->
 
 
-<!-- (c) 2006 che Wolfram Diestel
-     licenco GPL 2.0
+<!-- (c) 2006 - 2023 ĉe Wolfram Diestel
+     laŭ permesilo GPL 2.0
+
+    La transformilo kreas la retpaĝojn pri ŝangoj kaj novaj artikoloj de Revo.
+    La XML-fonto-dokumento unue devos kreiĝi el la arĥivosistemo, kies eroj
+    estas "entry"-elementoj. 
 -->
 
 <xsl:include href="inc/inx_menuo.inc"/>
 
-<xsl:output method="xhtml" encoding="utf-8"/>
+<xsl:output method="xhtml" encoding="utf-8" indent="no"/>
 
 <xsl:key name="autoroj" match="//entry" use="substring-before(msg,':')"/>
 
@@ -46,52 +50,36 @@
         <tr>
           <td colspan="{$inx_paghoj}" class="enhavo">
             <h1>laste &#x015d;an&#x011d;itaj</h1>
-            <ul>
-              <xsl:for-each select="//entry[count(.
-                |key('autoroj',substring-before(msg,':'))[1])=1 and contains(file[1]/name,'.xml')]">
 
-                <xsl:sort select="substring-before(msg,':')"/>
+            <!-- unu sekcio details/summary por ĉiu aŭtoro 
+                 senaŭtoraj ŝangoj kolektiĝos sub "revo"
 
-                <li>
-                  <a>
-                    <xsl:attribute name="href">
-                      <xsl:text>#</xsl:text>
-                      <xsl:call-template name="autoro">
-                        <xsl:with-param name="spaco" select="'_'"/>
-                      </xsl:call-template>
-                    </xsl:attribute>
+                erareto: Se la ero ne havas aŭtoron, sed enhavas dupunkton, la teksto
+                antaŭ tiu estas miskomprenata kiel aŭtornomo!
+            -->
+            <xsl:for-each select="//entry[count(.
+              |key('autoroj',substring-before(msg,':'))[1])=1 and contains(file[1]/name,'.xml')]">
+              <xsl:sort select="substring-before(msg,':')"/>
+              <xsl:variable name="autoro" select="substring-before(msg,':')"/>
+
+              <details>                
+                <summary>
+                  <strong>
                     <xsl:call-template name="autoro">
                       <xsl:with-param name="spaco" select="' '"/>
                     </xsl:call-template>
-                  </a>
-                </li>
-              
-              </xsl:for-each>
-            </ul>
+                  </strong>
+                </summary>
 
-            <xsl:for-each select="//entry[count(.
-                |key('autoroj',substring-before(msg,':'))[1])=1 and contains(file[1]/name,'.xml')]">
-
-                <xsl:sort select="substring-before(msg,':')"/>
+                <!-- la ŝanĝoj de tiu aŭtoro -->
+                <xsl:for-each select="key('autoroj',$autoro)">
+                  <xsl:sort select="date" order="descending"/>
+                  <dl>
+                    <xsl:apply-templates select="file"/>
+                  </dl>
+                </xsl:for-each>
                 <hr/>
-                <a>
-                  <xsl:attribute name="name">
-                    <xsl:call-template name="autoro">
-                      <xsl:with-param name="spaco" select="'_'"/>
-                    </xsl:call-template>
-                  </xsl:attribute>
-                </a>
-                <h2>
-                  <xsl:call-template name="autoro">
-                    <xsl:with-param name="spaco" select="' '"/>
-                  </xsl:call-template>
-                </h2>
-                <dl>
-                  <xsl:apply-templates select="key('autoroj',substring-before(msg,':'))">
-                    <xsl:sort select="date" order="descending"/>
-                  </xsl:apply-templates>
-                </dl>
-              
+              </details>            
             </xsl:for-each>
 
           </td>

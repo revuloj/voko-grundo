@@ -11,8 +11,8 @@
 #host=retavortaro.de
 # aldonu en /etc/hosts!
 host=revo
-release=2g
-node_release=2.0.7
+release=2h
+node_release=2.0.8
 revo=${host}:www/revo
 files=${host}:files
 
@@ -47,8 +47,8 @@ araneo|araneo:debug)
     araneo_id=$(docker ps --filter name=araneujo_araneo -q)
     todir=/usr/local/apache2/htdocs/revo
     echo "kopiante JS+CSS al ${araneo_id}:${todir}..."
-    docker cp ${JSC} ${araneo_id}:${todir}/jsc
-    docker cp ${CSS} ${araneo_id}:${todir}/stl
+    docker cp -q ${JSC} ${araneo_id}:${todir}/jsc
+    docker cp -q ${CSS} ${araneo_id}:${todir}/stl
     ;;
 araneo-dtd)
     araneo_id=$(docker ps --filter name=araneujo_araneo -q)

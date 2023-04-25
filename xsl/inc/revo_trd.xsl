@@ -181,9 +181,9 @@ reguloj por prezentado de la tradukoj
 </xsl:template>  
 
 
-<!-- traktas unuopan tradukon au tradukgrupon
-   (tio inkluzivas ankaŭ dif/trd, kiu montriĝas krom
-     en la difino mem ankaŭ en la listo sube de drv) -->
+<!-- traktas unuopan tradukon aŭ tradukgrupon
+    (tio inkluzivas ankaŭ dif/trd, kiu montriĝas krom
+    en la difino mem ankaŭ en la listo sube de drv) -->
 <xsl:template match="trd[@lng]|trdgrp" mode="tradukoj">
 
   <!-- rigardu, al kiu subarbo apartenas la traduko kaj skribu la
@@ -197,8 +197,11 @@ reguloj por prezentado de la tradukoj
       <!-- uzu spacon ĉe ekz/bld, 0xA0 aliokaze -->
       <xsl:text> </xsl:text>      
     </xsl:when>
-    <xsl:when test="not(parent::drv
-      or count(ancestor::node()[self::drv or self::subart][1]//snc)=1) or parent::subsnc">
+    <xsl:when test="not(
+        parent::drv 
+        or count(ancestor::node()[self::drv or self::subart][1]//snc)=1
+      ) 
+      or parent::subsnc">
       <strong lang="eo" class="trdeo">
         <xsl:apply-templates 
           select="ancestor::node()[
@@ -252,7 +255,7 @@ reguloj por prezentado de la tradukoj
 
 </xsl:template>
 
-
+<!-- tradukoj ene de tradukgrupo -->
 <xsl:template match="trdgrp/trd" mode="tradukoj">
   <xsl:apply-templates mode="tradukoj"/>
 
