@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# (c) 2022 Wolfram Diestel
+# (c) 2022-2023 Wolfram Diestel
 # laŭ GPL 2.0
 #
 # faras anstataŭigojn en artikoloj kaj altigas la versi-numeron en Id...
@@ -20,6 +20,8 @@ $debug = 0;
 $verbose=1;
 @artikoloj = @ARGV;
 
+my $shanghoj = "revo: aktualigo URL-unuoj";
+
 for $art (@artikoloj) {
     process_art($art);
 }
@@ -33,6 +35,7 @@ sub process_art {
     
     # apliku anstataŭigojn
     $chg += ($xml =~ s|https?://(?:www\.)?monato\.be|&Monato;|g);
+    $chg += ($xml =~ s|https?://(?:www\.)?monato\.net|&Monato;|g);
     $chg += ($xml =~ s|https?://esperanto\.cri\.cn/|&CRI;|g);
     $chg += ($xml =~ s|https?://eo\.mondediplo\.com/|&Mondediplo;|g);
     $chg += ($xml =~ s|https?://eo\.wikipedia\.org/w/index.php\?title=|&Vikio;|g);
@@ -56,16 +59,13 @@ sub process_art {
     $chg += ($xml =~ s|https?://(?:www\.)?uea\.org/|&UEA;|g);
     $chg += ($xml =~ s|https?://(?:www\.)?tekstaro\.com/t|&Tekstaro;|g);
 
-
     if ($chg) {
         process::write_file(">",$art,$xml);
 
         # nova versio
-        my $shanghoj = "aktualigo URL-unuoj";
         process::write_file(">","/tmp/shanghoj.msg",$shanghoj);
         process::incr_ver($art,"/tmp/shanghoj.msg");
 
         print "...$chg ŝanĝo(j)! [$shanghoj]\n" if ($verbose);
     }
-
 }

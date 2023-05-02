@@ -147,10 +147,12 @@
       <ero s="kap" t="bildoj" n="{count(//bld)}"/>
       <ero s="kap" t="mallongigoj" n="{count(//mlg)}"/> 
 
+<!-- kp https://www.akademio-de-esperanto.org/akademia_vortaro/klarigoj.html,
+tamen AdE nur kalkulas novajn radikojn, dum ni kalkulas ankaŭ derivaĵojn kaj relistigitajn -->
       <ero s="rad" t="fundamentaj (1905)" n="{count(//art/kap//ofc[.='*'])}/2768"/>
       <ero s="rad" t="oficialaj (1a, 1909)" n="{count(//art/kap//ofc[.='1'])}/860"/>
       <ero s="rad" t="oficialaj (2a, 1919)" n="{count(//art/kap//ofc[.='2'])}/591"/>
-      <ero s="rad" t="oficialaj (3a, 1921)" n="{count(//art/kap//ofc[.='3'])}/204"/>
+      <ero s="rad" t="oficialaj (3a, 1921)" n="{count(//art/kap//ofc[.='3'])}/203"/>
       <ero s="rad" t="oficialaj (4a, 1929)" n="{count(//art/kap//ofc[.='4'])}/118"/>
       <ero s="rad" t="oficialaj (5a, 1934)" n="{count(//art/kap//ofc[.='5'])}/8"/>
       <ero s="rad" t="oficialaj (6a, 1935)" n="{count(//art/kap//ofc[.='6'])}/21"/>
