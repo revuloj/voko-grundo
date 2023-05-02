@@ -32,39 +32,36 @@ sub process_art {
     my $chg = 0;
     
     # apliku anstataŭigojn
-    $chg += ($xml =~ s/lng\s*=\s*"jw"/lng="jv"/g);
-    $chg += ($xml =~ s/lng\s*=\s*"tp"/lng="tok"/g);
-    #...
-    $chg += ($xml =~ s|https?://www\.monato\.be|&Monato;|g);
+    $chg += ($xml =~ s|https?://(?:www\.)?monato\.be|&Monato;|g);
     $chg += ($xml =~ s|https?://esperanto\.cri\.cn/|&CRI;|g);
     $chg += ($xml =~ s|https?://eo\.mondediplo\.com/|&Mondediplo;|g);
     $chg += ($xml =~ s|https?://eo\.wikipedia\.org/w/index.php\?title=|&Vikio;|g);
     $chg += ($xml =~ s|https?://eo\.wikipedia\.org/wiki|&Viki;|g);
     $chg += ($xml =~ s,https?://groups\.google\.(?:com|be)/(?:g|group)/soc\.culture\.esperanto\?hl=eo,&SCE;,g);
-    $chg += ($xml =~ s|http://kono\.be/cgi-bin/vivo/ViVo.cgi\?pagxo=|&ViVoTrd;|g);
-    $chg += ($xml =~ s|http://kono\.be/cgi-bin/vivo/|&ViVo;|g);
-    $chg += ($xml =~ s|https?://www\.akademio-de-esperanto\.org|&AdE;|g);
-    $chg += ($xml =~ s|https?://bertilow\.com/pmeg/|&PMEG;|g);
+    $chg += ($xml =~ s|http://(?:www\.)?kono\.be/cgi-bin/vivo/ViVo.cgi\?pagxo=|&ViVoTrd;|g);
+    $chg += ($xml =~ s|http://(?:www\.)?kono\.be/cgi-bin/vivo/|&ViVo;|g);
+    $chg += ($xml =~ s|https?://(?:www\.)?akademio-de-esperanto\.org|&AdE;|g);
+    $chg += ($xml =~ s|https?://(?:www\.)?bertilow\.com/pmeg/|&PMEG;|g);
 
-    $chg += ($xml =~ s|https?://www\.eventoj\.hu/steb/|&STEB;|g);
-    $chg += ($xml =~ s|https?://literaturo\.org/HARLOW-Don/Esperanto/Literaturo/|&DonH;|g);
+    $chg += ($xml =~ s|https?://(?:www\.)?eventoj\.hu/steb/|&STEB;|g);
+    $chg += ($xml =~ s|https?://(?:www\.)?literaturo\.org/HARLOW-Don/Esperanto/Literaturo/|&DonH;|g);
     $chg += ($xml =~ s|https?://eduinf\.waw\.pl/esp/|&EduInf;|g);
-    $chg += ($xml =~ s|https?://esperanto-ondo\.ru/|&LOdE;|g);
-    $chg += ($xml =~ s|https?://sezonoj\.ru/|&Sezonoj;|g);
-    $chg += ($xml =~ s|https?://www\.gutenberg\.org/|&Gutenberg;|g);
+    $chg += ($xml =~ s|https?://(?:www\.)?esperanto-ondo\.ru/|&LOdE;|g);
+    $chg += ($xml =~ s|https?://(?:www\.)?sezonoj\.ru/|&Sezonoj;|g);
+    $chg += ($xml =~ s|https?://(?:www\.)?gutenberg\.org/|&Gutenberg;|g);
     $chg += ($xml =~ s|https?://(?:www\.)?steloj\.de/esperanto/|&Steloj;|g);
     $chg += ($xml =~ s|https?://upload\.wikimedia\.org/wikipedia/commons|&WCU;|g);
     $chg += ($xml =~ s|https?://commons\.wikimedia\.org/wiki|&WCW;|g);
 
-    $chg += ($xml =~ s|https?://www\.uea\.org/|&UEA;|g);
-    $chg += ($xml =~ s|https?://tekstaro\.com/t|&Tekstaro;|g);
+    $chg += ($xml =~ s|https?://(?:www\.)?uea\.org/|&UEA;|g);
+    $chg += ($xml =~ s|https?://(?:www\.)?tekstaro\.com/t|&Tekstaro;|g);
 
 
     if ($chg) {
         process::write_file(">",$art,$xml);
 
         # nova versio
-        my $shanghoj = "aktualigo lingvokodoj kaj URL-unuoj";
+        my $shanghoj = "aktualigo URL-unuoj";
         process::write_file(">","/tmp/shanghoj.msg",$shanghoj);
         process::incr_ver($art,"/tmp/shanghoj.msg");
 
