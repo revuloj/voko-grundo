@@ -26,7 +26,7 @@ $debug = 0;
 $reverse = 0; # skribo de dekstre maldekstren (ekz-e hebrea)
 unless ($#ARGV>1) {
     print "\n=> Certigu, ke vi troviĝas en la dosierujo kie enestas la artikoloj al kiuj\n";
-    print "vi volas aldoni tradukojn el CSV-dosero. Poste voku tiel:\n";
+    print "vi volas aldoni tradukojn el CSV-dosiero. Poste voku tiel:\n";
     print "   perl merge_trd_xml.pl <lingvokodo> <csv-dosiero> <art>*.xml...\n\n" ;
     exit 1;
 }
