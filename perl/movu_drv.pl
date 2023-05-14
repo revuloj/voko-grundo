@@ -45,8 +45,7 @@ $xml_dir = "./revo/";
 
 $origmrk = shift @ARGV;
 $celmrk = shift @ARGV;
-
-my $shanghoj = "revo: movu drv $origmrk al/sub $celmrk";
+my $novmrk;
 
 # enlegu la originan kaj la celan artikolojn
 my $origart = mrk_art($origmrk);
@@ -56,6 +55,10 @@ my $origrad = art_radikoj($origxml);
 my $celart = mrk_art($celmrk);
 my $celxml = XML::LibXML->load_xml(location => $celart, expand_entities=>0, keep_blanks=>1);
 my $celrad = art_radikoj($celxml);
+my @cel = split(/\./,$celmrk);
+my $celdos = @cel[0];
+
+my $shanghoj = "revo: movu drv $origmrk al $celdos/";
 
 # forigu la derivaĵon el la originala artikolo
 my $drv = forigu_drv();
@@ -72,6 +75,10 @@ if ($drv) {
     skribu_art($celart,$celxml);
 
     #adaptu_refjn($origmrk,$celmrk?);
+
+    for $art (glob '$art_dir/*.xml') {
+        anst_ref_art($art);
+    }
 }
 
 
@@ -106,7 +113,7 @@ sub skribu_art {
     process::write_file(">","/tmp/shanghoj.msg",$shanghoj);
     process::incr_ver($art,"/tmp/shanghoj.msg");
 
-    print "...$shanghoj\n" if ($verbose);
+    print "$art:...$shanghoj\n" if ($verbose);
 }    
 
 
@@ -239,6 +246,29 @@ sub radtld {
     return;
 }
 
+
+sub anst_ref_art {
+    my $art = shift;
+
+    my $xml = process::read_file($art);
+    my $chg = 0;
+
+    my $i = index($xml,$origmrk); 
+
+    if ($i > 0) {     
+        print "...anstataŭigu ref@cel en $art...?\n" if ($verbose);
+
+        my $omrk = $origmrk;
+        $omrk =~ s/\./\\./g;
+
+        # apliku anstataŭigojn
+        $chg += ($xml =~ s/cel\s*=\s*['"]$omrk["']/cel="$novmrk"/g);
+
+        if ($chg) {
+            skribu_art($art,$xml);
+        }
+    }
+}
 
 
 # eltrovu atributon var el <rad resp. <tld
