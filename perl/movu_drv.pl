@@ -130,7 +130,7 @@ sub forigu_drv {
 
     if ($drv) {
       $drv->unbindNode();
-      return $drv;
+      return $drv->cloneNode(1);
     } else {
         die "Ne troviĝas drv $origmrk en la artikolo $origart\n";
     }
