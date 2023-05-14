@@ -53,7 +53,7 @@ my $doc;
 
 
 my $origart = mrk_art($origmrk);
-my $celart = mrk_art($celart);
+my $celart = mrk_art($celmrk);
 
 forigu_drv();
 #aldonu_drv($celart,$celmrk);
@@ -113,7 +113,7 @@ sub forigu_drv {
         print var_key($rad).": ".$rad->textContent()."\n" if ($debug);
     }
 
-    $novdrv = adaptu_drv($drv,$rad);
+    $novdrv = adaptu_drv($drv);
         
 #    # trovu kapojn de derivaĵoj kaj anstataŭigu tildojn
 #    for my $d ($doc->findnodes('//drv')) {
@@ -206,11 +206,9 @@ WRITE:
 
 # ŝanĝu drv el nuna al cel-artikolo
 sub adaptu_drv {
-    my ($drv,$rad) = @_;
+    my ($drv) = @_;
 
-    # KOREKTU: ni bezonas la radikon de la celartikolo, provizore ni uzas la doserinomon de la artikolo...!
-    $celrad = $celart;
-    $novmrk = adaptu_mrk($rad,$celrad);
+    $novmrk = adaptu_mrk();
 
     # trovu drv@mrk kaj enmetu ŝanĝitan markon...
     my $drv_mrk = $drv->findnodes('@mrk')->[0];
@@ -218,8 +216,9 @@ sub adaptu_drv {
 
     # trovu ĉiujn tildojn kaj enmatu la radikon anstataŭe...
     my @tld = $drv->findnodes('.//tld');
-    $rt = XML::LibXML::Text->new($rad);
     for $tld (@tld) {
+        my $rad = tldrad($tld);
+        my $rt = XML::LibXML::Text->new($rad);
         $tld->replaceNode($rt);
     }
 
@@ -229,10 +228,14 @@ sub adaptu_drv {
 
 # ŝanĝu mrk el nuna al cel-artikolo
 sub adaptu_mrk {
-    my ($rad,$celrad) = @_;
+    my ($celrad) = @_;
 
-    my @orig = split('.',$origmrk);
-    my @cel = split('.',$celmrk);
+    my $rad = $radikoj->{'_'};
+    my @orig = split(/\./,$origmrk);
+    my @cel = split(/\./,$celmrk);
+
+    # KOREKTU: ni bezonas la radikon de la celartikolo, provizore ni uzas la doserinomon...!
+    my $celrad = @cel[0];
 
     # la unuan parton ni anstataŭigu per la nova artikolo
     @orig[0] = @cel[0];
@@ -245,6 +248,19 @@ sub adaptu_mrk {
     }
 
     return join('.',@orig);
+}
+
+# redonas la radikan tekston respondan al la tildo
+# konsiderante ankaŭ ties atributojn @lit kja @var
+sub tldrad {
+    my ($tld) = @_;
+    my $lit = $tld->getAttribute('lit');
+    my $var = $tld->getAttribute('var') || '_';
+    my $rad = $radikoj->{$var};
+    if ($lit) {
+        $rad =~ s/^./$lit/;
+    }
+    return $rad;
 }
 
 
