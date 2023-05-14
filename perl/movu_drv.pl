@@ -191,6 +191,8 @@ sub adaptu_drv {
     print "drv: ".$drv."\n" if ($debug);
 }
 
+### PLIBONIGU: la traktoj de radikoj/tildoj ankoraŭ ne funkcias, se enestas supersignoj!
+# verŝajne ĉar ili estas unuo-nodoj kiel &ccirc;...
 
 # ŝanĝu mrk el nuna al cel-artikolo
 sub adaptu_mrk {
