@@ -154,6 +154,8 @@ sub aldonu_drv {
         print "...enmetas drv ".$drv->getAttribute('mrk')." post ".$celo->getAttribute('mrk')."\n" if ($verbose);
         my $p = $celo->parentNode;
         $p->insertAfter($drv,$celo);
+        # linirompo inter derivaĵoj
+        $p->insertAfter(XML::LibXML::Text->new("\n\n"),$celo);
     } else {
         die "Ne troviĝas drv $celmrk en la artikolo $celart\n";
     }
