@@ -131,6 +131,8 @@ sub forigu_drv {
     if ($drv) {
       $drv->unbindNode();
       return $drv;
+    } else {
+        die "Ne troviĝas drv $origmrk en la artikolo $origart\n";
     }
 }
 
@@ -150,7 +152,10 @@ sub aldonu_drv {
 
     if ($celo) {
         print "...enmetas drv ".$drv->getAttribute('mrk')." post ".$celo->getAttribute('mrk')."\n" if ($verbose);
-        $celo->parentNode->insertAfter($drv,$celo);
+        my $p = $celo->parentNode;
+        $p->insertAfter($drv,$celo);
+    } else {
+        die "Ne troviĝas drv $celmrk en la artikolo $celart\n";
     }
 }
 
