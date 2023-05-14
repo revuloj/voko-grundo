@@ -47,162 +47,88 @@ $celmrk = shift @ARGV;
 
 my $shanghoj = "revo: movu drv $origmrk al/sub $celmrk";
 
-my %radikoj;
-my %drvmap;
-my $doc;
-
-
+# enlegu la originan kaj la celan artikolojn
 my $origart = mrk_art($origmrk);
-my $celart = mrk_art($celmrk);
+my $origxml = XML::LibXML->load_xml(location => $origart, expand_entities=>0, keep_blanks=>1);
+my $origrad = art_radikoj($origxml);
 
-forigu_drv();
+my $celart = mrk_art($celmrk);
+my $celxml = XML::LibXML->load_xml(location => $celart, expand_entities=>0, keep_blanks=>1);
+my $celrad = art_radikoj($celxml);
+
+# forigu la derivaĵon el la originala artikolo
+my $drv = forigu_drv();
+
+# se tio funkciis, skribu la rezulton kaj enŝovu en la celan artikolon
+if ($drv) {
+    
+    skribu_art($origart,$origxml);
+
+    # adaptu la XML de la derivaĵo kaj enmetu en la nvoan artikolon
+    my $novdrv = adaptu_drv($drv);  
+
 #aldonu_drv($celart,$celmrk);
 #adaptu_refjn($origmrk,$celmrk?);
+}
 
+
+############ helpaj funkcioj.... #############
+
+# konstruas la dosiernomon el donita marko
 sub mrk_art {
     my $mrk = shift;
     $mrk =~ /^([^\.]+)(\.|$)/;
     return $xml_dir.$1.".xml";
 }
 
+sub art_radikoj {
+    my $xml = shift;
+    my $radikoj = {};
+
+    # trovu radikojn (inkluzive de var-iaĵoj) - ni bezonos poste por anst. tildojn
+    for my $rad ($xml->findnodes('//rad')) {
+        $radikoj->{var_key($rad)} = $rad->textContent();
+        print var_key($rad).": ".$rad->textContent()."\n" if ($debug);
+    }
+
+    return $radikoj;
+}
+
+sub skribu_art {
+    my ($art,$xml) = @_;
+
+    process::write_file(">",$art,$xml);
+
+    # nova versio
+    process::write_file(">","/tmp/shanghoj.msg",$shanghoj);
+    process::incr_ver($art,"/tmp/shanghoj.msg");
+
+    print "...$shanghoj\n" if ($verbose);
+}    
+
+
+# trovu kaj forigu la derivaĵon en la originala artikol,
+# kiel rezulto ni ricevas la XML-strukturon de la derivaĵo
 sub forigu_drv {
 
     # ni reskribos ĉion al la sama artikolo, kiam ni
     # uzas git-versiadon!
     my $artout = $origart; #.".out";
-    my $modified = 0;
 
     print "### ",uc($origart)," ###\n";
-
-    %radikoj = ();
-    %drvmap = ();
-
-    # load XML
-    # DTD devas troviĝi relative al la XML-pado: ../dtd/*.dtd
-    # alternative oni devus deklari ext_ent_handler
-    # kiel klarigita en https://metacpan.org/pod/distribution/XML-LibXML/lib/XML/LibXML/Parser.pod#Parser-Options
-    $doc = XML::LibXML->load_xml(location => $origart, expand_entities=>0, keep_blanks=>1);
-    #open my $fh, '<', $test_art;
-    #binmode $fh; # drop all PerlIO layers possibly created by a use open pragma
-    #my $doc = XML::LibXML->load_xml(IO => $fh, validation=>0, expand_entities=>0, keep_blanks=>1);
-
-    # nun ni povas uzi $doc (DOM) kiel klarigita en
-    # https://metacpan.org/pod/distribution/XML-LibXML/lib/XML/LibXML/Document.pod
-    # https://metacpan.org/pod/distribution/XML-LibXML/lib/XML/LibXML/Node.pod
-    # https://metacpan.org/pod/distribution/libxml-enno/lib/XML/DOM/NamedNodeMap.pod
 
     # trovu drv@mrk, forigu ĝin...
     my $drv_xpath = XML::LibXML::XPathExpression
       ->new(".//drv[\@mrk='$origmrk']");
-    my $drv = $doc->findnodes($drv_xpath)->[0];
-    $drv->unbindNode();
-    $modified = 1;
+    my $drv = $origxml->findnodes($drv_xpath)->[0];
 
-    # trovu art@mrk kaj altigu la version...
-#    my $art_mrk = $doc->findnodes('//art/@mrk')->[0];
-#    print ("nuna id: ".$art_mrk->value()."\n") if ($debug);
-#    my $new_id = incr_ver($art_mrk->value());
-#    $art_mrk->setValue($new_id);
-#    print ("nova id: ".$art_mrk->value()."\n") if ($debug);
-    ### $modified=1; goto WRITE;
-
-    # trovu radikojn (inkluzive de var-iaĵoj) - ni bezonos por anst. tildojn
-    my @rad = $doc->findnodes('//rad');
-    for my $rad (@rad) {
-        $radikoj->{var_key($rad)} = $rad->textContent();
-        print var_key($rad).": ".$rad->textContent()."\n" if ($debug);
+    if ($drv) {
+      $drv->unbindNode();
+      return $drv;
     }
+}
 
-    $novdrv = adaptu_drv($drv);
-        
-#    # trovu kapojn de derivaĵoj kaj anstataŭigu tildojn
-#    for my $d ($doc->findnodes('//drv')) {
-#        extract_kap($d);
-#    }
-#    print "drv: ".join(';',keys(%drvmap))."\n" if ($debug);
 
-    # Nun ni scias la kapvortojn kaj derivaĵon kaj povas modifi ĝin
-#    for my $k (keys(%drvmap)) {
-#        print "kap: |$k|...\n" if ($debug);
-#        my $t = $tradukoj->{$k};
-#        my $te;
-#
-#        if ($t) {
-#            print "- trd: $t\n" if ($debug);
-#
-#            my $drv = %drvmap{$k};
-#            my $inserted = 0;
-#            my $ignore = 0;
-#
-#            # unue ni kontrolu ĉu en la derivaĵo jam estas tradukoj de tiu lingvo
-#            # se jes ni ne tuŝos ĝin.
-#            my $trd_en_drv = $drv->find($trd_xpath);
-#            
-#            if ($trd_en_drv) {
-#
-#                # se jam enestas tradukoj ni ne aldonas...
-#                $ignore = 1;
-#                print "!!! jam enestas trd '$lingvo' !!!\n" if ($debug);
-#
-#            } else {
-#                # ne enestas jam tradukoj serĉu kie enŝovi la novan tradukon
-#
-#                # kreu <trd> aŭ <trdgrp>
-#                my @t = split(/\s*,\s*/,$t);
-#                my $te, $nl;
-#                if ($#t < 1) {
-#                    $te = make_trd($t);            
-#                } else {
-#                    $te = make_trdgrp(@t);
-#                }
-#                $nl = XML::LibXML::Text->new("\n  ");
-#
-#                for $ch ($drv->childNodes()) {
-#                    if ($ch->nodeName eq 'trd' || $ch->nodeName eq 'trdgrp') {
-#                        my $l = attr($ch,'lng');
-#
-#                        if ($l gt $lingvo) {
-#                            # aldonu novajn tradukojn antaŭ la nuna
-#                            $drv->insertBefore($te,$ch);
-#                            $drv->insertBefore($nl,$ch);
-#                            $inserted = 1;
-#                            $modified = 1;
-#
-#                            print "+ $te\n...\n" if ($debug);
-#                            last;
-#                        }                
-#                        print "  $ch\n" if ($debug);
-#                    }
-#                } # for
-#                if (! $inserted && ! $ignore) {
-#                    # aldonu fine, se ne jam antaŭe troviĝis loko por enŝovi
-#                    $drv->appendText("  ");
-#                    $drv->appendChild($te);
-#                    $drv->appendText("\n");
-#                    $modified = 1;
-#                }
-#            } # else
-#        }
-#    }
-
-    # nur skribu, se ni efektive ŝanĝis la artikolon, ĉar
-    # ankaŭ ŝanĝiĝas iom linirompado kaj kodado de unikodaj literoj en la XML
-WRITE:    
-    if ($modified) {
-#        open OUT, ">", $artout || die "Ne povas skribi al '$artout': $!\n";
-#        print OUT $doc;
-#        close OUT;
-        process::write_file(">",$artout,$doc);
-
-        # nova versio
-        process::write_file(">","/tmp/shanghoj.msg",$shanghoj);
-        process::incr_ver($artout,"/tmp/shanghoj.msg");
-
-        print "...$shanghoj\n" if ($verbose);
-    }
-}    
-
-############ helpaj funkcioj.... #############
 
 # ŝanĝu drv el nuna al cel-artikolo
 sub adaptu_drv {
@@ -230,7 +156,7 @@ sub adaptu_drv {
 sub adaptu_mrk {
     my ($celrad) = @_;
 
-    my $rad = $radikoj->{'_'};
+    my $rad = $origrad->{'_'};
     my @orig = split(/\./,$origmrk);
     my @cel = split(/\./,$celmrk);
 
@@ -256,7 +182,7 @@ sub tldrad {
     my ($tld) = @_;
     my $lit = $tld->getAttribute('lit');
     my $var = $tld->getAttribute('var') || '_';
-    my $rad = $radikoj->{$var};
+    my $rad = $origrad->{$var};
     if ($lit) {
         $rad =~ s/^./$lit/;
     }
@@ -285,41 +211,4 @@ sub make_el{
         $el->setAttribute( $key, $val);
     }
     return $el;
-}
-
-
-# trovu ĉiujn kapvortojn inkl. variaĵojn kaj referencu la derivaĵon ($node)
-# sub tiuj kapvortoj
-
-sub extract_kap {
-    my $node = shift;
-    my $res = '';
-
-    my $kap = ($node->findnodes('kap'))[0];
-    print "kap: ".$kap if ($debug);
-
-    for my $ch ($kap->childNodes()) {
-        # se la ido estas tildo, ni anstataŭigu per la koncerna radiko / variaĵo
-        if ($ch->nodeName eq 'tld') {            
-            print "\n".$radikoj->{var_key($ch)}."\n" if ($debug); 
-            $res .= $radikoj->{var_key($ch)}
-        # se temas pri variaĵo ni rikure vokas extract_kap por trakti ĝin
-        } elsif ($ch->nodeName eq 'var') {
-            my $var = extract_kap($ch);
-            # registru la derivaĵon ($node) sub la nomo $var
-            $drvmap{$var} = $node;
-        # tekstojn kaj literunuojn ni kolektas kiel tekstenhavo
-        } elsif ($ch->nodeType eq XML_TEXT_NODE || $ch->nodeType eq XML_ENTITY_REF_NODE) {
-            print $ch."\n" if ($debug);
-            my $cnt = $ch->textContent();
-            $cnt =~ s/,//g;
-            $res .= $cnt;
-        } else {
-            print "NT: ".$ch->nodeType."\n" if ($debug && $ch->nodeType ne XML_ELEMENT_NODE);
-        }
-    };
-    # registru la derivaĵon ($node) sub la kapvorto $res
-    $res =~ s/^\s+|\s+$//sg;
-    $drvmap{$res} = $node if ($node->nodeName() eq 'drv');
-    return $res;
 }
