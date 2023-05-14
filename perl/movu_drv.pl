@@ -65,10 +65,11 @@ if ($drv) {
     skribu_art($origart,$origxml);
 
     # adaptu la XML de la derivaĵo kaj enmetu en la nvoan artikolon
-    my $novdrv = adaptu_drv($drv);  
+    adaptu_drv($drv);  
+    aldonu_drv($drv);
+    skribu_art($celart,$celxml);
 
-#aldonu_drv($celart,$celmrk);
-#adaptu_refjn($origmrk,$celmrk?);
+    #adaptu_refjn($origmrk,$celmrk?);
 }
 
 
@@ -109,11 +110,7 @@ sub skribu_art {
 
 # trovu kaj forigu la derivaĵon en la originala artikol,
 # kiel rezulto ni ricevas la XML-strukturon de la derivaĵo
-sub forigu_drv {
-
-    # ni reskribos ĉion al la sama artikolo, kiam ni
-    # uzas git-versiadon!
-    my $artout = $origart; #.".out";
+sub forigu_drv {    
 
     print "### ",uc($origart)," ###\n";
 
@@ -128,7 +125,24 @@ sub forigu_drv {
     }
 }
 
+# trovu la lokon indikita kiel celo kaj enŝovu la derivaĵon tie
+sub aldonu_drv {
+    my $drv = shift;
+    my $celo; # kie enmeti la novan derivaĵon, t.e. post alia derivaĵo aŭ fine de la artikolo
 
+    if (index($celmrk,'.')>0) {
+        my $drv_xpath = XML::LibXML::XPathExpression
+        ->new(".//drv[\@mrk='$celmrk']");
+        $celo = $celxml->findnodes($drv_xpath)->[0];
+    } else {
+        # lasta drv-elemento
+        $celo = $celxml->findnodes('//drv')->[-1];
+    }
+
+    if ($celo) {
+        $celo->addSibling($drv);
+    }
+}
 
 # ŝanĝu drv el nuna al cel-artikolo
 sub adaptu_drv {
