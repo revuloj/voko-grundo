@@ -31,6 +31,7 @@ use process;
 use utf8;
 binmode(STDOUT, "encoding(UTF-8)");
 
+$verbose = 1;
 $debug = 1;
 
 unless ($#ARGV == 1) { # 1: tio estas du argumentoj
@@ -62,11 +63,12 @@ my $drv = forigu_drv();
 # se tio funkciis, skribu la rezulton kaj enŝovu en la celan artikolon
 if ($drv) {
     
-    skribu_art($origart,$origxml);
-
     # adaptu la XML de la derivaĵo kaj enmetu en la nvoan artikolon
     adaptu_drv($drv);  
     aldonu_drv($drv);
+
+    # skribu ambaŭ artikolojn
+    skribu_art($origart,$origxml);
     skribu_art($celart,$celxml);
 
     #adaptu_refjn($origmrk,$celmrk?);
@@ -140,13 +142,15 @@ sub aldonu_drv {
     }
 
     if ($celo) {
-        $celo->addSibling($drv);
+        print "...enmetas drv ".$drv->getAttribute('mrk')." post ".$celo->getAttribute('mrk')."\n" if ($verbose);
+        $celo->parentNode->insertAfter($drv,$celo);
     }
 }
 
 # ŝanĝu drv el nuna al cel-artikolo
 sub adaptu_drv {
     my ($drv) = @_;
+    @posttld = ();
 
     $novmrk = adaptu_mrk();
 
@@ -157,9 +161,24 @@ sub adaptu_drv {
     # trovu ĉiujn tildojn kaj enmatu la radikon anstataŭe...
     my @tld = $drv->findnodes('.//tld');
     for $tld (@tld) {
+        # memoru la nodon post la tildo, ĉar kutime ĝi enhavas
+        # la radikon $tld->nextSibling()de la celartikolo, kiun ni poste devas anstataŭigi per tildo
+        my $s = $tld->nextSibling();
+        push @posttld, ($s) if ($s && $s->nodeType eq XML_TEXT_NODE); # || ??? $n->nodeType eq XML_ENTITY_REF_NODE
+
+        # anstataŭigu la tildon per la ĝusta radiko
         my $rad = tldrad($tld);
         my $rt = XML::LibXML::Text->new($rad);
         $tld->replaceNode($rt);
+    }
+
+    # enmetu tildojn por la celartikolo
+    for $n (@posttld) {
+        my @nl = radtld($n->textContent);
+        if (@nl) {
+            insert_after($n,@nl);
+            $n->unbindNode();
+        }
     }
 
     print "drv: ".$drv."\n" if ($debug);
@@ -203,6 +222,24 @@ sub tldrad {
     return $rad;
 }
 
+# anstataŭigu radikoj de la celartikolo per tildo
+# kaj redoni kiel nodlisto
+sub radtld {
+    my $text = shift;
+    my @nl = ();
+    my $rad = $celrad->{'_'}; # provizore ni ignoras minuskligitajn/majuskligitajn variojn
+
+    my $i = index($text,$rad);
+    if ($i > -1) {
+        push @nl, (XML::LibXML::Text->new(substr($text,0,$i)));
+        push @nl, ($celxml->createElement('tld'));
+        push @nl, (XML::LibXML::Text->new(substr($text,$i+length($rad))));
+        return @nl;
+    }
+    return;
+}
+
+
 
 # eltrovu atributon var el <rad resp. <tld
 sub var_key {
@@ -225,4 +262,15 @@ sub make_el{
         $el->setAttribute( $key, $val);
     }
     return $el;
+}
+
+# aldonu pliajn XML-nodojn post la donita
+sub insert_after {
+    my $node = shift;
+    my @novaj = @_;
+
+    my $p = $node->parentNode;
+    for $n (reverse @novaj) {
+        $p->insertAfter($n,$node);
+    }
 }
