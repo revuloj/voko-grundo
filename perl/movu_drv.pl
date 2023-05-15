@@ -180,7 +180,7 @@ sub adaptu_drv {
         my $omrk = $origmrk;
         $omrk =~ s/\./\\./g;
         # apliku anstataŭigon
-        $mv =~ s/^$omrk(\..*)$/${novmrk}$2/;
+        $mv =~ s/^$omrk(\..*)$/${novmrk}$1/;
         $mrk->setValue($mv);
     }
 
