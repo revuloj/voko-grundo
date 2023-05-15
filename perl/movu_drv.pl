@@ -172,6 +172,19 @@ sub adaptu_drv {
     my $drv_mrk = $drv->findnodes('@mrk')->[0];
     $drv_mrk->setValue($novmrk);
 
+    # adaptu ankaŭ snc@mrk
+    # KOREKTU: aldonu poste same por subsnc@mrk!
+    my @snc_mrk = $drv->findnodes('snc/@mrk');
+    for my $mrk (@snc_mrk) {
+        my $mv = $mrk->getValue();
+        my $omrk = $origmrk;
+        $omrk =~ s/\./\\./g;
+        # apliku anstataŭigon
+        $mv =~ s/^$omrk(\..*)$/${novmrk}$2/;
+        $mrk->setValue($mv);
+    }
+
+
     # trovu ĉiujn tildojn kaj enmatu la radikon anstataŭe...
     my @tld = $drv->findnodes('.//tld');
     for $tld (@tld) {
@@ -271,7 +284,7 @@ sub anst_ref_art {
         $omrk =~ s/\./\\./g;
 
         # apliku anstataŭigojn
-        $chg += ($xml =~ s/cel\s*=\s*['"]$omrk["']/cel="$novmrk"/g);
+        $chg += ($xml =~ s/cel\s*=\s*(['"])$omrk(["'\.])/cel=$1${novmrk}$2/g);
 
         if ($chg) {
             skribu_art($art,$xml);
