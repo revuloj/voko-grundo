@@ -1,11 +1,11 @@
 
 /* jshint esversion: 6 */
 
-// (c) 2020 - 2022 Wolfram Diestel
-// laŭ GPL 2.0
+// (c) 2020 - 2023 Wolfram Diestel
+// laŭ permesilo GPL 2.0
 
 
-// statoj kaj transiroj
+// statoj kaj transiroj - ni uzas tri diversajn statomaŝinojn por la tri paĝoj navigilo, ĉefpago kaj redaktilo
 const t_nav  = new Transiroj("nav","start",["ĉefindekso","subindekso","serĉo","redaktilo"]);
 const t_main = new Transiroj("main","start",["titolo","artikolo","red_xml","red_rigardo"]);
 const t_red  = new Transiroj("red","ne_redaktante",["ne_redaktante","redaktante","tradukante","sendita"]);
@@ -221,7 +221,7 @@ when_doc_ready(function() {
                 load_page("main",art_url);   
                 load_page("nav",globalThis.inx_eo_url);   
             } else if (srch) {
-                // ĉe URL-parametro 'q' ni tuj lanĉu serĉon
+                // ĉe URL-parametro '?q=' ni tuj lanĉu serĉon
                 // ni devas certigi, ke la naviga kaj titolpaĝo antaŭ la
                 // serĉo ŝargiĝu, por ke depende de la rezulto la vortaro 
                 // tamen aperu bona! Tial la ĉenigo!
@@ -260,13 +260,6 @@ when_doc_ready(function() {
         });
         //t_nav.je("x:nav_srch_btn","click","serĉo");
 
-        /*
-        onclick("x:redakt_btn",()=>{ 
-            show("r:tab_txmltxt",'collapsed');
-            hide("r:tab_trigardo",'collapsed');
-            //...
-        });
-        */
         onclick("x:redakt_btn",()=>{ 
             if (t_nav.stato != "redaktilo")
                 load_page("nav",globalThis.redaktmenu_url);
@@ -283,13 +276,6 @@ when_doc_ready(function() {
         });
         //t_main.je("x:redakt_btn","click","red_xml");
 
-        /*
-        onclick("x:rigardo_btn",()=>{ 
-            hide("r:tab_txmltxt",'collapsed');
-            show("r:tab_trigardo",'collapsed');
-            redaktilo.rantaurigardo();
-        });
-        */
         onclick("x:rigardo_btn",()=>{ t_main.transiro("red_rigardo"); });
         //t_main.je("x:rigardo_btn","click","red_rigardo");
 
@@ -345,9 +331,10 @@ when_doc_ready(function() {
         // tio vokiĝas, i.a. kiam la uzanto reŝargas la paĝon aŭ fermas la redaktilon.
         do_before_unload(aktualigilo);
 
-        // kondiĉe, ke serĉo-parametro (q) estis donita en URL ni tuj sercos
+        // kondiĉe, ke serĉo-parametro (q) estis donita en URL ni tuj serĉos
         // ĉu ni bezonos ankoraŭ originan staton "start" anstataŭ tuj "ĉefindekso"?
-        t_nav.transiro("ĉefindekso","serĉo"); // ĉu parametro ?q= estis donita, devus testi la stato-maŝino per la pli supra difino kun gardo
+        t_nav.transiro("ĉefindekso","serĉo"); // ĉu parametro ?q= estis donita
+            // (tion fakte jam devus testi la stato-maŝino 't_nav' per la pli supra difino kun gardo)
 
     }
 });
