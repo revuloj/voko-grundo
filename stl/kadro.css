@@ -91,7 +91,7 @@ nav {
     padding: .1em .3em; 
     overflow: auto;
     scrollbar-color: var(--nav-brd-clr) var(--nav-bgr-clr);
-    scrollbar-width: thin;
+    /*scrollbar-width: thin; */
 
     /*width: 100%;*/ /* prenu tutan spacon de nav, kaj lasu al tiu
                 difini la larĝecon! */
@@ -320,7 +320,7 @@ nav a:active {
 #submetoj {
     max-width: var(--nav-enh-width);
     font-family: sans-serif;
-    line-height: 150%;
+    line-height: 180%;
     color: var(--nav-enh-fnt-clr);
 }
 
@@ -345,6 +345,17 @@ nav a:active {
     font-size: 150% !important;
     line-height: 120%;
     vertical-align: text-top;
+}
+
+#navigado .enhavo a[target='precipa']::before {
+    content: "\2022\00a0";
+    color: #222;
+}
+
+#navigado .enhavo u {
+    text-decoration-style: dotted;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.1em;
 }
 
 #navigado .enhavo *[lang='zh'] {
