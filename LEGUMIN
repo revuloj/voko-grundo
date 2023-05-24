@@ -1,4 +1,7 @@
-Ĝeneralaj informoj estas end README.md kaj en Viki-paĝoj ĉe la Github-projekto
+Ĝeneralaj informoj estas en README.md kaj en Viki-paĝoj ĉe la Github-projekto
+
+Por helpi fari programi kaj fari novajn eldonojn vi povas uzi la skriptojn `bin/eldono.sh` 
+kaj `bin/deplojo.sh`. Vd. README.md pri detaloj.
 
 Eventuala problemoj
 -------------------

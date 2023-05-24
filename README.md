@@ -134,3 +134,12 @@ git push --tags
 git -d <ELD>
 git push --delete origin <ELD>
 ```
+
+5. Uzi la procezujon kun projektoj voko-araneo kaj voko-cetonio
+
+La retservo voko-areno kaj la redaktilo voko-cetonio baziĝas sur la kompilita enhavo de voko-grundo.
+Por ke ili povu atingi la enhavon ili elŝutas la procezujon kutime de Github-pakaĵajo `ghcr`. Do vi devas unue krei eldono de voko-grundo kaj pusi la enhavon al Github. Tie la skripto `.github/workflows/docker-push.yml` aŭtomate kreas novan pakaĵon  kun la donita eldonnumero.
+
+Alternative vi povas loke kompili per `bin/eldono kreo` kaj doni la kompletan nomon, kiun donus Github al la procezujo per `docker tag...`.
+
+La du menciitaj projektoj havas saman eldon-skripton por krei akordan eldonnumeron. Por funkciigi ilin loke prefere uzu la konfigurojn el la projekto `revo-medioj`. Kiam la aplikaĵoj ekfunkcias loke, vi povas deploji ŝanĝojn, kiujn vi programis, ekz-e de JS, CSS, XSL al la kurantaj aplikaĵoj per la diversajn celoj troviĝantaj en la skripto `bin/deplojo.sh`, ekz-e `bin/deplojo.sh araneo:debug`.
