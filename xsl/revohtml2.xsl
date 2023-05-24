@@ -46,7 +46,7 @@ transform-reguloj
 <xsl:variable name="jscdir">../jsc</xsl:variable>
 <xsl:variable name="hstdir">../hst</xsl:variable>
 
-<xsl:variable name="redcgi">/cgi-bin/vokomail.pl?art=</xsl:variable>
+<xsl:variable name="redcgi">../index.html?r=</xsl:variable>
 <xsl:variable name="vivocgi">http://kono.be/cgi-bin/vivo/ViVo.cgi?tradukiReVon=</xsl:variable>
 <xsl:variable name="bibliogrhtml">../dok/bibliogr.html</xsl:variable>
 <xsl:variable name="revo">/home/revo/revo</xsl:variable>

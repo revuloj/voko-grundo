@@ -992,7 +992,7 @@ var redaktilo = function() {
    * @param {string} params - HTTP-parametroj, ni ekstraktas parametron 'art', kiu donas la dosiernomon de la artikolo
    */
   function load_xml(params) {
-    var art = getParamValue("art",params);
+    var art = getParamValue("art",params) || getParamValue("r",params);
 
     function replace_entities(data) {
         return data.replace(/&[^;\s]+;/g, function (ent) {
