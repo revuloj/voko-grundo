@@ -1,3 +1,5 @@
+-- skemo por datumbazo de redaktantoj, uzata de Cetonio
+
 CREATE TABLE redaktanto (
   red_id VARCHAR(20) PRIMARY KEY NOT NULL,
   nomo VARCHAR(100) NOT NULL,

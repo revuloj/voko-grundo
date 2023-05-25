@@ -1,8 +1,17 @@
+-- skemo uzata de Cetonio kiel serĉindekso 
+-- kaj de Formiko por regule krei tian indeks-datumbazon por Cetonio
+
 CREATE TABLE nodo (
   mrk TEXT PRIMARY KEY NOT NULL,
   art TEXT NOT NULL,
   kap TEXT NOT NULL,
   num VARCHAR(5)
+);
+
+CREATE TABLE var (
+  mrk TEXT NOT NULL,
+  kap TEXT NOT NULL,
+  var VARCHAR(5)
 );
 
 CREATE TABLE traduko (
