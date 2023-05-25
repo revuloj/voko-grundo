@@ -61,6 +61,23 @@ CREATE TABLE agordo (
 INSERT INTO agordo (nomo,valoro)
 VALUES('kreotempo',datetime('now'));
 
+
+CREATE VIEW _kap AS
+SELECT
+  nodo.kap AS kap,
+  nodo.mrk AS mrk,
+  nodo.art As art,
+  nodo.num AS dis
+FROM nodo
+UNION
+SELECT
+  var.kap AS kap,
+  var.mrk AS mrk,
+  nodo.art AS art,
+  var.var AS dis
+FROM var, nodo
+WHERE nodo.mrk = var.mrk;
+
 CREATE VIEW _eo AS
 SELECT
   nodo.kap AS eo,

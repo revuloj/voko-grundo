@@ -242,7 +242,7 @@ INSERT INTO nodo(mrk,art,kap,num) VALUES('</xsl:text>
   <xsl:param name="mrk"/>
 <xsl:text>
 
-INSERT INTO var(mrk,kap,num) VALUES('</xsl:text>
+INSERT INTO var(mrk,kap,var) VALUES('</xsl:text>
 <xsl:value-of select="$mrk"/>
 <xsl:text>','</xsl:text>
 <xsl:apply-templates select="kap"/>
