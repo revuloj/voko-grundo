@@ -1,0 +1,85 @@
+
+==== compile-css.sh ====
+
+
+==== compile-dok.sh ====
+
+
+==== compile-jscript.sh ====
+
+
+==== deplojo ====
+
+ | Kompilas partojn de la kodo (precipe uzante komandojn npm run <celo>) kaj
+ | deplojas ilin en lokan procezujon
+
+ Voku kiel:
+    depolojo <celo>
+
+ kie <celo> estas unu el la sekvaj:
+     araneo       : kompilas kaj deplojas JS + CSS al loka Araneo
+     araneo:debug : kompilas kaj deplojas legeblan (sencimigeblan) JS + CSS al loka Araneo
+     araneo-dtd   : deplojas DTD al loka Araneo
+     araneo-xsl   : deplojas XSL al loka Araneo
+     cetonio      : kompilas kaj deplojas JS + CSS al loka Cetonio
+     cetonio:debug: kompilas kaj deplojas legeblan (sencimigeblan) JS + CSS al loka Cetonio
+     cetonio.xsl  : deplojas XSL al loka Cetonio
+     formiko-xsl  : deplojas XSL al loka Formiko
+     manlibro     : kompilas manlibron pri XML-skemo (Relax-NG) al formato markdown
+     helpo        : baza informo
+
+==== eldono ====
+
+ | Subtenas prepari kaj publikigi eldonojn
+
+ Voku kiel:
+    eldono <celo>
+
+ kie <celo> estas unu el la sekvaj:
+     servilo    : kompilas kaj transsendas JS+CSS al la publika servilo
+     preparo    : preparas novan eldonon. Antaŭe kreu branĉon kun la nomo de la eldono
+                  kaj adaptu la parametrojn eldono kaj nodo_eldono en ambaŭ skriptoj 'eldono' kaj 'deplojo'
+     kreo       : kompilas la procezujon voko-grundo, kies rezultoj estas bezonataj de aliaj
+                  procezujoj Araneo, Cetonio, Formiko    
+     etikedo    : puŝas la lastajn ŝanĝojn al Github ŝovante la eldonetikedon tiel,
+                  ke en Github kompiliĝu nova aktuala pakaĵo
+     xsl        : transsendas la precipajn XSL-dosierojn donitajn en la komandlinio al la publika servilo
+     xsl-inc    : transsendas la inkluziveblajn, t.e. sub-XSL-dosierojn el xsl/inc,
+                  donitajn en la komandlinio, al la publika servilo
+     smb        : transsendas la simbolojn donitajn en la komandlinio al la publika servilo
+     artikoloj  : transsendas la artikolojn (HTML) donitajn en la komandlinio al la publika servilo    
+     historioj  : transsendas la artikolo-hisotriojn (HTML) donitajn en la komandlinio al la publika servilo    
+     indeksoj   : transsendas la indkesojn (HTML) donitajn en la komandlinio al la publika servilo    
+     fontoj     : transsendas la artikol-fontojn (XML) donitajn en la komandlinio al la publika servilo    
+     helpo      : baza informo  
+
+==== helpo ====
+
+ | Elfiltras helpinformojn el la diversaj komanddosieroj
+
+ - Sen argumento ĝi listigas koncizajn informojn pri la unuopaj skriptoj
+   trovitaj en dosierujo respektiva ./bin (relative al aktuala situo)
+ - Kun skriptnomo kiel argumento ĝi montras helpinformojn pri ĝuste tiu
+ - Kun argumento 'komandoj' kreiĝas dosiero LEGUMIN kun helpinformoj 
+   pri la skriptoj en ./bin
+
+==== indekso_trovu.sh ====
+
+
+==== mp2png_svg.sh ====
+
+
+==== svg2css.sh ====
+
+
+==== svg2woff.ff ====
+
+
+==== svg-stroke2path-all.sh ====
+
+
+==== svg-stroke-to-path.sh ====
+
+
+==== xsl-testo ====
+
