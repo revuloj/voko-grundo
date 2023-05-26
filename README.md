@@ -54,7 +54,7 @@ alinomojn por literoj, libroj de la biblio ks.
 La centraj dosieroj el voko-grundo (agordo, DTD, XSL, vinjetoj) estas uzataj de pluraj aliaj subprojektoj kaj ties procezujoj, aparte: voko-formiko (la redaktoservo), voko-araneo (la vortara retpaĝaro), voko-cetonio (la komforta redaktilo). Eldonoj de tiuj povas referenci al certa eldono de voko-grundo (precipe en ties Dockerfile).
 Kelkaj uzas nur la kunpakitan font-arĥivon de voko-grundo, kelkaj la procezujon ĉar ili bezonas ankaŭ kompilaĵon (CSS, JS, vinjetoj).
 
-Helpas la skripto bin/eldono.sh kaj bin/deplojo.sh por organizi la novan eldonon. Eldono kreiĝas en sia aparta git-branĉo, kiun vi kreas komence. Eldonojn ni nomas cifero+litero, ekzemple `2f`, sed malsupre montras per ĵokero `<ELD>`. La eldonnumero aperas en pluraj fontdosiero. La eldono por la pakaĵo `nodejs` tamen toleras nur ciferojn,
+Helpas la skripto `bin/eldono` kaj `bin/deplojo` por organizi la novan eldonon. Eldono kreiĝas en sia aparta git-branĉo, kiun vi kreas komence. Eldonojn ni nomas cifero+litero, ekzemple `2f`, sed malsupre montras per ĵokero `<ELD>`. La eldonnumero aperas en pluraj fontdosiero. La eldono por la pakaĵo `nodejs` tamen toleras nur ciferojn,
 do ni tradukas la literon al cifero en la tria pozicio: `2f` => `2.0.6`. 
 La celo `preparo` poste aŭtomate aktualigas ilin en la fontodosieroj.
 
@@ -69,11 +69,11 @@ git checkout -b <ELD>
 
 Prepari la eldonon, skribante la nomon supre en la helpskriptojn:
 ```
-vi bin/eldono.sh
+vi bin/eldono
 release=<ELD>
 node_release=<ELDn>
 
-vi bin/deplojo.sh
+vi bin/deplojo
 release=<ELD>
 node_release=<ELDn>
 ```
@@ -81,7 +81,7 @@ node_release=<ELDn>
 Aktualigu la novan eldonnumeron en diversajn fontdosierojn:
 
 ```
-bin/eldono.sh preparo
+bin/eldono preparo
 ```
 
 2. Fari kaj konservi ŝanĝojn por la nova eldono
@@ -89,7 +89,7 @@ bin/eldono.sh preparo
 Faru ĉiujn bezonatajn ŝanĝojn en la kodo. Kompletan novan procezujon `voko-grundo` vi povas krei loke per:
 
 ```
-bin/eldono.sh kreo
+bin/eldono kreo
 ```
 
 Kutime vi volas nur kompili kaj elprovi novan JS/CSS k.s. vi uzos por tio la diversajn celojn en `package.json`, ekz-e:
@@ -103,8 +103,8 @@ La skripto `bin/deplojo.sh` helpas rekompili kaj kopii la rezulton al loka proce
 (vd. `revo-medioj/araneujo` kaj `revo-medioj/cetoniujo` k.a.) 
 Por povi tuj elprovi ŝanĝojn loke, enrigardu tiun skripton por pliaj detaloj.
 ```
-bin/deplojo.sh araneo:debug
-bin/deplojo.sh cetonio:debug
+bin/deplojo araneo:debug
+bin/deplojo cetonio:debug
 ```
 
 Por sendi viajn ŝanĝojn al la centra deponejo,
@@ -120,7 +120,7 @@ git push --set-upstream origin <ELD>
 Donu aŭ ŝovu etikedon `<ELD>` al la nuna stato de la kodo.
 Tio puŝas la etikedon ankaŭ al github kaj tie kreiĝas nova procezujo kun tiu etikedo (vd. ago-skripton sub `.github/workflows`)
 ```
-bin/eldono.sh etikedo
+bin/eldono etikedo
 ```
 
 4. Integrigi la eldonon en la ĉefan branĉon
@@ -142,4 +142,4 @@ Por ke ili povu atingi la enhavon ili elŝutas la procezujon kutime de Github-pa
 
 Alternative vi povas loke kompili per `bin/eldono kreo` kaj doni la kompletan nomon, kiun donus Github al la procezujo per `docker tag...`.
 
-La du menciitaj projektoj havas saman eldon-skripton por krei akordan eldonnumeron. Por funkciigi ilin loke prefere uzu la konfigurojn el la projekto `revo-medioj`. Kiam la aplikaĵoj ekfunkcias loke, vi povas deploji ŝanĝojn, kiujn vi programis, ekz-e de JS, CSS, XSL al la kurantaj aplikaĵoj per la diversajn celoj troviĝantaj en la skripto `bin/deplojo.sh`, ekz-e `bin/deplojo.sh araneo:debug`.
+La du menciitaj projektoj havas saman eldon-skripton por krei akordan eldonnumeron. Por funkciigi ilin loke prefere uzu la konfigurojn el la projekto `revo-medioj`. Kiam la aplikaĵoj ekfunkcias loke, vi povas deploji ŝanĝojn, kiujn vi programis, ekz-e de JS, CSS, XSL al la kurantaj aplikaĵoj per la diversajn celoj troviĝantaj en la skripto `bin/deplojo`, ekz-e `bin/deplojo araneo:debug`.
