@@ -49,7 +49,7 @@ COMMIT;
   <xsl:apply-templates select="drv|subdrv|snc|subsnc"/>
 </xsl:template>
 
-
+<!-- derivaĵo kun nur unu senco, ni kreas nur unu nodon por la derivaĵo -->
 <xsl:template match="drv[count(snc)=1]">
 <xsl:variable name="mrk" select="@mrk"/>
 <xsl:text>
@@ -60,7 +60,18 @@ INSERT INTO nodo(mrk,art,kap,num) VALUES('</xsl:text>
 <xsl:call-template name="art-mrk"><xsl:with-param name="mrk" select="$mrk"/></xsl:call-template>
 <xsl:text>','</xsl:text>
 <xsl:apply-templates select="ancestor-or-self::node()[self::art or self::drv][kap][1]/kap"/>
-<xsl:text>',NULL);</xsl:text>  
+<xsl:text>',NULL);</xsl:text>
+
+
+  <!-- variaĵoj -->
+  <xsl:for-each select="kap/var">
+      <xsl:call-template name="var">
+        <xsl:with-param name="mrk" select="$mrk"/>
+      </xsl:call-template>
+  </xsl:for-each>
+
+
+<!-- nun traktu uzo, trd, ref, snc/subsnc ... -->
 
   <xsl:for-each select="uzo|stl">
     <xsl:call-template name="uzo">
@@ -90,7 +101,7 @@ INSERT INTO nodo(mrk,art,kap,num) VALUES('</xsl:text>
 
 </xsl:template>
 
-
+<!-- derivaĵo kun pluraj sencoj aŭ snc/subsnc -->
 <xsl:template match="drv[count(snc)!=1]|snc|subsnc">
 <xsl:variable name="mrk">
   <xsl:call-template name="tez-mrk-n"/>
@@ -109,6 +120,16 @@ INSERT INTO nodo(mrk,art,kap,num) VALUES('</xsl:text>
 </xsl:if>
 <xsl:text>');</xsl:text>
 
+
+  <!-- variaĵoj -->
+  <xsl:for-each select="kap/var">
+      <xsl:call-template name="var">
+        <xsl:with-param name="mrk" select="$mrk"/>
+      </xsl:call-template>
+  </xsl:for-each>
+
+
+<!-- nun traktu uzo, trd, ref, snc/subsnc ... -->
   <xsl:for-each select="uzo|stl">
     <xsl:call-template name="uzo">
       <xsl:with-param name="mrk" select="$mrk"/>
@@ -138,15 +159,19 @@ INSERT INTO nodo(mrk,art,kap,num) VALUES('</xsl:text>
 </xsl:template>
 
 
+
+<!-- snc-numero -->
 <xsl:template match="snc" mode="number-of-ref-snc">
   <xsl:number from="drv|subart" level="any" count="snc"/>
 </xsl:template>
 
+<!-- subsnc-numero -->
 <xsl:template match="subsnc" mode="number-of-ref-snc">
   <xsl:number from="drv|subart" level="multiple" count="snc|subsnc"
     format="1.a"/>
 </xsl:template>
 
+<!-- tezaŭro-marko -->
 <xsl:template name="tez-mrk-n">
    <xsl:choose>
       <xsl:when test="@mrk">
@@ -166,7 +191,7 @@ INSERT INTO nodo(mrk,art,kap,num) VALUES('</xsl:text>
   <!-- <xsl:number from="drv|subart" level="multiple" count="snc|subsnc" format="1.a"/> -->
 </xsl:template>
 
-
+<!-- artikol-marko -->
 <xsl:template name="art-mrk">
   <xsl:param name="mrk"/>
   <xsl:choose>
@@ -181,30 +206,53 @@ INSERT INTO nodo(mrk,art,kap,num) VALUES('</xsl:text>
 
 <!-- xsl:template match="snc|subsnc"/ --> <!-- ignoru sen @mrk -->
 
-
+<!-- kapvorto -->
 <xsl:template match="kap">
    <xsl:variable name="kap"><xsl:apply-templates select="text()|rad|tld"/></xsl:variable>
    <xsl:value-of select="normalize-space(replace(translate($kap,'/,',''),'''',''''''))"/> 
 <!--  <xsl:value-of select="normalize-space(translate($kap,'/,',''))"/> -->
 </xsl:template>
 
+<!-- tildo -->
 
 <xsl:template match="tld">
+  <xsl:variable name="rad">
+    <xsl:choose>
+      <xsl:when test="@var">
+        <xsl:value-of select="ancestor::art/kap/var/kap/rad[@var=current()/@var]"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="ancestor::art/kap/rad"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
   <xsl:choose>
-
     <xsl:when test="@lit">
-      <xsl:value-of select="concat(@lit,substring(ancestor::art/kap/rad,2))"/>
+      <xsl:value-of select="concat(@lit,substring($rad,2))"/>
     </xsl:when>
-
     <xsl:otherwise>
-      <xsl:value-of select="ancestor::art/kap/rad"/>
+      <xsl:value-of select="$rad"/>
     </xsl:otherwise>
-
   </xsl:choose>
 </xsl:template>
 
 
+<!-- variaĵo -->
+<xsl:template name="var">
+  <xsl:param name="mrk"/>
+<xsl:text>
 
+INSERT INTO var(mrk,kap,var) VALUES('</xsl:text>
+<xsl:value-of select="$mrk"/>
+<xsl:text>','</xsl:text>
+<xsl:apply-templates select="kap"/>
+<xsl:text>','</xsl:text>
+<xsl:apply-templates select="kap/tld/@var"/>
+<xsl:text>');</xsl:text>
+</xsl:template>
+
+
+<!-- uzo -->
 <xsl:template name="uzo">
   <xsl:param name="mrk"/>
 <xsl:text>                                                                                                                   
@@ -219,7 +267,7 @@ INSERT INTO uzo(mrk,tip,uzo) VALUES('</xsl:text>
 
 
 
-
+<!-- traduko -->
 <xsl:template name="traduko">
   <xsl:param name="mrk"/>
 <xsl:text>                                                                                                             
@@ -253,7 +301,7 @@ INSERT INTO traduko(mrk,lng,trd,txt) VALUES('</xsl:text>
   </xsl:choose>
 </xsl:template>
 
-
+<!-- referenco -->
 <xsl:template name="referenco">
   <xsl:param name="mrk"/>
 <xsl:text>                                                                                                                   

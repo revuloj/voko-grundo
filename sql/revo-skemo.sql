@@ -1,8 +1,17 @@
+-- skemo uzata de Cetonio kiel serĉindekso 
+-- kaj de Formiko por regule krei tian indeks-datumbazon por Cetonio
+
 CREATE TABLE nodo (
   mrk TEXT PRIMARY KEY NOT NULL,
   art TEXT NOT NULL,
   kap TEXT NOT NULL,
   num VARCHAR(5)
+);
+
+CREATE TABLE var (
+  mrk TEXT NOT NULL,
+  kap TEXT NOT NULL,
+  var VARCHAR(5)
 );
 
 CREATE TABLE traduko (
@@ -51,6 +60,23 @@ CREATE TABLE agordo (
 );
 INSERT INTO agordo (nomo,valoro)
 VALUES('kreotempo',datetime('now'));
+
+
+CREATE VIEW _kap AS
+SELECT
+  nodo.kap AS kap,
+  nodo.mrk AS mrk,
+  nodo.art As art,
+  nodo.num AS dis
+FROM nodo
+UNION
+SELECT
+  var.kap AS kap,
+  var.mrk AS mrk,
+  nodo.art AS art,
+  var.var AS dis
+FROM var, nodo
+WHERE nodo.mrk = var.mrk;
 
 CREATE VIEW _eo AS
 SELECT
