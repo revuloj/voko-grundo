@@ -1,9 +1,16 @@
 #!/bin/bash
 
-# eldonas kadrajn paĝojn, sendante ilin al la publika servilo
-# tio estas iom provizora solvo, kiun necesas plibonigi poste.
-#
-# jen kelkaj informoj kiel eviti plurfoje doni la pasvorton por scp:
+## | Kompilas partojn de la kodo (precipe uzante komandojn npm run <celo>) kaj
+## | deplojas ilin en lokan procezujon
+##
+## Voku kiel:
+##    depolojo <celo>
+##
+## kie <celo> estas unu el la sekvaj:
+
+
+# Por eviti, ke uzante scp necesus ripete tajpi pasvorton, 
+# jen kelkaj informoj kiel agordi tion:
 # https://linux.101hacks.com/unix/ssh-controlmaster/
 # + ControlPersist 2m
 # http://blogs.perl.org/users/smylers/2011/08/ssh-productivity-tips.html
@@ -15,6 +22,7 @@ release=2i
 node_release=2.0.9
 revo=${host}:www/revo
 files=${host}:files
+
 
 # ni komprenas preparo | docker | servilo kaj supozas "docker", se nenio donita argumente
 # por specialaj okazoj ni povas kopii ankaŭ dosierojn el loka Revo-versio al la servilo
@@ -36,10 +44,12 @@ PACKG=package.json
 
 case $target in
 araneo)
+    ## araneo       : kompilas kaj deplojas JS + CSS al loka Araneo
     npm run build:js
     npm run build:css
     ;;&
 araneo:debug)
+    ## araneo:debug : kompilas kaj deplojas legeblan (sencimigeblan) JS + CSS al loka Araneo
     npm run build:js:debug
     npm run build:css
     ;;&
@@ -51,6 +61,7 @@ araneo|araneo:debug)
     docker cp -q ${CSS} ${araneo_id}:${todir}/stl
     ;;
 araneo-dtd)
+    ## araneo-dtd   : deplojas DTD al loka Araneo
     araneo_id=$(docker ps --filter name=araneujo_araneo -q)
     todir=/usr/local/apache2/htdocs/revo/dtd
     echo "kopiante DTD al ${araneo_id}:${todir}..."
@@ -60,6 +71,7 @@ araneo-dtd)
     done
     ;;    
 araneo-xsl)
+    ## araneo-xsl   : deplojas XSL al loka Araneo
     araneo_id=$(docker ps --filter name=araneujo_araneo -q)
     xsldir=/hp/af/ag/ri/files/xsl
     incdir=/hp/af/ag/ri/files/xsl/inc
@@ -75,10 +87,12 @@ araneo-xsl)
     done
     ;;    
 cetonio)
+    ## cetonio      : kompilas kaj deplojas JS + CSS al loka Cetonio
     npm run build:rsj
     npm run build:rsc
     ;;&
 cetonio:debug)
+    ## cetonio:debug: kompilas kaj deplojas legeblan (sencimigeblan) JS + CSS al loka Cetonio
     npm run build:rsj:debug
     npm run build:rsc
     ;;&
@@ -90,6 +104,7 @@ cetonio|cetonio:debug)
     docker cp ${RSC} ${cetonio_id}:${todir}/web/static
     ;;
 cetonio-xsl)
+    ## cetonio.xsl  : deplojas XSL al loka Cetonio
     cetonio_id=$(docker ps --filter name=cetoniujo_cetonio -q)
     xsldir=/home/cetonio/voko/xsl
     incdir=/home/cetonio/voko/xsl/inc
@@ -105,6 +120,7 @@ cetonio-xsl)
     done
     ;;        
 formiko-xsl)
+    ## formiko-xsl  : deplojas XSL al loka Formiko
     formiko_id=$(docker ps --filter name=formikujo_formiko -q)
     xsldir=/home/formiko/voko/xsl
     incdir=/home/formiko/voko/xsl/inc
@@ -120,6 +136,7 @@ formiko-xsl)
     done
     ;;        
 manlibro)
+    ## manlibro     : kompilas manlibron pri XML-skemo (Relax-NG) al formato markdown
     echo "aktuligi RNC-manlibron..."
     perl perl/rnc2md.pl > ../revuloj.github.io/_temoj/rnc.md
     ;;
@@ -127,6 +144,7 @@ manlibro)
     echo "Nevalida celo, enrigaru ĉi-skripton por vidi la eblajn celojn, ekz-e araneo:debug)"    
     ;;&
 helpo|*)
+    ## helpo        : baza informo
     echo "---------------------------------------------------------------------------"
     echo "Tiu ĉi skripto servas por sendi loke preparitajn dosierojn"
     echo "en la docker-procezujojn, por elprovi kaj sencimigi ilin tie."

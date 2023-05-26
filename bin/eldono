@@ -1,8 +1,13 @@
 #!/bin/bash
 
-# eldonas kadrajn paĝojn, sendante ilin al la publika servilo
-# tio estas iom provizora solvo, kiun necesas plibonigi poste.
-#
+## | Subtenas prepari kaj publikigi eldonojn
+##
+## Voku kiel:
+##    eldono <celo>
+##
+## kie <celo> estas unu el la sekvaj:
+
+
 # jen kelkaj informoj kiel eviti plurfoje doni la pasvorton por scp:
 # https://linux.101hacks.com/unix/ssh-controlmaster/
 # + ControlPersist 2m
@@ -29,6 +34,7 @@ PACKG=package.json
 
 case $target in
 servilo)
+    ## servilo    : kompilas kaj transsendas JS+CSS al la publika servilo
     # ĉu ni supozu, ke ni jam kompilis JS kaj CSS ...? 
     npm run build:js
     npm run build:css
@@ -36,6 +42,8 @@ servilo)
     scp ${CSS} ${revo}/stl
     ;;
 preparo)
+    ## preparo    : preparas novan eldonon. Antaŭe kreu branĉon kun la nomo de la eldono
+    ##              kaj adaptu la parametrojn eldono kaj nodo_eldono en ambaŭ skriptoj 'eldono' kaj 'deplojo'
     # kontrolu ĉu la branĉo kongruas kun la agordita versio
     branch=$(git symbolic-ref --short HEAD)
     if [ "${branch}" != "${release}" ]; then
@@ -51,43 +59,56 @@ preparo)
     sed -i 's/"version": "[1-9].[0-9].[1-9]"/"version": "'${node_release}'"/' ${PACKG}
     ;;
 kreo)
+    ## kreo       : kompilas la procezujon voko-grundo, kies rezultoj estas bezonataj de aliaj
+    ##              procezujoj Araneo, Cetonio, Formiko    
     echo "Kreante lokan procezujon (por docker) voko-grundo"
     docker build -t voko-grundo .
     ;;    
 etikedo)
+    ## etikedo    : puŝas la lastajn ŝanĝojn al Github ŝovante la eldonetikedon tiel,
+    ##              ke en Github kompiliĝu nova aktuala pakaĵo
     echo "Provizante la aktualan staton per etikedo (git tag) v${release}"
     echo "kaj puŝante tiun staton al la centra deponejo"
     git tag -f v${release} && git push && git push --tags -f
     ;;
 xsl)
+    ## xsl        : transsendas la precipajn XSL-dosierojn donitajn en la komandlinio al la publika servilo
     # kopiu ĉiujn xsl-dosierojn donitaj sur komandlinio (ekde dua argumento) al la servilo
     scp "${@:2}" ${files}/xsl/
     ;;     
 xsl-inc)
+    ## xsl-inc    : transsendas la inkluziveblajn, t.e. sub-XSL-dosierojn el xsl/inc,
+    ##              donitajn en la komandlinio, al la publika servilo
     # kopiu ĉiujn xsl-dosierojn donitaj sur komandlinio (ekde dua argumento) al la servilo
     scp "${@:2}" ${files}/xsl/inc/
     ;;
 smb)
+    ## smb        : transsendas la simbolojn donitajn en la komandlinio al la publika servilo
     # kopiu ĉiujn smb-dosierojn donitaj sur komandlinio (ekde dua argumento) al la servilo
     scp "${@:2}" ${revo}/smb/
     ;;    
 artikoloj)
+    ## artikoloj  : transsendas la artikolojn (HTML) donitajn en la komandlinio al la publika servilo    
     # kopiu ĉiujn artikolojn donitaj sur komandlinio (ekde dua argumento) al la servilo
     scp "${@:2}" ${revo}/art/
     ;;
 historioj)
+    ## historioj  : transsendas la artikolo-hisotriojn (HTML) donitajn en la komandlinio al la publika servilo    
     # kopiu ĉiujn historiojn donitaj sur komandlinio (ekde dua argumento) al la servilo
     scp "${@:2}" ${revo}/hst/
     ;;
 indeksoj)
+    ## indeksoj   : transsendas la indkesojn (HTML) donitajn en la komandlinio al la publika servilo    
     # kopiu ĉiujn indeksojn donitaj sur komandlinio (ekde dua argumento) al la servilo
     scp "${@:2}" ${revo}/inx/
     ;;
 fontoj)
+    ## fontoj     : transsendas la artikol-fontojn (XML) donitajn en la komandlinio al la publika servilo    
     # kopiu ĉiujn XML-fontojn donitaj sur komandlinio (ekde dua argumento) al la servilo
     scp "${@:2}" ${revo}/xml/
     ;;
 helpo | *)
+    ## helpo      : baza informo  
     echo "---------------------------------------------------------------------------"
     echo "Tiu skripto servas por publikigi dosierojn loke preparitajn en la servilo."
     echo "Tiucele ekzistas celoj 'servilo', 'artikoloj', 'historioj', 'indeksoj', 'fontoj'."

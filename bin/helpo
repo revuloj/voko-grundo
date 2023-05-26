@@ -1,0 +1,44 @@
+#!/bin/bash
+
+## | Elfiltras helpinformojn el la diversaj komanddosieroj
+##
+## - Sen argumento ĝi listigas koncizajn informojn pri la unuopaj skriptoj
+##   trovitaj en dosierujo respektiva ./bin (relative al aktuala situo)
+## - Kun skriptnomo kiel argumento ĝi montras helpinformojn pri ĝuste tiu
+## - Kun argumento 'komandoj' kreiĝas dosiero LEGUMIN kun helpinformoj 
+##   pri la skriptoj en ./bin
+
+
+celo="${1:-konciza}"
+# skripto=$(realpath "$0")
+# pado=$(dirname "$skripto")
+pado='bin'
+LEGUMIN="KOMANDOJ"
+
+case $celo in
+konciza)
+    for sh in ${pado}/*
+    do
+        sname=$(basename "${sh}")
+        echo "${pado}/${sname}"
+        grep -E "^\s*##\s\|" "${sh}" | sed -E 's/^(\s*)##/\1/'
+    done
+    ;;    
+komandoj)
+    for sh in ${pado}/*
+    do
+        sname=$(basename "${sh}")
+        echo
+        echo "==== ${sname} ===="
+        echo
+        grep -E "^\s*##(\s|$)" "${sh}" | sed -E 's/^(\s*)##/\1/'
+    done | cat > ./KOMANDOJ
+    ;;
+*)
+    for sh in $1
+    do
+        sname=$(basename "${sh}")
+        echo "${sh}"
+        grep -E "^\s*##(\s|$)" "${sh}" | sed -E 's/^(\s*)##/\1/'
+    done
+esac
