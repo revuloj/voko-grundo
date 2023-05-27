@@ -280,7 +280,7 @@ $.widget( "redaktilo.Artikolo", {
             this._change_count++; 
             // se tio daŭras tro longe, t.e. konfuzas la tajpadon de la uzanto
             // alternative ni povas fari nur if(!this._change_count)this._change_count=1;
-            if (this._change_count % 20) this.backup();        
+            if (0 == this._change_count % 20) this.backup();        
         }
     },
 
@@ -290,7 +290,7 @@ $.widget( "redaktilo.Artikolo", {
 
         // de tempo al tempo sekurigu la tekston
         this._change_count++; 
-        if (this._change_count % 20) this.backup();        
+        if (0 == this._change_count % 20) this.backup();        
         
         /* tie ni uzas eventon "input" rekte en xmlarea mem
         verŝajne ni devos la suprajn liniojn "tekstŝanĝo" pp ankaŭ
