@@ -16,8 +16,8 @@
 #host=retavortaro.de
 # aldonu en /etc/hosts!
 host=revo
-release=2i
-node_release=2.0.9
+eldono=2i
+node_eldono=2.0.9
 revo=${host}:www/revo
 files=${host}:files
 
@@ -26,8 +26,8 @@ files=${host}:files
 # per unu el artikoloj | historioj | indeksoj | fontoj
 target="${1:-helpo}"
 
-JSC=build/jsc/revo-${release}-min.js
-CSS=build/stl/revo-${release}-min.css
+JSC=build/jsc/revo-${eldono}-min.js
+CSS=build/stl/revo-${eldono}-min.css
 
 GLOBAL=jsc/u/global.js
 PACKG=package.json
@@ -43,20 +43,20 @@ servilo)
     ;;
 preparo)
     ## preparo    : preparas novan eldonon. Antaŭe kreu branĉon kun la nomo de la eldono
-    ##              kaj adaptu la parametrojn eldono kaj nodo_eldono en ambaŭ skriptoj 'eldono' kaj 'deplojo'
+    ##              kaj adaptu la parametrojn eldono kaj node_eldono en ambaŭ skriptoj 'eldono' kaj 'deplojo'
     # kontrolu ĉu la branĉo kongruas kun la agordita versio
     branch=$(git symbolic-ref --short HEAD)
-    if [ "${branch}" != "${release}" ]; then
-        echo "Ne kongruas la branĉo (${branch}) kun la eldono (${release})"
-        echo "Agordu la variablon 'release' en tiu ĉi skripto por prepari novan eldonon."
+    if [ "${branch}" != "${eldono}" ]; then
+        echo "Ne kongruas la branĉo (${branch}) kun la eldono (${eldono})"
+        echo "Agordu la variablon 'eldono' en tiu ĉi skripto por prepari novan eldonon."
         exit 1
     fi
 
-    echo "Aktualigante skriptojn al nova eldono ${release}..."
-    sed -i 's/globalThis.eldono = "[1-9][a-z]";/globalThis.eldono = "'${release}'";/' ${GLOBAL}
-    sed -i 's,/revo-[1-9][a-z]-min\.,/revo-'${release}'-min\.,g' ${PACKG}
-    sed -i 's,/redaktilo-[1-9][a-z]-min\.,/redaktilo-'${release}'-min\.,g' ${PACKG}
-    sed -i 's/"version": "[1-9].[0-9].[1-9]"/"version": "'${node_release}'"/' ${PACKG}
+    echo "Aktualigante skriptojn al nova eldono ${eldono}..."
+    sed -i 's/globalThis.eldono = "[1-9][a-z]";/globalThis.eldono = "'${eldono}'";/' ${GLOBAL}
+    sed -i 's,/revo-[1-9][a-z]-min\.,/revo-'${eldono}'-min\.,g' ${PACKG}
+    sed -i 's,/redaktilo-[1-9][a-z]-min\.,/redaktilo-'${eldono}'-min\.,g' ${PACKG}
+    sed -i 's/"version": "[1-9].[0-9].[1-9]"/"version": "'${node_eldono}'"/' ${PACKG}
     ;;
 kreo)
     ## kreo       : kompilas la procezujon voko-grundo, kies rezultoj estas bezonataj de aliaj
@@ -67,9 +67,9 @@ kreo)
 etikedo)
     ## etikedo    : puŝas la lastajn ŝanĝojn al Github ŝovante la eldonetikedon tiel,
     ##              ke en Github kompiliĝu nova aktuala pakaĵo
-    echo "Provizante la aktualan staton per etikedo (git tag) v${release}"
+    echo "Provizante la aktualan staton per etikedo (git tag) v${eldono}"
     echo "kaj puŝante tiun staton al la centra deponejo"
-    git tag -f v${release} && git push && git push --tags -f
+    git tag -f v${eldono} && git push && git push --tags -f
     ;;
 xsl)
     ## xsl        : transsendas la precipajn XSL-dosierojn donitajn en la komandlinio al la publika servilo
@@ -115,7 +115,7 @@ helpo | *)
     echo ""
     echo "Per la aparta celo 'preparo' oni povas krei git-branĉon kun nova eldono por tie "
     echo "komenci programadon de novaj funkcioj, ŝanĝoj ktp. Antaŭ adaptu en la kapo de ĉi-skripto"
-    echo "la variablojn 'release' kaj 'node_release' al la nova eldono."
+    echo "la variablojn 'eldono' kaj 'node_eldono' al la nova eldono."
     echo "Per la celo 'etikedo' vi provizas aktualan staton per 'git tag', necesa por "
     echo "ke kompiliĝu ĉe Github nova eldono de procezujo 'docker' kiel bazo por Cetonio kaj Araneo."
     ;;    
