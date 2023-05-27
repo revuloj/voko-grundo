@@ -94,7 +94,11 @@ Xmlarea.prototype.sync = function(select = undefined) {
 
     // unue ni legas la aktuale redaktatan subtekston kaj enŝovas en la kompletan
     // tio ankaŭ rekreas la strukturon de subtekstoj!
-    this.xmlstruct.replaceSubtext(this.elekto,this.txtarea.value,select.id);
+    // ni memoras la longecon de la nova subteksto, ĉar se ĝi entenas pli ol la ĉefan elementon, ekz-e finan
+    // komenton, ni devas evit duobliĝon per aktualigo ankaŭ de la montrata subteksto
+    const xml =  this.txtarea.value;
+    const len = xml.length;
+    this.xmlstruct.replaceSubtext(this.elekto,xml,select.id);
 
     // nun retrovu la elektendan subtekston en la rekreita strukturo
 
@@ -116,15 +120,11 @@ Xmlarea.prototype.sync = function(select = undefined) {
       this.elekto = this.xmlstruct.strukturo[0]; 
     }
 
-    // se ni transiris al alia subteksto, aŭ aldoniĝis strukturero, ni devos ankoraŭ montri la
-    // novelektitan subtekston en Textarea
-    // PRIPENSU: se ni sube de subteksto snc/drv aldonis ion, kio ne apartenas
-    // tien (ekz-e komento), sed ne renovigas la montratan tekston,
-    // ĝi duobliĝos ĉe la venonta sinkronigado..., ĉu?
-    // Kiel ni povus testi tion? - ĉu rigardi, ke la teksto finiĝas per la
-    // responde ferma etikedo...?
+    // se ni transiris al alia subteksto, aŭ aldoniĝisio post ĝi, aŭ eĉ tuta strukturero, 
+    // ni devos ankoraŭ montri la novelektitan/ŝanĝitan subtekston en Textarea
     if (old_s.id != this.elekto.id 
       || old_s.ln != this.elekto.ln
+      || len != (this.elekto.al - this.elekto.de)
       || old_s.el != this.elekto.el
       || nstru != this.xmlstruct.strukturo.length) {
       // nun ni montras la celatan XML-parton por redaktado
@@ -775,46 +775,10 @@ Xmlarea.prototype.indent = function(ind=undefined) {
 
   if (typeof ind == "number") { // enŝovu
     txtarea.focus();
-    /*
-    if (document.selection  && document.selection.createRange) { // IE/Opera
-      alert("enŝovado por malnova retumilo IE aŭ Opera ne funkcias.");
-    } else if (txtarea.selectionStart || txtarea.selectionStart==0) { // Mozilla
-*/
-      // memoru aktualan rul-pozicion de textarea
-      //var scrollPos = this.scrollPos();
-
-      // legu la nunan elekton
-      /*
-      startPos = txtarea.selectionStart;
-      //if (startPos > 0) {
-      //  startPos--;
-      //}
-      var endPos = txtarea.selectionEnd;
-      //if (endPos > 0) {
-      //  endPos--;
-      //}
-      selText = txtarea.value.substring(startPos, endPos);
-      if (selText=="") {
-        alert("Marku kion vi volas en-/elŝovi.");
-      } else {
-        */
-        // uzu get_indent / indent el tekstiloj
-        const i_ = get_indent(txtarea);
-        if (i_ % 2 == 1) ind = ind/2; // ŝovu nur ±1 (±2/2) ĉe momente nepara enŝovo!
-        indent(txtarea,ind);
-/*
-        var nt;
-        if (indent == 2)
-          nt = selText.replace(/\n/g, "\n  ");
-        else 
-          nt = selText.replace(/\n  /g, "\n");
-
-        this.selection(nt);
-        */
-        //restore textarea scroll position
-        //this.scrollPos(scrollPos);
-      /*}
-    } */
+    // uzu get_indent / indent el tekstiloj
+    const i_ = get_indent(txtarea);
+    if (i_ % 2 == 1) ind = ind/2; // ŝovu nur ±1 (±2/2) ĉe momente nepara enŝovo!
+    indent(txtarea,ind);
     // ni ŝangis la tekston, sed la evento "input" ne en ciu retumilo lanciĝas
     // se la klavaro ne estas tuŝita...:
     this.setUnsynced();
