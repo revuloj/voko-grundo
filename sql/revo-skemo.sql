@@ -67,14 +67,14 @@ SELECT
   nodo.kap AS kap,
   nodo.mrk AS mrk,
   nodo.art As art,
-  nodo.num AS dis
+  nodo.num AS num
 FROM nodo
 UNION
 SELECT
   var.kap AS kap,
   var.mrk AS mrk,
   nodo.art AS art,
-  var.var AS dis
+  NULL AS num
 FROM var, nodo
 WHERE nodo.mrk = var.mrk;
 
