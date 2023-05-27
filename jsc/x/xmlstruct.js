@@ -69,7 +69,7 @@ XmlStruct.prototype.structure = function(selected = undefined) {
    * @param {number} de - la komenco de la subteksto en la tuta XML
    * @returns la atributon 'mrk'
    */
-  function mrk(elm,de) {
+  function _mrk(elm,de) {
     let i_start = xmlteksto.indexOf('<',de);
     if (i_start > -1) {
       i_start += 1 + elm.length + 1; // de:"<elm " 
@@ -83,7 +83,8 @@ XmlStruct.prototype.structure = function(selected = undefined) {
       }  
     }
   }
-  function rad(de,ghis) {
+  // trovas la radikon de artikolo
+  function _rad(de,ghis) {
     const art = xmlteksto.substring(de,ghis);
     const mr = art.match(re_stru._rad);
 
@@ -95,7 +96,8 @@ XmlStruct.prototype.structure = function(selected = undefined) {
       return rad;
     }
   }
-  function kap(elm,de,ghis) {
+  // trovas la kapvorton de elemento
+  function _kap(elm,de,ghis) {
     if (elm == 'drv') {
       // find kap
       const drv = xmlteksto.substring(de,ghis);
@@ -116,10 +118,13 @@ XmlStruct.prototype.structure = function(selected = undefined) {
       }
     }
   }
-  function id(subt) {
+  // kreas identigilon el marko resp. enhavkomenco
+  function _id(subt) {
     const rx = /[^A-Za-z]/g;
     const key = [123,45,67,89,102,43,69]; // enhavo ne tro gravas sed estu ne tro mallonga...
-    const hash_str = (str) => // kondensigi signoĉenon al identigilo
+
+    // kondensigi signoĉenon al identigilo
+    const hash_str = (str) => 
       { 
           var c = key;
           for(let i=0; i<str.length; i++) { 
@@ -139,8 +144,8 @@ XmlStruct.prototype.structure = function(selected = undefined) {
       return hash_str(xmlteksto.substring(subt.de,subt.de+120).replace(rx,''));
     }
   }
-  function al(elm,de) {
-    // trovu la finon de elemento 'elm'
+  // trovas la finon de elemento 'elm'
+  function _al(elm,de) {
     var fin = xmlteksto.indexOf('</'+elm, de);
     // trovu avance >..\n?
     re_stru._eoe.lastIndex = fin;
@@ -151,22 +156,25 @@ XmlStruct.prototype.structure = function(selected = undefined) {
   }
 
   this.strukturo = [];
-  var m = re_stru._elm.exec(xmlteksto);
+  // la regulestrimo trovas ĉiujn art, drv, snc kaj subart, subdrv, subsnc en la XML
+  let m = re_stru._elm.exec(xmlteksto);
 
+  // por ĉiu trovo ni ekstraktas la informojn bezonatajn por
+  // ĵongli la unuopaj pecojn en la redaktilo
   while (m) {
     var subt = {de: m.index}; // komenca signo
     // kiom da linioj antaŭ tio?
-    subt.el = m[1]; // elemento
+    subt.el = m[1]; // la elemento (art,drv,snc...)
     subt.ln = count_char(xmlteksto,'\n',0,m.index); // komenca linio
-    subt.al = al(subt.el,m.index+5); // fina signo
+    subt.al = _al(subt.el,m.index+5); // fina signo
     subt.lc = count_char(xmlteksto,'\n',m.index,subt.al); // lininombro
 
-    subt.mrk = mrk(subt.el,subt.de);
-    subt.kap = kap(subt.el,subt.de,subt.al);
-    subt.id = id(subt);
+    subt.mrk = _mrk(subt.el,subt.de); // la marko de la elemento, se estas
+    subt.kap = _kap(subt.el,subt.de,subt.al); // la kapvorto
+    subt.id = _id(subt); // identigilo por la peco
     subt.no = this.strukturo.length;
 
-    //const id = el_id(m[1], m.index+5, fino);
+    // kunmetu etikedon por la peco el elementnomo kaj sufikso
     const suff = subt.kap ? subt.kap : subt.mrk||'';
     subt.dsc = this.indents[subt.el] + (
       subt.el!='art'? 
@@ -174,7 +182,7 @@ XmlStruct.prototype.structure = function(selected = undefined) {
         : suff);
 
     // ĉe la kapvorto de la artikolo ekstraktu la radikon
-    if (subt.el == 'art') this.radiko = rad(subt.de,subt.al);
+    if (subt.el == 'art') this.radiko = _rad(subt.de,subt.al);
 
     // console.debug(subt.de + '-' + subt.al + ': ' + subt.id + ':' + subt.dsc);
 
@@ -185,7 +193,7 @@ XmlStruct.prototype.structure = function(selected = undefined) {
     m = re_stru._elm.exec(xmlteksto);
   }
 
-  // en la fino aldonu ankoraŭ elektilon por la tuta XML
+  // en la fino de la listo aldonu ankoraŭ elektilon por la tuta XML
   const tuto = {de: 0, ln: 0, al: xmlteksto.length, id: "x.m.l", dsc: 'tuta xml-fonto'};
   if (this.onaddsub) this.onaddsub(tuto,this.strukturo.length,tuto.id == selected);
   this.strukturo.push(tuto);
@@ -214,7 +222,7 @@ XmlStruct.prototype.replaceSubtext = function(sd, xml, select = undefined) {
       + xml
       + this.xmlteksto.substring(elekto.al));
     // rekalkulu la strukturon pro ŝovitaj pozicioj...
-    this.structure(select);  
+    this.structure(select);
 };
 
 /**
@@ -247,19 +255,6 @@ XmlStruct.prototype.findStruct = function(sd) {
     }
   }
 }
-
-
-/**
-XmlStruct.prototype.match = function(sd1,sd2) {
-  return (
-    sd1.id = sd2.id
-    || 
-    ( sd1.el && sd2.el && sd1.ln && sd2.ln 
-      && ( sd1.el == sd2.el ) 
-      && ( Math.abs(sd2.ln-sd1.ln) <= 1 ) )
-  );
-}
- */
 
 /**
  * Trovas subtekston en la strukturlisto
