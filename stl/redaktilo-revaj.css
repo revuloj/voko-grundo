@@ -30,6 +30,23 @@ body {
     overflow: auto !important;
 }
 
+.flex-form {
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 50em;
+    justify-content: space-between;
+}
+
+.flex-form>* {
+    display: inline-block;
+    flex: 0;
+}
+
+.flex-div {
+    display: flex;
+    flex-wrap: nowrap;
+}
+
 .ui-tooltip {
     max-width: 30em;
 }
