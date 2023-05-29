@@ -1387,18 +1387,19 @@ function fill_tradukojn(lng,lingvo_nomo) {
     // aldonitaj aŭ ŝanĝitaj en la dialogo
     // var trdoj = $("#xml_text").Artikolo("tradukoj",lng); 
     const xmlarea = $("#xml_text").Artikolo("option","xmlarea");
-    const xmltrad = new XmlTrad(xmlarea.xmlstruct)
+    const xmltrad = new XmlTrad(xmlarea.xmlstruct);
     // PLIBONIGU: uzu malsupre la objekton xmltrad anstataŭ trdoj por legi kaj skribi unuopajn tradukojn!
-    const trdoj = xmltrad.collectTrdAllStruct(lng);
+    //const trdoj = 
+    xmltrad.collectTrdAllStruct(lng);
     const trd_shanghoj = $("#traduko_tradukoj").data("trd_shanghoj") || {};
 
     var tableCnt = '';
 
-    if (trdoj) {
+    //if (trdoj) {
 
         // PLIBONIGU: estas neelegante tie pridemandi
         // .xmlstruct - pli bone xmlarea jam redonu la pretan
-        // bezonatan strukturon pro tradukprezento!
+        // bezonatan strukturon por tradukprezento!
         //
         // Krom la uzo de semantikaj id-atributoj ne estas tro eleganta
         // pli bone kreu propran tradukoj-objekton kun insert, update ktp
@@ -1422,7 +1423,7 @@ function fill_tradukojn(lng,lingvo_nomo) {
                     trd = trd_shanghoj[s.id][lng];
                 } catch (e) {
                     // se ŝanĝoj ne ekzistas prenu tiujn el la XML-artikolo
-                    trd = trdoj[s.id];
+                    trd = xmltrad.getStruct(lng,s.id); //trdoj[s.id];
                 }
                 
                 if ( trd && trd.length ) {
@@ -1438,7 +1439,7 @@ function fill_tradukojn(lng,lingvo_nomo) {
                 tableCnt += '</tr>';
             } // if drv..subsnc
         } // for s...
-    } // if trdj
+    //} // if trdj
     $("#traduko_lingvo").text(lingvo_nomo +" ["+lng+"]");
     $("#traduko_dlg").data("lng",lng);
     $("#traduko_tradukoj").empty();

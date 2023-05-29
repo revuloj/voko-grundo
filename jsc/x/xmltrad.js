@@ -3,6 +3,14 @@
 
 // (c) 2023 Wolfram Diestel
 
+/* FARENDA:
+ - ebligu administradon de ĉiuj tradukoj de redaktata teksto en XmlTrad, senŝargigante la tradukdialgon de administrado 
+ de ŝanĝoj
+ - ebligu ŝanĝi tradukojn de pluraj lingvoj sen perdi ion kaj aldonu fine ĉiujn ŝanĝitajn lingvoj/tradukojn
+ - ebligu aldoni kaj redakti ankaŭ enekzemplajn tradukojn
+*/
+
+
 /**
  * Helpas ekstrakti kaj remeti la tradukojn de la redaktata teksto
  * @constructor
@@ -10,8 +18,8 @@
 function XmlTrad(xmlstruct) {
     this.xmlstruct = xmlstruct;
     // la atributnomoj en 'tradukoj' estas la lingvoj kaj la vaolroj listoj de tradukoj en tiu lingvo
-    this.tradukoj = {};
-    this.tradukoj_strukt = {};
+    this.tradukoj = {}; // tradukoj de unu substrukturo/subteksto sed de pluraj lingvoj
+    this.tradukoj_strukt = {}; // laŭ lingvo estas objektoj por ĉiu strukturero de xmlstruct
 
     this.re_stru = {
         /*_line: /^.*$/mg,*/
@@ -21,8 +29,14 @@ function XmlTrad(xmlstruct) {
         _klr: /<klr[^>]*>[^]*<\/klr>/g,
         _ind: /<ind>([^]*)<\/ind>/g
     };  
-}
+};
 
+/**
+ * Redonas tradukliston de tradukoj de unu strukturero en unu lingvo
+ */
+XmlTrad.prototype.getStruct = function(lng, s_id) {
+    return this.tradukoj_strukt[lng][s_id];
+};
 
 /**
  * Kolektas ĉiujn tradukojn en donita XML-teksto
@@ -100,7 +114,7 @@ function XmlTrad(xmlstruct) {
  * Kolektas tradukojn de unu lingvo malprofunde por ĉiu unuopa
  * subteksto laŭ la strukturo. Do por 'drv' enestas nur la rektaj tradukoj
  * dum la tradukoj de enhavataj 'snc' aperas por la sekvaj snc-subtekstoj
- * @param {string} lng - la lingvo por kiu redoni tradukojn
+ * @param {string} lng - la lingvo por kiu kolekti tradukojn
  */
  XmlTrad.prototype.collectTrdAllStruct = function(lng) {
     this.tradukoj_strukt[lng] = {}; // se jam ekzistas, tamen malplenigu! 
@@ -117,7 +131,7 @@ function XmlTrad(xmlstruct) {
       }
     }
   
-    return this.tradukoj_strukt[lng];
+    //return this.tradukoj_strukt[lng];
   };
 
 
