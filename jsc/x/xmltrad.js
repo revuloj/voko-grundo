@@ -5,7 +5,7 @@
 
 /* FARENDA:
  - ebligu administradon de ĉiuj tradukoj de redaktata teksto en XmlTrad, senŝargigante la tradukdialgon de administrado 
- de ŝanĝoj
+ de ŝanĝoj: necesas por tio havi unu instancon en xmlarea aŭ en Artikolo.options
  - ebligu ŝanĝi tradukojn de pluraj lingvoj sen perdi ion kaj aldonu fine ĉiujn ŝanĝitajn lingvoj/tradukojn
  - ebligu aldoni kaj redakti ankaŭ enekzemplajn tradukojn
 */
@@ -15,8 +15,8 @@
  * Helpas ekstrakti kaj remeti la tradukojn de la redaktata teksto
  * @constructor
  */
-function XmlTrad(xmlstruct) {
-    this.xmlstruct = xmlstruct;
+function XmlTrad() {
+    this.xmlstruct = null;
     // la atributnomoj en 'tradukoj' estas la lingvoj kaj la vaolroj listoj de tradukoj en tiu lingvo
     this.tradukoj = {}; // tradukoj de unu substrukturo/subteksto sed de pluraj lingvoj
     this.tradukoj_strukt = {}; // laŭ lingvo estas objektoj por ĉiu strukturero de xmlstruct
@@ -38,6 +38,13 @@ XmlTrad.prototype.getStruct = function(lng, s_id) {
     return this.tradukoj_strukt[lng][s_id];
 };
 
+XmlTrad.prototype.preparu = function(xmlstruct) {
+    this.xmlstruct = xmlstruct;
+    this.tradukoj = {};
+    this.tradukoj_strukt = {};
+}
+
+
 /**
  * Kolektas ĉiujn tradukojn en donita XML-teksto
  * @param {string} xml - la XML-teksto
@@ -45,10 +52,10 @@ XmlTrad.prototype.getStruct = function(lng, s_id) {
  * @param {boolean} normalize - true: ni forigas ofc, klr, ind el la traduko, false: ni ne tuŝas ĝian strukturon
  */
  XmlTrad.prototype.collectXml = function(xml, shallow=false, normalize=false) {
-    const re = this.re_stru;   
+    const re = this.re_stru;
     const find_stag = (elm,xml,from) => this.xmlstruct.travel_tag_bw([elm],false,false,xml,from);  
   
-    var find_etag, spos = xml.length;
+    let find_etag, spos = xml.length;
     if (shallow) {
       // expect
       find_etag = (elist,xml,from) => this.xmlstruct.travel_tag_bw(elist,true,true,xml,from);

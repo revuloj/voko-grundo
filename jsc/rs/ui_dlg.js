@@ -1387,9 +1387,8 @@ function fill_tradukojn(lng,lingvo_nomo) {
     // aldonitaj aŭ ŝanĝitaj en la dialogo
     // var trdoj = $("#xml_text").Artikolo("tradukoj",lng); 
     const xmlarea = $("#xml_text").Artikolo("option","xmlarea");
-    const xmltrad = new XmlTrad(xmlarea.xmlstruct);
-    // PLIBONIGU: uzu malsupre la objekton xmltrad anstataŭ trdoj por legi kaj skribi unuopajn tradukojn!
-    //const trdoj = 
+    const xmltrad = xmlarea.xmltrad;
+    xmltrad.preparu(xmlarea.xmlstruct);
     xmltrad.collectTrdAllStruct(lng);
     const trd_shanghoj = $("#traduko_tradukoj").data("trd_shanghoj") || {};
 

@@ -16,6 +16,8 @@ function Xmlarea(ta_id, onAddSub) {
 
     //this.structure_selection = document.getElementById(struc_sel);
     this.xmlstruct = new XmlStruct('',onAddSub); // la tuta teksto
+    this.xmltrad = new XmlTrad(this.xmlstruct); // por redaktaado de tradukoj
+
     this.elekto = undefined; // aktuale redaktata subteksto
     //this.tradukoj = {}; // tradukoj trovitaj en la aktuala redaktata subteksto
     //this.radiko = '';
@@ -248,14 +250,13 @@ Xmlarea.prototype.goto = function(line_pos,len = 1) {
  */
 Xmlarea.prototype.collectTrd = function(xml, shallow=false, normalize=false) {
   const re = this.re_stru;
-  const xmltrad = new XmlTrad(this.xmlstruct);
   if (!xml) {
     xml = this.txtarea.value;
     // KOREKTU: fakte ni nun kolektas en {<lng>: [trdj]}
     // do ĝuste estus this.tradukoj = {} aŭ this.tradukoj[lng] = [] !?
   }
 
-  xml.trad.collectXml(xml,shallow,normalize);
+  this.xmltrad.collectXml(xml,shallow,normalize);
 };
 
 
@@ -264,18 +265,18 @@ Xmlarea.prototype.collectTrd = function(xml, shallow=false, normalize=false) {
  * La rezulto estos poste en la listo xmltrad.tradukoj[lng]
  */
 Xmlarea.prototype.collectTrdAll = function() {
-  const xmltrad = new XmlTrad(this.xmlstruct);
   let xml = this.txtarea.value;
   
   // kolektu unue la tradukojn profunde en la aktuala subteksto
-  xmltrad.collectXml(xml,false,true); // profunde, normigu
+  this.xmltrad.preparu(this.xmlstruct);
+  this.xmltrad.collectXml(xml,false,true); // profunde, normigu
 
-  // se temas pri subdrv, snc, subsnc ni kolektu ankaŭ de la parencaj,
+  // se temas pri subdrv, snc, subsnc ni kolektu ankaŭ de la parencoj,
   // ĉar ekz-e la traduko de drv validas ankaŭ por ĉiu ena snc...
   let p = this.xmlstruct.getParent(this.elekto);
   while ( ['snc','subdrv','drv'].indexOf(p.el)>-1 ) {
     xml = this.xmlstruct.getSubtext(p);
-    xmltrad.collectXml(xml,true,true); // malprofunde, normigu
+    this.xmltrad.collectXml(xml,true,true); // malprofunde, normigu
     p = this.xmlstruct.getParent(p);
   }
 };
@@ -291,9 +292,8 @@ Xmlarea.prototype.collectTrdAll = function() {
 Xmlarea.prototype.addTrd = function(lng,trd) {
   //if (! this.synced) this.sync(this.elekto); 
   const xml = this.txtarea.value;
-  const xmltrad = new XmlTrad(this.xmlstruct);
 
-  const place = xmltrad.findTrdPlace(xml,lng); // this.getCurrentLastTrd(lng);
+  const place = this.xmltrad.findTrdPlace(xml,lng); // this.getCurrentLastTrd(lng);
   if (place) {
     // se jam estas .trd, ni anstataŭigu ĝin per la etendita trdgrp...,
     // alie ni enmetos novan trd (len=0)
@@ -364,8 +364,7 @@ Xmlarea.prototype.replaceTrd = function(id,lng,trdj) {
     }
   }
 
-  const xmltrad = new XmlTrad(this.xmlstruct);
-  const place = xmltrad.findTrdPlace(xml,lng); // this.getCurrentLastTrd(lng);
+  const place = this.xmltrad.findTrdPlace(xml,lng); // this.getCurrentLastTrd(lng);
   if (place) {
     const len = place.trd? place.trd.length : 0;
     //this.select(place.pos, len);
