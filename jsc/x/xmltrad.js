@@ -58,7 +58,9 @@ XmlTrad.prototype.putStruct = function(s_id,lng,no,trd) {
     // PLIBONIGU: verŝajne estas pli efike meti aldonojn kaj ŝanĝojn 
     // al Xmlarea.tradukoj nun anstataŭ en aparta dlg-alpendo trd_shanghoj...
     if (! this.shanghoj_strukt[lng]) this.shanghoj_strukt[lng] = {};
-    if (! this.shanghoj_strukt[lng][s_id]) this.shanghoj_strukt[lng][s_id] = [];
+    // se ankoraŭ malplena, transprenu ĉiujn originajn tradukoj de s_id
+    if (! this.shanghoj_strukt[lng][s_id]) this.shanghoj_strukt[lng][s_id] = this.tradukoj_strukt[lng][s_id];
+    // ŝanĝu la traduktekston kun la indikita n-ro
     this.shanghoj_strukt[lng][s_id][no] = trd;
 }
 
