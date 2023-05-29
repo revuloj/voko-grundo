@@ -508,7 +508,7 @@ export default function() {
         },
         open: function() {
             $("#traduko_error").hide();
-            $("#traduko_tradukoj").data("trd_shanghoj",{});
+            //$("#traduko_tradukoj").data("trd_shanghoj",{});
             plenigu_lingvojn_artikolo();
             $("#traduko_menuo").menu("refresh");
             // jam difinita en ui_kreo... var preflng = pref_lngoj? pref_lngoj[0] : 'en'; // globala variablo
@@ -1390,7 +1390,7 @@ function fill_tradukojn(lng,lingvo_nomo) {
     const xmltrad = xmlarea.xmltrad;
     xmltrad.preparu(xmlarea.xmlstruct);
     xmltrad.collectTrdAllStruct(lng);
-    const trd_shanghoj = $("#traduko_tradukoj").data("trd_shanghoj") || {};
+    //const trd_shanghoj = $("#traduko_tradukoj").data("trd_shanghoj") || {};
 
     var tableCnt = '';
 
@@ -1416,14 +1416,15 @@ function fill_tradukojn(lng,lingvo_nomo) {
                 if (s.el == 'drv') dsc = '<b>'+dsc+'</b>';
                 tableCnt += '<tr class="tr_' + s.el + '"><td>' + dsc + '</td><td>';
             
-                let trd; 
+                const trd = xmltrad.getStruct(lng,s.id);
+                /*
                 try {
                     // preferu jam ŝanĝitajn tradukojn
                     trd = trd_shanghoj[s.id][lng];
                 } catch (e) {
                     // se ŝanĝoj ne ekzistas prenu tiujn el la XML-artikolo
                     trd = xmltrad.getStruct(lng,s.id); //trdoj[s.id];
-                }
+                }*/
                 
                 if ( trd && trd.length ) {
                     for (let j=0; j<trd.length; j++) {
@@ -1455,30 +1456,31 @@ function trd_shanghita() {
 }
 
 function trd_input_shanghita(element) {
-        var mrk = element.id.split(':')[1];
-        var lng = $("#traduko_dlg").data("lng");
-        // prenu ĉiujn tradukojn kun tiu marko, ne nur la ĵus ŝanĝitan
-        $("#traduko_tradukoj input[id^='trd\\:" + mrk + "\\:']").each( function(){
-            var nro = this.id.split(':')[2];
-            trd_put(mrk,lng,nro,$(this).val());                               
-        });
+    const sid = element.id.split(':')[1];
+    const lng = $("#traduko_dlg").data("lng");
+
+    const xmlarea = $("#xml_text").Artikolo("option","xmlarea");
+    const xmltrad = xmlarea.xmltrad;   
+
+    // prenu ĉiujn tradukojn kun tiu marko, ne nur la ĵus ŝanĝitan
+    $("#traduko_tradukoj input[id^='trd\\:" + sid + "\\:']").each( function(){
+        var nro = this.id.split(':')[2];
+        xmltrad.putStruct(sid,lng,nro,$(this).val());                               
+    });
 }
 
+/*
 function trd_put(mrk,lng,no,trd) {
     // PLIBONIGU: verŝajne estas pli efike meti aldonojn kaj ŝanĝojn 
     // al Xmlarea.tradukoj nun anstataŭ en aparta dlg-alpendo trd_shanghoj...
     var trd_shanghoj = $("#traduko_tradukoj").data("trd_shanghoj") || {};
     if (! trd_shanghoj[mrk]) trd_shanghoj[mrk] = {};
     if (! trd_shanghoj[mrk][lng]) trd_shanghoj[mrk][lng] = Array();
-    /* 
-    console.debug("mrk: "+mrk+" lng: "+lng+" no: "+no+ " trd: "+trd);
-    for (var i=0; i<trd_shanghoj[mrk][lng].length; i++) {
-        console.debug(" no: "+i+": "+trd_shanghoj[mrk][lng][i]);  
-    } 
-    */
+
     trd_shanghoj[mrk][lng][no] = trd;
     $("#traduko_tradukoj").data("trd_shanghoj",trd_shanghoj);
 }
+*/
 
 function traduko_input_field(mrk,nro,trd) {
     var id = "trd:" + mrk + ':' + nro; //.replace(/\./g,'\\\\.') + '_' + nro;
@@ -1515,9 +1517,9 @@ function shanghu_trd_lingvon(event,ui) {
 // enmetu ŝanĝitajn kaj aldonitajn tradukojn en la XML-artikolon
 function tradukojn_enmeti(event) {
     // prenu la shanghitajn tradukojn
-    var trd_shanghoj = $("#traduko_tradukoj").data("trd_shanghoj"); 
+    //var trd_shanghoj = $("#traduko_tradukoj").data("trd_shanghoj"); 
     try {
-        $("#xml_text").Artikolo("insert_tradukojn",trd_shanghoj);
+        $("#xml_text").Artikolo("insert_tradukojn"); //,trd_shanghoj);
         $("#traduko_dlg").dialog( "close" );
     } catch (e) {
         $("#traduko_error").html(e.toString());

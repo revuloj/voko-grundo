@@ -35,13 +35,54 @@ function XmlTrad() {
  * Redonas tradukliston de tradukoj de unu strukturero en unu lingvo
  */
 XmlTrad.prototype.getStruct = function(lng, s_id) {
-    return this.tradukoj_strukt[lng][s_id];
+    let trd;
+
+    try {
+        // preferu jam ŝanĝitajn tradukojn
+        trd = this.shanghoj_strukt[lng][s_id];
+    } catch (e) {
+        // se ŝanĝoj ne ekzistas prenu la originalajn el la netuŝita artikolo
+        trd = this.tradukoj_strukt[lng][s_id];
+    }    
+    return trd;
 };
+
+/**
+ * Aldonas ŝanĝon al tradukoj
+ * @param {*} id la identigilo de la strukturo (drv, snc...)
+ * @param {*} lng la lingvo
+ * @param {*} no la pozicio de la tradukoj en tiu strukturo kaj lingvo
+ * @param {*} trd la tradukteksto
+ */
+XmlTrad.prototype.putStruct = function(s_id,lng,no,trd) {
+    // PLIBONIGU: verŝajne estas pli efike meti aldonojn kaj ŝanĝojn 
+    // al Xmlarea.tradukoj nun anstataŭ en aparta dlg-alpendo trd_shanghoj...
+    if (! this.shanghoj_strukt[lng]) this.shanghoj_strukt[lng] = {};
+    if (! this.shanghoj_strukt[lng][s_id]) this.shanghoj_strukt[lng][s_id] = [];
+    this.shanghoj_strukt[lng][s_id][no] = trd;
+}
+
+/**
+ * Redonas ĉiujn ŝanĝojn por s_id estas (ĉiuj ŝanĝitaj lingvoj kun tradukoj)
+ */
+XmlTrad.prototype.shanghitaj = function(s_id) {
+    let r = {};
+    for (let l of Object.keys(this.shanghoj_strukt)) {
+        const s = this.shanghoj_strukt[l][s_id];
+        if (s) {
+            r[l] = s;
+        }
+    }
+    return r;
+}
+
+
 
 XmlTrad.prototype.preparu = function(xmlstruct) {
     this.xmlstruct = xmlstruct;
     this.tradukoj = {};
     this.tradukoj_strukt = {};
+    this.shanghoj_strukt = {};
 }
 
 

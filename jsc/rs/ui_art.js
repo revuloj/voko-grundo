@@ -547,58 +547,18 @@ $.widget( "redaktilo.Artikolo", {
         return tradukoj;
     },
 
-    insert_tradukojn: function (tradukoj) {
-        // tradukoj estas {mrk1: array(), mrk2: ...}
-        //for (trd in tradukoj) {
-        //var rx = this._regex_xml;
-
+    insert_tradukojn: function () {
         const xmlarea = this.option("xmlarea");
-        /*
-        var xml = xmlarea.syncedXml() //this.element.val();
-            .replace(rx._ent,'&amp;$1;'); // entities cannot be resolved...
-                    
-        var artikolo;
-        try {
-            artikolo = $("vortaro",$.parseXML(xml));
-        } catch(e) {
-            console.error("Pro nevalida XML ne eblas enŝovi tradukojn.");
-            console.error(e);
-            return;
-        }*/
+        const xmltrad = xmlarea.xmltrad;
 
         for (let s of xmlarea.xmlstruct.strukturo) {
-            if (tradukoj[s.id]) {
-                for (let lng in tradukoj[s.id]) {
-                    xmlarea.replaceTrd(s.id,lng,tradukoj[s.id][lng]);
-                    // insert_trd_lng(this,shov,lng,tradukoj[mrk][lng]);
-                }
+            const s_t = xmltrad.shanghitaj(s.id);
+            for (let lng of Object.keys(s_t)) {
+                const trd = s_t[lng];
+                xmlarea.replaceTrd(s.id,lng,trd);
             }
         }
         
-        /*
-        artikolo.find("[mrk]").each(function(index) {
-            var mrk = $(this).attr("mrk");
-            // kiom da spacsignojn metu komence?
-            var shov = enshovo($(this)[0].previousSibling.nodeValue) + "  ";
-            // ĉu estas tradukoj por enmeti en tiun elementon (drv/snc) ktp.
-            if (tradukoj[mrk]) {
-                for (let lng in tradukoj[mrk]) {
-                    // $(this).append(tradukoj[mrk][lng][0])
-                    insert_trd_lng(this,shov,lng,tradukoj[mrk][lng]);
-                    //$(this).each(insert_trd_lng_2,[shov,lng,tradukoj[mrk][lng]])
-                }
-            }
-        });
-        */
-        /*
-        var prologo = '<?xml version="1.0"?>\n<!DOCTYPE vortaro SYSTEM "../dtd/vokoxml.dtd">\n\n';
-        xml = outerXML(artikolo[0]).replace(rx._amp,'&').replace(rx._spc,'');  // ĉi lasta aparte pro Edge, kiu eligas "<tld />"            
-        //if (xml) this.element.val(prologo + xml);
-        if (xml) {
-            const xmlarea = this.option("xmlarea");
-            xmlarea.setText(prologo + xml);
-        }
-        */
         this.element.change();    
     },
 
