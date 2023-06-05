@@ -1176,7 +1176,13 @@ function derivajho_enmeti(event) {
     // la nova ŝajnas malaperi (ĝi estas super aŭ sub la aktuala)
     // do eble pli bone aldonu la novan derivaĵon rekte en la xmlstrukturon(?)
     // kaj/aŭ navigu al la nova derivaĵo, se ni estas sur nivelo art/subart/xml
+
+    // if (values.listo == 'kursoro') {
     $("#xml_text").Artikolo("insert",drvxml,true);
+    // } else {
+    // ...aldoni drv rekte en la strukturon de xmlarea/xmlstruct
+    //}
+
     // $("#xml_text").insert(drvxml);
     // $("#xml_text").change();
     $("#derivajho_dlg").dialog("close");
