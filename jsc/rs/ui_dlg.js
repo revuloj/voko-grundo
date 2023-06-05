@@ -1152,7 +1152,7 @@ function plenigu_derivajxojn() {
     const xmlarea = $("#xml_text").Artikolo("option","xmlarea");
 
     for (let ero in xmlarea.xmlstruct.strukturo) {
-        if ero.el == 'drv'
+        if (ero.el == 'drv')
             drv_list += '<option value="'+el.id+'">' + el.dsc + '</option>';
     }
     $("#sxablono_listoo").append(drv_list);
