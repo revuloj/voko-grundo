@@ -454,7 +454,8 @@ export default function() {
             $("#derivajho_error").hide();
             $("#derivajho_dlg").dialog("expand"); // necesas, se la dialogo estis fermita en faldita stato...
         }
-    });       
+    });
+    plenigu_derivajxojn();   
     $("#derivajho_butonoj").Klavaro({
         artikolo: $("#xml_text"),
         posedanto: "#derivajho_dlg",
@@ -1142,6 +1143,19 @@ function bildo_larĝecoj(lrg,chk) {
             $("#bildo_lrg label[for='bildo_lrg_" + l + "']").hide();
         }
     });
+}
+
+/**************** helpfunkcioj por derivajho-dialogo **********/
+
+function plenigu_derivajxojn() {
+    let drv_list = '';
+    const xmlarea = $("#xml_text").Artikolo("option","xmlarea");
+
+    for (let ero in xmlarea.xmlstruct.strukturo) {
+        if ero.el == 'drv'
+            drv_list += '<option value="'+el.id+'">' + el.dsc + '</option>';
+    }
+    $("#sxablono_listoo").append(drv_list);
 }
 
 function derivajho_enmeti(event) {
