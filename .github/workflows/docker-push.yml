@@ -1,4 +1,4 @@
-name: procesumo voko-grundo
+name: procesujo voko-grundo
 # https://github.com/actions/starter-workflows/blob/master/ci/docker-push.yml
 
 on:
