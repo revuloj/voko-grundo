@@ -69,7 +69,7 @@ etikedo)
     ##              ke en Github kompiliĝu nova aktuala pakaĵo
     echo "Provizante la aktualan staton per etikedo (git tag) v${eldono}"
     echo "kaj puŝante tiun staton al la centra deponejo"
-    git tag -f v${eldono} && git push && git push --tags -f
+    git tag -f v${eldono} && git push && git push origin v${eldono} -f
     ;;
 xsl)
     ## xsl        : transsendas la precipajn XSL-dosierojn donitajn en la komandlinio al la publika servilo
