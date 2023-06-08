@@ -76,7 +76,7 @@ if ($drv) {
 
     #adaptu_refjn($origmrk,$celmrk?);
 
-    for $art (glob "${xml_dir}/*.xml") {
+    for $art (glob "${xml_dir}*.xml") {
         anst_ref_art($art);
     }
 }
@@ -278,7 +278,7 @@ sub anst_ref_art {
     my $i = index($xml,$origmrk); 
 
     if ($i > 0) {     
-        print "...anstataŭigu ref@cel en $art...?\n" if ($verbose);
+        print "...anstataŭigu ref\@cel en $art...\n" if ($verbose);
 
         my $omrk = $origmrk;
         $omrk =~ s/\./\\./g;
