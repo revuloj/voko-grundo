@@ -55,6 +55,8 @@ RUN npm install -g npm@latest && npm ci && npm run build && tst/xml-test.sh
 # staĝo 3 kopiu nur la kreitajn rezultojn al nova malplena ujo
 FROM scratch
 COPY --from=builder /usr/app/build/ build/
-COPY xsl/ build/xsl/
+
+# simplan kopiadon de pluraj fontoj ni faras per npm run build:copy
+# COPY xsl/ build/xsl/
 
 
