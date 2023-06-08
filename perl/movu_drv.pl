@@ -76,7 +76,7 @@ if ($drv) {
 
     #adaptu_refjn($origmrk,$celmrk?);
 
-    for $art (glob '$art_dir/*.xml') {
+    for $art (glob '$xml_dir/*.xml') {
         anst_ref_art($art);
     }
 }
