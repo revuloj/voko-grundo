@@ -451,10 +451,11 @@ export default function() {
             "\u2718": function() { $(this).dialog( "close" ); }
         },
         open: function() {
+            plenigu_derivajxojn();
             $("#derivajho_error").hide();
             $("#derivajho_dlg").dialog("expand"); // necesas, se la dialogo estis fermita en faldita stato...
         }
-    });       
+    });
     $("#derivajho_butonoj").Klavaro({
         artikolo: $("#xml_text"),
         posedanto: "#derivajho_dlg",
@@ -1144,6 +1145,21 @@ function bildo_larĝecoj(lrg,chk) {
     });
 }
 
+/**************** helpfunkcioj por derivajho-dialogo **********/
+
+function plenigu_derivajxojn() {
+    let drv_list = '';
+    const xmlarea = $("#xml_text").Artikolo("option","xmlarea");
+
+    for (let ero of xmlarea.xmlstruct.strukturo) {
+        if (ero.el == 'drv') {
+            const drv = ero.dsc.split(' ').slice(2).join(' ') || ero.dsc;
+            drv_list += '<option value="'+ero.id+'">' + drv + '</option>';
+        }
+    }
+    $("#derivajho_listo").append(drv_list);
+}
+
 function derivajho_enmeti(event) {
     event.preventDefault();
     $("#derivajho_error").hide();
@@ -1162,7 +1178,13 @@ function derivajho_enmeti(event) {
     // la nova ŝajnas malaperi (ĝi estas super aŭ sub la aktuala)
     // do eble pli bone aldonu la novan derivaĵon rekte en la xmlstrukturon(?)
     // kaj/aŭ navigu al la nova derivaĵo, se ni estas sur nivelo art/subart/xml
+
+    // if (values.listo == 'kursoro') {
     $("#xml_text").Artikolo("insert",drvxml,true);
+    // } else {
+    // ...aldoni drv rekte en la strukturon de xmlarea/xmlstruct
+    //}
+
     // $("#xml_text").insert(drvxml);
     // $("#xml_text").change();
     $("#derivajho_dlg").dialog("close");

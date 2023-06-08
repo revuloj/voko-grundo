@@ -562,20 +562,26 @@ function antaurigardo() {
                 
                 // korektu ligilojn en <a href...
                 $("#rigardo a").each( function() {
-                    var href = $(this).attr('href');
+                    const href = $(this).attr('href');
+                    let newUrl;
                     if (href && href[0] != '#' && href.slice(0,4) != 'http') {
                         if (href[0] != '/' && href[0] != '.') {
-                            var newUrl = revo_url + '/revo/art/' + href;
+                        // referenco al alia artikolo
+                            // var newUrl = revo_url + '/revo/art/' + href;
+                            const art = href.split('.')[0];
+                            newUrl = revo_url + '/index.html#' + art;
                             //console.debug(href+" -> "+newUrl);
                             $(this).attr('href', newUrl);
                             $(this).attr('target', '_new');
                         } else if (href.slice(0,3) == '../' ) {
-                            const newUrl = revo_url + '/revo/'+href.slice(3);
+                        // relativa referenco al Revo-dosiero, ekz-e indekso
+                            newUrl = revo_url + '/revo/'+href.slice(3);
                             //console.debug(href+" -> "+newUrl);
                             $(this).attr('href', newUrl);
                             $(this).attr('target', '_new');
                         } else if (href[0] == '/' ) {
-                            const newUrl = revo_url + href;
+                        // absoluta referenco al Revo-dosiero
+                            newUrl = revo_url + href;
                             //console.debug(href+" -> "+newUrl);
                             $(this).attr('href', newUrl);
                             $(this).attr('target', '_new');
