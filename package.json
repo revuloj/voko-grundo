@@ -35,7 +35,7 @@
         "//build:codec": "node js_util/vokosgn2x.js",
         "prebuild:js": "mkdir -p build/jsc && node js_util/vokosgn2x.js",
         "prebuild:rsj": "mkdir -p build/rsj",
-        "build:copy": "cp -r bin ./build/bin && cp -r dtd ./build/dtd && cp -r bin ./build/sql && cp -r bin ./build/owl && cp -r xsl ./build/xsl",
+        "build:copy": "cp -r bin ./build/bin && cp -r dtd ./build/dtd && cp -r bin ./build/sql && cp -r bin ./build/owl && cp -r xsl ./build/xsl && cp -r smb/*.gif ./build/smb/",
         "build:js": "google-closure-compiler -W VERBOSE --compilation_level SIMPLE --js_module_root ./jsc/rv --entry_point ./kadro.js --js_output_file build/jsc/revo-2i-min.js --js='jsc/u/*.js' --js='jsc/x/*.js' --js='jsc/a/*.js' --js='jsc/rv/*.js' && cp jsc/revo-art-1b.js build/jsc",
         "build:js:debug": "google-closure-compiler -W VERBOSE --compilation_level BUNDLE --js_module_root ./jsc --entry_point ./jsc/kadro.js --js_output_file build/jsc/revo-2i-min.js --js='jsc/u/*.js' --js='jsc/x/*.js' --js='jsc/a/*.js' --js='jsc/rv/*.js'",
         "build:rsj": "google-closure-compiler --compilation_level SIMPLE --process_common_js_modules --js_module_root ./jsc/rs --entry_point ./ui_kreo.js --js_output_file build/rsj/redaktilo-2i-min.js --js='jsc/u/*.js' --js='jsc/x/*.js' --js='jsc/a/*.js' --js='jsc/rs/*.js'",
