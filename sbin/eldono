@@ -70,6 +70,7 @@ etikedo)
     echo "Provizante la aktualan staton per etikedo (git tag) v${eldono}"
     echo "kaj puŝante tiun staton al la centra deponejo"
     git tag -f v${eldono} && git push && git push origin v${eldono} -f
+        # alternative anst. la lasste eble funkcias ankaŭ: git push --follow-tags
     ;;
 xsl)
     ## xsl        : transsendas la precipajn XSL-dosierojn donitajn en la komandlinio al la publika servilo
