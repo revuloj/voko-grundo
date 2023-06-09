@@ -148,7 +148,7 @@ $.widget( "redaktilo.Artikolo", {
         e.selectRange(pos,pos+len); // nur nun marku <len> signojn por pli bona videbleco
     },*/
 
-    /* PLIBONIGU: ĉu ni plu bezonas insert(), aŭ cu ni lasu
+    /* PLIBONIGU: ĉu ni plu bezonas insert(), aŭ ĉu ni lasu
     rekte voki al uzantaj funkcioj xmlarea.selection...?
     */
     insert: function(xmlstr,sync=false) {
@@ -160,6 +160,18 @@ $.widget( "redaktilo.Artikolo", {
         if (sync) xmlarea.sync();
         e.change();
     },
+
+    // enŝovu novan tekston post elemento s_id
+    insert_post: function(xmlstr,s_id,sync=false) {
+        const e = this.element;
+        //e.insert(xmlstr);
+        const xmlarea = this.option("xmlarea");
+        xmlarea.xmlstruct.insertAfterId(s_id,xmlstr);
+        // se postulate, tuj sinkronigu, eventuale rekreante la strukturon
+        if (sync) xmlarea.sync();
+        e.change();
+    },
+
 
     /*
     _setOption: function( key, value ) {

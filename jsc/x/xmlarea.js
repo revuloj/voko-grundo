@@ -95,7 +95,7 @@ Xmlarea.prototype.sync = function(select = undefined) {
 
     // nun retrovu la elektendan subtekston en la rekreita strukturo
 
-    // trovu laŭ id
+    // trovu laŭ id (tbs = to be selected)
     let tbs = this.xmlstruct.getStructById(select.id);
 
     if (tbs) {
@@ -139,7 +139,7 @@ Xmlarea.prototype.syncedXml = function() {
 
 
 /**
- * Malvalidigas la sinkron-flagoj por signi, ke venontfoje necesas sinkronigo de Xml 
+ * Malvalidigas la sinkron-flagon por signi, ke venontfoje necesas sinkronigo de Xml 
  * resp. rekrei antaŭrigardon
  */
 Xmlarea.prototype.setUnsynced = function() {

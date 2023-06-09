@@ -4,6 +4,20 @@
 // (c) 2021 Wolfram Diestel
 
 /**
+ * @typedef {Object} Strukturero
+ * @property {string} el  - la elemento (art, subart, drv, ...subsnc)
+ * @property {number} de  - la indekso de la komenca signo subteksta en la tuta XML
+ * @property {number} al  - la indekso de la lasta signo subteksta en la tuta XML
+ * @property {number} ln  - la komenca linio ene de la tuta XML
+ * @property {number} lc  - la nombro de linioj
+ * @property {string} mrk - la XML-atributo mrk, se la elemento ĝin havas
+ * @property {string} kap - la kapvorto, se la elemento ĝin havas
+ * @property {string} id  - unika ŝlosilo kalkulita (el mrk + evtl. tekstkomenco) por la subteksto
+ * @property {number} no  - la numero de la subteksto en la listo
+ * @property {string} dsc - konciza priskribo (rekonilo) de la subteksto por reprezenti ĝin en la retpaĝo
+*/
+
+/**
  * Administras XML-tekston kiel strukturo de subtekstoj
  * @constructor
  * @param {string} xml - la XML-teksto
@@ -42,6 +56,7 @@ function XmlStruct(xml, onAddSub) {
       drv: "\u24b9", subdrv: "\u24d3", snc: "\u24c8", subsnc: "\u24e2"
     }
 
+    // analizu la strukturon
     this.structure();
 }
 
@@ -56,8 +71,11 @@ XmlStruct.prototype.setText = function(xml) {
 
 
 /**
- * Ekstraktas strukturon de art/subart/drv/subdrv/snc/subsnc el la artikolo
+ * Ekstraktas strukturon de art/subart/drv/subdrv/snc/subsnc el la artikolo. Tio estas listo de (ingigitaj) subtekstoj
+ * por ĉiu el kiuj la listo enhavos objekton 
+ * 
  * @param {string} selected - se donita tio estas la elektita subteksto kaj estos markita en la revokfunkcio onaddsub (4-a argumento: true)
+ * @returns {Array.<Strukturero>}
  */
 XmlStruct.prototype.structure = function(selected = undefined) {
   const re_stru = this.re_stru;
@@ -226,6 +244,25 @@ XmlStruct.prototype.replaceSubtext = function(sd, xml, select = undefined) {
 };
 
 /**
+ * Enŝovas novan subtekston post la subtekston kun 's_id'
+ * Ĝi atentas, ke rekte post tiu povas okazi sub-subtekstoj,
+ * ekzemple enmetante derivaĵon oni devas ignori ties sencojn.
+ */
+XmlStruct.prototype.insertAfterId = function(s_id,xml) {
+  // trovu la subtekston laŭ mrk
+  const s = this.getStructById(s_id);
+  if (!s) throw "Subteksto kun id "+s_id+" ne trovita!"
+  // enŝovu la novan subtekston post tiu
+  this.setText(
+    this.xmlteksto.substring(0,s.al) 
+    + "\n"+ xml 
+    + this.xmlteksto.substring(s.al+1));
+  // FARENDA: laŭeble ni ankaŭ elektu la novan subtekston, sed
+  // ni nur post la analizo scias ties id kaj mrk! Do ni ne povas 
+  // doni tiun kiel argumenton al structure()
+}
+
+/**
  * Trovu la informojn de subteksto 'id' en la strukturlisto 
  * @param {string} id 
  * @returns la detalojn kiel objekto
@@ -236,6 +273,15 @@ XmlStruct.prototype.getStructById = function(id) {
   }
 };
 
+/**
+ * Trovas la subtekston kun 'mrk' en la strukturlisto kaj redonas ties informojn
+ * @param {*} mrk 
+ */
+XmlStruct.prototype.getStructByMrk = function(mrk) {
+  for (let s of this.strukturo) {
+    if (s.mrk == mrk) return s;
+  }
+}
 
 /**
  * Trovas la informon de subteksto: aŭ identigante ĝin per sia .id aŭ
@@ -255,6 +301,7 @@ XmlStruct.prototype.findStruct = function(sd) {
     }
   }
 }
+
 
 /**
  * Trovas subtekston en la strukturlisto

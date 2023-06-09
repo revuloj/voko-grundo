@@ -444,6 +444,7 @@ export default function() {
         kampoj: {
             kap: "#derivajho_kap",
             dif: "#derivajho_dif",
+            loko: "#derivajho_listo"
         },
         buttons: {   
             "Enmeti la derivaĵon": derivajho_enmeti, 
@@ -1157,6 +1158,7 @@ function plenigu_derivajxojn() {
             drv_list += '<option value="'+ero.id+'">' + drv + '</option>';
         }
     }
+    $("#derivajho_listo option").not(':first').remove();
     $("#derivajho_listo").append(drv_list);
 }
 
@@ -1179,14 +1181,14 @@ function derivajho_enmeti(event) {
     // do eble pli bone aldonu la novan derivaĵon rekte en la xmlstrukturon(?)
     // kaj/aŭ navigu al la nova derivaĵo, se ni estas sur nivelo art/subart/xml
 
-    // if (values.listo == 'kursoro') {
-    $("#xml_text").Artikolo("insert",drvxml,true);
-    // } else {
-    // ...aldoni drv rekte en la strukturon de xmlarea/xmlstruct
-    //}
+    if (values.loko == 'kursoro') {
+        // enŝovu ĉe kursoro
+        $("#xml_text").Artikolo("insert",drvxml,true);
+    } else {
+        // enŝovu post donita drv 
+        $("#xml_text").Artikolo("insert_post",drvxml,values.loko);
+    }
 
-    // $("#xml_text").insert(drvxml);
-    // $("#xml_text").change();
     $("#derivajho_dlg").dialog("close");
 }
 
