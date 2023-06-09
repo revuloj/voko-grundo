@@ -153,10 +153,10 @@ Xmlarea.prototype.setUnsynced = function() {
  * Laŭbezone sekurigas la nune redaktatan parton...
  * @param {string} id - la identigilo de la subteksto
  */
-Xmlarea.prototype.changeSubtext = function(id) {
+Xmlarea.prototype.changeSubtext = function(id,sync=true) {
   if (id) {
     // ni unue sekurigu la aktuale redaktatan parton...
-    this.sync({id:id}); // ni transdonas ankaŭ la elektotan id por navigi tien en la elekto-listo
+    if (sync) this.sync({id:id}); // ni transdonas ankaŭ la elektotan id por navigi tien en la elekto-listo
     
     /* ni trovu la celatan subtekston per ĝia id... */
 
@@ -222,7 +222,7 @@ Xmlarea.prototype.goto = function(line_pos,len = 1) {
   const xml = this.xmlstruct.getSubtext(sub);
   const pos = pos_of_line(xml,line-sub.ln-1) + ( lpos>0 ? lpos-1 : 0 );
 
-  this.changeSubtext(sub.id);
+  this.changeSubtext(sub.id,true);
   this.select(pos,0); // rulu al la pozicio
   this.select(pos,len); // nur nun marku <len> signojn por pli bona videbleco
 };

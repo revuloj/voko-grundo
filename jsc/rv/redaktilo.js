@@ -1078,7 +1078,7 @@ var redaktilo = function() {
 
     // tio renovigas la strukturon pro eblaj intertempaj snc-/drv-aldonoj ks...
     // do ni poste rekreos ĝin kaj devos ankaŭ marki la elektitan laŭ _item_
-    xmlarea.changeSubtext(val);
+    xmlarea.changeSubtext(val,true);
     show_pos();
 
     // se montriĝas traduk-proponoj, necesas adapti la hoketojn kaj +-butonoj

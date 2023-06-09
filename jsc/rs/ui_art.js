@@ -166,11 +166,11 @@ $.widget( "redaktilo.Artikolo", {
         const e = this.element;
         //e.insert(xmlstr);
         const xmlarea = this.option("xmlarea");
-        xmlarea.xmlstruct.insertAfterId(s_id,xmlstr);
+        // const nova_id =
+          xmlarea.xmlstruct.insertAfterId(s_id,xmlstr);
         // montru subtekston en la redaktilo, PLIBONIGU: tio iel okazu en xmlarea, ne tie ĉi eksplicite
         // krome ni volas montri la enigitan xml, ne tiun antaŭ ĝi
-        xmlarea.elekto = xmlarea.xmlstruct.getStructById(s_id);
-        xmlarea.txtarea.value = xmlarea.xmlstruct.getSubtext(xmlarea.elekto);
+        xmlarea.changeSubtext(s_id/*nova_id*/,false);
 
         e.change();
     },

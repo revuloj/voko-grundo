@@ -93,7 +93,7 @@ export default function() {
         // do ni poste rekreos ĝin kaj devos ankaŭ marki la elektitan laŭ _item_
         const art = $("#xml_text");
         const xmlarea = art.Artikolo("option","xmlarea");
-        xmlarea.changeSubtext(val);
+        xmlarea.changeSubtext(val,true);
         // okazigu eventon poziciŝanĝo ĉe Artikolo...
         art.Artikolo("option","poziciŝanĝo")();        
         //show_pos();
