@@ -162,13 +162,16 @@ $.widget( "redaktilo.Artikolo", {
     },
 
     // enŝovu novan tekston post elemento s_id
-    insert_post: function(xmlstr,s_id,sync=false) {
+    insert_post: function(xmlstr,s_id) {
         const e = this.element;
         //e.insert(xmlstr);
         const xmlarea = this.option("xmlarea");
         xmlarea.xmlstruct.insertAfterId(s_id,xmlstr);
-        // se postulate, tuj sinkronigu, eventuale rekreante la strukturon
-        if (sync) xmlarea.sync();
+        // montru subtekston en la redaktilo, PLIBONIGU: tio iel okazu en xmlarea, ne tie ĉi eksplicite
+        // krome ni volas montri la enigitan xml, ne tiun antaŭ ĝi
+        xmlarea.elekto = xmlarea.xmlstruct.getStructById(s_id);
+        xmlarea.txtarea.value = xmlarea.xmlstruct.getSubtext(xmlarea.elekto);
+
         e.change();
     },
 

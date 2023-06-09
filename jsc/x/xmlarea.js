@@ -113,7 +113,7 @@ Xmlarea.prototype.sync = function(select = undefined) {
       this.elekto = this.xmlstruct.strukturo[0]; 
     }
 
-    // se ni transiris al alia subteksto, aŭ aldoniĝisio post ĝi, aŭ eĉ tuta strukturero, 
+    // se ni transiris al alia subteksto, aŭ aldoniĝis io post ĝi, aŭ eĉ tuta strukturero, 
     // ni devos ankoraŭ montri la novelektitan/ŝanĝitan subtekston en Textarea
     if (old_s.id != this.elekto.id 
       || old_s.ln != this.elekto.ln
