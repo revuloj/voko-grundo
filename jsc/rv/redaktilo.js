@@ -767,8 +767,9 @@ var redaktilo = function() {
 
     if (xml.startsWith("<?xml") &&
       document.getElementById("r:eraroj").textContent == '') {
+        const nxml = xmlarea.normalizedXml();
         // forsendu la redaktitan artikolon
-        vokomailx("forsendo",art,xml);
+        vokomailx("forsendo",art,nxml);
         // memoru enhavon de kelkaj kampoj
         store_preferences();
       }

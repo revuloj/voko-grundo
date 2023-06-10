@@ -9,7 +9,7 @@
  * @param {string} ta_id - La HTML-Id de la koncerna textarea-elemento en la HTML-paĝo
  * @param {Function} onAddSub - Revokfunkcio, vokata dum analizo de la strukturo ĉiam, kiam troviĝas subteksto. Tiel eblas reagi ekzemple plenigante liston per la trovitaj subtekstoj (art, drv, snc...) 
  */
-function Xmlarea(ta_id, onAddSub) {
+function Xmlarea(ta_id, onAddSub, onSelectSub) {
     this.txtarea = document.getElementById(ta_id);
     this.txtarea.addEventListener("input",() => { this.setUnsynced(); });
     this.txtarea.addEventListener("change",() => { this.setUnsynced(); });
@@ -22,6 +22,7 @@ function Xmlarea(ta_id, onAddSub) {
     //this.tradukoj = {}; // tradukoj trovitaj en la aktuala redaktata subteksto
     //this.radiko = '';
     this.onaddsub = onAddSub;
+    this.onselectsub = onSelectSub;
     this.synced = true;
     this.ar_in_sync = false; // por scii, ĉu la lasta antaŭrigardo estas aktuala...
 
@@ -29,6 +30,12 @@ function Xmlarea(ta_id, onAddSub) {
     this.tradukoj_strukt = {}; // tradukoj kolektitaj (malprofunde) por ĉiu subteksto, ŝlosilo estas .id
                         // valoro estas objekto {<lng>:[<trdj>]}
 }
+
+Xmlarea.re_xml = {
+  finspacoj: /[ \t]+\n/g,
+  trolinioj: /\n\n\n+/g
+};                        
+
 
 /**
  * Metas la kompletan XML-tekston laŭ la argumento 'xml' kaj aktualigas la strukturon el ĝi
@@ -137,6 +144,17 @@ Xmlarea.prototype.syncedXml = function() {
   return this.xmlstruct.xmlteksto;
 };
 
+/**
+ * Redonas la tutan XML-tekston post eventuala sinkronigo kaj iom
+ * da normaligo, forigi troajn malplenajn liniojn kaj spacsignojn en linifinoj...
+ */
+Xmlarea.prototype.normalizedXml = function() {
+  const xml = this.syncedXml();
+  return (xml
+    .replace(Xmlarea.re_xml.finspacoj,"\n")
+    .replace(Xmlarea.re_xml.trolinioj,"\n\n"));
+}
+
 
 /**
  * Malvalidigas la sinkron-flagon por signi, ke venontfoje necesas sinkronigo de Xml 
@@ -180,8 +198,21 @@ Xmlarea.prototype.changeSubtext = function(id,sync=true) {
     // iru al la komenco!
     this.resetCursor();
     this.scrollPos(0);
+
+    if (this.onselectsub) this.onselectsub(this.elekto);
   }
 };
+
+/**
+ * Elektas la parton identigeblan per 'mrk' por redaktado.
+ * Laŭbezone antaŭe sekurigas la nune redaktatan parton...
+ * @param {*} mrk 
+ * @param {*} sync 
+ */
+Xmlarea.prototype.changeSubtextMrk = function(mrk,sync=true) {
+  const s = this.xmlstruct.getStructByMrk(mrk);
+  if (s) this.changeSubtext(s.id,sync);
+}
 
 
 /**

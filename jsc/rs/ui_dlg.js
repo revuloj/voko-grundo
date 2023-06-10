@@ -818,7 +818,7 @@ function sendi_artikolon_servile(event) {
     const xmlarea = $("#xml_text").Artikolo("option","xmlarea");
 
     $.alportu("revo_sendo", {
-        xml: xmlarea.syncedXml(),
+        xml: xmlarea.normalizedXml(),
         shangho: komento,
         redakto: reĝimo,
         metodo: metodo,
@@ -1168,26 +1168,25 @@ function derivajho_enmeti(event) {
 
     const xmlarea = $("#xml_text").Artikolo("option","xmlarea");    
     
-    var values = $("#derivajho_dlg").dialog("valoroj");
+    let values = $("#derivajho_dlg").dialog("valoroj");
     //values.mrk = xmlArtDrvMrk($("#xml_text").val()); 
     const indent = 2;
     values.dif = linirompo(values.dif,indent);
     values.mrk = xmlarea.getDosiero(); 
+
+    const drv = new XMLDerivaĵo(values);
     
-    var drvxml = new XMLDerivaĵo(values).xml();
-
-    // PLIBONIGU: pro la sinkronigado se ni estas sur nivelo de alia drv
-    // la nova ŝajnas malaperi (ĝi estas super aŭ sub la aktuala)
-    // do eble pli bone aldonu la novan derivaĵon rekte en la xmlstrukturon(?)
-    // kaj/aŭ navigu al la nova derivaĵo, se ni estas sur nivelo art/subart/xml
-
     if (values.loko == 'kursoro') {
         // enŝovu ĉe kursoro
-        $("#xml_text").Artikolo("insert",drvxml,true);
+        $("#xml_text").Artikolo("insert",drv.xml(),true);
     } else {
         // enŝovu post donita drv 
-        $("#xml_text").Artikolo("insert_post",drvxml,values.loko);
+        $("#xml_text").Artikolo("insert_post",drv.xml(),values.loko);
     }
+    
+    // ekredaktu la novan derivaĵon
+    const mrk = drv.drv.mrk;
+    const s_id = xmlarea.changeSubtextMrk(mrk,false);
 
     $("#derivajho_dlg").dialog("close");
 }

@@ -278,8 +278,12 @@ XmlStruct.prototype.getStructById = function(id) {
  * @param {*} mrk 
  */
 XmlStruct.prototype.getStructByMrk = function(mrk) {
-  for (let s of this.strukturo) {
-    if (s.mrk == mrk) return s;
+  const p = mrk.indexOf('.');
+  if (p) {
+    const ms = mrk.slice(p+1);
+    for (let s of this.strukturo) {
+      if (s.mrk == ms) return s;
+    }  
   }
 }
 

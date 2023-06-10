@@ -74,7 +74,7 @@ export default function() {
             $("#rigardo").empty();
         },
         xmlarea: new Xmlarea("xml_text",
-            function(subt,index,selected) {
+            function(subt,index,selected) { // reago je aldono de nova subteksto: aldonu en la listo art_strukturo
                 const sel_stru = document.getElementById("art_strukturo");
                 if (index == 0) sel_stru.textContent = ''; // malplenigu la liston ĉe aldono de unua ero...        
                 if (selected) {
@@ -82,6 +82,9 @@ export default function() {
                 } else {
                     sel_stru.append(ht_element('option',{value: subt.id},subt.dsc));
                 }
+            },
+            function(subt) { // reago al interna elektoŝanĝo: elektu ankaŭ en la listo art_strukturo
+                $("#art_strukturo option[value='"+subt.id+"']").prop('selected', true);
             }
         )        
     });
