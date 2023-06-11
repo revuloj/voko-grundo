@@ -213,13 +213,18 @@ when_doc_ready(function() {
         if (document.getElementById("navigado")) {
 
             const srch = getParamValue("q");
+            const red = getParamValue("r");
             const art = window.location.hash;
     
             if (art) {
                 // ĉe URL-parametro 'a' ni rekte iru al artikolo
                 const art_url = hash2art(art);
                 load_page("main",art_url);   
-                load_page("nav",globalThis.inx_eo_url);   
+                load_page("nav",globalThis.inx_eo_url);  
+
+            } else if (red) {
+                // se parametro r estas donita, ni ekredaktos la donitan artikolon...
+                redaktu(window.location.href);                
             } else if (srch) {
                 // ĉe URL-parametro 'q' ni tuj lanĉu serĉon
                 // ni devas certigi, ke la naviga kaj titolpaĝo antaŭ la
