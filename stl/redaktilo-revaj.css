@@ -230,6 +230,10 @@ input[type='button']:focus,
     margin-right: .1em;
 }
 
+#sercho_trovoj img {
+    background-color: var(--wmb-bgr-clr);
+}
+
 
 .surxml {
     position: absolute;

@@ -118,6 +118,8 @@
     --bld-bgr-clr: lightgoldenrodyellow;
     --bld-brd-clr: #cccccc;
 
+    --wmb-bgr-clr: #eee; /* fono de Wikimedia-bildoj */
+
     /* ŝablonoj  */
     --shb-bgr-clr: #e5e3d5;
     --sh2-bgr-clr: #ffedad;
@@ -206,6 +208,8 @@
 
     --svg-bgr-clr: #ffffee; 
     --svg-brd-clr: #cccccc;
+
+    --wmb-bgr-clr: #999; /* fono de Wikimedia-bildoj */
 
     /* ŝablonoj  */
     --shb-bgr-clr: #070721;
