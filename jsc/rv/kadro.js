@@ -457,14 +457,17 @@ function nav_toggle() {
 */
 function ref_target(a_el) {
     var href = a_el.getAttribute("href");
-    var trg = a_el.getAttribute("target");   
+    var trg = a_el.getAttribute("target");
+    const red = getParamValue("r",href.split('?')[1]);
 
     if (! href) {
         console.error("mankas atributo href ĉe elemento "+a_el.tagName+" ("+a_el.id+")");
         return;
     }
 
-    if (href.startsWith('#')) {
+    if (red || href.indexOf("/cgi-bin/vokomail.pl")>=0) {
+        return "red"; // redakti...
+    } else if (href.startsWith('#')) {
         return "int";
     } else if (
         href.startsWith('http://') 
@@ -473,8 +476,6 @@ function ref_target(a_el) {
         && href.substring('https://'.length-1,globalThis.revo_url.length) != globalThis.revo_url
         ) {
         return "ext";
-    } else if (href.indexOf("/cgi-bin/vokomail.pl")>=0) {
-        return "red"; // redakti...
     } else if (trg == "precipa") {
         return "main";
     } else if (trg == "indekso") {
@@ -542,7 +543,7 @@ function stop_wait() {
  * @param {*} request 
  */
 function load_error(request) {
-    if (request.status == 404)
+    if (request.status == 404 && request.responseURL.indexOf('404')<0) // evitu ciklon se 404.html mankas!
         load_page("main",globalThis.http_404_url);
 }
 
