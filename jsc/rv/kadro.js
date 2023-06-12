@@ -442,15 +442,18 @@ function nav_toggle() {
  * 4. main: temas pri referenco al artikolo/ĉefpaĝo, t.e. inx: target="precipa", art: target=""    
 */
 function ref_target(a_el) {
-    var href = a_el.getAttribute("href");
-    var trg = a_el.getAttribute("target");   
+    const href = a_el.getAttribute("href");
+    const trg = a_el.getAttribute("target");
+    const red = getParamValue("r");
 
     if (! href) {
         console.error("mankas atributo href ĉe elemento "+a_el.tagName+" ("+a_el.id+")");
         return;
     }
 
-    if (href.startsWith('#')) {
+    if (red || href.indexOf("/cgi-bin/vokomail.pl")>=0) {
+        return "red"; // redakti...
+    } else if (href.startsWith('#')) {
         return "int";
     } else if (
         href.startsWith('http://') 
@@ -459,8 +462,6 @@ function ref_target(a_el) {
         && href.substring('https://'.length-1,globalThis.revo_url.length) != globalThis.revo_url
         ) {
         return "ext";
-    } else if (href.indexOf("/cgi-bin/vokomail.pl")>=0) {
-        return "red"; // redakti...
     } else if (trg == "precipa") {
         return "main";
     } else if (trg == "indekso") {
