@@ -352,6 +352,12 @@ nav a:active {
     color: #222;
 }
 
+#navigado .enhavo a[target='_new']::after {
+    content: "\00a0\25b9";
+    color: #222;
+}
+
+
 #navigado .enhavo u {
     text-decoration-style: dotted;
     text-decoration-thickness: 1px;
