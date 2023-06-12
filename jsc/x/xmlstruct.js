@@ -3,7 +3,7 @@
 
 // (c) 2021 Wolfram Diestel
 
-/**
+/* (bedaŭrinde ni ne povas tion dokumenti per JSDoc, t.e. ni ne uzas duoblan stelon, ĉar tiam google-closure-compiler stumblus aŭ oni devus difini apartan variablon por tio...)
  * @typedef {Object} Strukturero
  * @property {string} el  - la elemento (art, subart, drv, ...subsnc)
  * @property {number} de  - la indekso de la komenca signo subteksta en la tuta XML
@@ -21,43 +21,44 @@
  * Administras XML-tekston kiel strukturo de subtekstoj
  * @constructor
  * @param {string} xml - la XML-teksto
- * @param {Function} onAddSub - Revokfunkcio, vokata dum analizo de la strukturo ĉiam, kiam troviĝas subteksto. Tiel eblas reagi ekzemple plenigante liston per la trovitaj subtekstoj (art, drv, snc...) 
+ * @param {Function} [onAddSub] - Revokfunkcio, vokata dum analizo de la strukturo ĉiam, kiam troviĝas subteksto. Tiel eblas reagi ekzemple plenigante liston per la trovitaj subtekstoj (art, drv, snc...) 
  */
 function XmlStruct(xml, onAddSub) {
     this.xmlteksto = xml; // la tuta teksto
+    /* @type {Array.<Strukturero>} */
     this.strukturo = []; // la listo de subtekstoj [komenco,fino,nomo]
     this.radiko = '';
     this.onaddsub = onAddSub;
 
-    this.re_stru = {
-      _elm: /[ \t]*<((?:sub)?(?:art|drv|snc))[>\s]/g,
-      _eoe: />[ \t]*\n?/g,
-      _mrk: /\s*mrk\s*=\s*(['"])([^>"']*?)\1/g,
-      _kap: /<kap>([^]*)<\/kap>/,
-      _rad: /<rad>([^<]+)<\/rad>/,
-      _dos: /<art\s+mrk="\$Id:\s+([^\.]+)\.xml|<drv\s+mrk="([^\.]+)\./,
-      _var: /<var>[^]*<\/var>/g,
-      _ofc: /<ofc>[^]*<\/ofc>/g,
-      _klr: /<klr[^>]*>[^]*<\/klr>/g,
-      _ind: /<ind>([^]*)<\/ind>/g,
-      _fnt: /<fnt>[^]*<\/fnt>/g,
-      _tl1: /<tld\s+lit="(.)"[^>]*>/g,
-      _tl2: /<tld[^>]*>/g,
-      _tagend: /[>\s]/
-    };
-  
-    this.indents = {
-      art: "", subart: "\u25b8\u00a0", drv: "\u2014 ", subdrv: "\u00a0\u2014 ", 
-      snc: "\u00a0\u00a0\u00a0\u22ef ", subsnc: "\u00a0\u00a0\u00a0\u22ef\u22ef "
-    };
-
-    this.elements = {
-      subart: "\u24d0",
-      drv: "\u24b9", subdrv: "\u24d3", snc: "\u24c8", subsnc: "\u24e2"
-    }
-
     // analizu la strukturon
     this.structure();
+}
+
+XmlStruct.re_stru = {
+  _elm: /[ \t]*<((?:sub)?(?:art|drv|snc))[>\s]/g,
+  _eoe: />[ \t]*\n?/g,
+  _mrk: /\s*mrk\s*=\s*(['"])([^>"']*?)\1/g,
+  _kap: /<kap>([^]*)<\/kap>/,
+  _rad: /<rad>([^<]+)<\/rad>/,
+  _dos: /<art\s+mrk="\$Id:\s+([^\.]+)\.xml|<drv\s+mrk="([^\.]+)\./,
+  _var: /<var>[^]*<\/var>/g,
+  _ofc: /<ofc>[^]*<\/ofc>/g,
+  _klr: /<klr[^>]*>[^]*<\/klr>/g,
+  _ind: /<ind>([^]*)<\/ind>/g,
+  _fnt: /<fnt>[^]*<\/fnt>/g,
+  _tl1: /<tld\s+lit="(.)"[^>]*>/g,
+  _tl2: /<tld[^>]*>/g,
+  _tagend: /[>\s]/
+};
+
+XmlStruct.indents = {
+  art: "", subart: "\u25b8\u00a0", drv: "\u2014 ", subdrv: "\u00a0\u2014 ", 
+  snc: "\u00a0\u00a0\u00a0\u22ef ", subsnc: "\u00a0\u00a0\u00a0\u22ef\u22ef "
+};
+
+XmlStruct.elements = {
+  subart: "\u24d0",
+  drv: "\u24b9", subdrv: "\u24d3", snc: "\u24c8", subsnc: "\u24e2"
 }
 
 /**
@@ -75,10 +76,9 @@ XmlStruct.prototype.setText = function(xml) {
  * por ĉiu el kiuj la listo enhavos objekton 
  * 
  * @param {string} selected - se donita tio estas la elektita subteksto kaj estos markita en la revokfunkcio onaddsub (4-a argumento: true)
- * @returns {Array.<Strukturero>}
  */
 XmlStruct.prototype.structure = function(selected = undefined) {
-  const re_stru = this.re_stru;
+  const re_stru = XmlStruct.re_stru;
   const xmlteksto = this.xmlteksto;
 
   /**
@@ -194,9 +194,9 @@ XmlStruct.prototype.structure = function(selected = undefined) {
 
     // kunmetu etikedon por la peco el elementnomo kaj sufikso
     const suff = subt.kap ? subt.kap : subt.mrk||'';
-    subt.dsc = this.indents[subt.el] + (
+    subt.dsc = XmlStruct.indents[subt.el] + (
       subt.el!='art'? 
-        this.elements[subt.el]+ (suff?' '+suff:' ('+subt.el+')') 
+        XmlStruct.elements[subt.el]+ (suff?' '+suff:' ('+subt.el+')') 
         : suff);
 
     // ĉe la kapvorto de la artikolo ekstraktu la radikon
@@ -222,7 +222,7 @@ XmlStruct.prototype.structure = function(selected = undefined) {
  * @returns La dosiernomon ekstraktitan el la trovita mrk-atributo
  */
 XmlStruct.prototype.art_drv_mrk = function() {
-  var match = this.xmlteksto.match(this.re_stru._dos);
+  var match = this.xmlteksto.match(XmlStruct.re_stru._dos);
   if (match) return (match[1]? match[1] : match[2]);
 };
 
@@ -429,7 +429,7 @@ XmlStruct.prototype.getLastStructWithLine = function(line) {
  * @returns objekton kun kampoj pos, end, elm
  */
 XmlStruct.prototype.travel_tag_bw = function(elements,end,stop_no_match,xml,from=undefined) {    
-  const re_te = this.re_stru._tagend;
+  const re_te = XmlStruct.re_stru._tagend;
   const mark = end? '</' : '<';
 
   // se mankas la lasta argumento, uzu aprioran...

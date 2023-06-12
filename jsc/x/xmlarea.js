@@ -7,7 +7,8 @@
  * Administras la redaktatan tekston tiel, ke eblas redakti nur parton de ĝi, t.e. unuopan derivaĵon, sencon ktp.
  * @constructor
  * @param {string} ta_id - La HTML-Id de la koncerna textarea-elemento en la HTML-paĝo
- * @param {Function} onAddSub - Revokfunkcio, vokata dum analizo de la strukturo ĉiam, kiam troviĝas subteksto. Tiel eblas reagi ekzemple plenigante liston per la trovitaj subtekstoj (art, drv, snc...) 
+ * @param {Function} [onAddSub] - Revokfunkcio, vokata dum analizo de la strukturo ĉiam, kiam troviĝas subteksto.  Tiel eblas reagi ekzemple plenigante liston per la trovitaj subtekstoj (art, drv, snc...)
+ * @param {Function} [onSelectSub] - Revokfunkcio, vokata dum interne kaŭzia elekto de alia subteksto. Ekz-e aldono de nova <drv> 
  */
 function Xmlarea(ta_id, onAddSub, onSelectSub) {
     this.txtarea = document.getElementById(ta_id);
@@ -16,7 +17,7 @@ function Xmlarea(ta_id, onAddSub, onSelectSub) {
 
     //this.structure_selection = document.getElementById(struc_sel);
     this.xmlstruct = new XmlStruct('',onAddSub); // la tuta teksto
-    this.xmltrad = new XmlTrad(this.xmlstruct); // por redaktaado de tradukoj
+    this.xmltrad = new XmlTrad(); // por redaktado de tradukoj
 
     this.elekto = undefined; // aktuale redaktata subteksto
     //this.tradukoj = {}; // tradukoj trovitaj en la aktuala redaktata subteksto
@@ -280,7 +281,6 @@ Xmlarea.prototype.goto = function(line_pos,len = 1) {
  * @param {boolean} normalize - true: ni forigas ofc, klr, ind el la traduko, false: ni ne tuŝas ĝian strukturon
  */
 Xmlarea.prototype.collectTrd = function(xml, shallow=false, normalize=false) {
-  const re = this.re_stru;
   if (!xml) {
     xml = this.txtarea.value;
     // KOREKTU: fakte ni nun kolektas en {<lng>: [trdj]}

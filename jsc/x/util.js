@@ -280,12 +280,12 @@ function getHashParts() {
 function getParamValue(param, params=undefined) {
   // ĉu ni vere bezonos tion? parametroj estas afero de la servilo,
   // sed ni povas kaŝi ilin ankaŭ post #, vd. supre getHashParts
-    var result = null,
+    let result = null,
         tmp = [],
         parstr = params || location.search.slice(1);
         parstr.split("&").forEach(function (item) {
           tmp = item.split("=");
-          if (tmp[0] === param) result = decodeURIComponent(tmp[1]);
+          if (tmp[0] === param) result = (tmp[1]? decodeURIComponent(tmp[1]) : '');
         });
     return result;
 }

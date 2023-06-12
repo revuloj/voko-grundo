@@ -21,16 +21,17 @@ function XmlTrad() {
     this.tradukoj = {}; // tradukoj de unu substrukturo/subteksto sed de pluraj lingvoj
     this.tradukoj_strukt = {}; // laŭ lingvo estas objektoj por ĉiu strukturero de xmlstruct
 
-    this.re_stru = {
-        /*_line: /^.*$/mg,*/
-        _trd: /^<trd(grp)?\s+lng\s*=\s*["']([a-z]{2,3})['"]\s*>([^]*?)<\/trd\1\s*>$/,
-        _tr1: /<trd\s*>([^]*?)<\/trd\s*>/g,
-        _ofc: /<ofc>[^]*<\/ofc>/g,
-        _klr: /<klr[^>]*>[^]*<\/klr>/g,
-        _ind: /<ind>([^]*)<\/ind>/g
-    };  
 };
 
+
+XmlTrad.re_stru = {
+  /*_line: /^.*$/mg,*/
+  _trd: /^<trd(grp)?\s+lng\s*=\s*["']([a-z]{2,3})['"]\s*>([^]*?)<\/trd\1\s*>$/,
+  _tr1: /<trd\s*>([^]*?)<\/trd\s*>/g,
+  _ofc: /<ofc>[^]*<\/ofc>/g,
+  _klr: /<klr[^>]*>[^]*<\/klr>/g,
+  _ind: /<ind>([^]*)<\/ind>/g
+};  
 /**
  * Redonas tradukliston de tradukoj de unu strukturero en unu lingvo
  */
@@ -49,7 +50,7 @@ XmlTrad.prototype.getStruct = function(lng, s_id) {
 
 /**
  * Aldonas ŝanĝon al tradukoj
- * @param {*} id la identigilo de la strukturo (drv, snc...)
+ * @param {*} s_id la identigilo de la strukturo (drv, snc...)
  * @param {*} lng la lingvo
  * @param {*} no la pozicio de la tradukoj en tiu strukturo kaj lingvo
  * @param {*} trd la tradukteksto
@@ -78,8 +79,11 @@ XmlTrad.prototype.shanghitaj = function(s_id) {
     return r;
 }
 
-
-
+/**
+ * Preaparas kolekton de tradukoj metante la aktualan Xml-strukturdifinon
+ * kaj maplenigante la tradukobjektojn
+ * @param {Object} xmlstruct 
+ */
 XmlTrad.prototype.preparu = function(xmlstruct) {
     this.xmlstruct = xmlstruct;
     this.tradukoj = {};
@@ -95,7 +99,7 @@ XmlTrad.prototype.preparu = function(xmlstruct) {
  * @param {boolean} normalize - true: ni forigas ofc, klr, ind el la traduko, false: ni ne tuŝas ĝian strukturon
  */
  XmlTrad.prototype.collectXml = function(xml, shallow=false, normalize=false) {
-    const re = this.re_stru;
+    const re = XmlTrad.re_stru;
     const find_stag = (elm,xml,from) => this.xmlstruct.travel_tag_bw([elm],false,false,xml,from);  
   
     let find_etag, spos = xml.length;
@@ -216,7 +220,7 @@ XmlTrad.prototype.preparu = function(xmlstruct) {
           t = find_stag([q.elm],xml,q.pos);
           if (t) {
             // ni rigardu pri kiu lingvo temas...
-            const m = this.re_stru._trd.exec(xml.substring(t.pos,q.end+1));
+            const m = XmlTrad.re_stru._trd.exec(xml.substring(t.pos,q.end+1));
             if (m) {
               const l = m[2];
               if (l == lng) {

@@ -212,7 +212,7 @@ when_doc_ready(function() {
         // enkadrigu();
         if (document.getElementById("navigado")) {
 
-            const srch = getParamValue("q");
+            let srch = getParamValue("q"); if (srch === '') srch = "tohuvabohuo"; // Kajto :-)
             const red = getParamValue("r");
             const art = window.location.hash;
     
@@ -231,7 +231,7 @@ when_doc_ready(function() {
                 // tamen aperu bona! Tial la ĉenigo!
                 load_page("nav",globalThis.inx_eo_url,true,()=>{
                     load_page("main",globalThis.titolo_url,true,
-                        ()=>serchu_q(srch));
+                        ()=>serchu_q(srch || "tohuvabohuo"));
                 });
             } else {
                 // anstataŭe ŝargu tiujn du el ĉefa indeks-paĝo
@@ -435,11 +435,12 @@ function nav_toggle() {
 }
 
 /** 
- * Helpfunkcio por navigado. Navigante ni devas distingi plurajn kazojn:
+ * Helpfunkcio por navigado. Navigante laŭ a@href ni devas distingi plurajn kazojn:
  * 1. int: temas pri interna referenco (href="#...")
  * 2. ext: temas pri alekstera referenco (href="http(s)://iu-retejo...")
  * 3. nav: temas pri referenco al alia indekso, t.e. inx: target="", art: target="indekso"    
- * 4. main: temas pri referenco al artikolo/ĉefpaĝo, t.e. inx: target="precipa", art: target=""    
+ * 4. main: temas pri referenco al artikolo/ĉefpaĝo, t.e. inx: target="precipa", art: target="" 
+ * 5. red: temas pri referenco al redaktilo: vokomail.pl (malnova), parametro ?r (nova)   
 */
 function ref_target(a_el) {
     const href = a_el.getAttribute("href");
@@ -895,7 +896,7 @@ function adaptu_paghon(root_el, url) {
 //}
 
 /**
- * Navigado laŭ referenco depende de kie estas la celo (ext,int,nav,red,main).
+ * Navigado laŭ referenco (a@href) depende de kie estas la celo (ext,int,nav,red,main).
  * @param {*} event 
  * @returns se estas elŝuto (XML) laŭ atributo 'download' ni ne navigas sed tuj revenas.
  */
