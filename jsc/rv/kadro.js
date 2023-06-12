@@ -444,7 +444,7 @@ function nav_toggle() {
 function ref_target(a_el) {
     const href = a_el.getAttribute("href");
     const trg = a_el.getAttribute("target");
-    const red = getParamValue("r");
+    const red = getParamValue("r",href.split('?')[1]);
 
     if (! href) {
         console.error("mankas atributo href ĉe elemento "+a_el.tagName+" ("+a_el.id+")");
@@ -529,7 +529,7 @@ function stop_wait() {
  * @param {*} request 
  */
 function load_error(request) {
-    if (request.status == 404)
+    if (request.status == 404 && request.responseURL.indexOf('404')<0) // evitu ciklon se 404.html mankas!
         load_page("main",globalThis.http_404_url);
 }
 
