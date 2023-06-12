@@ -1265,12 +1265,18 @@ function mrk_eraroj() {
 /**
  * Pridemandas la bibliografion kiel JSON de la servilo kaj prezentas ĝin kiel HTML
  */
-function bibliogr() {
+function bibliogr(sort_by) {
     HTTPRequest('POST', globalThis.bib_json_url, {x:1}, // ni sendu ion per POST por ĉiam havi aktualan liston
         function(data) {
             var json = 
                 /** @type { {bib: string, tit: string} } */
                 (JSON.parse(data));
+
+            if (sort_by) {
+                const cmp = new Intl.Collator('eo').compare;
+                json.sort( (a, b) => cmp(a[sort_by],b[sort_by]) );
+            }
+
             const enh = document.querySelector(".enhavo");
             enh.textContent= '';
             const dl = ht_element(['dl']);
