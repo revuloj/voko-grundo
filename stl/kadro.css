@@ -348,7 +348,7 @@ nav a:active {
 }
 
 #navigado .enhavo a[target='precipa']::before {
-    content: "\2022\00a0";
+    content: "\25e6\00a0";
     color: #222;
 }
 
