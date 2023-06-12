@@ -598,6 +598,8 @@ function load_page(trg, url, push_state=true, whenLoaded=undefined) {
             });
         } else if (filename.startsWith("_plena")) {
             viaj_submetoj();
+        } else if (filename == "bibliogr") {
+            bibliogr();
         } else if (filename == "eraroj") {
             mrk_eraroj();
         }
@@ -1253,6 +1255,50 @@ function mrk_eraroj() {
                 }
             }
 
+        },
+        start_wait,
+        stop_wait 
+    );    
+}
+
+
+/**
+ * Pridemandas la bibliografion kiel JSON de la servilo kaj prezentas ĝin kiel HTML
+ */
+function bibliogr() {
+    HTTPRequest('POST', globalThis.bib_json_url, {x:1}, // ni sendu ion per POST por ĉiam havi aktualan liston
+        function(data) {
+            var json = 
+                /** @type { {bib: string, tit: string} } */
+                (JSON.parse(data));
+            const enh = document.querySelector(".enhavo");
+            enh.textContent= '';
+            const dl = ht_element(['dl']);
+
+            for (const bib of json) {          
+                // dt: la mallongigo evtl. kun href/url      
+                const dt = ht_element('dt');
+                if (bib.url) {
+                    const a = ht_elements([
+                        ['a',{href: bib.url, target: '_new'},
+                            [['b',{},bib.bib]]
+                        ]
+                    ])
+                    dt.append(...a);                  
+                } else {
+                    dt.append(ht_element('b',{},bib.bib));
+                }
+                // dd: la detaloj: autoro, titolo ktp.
+                const dd = ht_element('dd');
+                if (bib.aut) dd.append(bib.aut,ht_br());
+                if (bib.trd) dd.append('trad. ',bib.trd,ht_br());
+                dd.append(ht_element('b',{},bib.tit),ht_br());
+                if (bib.ald) dd.append("(",bib.ald,")",ht_br());
+                if (bib.eld) dd.append(bib.eld,ht_br());
+                dl.append(dt,dd);
+            }
+            const h1 = ht_element('h1',{},'bibliografio');
+            enh.append(h1,dl);
         },
         start_wait,
         stop_wait 

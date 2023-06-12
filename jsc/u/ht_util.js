@@ -170,6 +170,13 @@ function ht_elements(jlist) {
 }
 
 /**
+ * Kreas kaj redonas <br>-elementon
+ */
+function ht_br() {
+  return ht_element('br');
+}
+
+/**
  * Kreas HTML-butonon kun teksto
  * @param {string} label - la surskribo
  * @param {Function} handler - la reagfunkcio al premoj
@@ -221,7 +228,7 @@ function ht_list(list, listtype='ul', attrlist=undefined, listero_cb=undefined) 
 }
 
 /**
- * Kreas difinliston (HTML-dl). La ŝlosiloj de la transdonita objekto donas la difintermojn ('dt')
+ * Kreas difinliston (HTML-dl). La ŝlosiloj de la transdonita objekto donas la difin-termojn ('dt')
  * kaj la valoroj la difinojn ('dd'). Per la revokfunkcio item_cb vi povas strukturi ilin individue.
  * @param {!Object<string,*>} obj 
  * @param {Function} item_cb 

@@ -26,6 +26,7 @@ globalThis.inx_eo_url = "/revo/inx/_plena.html";
 globalThis.mx_trd_url = "/cgi-bin/mx_trd.pl";
 globalThis.nombroj_url = "/cgi-bin/nombroj.pl";
 globalThis.mrk_eraro_url = "/cgi-bin/mrk_eraroj.pl";
+globalThis.bib_json_url = "/revo/dok/bibliogr.json";
 globalThis.http_404_url = "/revo/dlg/404.html";
 globalThis.sercho_videblaj = 7;
 
