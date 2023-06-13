@@ -571,8 +571,8 @@ function antaurigardo() {
                         if (href[0] != '/' && href[0] != '.') {
                         // referenco al alia artikolo
                             // var newUrl = revo_url + '/revo/art/' + href;
-                            const art = href.split('.')[0];
-                            newUrl = revo_url + '/index.html#' + art;
+                            const mrk = href.split('#')[1] || href.split('.')[0];
+                            newUrl = revo_url + '/index.html#' + mrk;
                             //console.debug(href+" -> "+newUrl);
                             $(this).attr('href', newUrl);
                             $(this).attr('target', '_new');
