@@ -1542,7 +1542,7 @@ function tradukojn_enmeti(event) {
     // prenu la shanghitajn tradukojn
     //var trd_shanghoj = $("#traduko_tradukoj").data("trd_shanghoj"); 
     try {
-        $("#xml_text").Artikolo("insert_tradukojn"); //,trd_shanghoj);
+        $("#xml_text").Artikolo("enmetu_tradukojn"); //,trd_shanghoj);
         $("#traduko_dlg").dialog( "close" );
     } catch (e) {
         $("#traduko_error").html(e.toString());

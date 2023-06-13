@@ -353,7 +353,7 @@ var artikolo = function() {
     }
 
     /**
-     * Regas la evento por etendi kasitajn tradukojn
+     * Reagas al evento por etendi kaŝitajn tradukojn
      * @memberof artikolo
      * @inner
      * @param {Event} event 

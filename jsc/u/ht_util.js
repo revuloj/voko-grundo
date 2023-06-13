@@ -143,6 +143,10 @@ function ht_element(name, attributes = null, textcontent = undefined) {
  * Kreas ingitan HTML-elementostrukturon. Vi transdonu liston de kreendaj elementoj.
  * Ĉiu elemento estas tri-elementa listo [elementnomo,atributoj,enhavo]. La enhavo 
  * povas esti malplena, teksto aŭ samstruktura elementolisto.
+ * Ni momente ne subtenas miksitan enhavon en la enhavoparto (tria listero)
+ * Se vi volas krei tion, unue kreu la ĉirkaŭan elementon per ht_elemento
+ * kaj poste uzu JS HTMLElement.append por aldoni la enhavon kiel miksaĵon de
+ * tekstoj kaj elementoj kreitaj unuope per ht_element (aŭ ht_elements, se pluraj aŭ ingigitaj)
  * @param {!Array<*>} jlist 
  * @returns {Array<Node>} - listo de kreitaj elementoj, eventuale ingitaj
  * @suppress {checkTypes} - la tip-kontrolo de closure-compiler ne kapablas difini

@@ -558,7 +558,7 @@ $.widget( "redaktilo.Artikolo", {
         return tradukoj;
     },
 
-    insert_tradukojn: function () {
+    enmetu_tradukojn: function () {
         const xmlarea = this.option("xmlarea");
         const xmltrad = xmlarea.xmltrad;
 

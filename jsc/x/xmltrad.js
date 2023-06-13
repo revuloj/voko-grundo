@@ -60,7 +60,8 @@ XmlTrad.prototype.putStruct = function(s_id,lng,no,trd) {
     // al Xmlarea.tradukoj nun anstataŭ en aparta dlg-alpendo trd_shanghoj...
     if (! this.shanghoj_strukt[lng]) this.shanghoj_strukt[lng] = {};
     // se ankoraŭ malplena, transprenu ĉiujn originajn tradukoj de s_id
-    if (! this.shanghoj_strukt[lng][s_id]) this.shanghoj_strukt[lng][s_id] = this.tradukoj_strukt[lng][s_id];
+    if (! this.shanghoj_strukt[lng][s_id]) 
+      this.shanghoj_strukt[lng][s_id] = this.tradukoj_strukt[lng][s_id] || [];
     // ŝanĝu la traduktekston kun la indikita n-ro
     this.shanghoj_strukt[lng][s_id][no] = trd;
 }
