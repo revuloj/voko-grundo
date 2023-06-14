@@ -3,7 +3,7 @@
 // procento-traboj: (c) Changaco, https://github.com/Changaco/unicode-progress-bars
 // adaptita de Wolfram Diestel
 
-// cetero: (c) 2016 - 2018 Wolfram Diestel
+// cetero: (c) 2016-2023 ĉe Wolfram Diestel
 // laŭ GPL 2.0
 
 *****************************************************************************/
@@ -27,15 +27,17 @@ var bar_styles = [
     '⚪⚫',
 ];
 
-function repeat(s, i) {
-    var r = '';
-    for(var j=0; j<i; j++) r += s;
+function repeat(s: string, i: number) {
+    let r = '';
+    for(let j=0; j<i; j++) r += s;
     return r;
 }
 
-function make_percent_bar(p, bar_style, min_size, max_size) {
-    var d, full, m, middle, r, rest, x,
-        min_delta = Number.POSITIVE_INFINITY,
+function make_percent_bar(p: number, bar_style: Array<string>, 
+    min_size: number, max_size: number): {str: string, delta: number}
+{
+    var d: number, full: number, m: string, middle: number, r: string, 
+        rest: number, x: number, min_delta = Number.POSITIVE_INFINITY,
         full_symbol = bar_style[bar_style.length-1],
         n = bar_style.length - 1;
     if(p == 100) return {str: repeat(full_symbol, max_size), delta: 0};

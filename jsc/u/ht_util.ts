@@ -1,51 +1,55 @@
-
 /* jshint esversion: 6 */
 
-// (c) 2021 Wolfram Diestel
+/* 
+  (c) 2021-2023 ĉe Wolfram Diestel
+*/
 
-//const help_base_url = 'https://revuloj.github.io/temoj/';
 
 /**
  * HTML-elemento-specifo, konsistanta el nomo:string, atributoj:Object kaj enhavo.
  * Enhavo povas esti malplena, teksto aŭ listo de enhavataj HTML-elemento-specifoj.
  * La tipkontrolo de closure-compiler ne povas kontroli tro kompleksajn kaj refleksivajn
  * tipdifinojn kiel:
- * [string,Object<string,string>,string|Array<string|ElementSpec>]
- * Ni povas pripensi uzi ion kiel {tag: string, atr: Object<string,string>, cnt: ...}
- * anstatataŭ sed tio plilongigus nebezone niajn struktur-specifojn.
- * /@/typedef { Array<*> } ElementSpec; var ElementSpec;
- * /
+ */
  
+type StrObj = { [key: string]: string};
+type AtributSpec = StrObj;
+// Plibonigu, por permesi miksitan enhavon ni devus ŝanĝi la lastan
+// al Array<string|ElementSpec>, sed ni implemento tion ne jam subtenas
+type ElementSpec = [string, AtributSpec?, (string|Array<ElementSpec>)?];
+
+type Kapoj = StrObj;
+type Parametroj = StrObj;
 
 /**
  * Ŝargas fonan dokumenton de la servilo per XMLHttpRequest
- * @param {string} method - la HTTP-metodo
- * @param {string} url - la URL
- * @param {Object<string,string>} headers - la HTTP-kapoj
- * @param {Object<string,string>} params - la HTTP-parametroj
- * @param {Function} onSuccess - vokata post sukceso
- * @param {Function} onStart - vokata antaŭ la ŝargo
- * @param {Function} onFinish - vokata fine
- * @param {Function} onError - vokata kiam okazas eraro
+ * @param method - la HTTP-metodo
+ * @param url - la URL
+ * @param headers - la HTTP-kapoj
+ * @param params - la HTTP-parametroj
+ * @param onSuccess - vokata post sukceso
+ * @param onStart - vokata antaŭ la ŝargo
+ * @param onFinish - vokata fine
+ * @param onError - vokata kiam okazas eraro
  */
-function HTTPRequestFull(method, url, headers, params, onSuccess, 
-    onStart = undefined, onFinish = undefined, onError = undefined) {  // onStart, onFinish, onError vi povas ellasi!
+function HTTPRequestFull(method: string, url: string, headers: Kapoj, params: Parametroj, 
+    onSuccess: Function, onStart?: Function, onFinish?: Function, onError?: Function) {        
 
     var request = new XMLHttpRequest();
     var data = new FormData();
 
       // alpendigu aktualigilon por eventuale certigi freŝajn paĝojn
     function url_v() {
-      var akt = window.localStorage.getItem("aktualigilo");
-      akt = (akt && parseInt(akt,10)) || 0;
+      const akt = window.localStorage.getItem("aktualigilo");
+      const ver = (akt && parseInt(akt,10)) || 0;
 
-      if (akt) {
+      if (ver > 0) {
         const _url = url.split("#");
 
         if (_url[0].indexOf('?')>-1) {
-          _url[0] += "&v="+akt;
+          _url[0] += "&v="+ver;
         } else {
-          _url[0] += "?v="+akt;
+          _url[0] += "?v="+ver;
         }
 
         url = _url.join('#');
@@ -100,26 +104,27 @@ function HTTPRequestFull(method, url, headers, params, onSuccess,
 
 /**
  * Ŝargas fonan dokumenton de la servilo per XMLHttpRequest
- * @param {string} method - la HTTP-metodo
- * @param {string} url - la URL
- * @param {Object<string,string>} params - la HTTP-parametroj
- * @param {Function} onSuccess - vokata post sukceso
- * @param {Function} onStart - vokata antaŭ la ŝargo
- * @param {Function} onFinish - vokata fine
- * @param {Function} onError - vokata kiam okazas eraro
+ * @param method - la HTTP-metodo
+ * @param url - la URL
+ * @param params - la HTTP-parametroj
+ * @param onSuccess - vokata post sukceso
+ * @param onStart - vokata antaŭ la ŝargo
+ * @param onFinish - vokata fine
+ * @param onError - vokata kiam okazas eraro
  */
-function HTTPRequest(method, url, params, onSuccess, 
-  onStart=undefined, onFinish=undefined, onError=undefined) {  // onStart, onFinish, onError vi povas ellasi!
+function HTTPRequest(method: string, url: string, params: Parametroj, 
+  onSuccess: Function, onStart?: Function, onFinish?: Function, onError?: Function) {  
+    
     HTTPRequestFull(method, url, null, params, onSuccess, 
     onStart, onFinish, onError);
 }
 
 /**
  * Metas plurajn HTML-atributojn samtempe
- * @param {Element} el - la HTML-elemento
- * @param {Object<string,string>} attrs - Objekto, kies ŝlosiloj estas la atributnomoj, donantaj ties valorojn
+ * @param el - la HTML-elemento
+ * @param attrs - Objekto, kies ŝlosiloj estas la atributnomoj, donantaj ties valorojn
  */
-function ht_attributes(el, attrs) {
+function ht_attributes(el: Element, attrs: AtributSpec) {
   for(var key in attrs) {
     el.setAttribute(key, attrs[key]);
   }
@@ -127,12 +132,14 @@ function ht_attributes(el, attrs) {
 
 /**
  * Kreas HTML-elementon kun atributoj kaj eventuala tekstenhavo. 
- * @param {!string} name - elemento-nomo, ekz-e 'div'
- * @param {Object<string,string>} attributes 
- * @param {string} textcontent 
+ * @param name - elemento-nomo, ekz-e 'div'
+ * @param attributes 
+ * @param textcontent 
  * @returns {!Element}
  */
-function ht_element(name, attributes = null, textcontent = undefined) {
+function ht_element(name: string, attributes: AtributSpec = null, 
+  textcontent?: string): Element 
+{
     var element = document.createElement(name);
     ht_attributes(element,attributes);
     if (textcontent) element.append(textcontent);
@@ -147,28 +154,31 @@ function ht_element(name, attributes = null, textcontent = undefined) {
  * Se vi volas krei tion, unue kreu la ĉirkaŭan elementon per ht_elemento
  * kaj poste uzu JS HTMLElement.append por aldoni la enhavon kiel miksaĵon de
  * tekstoj kaj elementoj kreitaj unuope per ht_element (aŭ ht_elements, se pluraj aŭ ingigitaj)
- * @param {!Array<*>} jlist 
+ * @param jlist 
  * @returns {Array<Node>} - listo de kreitaj elementoj, eventuale ingitaj
- * @suppress {checkTypes} - la tip-kontrolo de closure-compiler ne kapablas difini
- *                          specifajn diversajn tipojn por elementoj de areo (t.e. 
- *                          nia elemento-specifo, do ni devas subpremi tion tie ĉi!)
  */
-function ht_elements(jlist) {
+function ht_elements(jlist: Array<ElementSpec>): Array<Node> {
     var dlist = [];
     for (var el of jlist) {
-      var element;
-      if (typeof el == "string") { // teksta enhavo
-        element = document.createTextNode(el);
-      } else { // elemento kun malsimpla enhavo: [nomo,attributoj,[...]]
+
+      // teksta enhavo
+      if (typeof el == "string") { 
+        dlist.push(document.createTextNode(el));
+
+      // elemento kun malsimpla enhavo: [nomo,attributoj,[...]]
+      } else { 
+        let element: Element;
         if (el[2] && el[2] instanceof Array) {
             var content = ht_elements(el[2]); // ni vokas nin mem por la enhavo-kreado
             element = ht_element(el[0],el[1]);
             if (content) element.append(...content);
+
         } else { // elemento kun simpla tekstenhavo: [nomo,attributoj,enhavo]
-            element=ht_element(el[0],el[1],el[2]);
+            element=ht_element(el[0],el[1],el[2] as string);
         }
+        dlist.push(element);
       } //else
-      dlist.push(element);
+
     } // for
     return dlist;
 }
@@ -182,12 +192,14 @@ function ht_br() {
 
 /**
  * Kreas HTML-butonon kun teksto
- * @param {string} label - la surskribo
- * @param {Function} handler - la reagfunkcio al premoj
- * @param {string} hint - la musnoto klariganta la butonfunkcion
- * @returns {Node} - la HTML-butono
+ * @param label - la surskribo
+ * @param handler - la reagfunkcio al premoj
+ * @param hint - la musnoto klariganta la butonfunkcion
+ * @returns la HTML-butono
  */
-function ht_button(label,handler,hint='') {
+function ht_button(label: string, handler: EventListenerOrEventListenerObject, 
+  hint: string=''): Node 
+{
     var btn = document.createElement("BUTTON");
     btn.appendChild(document.createTextNode(label)); 
     btn.addEventListener("click",handler);
@@ -198,12 +210,14 @@ function ht_button(label,handler,hint='') {
 
 /**
  * Kreas HTML-butonon kun bildeto
- * @param {string} iclass - CSS-klasoj, dividitaj per spaco
- * @param {Function} handler - la reagfunkcio al premoj
- * @param {string} hint - la musnoto klariganta la butonfunkcion
- * @returns {Node} - la HTML-butono
+ * @param iclass - CSS-klasoj, dividitaj per spaco
+ * @param handler - la reagfunkcio al premoj
+ * @param hint - la musnoto klariganta la butonfunkcion
+ * @returns la HTML-butono
  */
-function ht_icon_button(iclass,handler,hint='') {
+function ht_icon_button(iclass: string,handler: EventListenerOrEventListenerObject, 
+  hint: string=''): Node 
+{
     var btn = document.createElement("BUTTON");
     //btn.appendChild(document.createTextNode(label)); 
     if (handler) btn.addEventListener("click",handler);
@@ -215,13 +229,15 @@ function ht_icon_button(iclass,handler,hint='') {
 /**
  * Kreas HTML-liston. Ĝi povas esti 'ul'- aŭ 'ol'-listo enhavanta 'li'-elementojn,
  * sed ankaŭ iu ajn alia HTML-elemento, tiam la listeroj estos 'span'-elementoj
- * @param {!Array} list - la listo de enhavoj
- * @param {string} listtype - la nomo de la ĉirkaŭa elemento
- * @param {Object<string,string>} attrlist - atributlisto aldonante al la ĉirkaŭa elemento
- * @param {Function} listero_cb - revokfunkcioj por adaptita kreado de la listeroj
- * @returns {Node} - la HTML-elemento kun la tuta listo
+ * @param list - la listo de enhavoj
+ * @param listtype - la nomo de la ĉirkaŭa elemento
+ * @param attrlist - atributlisto aldonante al la ĉirkaŭa elemento
+ * @param listero_cb - revokfunkcioj por adaptita kreado de la listeroj
+ * @returns la HTML-elemento kun la tuta listo
  */
-function ht_list(list, listtype='ul', attrlist=undefined, listero_cb=undefined) {
+function ht_list(list: Array<any>, listtype: string='ul', attrlist?: AtributSpec, 
+  listero_cb?: Function): Node 
+{
   const elmtype = (listtype == 'ul' || listtype == 'ol')? 'li' : 'span';
   const container = ht_element(listtype,attrlist);
   for (let e of list) {    
@@ -234,27 +250,34 @@ function ht_list(list, listtype='ul', attrlist=undefined, listero_cb=undefined) 
 /**
  * Kreas difinliston (HTML-dl). La ŝlosiloj de la transdonita objekto donas la difin-termojn ('dt')
  * kaj la valoroj la difinojn ('dd'). Per la revokfunkcio item_cb vi povas strukturi ilin individue.
- * @param {!Object<string,*>} obj 
- * @param {Function} item_cb 
- * @param {boolean} sorted - true: ordigu la ŝlosilojn
- * @returns {Node}
+ * @param obj 
+ * @param item_cb 
+ * @param sorted - true: ordigu la ŝlosilojn
+ * @returns
  */
-function ht_dl(obj,item_cb,sorted) {
+function ht_dl(obj: { [s: string]: any; }, item_cb: Function, 
+  sorted: boolean): Node 
+{
   const dl = ht_element("dl");
-  var keys;
-  if (sorted) keys = Object.keys(obj).sort(); else keys = Object.keys(obj);
+  // PLIBONIGU: se ni supozas ordigon laŭ esperanta aŭ alilingva
+  // alfabeto ni devos uzi: .sort(new Intl.Collator(lng).compare)
+  const keys = (sorted)? Object.keys(obj).sort() : Object.keys(obj);
+
   for (const key of keys) {
     const value = obj[key];
-    var dt, dd;
+    let dt: Element, dd: Element;
+
     if (! item_cb) {
-      dt = ht_element('dt',{},key);
-      dd = ht_element('dd',{},/**@type{string}*/(value));
+      dt = ht_element('dt',{}, key);
+      dd = ht_element('dd',{}, value as string);
+
     } else {
       dt = document.createElement('dt');
       dd = document.createElement('dd');
       // permesu modifadon...
       item_cb(key,value,dt,dd);
     }
+
     if (dt.textContent || dd.textContent)
       dl.append(dt,dd);
   }
@@ -264,14 +287,17 @@ function ht_dl(obj,item_cb,sorted) {
 /**
  * Kreas HTML-details-summary-elementon. Per la revokfunkcioj vi povas
  * enmeti pli kompleksajn strukturojn ol simplajn tekstojn
- * @param {string} sum - la enhavo de 'summary'
- * @param {string} det - la enhavo de 'details'
- * @param {Function} det_callback 
- * @param {Function} sum_callback 
- * @returns {Node}
+ * @param sum - la enhavo de 'summary'
+ * @param det - la enhavo de 'details'
+ * @param det_callback 
+ * @param sum_callback 
+ * @returns
  */
-function ht_details(sum, det, det_callback=undefined, sum_callback=undefined) {
+function ht_details(sum: string, det: string, 
+  det_callback?: Function, sum_callback?: Function): Node 
+{
   const details = ht_element("details");
+
   if (sum_callback) {
     const summary = ht_element('summary'); 
     sum_callback(summary,sum);
@@ -279,11 +305,13 @@ function ht_details(sum, det, det_callback=undefined, sum_callback=undefined) {
   } else {
     details.append(ht_element('summary',{},sum));
   }
+
   if (det_callback) {
     det_callback(details,det);
   } else { 
     details.append(det);
   }
+
   return details;
 }
 
@@ -291,23 +319,28 @@ function ht_details(sum, det, det_callback=undefined, sum_callback=undefined) {
  * Kreas klakeblan tekston '(+nnn)' por malfaldi kaŝitan enhavon (pliaj tradukoj, pliaj trovoj k.c.)
  * Ni realigas ĝin kiel dt-dl-elemento ene de 'dl'-elemento, kiu enhavas la tutan liston 
  * - videblaj kaj kasitaj enhavoj.
- * @param {number} n_kasxitaj - la nombro de kasitaj elementoj
- * @returns {Array<Node>} - la HTML-elemento
+ * @param n_kasxitaj - la nombro de kasitaj elementoj
+ * @returns la HTML-elemento
  */
-function ht_pli(n_kasxitaj) {
-  var pli = ht_elements([
+function ht_pli(n_kasxitaj: number): Array<Node> 
+{
+  const pli = ht_elements([
       ["dt",{},
           [["a",{href: "#"},"(+"+(n_kasxitaj)+")"]]
       ],
       ["dd"]
   ]);
+
   // funkcio por malkaŝi la reston...
   pli[0].addEventListener("click",function(event) {
-      var dl = event.target.closest("dl");
-      for (var ch of dl.childNodes) {
-          ch.classList.remove("kasxita");
-      }
-      event.target.closest("dt").classList.add("kasxita");
+      const trg = event.target as Element;
+      const dl = trg.closest("dl");
+      dl.childNodes.forEach((ch) => {
+          if (ch instanceof Element)
+            ch.classList.remove("kasxita");
+      });
+
+      trg.closest("dt").classList.add("kasxita");
       var p = dl.parentElement.querySelector("p");
       if (p) p.classList.remove("kasxita");
   });
@@ -317,10 +350,11 @@ function ht_pli(n_kasxitaj) {
 /**
  * Transformas HTML-unuojn en la formoj &#9999; aŭ &#xFFFF; al la
  * reprezentitaj signoj
- * @param {string} str - la traktenda teksto
- * @returns - la teksto kun anstataŭigitaj HTML-unuoj
+ * @param str - la traktenda teksto
+ * @returns la teksto kun anstataŭigitaj HTML-unuoj
  */
-function parseHtmlEntities(str) {
+function parseHtmlEntities(str: string): string 
+{
   return str
   .replace(/&#([0-9]{1,5});/gi, function(match, numStr) {
       var num = parseInt(numStr, 10); // read num as normal number
@@ -335,11 +369,11 @@ function parseHtmlEntities(str) {
 /**
  * Komparas du HTML-tekstojn anstataŭigante la HTML-unuojn per la ĝustaj signoj
  * kaj minusklante
- * @param {string|undefined} a - la unua teksto
- * @param {string|undefined} b - la dua teksto
+ * @param a - la unua teksto
+ * @param b - la dua teksto
  * @returns -1, se a&lt;b; 1, se a&gt;b; 0 se a=b post la normigo de ambaŭ
  */
-function compareXMLStr(a,b) {  
+function compareXMLStr(a?: string, b?: string) {  
   return (parseHtmlEntities(a||'').toLowerCase()
     === parseHtmlEntities(b||'').toLowerCase());
 }
