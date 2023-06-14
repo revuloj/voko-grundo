@@ -341,6 +341,14 @@ nav a:active {
     margin-top: 0;
 }
 
+#navigado .enhavo details ul {
+    list-style-type: square;
+}
+
+#navigado .enhavo details ul ul {
+    list-style-type: disc;
+}
+
 #navigado .enhavo *[lang='bo'] {
     font-size: 150% !important;
     line-height: 120%;

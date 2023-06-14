@@ -1264,45 +1264,49 @@ function mrk_eraroj() {
 
 /**
  * Pridemandas la bibliografion kiel JSON de la servilo kaj prezentas ĝin kiel HTML
+ * @param {string|undefined} [sort_by] se donita, ni ordigos la bibliografion laŭ tiu kampo (bib,aut,tit)
  */
 function bibliogr(sort_by) {
     HTTPRequest('POST', globalThis.bib_json_url, {x:1}, // ni sendu ion per POST por ĉiam havi aktualan liston
         function(data) {
             var json = 
-                /** @type { {bib: string, tit: string} } */
+                /** @type { Array.<{bib: string, tit: string}> } */
                 (JSON.parse(data));
 
             if (sort_by) {
-                const cmp = new Intl.Collator('eo').compare;
-                json.sort( (a, b) => cmp(a[sort_by],b[sort_by]) );
+                const cmp = new Intl.Collator('eo');
+                json.sort( (a, b) => cmp.compare(a[sort_by],b[sort_by]) );
             }
 
             const enh = document.querySelector(".enhavo");
             enh.textContent= '';
-            const dl = ht_element(['dl']);
+            const dl = ht_element('dl');
 
-            for (const bib of json) {          
-                // dt: la mallongigo evtl. kun href/url      
-                const dt = ht_element('dt');
-                if (bib.url) {
-                    const a = ht_elements([
-                        ['a',{href: bib.url, target: '_new'},
-                            [['b',{},bib.bib]]
-                        ]
-                    ])
-                    dt.append(...a);                  
-                } else {
-                    dt.append(ht_element('b',{},bib.bib));
-                }
-                // dd: la detaloj: autoro, titolo ktp.
-                const dd = ht_element('dd');
-                if (bib.aut) dd.append(bib.aut,ht_br());
-                if (bib.trd) dd.append('trad. ',bib.trd,ht_br());
-                dd.append(ht_element('b',{},bib.tit),ht_br());
-                if (bib.ald) dd.append("(",bib.ald,")",ht_br());
-                if (bib.eld) dd.append(bib.eld,ht_br());
-                dl.append(dt,dd);
-            }
+            if (json) {
+
+                for (const bib of json) {          
+                    // dt: la mallongigo evtl. kun href/url      
+                    const dt = ht_element('dt');
+                    if (bib.url) {
+                        const a = ht_elements([
+                            ['a',{href: bib.url, target: '_new'},
+                                [['b',{},bib.bib]]
+                            ]
+                        ]);
+                        if (a) dt.append(...a);                  
+                    } else {
+                        dt.append(ht_element('b',{},bib.bib));
+                    }
+                    // dd: la detaloj: autoro, titolo ktp.
+                    const dd = ht_element('dd');
+                    if (bib.aut) dd.append(bib.aut,ht_br());
+                    if (bib.trd) dd.append('trad. ',bib.trd,ht_br());
+                    dd.append(ht_element('b',{},bib.tit),ht_br());
+                    if (bib.ald) dd.append("(",bib.ald,")",ht_br());
+                    if (bib.eld) dd.append(bib.eld,ht_br());
+                    dl.append(dt,dd);
+                } // for
+            }; // if json
             const h1 = ht_element('h1',{},'bibliografio');
             enh.append(h1,dl);
         },
