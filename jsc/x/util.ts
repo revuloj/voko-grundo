@@ -1,7 +1,6 @@
-
-/* jshint esversion: 6 */
-
-// (c) 2021-2022 Wolfram Diestel
+/*
+ (c) 2021-2023 ĉe Wolfram Diestel
+*/
 
 //const help_base_url = 'https://revuloj.github.io/temoj/';
 
@@ -9,9 +8,9 @@
 /**
  * Aldonas agon farendan ĉe forlaso de la paĝo (ekz-e pro reŝargo aŭ fermo).
  * Utila ekz-e por memori preferatajn valoroj k.s.
- * @param {Function} todo_cb - ago farenda
+ * @param todo_cb - ago farenda
  */
-function do_before_unload(todo_cb) {
+function do_before_unload(todo_cb: EventListenerOrEventListenerObject) {
   // tio vokiĝas, i.a. kiam la uzanto reŝargas la paĝon aŭ fermas la redaktilon.
   window.addEventListener('beforeunload', todo_cb);
   // por iOS...:
@@ -26,18 +25,17 @@ function do_before_unload(todo_cb) {
  * Se mankas la ŝlosilkampo tiu listero estas aldonata al "&lt;_sen_&gt;".
  * Tio ankaŭ funkcias por listo de listoj, kiel ŝlosilo (key) tiam vi donu la
  * numeron de la kolumno laŭ kiu ordigi: group_by(0,listo_de_listoj)
- * @param {string|number} key 
- * @param { !Array<Object|Array> } array 
- * @returns { Object<string|Array<Object>> }
+ * @param key 
+ * @param array 
+ * @returns grupigitajn listojn
  */
-function group_by(key, array) {
-  var grouped = {};
+function group_by(key: string|number, array: Array<any>): {[key: string]: Array<any>} {
+  let grouped = {};
+
   for (var el of array) {
     const v = el[key] || '<_sen_>';
-    //if (v) {
-      if (! grouped[v] ) grouped[v] = [];
-      grouped[v].push(el);      
-    //}
+    if (! grouped[v] ) grouped[v] = [];
+    grouped[v].push(el);      
   }
   return grouped;
 }
@@ -45,20 +43,20 @@ function group_by(key, array) {
 
 /**
  * Transformas markon al href por artikolo
- * @param {string} mrk 
- * @returns {string} URL-o por artikolo.
+ * @param mrk 
+ * @returns URL-o por artikolo.
  */
-function art_href(mrk) {
+function art_href(mrk: string): string {
   return globalThis.art_prefix + mrk.split('.')[0] + '.html#' + mrk;
 }
 
 
 /**
  * Aldonas ../art en href-atributoj kun relativaj URL-oj
- * @param {Node} root_el 
+ * @param root_el 
  */
-function fix_art_href(root_el) {
-  for (var a of root_el.getElementsByTagName("a")) {
+function fix_art_href(root_el: Element) {
+  for (var a of Array.from(root_el.getElementsByTagName("a"))) {
     var href = a.getAttribute("href");
 
     // aldonu ../art nur se ne estas absoluta URL
@@ -74,10 +72,10 @@ function fix_art_href(root_el) {
  * Tradukas referenctipon al responda CSS-klasnomo.
  * (Ni ne havas por ĉiu referenctipo apartan vinjeton
  * kaj ni nun uzas SVG-fonon per CSS anstataŭ GIF-bildeton.)
- * @param {string} tip - la referenctipo
- * @returns {string} - la CSS-klasnomo
+ * @param tip - la referenctipo
+ * @returns la CSS-klasnomo
  */
-function ref_tip_class(tip) {
+function ref_tip_class(tip: string): string {
   return {
     dif: "r_dif", difino: "r_dif", 
     sin: "r_sin", ant: "r_ant",
@@ -93,10 +91,10 @@ function ref_tip_class(tip) {
 
 /**
  * Tradukas referenctipon al responda ALT-atributo.
- * @param {string} tip - la referenctipo
- * @returns {string} - la HTML-ALT-atributo
+ * @param tip - la referenctipo
+ * @returns la HTML-ALT-atributo
  */
-function ref_tip_alt(tip) {
+function ref_tip_alt(tip: string): string {
   return {
     dif: "=", difino: "=", 
     sin: "SIN:", ant: "ANT:",
@@ -112,10 +110,10 @@ function ref_tip_alt(tip) {
 
 /**
  * Tradukas referenctipon al responda TITLE-atributo.
- * @param {string} tip - la referenctipo
- * @returns {string} - la HTML-TITLE-atributo
+ * @param tip - la referenctipo
+ * @returns la HTML-TITLE-atributo
  */
-function ref_tip_title(tip) {
+function ref_tip_title(tip: string): string {
   return {
     dif: "difino ĉe", difino: "difino ĉe", 
     sin: "sinonimo", ant: "antonimo",
@@ -132,12 +130,12 @@ function ref_tip_title(tip) {
 
 /**
  * Anstataŭigas GIF per SVG en IMG-SRC-atributoj
- * @param {Node} root_el 
+ * @param root_el 
  */
-function fix_img_svg(root_el) {
+function fix_img_svg(root_el: Element) {
   var src;
 
-  for (var i of root_el.getElementsByTagName("img")) {
+  for (var i of Array.from(root_el.getElementsByTagName("img"))) {
     src = i.getAttribute("src");
     //if (src.startsWith("..")) i.setAttribute("src",src.substring(1));
 
@@ -155,10 +153,10 @@ function fix_img_svg(root_el) {
 
 /**
  * Videbligas HTML-elementon forigante CSS-klason 'kasxita'.
- * @param {string} id - la 'id'-atributo de la elemento
- * @param {string} cls - CSS-klaso, se alia ol 'kasxita'
+ * @param id - la 'id'-atributo de la elemento
+ * @param cls - CSS-klaso, se alia ol 'kasxita'
  */
-function show(id,cls='kasxita') {
+function show(id: string,cls: string='kasxita') {
   const el = document.getElementById(id);
   if (el) el.classList.remove(cls);
   else console.warn("show: elemento "+id+" ne troviĝis.");
@@ -166,10 +164,10 @@ function show(id,cls='kasxita') {
 
 /**
  * Kaŝas HTML-elementon aldonante CSS-klason 'kasxita'.
- * @param {string} id - la 'id'-atributo de la elemento
- * @param {string} cls - CSS-klaso, se alia ol 'kasxita'
+ * @param id - la 'id'-atributo de la elemento
+ * @param cls - CSS-klaso, se alia ol 'kasxita'
  */
-function hide(id,cls='kasxita') {
+function hide(id: string,cls: string='kasxita') {
   const el = document.getElementById(id);
   if (el) el.classList.add(cls);
   else console.warn("hide: elemento "+id+" ne troviĝis.");
@@ -177,10 +175,10 @@ function hide(id,cls='kasxita') {
 
 /**
  * Ŝanĝas videblecon de HTML-elemento aldonante aŭ forigante CSS-klason 'kasxita'.
- * @param {string} id - la 'id'-atributo de la elemento
- * @param {string} cls - CSS-klaso, se alia ol 'kasxita'
+ * @param id - la 'id'-atributo de la elemento
+ * @param cls - CSS-klaso, se alia ol 'kasxita'
  */
-function toggle(id,cls='kasxita') {
+function toggle(id: string,cls: string='kasxita') {
   const el = document.getElementById(id);
   if (el) el.classList.toggle(cls);
   else console.warn("toggle: elemento "+id+" ne troviĝis.");
@@ -188,9 +186,9 @@ function toggle(id,cls='kasxita') {
 
 /**
  * Malaktivigas HTML-elementon metante atributon 'disabled'.
- * @param {string} id - la 'id'-atributo de la elemento
+ * @param id - la 'id'-atributo de la elemento
  */
-function disable(id) {
+function disable(id: string) {
   const el = document.getElementById(id);
   if (el) el.setAttribute("disabled","disabled");
   else console.warn("disable: elemento "+id+" ne troviĝis.");
@@ -198,9 +196,9 @@ function disable(id) {
 
 /**
  * Aktivigas HTML-elementon forigante atributon 'disabled'.
- * @param {string} id - la 'id'-atributo de la elemento
+ * @param id - la 'id'-atributo de la elemento
  */
-function enable(id) {
+function enable(id: string) {
   const el = document.getElementById(id);
   if (el) el.removeAttribute("disabled");
   else console.warn("disable: elemento "+id+" ne troviĝis.");
@@ -208,21 +206,21 @@ function enable(id) {
 
 /**
  * Navigas la retumilon al helpo-paĝo
- * @param {string} url - la pado de helpopaĝo, rilate al 'help_base_url'
+ * @param url - la pado de helpopaĝo, rilate al 'help_base_url'
  */
-function helpo_pagho(url) {
+function helpo_pagho(url: string) {
     window.open(globalThis.help_base_url+url);
 }
 
 /**
  * Preparas paĝon post kiam ĝi estas ŝargita
- * @param {Function} onready_fn 
+ * @param onready_fn 
  */
-function when_doc_ready(onready_fn) {
+function when_doc_ready(onready_fn: EventListener) {
     if (document.readyState != 'loading'){
-      onready_fn();
+      onready_fn(new Event('DOMContentLoaded'));
     } else {
-      document.addEventListener('DOMContentLoaded',  onready_fn);
+      document.addEventListener('DOMContentLoaded', onready_fn);
     }
 }
 
@@ -230,10 +228,10 @@ function when_doc_ready(onready_fn) {
 /**
  * Kontrolas ĉu 'url' estas al la sama paĝo, kiel ĵus montrata. Se url komenciĝas
  * per '#' tio estas evidenta, alie ni komparas la URL-on de la aktuala paĝo kun 'url'.
- * @param {string} url 
- * @returns {boolean} true: se estas paĝo-loka referenco
+ * @param url 
+ * @returns true: se estas paĝo-loka referenco
  */
-function isLocalLink(url) {
+function isLocalLink(url: string): boolean {
     if (url[0] == '#') return true;
     // necesas kompari ankaŭ la dosiernomon      
     var doc = getUrlFileName(document.location.pathname);
@@ -243,29 +241,29 @@ function isLocalLink(url) {
 
 /**
  * Ekstraktas la dosieronomon el URL, t.e. la parto inter la lasta '/' kaj eventuala '#'
- * @param {string} url 
- * @returns {string}
+ * @param url 
+ * @returns 
  */
-function getUrlFileName(url) {
+function getUrlFileName(url: string): string {
     return url.substring(url.lastIndexOf('/')+1).split('#')[0];
 }
 
 
 /**
  * Redonas la parton post '#' interpretante ĝin kiel parametroliston.
- * @returns {Object<string,string>} - la trovitaj parametroj kiel Objekto kies ŝlosiloj estas la parametronomoj
+ * @returns la trovitaj parametroj kiel Objekto kies ŝlosiloj estas la parametronomoj
  */
-function getHashParts() {
-    var h = (location.hash[0] == '#' ?
+function getHashParts(): { [s: string]: string; } {
+    const h = (location.hash[0] == '#' ?
         location.hash.slice(1) :
         location.hash);
-    var r = {};
-    for (var p of h.split('&')) {
+    let r = {};
+    for (const p of h.split('&')) {
         if (p.indexOf('=') < 0) {
-            r.mrk = p;
+          r["mrk"] = p;
         } else {
-            var v = p.split('=');
-            r[v[0]] = v[1];
+          const v = p.split('=');
+          r[v[0]] = v[1];
         }
     }
     return r;
@@ -273,11 +271,11 @@ function getHashParts() {
 
 /**
  * Ekstraktas unuopan parametron el signoĉeno kun pluraj HTML-parametroj
- * @param {string} param - la nomo de la petata parametro
- * @param {string} params - la signoĉeno de parametroj, se manks location.search estas uzata
- * @returns {?string} la valoro de la petata parametro
+ * @param param - la nomo de la petata parametro
+ * @param params - la signoĉeno de parametroj, se manks location.search estas uzata
+ * @returns la valoro de la petata parametro
  */
-function getParamValue(param, params=undefined) {
+function getParamValue(param: string, params: string=undefined): string|null {
   // ĉu ni vere bezonos tion? parametroj estas afero de la servilo,
   // sed ni povas kaŝi ilin ankaŭ post #, vd. supre getHashParts
     let result = null,
@@ -296,7 +294,7 @@ function getParamValue(param, params=undefined) {
  * @param {number} rNum - la nombro de ripetoj
  * @returns {string}
  */
-function str_repeat(rStr, rNum) {
+function str_repeat(rStr: string, rNum: number): string {
     var nStr="";
     for (var x=1; x<=rNum; x++) {
         nStr+=rStr;
@@ -306,13 +304,14 @@ function str_repeat(rStr, rNum) {
 
 /**
  * Nombras, kiom ofte certa signo aperas en teksto. Vi povas limigi la nombradon al parto de la teksto.
- * @param {string} str - la teksto
- * @param {string} chr - la nombrenda signo
- * @param {number} from - komenco de nombrado, se ne donita 0
- * @param {number} to - fino de nombrado, se ne donita fino de 'str'
- * @returns {number}
+ * @param str - la teksto
+ * @param chr - la nombrenda signo
+ * @param from - komenco de nombrado, se ne donita 0
+ * @param to - fino de nombrado, se ne donita fino de 'str'
+ * @returns
  */
-function count_char(str,chr,from=undefined,to=undefined) {
+function count_char(str: string, chr: string, from?: number,to?: number): number 
+{
   var nc = 0;
   const f = from||0;
   const t = to||str.length;
@@ -325,10 +324,10 @@ function count_char(str,chr,from=undefined,to=undefined) {
 
 /**
  * Konvertas supersignajn literojn al askia x-konvencio, do ĉ al cx ... ŭ al ux
- * @param {string} str - la konvertenda teksto
- * @returns {string} - la konvertita teksto
+ * @param str - la konvertenda teksto
+ * @returns la konvertita teksto
  */
-function eo_ascii(str) {
+function eo_ascii(str: string): string {
     return str
         .replace(/ĉ/g,'cx')
         .replace(/ĝ/g,'gx')
@@ -340,10 +339,10 @@ function eo_ascii(str) {
 
 /**
  * Konvertas de la x-konvencio al supersignaj literoj, do cx al ĉ ... ux al ŭ.
- * @param {string} str - la konvertenda teksto
- * @returns {string} - la konvertita teksto
+ * @param str - la konvertenda teksto
+ * @returns la konvertita teksto
  */
-function ascii_eo(str) {
+function ascii_eo(str: string): string {
   return str
     .replace(/c[xX]/g, "\u0109")
     .replace(/g[xX]/g, "\u011d")
@@ -362,11 +361,11 @@ function ascii_eo(str) {
   
 /**
  * Anstataŭigas cx -> ĉ, gx -> ĝ, ..., ux -> ŭ, ĉx -> cx, ĝx -> gx,..., ŭx -> ux
- * @param {string} b - la antaŭa signo
- * @param {number} key - la tajpita klavkodo
+ * @param b - la antaŭa signo
+ * @param key - la tajpita klavkodo
  * @returns - la eventuale modifita signo
  */
-function cxigi(b, key) {
+function cxigi(b: string, key: number) {
     var n="";
     var k=String.fromCharCode(key);
 

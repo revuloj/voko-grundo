@@ -7,5 +7,8 @@
       "rootDir": ".",
       "outDir": "../../build/js/x",
       "composite": true 
-    }
+    },
+    "references": [
+      { "path": "../u" }
+    ]
 }

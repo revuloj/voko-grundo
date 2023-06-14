@@ -3,7 +3,7 @@
 
 /*************************************************************************
 
-// (c) 2008 - 2021 Wolfram Diestel, Wieland Pusch, Bart Demeyere & al.
+// (c) 2008 - 2023 Wolfram Diestel, Wieland Pusch, Bart Demeyere & al.
 // laŭ GPL 2.0
 
 *****************************************************************************/
@@ -14,11 +14,11 @@ var regex_xmltag = new RegExp('<[^>]+>','g');
 
 /**
  * Kalkulas el la signoindekso la linion kaj la pozicion ene de la linio
- * @param {number} inx - la pozicio en la teksto (sen konsideri liniojn)
- * @param {string} text - la koncerna teksto
+ * @param inx - la pozicio en la teksto (sen konsideri liniojn)
+ * @param text - la koncerna teksto
  * @returns la pozicion kiel objekto {{line: number, pos: number}}
  */
-function get_line_pos(inx,text) {
+function get_line_pos(inx: number, text: string) {
     var lines = 0;
     var last_pos = 0;
     for (let i=0; i<inx; i++) { 
@@ -34,11 +34,11 @@ function get_line_pos(inx,text) {
 /**
  * Anstataŭigas XML-tildo-elementojn en teksto per donita radiko. Se la
  * tld-elemento enhavas liter-atributon (majusklo-minusklo-ŝanĝo) tio estas konsiderata
- * @param {string} radiko - la radiko (kapvorto sen finaĵo)
- * @param {string} str - la XML-teksto kun elementoj 'tld' anstataŭigendaj
+ * @param radiko - la radiko (kapvorto sen finaĵo)
+ * @param str - la XML-teksto kun elementoj 'tld' anstataŭigendaj
  * @returns la ŝanĝita teksto
  */
-function replaceTld(radiko,str) {
+function replaceTld(radiko: string, str: string) {
     if (radiko) {
         return (str
             .replace(/<tld\/>/g,radiko)
@@ -50,15 +50,15 @@ function replaceTld(radiko,str) {
 
 /**
  * Elprenas la lingvojn en kiuj ekzistas tradukoj el XML-artikolo
- * @param {string} xmlStr - la XML-teksto
+ * @param xmlStr - la XML-teksto
  * @returns la lingvoj kiel objekto
  */
-function traduk_lingvoj(xmlStr) {
+function traduk_lingvoj(xmlStr: string) {
     const rx_ent = /&[a-zA-Z0-9_]+;/g;
     const xml = xmlStr.replace(rx_ent,'?'); // entities cannot be resolved...
 
     let lingvoj = {};
-    let artikolo;
+    let artikolo: Element;
 
     try {
         //var artikolo = $("vortaro",$.parseXML(xml));
@@ -75,10 +75,10 @@ function traduk_lingvoj(xmlStr) {
     //artikolo.find("trd[lng],trdgrp[lng]").each(function(index) {
     //    lingvoj[$(this).attr('lng')] = true;
     //});
-    for (let t of artikolo.querySelectorAll("trd[lng],trdgrp[lng]")) {
+    artikolo.querySelectorAll("trd[lng],trdgrp[lng]").forEach( (t) => {
         const lng = t.getAttribute("lng");
         lingvoj[lng] = true;
-    }
+    });
     
     return lingvoj;
 }
@@ -86,10 +86,10 @@ function traduk_lingvoj(xmlStr) {
 /**
  * Redonas la XML-enhavon de XML-nodo, IE rekte subtenas tion kiel atributo de XmlNode,
  * sed por aliaj retumiloj ni devas seriigi ekstrakti la enhavon forigante la elementokomencon kaj finon
- * @param {Node} xmlNode 
+ * @param xmlNode 
  * @returns la XML-enhavo
  */
-function innerXML(xmlNode) {
+function innerXML(xmlNode: Node) {
    try {
       // Gecko- and Webkit-based browsers (Firefox, Chrome), Opera.
       var str = (new XMLSerializer()).serializeToString(xmlNode);
@@ -99,6 +99,7 @@ function innerXML(xmlNode) {
   catch (e) {
      try {
         // if XMLSerializer is not supported, old Internet Explorer, but innerHTML.
+        // @ts-ignore
         return xmlNode.innerHTML;
      }
      catch (e) {  
@@ -113,10 +114,10 @@ function innerXML(xmlNode) {
 /**
  * Redonas la la XML-kodon de elemento. IE rekte subtenas tian atributon ĉe
  * aliaj retumiloj ne devas seriigi la XML-nodon
- * @param {Node} xmlNode 
+ * @param xmlNode 
  * @returns la XML-enahvo kun la elemento mem
  */
-function outerXML(xmlNode) {
+function outerXML(xmlNode: Node) {
    try {
       // Gecko- and Webkit-based browsers (Firefox, Chrome), Opera.
       return (new XMLSerializer()).serializeToString(xmlNode);
@@ -124,6 +125,7 @@ function outerXML(xmlNode) {
   catch (e) {
      try {
         // if XMLSerializer is not supported, old Internet Explorer, but outerHTML.
+        // @ts-ignore
         return xmlNode.outerHTML;
      }
      catch (e) {  
@@ -138,12 +140,12 @@ function outerXML(xmlNode) {
 /**
  * Enŝovas tradukojn de unu lingvo en XML
  * KOREKTU: ĉar tio uzas jQuery - prefere ŝovu tion al iu dosiero rs/jq_util.js
- * @param {Object} element - la elemento (havanta atributon mrk) en kiu enŝovi la tradukojn (ekz. 'drv')
- * @param {string} shov - la linikomenca enŝovo aplikenda
- * @param {string} lng - la lingvokodo
- * @param {Array<string>} tradukoj - la tradukoj por tiu linggvo
+ * @param element - la elemento (havanta atributon mrk) en kiu enŝovi la tradukojn (ekz. 'drv')
+ * @param shov - la linikomenca enŝovo aplikenda
+ * @param lng - la lingvokodo
+ * @param tradukoj - la tradukoj por tiu linggvo
  */
-function insert_trd_lng(element,shov,lng,tradukoj) {
+function insert_trd_lng(element: Element, shov: string, lng: string, tradukoj: Array<string>) {
     // kunmetu la XML por la tradukoj
     var trdXML = trd_xml_dom(lng,shov,tradukoj);
     
@@ -157,9 +159,9 @@ function insert_trd_lng(element,shov,lng,tradukoj) {
     // metu laŭ alfabeto
     } else {
         var lngj = Array();
-        for (let e of element.querySelectorAll("trd[lng],trdgrp[lng]")) {
-            lngj.push(e.getAttribute("lng"));
-        }
+        element.querySelectorAll("trd[lng],trdgrp[lng]").forEach(
+            (e) => lngj.push(e.getAttribute("lng"))
+        );
 
         // lingvo_post redonas la pozicion (lingvon) antaŭ kiu meti la tradukojn
         var lpost = lingvo_post(lng,lngj);
@@ -182,34 +184,33 @@ function insert_trd_lng(element,shov,lng,tradukoj) {
 
 /**
  * Anstataŭigas id-elementon per novaj (ni bezonas tion por la tradukenŝovo)
- * @param {Object} element - la patra elemento en kiu anstataŭigi
- * @param {Object} oldChild - la anstataŭigenda ido
- * @param {Array} newChildren - la novaj id-elementoj
- * @param {string} wsBefore - teksto enŝovenda antaŭe
- * @param {string} wsAfter - teksto enŝovenda poste
+ * @param element - la patra elemento en kiu anstataŭigi
+ * @param oldChild - la anstataŭigenda ido
+ * @param newChildren - la novaj id-elementoj
+ * @param wsBefore - teksto enŝovenda antaŭe
+ * @param wsAfter - teksto enŝovenda poste
  */
-function replaceChildren(element,oldChild,newChildren,wsBefore=undefined,wsAfter=undefined) {
+function replaceChildren(element: Element, oldChild: Element, newChildren: NodeListOf<ChildNode>,
+    wsBefore?: string, wsAfter?: string) 
+{
   if (wsBefore) element.insertBefore(element.ownerDocument.createTextNode(wsBefore),oldChild);
-  for (var i=0; i<newChildren.length; i++) {
-        element.insertBefore(newChildren[i],oldChild);
-  }   
+  newChildren.forEach( (ch) => element.insertBefore(ch,oldChild) );
   if (wsAfter) element.insertBefore(element.ownerDocument.createTextNode(wsAfter),oldChild);
   element.removeChild(oldChild);
 }
 
 /**
  * Enŝovas novajn idojn antaŭe
- * @param {Object} element - la patra elemento en kiu enŝovi
- * @param {Object} before - la elemento antaŭ kiu enŝovi
- * @param {Array} children - la aldonendaj idoj
- * @param {string} wsBefore - teksto aldonenda antaŭe
- * @param {string} wsAfter - teksto aldonenda poste
+ * @param element - la patra elemento en kiu enŝovi
+ * @param before - la elemento antaŭ kiu enŝovi
+ * @param children - la aldonendaj idoj
+ * @param wsBefore - teksto aldonenda antaŭe
+ * @param wsAfter - teksto aldonenda poste
  */
-function beforeChildren(element,before,children,wsBefore=undefined,wsAfter=undefined) {
+function beforeChildren(element: Element, before: Element, children: NodeListOf<ChildNode>,
+    wsBefore?: string, wsAfter?: string) {
     if (wsBefore) element.insertBefore(element.ownerDocument.createTextNode(wsBefore),before);
-    for (var i=0; i<children.length; i++) {
-        element.insertBefore(children[i],before);
-    }  
+    children.forEach( (ch) => element.insertBefore(ch,before) );
     if (wsAfter) element.insertBefore(element.ownerDocument.createTextNode(wsAfter),before);
 }
 
@@ -220,23 +221,22 @@ function beforeChildren(element,before,children,wsBefore=undefined,wsAfter=undef
  * @param {string} wsBefore - teksto aldonenda antaŭe
  * @param {string} wsAfter - teksto aldonenda poste
  */
-function appendChildren(element,children,wsBefore=undefined,wsAfter=undefined) {
+function appendChildren(element: Element, children: NodeListOf<ChildNode>,
+    wsBefore?: string, wsAfter?: string) {
     if (wsBefore) element.appendChild(element.ownerDocument.createTextNode(wsBefore));
-    for (var i=0; i<children.length; i++) {
-        element.appendChild(children[i]);
-    }
+    children.forEach( (ch) => element.appendChild(ch) );
     if (wsAfter) element.appendChild(element.ownerDocument.createTextNode(wsAfter));
 }
 
 
 /**
  * Aldonas tradukojn de iu lingvo en la XML-DOM
- * @param {string} lng - la lingvokodo
- * @param {string} shov - la linikomenca enŝovo aplikenda
- * @param {Array<string>} tradukoj - la tradukoj
+ * @param lng - la lingvokodo
+ * @param shov - la linikomenca enŝovo aplikenda
+ * @param tradukoj - la tradukoj
  * @returns la XML-dokumento kun la aldonitaj tradukoj
  */
-function trd_xml_dom(lng,shov,tradukoj) {
+function trd_xml_dom(lng: string,shov: string,tradukoj: Array<string>) {
     const parser = new DOMParser();
     const xmlDoc = parser.parseFromString('<xml></xml>',"text/xml");
     let root = xmlDoc.documentElement;
@@ -277,12 +277,12 @@ function trd_xml_dom(lng,shov,tradukoj) {
 
 /**
  * Transformas la traduktekston al XML-strukturo
- * @param {*} parser - XML-analizilo reuzenda
- * @param {string} traduko - la tradukteksto
+ * @param parser - XML-analizilo reuzenda
+ * @param traduko - la tradukteksto
  * @returns - la kreita XML-strukturo
  */
-function parseTrd(parser, traduko) {
-    var doc;
+function parseTrd(parser: any, traduko: string) {
+    var doc: XMLDocument;
     try {
         doc = parser.parseFromString('<xml>'+traduko+'</xml>',"text/xml");
         // che eraro enestas elemento "parseerror"
@@ -300,11 +300,11 @@ function parseTrd(parser, traduko) {
 
 /**
  * Trovas la lingvon, post kiu ni aldonas novan
- * @param {string} lng - la aldonenda lingvo
- * @param {Array<string>} lingvoj - la listo de ekzistantaj lingvoj
+ * @param lng - la aldonenda lingvo
+ * @param lingvoj - la listo de ekzistantaj lingvoj
  * @returns la lingvo, post kiu enŝovi aŭ null, kiam enŝovi en la fino
  */
-function lingvo_post(lng,lingvoj) {
+function lingvo_post(lng: string, lingvoj: Array<string>) {
     for (var i=0; i<lingvoj.length;i++) {
         if (lingvoj[i] > lng) return lingvoj[i];
     }
@@ -315,10 +315,10 @@ function lingvo_post(lng,lingvoj) {
 
 /**
  * Redonas la spacsignojn en la fino de la teksto (kutime post la lasta linifino) kiel enŝovo
- * @param {string} text - la teksto
+ * @param text - la teksto
  * @returns  la finspacsignoj de enŝovo
  */
-function enshovo(text) {
+function enshovo(text: string) {
     // redonu la spacsignojn en la fino de text
     var enshovo = '';
     for (var i=text.length-1;i>-1;i--) {
@@ -333,11 +333,11 @@ function enshovo(text) {
 
 /**
  * Redonas la spacsignojn de la enŝovo en la antaaŭ linio
- * @param {string} text - la teksto
- * @param {number} pos - la pozicio antaŭ kiu kolekti spacsignojn
+ * @param text - la teksto
+ * @param pos - la pozicio antaŭ kiu kolekti spacsignojn
  * @returns la kolektitaj spacsignoj kiel enŝovo
  */
-function enshovo_antaua_linio(text, pos) {
+function enshovo_antaua_linio(text: string, pos: number) {
     // redonu la spacsignojn en la linio antaŭ pos
     // minus la spacsignojn post pos
     var enshovo = '';
@@ -356,10 +356,10 @@ function enshovo_antaua_linio(text, pos) {
 }
 
 /** Kontrolas ĉu teksto konsistas nur el spacsignoj
- * @param {string} spaces - la teksto
+ * @param spaces - la teksto
  * @returns true, se la teksto enhavas nur spacojn
  */
-function all_spaces(spaces) {
+function all_spaces(spaces: string) {
     var p = 0;
     while (spaces[p] == ' ' && p<spaces.length) p++;
     return p == spaces.length;
@@ -367,11 +367,11 @@ function all_spaces(spaces) {
 
 /**
  * Majuskligas la unuajn signojn de ĉiu trovita vorto
- * @param {*} str - la teksto de vortoj
- * @param {*} rad - radiko, se donita ni uzas ties komencliteron por majuskligi ankaŭ tld-elementojn
+ * @param str - la teksto de vortoj
+ * @param rad - radiko, se donita ni uzas ties komencliteron por majuskligi ankaŭ tld-elementojn
  * @returns la teksto kun majuskligitaj vortkomencoj
  */
-function kameligo(str, rad='') {
+function kameligo(str: string, rad: string = '') {
     var kamelo = '';
     var vortoj = str.split(' ');
     var komenclitero = rad ? rad.slice(0,1).toUpperCase() : '';
@@ -387,11 +387,11 @@ function kameligo(str, rad='') {
 
 /**
  * Minuskligas tekston
- * @param {*} str - la teksto kun la vortoj
- * @param {*} rad - radiko, se donita ni uzas ties unuan minuskligitan literon por minuskligi tld-elementojn
+ * @param str - la teksto kun la vortoj
+ * @param rad - radiko, se donita ni uzas ties unuan minuskligitan literon por minuskligi tld-elementojn
  * @returns la minuskligita teksto
  */
-function minuskligo(str, rad='') {
+function minuskligo(str: string, rad: string = '') {
     str = str.toLowerCase();
     if (rad && rad[0].toLowerCase() != rad[0])
         str = str.replace(/<tld[^\/>]*\/>/,'<tld lit="'+rad[0].toLowerCase()+'"/>');
@@ -400,22 +400,22 @@ function minuskligo(str, rad='') {
 
 /**
  * Forigas ĉiujn XML-elementoj el teksto kaj lasas nur la nudan enhavon
- * @param {*} xml - la XML-teksto
+ * @param xml - la XML-teksto
  * @returns la nuda enhavo send la XML-elementoj
  */
-function forigu_markup(xml) {
+function forigu_markup(xml: string) {
     var t = xml.replace(regex_xmltag,'');
     return t;
 }
 
 /**
  * Rompas tro longajn liniojn
- * @param {string} str - la traktenda teksto
- * @param {number} indent - se donita, nombro de spacsignoj aldonendaj ĉe ĉiu nova linio
- * @param {number} linirompo - la maksimuma linilongeco, 80 apriore
+ * @param str - la traktenda teksto
+ * @param indent - se donita, nombro de spacsignoj aldonendaj ĉe ĉiu nova linio
+ * @param linirompo - la maksimuma linilongeco, 80 apriore
  * @returns la teksto kun eventuale aldonitaj linirompoj
  */
-function linirompo(str, indent=0, linirompo=80) {
+function linirompo(str: string, indent: number=0, linirompo: number=80) {
     var pos = 0, bpos = 0, lrpos = 0;
     var ispaces = '';
     if (indent) {
@@ -445,17 +445,19 @@ function linirompo(str, indent=0, linirompo=80) {
 
 /**
  * Redonas la spacojn (enŝovon) en la komenco de la markita liniode Textarea
- * @param {Element} txtarea 
- * @param {number} shift - se donita, ŝoviĝu tiom da signoj antaŭ eltrovi (ekz-e shift=-1)
+ * @param txtarea 
+ * @param shift - se donita, ŝoviĝu tiom da signoj antaŭ eltrovi (ekz-e shift=-1)
  * @returns la linikomencaj spacoj
  */
-function get_indent(txtarea,shift = 0) {
+function get_indent(txtarea: HTMLInputElement, shift: number = 0) {
     let indent = 0;
-    if (txtarea.selectionStart || txtarea.selectionStart == '0') { // Mozilla
+    if (txtarea.selectionStart || txtarea.selectionStart == 0) { // Mozilla
         const startPos = txtarea.selectionStart+shift;
         const linestart = txtarea.value.substring(0, startPos).lastIndexOf("\n");
         while (txtarea.value.substring(0, startPos).charCodeAt(linestart+1+indent) == 32) {indent++;}
+    // @ts-ignore
     } else if (document.selection && document.selection.createRange) { // IE/Opera
+        // @ts-ignore
         const range = document.selection.createRange();
         range.moveStart('character', -200); 
         const selText = range.text;
@@ -468,16 +470,17 @@ function get_indent(txtarea,shift = 0) {
 
 /**
  * Enŝovas markitan liniaron je pliaj spacoj dekstren (offset>0) aŭ maldekstren (offset<0)
- * @param {Element} txtarea 
- * @param {number} offset 
+ * @param txtarea 
+ * @param offset 
  */
-function indent(txtarea, offset) {
-    let selText, isSample=false;
+function indent(txtarea: HTMLInputElement, offset: number) {
+    let selText: string, isSample=false;
     const ind = str_repeat(" ", Math.abs(offset))
 
+    // @ts-ignore
     if (document.selection && document.selection.createRange) { // IE/Opera
         alert("tio ne funkcias por IE/Opera.");
-    } else if (txtarea.selectionStart || txtarea.selectionStart==0) { // Mozilla
+    } else if (txtarea.selectionStart || txtarea.selectionStart == 0) { // Mozilla
 
         // sekurigu nunan rulpozicion
         const textScroll = txtarea.scrollTop;
@@ -522,11 +525,11 @@ function indent(txtarea, offset) {
     
 /**
  * Elektas regionon en Input, Textarea inter signoj start kaj end
- * @param {Element} element 
- * @param {number} start 
- * @param {number} end 
+ * @param element 
+ * @param start 
+ * @param end 
  */
-function selectRange(element, start, end) {
+function selectRange(element: HTMLInputElement, start: number, end: number) {
     if (end === undefined) {
         end = start;
     }
@@ -534,9 +537,15 @@ function selectRange(element, start, end) {
     if ('selectionStart' in element) {
         element.selectionStart = start;
         element.selectionEnd = end;
+
+    // @ts-ignore
     } else if (element.setSelectionRange) {
+        // @ts-ignore
         element.setSelectionRange(start, end);
+
+    // @ts-ignore
     } else if (element.createTextRange) {
+        // @ts-ignore
         var range = element.createTextRange();
         range.collapse(true);
         range.moveEnd('character', end);
