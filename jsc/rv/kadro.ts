@@ -2,11 +2,12 @@
 // (c) 2020 - 2023 Wolfram Diestel
 // laŭ permesilo GPL 2.0
 
-import {Transiroj} from '../u/transiroj';
-import {Xlist} from '../x/xlisto';
 import '../x/util';
 import '../u/ht_util';
+import '../a/preferoj';
 
+import {Transiroj} from '../u/transiroj';
+import {Xlist} from '../x/xlisto';
 
 // statoj kaj transiroj - ni uzas tri diversajn statomaŝinojn por la tri paĝoj navigilo, ĉefpago kaj redaktilo
 const t_nav  = new Transiroj("nav","start",["ĉefindekso","subindekso","serĉo","redaktilo"]);
@@ -105,7 +106,7 @@ when_doc_ready(function() {
         show("x:nav_start_btn");
     });
 
-    t_nav.alvene("redaktilo",()=>{ 
+    t_nav.alvene("redaktilo", ()=>{ 
         // metu buton-surskribon Rezignu kaj malaktivigu la aliajn du
         if (t_red.stato == "redaktante") {
                 // ĉe sendita ne jam montru, sed eble tio eĉ en povus okazi?
@@ -119,7 +120,7 @@ when_doc_ready(function() {
             if (t_main.stato == "red_xml") {
                 hide("x:redakt_btn");
                 show("x:rigardo_btn");
-            } else if (t_main == "red_rigardo") {
+            } else if (t_main.stato == "red_rigardo") {
                 show("x:redakt_btn");
                 hide("x:rigardo_btn");
             }

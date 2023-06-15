@@ -10,6 +10,7 @@
     },
     "references": [
       { "path": "../u" },
-      { "path": "../x" }
+      { "path": "../x" },
+      { "path": "../a" },
     ]
 }
