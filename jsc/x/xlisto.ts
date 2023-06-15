@@ -4,7 +4,7 @@
  * elektilojn en la redaktilo kaj traduki lingvojn en la
  * serĉilo
  */
-class Xlist {
+export class Xlist {
   public codes: { [s: string]: string };
   public load: Function;
   public fill: Function;

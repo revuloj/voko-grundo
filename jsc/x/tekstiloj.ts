@@ -449,7 +449,7 @@ function linirompo(str: string, indent: number=0, linirompo: number=80) {
  * @param shift - se donita, ŝoviĝu tiom da signoj antaŭ eltrovi (ekz-e shift=-1)
  * @returns la linikomencaj spacoj
  */
-function get_indent(txtarea: HTMLInputElement, shift: number = 0) {
+function get_indent(txtarea: HTMLInputElement, shift: number = 0): string {
     let indent = 0;
     if (txtarea.selectionStart || txtarea.selectionStart == 0) { // Mozilla
         const startPos = txtarea.selectionStart+shift;

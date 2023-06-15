@@ -4,6 +4,10 @@
 
 //const help_base_url = 'https://revuloj.github.io/temoj/';
 
+type LinePos = {
+  line: number,
+  pos: number
+}
 
 /**
  * Aldonas agon farendan ĉe forlaso de la paĝo (ekz-e pro reŝargo aŭ fermo).

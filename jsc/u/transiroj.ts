@@ -82,7 +82,8 @@ class TransiroEscepto {
     constructor(public message: string) {}
 };
 
-class Transiroj {
+export class Transiroj {
+    
     private trans: Transagoj;
     public stato: string;
 

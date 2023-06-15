@@ -16,7 +16,8 @@ type StrObj = { [key: string]: string};
 type AtributSpec = StrObj;
 // Plibonigu, por permesi miksitan enhavon ni devus ŝanĝi la lastan
 // al Array<string|ElementSpec>, sed ni implemento tion ne jam subtenas
-type ElementSpec = [string, AtributSpec?, (string|Array<ElementSpec>)?];
+type ElementSpec = [string, AtributSpec?, (string|Array<ContentSpec>)?];
+type ContentSpec = string|ElementSpec
 
 type Kapoj = StrObj;
 type Parametroj = StrObj;
@@ -155,26 +156,28 @@ function ht_element(name: string, attributes: AtributSpec = null,
  * kaj poste uzu JS HTMLElement.append por aldoni la enhavon kiel miksaĵon de
  * tekstoj kaj elementoj kreitaj unuope per ht_element (aŭ ht_elements, se pluraj aŭ ingigitaj)
  * @param jlist 
- * @returns {Array<Node>} - listo de kreitaj elementoj, eventuale ingitaj
+ * @returns listo de kreitaj elementoj, eventuale ingitaj
  */
-function ht_elements(jlist: Array<ElementSpec>): Array<Node> {
+function ht_elements(jlist: Array<ContentSpec>): Array<Node> {
     var dlist = [];
     for (var el of jlist) {
 
-      // teksta enhavo
+      // unuopa teksta enhavo
       if (typeof el == "string") { 
         dlist.push(document.createTextNode(el));
 
       // elemento kun malsimpla enhavo: [nomo,attributoj,[...]]
       } else { 
         let element: Element;
+
+        // ingigita enhavo de la elemento estas listo (array)
         if (el[2] && el[2] instanceof Array) {
-            var content = ht_elements(el[2]); // ni vokas nin mem por la enhavo-kreado
+            let content = ht_elements(el[2]); // ni vokas nin mem por la enhavo-kreado
             element = ht_element(el[0],el[1]);
             if (content) element.append(...content);
 
         } else { // elemento kun simpla tekstenhavo: [nomo,attributoj,enhavo]
-            element=ht_element(el[0],el[1],el[2] as string);
+            element = ht_element(el[0],el[1],el[2] as string);
         }
         dlist.push(element);
       } //else

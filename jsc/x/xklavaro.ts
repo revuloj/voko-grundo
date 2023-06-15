@@ -55,7 +55,7 @@ class XKlavaro{
         if (this.dialogo) {
             this.dialogo.querySelectorAll("textarea,input").forEach( (e) =>
                 e.addEventListener("blur", function(event) {
-                    this.lasta_fokuso = event.target.id;
+                    this.lasta_fokuso = (event.target as Element).id;
                 })
             );
         }            
@@ -212,7 +212,7 @@ class XKlavaro{
                     class: 'klv stl', 
                     'data-stl': kod,
                     title: 'stilo: ' + nom},
-                    [['span',{},[nom,['br'],kod]]]
+                    [ ['span',{},[nom,['br'],kod]] ]
                 ]
             ]);
             klvrElm.children[pos-1]
@@ -305,7 +305,7 @@ class XKlavaro{
                 let n = parseInt(val.substring(0,2),10);
                 if (n) {
                     const ta = this.celo();
-                    const i_ = get_indent(ta);
+                    const i_ = get_indent(ta).length;
                     if (i_ % 2 == 1) n = n/2; // ŝovu nur unu (±2/2) ĉe momente nepara enŝovo!
                     indent(ta,n);
                     this.postenmeto(event);
