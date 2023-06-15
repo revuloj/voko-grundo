@@ -35,7 +35,6 @@ type Trovoj = { [key: string]: TrovVorto[] };
 
 /**
  * Kreas novan serĉon. Ĝi helpas aliri la esperantajn kaj nacilingvajn trovojn post farita serĉo.
- * @constructor
  */
 class Sercho {
 
