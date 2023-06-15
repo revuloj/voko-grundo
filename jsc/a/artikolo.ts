@@ -49,23 +49,7 @@ window.addEventListener("hashchange", function() {
  * ni uzas en la prezento de unuopa artikolo en Reta Vortaro.
  * @namespace artikolo
  */
-namespace artikolo {
-
-    /**
-     * Tio vokiĝas ĉe izolita prezento de la artikolo
-     * kio fakte momente ne okazas, ĉar artikoloj referencas plu al v1b kaj ne al tiu ĉi
-     * pli nova JS. Ni poste povos uzi tion por prepari la artikolon ĉe unuopa prezento
-     * eble aŭtomate ankadrigante / transirante al la plenkadra prezento.
-     * @memberof artikolo
-     * @inner
-     */
-    when_doc_ready(function() {
-        console.log("artikolo.when_doc_ready...:" + location.href);
-        const fn = getUrlFileName(location.href);
-        const art = fn.substring(0,fn.lastIndexOf('.')); 
-        if (art) preparu_art(art);
-        //enkadrigu();
-    });
+export namespace artikolo {
 
     /**
      * Preparas la artikolon: kaŝas kaseblajn aferojn, t.e. kunfaldas derivajojn krom unu, kaŝas 
@@ -828,6 +812,21 @@ namespace artikolo {
         tez_btn.querySelector('.i_tez').classList.remove('kasxita');
     }
 
+    /**
+     * Tio vokiĝas ĉe izolita prezento de la artikolo
+     * kio fakte momente ne okazas, ĉar artikoloj referencas plu al v1b kaj ne al tiu ĉi
+     * pli nova JS. Ni poste povos uzi tion por prepari la artikolon ĉe unuopa prezento
+     * eble aŭtomate ankadrigante / transirante al la plenkadra prezento.
+     * @memberof artikolo
+     * @inner
+     */
+    when_doc_ready(function() {
+        console.log("artikolo.when_doc_ready...:" + location.href);
+        const fn = getUrlFileName(location.href);
+        const art = fn.substring(0,fn.lastIndexOf('.')); 
+        if (art) preparu_art(art);
+        //enkadrigu();
+    });
 
    // eksportu publikajn funkciojn
    /*

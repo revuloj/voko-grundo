@@ -16,9 +16,9 @@ type Seanco = {
 /**
  * La nomspaco 'preferoj' enhavas funkciojn kaj variablojn por
  * konservi, legi, ŝangi la preferojn de la uzanto.
- * @namespace {Function} preferoj
+ * @namespace preferoj
  */
-namespace preferoj {  
+export namespace preferoj {  
     
     var lingvoj = [];
     export var seanco: Seanco = {};
