@@ -1,8 +1,9 @@
 
-/* jshint esversion: 6 */
-
 // (c) 2020 - 2023 ĉe Wolfram Diestel
 // laŭ GPL 2.0
+
+import '../x/util';
+import '../u/ht_util';
 
 const js_sojlo = 3; //30+3;
 const ekz_sojlo = 3;
@@ -37,6 +38,7 @@ window.addEventListener("hashchange", function() {
         if (trg)
             trg.dispatchEvent(MalkashEvento);
         else
+            // @ts-ignore
             this.console.error("ne troviĝis saltomarko '"+id+'"');
     }
 });
@@ -45,9 +47,9 @@ window.addEventListener("hashchange", function() {
 /**
  * La nomspaco 'artikolo' kunigas ĉiujn funkciojn kaj variablojn, kiujn
  * ni uzas en la prezento de unuopa artikolo en Reta Vortaro.
- * @namespace {Function} artikolo
+ * @namespace artikolo
  */
-var artikolo = function() {
+namespace artikolo {
 
     /**
      * Tio vokiĝas ĉe izolita prezento de la artikolo
@@ -70,9 +72,9 @@ var artikolo = function() {
      * ekzemploj krom po tri, kaŝas tradukojn krom preferatajn. Alligas la kodon por aktivaj elementoj
      * uzata por faldi-malfaldi.
      * @memberof artikolo
-     * @param {string} artikolo - la doserinomo de la artikolo
+     * @param artikolo - la doserinomo de la artikolo
      */
-    function preparu_art(artikolo) {
+    export function preparu_art(artikolo: string) {
         // evitu preparon, se ni troviĝas en la redaktilo kaj
         // la artikolo ne ĉeestas!
         if (! document.getElementById(sec_art)) return;
@@ -89,7 +91,7 @@ var artikolo = function() {
         /* aktivigu nur por longaj artikoloj... */
         var d = document.getElementsByClassName("kasxebla");
          //if (d.length > js_sojlo) {
-        piedlinio_modifo(artikolo);
+        piedlinio_modifo();
         preparu_kashu_sekciojn();
         preparu_malkashu_fontojn();
         preparu_maletendu_sekciojn();
@@ -106,10 +108,10 @@ var artikolo = function() {
      * @param {Element} element 
      * @returns La trovitan H2-elementon
      */
-    function getPrevH2(element) {
+    function getPrevH2(element: Element): Element {
         var prv = element.previousSibling;
         while ( prv && prv.nodeName != "H2") { prv = prv.previousSibling; }
-        return prv;
+        return prv as Element;
     }
 
     
@@ -130,7 +132,7 @@ var artikolo = function() {
         var multaj = d.length > js_sojlo;
         var first = true;
 
-        for (var el of d) {
+        for (const el of Array.from(d)) {
 
             // forigu titolon "administraj notoj", se la sekcio estas malplena
             if (el.closest(".admin") && el.childElementCount == 0) {
@@ -140,11 +142,11 @@ var artikolo = function() {
             
             // provizore ne bezonata: el.addEventListener("kashu", function(event) { kashu_drv(event.currentTarget) });
             el.addEventListener("malkashu", function(event) { 
-                malkashu_drv(/** @type {Element}*/(event.currentTarget));
+                malkashu_drv(event.currentTarget as Element);
                 event.stopPropagation();
             });
             el.addEventListener("komutu", function(event) { 
-                kashu_malkashu_drv(/** @type {Element}*/(event.currentTarget));
+                kashu_malkashu_drv(event.currentTarget as Element);
                 event.stopPropagation();
             });           
 
@@ -171,8 +173,9 @@ var artikolo = function() {
                 // difinu eventojn
                 h2.addEventListener("click", function(event) { 
                     //kashu_malkashu_drv(event);
-                    var sec = event.target.closest("section"); //parentElement;    
-                    var div = sec.querySelector("div.kasxebla");
+                    const trg = event.target as Element;
+                    const sec = trg.closest("section"); //parentElement;    
+                    const div = sec.querySelector("div.kasxebla");
                     div.dispatchEvent(KomutEvento);
                     //triggerEvent(div,"komutu");
                 });
@@ -188,9 +191,10 @@ var artikolo = function() {
      */
     function preparu_malkashu_fontojn() {
         var d = document.getElementsByClassName("fontoj kasxita");
-        for (var el of d) {
-            el.addEventListener("malkashu", function(event) { 
-                event.currentTarget.classList.remove("kasxita");
+        for (var el of Array.from(d)) {
+            el.addEventListener("malkashu", function(event) {
+                const trg = event.currentTarget as Element;
+                trg.classList.remove("kasxita");
                 event.stopPropagation();
             });
         }
@@ -206,7 +210,7 @@ var artikolo = function() {
         var d = document.getElementsByClassName("etendebla");
     //    var sojlo = 3+2; // ekde tri drv + trd + fnt, au du drv kaj adm
     // if (d.length > sojlo) { // ĝis tri derivaĵoj (+tradukoj, fontoj), ne kaŝu la alineojn
-        for (var el of d) {
+        for (var el of Array.from(d)) {
             if (el.classList.contains("tradukoj")) {
                 maletendu_trd(el);
             }
@@ -215,7 +219,7 @@ var artikolo = function() {
         var art = document.getElementById("s_artikolo");
         if (art) {
             var d1 = art.querySelectorAll("span.dif");
-            for (var dif of d1) {
+            for (var dif of Array.from(d1)) {
                 maletendu_ekz(dif);
             }
         }
@@ -227,7 +231,8 @@ var artikolo = function() {
      * @inner
      */
     function kashu_chiujn_drv() {
-        for (var el of document.getElementsByClassName("kasxebla")) 
+        const kasheblaj = Array.from(document.getElementsByClassName("kasxebla"));
+        for (var el of kasheblaj) 
             if (el.parentElement.classList.contains("drv") ||
                 el.parentElement.classList.contains("notoj")) 
                 kashu_drv(el);
@@ -239,7 +244,8 @@ var artikolo = function() {
      * @inner
      */
     function malkashu_chiujn_drv() {
-        for (var el of document.getElementsByClassName("kasxebla")) 
+        const kasheblaj = Array.from(document.getElementsByClassName("kasxebla"));
+        for (var el of kasheblaj) 
             if (el.parentElement.classList.contains("drv") ||
                 el.parentElement.classList.contains("notoj"))  
                 malkashu_drv(el);
@@ -249,9 +255,9 @@ var artikolo = function() {
      * Kaŝas unuopan derivaĵon
      * @memberof artikolo
      * @inner
-     * @param {Element} el 
+     * @param el 
      */
-    function kashu_drv(el) {
+    function kashu_drv(el: Element) {
         el.classList.add("kasxita");
         var h2 = getPrevH2(el);
         if (h2) {
@@ -264,9 +270,9 @@ var artikolo = function() {
      * Malkaŝas unopan derivaĵon
      * @memberof artikolo
      * @inner
-     * @param {Element} el 
+     * @param el 
      */
-    function malkashu_drv(el) {
+    function malkashu_drv(el: Element) {
         // console.log("malkaŝu drv");
         el.classList.remove("kasxita");
         var h2 = getPrevH2(el);
@@ -280,9 +286,9 @@ var artikolo = function() {
      * Kaŝas unuopan derivaĵon,s e gi estas malkasita kaj malkaŝas ĝin, se gi estas kasita momente.
      * @memberof artikolo
      * @inner
-     * @param {Element} el 
+     * @param el 
      */
-    function kashu_malkashu_drv(el) {
+    function kashu_malkashu_drv(el: Element) {
         //event.stopPropagation();
         //var div = section.getElementsByClassName("kasxebla")[0];
 
@@ -299,15 +305,15 @@ var artikolo = function() {
      * Maletendas tradukojn en unu sekcio
      * @memberof artikolo
      * @inner
-     * @param {Element} element 
+     * @param element 
      */
-    function maletendu_trd(element) {
+    function maletendu_trd(element: Element) {
         //var nav_lng = navigator.languages || [navigator.language];
-        var eo;
+        var eo: Element;
         var maletenditaj = 0;
         var serch_lng = getHashParts().lng;
 
-        for (var id of element.children) {
+        for (var id of Array.from(element.children)) {
             var id_lng = id.getAttribute("lang");
             // la tradukoj estas paroj de ea lingvo-nomo kaj nacilingvaj tradukoj
             if (id_lng) {
@@ -356,12 +362,13 @@ var artikolo = function() {
      * Reagas al evento por etendi kaŝitajn tradukojn
      * @memberof artikolo
      * @inner
-     * @param {Event} event 
+     * @param event 
      */
-    function etendu_trd(event) {
+    function etendu_trd(event: Event) {
         event.preventDefault();
-        var div_trd = event.target.closest("DL");
-        for (var id of div_trd.children) {
+        const trg = event.target as Element;
+        const div_trd = trg.closest("DL");
+        for (var id of Array.from(div_trd.children)) {
             id.classList.remove("kasxita");
         }
         // kaŝu pli...
@@ -378,75 +385,72 @@ var artikolo = function() {
      * Maletendas ekzemplojn ene de dfinio
      * @memberof artikolo
      * @inner
-     * @param {Element} dif 
+     * @param dif 
      */
-    function maletendu_ekz(dif) {
+    function maletendu_ekz(dif: Element) {
         var ekz_cnt = 0;
-        for (var ch of dif.childNodes) {
-            if (ch.classList && ch.classList.contains("ekz")) {
-                ekz_cnt += 1;
-                if (ekz_cnt > ekz_sojlo) {
-                    ch.classList.add("kasxita");
+        dif.childNodes.forEach( (ch) => {
+            if (ch.nodeType == 1) { // Element
+                const e = ch as Element;
+                // ekz
+                if (e.classList && e.classList.contains("ekz")) {
+                    ekz_cnt += 1;
+                    if (ekz_cnt > ekz_sojlo) {
+                        e.classList.add("kasxita");
+                    }            
+                } else {
+                    // se ni ĵus kaŝis iujn ekzemplojn, ni montru
+                    // etendilon "+nn..."
+                    if (ekz_cnt > ekz_sojlo) {
+                        var maletenditaj = ekz_cnt - ekz_sojlo;
+                        var pli = ht_elements([
+                                ["i",{class: "ekz pli"},
+                                    ["(",["A",{href: "#", class: "pli etendilo"},"+"+maletenditaj],")"]
+                                ]])[0];
+                        pli.addEventListener("click",etendu_ekz);
+                        dif.insertBefore(pli,ch);        
+                    }
+                    // ni rekomencu kalkuladon - atentu, ke ekzemploj de difino
+                    // ne nepre estas unu post alia, sed povas esti pli distritaj...
+                    ekz_cnt = 0;
                 }
-            } else if ( ch.nextSibling && ch.nodeType == 3 && ! ch.nodeValue.trim() ) {
+            }
+            // !Element
+            /*
+            else if ( ch.nextSibling && ch.nodeType == 3 && ! ch.nodeValue.trim() ) {
                 // ignoru "blankjn" tekstojn
                 continue;
-            } else {
-                // se ni ĵus kaŝis iujn ekzemplojn, ni montru
-                // etendilon "+nn..."
-                if (ekz_cnt > ekz_sojlo) {
-                    var maletenditaj = ekz_cnt - ekz_sojlo;
-                    var pli = ht_elements([
-                            ["i",{class: "ekz pli"},
-                                ["(",["A",{href: "#", class: "pli etendilo"},"+"+maletenditaj],")"]
-                            ]])[0];
-                    pli.addEventListener("click",etendu_ekz);
-                    dif.insertBefore(pli,ch);        
-                }
-                // ni rekomencu kalkuladon - atentu, ke ekzemploj de difino
-                // ne nepre estas unu post alia, sed povas esti pli distritaj...
-                ekz_cnt = 0;
-            }
-        }    
+            }*/
+        }); 
     }
 
     /**
      * Reagas al evento por etendi kasitajn ekzemplojn
      * @memberof artikolo
      * @inner
-     * @param {Event} event 
+     * @param event 
      */
-    function etendu_ekz(event) {
-        var dif = event.target.closest("span.dif");
-        for (var ch of dif.querySelectorAll(".ekz")) {
+    function etendu_ekz(event: Event) {
+        const trg = event.target as Element;
+        var dif = trg.closest("span.dif");
+        dif.querySelectorAll(".ekz").forEach( (ch) => {
             ch.classList.remove("kasxita");
             if (ch.classList.contains("pli"))
                 // ĉu forigi aŭ kaŝi - dependas, ĉu poste ni denove bezonus ĝin...
                 dif.removeChild(ch);
-        }
+        });
     }
-
-    /*
-    function make_flat_button(label,handler,hint='') {
-        var span = document.createElement("SPAN");
-        span.classList.add("kashilo");
-        span.appendChild(document.createTextNode(label)); 
-        //span.addEventListener("click",handler);
-        if (hint) span.setAttribute("title",hint)
-        return span;
-    }*/
 
     /**
      * Aldonas butonojn por kasi kaj malkasi sekciojn
      * @memberof artikolo
      * @inner
-     * @param {string} artikolo - la dosiernomo de la artikolo
+     * @param artikolo - la dosiernomo de la artikolo
      */
-    function kashu_malkashu_butonoj(artikolo) {
+    function kashu_malkashu_butonoj(artikolo: string) {
         // aldonu kasho/malkasho-butonojn  
         //var art = document.getElementById(sec_art);
         var art = document.getElementsByTagName("article")[0];
-
 
         var div=ht_element("DIV",{id: "tez_btn"});
         div.appendChild(ht_icon_button("i_tez", () => {tezauro(artikolo);}, "montru la tezaŭron"));
@@ -467,13 +471,16 @@ var artikolo = function() {
      * @memberof artikolo
      * @inner
      */
-    function piedlinio_modifo(artikolo) {
+    function piedlinio_modifo() { //artikolo) {
         const pied = document.body.getElementsByTagName("FOOTER")[0];
 
-        function ref_dlg(r) {
-            let dlg = document.getElementById('dlg_referenco');
+        /**
+         * Provizas referencdialogon kiu ebligas vidi kaj kopii la URL-on de la artikolo
+         */
+        function ref_dlg(r: {url: string, title: string}) {
+            let dlg = <HTMLDialogElement>document.getElementById('dlg_referenco');
             if (!dlg) {
-                dlg = ht_elements([
+                dlg = <HTMLDialogElement>ht_elements([
                     ['dialog',{id: 'dlg_referenco',class: 'overlay'},[
                         ['a',{href: r.url},r.title],' ',
                         ['input',{id: 'dlg_ref_url', type: 'hidden'},r.url],
@@ -491,14 +498,15 @@ var artikolo = function() {
                 });
                 const kopiu = document.getElementById('dlg_ref_kopiu');
                 kopiu.addEventListener("click", () => {
-                    navigator.permissions.query({name: "clipboard-write"}).then((result) => {
+                    // @ts-ignore, vd https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Interact_with_the_clipboard
+                    navigator.permissions.query({ name: "clipboard-write" }).then( (result) => {
                         if (result.state === "granted" || result.state === "prompt") {
                             navigator.clipboard.writeText(r.url);
                             return;
                         }
                     });
-                    // se la supra ne funkcias, kopiu laŭ malnova maniero
-                    const url = document.getElementById('dlg_ref_url');
+                    // se la supra ne funkcias, provu kopii laŭ malnova maniero
+                    const url = <HTMLInputElement>document.getElementById('dlg_ref_url');
                     url.select();
                     document.execCommand("copy");
                 });
@@ -528,6 +536,13 @@ var artikolo = function() {
             // antaŭ xml aldonu "referenci..."
             if (xml) {
                 const ref = ht_element("A",{class: "redakto", href: "#", title: "refrenci al tiu ĉi artikolo"},"referenci...");
+
+                /* ebligu sendi artikolreferencon per sistemdependa reimedo (Share),
+                * tio ordinare provizas plurajn eblecojn sendi referencon al la artikolo 
+                * ien (kopio, legomarko, ...FB, Twitter,...)
+                * se tio ne funkcias ni kreas propran malgrandan dialogeton por vidi kaj
+                * kopii la URL-on
+                */
                 ref.addEventListener("click", () => {
                     const referenco = {
                         title: document.title,
@@ -542,6 +557,7 @@ var artikolo = function() {
                 xml.insertAdjacentElement("beforebegin",ref);
                 xml.insertAdjacentText("beforebegin"," | ");
             }
+
             // mallongigu artikolversion al nura dato
             const hst = pied.querySelector("A[href*='/hst/']");
             if (hst) {
@@ -572,7 +588,7 @@ var artikolo = function() {
      * @inner
      * @param {string} artikolo - la dosiernomo de la artikolo
      */
-    function tezauro(artikolo) {
+    function tezauro(artikolo: string) {
         if (!artikolo) return;
 
         function toggle_tez_btn() {
@@ -585,11 +601,11 @@ var artikolo = function() {
 
         // ni ne bezonas ŝargi la tezaŭron, se ĝi jam ŝarĝiĝis antaŭe, sed nur montri...
         const art = document.getElementById(sec_art);
-        var t_exists = false;
-        for (var t of art.querySelectorAll('div.tezauro')) {
+        let t_exists = false;
+        art.querySelectorAll('div.tezauro').forEach( (t) => {
             t_exists = true;
             t.classList.remove('kasxita');
-        }
+        });
         if (t_exists) {
             toggle_tez_btn();
             return;
@@ -664,7 +680,7 @@ var artikolo = function() {
                                     title: 'al FdE/OA'}]
                                 ]]
                         ]);
-                        p[0].append(...oj);
+                        if (p[0]) (p[0] as Element).append(...oj);
                         refs.push(...p); 
                     }
 
@@ -699,7 +715,7 @@ var artikolo = function() {
                                     title: 'al Vikipedio'}]
                                 ]]
                         ]);
-                        p[0].append(...vj);
+                        if (p[0]) (p[0] as Element).append(...vj);
                         refs.push(...p); 
                     }
 
@@ -746,9 +762,9 @@ var artikolo = function() {
                                         class: "ref"
                                     },cel.k],', '
                                 ]);
-                                if (cel.n) {
+                                if (cel.n && a[0]) {
                                     const s = ht_element("sup",{},cel.n);
-                                    a[0].append(s);
+                                    (a[0] as Element).append(s);
                                 }  
                                 if (a) aj.push(...a);    
                             }
@@ -764,7 +780,7 @@ var artikolo = function() {
                                         alt: ref_tip_alt(tip_fixed(tip)) }]
                                 ]]
                             ]);
-                            p[0].append(...aj);
+                            if (p[0]) (p[0] as Element).append(...aj);
                             refs.push(...p); 
                         }
                     }
@@ -777,7 +793,7 @@ var artikolo = function() {
                     }
                 }
 
-                for (let h2 of art.querySelectorAll('h2[id]')) {
+                art.querySelectorAll('h2[id]').forEach( (h2) => {
                     const div = kreu_ref_div(h2.id,first); first = false;
                     if (div) {
                         const sec = h2.closest("section");
@@ -788,7 +804,7 @@ var artikolo = function() {
                         //    class: "i_tez" });                        
                         //h2.append(btn);
                     }
-                }
+                });
 
                 toggle_tez_btn();
             }
@@ -802,9 +818,9 @@ var artikolo = function() {
      */
     function tezauro_kashu() {
         const art = document.getElementById(sec_art);
-        for (var t of art.querySelectorAll('div.tezauro')) {
+        art.querySelectorAll('div.tezauro').forEach( (t) => {
             t.classList.add('kasxita');
-        }
+        });
         preferoj.seanco.tez_videbla = false;
 
         const tez_btn = document.getElementById("tez_btn");
@@ -814,8 +830,10 @@ var artikolo = function() {
 
 
    // eksportu publikajn funkciojn
+   /*
    return {
         preparu_art: preparu_art
    };
+   */
 
-}();
+};

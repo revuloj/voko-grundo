@@ -1,22 +1,27 @@
-
-/* jshint esversion: 6 */
-
-// (c) 2020 - 2022 Wolfram Diestel
-// laŭ GPL 2.0
+/* (c) 2020 - 2023 ĉe Wolfram Diestel
+ laŭ GPL 2.0
+*/
 
 //const lingvoj_xml = "../cfg/lingvoj.xml";
 
 // difinu ĉion sub nomprefikso "preferoj"
+
+const sec_art = "s_artikolo";
+
+
+type Seanco = {
+    tez_videbla?: boolean
+}
 
 /**
  * La nomspaco 'preferoj' enhavas funkciojn kaj variablojn por
  * konservi, legi, ŝangi la preferojn de la uzanto.
  * @namespace {Function} preferoj
  */
-var preferoj = function() {  
+namespace preferoj {  
     
     var lingvoj = [];
-    var seanco = {};
+    export var seanco: Seanco = {};
     var dato = Date.now();
     
     /**
@@ -30,17 +35,18 @@ var preferoj = function() {
         HTTPRequest('GET', globalThis.lingvoj_xml, {},
         function() {
             // Success!
-            var parser = new DOMParser();
-            var doc = parser.parseFromString(this.response,"text/xml");
-            var plist = document.getElementById("pref_lng");
-            var alist = document.getElementById("alia_lng");
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(this.response,"text/xml");
+            const plist = document.getElementById("pref_lng");
+            const alist = document.getElementById("alia_lng");
 
-            var selection = document.getElementById("preferoj")
-                .querySelector('input[name="pref_lingvoj"]:checked').value.split('_');
+            const ichecked = document.getElementById("preferoj")
+                .querySelector('input[name="pref_lingvoj"]:checked') as HTMLInputElement;
+            const selection = ichecked.value.split('_');
             
             // kolekti la lingvojn unue, ni bezonos ordigi ilin...
-            var _lingvoj = {};
-            for (var e of doc.getElementsByTagName("lingvo")) {
+            let _lingvoj = {};
+            for (var e of Array.from(doc.getElementsByTagName("lingvo"))) {
                 var c = e.attributes['kodo']; // jshint ignore:line
                 if (c.value != "eo") {
                     var ascii = eo_ascii(e.textContent);
@@ -65,7 +71,7 @@ var preferoj = function() {
                     li.setAttribute("title","forigu");
                     plist.appendChild(li);
 
-                    var lk = li.cloneNode(true);
+                    var lk = <Element>li.cloneNode(true);
                     lk.setAttribute("class","kasxita");
                     alist.appendChild(lk);
                 }
@@ -83,16 +89,18 @@ var preferoj = function() {
      * @inner
      */
     function change_pref_lng() {
-        var selection = document.getElementById("preferoj")
-            .querySelector('input[name="pref_lingvoj"]:checked').value.split('_');
+        const checked = document.getElementById("preferoj") 
+            .querySelector('input[name="pref_lingvoj"]:checked') as HTMLInputElement;
+        const selection = checked.value.split('_');
 
-        for (var ch of document.getElementById("alia_lng").childNodes) {
-            var la=ch.getAttribute("data-la");
-            if (la[0] < selection[0] || la[0] > selection[1]) 
-                ch.classList.add("kasxita");
-            else
-                ch.classList.remove("kasxita");
-        }
+        for (const e of Array.from(document.getElementById("alia_lng").children)) {
+                const la = e.getAttribute("data-la");
+
+                if (la[0] < selection[0] || la[0] > selection[1]) 
+                    e.classList.add("kasxita");
+                else
+                    e.classList.remove("kasxita");
+        };
     }
 
     /**
@@ -101,8 +109,8 @@ var preferoj = function() {
      * @inner
      * @param {Event} event 
      */
-    function aldonuLingvon(event) {
-        var el = event.target; 
+    function aldonuLingvon(event: Event) {
+        var el = event.target as Element; 
 
         if (el.tagName == "LI") {
             var lng = el.getAttribute("data-lng");
@@ -123,8 +131,8 @@ var preferoj = function() {
      * @inner
      * @param {Event} event 
      */
-    function foriguLingvon(event) {
-        var el = event.target; 
+    function foriguLingvon(event: Event) {
+        var el = event.target as Element; 
 
         if (el.tagName == "LI") {
             var lng = el.getAttribute("data-lng");
@@ -147,7 +155,7 @@ var preferoj = function() {
      * @memberof preferoj
      * @param {Function} sePreta 
      */
-    function dialog(sePreta) {
+    export function dialog(sePreta: Function) {
         var pref = document.getElementById("pref_dlg");
         var inx = [['a','b'],['c','g'],['h','j'],['k','l'],['m','o'],['p','s'],['t','z']];
 
@@ -159,7 +167,7 @@ var preferoj = function() {
             var dlg = ht_element("DIV",{id: "pref_dlg", class: "overlay"});
             var div = ht_element("DIV",{id: "preferoj", class: "preferoj"});
             //var tit = ht_element("H2",{title: "tiun ĉi dialogon vi povas malfermi ĉiam el la piedlinio!"},"preferoj");
-            var close = ht_button("preta",function() {
+            var close = <Element>ht_button("preta", function() {
                 document.getElementById("pref_dlg").classList.add("kasxita");
                 store();
                 // adaptu la rigardon, t.e. trd-listojn
@@ -200,13 +208,14 @@ var preferoj = function() {
      * lingvoj laŭ alfabeto ĉar ni ne povas montri ciujn samtempe
      * @memberof preferoj
      * @inner
-     * @param {Element} parent - la parenca elemento por la opcioj
-     * @param {string} name - la nevidebla nomo (atributo 'name') 
-     * @param {string|null} glabel - la videbla nomo de la grupo
-     * @param {Array<{id,label}>} radios - listo de HTML-id por la opcioj
-     * @param {Function} handler - reago al elekto-eventoj
+     * @param parent - la parenca elemento por la opcioj
+     * @param name - la nevidebla nomo (atributo 'name') 
+     * @param glabel - la videbla nomo de la grupo
+     * @param radios - listo de HTML-id por la opcioj
+     * @param handler - reago al elekto-eventoj
      */
-    function add_radios(parent,name,glabel,radios,handler) {
+    function add_radios(parent: Element, name: string, glabel: string|null,
+        radios: Array<{ id: string, label: string }>, handler: EventListenerOrEventListenerObject) {
         if (glabel) {
             const gl = document.createElement("LABEL");
             gl.appendChild(document.createTextNode(glabel));
@@ -251,7 +260,7 @@ var preferoj = function() {
      * loka memoro de la retumilo.
      * @memberof preferoj
      */
-    function restore() {
+    export function restore() {
         var str = window.localStorage.getItem("revo_preferoj");            
         var prefs = (str? JSON.parse(str) : null);
 
@@ -288,7 +297,7 @@ var preferoj = function() {
      * @memberof preferoj
      * @returns la lingvolisto
      */
-    function languages() {
+    export function languages() {
         return lingvoj;
     }
 
@@ -298,10 +307,10 @@ var preferoj = function() {
      * @memberof preferoj
      * @returns la dato kiam ni metis la preferojn
      */
-    function date() {
+    export function date() {
         return dato;
     }
-
+/*
     // eksportu publikajn funkciojn / variablojn
     return {
         //store: store,
@@ -311,5 +320,5 @@ var preferoj = function() {
         date: date,
         seanco: seanco
     };
-    
-}();
+    */
+};
