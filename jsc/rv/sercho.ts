@@ -25,9 +25,9 @@ type Trovero = [string,string,string,string,string,string?];
 
 // trovoj grupigita laŭ trovvorto por pli facila kreado de la HTML en la serĉlisto
 // v: vorto, k: kapvorto, h: href, t: trovoj
-export type TrovVorto = 
-    { v: string, t: Array<{ k: string, h: string }> } |
-    { v: string, h: string, t: { [lng: string]: string } };
+export type TrovEo = { v: string, h: string, t: { [lng: string]: string } };
+export type TrovTrd = { v: string, t: Array<{ k: string, h: string }> };
+export type TrovVorto = TrovEo | TrovTrd;
 
 // trovitaj rikordoj grupigitaj laŭ kapvorto (KAP=1) por 'eo'
 // kaj lingvo (LNG=2) por nacilingvoj
@@ -96,6 +96,9 @@ export class Sercho {
      * por aliaj lingvoj estas nur signaro kun esperanta traduko, do ne objekto 
      * @param {string} lng - la lingvo kies trovojn ni volas
      * @returns - la trovoj en la supre priskribita formo
+     * 
+     * PLIBONIGU: la diversa strukturo de eo / aliaj konfuzas la tipkontrolon de TypeScript
+     * do pli bone laŭeble apartigu la funkciojn por 'eo' kaj por aliaj lingvoj
      */
     trovoj(lng: string): TrovVorto[] {
 

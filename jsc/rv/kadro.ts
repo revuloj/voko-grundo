@@ -10,7 +10,7 @@ import {preferoj} from '../a/preferoj';
 import {Transiroj} from '../u/transiroj';
 import {Xlist} from '../x/xlisto';
 
-import {Sercho, Lingvo, TrovVorto} from './sercho';
+import {Sercho, Lingvo, TrovEo, TrovTrd} from './sercho';
 import {redaktilo} from './redaktilo';
 
 type Submeto = { state: string, fname: string, desc: string, time: string, result: string };
@@ -1012,8 +1012,9 @@ function serchu_q(esprimo: string) {
             // console.log(trvj);
 
             var atr = {};
-            for (var n=0; n<trvj.length; n++) {
-                var t = trvj[n];
+            for (let n=0; n<trvj.length; n++) {
+                let t = trvj[n];
+
                 if (n+1 > globalThis.sercho_videblaj && trvj.length > globalThis.sercho_videblaj+1) {
                     // enmetu +nn antaŭ la unua kaŝita elemento
                     if (n - globalThis.sercho_videblaj == 1) {
@@ -1028,7 +1029,7 @@ function serchu_q(esprimo: string) {
                 if ( lng == 'eo' ) {
                     // tradukojn oni momente ne povas ne povas rekte alsalti,
                     // do ni provizore uzas t.eo.mrk anst. t[l].mrk
-                    const a = ht_element("a",{target: "precipa", href: t.h}, t.v);
+                    const a = ht_element("a",{target: "precipa", href: (t as TrovEo).h}, t.v);
                     dt.append(a);
                 } else {
                     const s = ht_element("span",{lang: lng}, t.v);
@@ -1039,7 +1040,7 @@ function serchu_q(esprimo: string) {
                 if ( lng == 'eo' && t_red.stato == "redaktante") {
                     const ref_btn = ht_element("button",{
                         class: "icon_btn r_vid", 
-                        value: t.h.split('#')[1], // mrk
+                        value: (t as TrovEo).h.split('#')[1], // mrk
                         title:"transprenu kiel referenco"
                     });
                     dt.append(ref_btn);
@@ -1053,7 +1054,7 @@ function serchu_q(esprimo: string) {
                         // tradukojn oni momente ne povas rekte alsalti,
                         // do ni (provizore?) uzas href (el drv-mrk) 
                         const a = ht_elements([
-                                ["a",{target: "precipa", href: t.h},
+                                ["a",{target: "precipa", href: (t as TrovEo).h},
                                     [["code",{}, l + ":"],["span",{lang: l}, trd]]
                                 ],["br"]
                             ]);    
@@ -1061,7 +1062,7 @@ function serchu_q(esprimo: string) {
                     } // for lng,trd ...
                 } else {
                     // trovitaj esperantaj tradukoj de tiu nacilingva vorto
-                    for (let e of t.t) {
+                    for (let e of (t as TrovTrd).t) {
                         const a = ht_elements([
                             ["a",{target: "precipa", href: e.h},
                                 e.k
@@ -1357,7 +1358,7 @@ function viaj_submetoj() {
                 [
                     ["summary",{},[
                         ["strong",{},"viaj submetoj"]
-                    ],'...']
+                    ]],'...'
                 ]
             ]
         ]);
