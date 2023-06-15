@@ -11,6 +11,7 @@ import {Transiroj} from '../u/transiroj';
 import {Xlist} from '../x/xlisto';
 
 import {Sercho, Lingvo, TrovVorto} from './sercho';
+import {redaktilo} from './redaktilo';
 
 type Submeto = { state: string, fname: string, desc: string, time: string, result: string };
 
@@ -1136,8 +1137,8 @@ function serchu_q(esprimo: string) {
                         load_page("nav",globalThis.redaktmenu_url,true,
                             () => redaktilo.load_ref(refmrk,refstr));        
                     });
-                }           
-            }     
+                });
+            }
         }
 
         // montru butonon por reveni al ĉefa indekso

@@ -1,7 +1,10 @@
 
-/* jshint esversion: 6 */
+/* 
+(c) 2023 Wolfram Diestel
+*/
 
-// (c) 2023 Wolfram Diestel
+//import {Xlist} from './xlisto';
+import {XmlStruct, XElPos} from './xmlstruct';
 
 /* FARENDA:
  - ebligu administradon de ĉiuj tradukoj de redaktata teksto en XmlTrad, senŝargigante la tradukdialgon de administrado 
@@ -10,12 +13,12 @@
  - ebligu aldoni kaj redakti ankaŭ enekzemplajn tradukojn
 */
 
-type Lingvo = string;
-type sId = string; // la valoro de SId (vd. xmlstruct)
-type TList = Array<string>;
-type Tradukoj = { [s_id: sId]: TList } // tradukoj de iu lingvo kaj iu strukturero
+export type Lingvo = string;
+// type sId = string; // la valoro de SId (vd. xmlstruct)
+export type TList = Array<string>;
+type Tradukoj = { [s_id: string]: TList } // tradukoj de iu lingvo kaj iu strukturero
 
-type XPlace = XElPos & {
+export type XPlace = XElPos & {
   grp?: string, trd?: string, itr?: string
 }
 
@@ -23,15 +26,15 @@ type XPlace = XElPos & {
  * Helpas ekstrakti kaj remeti la tradukojn de la redaktata teksto
  * @constructor
  */
-class XmlTrad{
+export class XmlTrad {
   private xmlstruct: XmlStruct;
 
   // tradukoj de unu substrukturo/subteksto sed de pluraj lingvoj
   // la atributnomoj en 'tradukoj' estas la lingvoj, kaj la valoroj listoj de tradukoj en tiu lingvo
-  private tradukoj: { [lng: Lingvo]: TList }; 
+  private tradukoj: { [lng: string]: TList }; 
   // laŭ lingvo estas objektoj por ĉiu strukturero de xmlstruct
-  private tradukoj_strukt: { [lng: Lingvo]: Tradukoj };
-  private shanghoj_strukt: { [lng: Lingvo]: Tradukoj };
+  private tradukoj_strukt: { [lng: string]: Tradukoj };
+  private shanghoj_strukt: { [lng: string]: Tradukoj };
 
   private static re_stru = {
     /*_line: /^.*$/mg,*/
@@ -53,7 +56,7 @@ class XmlTrad{
 /**
  * Redonas tradukliston de tradukoj de unu strukturero en unu lingvo
  */
-getStruct(lng: Lingvo, s_id: sId) {
+getStruct(lng: Lingvo, s_id: string) {
     let trd: TList;
 
     try {
@@ -73,7 +76,7 @@ getStruct(lng: Lingvo, s_id: sId) {
  * @param no - la pozicio de la tradukoj en tiu strukturo kaj lingvo
  * @param trd - la tradukteksto
  */
-putStruct(s_id: sId, lng: Lingvo, no: number, trd: string) {
+putStruct(s_id: string, lng: Lingvo, no: number, trd: string) {
     // PLIBONIGU: verŝajne estas pli efike meti aldonojn kaj ŝanĝojn 
     // al Xmlarea.tradukoj nun anstataŭ en aparta dlg-alpendo trd_shanghoj...
     if (! this.shanghoj_strukt[lng]) this.shanghoj_strukt[lng] = {};
@@ -87,7 +90,7 @@ putStruct(s_id: sId, lng: Lingvo, no: number, trd: string) {
 /**
  * Redonas ĉiujn ŝanĝojn por s_id estas (ĉiuj ŝanĝitaj lingvoj kun tradukoj)
  */
-shanghitaj(s_id: sId) {
+shanghitaj(s_id: string) {
     let r = {};
     for (let l of Object.keys(this.shanghoj_strukt)) {
         const s = this.shanghoj_strukt[l][s_id];

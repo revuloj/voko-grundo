@@ -27,7 +27,7 @@ type Trovero = [string,string,string,string,string,string?];
 // v: vorto, k: kapvorto, h: href, t: trovoj
 export type TrovVorto = 
     { v: string, t: Array<{ k: string, h: string }> } |
-    { v: string, h: string, t: { [lng: Lingvo]: string } };
+    { v: string, h: string, t: { [lng: string]: string } };
 
 // trovitaj rikordoj grupigitaj laŭ kapvorto (KAP=1) por 'eo'
 // kaj lingvo (LNG=2) por nacilingvoj

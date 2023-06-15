@@ -5,6 +5,8 @@
 import '../x/util';
 import '../u/ht_util';
 
+import {preferoj} from './preferoj';
+
 const js_sojlo = 3; //30+3;
 const ekz_sojlo = 3;
 const sec_art = "s_artikolo";
@@ -532,7 +534,9 @@ export namespace artikolo {
                         title: document.title,
                         url: 'https://reta-vortaro.de/revo/art/'+artikolo+'.html'
                     };
+                    // @ts-ignore, ankoraŭ ne normigita (nur propono), sed ni ja havas se-ne-an solvon
                     if (navigator.share && navigator.canShare(referenco)) {
+                        // @ts-ignore
                         navigator.share(referenco);
                     } else {
                         ref_dlg(referenco);

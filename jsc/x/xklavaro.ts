@@ -4,6 +4,7 @@
 */
 
 import '../u/ht_util';
+import {Xlist} from './xlisto';
 
 console.debug("Instalante la klavarfunkciojn...");
 

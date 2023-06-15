@@ -2,8 +2,8 @@
 /* 
 (c) 2021-2023 ĉe Wolfram Diestel
 */
-
 import {XmlStruct, Strukturero, SId} from './xmlstruct';
+import {XmlTrad, TList, Lingvo, XPlace} from './xmltrad';
 
 /**
  * Administras la redaktatan tekston tiel, ke eblas redakti nur parton de ĝi, t.e. unuopan derivaĵon, sencon ktp.
@@ -379,7 +379,7 @@ export class Xmlarea {
    * @param lng - la lingvo
    * @param trdj - listo de novaj tradukoj
    */
-  replaceTrd(id: sId,lng: Lingvo, trdj: TList) {
+  replaceTrd(id: string, lng: Lingvo, trdj: TList) {
     if (! this.synced) this.sync(this.elekto); 
     let xml = this.xmlstruct.getSubtext({id:id});
 
