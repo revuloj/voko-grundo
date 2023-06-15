@@ -116,7 +116,7 @@ when_doc_ready(function() {
             if (t_main.stato == "red_xml") {
                 hide("x:redakt_btn");
                 show("x:rigardo_btn");
-            } else if (t_main == "red_rigardo") {
+            } else if (t_main.stato == "red_rigardo") {
                 show("x:redakt_btn");
                 hide("x:rigardo_btn");
             }
