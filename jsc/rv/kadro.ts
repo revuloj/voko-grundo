@@ -1,8 +1,11 @@
 
-/* jshint esversion: 6 */
-
 // (c) 2020 - 2023 Wolfram Diestel
 // laŭ permesilo GPL 2.0
+
+import {Transiroj} from '../u/transiroj';
+import {Xlist} from '../x/xlisto';
+import '../x/util';
+import '../u/ht_util';
 
 
 // statoj kaj transiroj - ni uzas tri diversajn statomaŝinojn por la tri paĝoj navigilo, ĉefpago kaj redaktilo
@@ -23,10 +26,10 @@ revo_codes.lingvoj.load();
 
 /**
  * Helpofunkcio, por instali klak-reagojn
- * @param {string} id - la id-atributo de HTML-elemento
- * @param {Function} reaction - la reago al la klak-evento
+ * @param id - la id-atributo de HTML-elemento
+ * @param reaction - la reago al la klak-evento
  */
-function onclick(id,reaction) {
+function onclick(id: string, reaction: Function) {
     var nb = document.getElementById(id);
     if (nb) {
         nb.addEventListener("click", function(event) {
@@ -46,9 +49,9 @@ function onclick(id,reaction) {
 /**
  * Eblas doni en la Revo-URL por rekta aliro artikolon/derivaĵon/sencon ekzemple per #hund.0o.dombesto
  * Tion ni transformas al /revo/art/hund.html#hund.0o.dombesto por ebligi navigi tien.
- * @param {*} hash - la valoro de loka URL-marko, ekz-e #hund.0o.dombesto
+ * @param hash - la valoro de loka URL-marko, ekz-e #hund.0o.dombesto
  */
-function hash2art(hash) {
+function hash2art(hash: string) {
     if (hash) {
         const art = hash.substring(1).split('.')[0];
         if (art)
@@ -529,7 +532,7 @@ function stop_wait() {
  * Se mankas paĝo petata ni montros nian apartan 404-paĝon
  * @param {*} request 
  */
-function load_error(request) {
+function load_error(request: any) {
     if (request.status == 404 && request.responseURL.indexOf('404')<0) // evitu ciklon se 404.html mankas!
         load_page("main",globalThis.http_404_url);
 }
@@ -541,7 +544,7 @@ function load_error(request) {
  * @param {boolean} push_state - true: memoru la petitan paĝon en la hisotrio, tiel ni povos poste reiri
  * @param {Function} whenLoaded - ago, farenda post fonŝargo de la paĝo
  */
-function load_page(trg, url, push_state=true, whenLoaded=undefined) {
+function load_page(trg: string, url: string, push_state: boolean=true, whenLoaded: Function=undefined) {
     function update_hash() {
         var hash;
         if (url.indexOf('#') > -1) {
@@ -737,7 +740,7 @@ function load_page(trg, url, push_state=true, whenLoaded=undefined) {
  * @param {Element} root_el 
  * @param {string} url 
  */
-function adaptu_paghon(root_el, url) {
+function adaptu_paghon(root_el: Element, url: string) {
     // adapto de atributoj img-atributoj
 
     // anstataŭigu GIF per SVG  
@@ -902,7 +905,7 @@ function adaptu_paghon(root_el, url) {
  * @param {*} event 
  * @returns se estas elŝuto (XML) laŭ atributo 'download' ni ne navigas sed tuj revenas.
  */
-function navigate_link(event) {
+function navigate_link(event: any) {
     var el = event.target.closest("a");
 
     if (el && el.getAttribute("download")) return; // tion traktu la retumilo mem!
@@ -946,7 +949,7 @@ function navigate_link(event) {
  * Navigas laŭ la historio, do returne.
  * @param {*} event 
  */
-function navigate_history(event) {
+function navigate_history(event: any) {
     event.preventDefault();
     var state = event.state;
 
@@ -964,7 +967,7 @@ function navigate_history(event) {
  * La uzanto volas serĉi ion...
  * @param {*} event 
  */
-function serchu(event) {
+function serchu(event: any) {
     event.preventDefault();
     var serch_in = event.target.closest("form")
         .querySelector('input[name=q]');
@@ -981,7 +984,7 @@ function serchu(event) {
  * Serĉas per la transdonita serĉesprimo.
  * @param {string} esprimo 
  */
-function serchu_q(esprimo) {
+function serchu_q(esprimo: string) {
 
     const srch = new Sercho();
     srch.serchu(esprimo, function() {
@@ -1266,7 +1269,7 @@ function mrk_eraroj() {
  * Pridemandas la bibliografion kiel JSON de la servilo kaj prezentas ĝin kiel HTML
  * @param {string|undefined} [sort_by] se donita, ni ordigos la bibliografion laŭ tiu kampo (bib,aut,tit)
  */
-function bibliogr(sort_by) {
+function bibliogr(sort_by: string | undefined) {
     HTTPRequest('POST', globalThis.bib_json_url, {x:1}, // ni sendu ion per POST por ĉiam havi aktualan liston
         function(data) {
             var json = 
@@ -1333,7 +1336,7 @@ function traduku(event,artikolo) {
  * Komencas redaktadon de la aktuala artikolo ŝargante la redaktopaĝon kaj -ilaron.
  * @param {*} href 
  */
-function redaktu(href) {
+function redaktu(href: any) {
     const params = href.split('?')[1];
     //const art = getParamValue("art",params);
     
@@ -1374,7 +1377,7 @@ function viaj_submetoj() {
  * Montras la staton de submetoj
  * @param { Array<{state,fname,desc,time,result}> } sj - la informoj pri la submetoj de la redaktanto
  */
-function montru_submeto_staton(sj) {
+function montru_submeto_staton(sj: Array<{ state; fname; desc; time; result; }>) {
     const stat = {
         'nov': '\u23f2\ufe0e', 'trakt': '\u23f2\ufe0e', 
         'erar': '\u26a0\ufe0e', 'arkiv': '\u2713\ufe0e'};
