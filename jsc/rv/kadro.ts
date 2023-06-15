@@ -10,6 +10,10 @@ import {preferoj} from '../a/preferoj';
 import {Transiroj} from '../u/transiroj';
 import {Xlist} from '../x/xlisto';
 
+import {Sercho, Lingvo, TrovVorto} from './sercho';
+
+type Submeto = { state: string, fname: string, desc: string, time: string, result: string };
+
 // statoj kaj transiroj - ni uzas tri diversajn statomaŝinojn por la tri paĝoj navigilo, ĉefpago kaj redaktilo
 const t_nav  = new Transiroj("nav","start",["ĉefindekso","subindekso","serĉo","redaktilo"]);
 const t_main = new Transiroj("main","start",["titolo","artikolo","red_xml","red_rigardo"]);
@@ -1000,7 +1004,7 @@ function serchu_q(esprimo: string) {
                 ["div",{},
                     [["h1",{}, revo_codes.lingvoj.codes[lng]||lng ]]
                 ]
-            ])[0];
+            ])[0] as Element;
             var dl = ht_element("dl");
 
             const trvj = srch.trovoj(lng);
@@ -1089,7 +1093,7 @@ function serchu_q(esprimo: string) {
             const div = ht_elements([["div",{class:"s_lng"},
                 [
                     ["span",{class: "llbl"},"serĉlingvoj: "],
-                    ["span",{class: "llst"},srch.s_lng.join(', ')]
+                    ["span",{class: "llst"}, srch.s_lng.join(', ')]
                 ]
             ]]);
             return div[0];
@@ -1122,11 +1126,12 @@ function serchu_q(esprimo: string) {
 
             // aldonu la reagon por ref-enmetaj butonoj
             if (t_red.stato == "redaktante") {
-                for (let btn of trovoj.querySelectorAll("button.r_vid")) {
-                    btn.addEventListener("click",(event)=>{                         
+                trovoj.querySelectorAll("button.r_vid").forEach((btn) => {
+                    btn.addEventListener("click", (event) => {                         
+                        const trg = event.target as HTMLInputElement;
                         // kiun ref-mrk ni uzu - depende de kiu butono premita
-                        const refmrk = event.target.value;
-                        const refstr = event.target.previousSibling.textContent;
+                        const refmrk = trg.value;
+                        const refstr = trg.previousSibling.textContent;
                         // revenu de trovlisto al redakto-menuo
                         load_page("nav",globalThis.redaktmenu_url,true,
                             () => redaktilo.load_ref(refmrk,refstr));        
@@ -1161,7 +1166,7 @@ function serchu_q(esprimo: string) {
 function hazarda_art() {
 
     HTTPRequest('POST', globalThis.sercho_url, {sercxata: "!iu ajn!"},
-        function(data) {
+        function(data: string) {
             // sukceso!
             var json = 
                 /** @type { {hazarda: Array<string>} } */
@@ -1181,8 +1186,8 @@ function hazarda_art() {
  */
 function nombroj() {
 
-    HTTPRequest('POST', globalThis.nombroj_url, {x:0}, // sen parametroj POST ne funkcius, sed GET eble ne estus aktuala!
-        function(data) {
+    HTTPRequest('POST', globalThis.nombroj_url, { x: "0" }, // sen parametroj POST ne funkcius, sed GET eble ne estus aktuala!
+        function(data: string) {
             // sukceso!
             var json = 
                 /** @type { {trd: Array, kap: Array} } */
@@ -1206,8 +1211,8 @@ function nombroj() {
  * la eraropaĝo.
  */
 function mrk_eraroj() {
-    HTTPRequest('POST', globalThis.mrk_eraro_url, {x:1}, // ni sendu ion per POST por ĉiam havi aktualan liston
-        function(data) {
+    HTTPRequest('POST', globalThis.mrk_eraro_url, { x: "1" }, // ni sendu ion per POST por ĉiam havi aktualan liston
+        function(data: string) {
             var json = 
                 /** @type { {drv: Array<Array>, snc: Array<Array>, hom: Array<Array>} } */
                 (JSON.parse(data));
@@ -1276,8 +1281,8 @@ function mrk_eraroj() {
  * @param sort_by se donita, ni ordigos la bibliografion laŭ tiu kampo (bib,aut,tit)
  */
 function bibliogr(sort_by?: string) {
-    HTTPRequest('POST', globalThis.bib_json_url, {x:1}, // ni sendu ion per POST por ĉiam havi aktualan liston
-        function(data) {
+    HTTPRequest('POST', globalThis.bib_json_url, {x: "1"}, // ni sendu ion per POST por ĉiam havi aktualan liston
+        function(data: string) {
             var json = 
                 /** @type { Array.<{bib: string, tit: string}> } */
                 (JSON.parse(data));
@@ -1325,24 +1330,11 @@ function bibliogr(sort_by?: string) {
 }
 
 
-
-/*
-function traduku(event,artikolo) {
-    event.preventDefault();
-
-    //const params = href.split('?')[1];
-    //const art = getParamValue("art",params);    
-    load_page("main",redaktilo_url+'?'+artikolo,
-        false, () => trad_uwn(artikolo));
-    load_page("nav",redaktmenu_url);
-}
-*/
-
 /**
  * Komencas redaktadon de la aktuala artikolo ŝargante la redaktopaĝon kaj -ilaron.
- * @param {*} href 
+ * @param href 
  */
-function redaktu(href: any) {
+function redaktu(href: string) {
     const params = href.split('?')[1];
     //const art = getParamValue("art",params);
     
@@ -1370,7 +1362,8 @@ function viaj_submetoj() {
         ]);
         if (ds) nv.append(...ds);
         ds[0].addEventListener("toggle", function(event) {
-            if (event.target.hasAttribute("open")) {
+            const trg = event.target as Element;
+            if (trg.hasAttribute("open")) {
                 redaktilo.submetoj_stato(montru_submeto_staton,start_wait,stop_wait);
                 aktualigilo(); // altigu aktualigilon por eventuale vidi la redaktitan artikolon
                                 // anstataŭ la bufritan!
@@ -1381,9 +1374,9 @@ function viaj_submetoj() {
 
 /**
  * Montras la staton de submetoj
- * @param { Array<{state,fname,desc,time,result}> } sj - la informoj pri la submetoj de la redaktanto
+ * @param sj - la informoj pri la submetoj de la redaktanto
  */
-function montru_submeto_staton(sj: Array<{ state; fname; desc; time; result; }>) {
+function montru_submeto_staton(sj: Array<Submeto>) {
     const stat = {
         'nov': '\u23f2\ufe0e', 'trakt': '\u23f2\ufe0e', 
         'erar': '\u26a0\ufe0e', 'arkiv': '\u2713\ufe0e'};
@@ -1400,16 +1393,15 @@ function montru_submeto_staton(sj: Array<{ state; fname; desc; time; result; }>)
             return '';
         }
     }
-    
+
     if (sj) {
         const ds = document.getElementById("submetoj");
         // forigu antaŭajn...
-        for (let ch of ds.querySelectorAll("details")) {
-            ds.removeChild(ch);
-        }
+        ds.querySelectorAll("details").forEach( (ch) => ds.removeChild(ch) );
+        
         // enŝovu novan staton....
         for (let s of sj) {
-            var info = ht_elements([
+            const info = ht_elements([
                 ["details",{},[
                     ["summary",{},[
                         ["span",{class:'s_stato'},(stat[s.state]||'--')],
@@ -1424,5 +1416,6 @@ function montru_submeto_staton(sj: Array<{ state; fname; desc; time; result; }>)
             ]);
             if (info) ds.append(...info);
         }
-    }   
-}
+    }
+}   
+

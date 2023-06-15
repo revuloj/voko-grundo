@@ -18,16 +18,16 @@ const EKZ=5; // ekz/ind aŭ bld/ind
 
 const e_regex = /[\.\^\$\[\(\|+\?{\\]/;
 
-type Lingvo = string;
+export type Lingvo = string;
 
 // mrk, kap, lng, ind, trd, ekz
 type Trovero = [string,string,string,string,string,string?];
 
 // trovoj grupigita laŭ trovvorto por pli facila kreado de la HTML en la serĉlisto
 // v: vorto, k: kapvorto, h: href, t: trovoj
-type TrovVorto = 
+export type TrovVorto = 
     { v: string, t: Array<{ k: string, h: string }> } |
-    { v: string, h: string, t: { [lng: Lingvo]: string } }
+    { v: string, h: string, t: { [lng: Lingvo]: string } };
 
 // trovitaj rikordoj grupigitaj laŭ kapvorto (KAP=1) por 'eo'
 // kaj lingvo (LNG=2) por nacilingvoj
@@ -36,11 +36,11 @@ type Trovoj = { [key: string]: TrovVorto[] };
 /**
  * Kreas novan serĉon. Ĝi helpas aliri la esperantajn kaj nacilingvajn trovojn post farita serĉo.
  */
-class Sercho {
+export class Sercho {
 
     private eo: Trovoj;
     private trd: Trovoj; 
-    private s_lng: any;
+    public s_lng: Array<Lingvo>;
     
     constructor() {
         //komence malplena
