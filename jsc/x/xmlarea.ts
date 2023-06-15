@@ -638,7 +638,7 @@ export class Xmlarea {
         linestart = selText.lastIndexOf("\n");
         while (selText.charCodeAt(linestart+1+ind) == 32) {ind++;}
       } else*/
-      if (txtarea.selectionStart || txtarea.selectionStart == 0) { // Mozilla/Chrome
+      if (txtarea.selectionStart || txtarea.selectionStart === 0) { // Mozilla/Chrome
         startPos = txtarea.selectionStart;
         linestart = txtarea.value.substring(0, startPos).lastIndexOf("\n");
         while (txtarea.value.substring(0, startPos).charCodeAt(linestart+1+ind) == 32) {ind++;}

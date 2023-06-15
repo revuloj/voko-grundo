@@ -451,7 +451,7 @@ function linirompo(str: string, indent: number=0, linirompo: number=80) {
  */
 function get_indent(txtarea: HTMLInputElement, shift: number = 0): string {
     let indent = 0;
-    if (txtarea.selectionStart || txtarea.selectionStart == 0) { // Mozilla
+    if (txtarea.selectionStart || txtarea.selectionStart === 0) { // Mozilla
         const startPos = txtarea.selectionStart+shift;
         const linestart = txtarea.value.substring(0, startPos).lastIndexOf("\n");
         while (txtarea.value.substring(0, startPos).charCodeAt(linestart+1+indent) == 32) {indent++;}
@@ -480,7 +480,7 @@ function indent(txtarea: HTMLInputElement, offset: number) {
     // @ts-ignore
     if (document.selection && document.selection.createRange) { // IE/Opera
         alert("tio ne funkcias por IE/Opera.");
-    } else if (txtarea.selectionStart || txtarea.selectionStart == 0) { // Mozilla
+    } else if (txtarea.selectionStart || txtarea.selectionStart === 0) { // Mozilla
 
         // sekurigu nunan rulpozicion
         const textScroll = txtarea.scrollTop;

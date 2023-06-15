@@ -1,8 +1,23 @@
 
-/* jshint esversion: 6 */
+/* 
+ (c) 2020 - 2023 ĉe Wolfram Diestel
+ laŭ GPL 2.0
+*/
 
-// (c) 2020 - 2022 Wolfram Diestel
-// laŭ GPL 2.0
+import '../x/tekstiloj';
+import '../x/voko_entities';
+import {Strukturero} from '../x/xmlstruct';
+import {Xmlarea} from '../x/xmlarea';
+import {XKlavaro} from '../x/xklavaro';
+
+import {artikolo} from '../a/artikolo';
+import {preferoj} from '../a/preferoj';
+import {revo_codes, t_red, start_wait, stop_wait} from './kadro';
+import {Sercho, Lingvo} from './sercho';
+
+// vd. https://mariusschulz.com/blog/declaring-global-variables-in-typescript
+// alternative oni povus uzi alnoton ty-ignore ne la malsupraj linioj kiuj uzas MathJax
+const MathJax = (window as any).MathJax;
 
 /**
  * La nomspaco 'redaktilo' kunigas ĉiujn variablojn kaj funkciojn bezonataj
@@ -10,7 +25,7 @@
  * @namespace {Function} redaktilo
  */
 // difinu ĉion sub nomprefikso "redaktilo"
-var redaktilo = function() {
+export namespace redaktilo {
 
   var xmlarea = null;  
   var xklavaro = null;
@@ -46,7 +61,7 @@ var redaktilo = function() {
    * @inner
    * @param {Element} element 
    */
-  function remove(element) { if (element) element.remove(); }
+  function remove(element: Element) { if (element) element.remove(); }
 
   /**
    * La XML-ŝablonoj, el kiuj ni elektos laŭ nomo...
@@ -111,11 +126,11 @@ var redaktilo = function() {
    * Kreas XML-tekston el ŝablono, anstataŭigante variablo-lokojn per
    * la valoroj de la respektivaj kampoj
    * @memberof redaktilo
-   * @param {string} name - la nomo de la ŝablono
-   * @param {string} selection - la momente elektita teksto, gi anstataŭas variablon '$_'
-   * @returns Liston kun: la XML-teksto kreita per la ŝablono; la relativan pozicio de la kursoro; la lininombro
+   * @param name - la nomo de la ŝablono
+   * @param selection - la momente elektita teksto, gi anstataŭas variablon '$_'
+   * @returns Liston kun: 1. la XML-teksto kreita per la ŝablono; 2. la relativa pozicio de la kursoro; 3. la lininombro
    */
-  function shablono(name,selection) {    
+  export function shablono(name: string, selection: string): [string,number,number] {    
     let p_kursoro = -1;
     let p_lines = 0;
 
@@ -125,15 +140,13 @@ var redaktilo = function() {
       // $_ ni anstataŭigos per la elektita teksto, 
       // $<var> per la valoro de elemento kun id="var"
       // alian tekstenhavon ni redonas nemodifite
-      function val(v) {
-        return v == "$_"? 
-          selection 
-          : (v[0] == "$"? 
-          document.getElementById(v.substring(1)).value 
-          : v);
+      function val(v: string): string {
+        const ie = document.getElementById(v.substring(1)) as HTMLInputElement;
+        return v == "$_"? selection 
+          : (v[0] == "$"? ie.value : v);
       }
 
-      function str(s) {
+      function str(s: string): string {
         if (p_kursoro < 0 && s.indexOf("\n")>-1) p_lines++;
 
         // povas esti alternativo
@@ -203,13 +216,13 @@ var redaktilo = function() {
    * Alt+X (mal)ŝaltas la cx-butonon, Alt+T enmetas traduk-ŝablonon en la aktuala lingvo,
    * X/x aplikas kun aktiva cx-ŝaltilo la transformas cx -> ĉ, ĉx -> cx ktp.
    * @memberof redaktilo
-   * @param {Event} event 
+   * @param event 
    */
 
-  function klavo(event) {
+  export function klavo(event: KeyboardEvent) {
     var key = event.keyCode ? event.keyCode : event.which ? event.which : event.charCode;
     //  alert(key);
-    var scrollPos;
+    var scrollPos: number;
 
     // RET: aldonu enŝovon (spacojn) komence de nova linio
     if (key == 13) {  
@@ -221,9 +234,9 @@ var redaktilo = function() {
 
     // X aŭ x
     } else if (key == 88 || key == 120) {   
-      var cx = document.getElementById("r:cx");
+      var cx = document.getElementById("r:cx") as HTMLInputElement;
       if (event.altKey) {	// shortcut alt-x  --> toggle cx
-        cx.value = 1 - cx.value || 0;
+        cx.value = ""+(1-parseInt(cx.value) || 0);
         event.preventDefault();
       }
   
@@ -262,7 +275,7 @@ var redaktilo = function() {
    * @inner
    * @param {Event} event 
    */
-  function tab_bsp(event) {
+  function tab_bsp(event: KeyboardEvent) {
     const keycode = event.keyCode || event.which; 
 
     // traktu TAB por ŝovi dekstren aŭ maldekstren plurajn liniojn
@@ -315,7 +328,7 @@ var redaktilo = function() {
    * @inner
    * @param {string} shabl - la nomo de la XML-ŝablono
    */
-  function insert_xml(shabl) {
+  function insert_xml(shabl: string) {
     //var txtarea = document.getElementById('r:xmltxt');
     //var selText;
 
@@ -335,24 +348,25 @@ var redaktilo = function() {
    * Saltigas la kursoron al la sekva komenco de XML-elemento 'tag'
    * @memberof redaktilo
    * @inner
-   * @param {string} tag - la nomo de la serĉata XML-elemento
-   * @param {number} dir - la direkto: &gt;0 antaŭen, &lt;0 malantaŭen
+   * @param tag - la nomo de la serĉata XML-elemento
+   * @param dir - la direkto: &gt;0 antaŭen, &lt;0 malantaŭen
    */
-  function nextTag(tag, dir) {
+  function nextTag(tag: string, dir: number) {
         
       function lines(str){
         try { return(str.match(/[^\n]*\n[^\n]*/gi).length); } 
         catch(e) { return 0; }
       }
 
-      var txtarea = document.getElementById('r:xmltxt');
-
+      var txtarea = document.getElementById('r:xmltxt') as HTMLInputElement;
+/*
       if (document.selection  && document.selection.createRange) { // IE/Opera
         alert("tio ne funkcias por malnova retumilo IE aŭ Opera.");
-      } else if (txtarea.selectionStart || txtarea.selectionStart == '0') { // Mozilla
-        var startPos = txtarea.selectionStart;
-        var t;
-        var pos;
+      } else */
+      if (txtarea.selectionStart || txtarea.selectionStart === 0) { // Mozilla
+        let startPos = txtarea.selectionStart;
+        let t: string;
+        let pos: number;
         // serĉu "tag" malantaŭ la nuna pozicio
         if (dir > 0) {
           t = txtarea.value.substring(startPos+1);
@@ -387,10 +401,10 @@ var redaktilo = function() {
    * en la loka memoro de la retumilo.
    * @memberof redaktilo
    */
-  function store_preferences() {
+  export function store_preferences() {
     var prefs = {};
     for (var key of ['r:redaktanto','r:trdlng','r:klrtip','r:reftip','r:sxangxo','r:cx','r:xklvr']) {
-      const el = document.getElementById(key);
+      const el = document.getElementById(key) as HTMLInputElement;
       if (el) prefs[key] = el.value;
     }
     window.localStorage.setItem("redaktilo_preferoj",JSON.stringify(prefs));  
@@ -407,7 +421,8 @@ var redaktilo = function() {
     var prefs = (str? JSON.parse(str) : {});
     if (prefs) {
       for (var key of ['r:redaktanto','r:trdlng','r:klrtip','r:reftip','r:sxangxo']) {
-        if (prefs[key]) document.getElementById(key).value = prefs[key];
+        const e = document.getElementById(key) as HTMLInputElement;
+        if (prefs[key]) e.value = prefs[key];
       }
     }
   }
@@ -415,10 +430,10 @@ var redaktilo = function() {
   /**
    * Legas unuopan valoron el la el la loka memoro de la retumilo.
    * @memberof redaktilo
-   * @param {string} key - la ŝlosilo de la legenda valoro.
-   * @returns - la valoro el preferoj
+   * @param key - la ŝlosilo de la legenda valoro.
+   * @returns la valoro el preferoj
    */
-  function get_preference(key) {
+  export function get_preference(key: string): any {
     var str = window.localStorage.getItem("redaktilo_preferoj");
     var prefs = (str? JSON.parse(str) : {});
     if (prefs) {
@@ -434,14 +449,16 @@ var redaktilo = function() {
    * @inner
    */
   function restore_preferences_xml() {
-    var str = window.localStorage.getItem("redaktilo_preferoj");
-    var prefs = (str? JSON.parse(str) : {});
-    document.getElementById('r:cx').value = prefs['r:cx'] || 0;
+    const str = window.localStorage.getItem("redaktilo_preferoj");
+    const prefs = (str? JSON.parse(str) : {});
+    const cx = document.getElementById('r:cx') as HTMLInputElement;
+    const xklvr = document.getElementById('r:xklvr') as HTMLInputElement;
+    cx.value = prefs['r:cx'] || 0;
     if (prefs['r:cx']) {
-      document.getElementById('r:xklvr').value = 1;
+      xklvr.value = "1";
       show("r:klavaro");
     } else {
-      document.getElementById('r:xklvr').value = 0;
+      xklvr.value = "0";
       hide("r:klavaro");
     }
   }
@@ -450,12 +467,15 @@ var redaktilo = function() {
    * en la loka memoro de la retumilo. 
    * @memberof redaktilo
    */
-  function store_art() {
-    window.localStorage.setItem("red_artikolo",JSON.stringify({
-      'xml': xmlarea.syncedXml(), //document.getElementById("r:xmltxt").value,
-      'nom': document.getElementById("r:art").value
-      //'red': nova/redakti...
-    }));
+  export function store_art() {
+    const nom = document.getElementById("r:art") as HTMLInputElement;
+    window.localStorage.setItem("red_artikolo",
+      JSON.stringify({
+        'xml': xmlarea.syncedXml(),
+        'nom': nom.value
+        //'red': nova/redakti...
+      })
+    );
   }
 
   
@@ -465,12 +485,13 @@ var redaktilo = function() {
    * @inner
    */
   function restore_art() {
-    var str = window.localStorage.getItem("red_artikolo");
-    var art = (str? JSON.parse(str) : null);
+    const str = window.localStorage.getItem("red_artikolo");
+    const nom = document.getElementById("r:art") as HTMLInputElement;
+    const art = (str? JSON.parse(str) : null);
     if (art) {
       xmlarea.setText(art.xml); // document.getElementById("r:xmltxt").value = art.xml;
       //  document.getElementById("...").value = art.red;
-      document.getElementById("r:art").value = art.nom;
+      nom.value = art.nom;
       //document.getElementById("r:art_titolo").textContent = art.nom; 
     }
   }
@@ -478,13 +499,13 @@ var redaktilo = function() {
   /**
    * Iras al alia panelo de la redaktomenuo (referencoj, tradukoj, difinoj...preta)
    * @memberof redaktilo
-   * @param {string} id - la HTMLL-id de la panelo
+   * @param id - la HTML-id de la panelo
    */
-  function fs_toggle(id) {
+  export function fs_toggle(id: string) {
     var el = document.getElementById(id);
-    var fs_id;
+    var fs_id: string;
     if (! el.classList.contains('aktiva')) {
-      for (var ch of el.parentElement.children) {
+      for (var ch of Array.from(el.parentElement.children)) {
         ch.classList.remove('aktiva');
         fs_id = 'r:fs_'+ch.id.substring(2);
 
@@ -515,12 +536,12 @@ var redaktilo = function() {
    * Metas erarojn liste en la keston por eraroj (sub la redakto-menuo)
    * @memberof redaktilo
    * @inner
-   * @param err {Array<string>} - la listo de eraroj
+   * @param err la listo de eraroj
    */
-  function listigu_erarojn(err) {
+  function listigu_erarojn(err: Array<string>) {
     var el = document.getElementById("r:eraroj");
     var elch = el.children;
-    var ul;
+    var ul: Element;
     if (! elch.length) {
       ul = document.createElement("ul");                
       el.appendChild(ul);
@@ -538,10 +559,10 @@ var redaktilo = function() {
    * prezentas ilin liste en la erarokesto al la uzanto
    * @memberof redaktilo
    * @inner
-   * @param {string} msg - mesaĝo, kiu montrigu en la komenco de ĉiu unuopa trovo
-   * @param {Array<Array>} matches - la trovoj, la trovita eraro estas la unua elmento den ĉiu trovo
+   * @param msg - mesaĝo, kiu montrigu en la komenco de ĉiu unuopa trovo
+   * @param matches - la trovoj, la trovita eraro estas la unua elmento de ĉiu trovo
    */
-  function add_err_msg(msg, matches) {
+  function add_err_msg(msg: string, matches: Array<Array<any>>) {
     let errors = [];
 
     if (matches)
@@ -558,14 +579,15 @@ var redaktilo = function() {
    * esas validaj. Uzoj de nevalidaj kodoj estas redonataj kiel rezultoj de la regulesprimo
    * @memberof redaktilo
    * @inner
-   * @param {string} clist - la nomo de la kodlisto kontraŭ kiu ni kontrolas
-   * @param {Object} regex - la regulesprimo per kiu ni serĉas la uzojn
+   * @param clist - la nomo de la kodlisto kontraŭ kiu ni kontrolas
+   * @param regex - la regulesprimo per kiu ni serĉas la uzojn
    * @returns la listo de nevalidaj koduzoj - kiel trovoj per regulesprimo
    */
-  function kontrolu_kodojn(clist,regex) {
-    var xml = xmlarea.syncedXml(); //document.getElementById("r:xmltxt").value;
-    var m; var invalid = [];
-    var list = revo_codes[clist];
+  function kontrolu_kodojn(clist: string, regex: RegExp) {
+    const xml = xmlarea.syncedXml(); //document.getElementById("r:xmltxt").value;
+    const list = revo_codes[clist];
+    let m: RegExpExecArray; 
+    let invalid = [];
 
     if (! list ) {
       console.error("Kodlisto \"" + clist + "\" estas malplena, ni ne povas kontroli ilin!");
@@ -587,7 +609,7 @@ var redaktilo = function() {
    * @inner
    * @param {string} art - la nomo de la artikolo, t.e. la unua parto de marko antaŭ la unua punkto
    */
-  function kontrolu_mrk(art) {
+  function kontrolu_mrk(art: string) {
     var xml = xmlarea.syncedXml(); // document.getElementById("r:xmltxt").value;
     var m; 
     var errors = [];
@@ -655,7 +677,7 @@ var redaktilo = function() {
    * @param {string} art - la artikolnomo
    * @param {string} xml - la XML-teksto
    */
-  function kontrolu_xml_loke(art,xml) {
+  function kontrolu_xml_loke(art: string,xml: string) {
     if (xml.startsWith("<?xml")) {
       kontrolu_mrk(art);
       kontrolu_trd();
@@ -678,9 +700,9 @@ var redaktilo = function() {
    * kaj trovitaj eraroj prezentataj al la uzanto en la eraro-kesto.
    * @memberof redaktilo
    */
-  function rantaurigardo() {
+  export function rantaurigardo() {
     let eraroj = document.getElementById("r:eraroj");
-    const art = document.getElementById("r:art").value;
+    const art = (document.getElementById("r:art") as HTMLInputElement).value;
     const xml = xmlarea.syncedXml();
 
     // eblas, ke en "nav" montriĝas indekso, ĉar la uzanto foiris de la redaktado tie
@@ -689,7 +711,7 @@ var redaktilo = function() {
     if (eraroj) {
       eraroj.textContent='';
       eraroj.classList.remove("collapsed"); // ĉu nur kiam certe estas eraroj?
-      eraroj.parentNode.setAttribute("open","open");  
+      (eraroj.parentNode as Element).setAttribute("open","open");  
 
       kontrolu_xml_loke(art,xml);
       if (xml.startsWith("<?xml")) {
@@ -709,12 +731,12 @@ var redaktilo = function() {
    */
   function rkontrolo() {
     let eraroj = document.getElementById("r:eraroj");
-    const art = document.getElementById("r:art").value;
+    const art = (document.getElementById("r:art") as HTMLInputElement).value;
     const xml = xmlarea.syncedXml();
 
     eraroj.textContent='';
     eraroj.classList.remove("collapsed"); // ĉu nur kiam certe estas eraroj?
-    eraroj.parentNode.setAttribute("open","open");
+    (eraroj.parentNode as Element).setAttribute("open","open");
 
     kontrolu_xml_loke(art,xml);
     if (xml.startsWith("<?xml")) {
@@ -753,13 +775,13 @@ var redaktilo = function() {
     }
     */
 
-    const art = document.getElementById("r:art").value;
+    const art = (document.getElementById("r:art") as HTMLInputElement).value;
     const xml = xmlarea.syncedXml();
 
     let eraroj = document.getElementById("r:eraroj");
     eraroj.textContent='';
     eraroj.classList.remove("collapsed"); // ĉu nur kiam certe estas eraroj?
-    eraroj.parentNode.setAttribute("open","open");
+    (eraroj.parentNode as Element).setAttribute("open","open");
 
     // kontrolu loke revenas nur post kontrolo,
     // dum kontrole ene de vokomailx as nesinkrona
@@ -779,7 +801,7 @@ var redaktilo = function() {
    * Vokas la servilan skripton vokohtmlx.pl por ricevi antaŭrigardon de la artikolo.
    * @param {string} xml - la sendota XML-teksto
    */
-  function vokohtmlx(xml) {
+  function vokohtmlx(xml: string) {
     HTTPRequest('POST',cgi_vokohtmlx,
     {
       xmlTxt: xml
@@ -802,7 +824,8 @@ var redaktilo = function() {
 
         // ekipu ĝin per faldiloj ktp., se ne estas 'aldono' ni transdonos
         // ankaŭ la artikolnomon el la kampo #r:art (por tezaŭro kaj piedlinio)
-        const art = redakto=='redakto'? document.getElementById("r:art").value : null;
+        const r_art = document.getElementById("r:art") as HTMLInputElement;
+        const art = redakto=='redakto'? r_art.value : null;
         artikolo.preparu_art(art);
 
         // saltu en la artikolo al la redaktata parto
@@ -838,11 +861,11 @@ var redaktilo = function() {
    * @param {string} art - la artikonomo (dosiernomo)
    * @param {string} xml - la XML-teksto
    */
-  function vokomailx(command,art,xml) {
+  function vokomailx(command: string,art: string,xml: string) {
 
-    var red = document.getElementById("r:redaktanto").value;
-    var sxg = document.getElementById("r:sxangxo").value;
-    var nova = (redakto == 'aldono')? 1:0;
+    var red = (document.getElementById("r:redaktanto") as HTMLInputElement).value;
+    var sxg = (document.getElementById("r:sxangxo") as HTMLInputElement).value;
+    var nova = (redakto == 'aldono')? "1" : "0";
 
     // console.log("vokomailx art:"+art);
     // console.log("vokomailx red:"+red);
@@ -857,7 +880,7 @@ var redaktilo = function() {
         nova: nova,
         command: command
       },
-      function (data) {
+      function (data: string) {
         const re_pos = /(pozicio\s+[\d:]+)/g;
         const re_enk = /(Atentu|Averto|Eraro):/g;
         // Success!
@@ -867,14 +890,15 @@ var redaktilo = function() {
         const err_list = document.getElementById("r:eraroj");
 
         //for (div of doc.body.getElementsByClassName("eraroj")) {
-        for (var div of doc.body.querySelectorAll(".eraroj")) {
+        doc.body.querySelectorAll(".eraroj").forEach((div) => {
           // debugging...
           console.log("div id=" + div.id);
           div.innerHTML = div.innerHTML
             .replace(re_enk,'<span class="$1">$1</span>:')
             .replace(re_pos,'<a href="#">$1</a>');
           err_list.appendChild(div);
-        }
+        });
+
         const konfirmo = doc.getElementById("konfirmo");
         if (konfirmo) {
           // debugging...
@@ -914,7 +938,7 @@ var redaktilo = function() {
    * @param {Function} onstart 
    * @param {Function} onstop 
    */
-  function submetoj_stato(subm_callback,onstart,onstop) {
+  export function submetoj_stato(subm_callback: Function,onstart: Function,onstop: Function) {
     const red = get_preference('r:redaktanto');
     if (!red) return;
 
@@ -948,12 +972,13 @@ var redaktilo = function() {
      * @inner
      */
     function create_new_art() {
-      var art = document.getElementById("r:nova_art").value;
+      const r_nova = document.getElementById("r:nova_art") as HTMLInputElement;
+      const art = r_nova.value;
       //var ta = document.getElementById("r:xmltxt");
-      document.getElementById("r:art").value = art;
+      (document.getElementById("r:art") as HTMLInputElement).value = art;
       //document.getElementById("r:art_titolo").textContent = art;
       redakto = 'aldono';
-      var shg = document.getElementById("r:sxangxo");
+      var shg = document.getElementById("r:sxangxo") as HTMLInputElement;
       shg.value = art; shg.setAttribute("readonly","readonly");
       /* jshint ignore:start */
       //ta.value = 
@@ -990,12 +1015,12 @@ var redaktilo = function() {
    * Ŝargas XML-artikolon por redaktado de la servilo
    * @memberof redaktilo
    * @inner
-   * @param {string} params - HTTP-parametroj, ni ekstraktas parametron 'art', kiu donas la dosiernomon de la artikolo
+   * @param params - HTTP-parametroj, ni ekstraktas parametron 'art', kiu donas la dosiernomon de la artikolo
    */
-  function load_xml(params) {
+  function load_xml(params: string) {
     var art = getParamValue("art",params) || getParamValue("r",params);
 
-    function replace_entities(data) {
+    function replace_entities(data: string) {
         return data.replace(/&[^;\s]+;/g, function (ent) {
           const key = ent.slice(1,-1);
           if (key.match(re_hex)) {
@@ -1012,30 +1037,11 @@ var redaktilo = function() {
     if (art) {
 
       HTTPRequest('GET',xml_url+art+'.xml',{},
-      function(data) {
-          // Success!
+      function(data: string) {
+          // Sukceso!
           const xmlteksto = replace_entities(data);
-          document.getElementById("r:art").value = art;
-          /*
-          var titolo = document.getElementById("r:art_titolo");
-          titolo.textContent = art; 
-          titolo.setAttribute("href","/revo/art/"+art+".html");
-          */
-
+          (document.getElementById("r:art") as HTMLInputElement).value = art;
           xmlarea.setText(xmlteksto);
-          // plenigu la liston de sub-tekstoj (strukturo)
-          /*
-          const sel_stru = document.getElementById("r:art_strukturo");
-          for (i in xmlarea.strukturo) {
-            const item = xmlarea.strukturo[i].id;
-            sel_stru.append(ht_element('option',{value: i},item));
-          }
-          */
-          /*
-          document.getElementById('r:xmltxt').value = xmlteksto;
-          xmlarea.resetCursor();   
-          xmlarea.strukturo();
-          */
         });
     } else {
       // se ne estas donita artikolo kiel parametro, ni provu legi
@@ -1050,11 +1056,11 @@ var redaktilo = function() {
    * en la elekto de subtekstoj, kiu troviĝas super la XML-redaktilo.
    * @memberof redaktilo
    * @inner
-   * @param {{id,dsc}} subt - la informoj pri la subteksto
-   * @param {number} index - la nombro de la subteksto (0-art, 1..n-1 - drv/snc..., n - tuta XML)
-   * @param {boolean} selected - true: temas pri la aktive redaktata subteksto, ni elektu gin en la listo
+   * @param subt - la informoj pri la subteksto
+   * @param index - la nombro de la subteksto (0-art, 1..n-1 - drv/snc..., n - tuta XML)
+   * @param selected - true: temas pri la aktive redaktata subteksto, ni elektu gin en la listo
    */
-  function on_xml_add_sub(subt,index,selected) {
+  function on_xml_add_sub(subt: Strukturero,index: number,selected: boolean) {
     const sel_stru = document.getElementById("r:art_strukturo");
     if (index == 0) sel_stru.textContent = ''; // malplenigu la liston ĉe aldono de unua ero...
 
@@ -1070,12 +1076,11 @@ var redaktilo = function() {
    * Reagas al elekto de subteksto en la listo. Ni ekredaktas nun tiun parton.
    * @memberof redaktilo
    * @inner
-   * @param {Event} event 
+   * @param event 
    */
-  function struktur_elekto(event) {
-    const val = event.target.value;
-    //const list = document.getElementById("r:art_strukturo");
-    //const sel = list.querySelector('option[value="'+val+'"]').text;
+  function struktur_elekto(event: Event) {
+    const trg = event.target as HTMLInputElement;
+    const val = trg.value;
 
     // tio renovigas la strukturon pro eblaj intertempaj snc-/drv-aldonoj ks...
     // do ni poste rekreos ĝin kaj devos ankaŭ marki la elektitan laŭ _item_
@@ -1085,33 +1090,22 @@ var redaktilo = function() {
     // se montriĝas traduk-proponoj, necesas adapti la hoketojn kaj +-butonoj
     // laŭ la elektita (sub)drv/snc
     trad_ebloj();
-
-    /*
-    for (i in xmlarea.strukturo) {
-      const item = xmlarea.strukturo[i].id;
-      if (sel == item) {
-        sel_stru.append(ht_element('option',{value: i, selected: 'selected'},item));
-      } else {
-        sel_stru.append(ht_element('option',{value: i},item));
-      }
-    }
-    */
   }
 
   /**
    * Ni notas referencon transprenante gin el la trovlisto post serĉo (kiam
    * la uzanto tie premas la sago-butonon)
    * @memberof redaktilo
-   * @param {string} refmrk - la marko de la referenco
-   * @param {string} refstr - la vorto, al kiu la referenco montras
+   * @param refmrk - la marko de la referenco
+   * @param refstr - la vorto, al kiu la referenco montras
    */
-  function load_ref(refmrk,refstr) {
+  export function load_ref(refmrk: string, refstr: string) {
     const m = re_mrk_split.exec(refmrk);
     if (m) {
       const art = m[1];
       const _mrk = m[2];
       //document.getElementById("r:refmrk").value = refmrk;
-      document.getElementById("r:refstr").value = refstr;
+      (document.getElementById("r:refstr") as HTMLInputElement).value = refstr;
       load_ref_sub(art,_mrk); // ŝargu la (sub)sencojn ks por la vorto
     }
     redaktilo.fs_toggle("r:ref");
@@ -1123,13 +1117,13 @@ var redaktilo = function() {
    * Ili montrigos en elekto-listo en la redaktomenuo - panelo 'referencoj'
    * @memberof redaktilo
    * @inner
-   * @param {string} art - la dosiernomo de la referencata artikolo
-   * @param {string} _mrk - la marko de la referencata vorto
+   * @param art - la dosiernomo de la referencata artikolo
+   * @param _mrk - la marko de la referencata vorto
    */
-  function load_ref_sub(art,_mrk) {
+  function load_ref_sub(art: string,_mrk: string) {
 
     HTTPRequest('GET',tez_url+art+'.json',{},
-      function (data) {
+      function (data: string) {
         const json = 
           /** @type { {mrk: Array<Array>} } */
           (JSON.parse(data));
@@ -1159,20 +1153,22 @@ var redaktilo = function() {
    * Metas elekton kaj fokuson ĝuste por ekredakto.
    * @memberof redaktilo
    * @inner
-   * @param {number} pos 
-   * @param {number} line 
-   * @param {number} lastline 
+   * @param pos 
+   * @param line 
+   * @param lastline 
    */
-  function sf(pos, line, lastline) {
+  function sf(pos: number, line: number, lastline: number) {
     document.getElementById("r:xmltxt").focus();
-    var txtarea = document.getElementById('r:xmltxt');
+    var txtarea = document.getElementById('r:xmltxt') as HTMLInputElement;
+    /*
     if (document.selection  && document.selection.createRange) { // IE/Opera
       var range = document.selection.createRange();
       range.moveEnd('character', pos); 
       range.moveStart('character', pos); 
       range.select();
       range.scrollIntoView(true);
-    } else if (txtarea.selectionStart || txtarea.selectionStart == '0') { // Mozilla
+    } else*/
+    if (txtarea.selectionStart || txtarea.selectionStart === 0) { // Mozilla
       txtarea.selectionStart = pos;
       txtarea.selectionEnd = txtarea.selectionStart;
       var scrollTop = txtarea.scrollHeight * line / lastline;
@@ -1199,7 +1195,7 @@ var redaktilo = function() {
    * @memberof redaktilo
    * @param {string} params - HTTP-parametroj, el kiu ni ekstraktas la parametron 'art' por sargi la XML-fonton
    */
-  function preparu_red(params) {
+  export function preparu_red(params: string) {
 
     // enlegu bezonaĵojn (listojn, XML-artikolon, preferojn)
     if (document.getElementById("r:xmltxt")) {
@@ -1208,14 +1204,14 @@ var redaktilo = function() {
       //if (!xmlarea) 
 
       // ŝanĝu tekston al nurlege
-      const xmltxt = document.getElementById("r:xmltxt");
+      const xmltxt = document.getElementById("r:xmltxt") as HTMLInputElement;
       xmltxt.removeAttribute("readonly");
 
-      const xklvr = document.getElementById("r:xklvr");
+      const xklvr = document.getElementById("r:xklvr") as HTMLInputElement;
 
       xklvr.addEventListener("click",
         () => {
-          const pressed = 1 - xklvr.value;
+          const pressed = ""+(1 - parseInt(xklvr.value));
           xklvr.value = pressed;
           if (pressed) {
             show("r:klavaro");
@@ -1229,7 +1225,7 @@ var redaktilo = function() {
       load_xml(params); // se doniĝis ?art=xxx ni fone ŝargas tiun artikolon
 
       const klvr = document.getElementById("r:klavaro");
-      xklavaro = new XKlavaro(klvr,null,xmltxt,
+      xklavaro = new XKlavaro(klvr, null, xmltxt,
         () => xmlarea.getRadiko(),
         (event,cmd) => { 
           // PLIBONIGU: tion ni povas ankaŭ meti en xklavaro.js!
@@ -1283,25 +1279,11 @@ var redaktilo = function() {
     document.getElementById("r:cx")
       .addEventListener("click",function(event) {
         event.preventDefault();
-        var cx = event.currentTarget;
-        cx.value = 1 - cx.value || 0; 
+        var cx = event.currentTarget as HTMLInputElement;
+        cx.value = ""+(1 - parseInt(cx.value)) || "0"; 
         document.getElementById('r:xmltxt').focus();
     });
 
-    // sub-paĝoj "redakti", "antaŭrigardo"
-    /*
-    var tabs = document.getElementById("r:tabs");
-    tabs.querySelectorAll("a").forEach(function (a) { 
-      a.removeAttribute("onclick") 
-    });
-    tabs.addEventListener("click", function(event) {
-      var a = event.target.closest("a");
-      tab_toggle(a.id);
-      if (a.id == "r:trigardo") {
-        rantaurigardo();
-      }
-    });
-    */
   }
 
   /**
@@ -1309,7 +1291,7 @@ var redaktilo = function() {
    * evento-traktiloj
    * @memberof redaktilo
    */
-  function preparu_menu() {
+  export function preparu_menu() {
 
     // enlegu bezonaĵojn (listojn, XML-artikolon, preferojn)
     restore_preferences();
@@ -1332,7 +1314,7 @@ var redaktilo = function() {
 
     // salto al eraroj
     document.getElementById("r:eraroj").addEventListener("click", function(event) {
-      const trg = event.target;
+      const trg = event.target as Element;
       if (trg.tagName == 'A') {
         event.preventDefault();
         const pos_str = trg.textContent.split(' ')[1];
@@ -1356,13 +1338,14 @@ var redaktilo = function() {
       a.removeAttribute("onclick");
     });
     fs_t.addEventListener("click", function(event) {
-      var a = event.target.closest("a");
+      const trg = event.target as Element;
+      const a = trg.closest("a");
       fs_toggle(a.id);
     });
 
     // butonoj sur tiuj paneloj por enmeti elementojn
     var v_sets = document.getElementById("r:v_sets");
-    for (var b of v_sets.querySelectorAll("button")) {
+    v_sets.querySelectorAll("button").forEach( (b) => {
 
       if (b.id == "r:create_new_art") { // [kreu]
         b.addEventListener("click", create_new_art);
@@ -1372,24 +1355,26 @@ var redaktilo = function() {
 
       } else if (b.classList.contains("help_btn")) { // (?) (<>)
         b.addEventListener("click", function(event) {
-          helpo_pagho(event.currentTarget.getAttribute("value"));
+          const trg = event.currentTarget as Element;
+          helpo_pagho(trg.getAttribute("value"));
         });
 
       } else { // ŝablon-butonoj
         b.addEventListener("click",function(event) {
-          const v = event.currentTarget.getAttribute("value");
+          const trg = event.currentTarget as Element;
+          const v = trg.getAttribute("value");
           insert_xml(v);
         });
       }
 
-    }
+    });
   }  
 
   /**
    * Ŝargas tradukproponojn el Universala Vort-Reto (UWN)
    * @param {Event} event 
    */
-  function trad_uwn(event) {
+  function trad_uwn(event: Event) {
     event.preventDefault();
     const s_trd = document.getElementById('r:trd_elekto');
     s_trd.textContent = '';
@@ -1398,8 +1383,8 @@ var redaktilo = function() {
 
     // prezento de traduklisto kiel HTML-dd-elemento
     // enhavanta la tradukojn kiel ul-listo
-    function dl_dd(lng,trd) {
-      return ht_list(trd,'ul',{},function(t) {
+    function dl_dd(lng: Lingvo, trd: string[]): Element {
+      return <Element>ht_list(trd,'ul',{}, function(t: string) {
           //var t = s; // la traduko
           const li = ht_element('li');
           if (t.slice(0,2) == '?;') {
@@ -1407,50 +1392,15 @@ var redaktilo = function() {
             t = t.slice(2);
           }
           li.append(ht_element('span',{class: 'trd'},t));
-    /*
-          // se drv/snc estas elektita kaj la traduko ankoraŭ 
-          // ne troviĝas tie, ni permesu aldoni ĝin
-          if (show_plus) {
-            if ( ! xmlarea.tradukoj[lng] 
-              || ! xmlarea.tradukoj[lng].find(e => compareXMLStr(e,t) )
-              ) {
-              // d.push('\u00a0'); // nbsp
-              li.append(ht_element('button',{
-                value: 'plus', 
-                title: 'aldonu al XML-(sub)drv/snc'},
-                '+'));  
-            } else {
-              // montru per hoketo, ke ni jam havas la tradukon en XML
-              li.append(ht_element('span',{class: 'ekzistas'},'\u2713'));
-            }
-            
-          } */
           return li;
       });
     } 
 
     const srch = new Sercho();
-    srch.serchu_uwn(sercho, function(json) {
+    srch.serchu_uwn(sercho, function(json: any) {
       if (json) {
           // butonojn por aldoni ni montras nur, se (sub)drv|(sub)snc estas
           // elektita en la redaktilo...
-
-          /*
-          const drv_snc = ('drv|snc'.indexOf(xmlarea.xml_elekto.el) > -1);
-
-          if (drv_snc) {
-            // eltrovu kiujn tradukojn ni havas en la aktuala teksto
-            // PLIBONIGU: tio povus okazi paralele kaj krome ni devos
-            // refari tion, se la uzanto elektas alian subtekston!
-            xmlarea.collectTrdAll();
-          } else {
-            // (sub)art|xml estas elektita en la redaktilo...
-            s_trd.append(ht_element('p',{},'Elektu (sub)derivaĵon aŭ (sub)sencon '
-              + 'en la redaktilo, poste vi povas aldoni tie novajn tradukojn el la '
-              + 'malsupraj faldlistoj per la +-butonoj.'));
-          }
-          */
-
           s_trd.prepend('El ',ht_element('a',{href: uwn_url},'Universala Vortreto'),
             ', kontrolu ĝustecon antaŭ aldoni!');          
 
@@ -1460,7 +1410,7 @@ var redaktilo = function() {
               const details = ht_details(
                 tv.trd.eo.map(s => s.replace(/\?;/,'?:\u00a0'))
                   .join(', ')||t, '',
-                function(d) {
+                function(d: Element) {
                   // esp-a difino
                   const eo = (tv.dif && tv.dif.length)? tv.dif : ['-/-'];
                   const pe = ht_elements([
@@ -1482,12 +1432,12 @@ var redaktilo = function() {
 
                   // tradukojn prezentu kiel difinlisto (dl)
                   var nkasxitaj = 0;
-                  const dl = ht_dl(
+                  const dl = <Element>ht_dl(
                     tv.trd,
 
                     // tiu funkci revokiĝas por ĉiu trovita en la json-listo lingvo 
                     // kun listo de tradukoj
-                    function(lng,trd,dt,dd) {
+                    function(lng: Lingvo, trd: string[], dt: Element, dd: Element) {
                       // lingvonomo
                       const ln = revo_codes.lingvoj.codes[lng];
 
@@ -1507,7 +1457,7 @@ var redaktilo = function() {
                         // per CSS
                         //if (has_trd(lng)) cls.push('tradukita');
 
-                        var atr = {};
+                        var atr: AtributSpec = {};
                         if (cls.length) atr = {class: cls.join(' ')};
 
                         // DT
@@ -1525,16 +1475,17 @@ var redaktilo = function() {
 
                     // aldonu eventon por reagi al +-butonoj
                     dl.addEventListener('click', function(event) {
-                      if (event.target.value == 'plus') {
-                        const dd = event.target.closest('dd');
+                      const trg = event.target as HTMLInputElement;
+                      if (trg.value == 'plus') {
+                        const dd = trg.closest('dd');
                         // la traduko troivĝas rekte antaŭ la butono!
-                        const sp = event.target.previousSibling;
+                        const sp = trg.previousSibling;
                         const lng = dd.getAttribute('lang');
                         console.log('aldonu ['+lng+'] '+sp.textContent);
                         xmlarea.addTrd(lng,sp.textContent);
 
                         // montru per hoketo, ke ni nun havas la tradukon en XML
-                        const li = event.target.closest('li');
+                        const li = trg.closest('li');
                         li.classList.remove('aldonebla');
                         li.append(ht_element('span',{class: 'ekzistas'},'\u2713'));
                         remove(li.querySelector('button'));
@@ -1593,10 +1544,10 @@ var redaktilo = function() {
         // eltrovu kiujn tradukojn ni havas en la aktuala teksto
         xmlarea.collectTrdAll();
 
-        for (let dd of elekto.querySelectorAll('dd')) {
+        elekto.querySelectorAll('dd').forEach( (dd) => {
           const lng = dd.getAttribute('lang');
 
-          for (let li of dd.querySelectorAll('li')) {
+          dd.querySelectorAll('li').forEach( (li) => {
             const trd = li.querySelector('.trd');
             const t = (trd)? trd.textContent : undefined;
             // se drv/snc estas elektita kaj la traduko ankoraŭ 
@@ -1624,23 +1575,27 @@ var redaktilo = function() {
               remove(li.querySelector('button'));
             }
 
-          } // for li...
+          }); // forEach li...
 
           // krome ni elstarigu lingvojn, kiuj jam havas tradukon por
           // eviti tro facilan aldonon!
           const dt = dd.previousSibling;
-          if (xmlarea.tradukoj[lng]) {
-            dt.classList.add('ekzistas');
-            remove(dt.querySelector('span.aldonebla'));
-            if (! dt.querySelector('span.ekzistas'))
-              dt.append(ht_element('span',{class: 'ekzistas'},'\u2713'));
-          } else {
-            dt.classList.remove('ekzistas');
-            remove(dt.querySelector('span.ekzistas'));
-            if (! dt.querySelector('span.aldonebla'))
-              dt.append(ht_element('span',{class: 'aldonebla'},'\u2026'));
-          }         
-        } // for dd..
+          if (dt instanceof Element) {
+            const e = dt as Element;
+            if (xmlarea.tradukoj[lng]) {
+              e.classList.add('ekzistas');
+              remove(dt.querySelector('span.aldonebla'));
+              if (! dt.querySelector('span.ekzistas'))
+                e.append(ht_element('span',{class: 'ekzistas'},'\u2713'));
+            } else {
+              e.classList.remove('ekzistas');
+              remove(e.querySelector('span.ekzistas'));
+              if (! e.querySelector('span.aldonebla'))
+                e.append(ht_element('span',{class: 'aldonebla'},'\u2026'));
+            }
+          }
+     
+        }); // forEach dd..
 
       // ĉe elekto de (sub)art|xml ni montras nur la tradukojn..., t.e. ni
       // forigas ilin, se ili restis de antaŭa elekto
@@ -1650,16 +1605,16 @@ var redaktilo = function() {
           + 'en la redaktilo, poste vi povas aldoni tie novajn tradukojn el la '
           + 'malsupraj faldlistoj per la +-butonoj.'));
 
-        for (let li of elekto.querySelectorAll('dd li')) {
+        elekto.querySelectorAll('dd li').forEach( (li) => {
           remove(li.querySelector('.ekzistas'));
           remove(li.querySelector('button'));
-        }
+        });
 
-        for (let dt of elekto.querySelectorAll('dt')) {
+        elekto.querySelectorAll('dt').forEach( (dt) => {
           dt.classList.remove('ekzistas');
           remove(dt.querySelector('span.ekzistas'));
           remove(dt.querySelector('span.aldonebla'));
-        }
+        });
 
       } // if drv_snc
     } // if.. details..else..
@@ -1676,7 +1631,7 @@ var redaktilo = function() {
     }  
   });
   */
-
+/*
   // eksportu publikajn funkction
   return {
     preparu_red: preparu_red,
@@ -1690,5 +1645,5 @@ var redaktilo = function() {
     shablono: shablono,
     store_preferences: store_preferences,
     store_art: store_art
-  };
-}();
+  };*/
+};

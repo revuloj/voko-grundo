@@ -17,7 +17,7 @@ type Submeto = { state: string, fname: string, desc: string, time: string, resul
 // statoj kaj transiroj - ni uzas tri diversajn statomaŝinojn por la tri paĝoj navigilo, ĉefpago kaj redaktilo
 const t_nav  = new Transiroj("nav","start",["ĉefindekso","subindekso","serĉo","redaktilo"]);
 const t_main = new Transiroj("main","start",["titolo","artikolo","red_xml","red_rigardo"]);
-const t_red  = new Transiroj("red","ne_redaktante",["ne_redaktante","redaktante","tradukante","sendita"]);
+export const t_red  = new Transiroj("red","ne_redaktante",["ne_redaktante","redaktante","tradukante","sendita"]);
 
 // vd. https://mariusschulz.com/blog/declaring-global-variables-in-typescript
 // alternative oni povus uzi alnoton ty-ignore ne la malsupraj linioj kiuj uzas MathJax
@@ -27,7 +27,7 @@ const MathJax = (window as any).MathJax;
 /**
  * Kodlistoj agorditaj por Reta Vortaro: lingvoj, fakoj, stiloj
  */
-const revo_codes = {
+export const revo_codes = {
     lingvoj: new Xlist('lingvo', '/revo/cfg/lingvoj.xml'),
     fakoj: new Xlist('fako','/revo/cfg/fakoj.xml'),
     stiloj: new Xlist('stilo','/revo/cfg/stiloj.xml')
@@ -520,7 +520,7 @@ function normalize_href(target, href) {
  * Kiam ni fone ŝargas ion ni montras tion per turniĝanta revo-fiŝo
  * (la serĉbutono)
  */
-function start_wait() {
+export function start_wait() {
     var s_btn = document.getElementById('x:revo_icon');
     if (s_btn) s_btn.classList.add('revo_icon_run');
     s_btn = document.getElementById('w:revo_icon');
@@ -533,7 +533,7 @@ function start_wait() {
  * la turniĝon. Se ni volus haltigi nur post la lasta, ni devus registri
  * ĉiun ekŝarĝon kaj kontroli, kiam la lasta revenis.
  */
-function stop_wait() {
+export function stop_wait() {
     var s_btn = document.getElementById('x:revo_icon');
     if (s_btn) s_btn.classList.remove('revo_icon_run');
     s_btn = document.getElementById('w:revo_icon');

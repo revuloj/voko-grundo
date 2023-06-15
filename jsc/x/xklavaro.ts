@@ -21,7 +21,7 @@ console.debug("Instalante la klavarfunkciojn...");
     },
     */
 
-class XKlavaro{
+export class XKlavaro {
     public lasta_fokuso: string;
     public klavoj: string;
 
@@ -426,7 +426,7 @@ class XKlavaro{
             sel.text = val;
             element.focus();
 
-        } else if (element.selectionStart || element.selectionStart == 0) {
+        } else if (element.selectionStart || element.selectionStart === 0) {
             // Firefox and Webkit based
             const startPos = element.selectionStart;
             const endPos = element.selectionEnd;
