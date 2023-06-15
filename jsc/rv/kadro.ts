@@ -4,7 +4,8 @@
 
 import '../x/util';
 import '../u/ht_util';
-import '../a/preferoj';
+import {artikolo} from '../a/artikolo';
+import {preferoj} from '../a/preferoj';
 
 import {Transiroj} from '../u/transiroj';
 import {Xlist} from '../x/xlisto';
@@ -13,6 +14,11 @@ import {Xlist} from '../x/xlisto';
 const t_nav  = new Transiroj("nav","start",["ĉefindekso","subindekso","serĉo","redaktilo"]);
 const t_main = new Transiroj("main","start",["titolo","artikolo","red_xml","red_rigardo"]);
 const t_red  = new Transiroj("red","ne_redaktante",["ne_redaktante","redaktante","tradukante","sendita"]);
+
+// vd. https://mariusschulz.com/blog/declaring-global-variables-in-typescript
+// alternative oni povus uzi alnoton ty-ignore ne la malsupraj linioj kiuj uzas MathJax
+const MathJax = (window as any).MathJax;
+
 
 /**
  * Kodlistoj agorditaj por Reta Vortaro: lingvoj, fakoj, stiloj
@@ -305,25 +311,26 @@ when_doc_ready(function() {
         //t_nav.je("x:q","keydown","serĉo");
 
         //var query = document.getElementById("x:q");
-        query.addEventListener("keyup",function(event){
+        query.addEventListener("keyup",function(event) {
+            const trg = event.target as HTMLInputElement;
+            const xcx = document.getElementById("x:cx") as HTMLInputElement;
             //console.debug("which: "+event.which+" code:"+event.code + " key: "+ event.key);
             if (event.key == "x" || event.key == "Shift") { // x-klavo
-                if (document.getElementById("x:cx").value == "1") {
-                    const s = event.target.value;
+                if (xcx.value == "1") {
+                    const s = trg.value;
                     const s1 = ascii_eo(s);
                     if (s != s1)
-                        event.target.value = s1;
+                        trg.value = s1;
                 }
             // keycode fix for older Android Chrome 
-            } else if ((event.keyCode == 0 || event.keyCode == 229) 
-                && document.getElementById("x:cx").value == "1") {
-                const s = event.target.value;
+            } else if ((event.keyCode == 0 || event.keyCode == 229) && xcx.value == "1") {
+                const s = trg.value;
                 const key = s.charAt(s.length-1);
                 //alert("Android dbg: "+event.keyCode+ "s: "+s+" kcd: "+kCd);
                 if (key == "x" || key == "X") {
                     const s1 = ascii_eo(s);
                     if (s != s1)
-                        event.target.value = s1;    
+                        trg.value = s1;    
                 }
             }
         });
@@ -402,7 +409,7 @@ function enkadrigu() {
     // preparu la ĉefan parton de la paĝo
     if (document.getElementsByTagName("main").length == 0) {
         var main = ht_element("main",{});
-        main.append(...document.body.children);
+        main.append(...Array.from(document.body.children));
         document.body.appendChild(main);
     } else {
         load_page("main",globalThis.titolo_url);
@@ -645,6 +652,8 @@ function load_page(trg: string, url: string, push_state: boolean=true, whenLoade
                 // aliflanke tiel la paĝo aperas jam iomete pli frue...
                 fix_art_href(s_artikolo);
             
+                // vd eble https://github.com/mathjax/MathJax/issues/2385
+                // aŭ https://mariusschulz.com/blog/declaring-global-variables-in-typescript
                 if ( typeof(MathJax) != 'undefined' && MathJax.Hub) {
 
                     /*
@@ -750,15 +759,17 @@ function adaptu_paghon(root_el: Element, url: string) {
     var filename = url.split('/').pop();
     // index Esperanto. Atentu! Ni nun uzas _plena. (vd. malsupre)
     if ( filename.startsWith('_eo.') ) {
-        for (var n of root_el.querySelectorAll(".kls_nom")) {
+        root_el.querySelectorAll(".kls_nom").forEach((n) => {
             if (n.tagName != "summary") {
                 n.classList.add("maletendita");
 
                 n.addEventListener("click", function(event) {
-                    event.target.classList.toggle("maletendita");
+                    const trg = event.target;
+                    if (trg instanceof Element)
+                        (trg as Element).classList.toggle("maletendita");
                 });   
             }
-        }
+        });
     }
     // index "ktp.
     else if ( filename.startsWith('_ktp.') ) {
@@ -794,14 +805,13 @@ function adaptu_paghon(root_el: Element, url: string) {
         }
     }
     else if ( filename.startsWith('mx_trd.') ) {
-        var a;
-        for (a of root_el.querySelectorAll("a[href^='?']")){
+        root_el.querySelectorAll("a[href^='?']").forEach((a) => {
             var href = a.getAttribute("href");
             a.setAttribute("href",globalThis.mx_trd_url+href);
-        }
-        for (a of root_el.querySelectorAll("a[target='_blank']")){
+        });
+        root_el.querySelectorAll("a[target='_blank']").forEach((a) => {
             a.removeAttribute("target");
-        }
+        });
     }
     else if ( filename.startsWith('tz_') ) {
         root_el.querySelector("tr").classList.add("menuo");
@@ -817,38 +827,39 @@ function adaptu_paghon(root_el: Element, url: string) {
         //s_form.removeAttribute("action");
         //submit.addEventListener("click",serchu);
         
-        query.addEventListener("keydown", function(event) {
+        query.addEventListener("keydown", function(event: KeyboardEvent) {
             if (event.key == "Enter") {  
                 serchu(event);
             }
         });
-        query.addEventListener("keyup",function(event){
+        query.addEventListener("keyup",function(event: KeyboardEvent) {
+            const trg = event.target as HTMLInputElement;
+            const wcx = document.getElementById("w:cx") as HTMLInputElement;
             if (event.key == "x" || event.key == "Shift") { // x-klavo 
-                if (document.getElementById("w:cx").value == "1") {
-                    var s = event.target.value;
+                if (wcx.value == "1") {
+                    var s = trg.value;
                     var s1 = ascii_eo(s);
                     if (s != s1)
-                        event.target.value = s1;
+                        trg.value = s1;
                 }
             }
             // keycode fix for older Android Chrome 
-            else if ((event.keyCode == 0 || event.keyCode == 229) 
-                && document.getElementById("w:cx").value == "1") {
-                const s = event.target.value;
+            else if ((event.keyCode == 0 || event.keyCode == 229) && wcx.value == "1") {
+                const s = trg.value;
                 const key = s.charAt(s.length-1);
                 //alert("Android dbg: "+event.keyCode+ "s: "+s+" kcd: "+kCd);
                 if (key == "x" || key == "X") {
                     const s1 = ascii_eo(s);
                     if (s != s1)
-                        event.target.value = s1;    
+                        trg.value = s1;    
                 }
             }
         });
 
         cx.addEventListener("click", function(event) {
             event.preventDefault();
-            var cx = event.target;
-            cx.value = 1 - cx.value; 
+            const cx = event.target as HTMLInputElement;
+            cx.value = ""+(1-parseInt(cx.value)); 
             document.getElementById('w:q').focus();
         });
 
@@ -861,25 +872,18 @@ function adaptu_paghon(root_el: Element, url: string) {
         s_form.querySelector("button[value='ecosia']")
             .addEventListener("click", function(event) {
                 event.preventDefault();
-                var q = document.getElementById('w:q').value;
-                location.href = 'https://www.ecosia.org/search?q='+encodeURIComponent(q+' site:reta-vortaro.de');
+                const wq = document.getElementById('w:q') as HTMLInputElement;
+                location.href = 'https://www.ecosia.org/search?q='
+                    + encodeURIComponent(wq.value + ' site:reta-vortaro.de');
             });
 
         s_form.querySelector("button[value='anaso']")
             .addEventListener("click", function(event) {
                 event.preventDefault();
-                var q = document.getElementById('w:q').value;
-                location.href = 'https://duckduckgo.com?q='+encodeURIComponent(q+' site:reta-vortaro.de');
+                const wq = document.getElementById('w:q') as HTMLInputElement;
+                location.href = 'https://duckduckgo.com?q='
+                    + encodeURIComponent(wq.value + ' site:reta-vortaro.de');
         });
-
-        /*
-        s_form.querySelector("button[value='google']")
-            .addEventListener("click", function(event) {
-                event.preventDefault();
-                var q = document.getElementById('w:q').value
-                location.href = 'https://www.google.com/search?q='+encodeURIComponent(q+' site:reta-vortaro.de')
-        });
-        */
 
         // hazarda artikolo
         hazarda.addEventListener("click", function(event) {
@@ -983,14 +987,15 @@ function serchu(event: any) {
 
 /**
  * Serĉas per la transdonita serĉesprimo.
- * @param {string} esprimo 
+ * @param esprimo 
  */
 function serchu_q(esprimo: string) {
 
     const srch = new Sercho();
     srch.serchu(esprimo, function() {
 
-        function findings(lng) {
+        function findings(lng: Lingvo) {
+
             var div = ht_elements([
                 ["div",{},
                     [["h1",{}, revo_codes.lingvoj.codes[lng]||lng ]]
@@ -1268,9 +1273,9 @@ function mrk_eraroj() {
 
 /**
  * Pridemandas la bibliografion kiel JSON de la servilo kaj prezentas ĝin kiel HTML
- * @param {string|undefined} [sort_by] se donita, ni ordigos la bibliografion laŭ tiu kampo (bib,aut,tit)
+ * @param sort_by se donita, ni ordigos la bibliografion laŭ tiu kampo (bib,aut,tit)
  */
-function bibliogr(sort_by: string | undefined) {
+function bibliogr(sort_by?: string) {
     HTTPRequest('POST', globalThis.bib_json_url, {x:1}, // ni sendu ion per POST por ĉiam havi aktualan liston
         function(data) {
             var json = 
