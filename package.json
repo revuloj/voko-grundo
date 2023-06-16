@@ -11,7 +11,9 @@
         "google-closure-compiler": "latest",
         "jsdoc": "latest",
         "jshint": "latest",
-        "localforage": "latest"
+        "localforage": "latest",
+        "tsc": "^2.0.4",
+        "typedoc": "^0.24.8"
     },
     "config": {},
     "jshintConfig": {
@@ -47,5 +49,8 @@
         "build:js": "Js por simpla redaktilo, pri google-closure-compiler vd. https://www.npmjs.com/package/google-closure-compiler",
         "build:rsj": "JS/jQuery por la komforta redaktilo, pri google-closure-compiler vd. https://www.npmjs.com/package/google-closure-compiler",
         "build:svg": "kunigas piktogramojn el unuopaj SVG-dosieroj. Ne uzante docker build vi antaŭe voku bin/mp2png_svg.sh"
+    },
+    "dependencies": {
+        "esbuild": "0.18.3"
     }
 }
