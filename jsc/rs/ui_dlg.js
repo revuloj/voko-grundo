@@ -1167,6 +1167,8 @@ function derivajho_enmeti(event) {
     $("#derivajho_error").hide();
 
     const xmlarea = $("#xml_text").Artikolo("option","xmlarea");    
+    // sinkronigu unue por certe ne perdi antaŭe faritajn ŝanĝojn
+    xmlarea.sync();
     
     let values = $("#derivajho_dlg").dialog("valoroj");
     //values.mrk = xmlArtDrvMrk($("#xml_text").val()); 
@@ -1185,8 +1187,9 @@ function derivajho_enmeti(event) {
     }
     
     // ekredaktu la novan derivaĵon
-    const mrk = drv.drv.mrk;
-    const s_id = xmlarea.changeSubtextMrk(mrk,false);
+    const mrk = drv.drv.mrk;    
+    const s_id = xmlarea.changeSubtextMrk(mrk,false); // false: ne denove sinkronigu, 
+            // kio povus perdigi ĵus aldonitan drv!
 
     $("#derivajho_dlg").dialog("close");
 }
