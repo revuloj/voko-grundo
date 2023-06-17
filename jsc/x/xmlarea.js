@@ -88,6 +88,11 @@ Xmlarea.prototype.saltu = function() {
  */
 Xmlarea.prototype.sync = function(select = undefined) {
   if (this.elekto) {
+    console.debug("<<< sinkronigo <<<");
+    // try {
+    //   console.debug(new Error().stack.split("\n")[2]);
+    // } catch(e) { };
+
     const old_s = this.elekto;    
     const nstru = this.xmlstruct.strukturo.length;
 
@@ -162,6 +167,7 @@ Xmlarea.prototype.normalizedXml = function() {
  * resp. rekrei antaŭrigardon
  */
 Xmlarea.prototype.setUnsynced = function() {
+  console.debug(">> synced=false >>");
   this.synced = false;
   this.ar_in_sync = false;
 }
@@ -174,13 +180,15 @@ Xmlarea.prototype.setUnsynced = function() {
  */
 Xmlarea.prototype.changeSubtext = function(id,sync=true) {
   if (id) {
+    console.debug("<<< ŝanĝu subtekston "+id+" <<<");
+
     // ni unue sekurigu la aktuale redaktatan parton...
     if (sync) this.sync({id:id}); // ni transdonas ankaŭ la elektotan id por navigi tien en la elekto-listo
     
     /* ni trovu la celatan subtekston per ĝia id... */
 
-    // se ni ne trovos la celatan, ekz-e ĉar marko aŭ enhavo snc-aldono...) ŝanĝiĝis,
-    // ni elektos al la unuan (art)
+    // apriore, por la kazo, ke ni ne trovos la celatan, ekz-e ĉar marko aŭ enhavo snc-aldono...) ŝanĝiĝis,
+    // ni antaŭelektas al la unuan (art)
     this.elekto = this.xmlstruct.strukturo[0]; 
         // ni montro simple la unua subtekston, t.e. la artikolon
     
@@ -211,6 +219,7 @@ Xmlarea.prototype.changeSubtext = function(id,sync=true) {
  * @param {*} sync 
  */
 Xmlarea.prototype.changeSubtextMrk = function(mrk,sync=true) {
+  console.debug("<<< ŝanĝu subtekston "+mrk+" <<<");
   const s = this.xmlstruct.getStructByMrk(mrk);
   if (s) this.changeSubtext(s.id,sync);
 }
