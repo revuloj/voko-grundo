@@ -39,8 +39,8 @@
         "build:copy": "cp -r bin ./build/bin && cp -r cfg ./build/cfg && cp -r dtd ./build/dtd && cp -r sql ./build/sql && cp -r owl ./build/owl && cp -r xsl ./build/xsl && cp -r smb/*.gif ./build/smb/",
         "//build:js": "google-closure-compiler -W VERBOSE --compilation_level SIMPLE --js_module_root ./jsc/rv --entry_point ./kadro.js --js_output_file build/jsc/revo-2i-min.js --js='jsc/u/*.js' --js='jsc/x/*.js' --js='jsc/a/*.js' --js='jsc/rv/*.js' && cp jsc/revo-art-1b.js build/jsc",
         "//build:js:debug": "google-closure-compiler -W VERBOSE --compilation_level BUNDLE --js_module_root ./jsc --entry_point ./jsc/kadro.js --js_output_file build/jsc/revo-2i-min.js --js='jsc/u/*.js' --js='jsc/x/*.js' --js='jsc/a/*.js' --js='jsc/rv/*.js'",
-        "build:js": "tsc --noEmit -p tsconfig-rv.json && ./node_modules/.bin/esbuild --target=es2017 jsc/rv/kadro.ts --bundle --minify --outfile=build/jsc/revo-ts-min.js",
-        "build:js:debug": "tsc --noEmit -p tsconfig-rv.json && ./node_modules/.bin/esbuild --target=es2017 jsc/rv/kadro.ts --bundle --outfile=build/jsc/revo-ts-min.js",
+        "build:js": "tsc --noEmit -p tsconfig-rv.json && ./node_modules/.bin/esbuild --target=es6 jsc/rv/kadro.ts --bundle --minify --outfile=build/jsc/revo-ts-min.js",
+        "build:js:debug": "tsc --noEmit -p tsconfig-rv.json && ./node_modules/.bin/esbuild --target=es6 jsc/rv/kadro.ts --bundle --outfile=build/jsc/revo-ts-min.js",
         "build:rsj": "google-closure-compiler --compilation_level SIMPLE --process_common_js_modules --js_module_root ./jsc/rs --entry_point ./ui_kreo.js --js_output_file build/rsj/redaktilo-2i-min.js --js='jsc/u/*.js' --js='jsc/x/*.js' --js='jsc/a/*.js' --js='jsc/rs/*.js'",
         "build:rsj:debug": "google-closure-compiler -W VERBOSE --compilation_level BUNDLE --js_module_root ./jsc/rs --entry_point ./ui_kreo.js --js_output_file build/rsj/redaktilo-2i-min.js --js='jsc/u/*.js' --js='jsc/x/*.js' --js='jsc/a/*.js' --js='jsc/rs/*.js' ",
         "build": "npm run build:css && npm run build:dok && npm run build:copy && npm run build:js && npm run build:rsc && npm run build:rsj"
