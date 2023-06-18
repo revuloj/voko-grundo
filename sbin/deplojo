@@ -118,7 +118,7 @@ cetonio-xsl)
         echo ${file}
         docker cp ${file} ${cetonio_id}:${incdir}
     done
-    ;;        
+    ;;
 formiko-xsl)
     ## formiko-xsl  : deplojas XSL al loka Formiko
     formiko_id=$(docker ps --filter name=formikujo_formiko -q)
@@ -133,6 +133,22 @@ formiko-xsl)
     for file in ${XSL_INC}; do
         echo ${file}
         docker cp ${file} ${formiko_id}:${incdir}
+    done
+    ;;        
+akrido-xsl)
+    ## formiko-xsl  : deplojas XSL al loka Formiko
+    akrido_id=$(docker ps --filter name=cetoniujo_akrido -q)
+    xsldir=/home/akrido/xsl
+    incdir=/home/akrido/xsl/inc
+    echo "kopiante XSL-dosierojn al ${akrido_id}:${xsldir}..."
+    for file in ${XSL} ${INXXSL}; do
+        echo ${file}
+        docker cp ${file} ${akrido_id}:${xsldir}
+    done
+    echo "kopiante XSL-dosierojn al ${akrido_id}:${incdir}..."
+    for file in ${XSL_INC}; do
+        echo ${file}
+        docker cp ${file} ${akrido_id}:${incdir}
     done
     ;;        
 manlibro)
