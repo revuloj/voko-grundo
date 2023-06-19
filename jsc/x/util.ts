@@ -4,7 +4,7 @@
 
 //const help_base_url = 'https://revuloj.github.io/temoj/';
 
-type LinePos = {
+export type LinePos = {
   line: number,
   pos: number
 }
@@ -14,7 +14,7 @@ type LinePos = {
  * Utila ekz-e por memori preferatajn valoroj k.s.
  * @param todo_cb - ago farenda
  */
-function do_before_unload(todo_cb: EventListenerOrEventListenerObject) {
+export function do_before_unload(todo_cb: EventListenerOrEventListenerObject) {
   // tio vokiĝas, i.a. kiam la uzanto reŝargas la paĝon aŭ fermas la redaktilon.
   window.addEventListener('beforeunload', todo_cb);
   // por iOS...:
@@ -33,7 +33,7 @@ function do_before_unload(todo_cb: EventListenerOrEventListenerObject) {
  * @param array 
  * @returns grupigitajn listojn
  */
-function group_by(key: string|number, array: Array<any>): {[key: string]: Array<any>} {
+export function group_by(key: string|number, array: Array<any>): {[key: string]: Array<any>} {
   let grouped = {};
 
   for (var el of array) {
@@ -50,7 +50,7 @@ function group_by(key: string|number, array: Array<any>): {[key: string]: Array<
  * @param mrk 
  * @returns URL-o por artikolo.
  */
-function art_href(mrk: string): string {
+export function art_href(mrk: string): string {
   return globalThis.art_prefix + mrk.split('.')[0] + '.html#' + mrk;
 }
 
@@ -59,7 +59,7 @@ function art_href(mrk: string): string {
  * Aldonas ../art en href-atributoj kun relativaj URL-oj
  * @param root_el 
  */
-function fix_art_href(root_el: Element) {
+export function fix_art_href(root_el: Element) {
   for (var a of Array.from(root_el.getElementsByTagName("a"))) {
     var href = a.getAttribute("href");
 
@@ -79,7 +79,7 @@ function fix_art_href(root_el: Element) {
  * @param tip - la referenctipo
  * @returns la CSS-klasnomo
  */
-function ref_tip_class(tip: string): string {
+export function ref_tip_class(tip: string): string {
   return {
     dif: "r_dif", difino: "r_dif", 
     sin: "r_sin", ant: "r_ant",
@@ -98,7 +98,7 @@ function ref_tip_class(tip: string): string {
  * @param tip - la referenctipo
  * @returns la HTML-ALT-atributo
  */
-function ref_tip_alt(tip: string): string {
+export function ref_tip_alt(tip: string): string {
   return {
     dif: "=", difino: "=", 
     sin: "SIN:", ant: "ANT:",
@@ -117,7 +117,7 @@ function ref_tip_alt(tip: string): string {
  * @param tip - la referenctipo
  * @returns la HTML-TITLE-atributo
  */
-function ref_tip_title(tip: string): string {
+export function ref_tip_title(tip: string): string {
   return {
     dif: "difino ĉe", difino: "difino ĉe", 
     sin: "sinonimo", ant: "antonimo",
@@ -136,8 +136,8 @@ function ref_tip_title(tip: string): string {
  * Anstataŭigas GIF per SVG en IMG-SRC-atributoj
  * @param root_el 
  */
-function fix_img_svg(root_el: Element) {
-  var src;
+export function fix_img_svg(root_el: Element) {
+  let src: string;
 
   for (var i of Array.from(root_el.getElementsByTagName("img"))) {
     src = i.getAttribute("src");
@@ -160,7 +160,7 @@ function fix_img_svg(root_el: Element) {
  * @param id - la 'id'-atributo de la elemento
  * @param cls - CSS-klaso, se alia ol 'kasxita'
  */
-function show(id: string,cls: string='kasxita') {
+export function show(id: string,cls: string='kasxita') {
   const el = document.getElementById(id);
   if (el) el.classList.remove(cls);
   else console.warn("show: elemento "+id+" ne troviĝis.");
@@ -171,7 +171,7 @@ function show(id: string,cls: string='kasxita') {
  * @param id - la 'id'-atributo de la elemento
  * @param cls - CSS-klaso, se alia ol 'kasxita'
  */
-function hide(id: string,cls: string='kasxita') {
+export function hide(id: string,cls: string='kasxita') {
   const el = document.getElementById(id);
   if (el) el.classList.add(cls);
   else console.warn("hide: elemento "+id+" ne troviĝis.");
@@ -182,7 +182,7 @@ function hide(id: string,cls: string='kasxita') {
  * @param id - la 'id'-atributo de la elemento
  * @param cls - CSS-klaso, se alia ol 'kasxita'
  */
-function toggle(id: string,cls: string='kasxita') {
+export function toggle(id: string,cls: string='kasxita') {
   const el = document.getElementById(id);
   if (el) el.classList.toggle(cls);
   else console.warn("toggle: elemento "+id+" ne troviĝis.");
@@ -192,7 +192,7 @@ function toggle(id: string,cls: string='kasxita') {
  * Malaktivigas HTML-elementon metante atributon 'disabled'.
  * @param id - la 'id'-atributo de la elemento
  */
-function disable(id: string) {
+export function disable(id: string) {
   const el = document.getElementById(id);
   if (el) el.setAttribute("disabled","disabled");
   else console.warn("disable: elemento "+id+" ne troviĝis.");
@@ -202,7 +202,7 @@ function disable(id: string) {
  * Aktivigas HTML-elementon forigante atributon 'disabled'.
  * @param id - la 'id'-atributo de la elemento
  */
-function enable(id: string) {
+export function enable(id: string) {
   const el = document.getElementById(id);
   if (el) el.removeAttribute("disabled");
   else console.warn("disable: elemento "+id+" ne troviĝis.");
@@ -212,7 +212,7 @@ function enable(id: string) {
  * Navigas la retumilon al helpo-paĝo
  * @param url - la pado de helpopaĝo, rilate al 'help_base_url'
  */
-function helpo_pagho(url: string) {
+export function helpo_pagho(url: string) {
     window.open(globalThis.help_base_url+url);
 }
 
@@ -220,7 +220,7 @@ function helpo_pagho(url: string) {
  * Preparas paĝon post kiam ĝi estas ŝargita
  * @param onready_fn 
  */
-function when_doc_ready(onready_fn: EventListener) {
+export function when_doc_ready(onready_fn: EventListener) {
     if (document.readyState != 'loading'){
       onready_fn(new Event('DOMContentLoaded'));
     } else {
@@ -235,7 +235,7 @@ function when_doc_ready(onready_fn: EventListener) {
  * @param url 
  * @returns true: se estas paĝo-loka referenco
  */
-function isLocalLink(url: string): boolean {
+export function isLocalLink(url: string): boolean {
     if (url[0] == '#') return true;
     // necesas kompari ankaŭ la dosiernomon      
     var doc = getUrlFileName(document.location.pathname);
@@ -248,7 +248,7 @@ function isLocalLink(url: string): boolean {
  * @param url 
  * @returns 
  */
-function getUrlFileName(url: string): string {
+export function getUrlFileName(url: string): string {
     return url.substring(url.lastIndexOf('/')+1).split('#')[0];
 }
 
@@ -257,7 +257,7 @@ function getUrlFileName(url: string): string {
  * Redonas la parton post '#' interpretante ĝin kiel parametroliston.
  * @returns la trovitaj parametroj kiel Objekto kies ŝlosiloj estas la parametronomoj
  */
-function getHashParts(): { [s: string]: string; } {
+export function getHashParts(): { [s: string]: string; } {
     const h = (location.hash[0] == '#' ?
         location.hash.slice(1) :
         location.hash);
@@ -279,7 +279,7 @@ function getHashParts(): { [s: string]: string; } {
  * @param params - la signoĉeno de parametroj, se manks location.search estas uzata
  * @returns la valoro de la petata parametro
  */
-function getParamValue(param: string, params: string=undefined): string|null {
+export function getParamValue(param: string, params: string=undefined): string|null {
   // ĉu ni vere bezonos tion? parametroj estas afero de la servilo,
   // sed ni povas kaŝi ilin ankaŭ post #, vd. supre getHashParts
     let result = null,
@@ -298,7 +298,7 @@ function getParamValue(param: string, params: string=undefined): string|null {
  * @param {number} rNum - la nombro de ripetoj
  * @returns {string}
  */
-function str_repeat(rStr: string, rNum: number): string {
+export function str_repeat(rStr: string, rNum: number): string {
     var nStr="";
     for (var x=1; x<=rNum; x++) {
         nStr+=rStr;
@@ -314,7 +314,7 @@ function str_repeat(rStr: string, rNum: number): string {
  * @param to - fino de nombrado, se ne donita fino de 'str'
  * @returns
  */
-function count_char(str: string, chr: string, from?: number,to?: number): number 
+export function count_char(str: string, chr: string, from?: number,to?: number): number 
 {
   var nc = 0;
   const f = from||0;
@@ -331,7 +331,7 @@ function count_char(str: string, chr: string, from?: number,to?: number): number
  * @param str - la konvertenda teksto
  * @returns la konvertita teksto
  */
-function eo_ascii(str: string): string {
+export function eo_ascii(str: string): string {
     return str
         .replace(/ĉ/g,'cx')
         .replace(/ĝ/g,'gx')
@@ -346,7 +346,7 @@ function eo_ascii(str: string): string {
  * @param str - la konvertenda teksto
  * @returns la konvertita teksto
  */
-function ascii_eo(str: string): string {
+export function ascii_eo(str: string): string {
   return str
     .replace(/c[xX]/g, "\u0109")
     .replace(/g[xX]/g, "\u011d")
@@ -369,7 +369,7 @@ function ascii_eo(str: string): string {
  * @param key - la tajpita klavkodo
  * @returns - la eventuale modifita signo
  */
-function cxigi(b: string, key: number) {
+export function cxigi(b: string, key: number) {
     var n="";
     var k=String.fromCharCode(key);
 

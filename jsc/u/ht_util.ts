@@ -13,7 +13,7 @@
  */
  
 type StrObj = { [key: string]: string};
-type AtributSpec = StrObj;
+export type AtributSpec = StrObj;
 // Plibonigu, por permesi miksitan enhavon ni devus ŝanĝi la lastan
 // al Array<string|ElementSpec>, sed ni implemento tion ne jam subtenas
 type ElementSpec = [string, AtributSpec?, (string|Array<ContentSpec>)?];
@@ -33,7 +33,7 @@ type Parametroj = StrObj;
  * @param onFinish - vokata fine
  * @param onError - vokata kiam okazas eraro
  */
-function HTTPRequestFull(method: string, url: string, headers: Kapoj, params: Parametroj, 
+export function HTTPRequestFull(method: string, url: string, headers: Kapoj, params: Parametroj, 
     onSuccess: Function, onStart?: Function, onFinish?: Function, onError?: Function) {        
 
     var request = new XMLHttpRequest();
@@ -113,7 +113,7 @@ function HTTPRequestFull(method: string, url: string, headers: Kapoj, params: Pa
  * @param onFinish - vokata fine
  * @param onError - vokata kiam okazas eraro
  */
-function HTTPRequest(method: string, url: string, params: Parametroj, 
+export function HTTPRequest(method: string, url: string, params: Parametroj, 
   onSuccess: Function, onStart?: Function, onFinish?: Function, onError?: Function) {  
     
     HTTPRequestFull(method, url, null, params, onSuccess, 
@@ -125,7 +125,7 @@ function HTTPRequest(method: string, url: string, params: Parametroj,
  * @param el - la HTML-elemento
  * @param attrs - Objekto, kies ŝlosiloj estas la atributnomoj, donantaj ties valorojn
  */
-function ht_attributes(el: Element, attrs: AtributSpec) {
+export function ht_attributes(el: Element, attrs: AtributSpec) {
   for(var key in attrs) {
     el.setAttribute(key, attrs[key]);
   }
@@ -138,7 +138,7 @@ function ht_attributes(el: Element, attrs: AtributSpec) {
  * @param textcontent 
  * @returns {!Element}
  */
-function ht_element(name: string, attributes: AtributSpec = null, 
+export function ht_element(name: string, attributes: AtributSpec = null, 
   textcontent?: string): Element 
 {
     var element = document.createElement(name);
@@ -158,7 +158,7 @@ function ht_element(name: string, attributes: AtributSpec = null,
  * @param jlist 
  * @returns listo de kreitaj elementoj, eventuale ingitaj
  */
-function ht_elements(jlist: Array<ContentSpec>): Array<Node> {
+export function ht_elements(jlist: Array<ContentSpec>): Array<Node> {
     var dlist = [];
     for (var el of jlist) {
 
@@ -189,7 +189,7 @@ function ht_elements(jlist: Array<ContentSpec>): Array<Node> {
 /**
  * Kreas kaj redonas <br>-elementon
  */
-function ht_br() {
+export function ht_br() {
   return ht_element('br');
 }
 
@@ -200,7 +200,7 @@ function ht_br() {
  * @param hint - la musnoto klariganta la butonfunkcion
  * @returns la HTML-butono
  */
-function ht_button(label: string, handler: EventListenerOrEventListenerObject, 
+export function ht_button(label: string, handler: EventListenerOrEventListenerObject, 
   hint: string=''): Node 
 {
     var btn = document.createElement("BUTTON");
@@ -218,7 +218,7 @@ function ht_button(label: string, handler: EventListenerOrEventListenerObject,
  * @param hint - la musnoto klariganta la butonfunkcion
  * @returns la HTML-butono
  */
-function ht_icon_button(iclass: string,handler: EventListenerOrEventListenerObject, 
+export function ht_icon_button(iclass: string,handler: EventListenerOrEventListenerObject, 
   hint: string=''): Node 
 {
     var btn = document.createElement("BUTTON");
@@ -238,7 +238,7 @@ function ht_icon_button(iclass: string,handler: EventListenerOrEventListenerObje
  * @param listero_cb - revokfunkcioj por adaptita kreado de la listeroj
  * @returns la HTML-elemento kun la tuta listo
  */
-function ht_list(list: Array<any>, listtype: string='ul', attrlist?: AtributSpec, 
+export function ht_list(list: Array<any>, listtype: string='ul', attrlist?: AtributSpec, 
   listero_cb?: Function): Node 
 {
   const elmtype = (listtype == 'ul' || listtype == 'ol')? 'li' : 'span';
@@ -258,7 +258,7 @@ function ht_list(list: Array<any>, listtype: string='ul', attrlist?: AtributSpec
  * @param sorted - true: ordigu la ŝlosilojn
  * @returns
  */
-function ht_dl(obj: { [s: string]: any; }, item_cb: Function, 
+export function ht_dl(obj: { [s: string]: any; }, item_cb: Function, 
   sorted: boolean): Node 
 {
   const dl = ht_element("dl");
@@ -296,7 +296,7 @@ function ht_dl(obj: { [s: string]: any; }, item_cb: Function,
  * @param sum_callback 
  * @returns
  */
-function ht_details(sum: string, det: string, 
+export function ht_details(sum: string, det: string, 
   det_callback?: Function, sum_callback?: Function): Node 
 {
   const details = ht_element("details");
@@ -325,7 +325,7 @@ function ht_details(sum: string, det: string,
  * @param n_kasxitaj - la nombro de kasitaj elementoj
  * @returns la HTML-elemento
  */
-function ht_pli(n_kasxitaj: number): Array<Node> 
+export function ht_pli(n_kasxitaj: number): Array<Node> 
 {
   const pli = ht_elements([
       ["dt",{},
@@ -356,7 +356,7 @@ function ht_pli(n_kasxitaj: number): Array<Node>
  * @param str - la traktenda teksto
  * @returns la teksto kun anstataŭigitaj HTML-unuoj
  */
-function parseHtmlEntities(str: string): string 
+export function parseHtmlEntities(str: string): string 
 {
   return str
   .replace(/&#([0-9]{1,5});/gi, function(match, numStr) {
@@ -376,7 +376,7 @@ function parseHtmlEntities(str: string): string
  * @param b - la dua teksto
  * @returns -1, se a&lt;b; 1, se a&gt;b; 0 se a=b post la normigo de ambaŭ
  */
-function compareXMLStr(a?: string, b?: string) {  
+export function compareXMLStr(a?: string, b?: string) {  
   return (parseHtmlEntities(a||'').toLowerCase()
     === parseHtmlEntities(b||'').toLowerCase());
 }

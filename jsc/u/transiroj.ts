@@ -72,7 +72,7 @@ type Nodo = {
     [key: string]: Transago
 };
 
-class TransiroEscepto {
+export class TransiroEscepto {
     public name: string = "TransiroEscepto";
     /**
      * Kreas transiro-escepton kun eraromesaĝo.

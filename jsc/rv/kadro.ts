@@ -2,8 +2,10 @@
 // (c) 2020 - 2023 Wolfram Diestel
 // laŭ permesilo GPL 2.0
 
-import '../x/util';
-import '../u/ht_util';
+//import '../x/util';
+import * as u from '../u';
+import * as x from '../x';
+
 import {artikolo} from '../a/artikolo';
 import {preferoj} from '../a/preferoj';
 
@@ -77,7 +79,7 @@ function hash2art(hash: string) {
  * Enira funkcio vokata post ŝarĝo de la kadra paĝo. Ĝi 
  * finpreparas la paĝon: evento-reagoj...
  */
-when_doc_ready(function() { 
+x.when_doc_ready(function() { 
 
     // dom_console();
     console.log("kadro.when_doc_ready...");
@@ -107,14 +109,14 @@ when_doc_ready(function() {
 
     t_nav.alvene("ĉefindekso",()=>{ 
         if (t_main.stato != "titolo") 
-            show("x:titol_btn");
-        hide("x:nav_start_btn");
+            x.show("x:titol_btn");
+        x.hide("x:nav_start_btn");
         // viaj_submetoj(); -- ĉe renovigado tio venus tro frue kaj reforiĝus....
     });
 
     t_nav.forire("ĉefindekso",()=>{ 
-        hide("x:titol_btn");
-        show("x:nav_start_btn");
+        x.hide("x:titol_btn");
+        x.show("x:nav_start_btn");
     });
 
     t_nav.alvene("redaktilo", ()=>{ 
@@ -122,47 +124,47 @@ when_doc_ready(function() {
         if (t_red.stato == "redaktante") {
                 // ĉe sendita ne jam montru, sed eble tio eĉ en povus okazi?
             document.getElementById("r:rezignu").textContent = "Rezignu"; 
-            enable("r:kontrolu"); 
-            enable("r:konservu");
+            x.enable("r:kontrolu"); 
+            x.enable("r:konservu");
 
             // se ni revenas al redaktado post portempa forlaso
             // ni devos adapti la butonon laŭ t_main
             // ĉar ĝi ne ŝanĝiĝas kaj do ne mem kaŭzas la adapton
             if (t_main.stato == "red_xml") {
-                hide("x:redakt_btn");
-                show("x:rigardo_btn");
+                x.hide("x:redakt_btn");
+                x.show("x:rigardo_btn");
             } else if (t_main.stato == "red_rigardo") {
-                show("x:redakt_btn");
-                hide("x:rigardo_btn");
+                x.show("x:redakt_btn");
+                x.hide("x:rigardo_btn");
             }
         }
     });
 
     t_nav.forire("redaktilo",()=>{ 
-        hide("x:rigardo_btn");
+        x.hide("x:rigardo_btn");
         // se ni ankoraŭ redaktas, ni bezonas butonon por reveni al la redaktilo!
         if (t_red.stato == "redaktante") {
-            show("x:redakt_btn");
+            x.show("x:redakt_btn");
         }
     });
 
     t_main.alvene("titolo",()=>{ 
-       hide("x:titol_btn");
+       x.hide("x:titol_btn");
        nombroj();
     });
 
     t_main.forire("titolo",()=>{ 
         if (t_nav.stato == "ĉefindekso") 
-            show("x:titol_btn");
+            x.show("x:titol_btn");
     });
 
     // difinu agojn por transiroj al cel-statoj
     //t_main.alvene("titolo",()=>{ load_page("main",titolo_url) });
     t_main.alvene("red_xml",()=>{ 
         t_red.transiro("redaktante"); // transiro al ne_redaktante okazas ĉe sendo aŭ rezigno!
-        show("r:tab_txmltxt",'collapsed');
-        show("x:rigardo_btn"); 
-        hide("x:redakt_btn"); 
+        x.show("r:tab_txmltxt",'collapsed');
+        x.show("x:rigardo_btn"); 
+        x.hide("x:redakt_btn"); 
         /***
          * se ne videbla...?:
             load_page("nav",redaktmenu_url);
@@ -170,28 +172,28 @@ when_doc_ready(function() {
          */    
     });
     t_main.forire("red_xml",()=>{ 
-        hide("r:tab_txmltxt",'collapsed');
-        hide("x:rigardo_btn"); 
+        x.hide("r:tab_txmltxt",'collapsed');
+        x.hide("x:rigardo_btn"); 
         // tiu servos por reveni al la redaktilo
         // ĝis ni definitive finis redaktadon!
         if (t_red.stato == "redaktante") 
-            show("x:redakt_btn"); 
+            x.show("x:redakt_btn"); 
     });
     t_main.alvene("red_rigardo",()=>{ 
-        show("r:tab_trigardo",'collapsed');
-        show("x:redakt_btn"); 
+        x.show("r:tab_trigardo",'collapsed');
+        x.show("x:redakt_btn"); 
         redaktilo.rantaurigardo();
     });
     t_main.forire("red_rigardo",()=>{ 
-        hide("r:tab_trigardo",'collapsed');
+        x.hide("r:tab_trigardo",'collapsed');
     });
 
     t_red.forire("redaktante",()=>{
         // memoru enhavon de kelkaj kampoj de la redaktilo
         redaktilo.store_preferences();
 
-        hide("x:redakt_btn");
-        hide("x:rigardo_btn");
+        x.hide("x:redakt_btn");
+        x.hide("x:rigardo_btn");
     });
 
     /*
@@ -214,8 +216,8 @@ when_doc_ready(function() {
         document.getElementById("r:xmltxt").setAttribute("readonly","readonly");
         // ŝanĝu buton-surskribon Rezignu->Finu kaj aktivigu la aliajn du 
         document.getElementById("r:rezignu").textContent = "Finu"; 
-        disable("r:kontrolu"); 
-        disable("r:konservu"); 
+        x.disable("r:kontrolu"); 
+        x.disable("r:konservu"); 
     });
     
 
@@ -227,8 +229,8 @@ when_doc_ready(function() {
         // enkadrigu();
         if (document.getElementById("navigado")) {
 
-            let srch = getParamValue("q"); if (srch === '') srch = "tohuvabohuo"; // Kajto :-)
-            const red = getParamValue("r");
+            let srch = x.getParamValue("q"); if (srch === '') srch = "tohuvabohuo"; // Kajto :-)
+            const red = x.getParamValue("r");
             const art = window.location.hash;
     
             if (art) {
@@ -323,7 +325,7 @@ when_doc_ready(function() {
             if (event.key == "x" || event.key == "Shift") { // x-klavo
                 if (xcx.value == "1") {
                     const s = trg.value;
-                    const s1 = ascii_eo(s);
+                    const s1 = x.ascii_eo(s);
                     if (s != s1)
                         trg.value = s1;
                 }
@@ -333,7 +335,7 @@ when_doc_ready(function() {
                 const key = s.charAt(s.length-1);
                 //alert("Android dbg: "+event.keyCode+ "s: "+s+" kcd: "+kCd);
                 if (key == "x" || key == "X") {
-                    const s1 = ascii_eo(s);
+                    const s1 = x.ascii_eo(s);
                     if (s != s1)
                         trg.value = s1;    
                 }
@@ -349,7 +351,7 @@ when_doc_ready(function() {
             .addEventListener('popstate', navigate_history);    
 
         // tio vokiĝas, i.a. kiam la uzanto reŝargas la paĝon aŭ fermas la redaktilon.
-        do_before_unload(aktualigilo);
+        x.do_before_unload(aktualigilo);
 
         // kondiĉe, ke serĉo-parametro (q) estis donita en URL ni tuj serĉos
         // ĉu ni bezonos ankoraŭ originan staton "start" anstataŭ tuj "ĉefindekso"?
@@ -376,8 +378,8 @@ function aktualigilo() {
  */
 function index_toggle() {
     document.getElementById("navigado").classList.toggle("eble_kasxita");
-    toggle("x:nav_kashu_btn");
-    toggle("x:nav_montru_btn");
+    x.toggle("x:nav_kashu_btn");
+    x.toggle("x:nav_montru_btn");
     //document.querySelector("main").classList.toggle("kasxita");
 }
 
@@ -386,8 +388,8 @@ function index_toggle() {
  */
 function index_spread() {
     document.getElementById("navigado").classList.remove("eble_kasxita");
-    show("x:nav_kashu_btn");
-    hide("x:nav_montru_btn");
+    x.show("x:nav_kashu_btn");
+    x.hide("x:nav_montru_btn");
 }
 
 /**
@@ -396,8 +398,8 @@ function index_spread() {
  */
 function index_collapse() {
     document.getElementById("navigado").classList.add("eble_kasxita");
-    show("x:nav_montru_btn");
-    hide("x:nav_kashu_btn");
+    x.show("x:nav_montru_btn");
+    x.hide("x:nav_kashu_btn");
 }
 
 
@@ -413,7 +415,7 @@ function enkadrigu() {
 
     // preparu la ĉefan parton de la paĝo
     if (document.getElementsByTagName("main").length == 0) {
-        var main = ht_element("main",{});
+        var main = u.ht_element("main",{});
         main.append(...Array.from(document.body.children));
         document.body.appendChild(main);
     } else {
@@ -422,8 +424,8 @@ function enkadrigu() {
 
     // preparu la navigo-parton de la paĝo
     if (document.getElementsByTagName("nav").length == 0) {
-        var nav = ht_element("nav",{});
-        var div = ht_element("div",{id: "navigado"});
+        var nav = u.ht_element("nav",{});
+        var div = u.ht_element("div",{id: "navigado"});
         nav.appendChild(div);
         document.body.appendChild(nav);
     }
@@ -461,7 +463,7 @@ function nav_toggle() {
 function ref_target(a_el) {
     const href = a_el.getAttribute("href");
     const trg = a_el.getAttribute("target");
-    const red = getParamValue("r",href.split('?')[1]);
+    const red = x.getParamValue("r",href.split('?')[1]);
 
     if (! href) {
         console.error("mankas atributo href ĉe elemento "+a_el.tagName+" ("+a_el.id+")");
@@ -644,7 +646,7 @@ function load_page(trg: string, url: string, push_state: boolean=true, whenLoade
             // laŭbezone ankoraŭ iru al loka marko
             update_hash();
 
-            const fn = getUrlFileName(url);
+            const fn = x.getUrlFileName(url);
             const art = fn.substring(0,fn.lastIndexOf('.')); 
             if (art)  
                 artikolo.preparu_art(art);                      
@@ -655,7 +657,7 @@ function load_page(trg: string, url: string, push_state: boolean=true, whenLoade
                 // aldonu ../art/ ĉe href, eble ni devus fari tion jam en adaptu_paghon
                 // ĉar tre rapida uzanto povus ankoraŭ kalki sur la nekorektitan ligon
                 // aliflanke tiel la paĝo aperas jam iomete pli frue...
-                fix_art_href(s_artikolo);
+                x.fix_art_href(s_artikolo);
             
                 // vd eble https://github.com/mathjax/MathJax/issues/2385
                 // aŭ https://mariusschulz.com/blog/declaring-global-variables-in-typescript
@@ -689,7 +691,7 @@ function load_page(trg: string, url: string, push_state: boolean=true, whenLoade
         index_collapse();
     }
 
-    HTTPRequest('GET', url, {},
+    u.HTTPRequest('GET', url, {},
         function(data) {
             // Success!
             var parser = new DOMParser();
@@ -759,7 +761,7 @@ function adaptu_paghon(root_el: Element, url: string) {
     // adapto de atributoj img-atributoj
 
     // anstataŭigu GIF per SVG  
-    fix_img_svg(root_el);
+    x.fix_img_svg(root_el);
 
     var filename = url.split('/').pop();
     // index Esperanto. Atentu! Ni nun uzas _plena. (vd. malsupre)
@@ -843,7 +845,7 @@ function adaptu_paghon(root_el: Element, url: string) {
             if (event.key == "x" || event.key == "Shift") { // x-klavo 
                 if (wcx.value == "1") {
                     var s = trg.value;
-                    var s1 = ascii_eo(s);
+                    var s1 = x.ascii_eo(s);
                     if (s != s1)
                         trg.value = s1;
                 }
@@ -854,7 +856,7 @@ function adaptu_paghon(root_el: Element, url: string) {
                 const key = s.charAt(s.length-1);
                 //alert("Android dbg: "+event.keyCode+ "s: "+s+" kcd: "+kCd);
                 if (key == "x" || key == "X") {
-                    const s1 = ascii_eo(s);
+                    const s1 = x.ascii_eo(s);
                     if (s != s1)
                         trg.value = s1;    
                 }
@@ -1001,12 +1003,12 @@ function serchu_q(esprimo: string) {
 
         function findings(lng: Lingvo) {
 
-            var div = ht_elements([
+            var div = u.ht_elements([
                 ["div",{},
                     [["h1",{}, revo_codes.lingvoj.codes[lng]||lng ]]
                 ]
             ])[0] as Element;
-            var dl = ht_element("dl");
+            var dl = u.ht_element("dl");
 
             const trvj = srch.trovoj(lng);
             // console.log(trvj);
@@ -1018,27 +1020,27 @@ function serchu_q(esprimo: string) {
                 if (n+1 > globalThis.sercho_videblaj && trvj.length > globalThis.sercho_videblaj+1) {
                     // enmetu +nn antaŭ la unua kaŝita elemento
                     if (n - globalThis.sercho_videblaj == 1) {
-                        const pli = ht_pli(trvj.length - globalThis.sercho_videblaj);
+                        const pli = u.ht_pli(trvj.length - globalThis.sercho_videblaj);
                         if (pli) dl.append(...pli);
                     }                        
                     atr = {class: "kasxita"};
                 }
 
-                const dt = ht_element("dt",atr);
+                const dt = u.ht_element("dt",atr);
 
                 if ( lng == 'eo' ) {
                     // tradukojn oni momente ne povas ne povas rekte alsalti,
                     // do ni provizore uzas t.eo.mrk anst. t[l].mrk
-                    const a = ht_element("a",{target: "precipa", href: (t as TrovEo).h}, t.v);
+                    const a = u.ht_element("a",{target: "precipa", href: (t as TrovEo).h}, t.v);
                     dt.append(a);
                 } else {
-                    const s = ht_element("span",{lang: lng}, t.v);
+                    const s = u.ht_element("span",{lang: lng}, t.v);
                     dt.append(s);
                 }
 
                 // dum redakto ni aldonas transprenan butonon por kreado de referencoj
                 if ( lng == 'eo' && t_red.stato == "redaktante") {
-                    const ref_btn = ht_element("button",{
+                    const ref_btn = u.ht_element("button",{
                         class: "icon_btn r_vid", 
                         value: (t as TrovEo).h.split('#')[1], // mrk
                         title:"transprenu kiel referenco"
@@ -1046,14 +1048,14 @@ function serchu_q(esprimo: string) {
                     dt.append(ref_btn);
                 }                            
 
-                const dd = ht_element("dd",atr);
+                const dd = u.ht_element("dd",atr);
 
                 if ( lng == 'eo' ) {
                     // trovitaj tradukoj de tiu e-a vorto
                     for ( let [l,trd] of Object.entries(t.t) ) { // ni trairu ĉiujn lingvojn....
                         // tradukojn oni momente ne povas rekte alsalti,
                         // do ni (provizore?) uzas href (el drv-mrk) 
-                        const a = ht_elements([
+                        const a = u.ht_elements([
                                 ["a",{target: "precipa", href: (t as TrovEo).h},
                                     [["code",{}, l + ":"],["span",{lang: l}, trd]]
                                 ],["br"]
@@ -1063,7 +1065,7 @@ function serchu_q(esprimo: string) {
                 } else {
                     // trovitaj esperantaj tradukoj de tiu nacilingva vorto
                     for (let e of (t as TrovTrd).t) {
-                        const a = ht_elements([
+                        const a = u.ht_elements([
                             ["a",{target: "precipa", href: e.h},
                                 e.k
                             ],["br"]
@@ -1084,7 +1086,7 @@ function serchu_q(esprimo: string) {
         } // ...findings
 
         function nofindings() {
-            return ht_elements([
+            return u.ht_elements([
                 ["p",{},
                     [["strong",{},"Nenio troviĝis!"]]
                 ]
@@ -1092,7 +1094,7 @@ function serchu_q(esprimo: string) {
         } // ...nofindings
 
         function serch_lng() {
-            const div = ht_elements([["div",{class:"s_lng"},
+            const div = u.ht_elements([["div",{class:"s_lng"},
                 [
                     ["span",{class: "llbl"},"serĉlingvoj: "],
                     ["span",{class: "llst"}, srch.s_lng.join(', ')]
@@ -1104,7 +1106,7 @@ function serchu_q(esprimo: string) {
         index_spread();
         const nav = document.getElementById("navigado");
         const inx_enh = nav.querySelector(".enhavo");
-        const trovoj = ht_element("div",{id: "x:trovoj"},"");
+        const trovoj = u.ht_element("div",{id: "x:trovoj"},"");
 
         // serĉlingvoj
         if ( srch.s_lng ) {
@@ -1167,7 +1169,7 @@ function serchu_q(esprimo: string) {
  */
 function hazarda_art() {
 
-    HTTPRequest('POST', globalThis.sercho_url, {sercxata: "!iu ajn!"},
+    u.HTTPRequest('POST', globalThis.sercho_url, {sercxata: "!iu ajn!"},
         function(data: string) {
             // sukceso!
             var json = 
@@ -1188,7 +1190,7 @@ function hazarda_art() {
  */
 function nombroj() {
 
-    HTTPRequest('POST', globalThis.nombroj_url, { x: "0" }, // sen parametroj POST ne funkcius, sed GET eble ne estus aktuala!
+    u.HTTPRequest('POST', globalThis.nombroj_url, { x: "0" }, // sen parametroj POST ne funkcius, sed GET eble ne estus aktuala!
         function(data: string) {
             // sukceso!
             var json = 
@@ -1213,7 +1215,7 @@ function nombroj() {
  * la eraropaĝo.
  */
 function mrk_eraroj() {
-    HTTPRequest('POST', globalThis.mrk_eraro_url, { x: "1" }, // ni sendu ion per POST por ĉiam havi aktualan liston
+    u.HTTPRequest('POST', globalThis.mrk_eraro_url, { x: "1" }, // ni sendu ion per POST por ĉiam havi aktualan liston
         function(data: string) {
             var json = 
                 /** @type { {drv: Array<Array>, snc: Array<Array>, hom: Array<Array>} } */
@@ -1221,19 +1223,19 @@ function mrk_eraroj() {
             const listo = document.getElementById("mrk_sintakso");
             listo.textContent= '';
 
-            const sum = ht_element("summary",{},"Nekongruaj markoj / referencoj");
+            const sum = u.ht_element("summary",{},"Nekongruaj markoj / referencoj");
             listo.append(sum);
             // tri- kaj plipartaj drv@mrk
             if (json.drv && json.drv.length) {
-                const e1 = ht_element("p",{},"Markoj de derivaĵoj havu nur du partojn, t.e. "
+                const e1 = u.ht_element("p",{},"Markoj de derivaĵoj havu nur du partojn, t.e. "
                 + "enhavu nur unu punkton:");
-                const ul = ht_element("ul");
+                const ul = u.ht_element("ul");
                 listo.append(e1,ul);
 
                 for (let m of json.drv) {
-                    let li = ht_elements([
+                    let li = u.ht_elements([
                         ['li',{},
-                            [['a',{href: art_href(m[0]), target: 'precipa'}, m[1]+' ['+m[0]+']']]
+                            [['a',{href: x.art_href(m[0]), target: 'precipa'}, m[1]+' ['+m[0]+']']]
                         ]
                     ]);
                     if (li) ul.append(...li);
@@ -1241,14 +1243,14 @@ function mrk_eraroj() {
             }
             // mrk nekongruaj kun drv@mrk
             if (json.snc && json.snc.length) {
-                const e2 = ht_element("p",{},"Markoj de sencoj, rimarkoj ktp. kongruu kun la "
+                const e2 = u.ht_element("p",{},"Markoj de sencoj, rimarkoj ktp. kongruu kun la "
                     + "marko de la enhavanta derivaĵo, ĝia prefikso estu la sama:");
-                const ul = ht_element("ul");
+                const ul = u.ht_element("ul");
                 listo.append(e2,ul);
                 for (let m of json.snc) {
-                    let li = ht_elements([
+                    let li = u.ht_elements([
                         ['li',{},
-                            [['a',{href: art_href(m[0]), target: 'precipa'}, m[1]+' ['+m[0]+']']]
+                            [['a',{href: x.art_href(m[0]), target: 'precipa'}, m[1]+' ['+m[0]+']']]
                         ]
                     ]);
                     if (li) ul.append(...li);
@@ -1256,15 +1258,15 @@ function mrk_eraroj() {
             }
             // homonimoj sen ref-hom
             if (json.hom && json.hom.length) {
-                const e2 = ht_element("p",{},"Homonimoj, kiuj ne havas referencon de la tipo 'hom' aŭ duoblaj derivaĵoj:");
-                const ul = ht_element("ul");
+                const e2 = u.ht_element("p",{},"Homonimoj, kiuj ne havas referencon de la tipo 'hom' aŭ duoblaj derivaĵoj:");
+                const ul = u.ht_element("ul");
                 listo.append(e2,ul);
                 for (let m of json.hom) {
-                    let li = ht_elements([
+                    let li = u.ht_elements([
                         ['li',{},[
-                            ['a',{href: art_href(m[1]), target: 'precipa'}, m[0]],' [',
-                            ['a',{href:  art_href(m[1]), target: 'precipa'}, 'de '+m[1]],' ',
-                            ['a',{href:  art_href(m[2]), target: 'precipa'}, 'al '+m[2]],']'
+                            ['a',{href: x.art_href(m[1]), target: 'precipa'}, m[0]],' [',
+                            ['a',{href: x.art_href(m[1]), target: 'precipa'}, 'de '+m[1]],' ',
+                            ['a',{href: x.art_href(m[2]), target: 'precipa'}, 'al '+m[2]],']'
                         ]]
                     ]);
                     if (li) ul.append(...li);
@@ -1283,7 +1285,7 @@ function mrk_eraroj() {
  * @param sort_by se donita, ni ordigos la bibliografion laŭ tiu kampo (bib,aut,tit)
  */
 function bibliogr(sort_by?: string) {
-    HTTPRequest('POST', globalThis.bib_json_url, {x: "1"}, // ni sendu ion per POST por ĉiam havi aktualan liston
+    u.HTTPRequest('POST', globalThis.bib_json_url, {x: "1"}, // ni sendu ion per POST por ĉiam havi aktualan liston
         function(data: string) {
             var json = 
                 /** @type { Array.<{bib: string, tit: string}> } */
@@ -1291,39 +1293,39 @@ function bibliogr(sort_by?: string) {
 
             if (sort_by) {
                 const cmp = new Intl.Collator('eo');
-                json.sort( (a, b) => cmp.compare(a[sort_by],b[sort_by]) );
+                json.sort( (a: string, b: string) => cmp.compare(a[sort_by],b[sort_by]) );
             }
 
             const enh = document.querySelector(".enhavo");
             enh.textContent= '';
-            const dl = ht_element('dl');
+            const dl = u.ht_element('dl');
 
             if (json) {
 
                 for (const bib of json) {          
                     // dt: la mallongigo evtl. kun href/url      
-                    const dt = ht_element('dt');
+                    const dt = u.ht_element('dt');
                     if (bib.url) {
-                        const a = ht_elements([
+                        const a = u.ht_elements([
                             ['a',{href: bib.url, target: '_new'},
                                 [['b',{},bib.bib]]
                             ]
                         ]);
                         if (a) dt.append(...a);                  
                     } else {
-                        dt.append(ht_element('b',{},bib.bib));
+                        dt.append(u.ht_element('b',{},bib.bib));
                     }
                     // dd: la detaloj: autoro, titolo ktp.
-                    const dd = ht_element('dd');
-                    if (bib.aut) dd.append(bib.aut,ht_br());
-                    if (bib.trd) dd.append('trad. ',bib.trd,ht_br());
-                    dd.append(ht_element('b',{},bib.tit),ht_br());
-                    if (bib.ald) dd.append("(",bib.ald,")",ht_br());
-                    if (bib.eld) dd.append(bib.eld,ht_br());
+                    const dd = u.ht_element('dd');
+                    if (bib.aut) dd.append(bib.aut,u.ht_br());
+                    if (bib.trd) dd.append('trad. ',bib.trd,u.ht_br());
+                    dd.append(u.ht_element('b',{},bib.tit),u.ht_br());
+                    if (bib.ald) dd.append("(",bib.ald,")",u.ht_br());
+                    if (bib.eld) dd.append(bib.eld,u.ht_br());
                     dl.append(dt,dd);
                 } // for
             }; // if json
-            const h1 = ht_element('h1',{},'bibliografio');
+            const h1 = u.ht_element('h1',{},'bibliografio');
             enh.append(h1,dl);
         },
         start_wait,
@@ -1353,7 +1355,7 @@ function viaj_submetoj() {
     if (redaktilo.get_preference("r:redaktanto")) {
         console.debug("+viaj submetoj");
         const nv = document.getElementById("navigado");
-        const ds = ht_elements([
+        const ds = u.ht_elements([
             ["details",{id: "submetoj"},
                 [
                     ["summary",{},[
@@ -1403,7 +1405,7 @@ function montru_submeto_staton(sj: Array<Submeto>) {
         
         // enŝovu novan staton....
         for (let s of sj) {
-            const info = ht_elements([
+            const info = u.ht_elements([
                 ["details",{},[
                     ["summary",{},[
                         ["span",{class:'s_stato'},(stat[s.state]||'--')],

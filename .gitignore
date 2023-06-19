@@ -2,6 +2,7 @@
 tmp/
 build/
 jsdoc/
+tsdoc/
 # nun en build:
 #smb/*.svg
 #smb/*.log

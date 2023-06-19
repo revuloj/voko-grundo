@@ -1,6 +1,6 @@
 /* jshint esversion: 6 */
 /* kreita per: swipl -s loaddtd.pl -g dtd2json_entities -g halt */
-const voko_entities={
+export const voko_entities={
 "amp":"&amp;",
 "lt":"&lt;",
 "gt":"&gt;",

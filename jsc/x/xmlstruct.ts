@@ -3,6 +3,7 @@
  (c) 2021-2023 ĉe Wolfram Diestel
 */
 
+import {count_char} from './util';
 
 export interface SId {
   id: string, // unika ŝlosilo kalkulita (el mrk + evtl. tekstkomenco) por la subteksto

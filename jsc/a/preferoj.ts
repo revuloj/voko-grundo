@@ -2,6 +2,10 @@
  laŭ GPL 2.0
 */
 
+import * as u from '../u';
+import * as x from '../x';
+
+
 //const lingvoj_xml = "../cfg/lingvoj.xml";
 
 // difinu ĉion sub nomprefikso "preferoj"
@@ -32,7 +36,7 @@ export namespace preferoj {
      * @inner
      */
     function load_pref_lng() {
-        HTTPRequest('GET', globalThis.lingvoj_xml, {},
+        u.HTTPRequest('GET', globalThis.lingvoj_xml, {},
         function() {
             // Success!
             const parser = new DOMParser();
@@ -49,7 +53,7 @@ export namespace preferoj {
             for (var e of Array.from(doc.getElementsByTagName("lingvo"))) {
                 var c = e.attributes['kodo']; // jshint ignore:line
                 if (c.value != "eo") {
-                    var ascii = eo_ascii(e.textContent);
+                    var ascii = x.eo_ascii(e.textContent);
                     _lingvoj[ascii] = {lc: c.value, ln: e.textContent};
                 }
             }
@@ -164,10 +168,10 @@ export namespace preferoj {
             store();
         // se ankoraŭ ne ekzistas, faru la fenestrojn por preferoj (lingvoj)
         } else {
-            var dlg = ht_element("DIV",{id: "pref_dlg", class: "overlay"});
-            var div = ht_element("DIV",{id: "preferoj", class: "preferoj"});
-            //var tit = ht_element("H2",{title: "tiun ĉi dialogon vi povas malfermi ĉiam el la piedlinio!"},"preferoj");
-            var close = <Element>ht_button("preta", function() {
+            var dlg = u.ht_element("DIV",{id: "pref_dlg", class: "overlay"});
+            var div = u.ht_element("DIV",{id: "preferoj", class: "preferoj"});
+            //var tit = u.ht_element("H2",{title: "tiun ĉi dialogon vi povas malfermi ĉiam el la piedlinio!"},"preferoj");
+            var close = <Element>u.ht_button("preta", function() {
                 document.getElementById("pref_dlg").classList.add("kasxita");
                 store();
                 // adaptu la rigardon, t.e. trd-listojn
@@ -177,17 +181,17 @@ export namespace preferoj {
             close.setAttribute("id","pref_dlg_close");
 
             var xopt = inx.map(i => { return {id: i.join('_'), label: i.join('..')}; });
-            var xdiv = ht_element("DIV",{id: "w:ix_literoj", class: "tabs"});
+            var xdiv = u.ht_element("DIV",{id: "w:ix_literoj", class: "tabs"});
             add_radios(xdiv,"pref_lingvoj",null,xopt,change_pref_lng);
             
             //div.appendChild(make_element("SPAN"));
             xdiv.appendChild(close);
             div.appendChild(xdiv);
 
-            div.appendChild(ht_element("H3",{},"preferataj lingvoj"));
-            div.appendChild(ht_element("H3",{},"aldoneblaj lingvoj"));
-            div.appendChild(ht_element("UL",{id: "pref_lng"}));
-            div.appendChild(ht_element("UL",{id: "alia_lng"}));
+            div.appendChild(u.ht_element("H3",{},"preferataj lingvoj"));
+            div.appendChild(u.ht_element("H3",{},"aldoneblaj lingvoj"));
+            div.appendChild(u.ht_element("UL",{id: "pref_lng"}));
+            div.appendChild(u.ht_element("UL",{id: "alia_lng"}));
 
             //dlg.appendChild(tit)
             dlg.appendChild(div);
@@ -226,10 +230,10 @@ export namespace preferoj {
             for (const r of radios) {
                 const span = document.createElement("SPAN");
                 const input = first?
-                    ht_element("INPUT",{name: name, type: "radio", id: r.id, checked: "checked", value: r.id}) :
-                    ht_element("INPUT",{name: name, type: "radio", id: r.id, value: r.id});
+                    u.ht_element("INPUT",{name: name, type: "radio", id: r.id, checked: "checked", value: r.id}) :
+                    u.ht_element("INPUT",{name: name, type: "radio", id: r.id, value: r.id});
                 first = false;
-                const label = ht_element("LABEL",{for: r.id}, r.label);
+                const label = u.ht_element("LABEL",{for: r.id}, r.label);
                 span.appendChild(input);
                 span.appendChild(label);
                 parent.appendChild(span);

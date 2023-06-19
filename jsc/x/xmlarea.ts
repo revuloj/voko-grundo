@@ -2,6 +2,9 @@
 /* 
 (c) 2021-2023 ĉe Wolfram Diestel
 */
+
+import {str_repeat, type LinePos} from './util';
+import {indent,get_indent,get_line_pos} from './tekstiloj';
 import {XmlStruct, Strukturero, SId} from './xmlstruct';
 import {XmlTrad, TList, Lingvo, XPlace} from './xmltrad';
 

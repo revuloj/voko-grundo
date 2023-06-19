@@ -1,3 +1,9 @@
+/*
+  (c) 2019-2023 ĉe Wolfram Diestel
+  laŭ GPL 2.0
+*/
+
+import * as u from '../u';
 
 /**
  * Legas Revo-liston kiel lingvoj, fakoj, stiloj por montri 
@@ -37,7 +43,7 @@ export class Xlist {
       if (! Object.keys(self.codes).length) {
         var codes = {};
   
-        HTTPRequest('GET', this.url, {},
+        u.HTTPRequest('GET', this.url, {},
           function() {
               // Success!
               var parser = new DOMParser();

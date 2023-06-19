@@ -3,7 +3,9 @@
   laŭ GPL 2.0
 */
 
-import '../u/ht_util';
+//import '../u/ht_util';
+import * as u from '../u';
+import {indent,get_indent,kameligo,minuskligo,get_line_pos} from './tekstiloj';
 import {Xlist} from './xlisto';
 
 console.debug("Instalante la klavarfunkciojn...");
@@ -208,7 +210,7 @@ export class XKlavaro {
         klvrElm.innerHTML += indikoj;
 
         function stilKlavoHtml(kod: string, nom: string) {
-            const btn = ht_elements([
+            const btn = u.ht_elements([
                 ['div',{
                     class: 'klv stl', 
                     'data-stl': kod,
@@ -231,7 +233,7 @@ export class XKlavaro {
     fako_klavoj(klvrElm: Element, fakList: Xlist) {
     
         function fakoKlavoHtml(kod,nom) {
-            const btn = ht_elements([
+            const btn = u.ht_elements([
                 ['div',{
                     class: 'klv fak', 
                     'data-fak': kod,

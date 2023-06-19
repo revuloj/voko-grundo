@@ -3,6 +3,8 @@
 (c) 2020 - 2023 ĉe Wolfram Diestel
 */
 
+import * as u from '../u';
+import * as x from '../x';
 import {preferoj} from '../a/preferoj';
 
 // sendu vorton al la serĉ-CGI kaj redonu la rezultojn grupigite kaj porciumite
@@ -69,16 +71,16 @@ export class Sercho {
             // almenaŭ 3 literoj
         }        
 
-        HTTPRequestFull('POST', globalThis.sercho_url, 
+        u.HTTPRequestFull('POST', globalThis.sercho_url, 
             {"Accept-Language": preferoj.languages().join(',')},
             {sercxata: esprimo},
             function(data: string) {
                 const json = JSON.parse(data);
                 self.eo = json.eo ? 
-                    group_by(KAP,json.eo) // ordigu laŭ kapvorto
+                    x.group_by(KAP,json.eo) // ordigu laŭ kapvorto
                     : undefined;
                 self.trd = json.trd ? 
-                    group_by(LNG,json.trd) // ordigu laŭ lingvo
+                    x.group_by(LNG,json.trd) // ordigu laŭ lingvo
                     : undefined; 
                 self.s_lng = json.lng; // la serĉlingvoj, eble reduktitaj se estis tro en preferoj
                 onSuccess.call(self);
@@ -107,7 +109,7 @@ export class Sercho {
             // grupigu la tradukojn laŭ lingvo kaj kunigi ĉiujn de
         // sama lingvo per komoj...
             // grupigu tradukojn laŭ lingvo            
-            const t_grouped = (group_by(LNG,trdj) || {});
+            const t_grouped = (x.group_by(LNG,trdj) || {});
             const t_l = Object.entries(t_grouped)
                 .filter( ([lng,list]) => { return lng != '<_sen_>'; } )
                 .reduce( (obj,[lng,list]) => {
@@ -120,7 +122,7 @@ export class Sercho {
                 }, {} );    
             return {
                 v: kap,
-                h: art_href(mrk),
+                h: x.art_href(mrk),
                 t: t_l
             };
         }
@@ -131,7 +133,7 @@ export class Sercho {
             const e_l = eroj.map((ero) =>
                 { return {
                     k: ero[EKZ] || ero[KAP], 
-                    h: art_href(ero[MRK])
+                    h: x.art_href(ero[MRK])
                 }; 
             });
             return {
@@ -150,7 +152,7 @@ export class Sercho {
                 for (let [kap,eroj] of Object.entries(this.eo)) {
                     if (Array.isArray(eroj)) {
                         // grupigu troverojn laŭ kampo 'MRK'
-                        const grouped = group_by(MRK,eroj);
+                        const grouped = x.group_by(MRK,eroj);
                         if (grouped) {
                             trvj.push(...Object.keys(grouped)
                                 // transformu Trovero -> TrovVorto
@@ -170,7 +172,7 @@ export class Sercho {
             if (Array.isArray(trvj)) {
                 for (let t of trvj) { if (! t[TRD]) t[TRD] = t[IND]; }
                 // grupigu troverojn laŭ kampo 'TRD'
-                const grouped = group_by(TRD,trvj); 
+                const grouped = x.group_by(TRD,trvj); 
                 if (grouped)
                     return Object.keys(grouped)
                         // ordigu lau la koncerna lingvo
@@ -223,7 +225,7 @@ export class Sercho {
     unua(): { href: string } {
         if (this.eo && this.trd) {
             var u = Object.values(this.eo)[0] || Object.values(this.trd)[0];
-            return { href: art_href(u[0][MRK]) };            
+            return { href: x.art_href(u[0][MRK]) };            
         }
     };
 
@@ -241,7 +243,7 @@ export class Sercho {
     {
         const self = this;
 
-        HTTPRequest('POST', globalThis.trad_uwn_url, {sercho: vorto}, 
+        u.HTTPRequest('POST', globalThis.trad_uwn_url, {sercho: vorto}, 
             function(data: string) {
                 if (data) {
                     const json = JSON.parse(data);

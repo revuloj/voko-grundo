@@ -2,8 +2,9 @@
 // (c) 2020 - 2023 ĉe Wolfram Diestel
 // laŭ GPL 2.0
 
-import '../x/util';
-import '../u/ht_util';
+import * as x from '../x';
+import * as u from '../u';
+//import '../u/ht_util';
 
 import {preferoj} from './preferoj';
 
@@ -24,7 +25,7 @@ window.addEventListener("hashchange", function() {
     //console.log("hashchange: "+window.location.hash )
     //event.stopPropagation();
     //var id = this.getAttribute("href").split('#')[1];
-    var id = getHashParts().mrk; // el: util.js
+    var id = x.getHashParts().mrk; // el: util.js
     if (id) {
         var trg = document.getElementById(id);
 
@@ -111,7 +112,7 @@ export namespace artikolo {
         var d = document.getElementsByClassName("kasxebla");
 
         // derivaĵo aŭ alia elemento celita kaj do montrenda
-        var h = getHashParts().mrk; 
+        var h = x.getHashParts().mrk; 
         var trg = h? document.getElementById(h) : null;
         var d_vid = trg? trg.closest("section.drv, section.fontoj").firstElementChild.id : null;
 
@@ -146,12 +147,12 @@ export namespace artikolo {
                 // 2b. aŭ ĝi ne estas la unua derivaĵo en la artikolo, kondiĉe ke ni ne celas al specifa derivaĵo 
                 if ( multaj && (h && h2.id != d_vid) || (!h && !first) ) { 
                     // \u25be
-                    h2.appendChild(ht_icon_button("i_mkash",
+                    h2.appendChild(u.ht_icon_button("i_mkash",
                         null,"malkaŝu derivaĵon"));
                     el.classList.add("kasxita");
                 } else {
                     // "\u25b2"
-                    h2.appendChild(ht_icon_button("i_kash",
+                    h2.appendChild(u.ht_icon_button("i_kash",
                         null,"kaŝu derivaĵon"));
                 }                    
                 first = false;
@@ -297,7 +298,7 @@ export namespace artikolo {
         //var nav_lng = navigator.languages || [navigator.language];
         var eo: Element;
         var maletenditaj = 0;
-        var serch_lng = getHashParts().lng;
+        var serch_lng = x.getHashParts().lng;
 
         for (var id of Array.from(element.children)) {
             var id_lng = id.getAttribute("lang");
@@ -319,7 +320,7 @@ export namespace artikolo {
         }
         // aldonu pli...
         if (maletenditaj && ! element.querySelector(".pli")) {
-            var pli = ht_elements([
+            var pli = u.ht_elements([
                 ["DT",{class: "pli lng"},
                     ["(",["A",{lang: "eo", href: "#", class: "pli etendilo"},"+"+maletenditaj],")"]
                 ],
@@ -331,7 +332,7 @@ export namespace artikolo {
 
             const _MS_PER_DAY = 1000 * 60 * 60 * 24;
             if ( Math.round((Date.now() - preferoj.date()) / _MS_PER_DAY) < 1 ) {
-                var pref = ht_elements([
+                var pref = u.ht_elements([
                     ["DT",{class: "pref"},
                         [["A",{lang: "eo", href: "#", class: "pref"}, "preferoj..."]]
                     ],
@@ -389,7 +390,7 @@ export namespace artikolo {
                     // etendilon "+nn..."
                     if (ekz_cnt > ekz_sojlo) {
                         var maletenditaj = ekz_cnt - ekz_sojlo;
-                        var pli = ht_elements([
+                        var pli = u.ht_elements([
                                 ["i",{class: "ekz pli"},
                                     ["(",["A",{href: "#", class: "pli etendilo"},"+"+maletenditaj],")"]
                                 ]])[0];
@@ -438,15 +439,15 @@ export namespace artikolo {
         //var art = document.getElementById(sec_art);
         var art = document.getElementsByTagName("article")[0];
 
-        var div=ht_element("DIV",{id: "tez_btn"});
-        div.appendChild(ht_icon_button("i_tez", () => {tezauro(artikolo);}, "montru la tezaŭron"));
-        div.appendChild(ht_icon_button("i_mtez kasxita",tezauro_kashu,"kaŝu la tezaŭron"));    
+        var div=u.ht_element("DIV",{id: "tez_btn"});
+        div.appendChild(u.ht_icon_button("i_tez", () => {tezauro(artikolo);}, "montru la tezaŭron"));
+        div.appendChild(u.ht_icon_button("i_mtez kasxita",tezauro_kashu,"kaŝu la tezaŭron"));    
         art.appendChild(div);
 
-        div=ht_element("DIV",{id: "kash_btn"});
-        div.appendChild(ht_icon_button("i_kash_ch",kashu_chiujn_drv,"kaŝu ĉiujn derivaĵojn"));
-        div.appendChild(ht_icon_button("i_mkash_ch",malkashu_chiujn_drv,"malkaŝu ĉiujn derivaĵojn"));
-        //h1.appendChild(ht_button(icon_opcioj,preferoj_dlg,"agordu viajn preferatajn lingvojn"));
+        div=u.ht_element("DIV",{id: "kash_btn"});
+        div.appendChild(u.ht_icon_button("i_kash_ch",kashu_chiujn_drv,"kaŝu ĉiujn derivaĵojn"));
+        div.appendChild(u.ht_icon_button("i_mkash_ch",malkashu_chiujn_drv,"malkaŝu ĉiujn derivaĵojn"));
+        //h1.appendChild(u.ht_button(icon_opcioj,preferoj_dlg,"agordu viajn preferatajn lingvojn"));
         art.appendChild(div);
     }
 
@@ -466,7 +467,7 @@ export namespace artikolo {
         function ref_dlg(r: {url: string, title: string}) {
             let dlg = <HTMLDialogElement>document.getElementById('dlg_referenco');
             if (!dlg) {
-                dlg = <HTMLDialogElement>ht_elements([
+                dlg = <HTMLDialogElement>u.ht_elements([
                     ['dialog',{id: 'dlg_referenco',class: 'overlay'},[
                         ['a',{href: r.url},r.title],' ',
                         ['input',{id: 'dlg_ref_url', type: 'hidden'},r.url],
@@ -504,7 +505,7 @@ export namespace artikolo {
             // aldonu ligilon "preferoj"
             const first_a = pied.querySelector("A");
             if (first_a) {                
-                const pref = ht_element("A",{class: "redakto", href: "#", title: "agordu preferatajn lingvojn"},"preferoj");
+                const pref = u.ht_element("A",{class: "redakto", href: "#", title: "agordu preferatajn lingvojn"},"preferoj");
                 pref.addEventListener("click", () =>
                     preferoj.dialog(preparu_maletendu_sekciojn));
                 first_a.insertAdjacentElement("afterend",pref);
@@ -521,7 +522,7 @@ export namespace artikolo {
             }
             // antaŭ xml aldonu "referenci..."
             if (xml) {
-                const ref = ht_element("A",{class: "redakto", href: "#", title: "refrenci al tiu ĉi artikolo"},"referenci...");
+                const ref = u.ht_element("A",{class: "redakto", href: "#", title: "refrenci al tiu ĉi artikolo"},"referenci...");
 
                 /* ebligu sendi artikolreferencon per sistemdependa reimedo (Share),
                 * tio ordinare provizas plurajn eblecojn sendi referencon al la artikolo 
@@ -600,7 +601,7 @@ export namespace artikolo {
         }
                 
         // se la tezaŭro ankoraŭ ne ŝarĝiĝis ni devos fari tion nun
-        HTTPRequestFull('POST', vokoref_url, {}, {art: artikolo},
+        u.HTTPRequestFull('POST', vokoref_url, {}, {art: artikolo},
             function(data) {
 
                 if (! data) return;   
@@ -647,7 +648,7 @@ export namespace artikolo {
                                 if (! pas[r.s] ) {
                                     pas[r.s] = true;  // memoru
 
-                                    const o = ht_elements([
+                                    const o = u.ht_elements([
                                         ['a',{ href: ofc_url(r.f,r.r) }, r.s],', '
                                     ]);
                                     if (o) oj.push(...o); 
@@ -657,8 +658,8 @@ export namespace artikolo {
                     }
 
                     if (oj.length) {
-                        oj.splice(oj.length-1,1,ht_element("br")); // anstataŭigu lastan komon per <br/>
-                        const p = ht_elements([
+                        oj.splice(oj.length-1,1,u.ht_element("br")); // anstataŭigu lastan komon per <br/>
+                        const p = u.ht_elements([
                             ['p',{},[
                                 ['img',{  
                                     //src: '../smb/i_wiki.svg', 
@@ -682,7 +683,7 @@ export namespace artikolo {
                                 if (! pas[r.v.toLowerCase()] ) {
                                     pas[r.v.toLowerCase()] = true;  // memoru
     
-                                    const v = ht_elements([
+                                    const v = u.ht_elements([
                                         ['a',{ href: vikipedio_url+r.v }, r.v.replace(/_/g,' ')],', '
                                     ]);
                                     if (v) vj.push(...v); 
@@ -692,8 +693,8 @@ export namespace artikolo {
                     }
                     
                     if (vj.length) {
-                        vj.splice(vj.length-1,1,ht_element("br")); // anstataŭigu lastan komon per <br/>
-                        const p = ht_elements([
+                        vj.splice(vj.length-1,1,u.ht_element("br")); // anstataŭigu lastan komon per <br/>
+                        const p = u.ht_elements([
                             ['p',{},[
                                 ['img',{  
                                     //src: '../smb/i_wiki.svg', 
@@ -708,7 +709,7 @@ export namespace artikolo {
                     }
 
                     // tezaŭro-referencoj, reordigitaj laŭ ref-tip
-                    const tez = group_by("tip", json.tez.filter(
+                    const tez = x.group_by("tip", json.tez.filter(
                         r => ( (r.mrk == mrk || r.mrk.startsWith(mrk+'.') ||   // referenco el tiu ĉi derv (mrk)
                             (first_drv && r.mrk == mrk.substring(0,mrk.indexOf('.'))) ) // en la unua drv ni 
                                                               // inkluzivas nespecif. ref. alartikolaj
@@ -744,28 +745,28 @@ export namespace artikolo {
                             if (! (pas[cel.k] && pas[cel.k] == (cel.n||-1)) )// jam antaŭe donita...
                             {
                                 pas[cel.k] = cel.n || -1;  // memoru
-                                const a = ht_elements([
+                                const a = u.ht_elements([
                                     ['a',{ 
                                         href: mrk_art_url(cel.m),
                                         class: "ref"
                                     },cel.k],', '
                                 ]);
                                 if (cel.n && a[0]) {
-                                    const s = ht_element("sup",{},cel.n);
+                                    const s = u.ht_element("sup",{},cel.n);
                                     (a[0] as Element).append(s);
                                 }  
                                 if (a) aj.push(...a);    
                             }
                         }
                         if (aj.length) {
-                            aj.splice(aj.length-1,1,ht_element("br")); // anstataŭigu lastan komon per <br/>
-                            const p = ht_elements([
+                            aj.splice(aj.length-1,1,u.ht_element("br")); // anstataŭigu lastan komon per <br/>
+                            const p = u.ht_elements([
                                 ['p',{},[
                                     ['img',{ 
                                         src: '../smb/' + tip_fixed(tip) + '.gif', 
-                                        class: "ref " + ref_tip_class(tip), 
-                                        title: ref_tip_title(tip_fixed(tip)),
-                                        alt: ref_tip_alt(tip_fixed(tip)) }]
+                                        class: "ref " + x.ref_tip_class(tip), 
+                                        title: x.ref_tip_title(tip_fixed(tip)),
+                                        alt: x.ref_tip_alt(tip_fixed(tip)) }]
                                 ]]
                             ]);
                             if (p[0]) (p[0] as Element).append(...aj);
@@ -775,7 +776,7 @@ export namespace artikolo {
 
                     // nestigu ĉiujn trovitajn referencojn den div
                     if (refs.length) {
-                        const div = ht_element("div", { class: 'tezauro' });
+                        const div = u.ht_element("div", { class: 'tezauro' });
                         div.append(...refs);
                         return div;
                     }
@@ -788,7 +789,7 @@ export namespace artikolo {
                         const dk = sec.querySelector("div.kasxebla");
                         dk.prepend(div);
                         // aldonu simbolon en h2
-                        //const btn = ht_element('button', { 
+                        //const btn = u.ht_element('button', { 
                         //    class: "i_tez" });                        
                         //h2.append(btn);
                     }
@@ -824,9 +825,9 @@ export namespace artikolo {
      * @memberof artikolo
      * @inner
      */
-    when_doc_ready(function() {
+    x.when_doc_ready(function() {
         console.log("artikolo.when_doc_ready...:" + location.href);
-        const fn = getUrlFileName(location.href);
+        const fn = x.getUrlFileName(location.href);
         const art = fn.substring(0,fn.lastIndexOf('.')); 
         if (art) preparu_art(art);
         //enkadrigu();
