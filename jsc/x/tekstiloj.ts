@@ -10,6 +10,7 @@
 
 import {quoteattr} from './kodado';
 import {str_repeat} from './util';
+import {type BoolObj} from '../u';
 
 const regex_tld = new RegExp('<tld\\s+lit="([^"]+)"\\s*/>','g');
 const regex_xmltag = new RegExp('<[^>]+>','g');
@@ -56,11 +57,11 @@ export function replaceTld(radiko: string, str: string) {
  * @param xmlStr - la XML-teksto
  * @returns la lingvoj kiel objekto
  */
-export function traduk_lingvoj(xmlStr: string) {
+export function traduk_lingvoj(xmlStr: string): BoolObj {
     const rx_ent = /&[a-zA-Z0-9_]+;/g;
     const xml = xmlStr.replace(rx_ent,'?'); // entities cannot be resolved...
 
-    let lingvoj = {};
+    let lingvoj: BoolObj = {};
     let artikolo: Element;
 
     try {
@@ -285,19 +286,22 @@ export function trd_xml_dom(lng: string,shov: string,tradukoj: Array<string>) {
  * @returns - la kreita XML-strukturo
  */
 export function parseTrd(parser: any, traduko: string) {
-    var doc: XMLDocument;
+    let doc: XMLDocument;
     try {
         doc = parser.parseFromString('<xml>'+traduko+'</xml>',"text/xml");
         // che eraro enestas elemento "parseerror"
-    } catch (e) {
+    } catch (e: any) {
         // IE ĵetas escepton
-        if (e.name == 'SyntaxError') {
+        if (e.name && e.name == 'SyntaxError') {
             throw "Nevalida XML en traduko: " + quoteattr(traduko);
         }
     }
+
     // aliaj kroziloj redonas HTML kun elemento "parsererror" ene ie
-    if (doc.getElementsByTagName("parsererror").length>0) throw "Nevalida XML en traduko: " + quoteattr(traduko);
-    return doc.documentElement.childNodes;
+    if (doc) {
+        if (doc.getElementsByTagName("parsererror").length>0) throw "Nevalida XML en traduko: " + quoteattr(traduko);
+        return doc.documentElement.childNodes;    
+    }
 }
 
 

@@ -4,6 +4,7 @@
 
 //import '../x/util';
 import * as u from '../u';
+import {agordo as g} from '../u';
 import * as x from '../x';
 
 import {artikolo} from '../a/artikolo';
@@ -15,7 +16,18 @@ import {Xlist} from '../x/xlisto';
 import {Sercho, Lingvo, TrovEo, TrovTrd} from './sercho';
 import {redaktilo} from './redaktilo';
 
-type Submeto = { state: string, fname: string, desc: string, time: string, result: string };
+// keydown / keyup mankas apriore en difinoj de TypeScript...!
+declare global {
+    interface Element {
+        removeEventListener(type: 'keyup' | 'keydown', listener: (event: KeyboardEvent) => any, options?: boolean | EventListenerOptions): void;
+        addEventListener(type: 'keyup' | 'keydown', listener: (event: KeyboardEvent) => any, options?: boolean | EventListenerOptions): void;  
+    }
+}
+  
+
+type SubmetoStato = "nov" | "trakt" | "erar" | "arkiv";
+type Submeto = { state: SubmetoStato, fname: string, desc: string, time: string, result: string };
+type Bibliogr = { bib: string, aut?: string, trd?: string, tit?: string, url?: string, ald?: string, eld?: string };
 
 // statoj kaj transiroj - ni uzas tri diversajn statomaŝinojn por la tri paĝoj navigilo, ĉefpago kaj redaktilo
 const t_nav  = new Transiroj("nav","start",["ĉefindekso","subindekso","serĉo","redaktilo"]);
@@ -48,7 +60,7 @@ function onclick(id: string, reaction: Function) {
     if (nb) {
         nb.addEventListener("click", function(event) {
             event.preventDefault();
-            if (globalThis.debug) console.debug("clicked: "+id);
+            if (g.debug) console.debug("clicked: "+id);
             reaction(event);
             //event.stopPropagation();
         });
@@ -70,7 +82,7 @@ function hash2art(hash: string) {
         const art = hash.substring(1).split('.')[0];
         if (art)
             return (
-                globalThis.art_prefix + art + '.html' + hash
+                g.art_prefix + art + '.html' + hash
             );
     }
 }
@@ -85,7 +97,7 @@ x.when_doc_ready(function() {
     console.log("kadro.when_doc_ready...");
 
     // sendu erarojn al aside#console - ŝaltu supre debug=true!
-    if (globalThis.debug) {
+    if (g.debug) {
         window.addEventListener("error", function(event) {
             // message,filename,lineno,error.message,error.stack
             const c = document.getElementById("console");
@@ -123,7 +135,8 @@ x.when_doc_ready(function() {
         // metu buton-surskribon Rezignu kaj malaktivigu la aliajn du
         if (t_red.stato == "redaktante") {
                 // ĉe sendita ne jam montru, sed eble tio eĉ en povus okazi?
-            document.getElementById("r:rezignu").textContent = "Rezignu"; 
+            const rzg = document.getElementById("r:rezignu");
+            if (rzg) rzg.textContent = "Rezignu"; 
             x.enable("r:kontrolu"); 
             x.enable("r:konservu");
 
@@ -207,22 +220,25 @@ x.when_doc_ready(function() {
     t_red.alvene("ne_redaktante",()=>{
         // ni devos fari tion en "alvene", ĉar
         // load_page kontrolas t_red.stato por scii ĉu montri "x:redakt_btn"
-        load_page("main",globalThis.titolo_url); // ĉu pli bone la ĵus redaktatan artikolon - sed povus konfuzi pro malapero de ŝangoj?
-        load_page("nav",globalThis.inx_eo_url);
+        load_page("main",g.titolo_url); // ĉu pli bone la ĵus redaktatan artikolon - sed povus konfuzi pro malapero de ŝangoj?
+        load_page("nav",g.inx_eo_url);
     });
 
     t_red.alvene("sendita",()=>{
         // ŝanĝu tekston al nurlege
-        document.getElementById("r:xmltxt").setAttribute("readonly","readonly");
+        const xt = document.getElementById("r:xmltxt");
+        if (xt) xt.setAttribute("readonly","readonly");
         // ŝanĝu buton-surskribon Rezignu->Finu kaj aktivigu la aliajn du 
-        document.getElementById("r:rezignu").textContent = "Finu"; 
+        const rzg = document.getElementById("r:rezignu");
+        if (rzg) rzg.textContent = "Finu"; 
         x.disable("r:kontrolu"); 
         x.disable("r:konservu"); 
     });
     
 
     // ni ne kreas la kadron, se ni estas en (la malnova) "frameset"
-    if (! top.frames.length) {
+    const malnova = top && top.frames.length;
+    if (! malnova) {
 
         // ĉe URL-parametro 'q' ni rekte lanĉu serĉon
         // provizore rezignu pri tia preparo, aparte la aŭtomata enkadrigo de artikoloj
@@ -236,8 +252,8 @@ x.when_doc_ready(function() {
             if (art) {
                 // se post # troviĝas artikolnomo, ni rekte iru al tiu artikolo
                 const art_url = hash2art(art);
-                load_page("main",art_url);   
-                load_page("nav",globalThis.inx_eo_url);   
+                if (art_url) load_page("main",art_url);   
+                load_page("nav",g.inx_eo_url);   
             } else if (red) {
                 // se parametro r estas donita, ni ekredaktos la donitan artikolon...
                 redaktu(window.location.href);
@@ -246,14 +262,14 @@ x.when_doc_ready(function() {
                 // ni devas certigi, ke la naviga kaj titolpaĝo antaŭ la
                 // serĉo ŝargiĝu, por ke depende de la rezulto la vortaro 
                 // tamen aperu bona! Tial la ĉenigo!
-                load_page("nav",globalThis.inx_eo_url,true,()=>{
-                    load_page("main",globalThis.titolo_url,true,
+                load_page("nav",g.inx_eo_url,true,()=>{
+                    load_page("main",g.titolo_url,true,
                         ()=>serchu_q(srch || "tohuvabohuo"));
                 });
             } else {
                 // anstataŭe ŝargu tiujn du el ĉefa indeks-paĝo
-                load_page("main",globalThis.titolo_url);
-                load_page("nav",globalThis.inx_eo_url);   
+                load_page("main",g.titolo_url);
+                load_page("nav",g.inx_eo_url);   
             }
         }
 
@@ -263,32 +279,32 @@ x.when_doc_ready(function() {
         //onclick("x:nav_start_btn",()=>{ load_page("nav",inx_eo_url) });
         //t_nav.je("x:nav_start_btn","click","ĉefindekso");
         onclick("x:nav_start_btn",()=>{ 
-            load_page("nav",globalThis.inx_eo_url);
+            load_page("nav",g.inx_eo_url);
             //t_nav.transiro("ĉefindekso") 
         });
 
         //onclick("x:titol_btn",()=>{ load_page("main",titolo_url) });
-        onclick("x:titol_btn",()=>{ 
-            load_page("main",globalThis.titolo_url);
+        onclick("x:titol_btn", () => { 
+            load_page("main",g.titolo_url);
             //t_main.transiro("titolo") 
         });
         //t_main.je("x:titol_btn","click","titolo")
 
         //onclick("x:nav_srch_btn",(event)=>{ serchu(event) })
-        onclick("x:nav_srch_btn",(event)=>{ 
+        onclick("x:nav_srch_btn", (event: Event) => { 
             serchu(event);
             // transiro aŭ lanĉu la serĉon aŭ evtl. sekvu ĝin...
         });
         //t_nav.je("x:nav_srch_btn","click","serĉo");
 
-        onclick("x:redakt_btn",()=>{ 
+        onclick("x:redakt_btn", () => { 
             if (t_nav.stato != "redaktilo")
-                load_page("nav",globalThis.redaktmenu_url);
+                load_page("nav",g.redaktmenu_url);
 
             // ni bezonas eble relegi la redaktilan kadron kaj
             // fine de tio relegi la artikolon!...
             if (t_main.stato != "red_xml" && t_main.stato != "red_rigardo")
-                load_page("main",globalThis.redaktilo_url);
+                load_page("main",g.redaktilo_url);
 
             // metu staton "red_xml" se ni venos de red_rigardo,
             // aliokaze ni faros tion en load_page - tie ĉi estus tro frue tiuokaze
@@ -300,48 +316,52 @@ x.when_doc_ready(function() {
         onclick("x:rigardo_btn",()=>{ t_main.transiro("red_rigardo"); });
         //t_main.je("x:rigardo_btn","click","red_rigardo");
 
-        onclick("x:cx",(event)=>{ 
-            var cx = event.currentTarget;
-            cx.value = 1 - cx.value; 
-            document.getElementById('x:q').focus();
+        onclick("x:cx", (event: Event) => { 
+            var cx = <HTMLInputElement>event.currentTarget;
+            cx.value = ""+(1 - parseInt(cx.value)); 
+            const xq = document.getElementById('x:q'); 
+            if (xq) xq.focus();
         });
 
         
-        var query = document.getElementById("x:q");
-        query.addEventListener("keydown", function(event) {
-            if (event.key == "Enter") {  
-                serchu(event);
-                // t_nav.transiro("serĉo")...
-            }
-        });
-        
-        //t_nav.je("x:q","keydown","serĉo");
+        let query = document.getElementById("x:q");
+        if (query) {
+            
+            query.addEventListener("keydown", function(event) {
+                if (event.key == "Enter") {  
+                    serchu(event);
+                    // t_nav.transiro("serĉo")...
+                }
+            });
+            
+            //t_nav.je("x:q","keydown","serĉo");
 
-        //var query = document.getElementById("x:q");
-        query.addEventListener("keyup",function(event) {
-            const trg = event.target as HTMLInputElement;
-            const xcx = document.getElementById("x:cx") as HTMLInputElement;
-            //console.debug("which: "+event.which+" code:"+event.code + " key: "+ event.key);
-            if (event.key == "x" || event.key == "Shift") { // x-klavo
-                if (xcx.value == "1") {
+            //var query = document.getElementById("x:q");
+            query.addEventListener("keyup",function(event) {
+                const trg = event.target as HTMLInputElement;
+                const xcx = document.getElementById("x:cx") as HTMLInputElement;
+                //console.debug("which: "+event.which+" code:"+event.code + " key: "+ event.key);
+                if (event.key == "x" || event.key == "Shift") { // x-klavo
+                    if (xcx.value == "1") {
+                        const s = trg.value;
+                        const s1 = x.ascii_eo(s);
+                        if (s != s1)
+                            trg.value = s1;
+                    }
+                // keycode fix for older Android Chrome 
+                } else if ((event.keyCode == 0 || event.keyCode == 229) && xcx.value == "1") {
                     const s = trg.value;
-                    const s1 = x.ascii_eo(s);
-                    if (s != s1)
-                        trg.value = s1;
+                    const key = s.charAt(s.length-1);
+                    //alert("Android dbg: "+event.keyCode+ "s: "+s+" kcd: "+kCd);
+                    if (key == "x" || key == "X") {
+                        const s1 = x.ascii_eo(s);
+                        if (s != s1)
+                            trg.value = s1;    
+                    }
                 }
-            // keycode fix for older Android Chrome 
-            } else if ((event.keyCode == 0 || event.keyCode == 229) && xcx.value == "1") {
-                const s = trg.value;
-                const key = s.charAt(s.length-1);
-                //alert("Android dbg: "+event.keyCode+ "s: "+s+" kcd: "+kCd);
-                if (key == "x" || key == "X") {
-                    const s1 = x.ascii_eo(s);
-                    if (s != s1)
-                        trg.value = s1;    
-                }
-            }
-        });
-    
+            });
+        }
+        
         document.body 
         //document.getElementById("navigado")
             .addEventListener("click",navigate_link);
@@ -377,7 +397,8 @@ function aktualigilo() {
  * Faldas-malfaldas la navigan panelon (tiu kun la indeksoj, serĉo...)
  */
 function index_toggle() {
-    document.getElementById("navigado").classList.toggle("eble_kasxita");
+    const nav = document.getElementById("navigado");
+    if (nav) nav.classList.toggle("eble_kasxita");
     x.toggle("x:nav_kashu_btn");
     x.toggle("x:nav_montru_btn");
     //document.querySelector("main").classList.toggle("kasxita");
@@ -387,7 +408,8 @@ function index_toggle() {
  * Malfaldas la navigan panelon
  */
 function index_spread() {
-    document.getElementById("navigado").classList.remove("eble_kasxita");
+    const nav = document.getElementById("navigado");
+    if (nav) nav.classList.remove("eble_kasxita");
     x.show("x:nav_kashu_btn");
     x.hide("x:nav_montru_btn");
 }
@@ -397,7 +419,8 @@ function index_spread() {
  * aŭ redaktado.
  */
 function index_collapse() {
-    document.getElementById("navigado").classList.add("eble_kasxita");
+    const nav = document.getElementById("navigado");
+    if (nav) nav.classList.add("eble_kasxita");
     x.show("x:nav_montru_btn");
     x.hide("x:nav_kashu_btn");
 }
@@ -419,7 +442,7 @@ function enkadrigu() {
         main.append(...Array.from(document.body.children));
         document.body.appendChild(main);
     } else {
-        load_page("main",globalThis.titolo_url);
+        load_page("main",g.titolo_url);
     }
 
     // preparu la navigo-parton de la paĝo
@@ -436,7 +459,7 @@ function enkadrigu() {
         // ni bezonas unue revo-1b.js:
         load_page("nav",history.state.nav,false);
     } else {
-        load_page("nav",globalThis.inx_eo_url);
+        load_page("nav",g.inx_eo_url);
     }
 }
 
@@ -444,11 +467,13 @@ function enkadrigu() {
  * vd. https://wiki.selfhtml.org/wiki/HTML/Tutorials/Navigation/Dropdown-Men%C3%BC
  */
 function nav_toggle() {
-    var menu = document.getElementById("navigado");
-    if (menu.style.display == "") {
-        menu.style.display = "block";
-    } else {
-        menu.style.display = "";
+    const menu = document.getElementById("navigado");
+    if (menu) {
+        if (menu.style.display == "") {
+            menu.style.display = "block";
+        } else {
+            menu.style.display = "";
+        }    
     }
 }
 
@@ -460,15 +485,15 @@ function nav_toggle() {
  * 4. main: temas pri referenco al artikolo/ĉefpaĝo, t.e. inx: target="precipa", art: target="" 
  * 5. red: temas pri referenco al redaktilo: vokomail.pl (malnova), parametro ?r (nova)   
 */
-function ref_target(a_el) {
+function ref_target(a_el: Element) {
     const href = a_el.getAttribute("href");
-    const trg = a_el.getAttribute("target");
-    const red = x.getParamValue("r",href.split('?')[1]);
-
     if (! href) {
         console.error("mankas atributo href ĉe elemento "+a_el.tagName+" ("+a_el.id+")");
         return;
     }
+
+    const trg = a_el.getAttribute("target");
+    const red = x.getParamValue("r",href.split('?')[1]);
 
     if (red || href.indexOf("/cgi-bin/vokomail.pl")>=0) {
         return "red"; // redakti...
@@ -476,9 +501,9 @@ function ref_target(a_el) {
         return "int";
     } else if (
         href.startsWith('http://') 
-        && href.substring('http://'.length-1,globalThis.revo_url.length) != globalThis.revo_url ||
+        && href.substring('http://'.length-1,g.revo_url.length) != g.revo_url ||
         href.startsWith('https://') 
-        && href.substring('https://'.length-1,globalThis.revo_url.length) != globalThis.revo_url
+        && href.substring('https://'.length-1,g.revo_url.length) != g.revo_url
         ) {
         return "ext";
     } else if (trg == "precipa") {
@@ -499,17 +524,17 @@ function ref_target(a_el) {
  * 3. /cgi-bin/vokomail.pl?art=xxx -> /revo/dlg/redaktilo.html?art=xxx
  * 4. aliaj absolutaj (t.e. ^/ aŭ http) ni lasu
 */
-function normalize_href(target, href) {
+function normalize_href(target: "main"|"nav", href: string) {
     // ĉu estas fidinde uzi "target" tie ĉi aŭ ĉu ni uzu "source"?
     const prefix = { main: "art/", nav: "inx/"};
     if (href.endsWith('titolo.html')) {
-        return globalThis.dlg_prefix + globalThis.titolo_url;
+        return g.dlg_prefix + g.titolo_url;
     } else if (href.startsWith('../')) {
-        return globalThis.revo_prefix + href.slice(3);
+        return g.revo_prefix + href.slice(3);
     } else if (href.startsWith('tz_') || href.startsWith('vx_')) {
-        return globalThis.tez_prefix + href;
+        return g.tez_prefix + href;
     } else if (href[0] != '/' && ! href.startsWith('http')) {
-        return globalThis.revo_prefix + prefix[target] + href;
+        return g.revo_prefix + prefix[target] + href;
     /*} else if (href.startsWith('/cgi-bin/vokomail.pl')) {
         var query = href.substring(href.search('art='));
         return '/revo/dlg/redaktilo-1c.html?' + query
@@ -549,7 +574,7 @@ export function stop_wait() {
  */
 function load_error(request: any) {
     if (request.status == 404 && request.responseURL.indexOf('404')<0) // evitu ciklon se 404.html mankas!
-        load_page("main",globalThis.http_404_url);
+        load_page("main",g.http_404_url);
 }
 
 /**
@@ -559,11 +584,11 @@ function load_error(request: any) {
  * @param {boolean} push_state - true: memoru la petitan paĝon en la hisotrio, tiel ni povos poste reiri
  * @param {Function} whenLoaded - ago, farenda post fonŝargo de la paĝo
  */
-function load_page(trg: string, url: string, push_state: boolean=true, whenLoaded: Function=undefined) {
+function load_page(trg: string, url: string, push_state: boolean=true, whenLoaded?: Function) {
     function update_hash() {
-        var hash;
+        let hash: string;
         if (url.indexOf('#') > -1) {
-            hash = url.split('#').pop();
+            hash = <string>url.split('#').pop();
         } else {
             hash = '';
         }
@@ -581,37 +606,41 @@ function load_page(trg: string, url: string, push_state: boolean=true, whenLoade
         }
     }
 
-    function load_page_nav(doc, nav) {
+    function load_page_nav(doc: Document, nav: Element) {
         nav.textContent= '';
-        var filename;
-        var table = doc.querySelector("table"); 
-        try {
-            filename = url.split('/').pop().split('.')[0];
-            table.id = "x:"+filename;
-            adaptu_paghon(table,url);    
+        let filename: string = '';
 
-            // forigu menuon kaj "colspan" 
-            const menu = table.querySelector("tr.menuo");
-            if (menu) menu.remove();
-            else if (!url.startsWith("redak")) {
-                // provizora solvo, ĉar class="menuo" mankas ankoraŭ en kelkaj dosieroj
-                const tr_menu = table.querySelector("td.fona").parentElement;
-                if (tr_menu) tr_menu.remove();
+        const table = doc.querySelector("table"); 
+        if (table)
+            try {
+                const file = url.split('/').pop()
+                filename = file? file.split('.')[0]: '';
+                table.id = "x:"+filename;
+                adaptu_paghon(table,url);    
+
+                // forigu menuon kaj "colspan" 
+                const menu = table.querySelector("tr.menuo");
+                if (menu) menu.remove();
+                else if (!url.startsWith("redak")) {
+                    // provizora solvo, ĉar class="menuo" mankas ankoraŭ en kelkaj dosieroj
+                    const fona = table.querySelector("td.fona");
+                    const tr_menu = fona? fona.parentElement: null;
+                    if (tr_menu) tr_menu.remove();
+                }
+                const enh = table.querySelector(".enhavo");
+                if (enh) enh.removeAttribute("colspan");
+
+            } catch(error) {
+                console.error(error);
             }
-            const enh = table.querySelector(".enhavo");
-            enh.removeAttribute("colspan");
 
-        } catch(error) {
-            console.error(error);
-        }
+        if (table) nav.append(table);
 
-        nav.append(table);
-
-        if (filename.startsWith("redaktmenu")) {
+        if (filename && filename.startsWith("redaktmenu")) {
             redaktilo.preparu_menu(); // redaktilo-paĝo
             // butono por rezigni
-            document.getElementById("r:rezignu")
-                .addEventListener("click",function() {
+            const rzg = document.getElementById("r:rezignu");
+            if (rzg) rzg.addEventListener("click",function() {
                     t_red.transiro("ne_redaktante");
             });
         } else if (filename.startsWith("_plena")) {
@@ -627,7 +656,7 @@ function load_page(trg: string, url: string, push_state: boolean=true, whenLoade
         update_hash();
     }
 
-    function load_page_main(doc, main) {
+    function load_page_main(doc: Document, main: Element) {
         var body = doc.body;
         try {
             adaptu_paghon(body,url);
@@ -635,12 +664,13 @@ function load_page(trg: string, url: string, push_state: boolean=true, whenLoade
             console.error(error);
         }
         main.textContent = '';
-        main.append(...body.children);
+        main.append(...Array.from(body.children));
         main.setAttribute("id","w:"+url);
-        var filename = url.split('/').pop();
+        let filename = url.split('/').pop();
 
-        if (filename.startsWith("redaktilo")) {
-            redaktilo.preparu_red(filename.split('?').pop()); // redaktilo-paĝo
+        if (filename && filename.startsWith("redaktilo")) {
+            const params = filename.split('?').pop() || '';
+            redaktilo.preparu_red(params); // redaktilo-paĝo
             
         } else {
             // laŭbezone ankoraŭ iru al loka marko
@@ -692,7 +722,7 @@ function load_page(trg: string, url: string, push_state: boolean=true, whenLoade
     }
 
     u.HTTPRequest('GET', url, {},
-        function(data) {
+        function(data: string) {
             // Success!
             var parser = new DOMParser();
             var doc = parser.parseFromString(data,"text/html");
@@ -706,9 +736,9 @@ function load_page(trg: string, url: string, push_state: boolean=true, whenLoade
                 // PLIBONIGU: difinu load_page_nav kiel ago de transiro
                 load_page_nav(doc,nav);
 
-                if (url == globalThis.redaktmenu_url)
+                if (url == g.redaktmenu_url)
                     t_nav.transiro("redaktilo"); 
-                else if (url == globalThis.inx_eo_url)
+                else if (url == g.inx_eo_url)
                     t_nav.transiro("ĉefindekso"); 
                 else
                     t_nav.transiro("subindekso"); 
@@ -723,9 +753,9 @@ function load_page(trg: string, url: string, push_state: boolean=true, whenLoade
 
                 // PLIBONIGU: difinu load_page_main kiel ago de transiro(?()
                 load_page_main(doc,main);
-                if (url == globalThis.titolo_url)
+                if (url == g.titolo_url)
                     t_main.transiro("titolo"); 
-                else if (url.startsWith(globalThis.redaktilo_url))
+                else if (url.startsWith(g.redaktilo_url))
                     t_main.transiro("red_xml");
                 else
                     t_main.transiro("artikolo");
@@ -763,7 +793,9 @@ function adaptu_paghon(root_el: Element, url: string) {
     // anstataŭigu GIF per SVG  
     x.fix_img_svg(root_el);
 
-    var filename = url.split('/').pop();
+    const filename = url.split('/').pop();
+    if (!filename) return;
+
     // index Esperanto. Atentu! Ni nun uzas _plena. (vd. malsupre)
     if ( filename.startsWith('_eo.') ) {
         root_el.querySelectorAll(".kls_nom").forEach((n) => {
@@ -783,7 +815,7 @@ function adaptu_paghon(root_el: Element, url: string) {
         // hazarda artikolo
         const hazarda = root_el.querySelector("p[id='x:Iu_ajn_artikolo'] a") ||
                         root_el.querySelector("a[href*='hazarda_art.pl'");
-        hazarda.addEventListener("click", function(event) {
+        if (hazarda) hazarda.addEventListener("click", function(event) {
             event.preventDefault();
             hazarda_art();
             event.stopPropagation(); // ne voku navigate_link!
@@ -793,110 +825,117 @@ function adaptu_paghon(root_el: Element, url: string) {
         // hazarda artikolo
         const hazarda = root_el.querySelector("p[id='x:Iu_ajn_artikolo'] a") ||
                         root_el.querySelector("a[href*='hazarda_art.pl'");
-        hazarda.addEventListener("click", function(event) {
+        if (hazarda) hazarda.addEventListener("click", function(event) {
             event.preventDefault();
             hazarda_art();
             event.stopPropagation(); // ne voku navigate_link!
         });
         // en la lingva indekso metu preferatajn lingvojn supren
-        const lingvoj = root_el.querySelector("a[href*='lx_la_']").closest('details');
-        const p = lingvoj.querySelector('p');
-        var jam = [];
-        for (let l of preferoj.languages()) {
-            let l_ = l.split(/-/)[0];
-            if (jam.indexOf(l_)<0) { // evitu duoblaĵojn!
-                let a = lingvoj.querySelector("a[href*='lx_"+l_+"_']");
-                if (a) p.prepend(a.cloneNode(true));
-                jam.push(l_);
-            }
+        const lingvoj = root_el.querySelector("a[href*='lx_la_']")?.closest('details');
+        if (lingvoj) {
+            const p = lingvoj.querySelector('p');
+            var jam: string[] = [];
+            for (let l of preferoj.languages()) {
+                let l_ = l.split(/-/)[0];
+                if (jam.indexOf(l_)<0) { // evitu duoblaĵojn!
+                    let a = lingvoj.querySelector("a[href*='lx_"+l_+"_']");
+                    if (a && p) p.prepend(a.cloneNode(true));
+                    jam.push(l_);
+                }
+            }    
         }
     }
     else if ( filename.startsWith('mx_trd.') ) {
         root_el.querySelectorAll("a[href^='?']").forEach((a) => {
             var href = a.getAttribute("href");
-            a.setAttribute("href",globalThis.mx_trd_url+href);
+            a.setAttribute("href",g.mx_trd_url+href);
         });
         root_el.querySelectorAll("a[target='_blank']").forEach((a) => {
             a.removeAttribute("target");
         });
     }
     else if ( filename.startsWith('tz_') ) {
-        root_el.querySelector("tr").classList.add("menuo");
+        root_el.querySelector("tr")?.classList.add("menuo");
     }
     // serĉilo en titol- kaj serĉo-paĝoj
-    else if ( filename.startsWith('titolo') ) {
-        // adaptu serĉilon
-        const s_form = root_el.querySelector("form[name='f']");
-        const query = s_form.querySelector("input[name='q']");
-        const cx = s_form.querySelector("button.cx");
-        const hazarda = root_el.querySelector("a[id='w:hazarda']");
-        //var submit = s_form.querySelector("input[type='submit']");
-        //s_form.removeAttribute("action");
-        //submit.addEventListener("click",serchu);
-        
-        query.addEventListener("keydown", function(event: KeyboardEvent) {
-            if (event.key == "Enter") {  
-                serchu(event);
-            }
-        });
-        query.addEventListener("keyup",function(event: KeyboardEvent) {
-            const trg = event.target as HTMLInputElement;
-            const wcx = document.getElementById("w:cx") as HTMLInputElement;
-            if (event.key == "x" || event.key == "Shift") { // x-klavo 
-                if (wcx.value == "1") {
-                    var s = trg.value;
-                    var s1 = x.ascii_eo(s);
-                    if (s != s1)
-                        trg.value = s1;
-                }
-            }
-            // keycode fix for older Android Chrome 
-            else if ((event.keyCode == 0 || event.keyCode == 229) && wcx.value == "1") {
-                const s = trg.value;
-                const key = s.charAt(s.length-1);
-                //alert("Android dbg: "+event.keyCode+ "s: "+s+" kcd: "+kCd);
-                if (key == "x" || key == "X") {
-                    const s1 = x.ascii_eo(s);
-                    if (s != s1)
-                        trg.value = s1;    
-                }
-            }
-        });
-
-        cx.addEventListener("click", function(event) {
-            event.preventDefault();
-            const cx = event.target as HTMLInputElement;
-            cx.value = ""+(1-parseInt(cx.value)); 
-            document.getElementById('w:q').focus();
-        });
-
-        s_form.querySelector("button[value='revo']")
-            .addEventListener("click", function(event) {
-                event.preventDefault();
-                serchu(event);
-            });
-
-        s_form.querySelector("button[value='ecosia']")
-            .addEventListener("click", function(event) {
-                event.preventDefault();
-                const wq = document.getElementById('w:q') as HTMLInputElement;
-                location.href = 'https://www.ecosia.org/search?q='
-                    + encodeURIComponent(wq.value + ' site:reta-vortaro.de');
-            });
-
-        s_form.querySelector("button[value='anaso']")
-            .addEventListener("click", function(event) {
-                event.preventDefault();
-                const wq = document.getElementById('w:q') as HTMLInputElement;
-                location.href = 'https://duckduckgo.com?q='
-                    + encodeURIComponent(wq.value + ' site:reta-vortaro.de');
-        });
-
+    else if ( filename && filename.startsWith('titolo') ) {
         // hazarda artikolo
-        hazarda.addEventListener("click", function(event) {
+        const hazarda = root_el.querySelector("a[id='w:hazarda']");
+        if (hazarda) hazarda.addEventListener("click", function(event) {
             event.preventDefault();
             hazarda_art();
         });
+
+        // adaptu serĉilon
+        const s_form = root_el.querySelector("form[name='f']");
+        const query = s_form?.querySelector("input[name='q']");
+
+        if (s_form && query) {
+            
+            const cx = s_form.querySelector("button.cx");
+            
+            //var submit = s_form.querySelector("input[type='submit']");
+            //s_form.removeAttribute("action");
+            //submit.addEventListener("click",serchu);
+            
+            query.addEventListener("keydown", function(event: KeyboardEvent) {
+                if (event.key == "Enter") {  
+                    serchu(event);
+                }
+            });
+            query.addEventListener("keyup",function(event: KeyboardEvent) {
+                const trg = event.target as HTMLInputElement;
+                const wcx = document.getElementById("w:cx") as HTMLInputElement;
+                if (event.key == "x" || event.key == "Shift") { // x-klavo 
+                    if (wcx.value == "1") {
+                        var s = trg.value;
+                        var s1 = x.ascii_eo(s);
+                        if (s != s1)
+                            trg.value = s1;
+                    }
+                }
+                // keycode fix for older Android Chrome 
+                else if ((event.keyCode == 0 || event.keyCode == 229) && wcx.value == "1") {
+                    const s = trg.value;
+                    const key = s.charAt(s.length-1);
+                    //alert("Android dbg: "+event.keyCode+ "s: "+s+" kcd: "+kCd);
+                    if (key == "x" || key == "X") {
+                        const s1 = x.ascii_eo(s);
+                        if (s != s1)
+                            trg.value = s1;    
+                    }
+                }
+            });
+
+            if (cx) cx.addEventListener("click", function(event) {
+                event.preventDefault();
+                const cx = event.target as HTMLInputElement;
+                cx.value = ""+(1-parseInt(cx.value)); 
+                document.getElementById('w:q')?.focus();
+            });
+
+            s_form.querySelector("button[value='revo']")
+                ?.addEventListener("click", function(event) {
+                    event.preventDefault();
+                    serchu(event);
+                });
+
+            s_form.querySelector("button[value='ecosia']")
+                ?.addEventListener("click", function(event) {
+                    event.preventDefault();
+                    const wq = document.getElementById('w:q') as HTMLInputElement;
+                    location.href = 'https://www.ecosia.org/search?q='
+                        + encodeURIComponent(wq.value + ' site:reta-vortaro.de');
+                });
+
+            s_form.querySelector("button[value='anaso']")
+                ?.addEventListener("click", function(event) {
+                    event.preventDefault();
+                    const wq = document.getElementById('w:q') as HTMLInputElement;
+                    location.href = 'https://duckduckgo.com?q='
+                        + encodeURIComponent(wq.value + ' site:reta-vortaro.de');
+            });
+        }
     } 
 }
 
@@ -1017,10 +1056,10 @@ function serchu_q(esprimo: string) {
             for (let n=0; n<trvj.length; n++) {
                 let t = trvj[n];
 
-                if (n+1 > globalThis.sercho_videblaj && trvj.length > globalThis.sercho_videblaj+1) {
+                if (n+1 > g.sercho_videblaj && trvj.length > g.sercho_videblaj+1) {
                     // enmetu +nn antaŭ la unua kaŝita elemento
-                    if (n - globalThis.sercho_videblaj == 1) {
-                        const pli = u.ht_pli(trvj.length - globalThis.sercho_videblaj);
+                    if (n - g.sercho_videblaj == 1) {
+                        const pli = u.ht_pli(trvj.length - g.sercho_videblaj);
                         if (pli) dl.append(...pli);
                     }                        
                     atr = {class: "kasxita"};
@@ -1105,7 +1144,7 @@ function serchu_q(esprimo: string) {
 
         index_spread();
         const nav = document.getElementById("navigado");
-        const inx_enh = nav.querySelector(".enhavo");
+        const inx_enh = nav?.querySelector(".enhavo");
         const trovoj = u.ht_element("div",{id: "x:trovoj"},"");
 
         // serĉlingvoj
@@ -1119,7 +1158,8 @@ function serchu_q(esprimo: string) {
 
         // se troviĝis ekzakte unu kaj ni ne redaktas, iru tuj al tiu paĝo
         } else if ( srch.sola() && t_red.stato != "redaktante" ) {
-            load_page("main",srch.unua().href);
+            const href = srch.unua()?.href;
+            if (href) load_page("main",href);
         }
 
         if ( !srch.malplena() ) {
@@ -1135,9 +1175,9 @@ function serchu_q(esprimo: string) {
                         const trg = event.target as HTMLInputElement;
                         // kiun ref-mrk ni uzu - depende de kiu butono premita
                         const refmrk = trg.value;
-                        const refstr = trg.previousSibling.textContent;
+                        const refstr = trg.previousSibling?.textContent;
                         // revenu de trovlisto al redakto-menuo
-                        load_page("nav",globalThis.redaktmenu_url,true,
+                        if (refmrk && refstr) load_page("nav",g.redaktmenu_url,true,
                             () => redaktilo.load_ref(refmrk,refstr));        
                     });
                 });
@@ -1149,13 +1189,17 @@ function serchu_q(esprimo: string) {
         //show("x:nav_start_btn");
         t_nav.transiro("serĉo");
 
-        inx_enh.textContent = "";
-        //inx_enh.append(...s_form,trovoj);
-        inx_enh.append(trovoj);
+        if (inx_enh) {
+            inx_enh.textContent = "";
+            //inx_enh.append(...s_form,trovoj);
+            inx_enh.append(trovoj);    
+        }
         // forigu ankaŭ eventualan "viaj submetoj", ĝi estu nur en ĉefindekso por
         // eviti konfuzojn
-        const subm = nav.querySelector("#submetoj");
-        if (subm) nav.removeChild(subm);
+        if (nav) {
+            const subm = nav.querySelector("#submetoj");
+            if (subm) nav.removeChild(subm);    
+        }
     },
     start_wait,
     stop_wait 
@@ -1169,14 +1213,14 @@ function serchu_q(esprimo: string) {
  */
 function hazarda_art() {
 
-    u.HTTPRequest('POST', globalThis.sercho_url, {sercxata: "!iu ajn!"},
+    u.HTTPRequest('POST', g.sercho_url, {sercxata: "!iu ajn!"},
         function(data: string) {
             // sukceso!
             var json = 
                 /** @type { {hazarda: Array<string>} } */
                 (JSON.parse(data));
             const mrk = json.hazarda[0];
-            const href = globalThis.art_prefix + mrk.split('.')[0] + '.html#' + mrk;
+            const href = g.art_prefix + mrk.split('.')[0] + '.html#' + mrk;
             if (href) load_page("main",href);
         }, 
         start_wait,
@@ -1190,7 +1234,7 @@ function hazarda_art() {
  */
 function nombroj() {
 
-    u.HTTPRequest('POST', globalThis.nombroj_url, { x: "0" }, // sen parametroj POST ne funkcius, sed GET eble ne estus aktuala!
+    u.HTTPRequest('POST', g.nombroj_url, { x: "0" }, // sen parametroj POST ne funkcius, sed GET eble ne estus aktuala!
         function(data: string) {
             // sukceso!
             var json = 
@@ -1215,61 +1259,63 @@ function nombroj() {
  * la eraropaĝo.
  */
 function mrk_eraroj() {
-    u.HTTPRequest('POST', globalThis.mrk_eraro_url, { x: "1" }, // ni sendu ion per POST por ĉiam havi aktualan liston
+    u.HTTPRequest('POST', g.mrk_eraro_url, { x: "1" }, // ni sendu ion per POST por ĉiam havi aktualan liston
         function(data: string) {
             var json = 
                 /** @type { {drv: Array<Array>, snc: Array<Array>, hom: Array<Array>} } */
                 (JSON.parse(data));
             const listo = document.getElementById("mrk_sintakso");
-            listo.textContent= '';
+            if (listo) {
+                listo.textContent= '';
 
-            const sum = u.ht_element("summary",{},"Nekongruaj markoj / referencoj");
-            listo.append(sum);
-            // tri- kaj plipartaj drv@mrk
-            if (json.drv && json.drv.length) {
-                const e1 = u.ht_element("p",{},"Markoj de derivaĵoj havu nur du partojn, t.e. "
-                + "enhavu nur unu punkton:");
-                const ul = u.ht_element("ul");
-                listo.append(e1,ul);
-
-                for (let m of json.drv) {
-                    let li = u.ht_elements([
-                        ['li',{},
-                            [['a',{href: x.art_href(m[0]), target: 'precipa'}, m[1]+' ['+m[0]+']']]
-                        ]
-                    ]);
-                    if (li) ul.append(...li);
+                const sum = u.ht_element("summary",{},"Nekongruaj markoj / referencoj");
+                listo.append(sum);
+                // tri- kaj plipartaj drv@mrk
+                if (json.drv && json.drv.length) {
+                    const e1 = u.ht_element("p",{},"Markoj de derivaĵoj havu nur du partojn, t.e. "
+                    + "enhavu nur unu punkton:");
+                    const ul = u.ht_element("ul");
+                    listo.append(e1,ul);
+    
+                    for (let m of json.drv) {
+                        let li = u.ht_elements([
+                            ['li',{},
+                                [['a',{href: x.art_href(m[0]), target: 'precipa'}, m[1]+' ['+m[0]+']']]
+                            ]
+                        ]);
+                        if (li) ul.append(...li);
+                    }
                 }
-            }
-            // mrk nekongruaj kun drv@mrk
-            if (json.snc && json.snc.length) {
-                const e2 = u.ht_element("p",{},"Markoj de sencoj, rimarkoj ktp. kongruu kun la "
-                    + "marko de la enhavanta derivaĵo, ĝia prefikso estu la sama:");
-                const ul = u.ht_element("ul");
-                listo.append(e2,ul);
-                for (let m of json.snc) {
-                    let li = u.ht_elements([
-                        ['li',{},
-                            [['a',{href: x.art_href(m[0]), target: 'precipa'}, m[1]+' ['+m[0]+']']]
-                        ]
-                    ]);
-                    if (li) ul.append(...li);
+                // mrk nekongruaj kun drv@mrk
+                if (json.snc && json.snc.length) {
+                    const e2 = u.ht_element("p",{},"Markoj de sencoj, rimarkoj ktp. kongruu kun la "
+                        + "marko de la enhavanta derivaĵo, ĝia prefikso estu la sama:");
+                    const ul = u.ht_element("ul");
+                    listo.append(e2,ul);
+                    for (let m of json.snc) {
+                        let li = u.ht_elements([
+                            ['li',{},
+                                [['a',{href: x.art_href(m[0]), target: 'precipa'}, m[1]+' ['+m[0]+']']]
+                            ]
+                        ]);
+                        if (li) ul.append(...li);
+                    }
                 }
-            }
-            // homonimoj sen ref-hom
-            if (json.hom && json.hom.length) {
-                const e2 = u.ht_element("p",{},"Homonimoj, kiuj ne havas referencon de la tipo 'hom' aŭ duoblaj derivaĵoj:");
-                const ul = u.ht_element("ul");
-                listo.append(e2,ul);
-                for (let m of json.hom) {
-                    let li = u.ht_elements([
-                        ['li',{},[
-                            ['a',{href: x.art_href(m[1]), target: 'precipa'}, m[0]],' [',
-                            ['a',{href: x.art_href(m[1]), target: 'precipa'}, 'de '+m[1]],' ',
-                            ['a',{href: x.art_href(m[2]), target: 'precipa'}, 'al '+m[2]],']'
-                        ]]
-                    ]);
-                    if (li) ul.append(...li);
+                // homonimoj sen ref-hom
+                if (json.hom && json.hom.length) {
+                    const e2 = u.ht_element("p",{},"Homonimoj, kiuj ne havas referencon de la tipo 'hom' aŭ duoblaj derivaĵoj:");
+                    const ul = u.ht_element("ul");
+                    listo.append(e2,ul);
+                    for (let m of json.hom) {
+                        let li = u.ht_elements([
+                            ['li',{},[
+                                ['a',{href: x.art_href(m[1]), target: 'precipa'}, m[0]],' [',
+                                ['a',{href: x.art_href(m[1]), target: 'precipa'}, 'de '+m[1]],' ',
+                                ['a',{href: x.art_href(m[2]), target: 'precipa'}, 'al '+m[2]],']'
+                            ]]
+                        ]);
+                        if (li) ul.append(...li);
+                    }
                 }
             }
 
@@ -1284,49 +1330,49 @@ function mrk_eraroj() {
  * Pridemandas la bibliografion kiel JSON de la servilo kaj prezentas ĝin kiel HTML
  * @param sort_by se donita, ni ordigos la bibliografion laŭ tiu kampo (bib,aut,tit)
  */
-function bibliogr(sort_by?: string) {
-    u.HTTPRequest('POST', globalThis.bib_json_url, {x: "1"}, // ni sendu ion per POST por ĉiam havi aktualan liston
+function bibliogr(sort_by?: "bib"|"aut"|"tit") {
+    u.HTTPRequest('POST', g.bib_json_url, {x: "1"}, // ni sendu ion per POST por ĉiam havi aktualan liston
         function(data: string) {
-            var json = 
-                /** @type { Array.<{bib: string, tit: string}> } */
-                (JSON.parse(data));
+            var json = (JSON.parse(data) as Array<Bibliogr>);
 
             if (sort_by) {
                 const cmp = new Intl.Collator('eo');
-                json.sort( (a: string, b: string) => cmp.compare(a[sort_by],b[sort_by]) );
+                // @ts-ignore
+                json.sort( (a: Bibliogr, b: Bibliogr) => cmp.compare(a[sort_by],b[sort_by]) );
             }
 
             const enh = document.querySelector(".enhavo");
-            enh.textContent= '';
-            const dl = u.ht_element('dl');
+            if (enh) {
+                enh.textContent= '';
+                const dl = u.ht_element('dl');
 
-            if (json) {
-
-                for (const bib of json) {          
-                    // dt: la mallongigo evtl. kun href/url      
-                    const dt = u.ht_element('dt');
-                    if (bib.url) {
-                        const a = u.ht_elements([
-                            ['a',{href: bib.url, target: '_new'},
-                                [['b',{},bib.bib]]
-                            ]
-                        ]);
-                        if (a) dt.append(...a);                  
-                    } else {
-                        dt.append(u.ht_element('b',{},bib.bib));
-                    }
-                    // dd: la detaloj: autoro, titolo ktp.
-                    const dd = u.ht_element('dd');
-                    if (bib.aut) dd.append(bib.aut,u.ht_br());
-                    if (bib.trd) dd.append('trad. ',bib.trd,u.ht_br());
-                    dd.append(u.ht_element('b',{},bib.tit),u.ht_br());
-                    if (bib.ald) dd.append("(",bib.ald,")",u.ht_br());
-                    if (bib.eld) dd.append(bib.eld,u.ht_br());
-                    dl.append(dt,dd);
-                } // for
-            }; // if json
-            const h1 = u.ht_element('h1',{},'bibliografio');
-            enh.append(h1,dl);
+                if (json) {
+                    for (const bib of json) {          
+                        // dt: la mallongigo evtl. kun href/url      
+                        const dt = u.ht_element('dt');
+                        if (bib.url) {
+                            const a = u.ht_elements([
+                                ['a',{href: bib.url, target: '_new'},
+                                    [['b',{},bib.bib]]
+                                ]
+                            ]);
+                            if (a) dt.append(...a);                  
+                        } else {
+                            dt.append(u.ht_element('b',{},bib.bib));
+                        }
+                        // dd: la detaloj: autoro, titolo ktp.
+                        const dd = u.ht_element('dd');
+                        if (bib.aut) dd.append(bib.aut,u.ht_br());
+                        if (bib.trd) dd.append('trad. ',bib.trd,u.ht_br());
+                        dd.append(u.ht_element('b',{},bib.tit),u.ht_br());
+                        if (bib.ald) dd.append("(",bib.ald,")",u.ht_br());
+                        if (bib.eld) dd.append(bib.eld,u.ht_br());
+                        dl.append(dt,dd);
+                    } // for
+                }; // if json
+                const h1 = u.ht_element('h1',{},'bibliografio');
+                enh.append(h1,dl);
+            }
         },
         start_wait,
         stop_wait 
@@ -1342,8 +1388,8 @@ function redaktu(href: string) {
     const params = href.split('?')[1];
     //const art = getParamValue("art",params);
     
-    load_page("main",globalThis.redaktilo_url+'?'+params);
-    load_page("nav",globalThis.redaktmenu_url);
+    load_page("main",g.redaktilo_url+'?'+params);
+    load_page("nav",g.redaktmenu_url);
 }
 
 /**
@@ -1364,7 +1410,7 @@ function viaj_submetoj() {
                 ]
             ]
         ]);
-        if (ds) nv.append(...ds);
+        if (ds && nv) nv.append(...ds);
         ds[0].addEventListener("toggle", function(event) {
             const trg = event.target as Element;
             if (trg.hasAttribute("open")) {
@@ -1384,22 +1430,25 @@ function montru_submeto_staton(sj: Array<Submeto>) {
     const stat = {
         'nov': '\u23f2\ufe0e', 'trakt': '\u23f2\ufe0e', 
         'erar': '\u26a0\ufe0e', 'arkiv': '\u2713\ufe0e'};
-    function decode_result(r) {
-        function b64DecodeUnicode(str) {
+
+    function decode_result(r: string) {
+        function b64DecodeUnicode(str: string) {
             // Going backwards: from bytestream, to percent-encoding, to original string.
             return decodeURIComponent(atob(str).split('').map(function(c) {
                 return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
             }).join(''));
         }
         if (r) {
-            return b64DecodeUnicode(r.split(':').slice(-1)).replace('[m ','[');
+            return ("["+b64DecodeUnicode(r.split(':').slice(-1)[0])+"]")
+                .replace('[m ','[');
         } else {
             return '';
         }
     }
 
-    if (sj) {
-        const ds = document.getElementById("submetoj");
+    const ds = document.getElementById("submetoj");
+
+    if (sj && ds) {
         // forigu antaŭajn...
         ds.querySelectorAll("details").forEach( (ch) => ds.removeChild(ch) );
         

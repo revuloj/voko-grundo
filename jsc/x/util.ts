@@ -2,6 +2,9 @@
  (c) 2021-2023 ĉe Wolfram Diestel
 */
 
+import {type StrObj} from '../u';
+import {agordo as g} from '../u/global';
+
 //const help_base_url = 'https://revuloj.github.io/temoj/';
 
 export type LinePos = {
@@ -34,7 +37,7 @@ export function do_before_unload(todo_cb: EventListenerOrEventListenerObject) {
  * @returns grupigitajn listojn
  */
 export function group_by(key: string|number, array: Array<any>): {[key: string]: Array<any>} {
-  let grouped = {};
+  let grouped: {[key: string]: Array<any>} = {};
 
   for (var el of array) {
     const v = el[key] || '<_sen_>';
@@ -51,7 +54,7 @@ export function group_by(key: string|number, array: Array<any>): {[key: string]:
  * @returns URL-o por artikolo.
  */
 export function art_href(mrk: string): string {
-  return globalThis.art_prefix + mrk.split('.')[0] + '.html#' + mrk;
+  return g.art_prefix + mrk.split('.')[0] + '.html#' + mrk;
 }
 
 
@@ -213,7 +216,7 @@ export function enable(id: string) {
  * @param url - la pado de helpopaĝo, rilate al 'help_base_url'
  */
 export function helpo_pagho(url: string) {
-    window.open(globalThis.help_base_url+url);
+    window.open(g.help_base_url+url);
 }
 
 /**
@@ -257,11 +260,11 @@ export function getUrlFileName(url: string): string {
  * Redonas la parton post '#' interpretante ĝin kiel parametroliston.
  * @returns la trovitaj parametroj kiel Objekto kies ŝlosiloj estas la parametronomoj
  */
-export function getHashParts(): { [s: string]: string; } {
+export function getHashParts(): StrObj {
     const h = (location.hash[0] == '#' ?
         location.hash.slice(1) :
         location.hash);
-    let r = {};
+    let r: StrObj = {};
     for (const p of h.split('&')) {
         if (p.indexOf('=') < 0) {
           r["mrk"] = p;

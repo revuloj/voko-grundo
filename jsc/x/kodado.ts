@@ -7,8 +7,10 @@
 // iloj por signaroj...
 //*********************************************************************************************
 
-interface String {
-    hashFnv32a(asString: boolean, seed: number): number|string;
+declare global {
+    interface String {
+        hashFnv32a(asString: boolean, seed: number): number|string;
+    }
 }
 
 

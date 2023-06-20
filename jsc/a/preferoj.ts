@@ -3,8 +3,10 @@
 */
 
 import * as u from '../u';
+import {agordo as g} from '../u/global';
 import * as x from '../x';
 
+type LngSpec = {lc: string, ln: string}; // ISO-kodo, lingvonomo
 
 //const lingvoj_xml = "../cfg/lingvoj.xml";
 
@@ -24,7 +26,7 @@ type Seanco = {
  */
 export namespace preferoj {  
     
-    var lingvoj = [];
+    var lingvoj: string[] = [];
     export var seanco: Seanco = {};
     var dato = Date.now();
     
@@ -36,11 +38,11 @@ export namespace preferoj {
      * @inner
      */
     function load_pref_lng() {
-        u.HTTPRequest('GET', globalThis.lingvoj_xml, {},
-        function() {
+        u.HTTPRequest('GET', g.lingvoj_xml, {},
+        function(request: XMLHttpRequest) {
             // Success!
             const parser = new DOMParser();
-            const doc = parser.parseFromString(this.response,"text/xml");
+            const doc = parser.parseFromString(request.response,"text/xml");
             const plist = document.getElementById("pref_lng");
             const alist = document.getElementById("alia_lng");
 
@@ -49,11 +51,11 @@ export namespace preferoj {
             const selection = ichecked.value.split('_');
             
             // kolekti la lingvojn unue, ni bezonos ordigi ilin...
-            let _lingvoj = {};
-            for (var e of Array.from(doc.getElementsByTagName("lingvo"))) {
-                var c = e.attributes['kodo']; // jshint ignore:line
+            let _lingvoj: { [ascii: string]: LngSpec } = {};
+            for (let e of Array.from(doc.getElementsByTagName("lingvo"))) {
+                const c: Attr = e.attributes.getNamedItem('kodo'); // jshint ignore:line
                 if (c.value != "eo") {
-                    var ascii = x.eo_ascii(e.textContent);
+                    const ascii = x.eo_ascii(e.textContent);
                     _lingvoj[ascii] = {lc: c.value, ln: e.textContent};
                 }
             }
@@ -250,7 +252,7 @@ export namespace preferoj {
      */    
     function store() {
         if (lingvoj.length > 0) {
-            var prefs = {};
+            var prefs: { [key: string]: any} = {};
             prefs["w:preflng"] = lingvoj;
             prefs["w:prefdat"] = dato;
             window.localStorage.setItem("revo_preferoj",JSON.stringify(prefs));     

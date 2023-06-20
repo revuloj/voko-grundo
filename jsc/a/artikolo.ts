@@ -17,6 +17,12 @@ const fundamento_url = "https://www.steloj.de/esperanto/fundamento/";
 const ofcaldonoj_url = "https://www.steloj.de/esperanto/ofcaldonoj/";
 const art_path = "../art/";
 
+type VikiRef = {m: string,v: string}; // marko, vorto
+type RefCel = {k: string, n?: string, m: string}; // kapvorto, sencnumero, marko
+type TezRef = {mrk: string, tip: string, cel: RefCel};
+type OfcRef = {s: string, m: string, r: string, f: string};  // sekcio, marko, referenco, verko (FE/OA1..9)
+type Tezauro = {viki: Array<VikiRef>, tez: Array<TezRef>, ofc: Array<OfcRef>};
+
 //const KashEvento = new Event("kashu", {bubbles: true});
 const MalkashEvento = new Event("malkashu", {bubbles: true});
 const KomutEvento = new Event("komutu", {bubbles: true});
@@ -27,13 +33,13 @@ window.addEventListener("hashchange", function() {
     //var id = this.getAttribute("href").split('#')[1];
     var id = x.getHashParts().mrk; // el: util.js
     if (id) {
-        var trg = document.getElementById(id);
+        let trg = document.getElementById(id);
 
         // this.console.log("ni malkaŝu "+id);    
         if (trg && trg.tagName == "H2") {
             // ĉe derivaĵoj, la kaŝita div venos post h2
             const sec = trg.closest("section"); //parentElement;    
-            trg = sec.querySelector("div.kasxebla");
+            if (sec) trg = sec.querySelector("div.kasxebla");
         }
     
         //showContainingDiv(trg);
@@ -270,7 +276,7 @@ export namespace artikolo {
     }
 
     /**
-     * Kaŝas unuopan derivaĵon,s e gi estas malkasita kaj malkaŝas ĝin, se gi estas kasita momente.
+     * Kaŝas unuopan derivaĵon, se ĝi estas malkaŝita kaj malkaŝas ĝin, se ĝi estas kaŝita momente.
      * @memberof artikolo
      * @inner
      * @param el 
@@ -602,7 +608,7 @@ export namespace artikolo {
                 
         // se la tezaŭro ankoraŭ ne ŝarĝiĝis ni devos fari tion nun
         u.HTTPRequestFull('POST', vokoref_url, {}, {art: artikolo},
-            function(data) {
+            function(data: string) {
 
                 if (! data) return;   
 
@@ -613,34 +619,31 @@ export namespace artikolo {
                 // do se ĝi jam ĉeestas, ni transsaltas la reston...
                 if (art.querySelector('div.tezauro')) return;
                                 
-                var json = 
-                    /** @type { {viki: Array<{m,v}>, tez: Array<{mrk,tip,cel}>, ofc: Array<{s,m,r,f}>} } */
-                    (JSON.parse(
-                        /** @type {string} */ (data)
-                    ));
+                var json: Tezauro = JSON.parse(data);
                 var first = true;
 
-                function mrk_art_url(mrk) {
+                function mrk_art_url(mrk: string): string {
                     const fn = mrk.substring(0,mrk.indexOf('.'));
                     return art_path + fn + '.html#' + mrk;
                 }
-                function tip_fixed(tip) {
+                function tip_fixed(tip: string): string {
                     return ({sup: 'super', mal: 'malprt'}[tip] || tip);
                 }
-                function ofc_url(f,r) {
+                function ofc_url(f: string, r: string): string {
                     return ((f=='fe')? fundamento_url:ofcaldonoj_url) + r;
                 }
                 // kreas la div-keston sub derivaĵo kun la tezaŭro-referencoj
-                function kreu_ref_div(mrk, first_drv = false) {
+                function kreu_ref_div(mrk: string, first_drv = false) {
                     var refs = [];
                     var oj = [];
 
-                    var pas = {}; // ni memoras la unuopajn, ĉar ni povas havi 
+                    let pas: {[key: string]: boolean} = {}; // ni memoras la unuopajn, ĉar ni povas havi 
                     // duoblaĵojn en ofc-referencoj kaj viki-referencoj, pro art/drv-mrk
                     // kaj pri minuklaj/majusklaj alinomoj de Viki-titoloj (internaj referencoj de V.)
 
                     // oficialeco-referencoj (FdE, OA1..9)
                     if(json.ofc) {
+
                         for (let r of json.ofc) {
                             if (r.m == mrk || 
                                 (first_drv && r.m == mrk.substring(0,mrk.indexOf('.')))
@@ -674,8 +677,10 @@ export namespace artikolo {
                     }
 
                     // viki-referencoj
-                    var vj = []; pas = {};
+                    var vj = []; 
+
                     if (json.viki) {
+
                         for (let r of json.viki) {
                             if (r.m == mrk || 
                                 (first_drv && r.m == mrk.substring(0,mrk.indexOf('.')))) {                            

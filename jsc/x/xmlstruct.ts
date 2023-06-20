@@ -11,8 +11,10 @@ export interface SId {
   ln?: number // la komenca linio ene de la tuta XML
 }
 
+type XEl = "xml"|"art"|"subart"|"drv"|"subdrv"|"snc"|"subsnc";
+
 interface SDet {
-  el: string, // la elemento (art, subart, drv, ...subsnc)
+  el: XEl, // la elemento (art, subart, drv, ...subsnc)
   de: number, // la indekso de la komenca signo subteksta en la tuta XML
   al: number, // la indekso de la lasta signo subteksta en la tuta XML
   ln: number, // la komenca linio ene de la tuta XML
@@ -24,8 +26,6 @@ interface SDet {
 }
 
 export type Strukturero = SId & SDet;
-
-type XEl = "xml"|"art"|"subart"|"drv"|"subdrv"|"snc"|"subsnc";
 
 export type XElPos = { pos: number, end: number, elm: string };
 
@@ -59,14 +59,15 @@ export class XmlStruct {
   };
 
   // enŝovoj por montri la elementojn laŭ tipo en hieraĥio
-  private static indents = {
-    art: "", subart: "\u25b8\u00a0", drv: "\u2014 ", subdrv: "\u00a0\u2014 ", 
+  private static indents: {[el in XEl]: string} = {
+    xml: "", art: "", subart: "\u25b8\u00a0", drv: "\u2014 ", subdrv: "\u00a0\u2014 ", 
     snc: "\u00a0\u00a0\u00a0\u22ef ", subsnc: "\u00a0\u00a0\u00a0\u22ef\u22ef "
   };
 
-  // signoj por koncize reprezenti la elemntojn en elekto-listo
-  private static elements = {
-    subart: "\u24d0",
+
+  // signoj por koncize reprezenti la elementojn en elekto-listo
+  private static elements: {[el in XEl]: string}  = {
+    art: "", xml: "", subart: "\u24d0",
     drv: "\u24b9", subdrv: "\u24d3", snc: "\u24c8", subsnc: "\u24e2"
   }
   

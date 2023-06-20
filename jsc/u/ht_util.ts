@@ -4,7 +4,7 @@
   (c) 2021-2023 ĉe Wolfram Diestel
 */
 
-
+import {StrObj} from './global';
 /**
  * HTML-elemento-specifo, konsistanta el nomo:string, atributoj:Object kaj enhavo.
  * Enhavo povas esti malplena, teksto aŭ listo de enhavataj HTML-elemento-specifoj.
@@ -12,12 +12,11 @@
  * tipdifinojn kiel:
  */
  
-type StrObj = { [key: string]: string};
 export type AtributSpec = StrObj;
 // Plibonigu, por permesi miksitan enhavon ni devus ŝanĝi la lastan
 // al Array<string|ElementSpec>, sed ni implemento tion ne jam subtenas
-type ElementSpec = [string, AtributSpec?, (string|Array<ContentSpec>)?];
-type ContentSpec = string|ElementSpec
+export type ElementSpec = [string, AtributSpec?, (string|Array<ContentSpec>)?];
+export type ContentSpec = string|ElementSpec
 
 type Kapoj = StrObj;
 type Parametroj = StrObj;

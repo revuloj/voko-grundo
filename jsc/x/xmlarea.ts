@@ -13,10 +13,10 @@ import {XmlTrad, TList, Lingvo, XPlace} from './xmltrad';
  */
 export class Xmlarea {
   public xmlstruct: XmlStruct; // la tuta teksto
+  public elekto: Strukturero; // aktuale redaktata subteksto
 
-  private txtarea: HTMLInputElement; // la <textarea> kun la momente redaktata teksto
+  public txtarea: HTMLInputElement; // la <textarea> kun la momente redaktata teksto
   private xmltrad: XmlTrad; // por redaktado de tradukoj
-  private elekto: Strukturero; // aktuale redaktata subteksto
   private onaddsub: Function;
   private onselectsub: Function;
   private synced: boolean; // por scii, ĉu ni devos konservi la videblan (redaktatan) tekstparton
@@ -290,11 +290,13 @@ export class Xmlarea {
     return this.xmlstruct.getClosestKap(this.elekto)
   }
 
-  /******
-   * PLIBONIGU: administrado de tradukoj estas sufiĉe defia por meriti apartigon
-   * en propra objekto...
-   */
 
+  /**
+   * Redonas kolektitajn tradukojn el this.xmltrad
+   */
+  tradukoj(): { [lng: string]: TList } {
+    return this.xmltrad.tradukoj;
+  }
 
   /**
    * Kolektas ĉiujn tradukojn en donita XML-teksto

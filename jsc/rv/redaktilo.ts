@@ -30,8 +30,8 @@ const MathJax = (window as any).MathJax;
 // difinu ĉion sub nomprefikso "redaktilo"
 export namespace redaktilo {
 
-  var xmlarea = null;  
-  var xklavaro = null;
+  let xmlarea: Xmlarea;  
+  let xklavaro: XKlavaro;
   var redakto = 'redakto'; // 'aldono' por nova artikolo
 
   const cgi_vokosubmx = '/cgi-bin/vokosubmx.pl';
@@ -75,7 +75,7 @@ export namespace redaktilo {
    * @memberof redaktilo
    * @inner
    */
-  const xml_shbl = {
+  const xml_shbl: {[key: string]: u.ElementSpec} = {
     trd: ["trd",{},"$_"],
     trd_lng: ["trd",{lng:"$r:trdlng"},"$_"],
     trdgrp: ["trdgrp",{lng:"$r:trdlng"},[
@@ -138,7 +138,7 @@ export namespace redaktilo {
     let p_lines = 0;
 
     //function xmlstr(jlist) {
-    return [(function xmlstr(jlist) {
+    return [(function xmlstr(jlist: Array<u.ContentSpec>): string {
 
       // $_ ni anstataŭigos per la elektita teksto, 
       // $<var> per la valoro de elemento kun id="var"
@@ -149,6 +149,7 @@ export namespace redaktilo {
           : (v[0] == "$"? ie.value : v);
       }
 
+      // tradukas esprimon por /string/ al /string/
       function str(s: string): string {
         if (p_kursoro < 0 && s.indexOf("\n")>-1) p_lines++;
 
@@ -164,13 +165,16 @@ export namespace redaktilo {
             // en alternativo la unua
             // efektiva valoro haltigas la valorigadon!
             xml += v;
-            return;
+            return '';
           }
-        }
+        };
+        return '';
       }
+
+      // traduku ŝablonon al xml-teksto
       if (!jlist || !jlist[0]) {
         console.error("Nedifinita ŝablono: \""+name+"\"");
-        return;
+        return '';
       }
       let xml = "";
       for (const el of jlist) {
@@ -356,9 +360,12 @@ export namespace redaktilo {
    */
   function nextTag(tag: string, dir: number) {
         
-      function lines(str){
-        try { return(str.match(/[^\n]*\n[^\n]*/gi).length); } 
-        catch(e) { return 0; }
+      function lines(str: string) {
+        try { 
+            return(str.match(/[^\n]*\n[^\n]*/gi)?.length);
+        } catch(e) { 
+          return 0; 
+        }        
       }
 
       var txtarea = document.getElementById('r:xmltxt') as HTMLInputElement;
@@ -405,7 +412,7 @@ export namespace redaktilo {
    * @memberof redaktilo
    */
   export function store_preferences() {
-    var prefs = {};
+    var prefs: {[key: string]: any} = {};
     for (var key of ['r:redaktanto','r:trdlng','r:klrtip','r:reftip','r:sxangxo','r:cx','r:xklvr']) {
       const el = document.getElementById(key) as HTMLInputElement;
       if (el) prefs[key] = el.value;
@@ -507,7 +514,7 @@ export namespace redaktilo {
   export function fs_toggle(id: string) {
     var el = document.getElementById(id);
     var fs_id: string;
-    if (! el.classList.contains('aktiva')) {
+    if (el && ! el.classList.contains('aktiva')) {
       for (var ch of Array.from(el.parentElement.children)) {
         ch.classList.remove('aktiva');
         fs_id = 'r:fs_'+ch.id.substring(2);
@@ -586,7 +593,7 @@ export namespace redaktilo {
    * @param regex - la regulesprimo per kiu ni serĉas la uzojn
    * @returns la listo de nevalidaj koduzoj - kiel trovoj per regulesprimo
    */
-  function kontrolu_kodojn(clist: string, regex: RegExp) {
+  function kontrolu_kodojn(clist: x.ListNomo, regex: RegExp) {
     const xml = xmlarea.syncedXml(); //document.getElementById("r:xmltxt").value;
     const list = revo_codes[clist];
     let m: RegExpExecArray; 
@@ -809,7 +816,7 @@ export namespace redaktilo {
     {
       xmlTxt: xml
     },
-    function (data) {
+    function (data: string) {
       // Success!
       var parser = new DOMParser();
       var doc = parser.parseFromString(data,"text/html");
@@ -949,7 +956,7 @@ export namespace redaktilo {
     {
       email: red
     },
-    function (data) {
+    function (data: string) {
       // Success!
       if (data) {
         var json = JSON.parse(data);
@@ -1031,6 +1038,7 @@ export namespace redaktilo {
           } else if (key.match(re_dec)) {
             return String.fromCharCode(parseInt(key.substring(1),10));
           } else {
+            // @ts-ignore
             const val = x.voko_entities[key];
             return (val && val.length == 1)? val : ent;
           }
@@ -1230,7 +1238,7 @@ export namespace redaktilo {
       const klvr = document.getElementById("r:klavaro");
       xklavaro = new XKlavaro(klvr, null, xmltxt,
         () => xmlarea.getRadiko(),
-        (event,cmd) => { 
+        (event: Event, cmd) => { 
           // PLIBONIGU: tion ni povas ankaŭ meti en xklavaro.js!
           if (cmd.cmd == 'indiko') {
             x.hide("r:klv_fak");
@@ -1411,7 +1419,7 @@ export namespace redaktilo {
               const tv = json[t];
               // montru serĉ-rezultojn kiel html summary/details 
               const details = u.ht_details(
-                tv.trd.eo.map(s => s.replace(/\?;/,'?:\u00a0'))
+                tv.trd.eo.map((s: string) => s.replace(/\?;/,'?:\u00a0'))
                   .join(', ')||t, '',
                 function(d: Element) {
                   // esp-a difino
@@ -1555,8 +1563,8 @@ export namespace redaktilo {
             const t = (trd)? trd.textContent : undefined;
             // se drv/snc estas elektita kaj la traduko ankoraŭ 
             // ne troviĝas tie, ni permesu aldoni ĝin
-            if ( ! xmlarea.tradukoj[lng] 
-              || ! xmlarea.tradukoj[lng].find((e: string) => u.compareXMLStr(e,t) )
+            if ( ! xmlarea.tradukoj()[lng] 
+              || ! xmlarea.tradukoj()[lng].find((e: string) => u.compareXMLStr(e,t) )
               ) {
               // d.push('\u00a0'); // nbsp
               li.classList.add('aldonebla');
@@ -1585,7 +1593,7 @@ export namespace redaktilo {
           const dt = dd.previousSibling;
           if (dt instanceof Element) {
             const e = dt as Element;
-            if (xmlarea.tradukoj[lng]) {
+            if (xmlarea.tradukoj()[lng]) {
               e.classList.add('ekzistas');
               remove(dt.querySelector('span.aldonebla'));
               if (! dt.querySelector('span.ekzistas'))

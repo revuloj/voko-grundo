@@ -8,6 +8,28 @@ import * as u from '../u';
 import {indent,get_indent,kameligo,minuskligo,get_line_pos} from './tekstiloj';
 import {Xlist} from './xlisto';
 
+/*
+ctl: citilo-elemento
+mis: misstilo-elemento
+nom: nomo (ne-e-a)
+nac: nacilingva vorto
+esc: escepta vorto
+ind: indeksero
+var: variaĵo de kapvorto
+frm: formulo
+*/
+
+/*
+type KlavSpec = "ctl" | "mis" | "nom" | "nac" | "esc" | "ind" | "var" | "frm" 
+  | "[elemento]" | "[indiko]" | "[serĉo]" | "[blank]" | "dekstren" | "maldekstren"
+  | "tld" | "grase" | "kursive" | "emfaze" | "minuskle" | "kamele" | "sup" | "sub" ;
+*/
+
+// paletro de la klavaro: klavoj por ciuj fakoj, por diversaj aliaj indikoj (vspec, stl, ofc...) kaj 
+// ceteraj klavoj por manipuli elementojn
+type Reghimo = "indiko" | "fako" | "klavaro" | null;
+type Reghimpremo = (e: Event, r: {cmd: Reghimo}) => void;
+
 console.debug("Instalante la klavarfunkciojn...");
 
 /*
@@ -41,10 +63,11 @@ export class XKlavaro {
      * @param postenmeto - revokfunkcio, vokata post kiam tekstenmeta klavo estis premita
      */    
     constructor(public klavaro: Element, public dialogo: Element, public apriora_kampo: HTMLInputElement, 
-        public kiuradiko: Function, public reĝimpremo: Function, public postenmeto: Function) 
+        public kiuradiko: Function, public reĝimpremo: Reghimpremo, public postenmeto: Function) 
     {
         this.lasta_fokuso = this.apriora_kampo.id;
         this.klavoj = this.klavaro.textContent;
+        const self = this;
         
         // kreu la klavojn
         //if (this.klavoj)
@@ -58,7 +81,7 @@ export class XKlavaro {
         if (this.dialogo) {
             this.dialogo.querySelectorAll("textarea,input").forEach( (e) =>
                 e.addEventListener("blur", function(event) {
-                    this.lasta_fokuso = (event.target as Element).id;
+                    self.lasta_fokuso = (event.target as Element).id;
                 })
             );
         }            
@@ -97,7 +120,7 @@ export class XKlavaro {
                 html += '<div class="klv elm_btn" data-cmd="'+klv+'">' + klv[0] + '&hellip;' + klv[1] +'</div>';
             // pli longaj estas elemento-butonoj k.s.
             } else {
-                var elmj = {
+                const elmj: {[s in string]: string} = {
                     ctl: "citilo-elemento",
                     mis: "misstilo-elemento",
                     nom: "nomo (ne-e-a)",
@@ -146,7 +169,7 @@ export class XKlavaro {
                     case 'strekite':
                             html += '<div class="klv elm_btn" data-cmd="ts" title="trastreko"><del>ts</del></div>';
                             break;
-                        case 'sup':
+                    case 'sup':
                         html += '<div class="klv elm_btn" data-cmd="sup" title="suprigite" ' +
                                 'style="padding-top:0.25em; padding-bottom:0.35em ">a<sup>s</sup></div>';
                         break;
@@ -232,7 +255,7 @@ export class XKlavaro {
      */
     fako_klavoj(klvrElm: Element, fakList: Xlist) {
     
-        function fakoKlavoHtml(kod,nom) {
+        function fakoKlavoHtml(kod: string, nom: string) {
             const btn = u.ht_elements([
                 ['div',{
                     class: 'klv fak', 
@@ -279,7 +302,7 @@ export class XKlavaro {
         const radiko =  this.kiuradiko();
 
         if (btn.classList.contains("reghim_btn")) {
-            this.reĝimpremo(event,{cmd: cmd});
+            this.reĝimpremo(event,{cmd: cmd as Reghimo});
 
         } else if (btn.classList.contains("stl")) {
             const stl = btn.getAttribute("data-stl");

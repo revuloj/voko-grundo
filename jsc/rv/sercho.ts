@@ -4,6 +4,8 @@
 */
 
 import * as u from '../u';
+import {type StrObj} from '../u';
+import {agordo as g} from '../u/global';
 import * as x from '../x';
 import {preferoj} from '../a/preferoj';
 
@@ -33,21 +35,21 @@ export type TrovVorto = TrovEo | TrovTrd;
 
 // trovitaj rikordoj grupigitaj laŭ kapvorto (KAP=1) por 'eo'
 // kaj lingvo (LNG=2) por nacilingvoj
-type Trovoj = { [key: string]: TrovVorto[] };
+type TrovGrupoj = { [key: string]: Array<Trovero> };
 
 /**
  * Kreas novan serĉon. Ĝi helpas aliri la esperantajn kaj nacilingvajn trovojn post farita serĉo.
  */
 export class Sercho {
 
-    private eo: Trovoj;
-    private trd: Trovoj; 
+    private eo: TrovGrupoj;
+    private trd: TrovGrupoj; 
     public s_lng: Array<Lingvo>;
     
     constructor() {
         //komence malplena
-        this.eo = undefined;
-        this.trd = undefined; 
+        this.eo = {};
+        this.trd = {}; 
         this.s_lng = [];
     }
 
@@ -71,17 +73,17 @@ export class Sercho {
             // almenaŭ 3 literoj
         }        
 
-        u.HTTPRequestFull('POST', globalThis.sercho_url, 
+        u.HTTPRequestFull('POST', g.sercho_url, 
             {"Accept-Language": preferoj.languages().join(',')},
             {sercxata: esprimo},
             function(data: string) {
                 const json = JSON.parse(data);
                 self.eo = json.eo ? 
                     x.group_by(KAP,json.eo) // ordigu laŭ kapvorto
-                    : undefined;
+                    : {};
                 self.trd = json.trd ? 
                     x.group_by(LNG,json.trd) // ordigu laŭ lingvo
-                    : undefined; 
+                    : {}; 
                 self.s_lng = json.lng; // la serĉlingvoj, eble reduktitaj se estis tro en preferoj
                 onSuccess.call(self);
             },
@@ -116,10 +118,10 @@ export class Sercho {
                     obj[lng] = 
                         // ĉenigu ĉiujn tradukojn de unu lingvo, se estas trd (lasta kampo)
                         // uzu tiun, ĉar ĝi estas pli longa ol ind, enhavante klarigojn ks.
-                        list.map((e) => e[TRD]||e[IND]) 
+                        list.map((e: Trovero) => e[TRD]||e[IND]) 
                         .join(', ');
                     return obj;
-                }, {} );    
+                }, {} as StrObj );    
             return {
                 v: kap,
                 h: x.art_href(mrk),
@@ -222,10 +224,14 @@ export class Sercho {
      * Redonas la unuan rezulton (aŭ nenion, se ne estas)
      * @returns la pretigita HTML-referenco al la unua trovaĵo
      */
-    unua(): { href: string } {
+    unua(): { href: string } | undefined {
         if (this.eo && this.trd) {
-            var u = Object.values(this.eo)[0] || Object.values(this.trd)[0];
-            return { href: x.art_href(u[0][MRK]) };            
+            // la unua kapvorto aŭ la unua traduko
+            const u = (Object.values(this.eo)[0] || Object.values(this.trd)[0]);
+            // unua trovero de tiu grupo
+            const tv = u[0]; 
+            // la marko de tiu trovero
+            return { href: x.art_href(tv[MRK]) };            
         }
     };
 
@@ -243,7 +249,7 @@ export class Sercho {
     {
         const self = this;
 
-        u.HTTPRequest('POST', globalThis.trad_uwn_url, {sercho: vorto}, 
+        u.HTTPRequest('POST', g.trad_uwn_url, {sercho: vorto}, 
             function(data: string) {
                 if (data) {
                     const json = JSON.parse(data);

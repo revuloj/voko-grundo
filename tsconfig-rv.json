@@ -4,6 +4,8 @@
       "target": "ES5",
       "module": "ES6",
       "moduleResolution": "node",
+      "strict": true,
+      "strictNullChecks": false,
       "esModuleInterop": true,
       "sourceMap": true,
       "rootDir": ".",

@@ -31,7 +31,7 @@ export class XmlTrad {
 
   // tradukoj de unu substrukturo/subteksto sed de pluraj lingvoj
   // la atributnomoj en 'tradukoj' estas la lingvoj, kaj la valoroj listoj de tradukoj en tiu lingvo
-  private tradukoj: { [lng: string]: TList }; 
+  public tradukoj: { [lng: string]: TList }; 
   // laŭ lingvo estas objektoj por ĉiu strukturero de xmlstruct
   private tradukoj_strukt: { [lng: string]: Tradukoj };
   private shanghoj_strukt: { [lng: string]: Tradukoj };
@@ -91,7 +91,7 @@ putStruct(s_id: string, lng: Lingvo, no: number, trd: string) {
  * Redonas ĉiujn ŝanĝojn por s_id estas (ĉiuj ŝanĝitaj lingvoj kun tradukoj)
  */
 shanghitaj(s_id: string) {
-    let r = {};
+    let r: Tradukoj = {};
     for (let l of Object.keys(this.shanghoj_strukt)) {
         const s = this.shanghoj_strukt[l][s_id];
         if (s) {
