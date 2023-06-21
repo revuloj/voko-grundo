@@ -1,8 +1,10 @@
 
-/* jshint esversion: 6 */
+/* 
+  (c) 2016 - 2023 ĉe Wolfram Diestel
+ laŭ GPL 2.0
+*/
 
-// (c) 2016 - 2018 Wolfram Diestel
-// laŭ GPL 2.0
+/// <reference types="@types/jqueryui/index.d.ts" />
 
 /*import { krei_dialogo, shargi_dialogo, sendi_dialogo, derivajho_dialogo, senco_dialogo, 
         traduko_dialogo, ekzemplo_dialogo, bildo_dialogo, referenco_dialogo, sxablono_dialogo, 

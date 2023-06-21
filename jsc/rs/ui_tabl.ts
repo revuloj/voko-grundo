@@ -1,8 +1,11 @@
 
-/* jshint esversion: 6 */
+/* 
+ (c) 2016 - 2023 ĉe Wolfram Diestel
+ laŭ GPL 2.0
+*/
 
-// (c) 2016 - 2022 Wolfram Diestel
-// laŭ GPL 2.0
+/// <reference types="@types/jqueryui/index.d.ts" />
+
 
 import { show_xhr_error } from './ui_dlg.js';
 import { vortokontrolo, xmlkontrolo, klrkontrolo, surmetita_dialogo } from './ui_err.js';

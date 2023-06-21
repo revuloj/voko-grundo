@@ -1,10 +1,23 @@
 
-/* jshint esversion: 6 */
+/* 
+ (c) 2016 - 2023 ĉe Wolfram Diestel
+ laŭ GPL 2.0
+*/
 
-// (c) 2016 - 2022 - Wolfram Diestel
-// laŭ GPL 2.0
+/// <reference types="@types/jqueryui/index.d.ts" />
 
 import { show_xhr_error } from './ui_dlg.js';
+import { HTMLError } from './sxabloniloj';
+
+
+type Eraro = { id: string, cls: string, msg: string };
+
+declare global {
+
+    interface JQuery {
+        Erarolisto(methodName: "aldonu", e: Eraro);
+    }
+}
 
 
 console.debug("Instalante la erar- kaj kontrolfunkciojn...");
@@ -101,7 +114,7 @@ $.widget( "redaktilo.Erarolisto", {
         //$("#kontrolo_list").fadeOut("fast", function() {
             // ni enŝovu la mesaĝon laŭ la ordo de linioj
             $("li",this.element).each(function(){
-                if ($(this).attr("value") > n_) {
+                if (parseInt($(this).attr("value") as string) > n_) {
                     $(this).before(li);
                 // $("#kontrolo_list").fadeIn("fast");
                     added = true;

@@ -1,12 +1,12 @@
 
-/* jshint esversion: 6 */
-
 /*************************************************************************
 
 // (c) 2017 - 2023 ĉe Wolfram Diestel
 // laŭ GPL 2.0
 
 *****************************************************************************/
+
+import * as x from '../x';
 
 /** ŝablonoj por flekseble enmeti referencojn, fontojn ktp. **/
 
@@ -66,7 +66,7 @@ class XMLŜablono {
 /**
  * Krei novan artikolon surbaze de ŝablono
  */
-class XMLArtikolo extends XMLŜablono {
+export class XMLArtikolo extends XMLŜablono {
     
     constructor(public art: Valoroj) {
         super(xml_sxablonoj.art);
@@ -82,11 +82,11 @@ class XMLArtikolo extends XMLŜablono {
 /**
  * Krei novan derivaĵon surbaze de ŝablono 
  */
-class XMLDerivaĵo extends XMLŜablono {
+export class XMLDerivaĵo extends XMLŜablono {
     constructor(public drv: Valoroj) {
         super(xml_sxablonoj.drv);
         drv.dif = drv.dif.replace(/\n/g,"\n       ").replace(/~/g,'<tld/>');
-        drv.mrk = alCx(drv.mrk + '.' + drv.kap.replace(/~/g,'0').replace(/ /g,'_'));
+        drv.mrk = x.alCx(drv.mrk + '.' + drv.kap.replace(/~/g,'0').replace(/ /g,'_'));
         drv.kap = drv.kap.replace(/~/g,'<tld/>');
     }; 
 
@@ -99,7 +99,7 @@ class XMLDerivaĵo extends XMLŜablono {
  * Krei novan sencon surbaze de ŝablono
  * @constructor
  */
-class XMLSenco extends XMLŜablono {
+export class XMLSenco extends XMLŜablono {
     constructor(public snc: { dif: string; drvmrk: string; mrk?: string}) {
         super(xml_sxablonoj.snc);
         snc.dif = snc.dif.replace(/\n/g,"\n       ").replace(/~/g,'<tld/>');
@@ -115,7 +115,7 @@ class XMLSenco extends XMLŜablono {
 /**
  * Krei novan fonton surbaze de ŝablono
  */
-class XMLFonto extends XMLŜablono {
+export class XMLFonto extends XMLŜablono {
     constructor(public fnt: Valoroj) {
         super(xml_sxablonoj.fnt);
     };
@@ -128,7 +128,7 @@ class XMLFonto extends XMLŜablono {
 /**
  * Krei novan ekzemplon surbaze de ŝablono
  */
-class XMLEkzemplo extends XMLŜablono {
+export class XMLEkzemplo extends XMLŜablono {
     public fonto: XMLFonto;
     public frazo: string;
 
@@ -156,7 +156,7 @@ class XMLEkzemplo extends XMLŜablono {
 /**
  * Krei novan referencon surbaze de ŝablono
  */
-class XMLReferenco extends XMLŜablono {
+export class XMLReferenco extends XMLŜablono {
 
     constructor(public ref: Valoroj) {
         super(xml_sxablonoj.ref);
@@ -172,7 +172,7 @@ class XMLReferenco extends XMLŜablono {
  * Krei novan referenc-grupon surbaze de ŝablono
  */
 
-class XMLReferencGrupo extends XMLŜablono {
+export class XMLReferencGrupo extends XMLŜablono {
     constructor(public ref: Valoroj) {
         super(xml_sxablonoj.refgrp);
         if (ref.tip == 'nuda') { ref.tip = ''; }
@@ -187,7 +187,7 @@ class XMLReferencGrupo extends XMLŜablono {
 /**
  * Krei novan rimarkon surbaze de ŝablono
  */
-class XMLRimarko extends XMLŜablono {
+export class XMLRimarko extends XMLŜablono {
     constructor(public rim: Valoroj, tip: any='rim') {
         super((tip=='rim'?xml_sxablonoj.rim:xml_sxablonoj.adm));
     };
@@ -201,7 +201,7 @@ class XMLRimarko extends XMLŜablono {
 /**
  * Krei novan bildo-strukturon surbaze de ŝablono
  */
-class XMLBildo extends XMLŜablono {
+export class XMLBildo extends XMLŜablono {
     constructor(public bld: Valoroj) {
         super(xml_sxablonoj.bld);
 
@@ -233,7 +233,7 @@ class XMLBildo extends XMLŜablono {
  * @constructor
  * @param {*} bib_src
  */
-class HTMLFonto {
+export class HTMLFonto {
     public source: any;
     private v: XMLŜablono;
     private b: XMLŜablono;
@@ -284,7 +284,7 @@ class HTMLFonto {
 /**
  * Krei novan trovon (DT-elemento ekz. en trov-listo) surbaze de ŝablono
  */
-class HTMLTrovoDt {
+export class HTMLTrovoDt {
     private t: XMLŜablono;
     private tc: XMLŜablono;
 
@@ -306,7 +306,7 @@ class HTMLTrovoDt {
  * Krei novan trovon (DD-bildo-elemento 
  * ekz. en trov-listo) surbaze de ŝablono 
  */
-class HTMLTrovoDdBld {
+export class HTMLTrovoDdBld {
     private dd: XMLŜablono;
 
     constrcutor() {
@@ -321,7 +321,7 @@ class HTMLTrovoDdBld {
 /**
  * Listero de eraro- kaj avertolisto
  */
-class HTMLError {
+export class HTMLError {
     private li: XMLŜablono;
 
     constructor() {
@@ -338,7 +338,7 @@ class HTMLError {
  * Ŝablonoj elekteblaj kaj prilaboreblaj per menuo Ŝablonoj
  * @constructor
  */
-class SncŜablono {
+export class SncŜablono {
     private sxablono: string;
 
     constructor(sxbl: string) {
@@ -346,7 +346,8 @@ class SncŜablono {
     };
 
     form() {
-        return quoteattr(this.sxablono).replace(/\{([osre]):([^\}]+)\}/g,this.form_element);
+        return x.quoteattr(this.sxablono).replace(/\{([osre]):([^\}]+)\}/g,
+            this.form_element);
     };
 
     html() {

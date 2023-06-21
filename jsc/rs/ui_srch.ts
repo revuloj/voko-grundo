@@ -1,8 +1,14 @@
 
-/* jshint esversion: 6 */
+/* 
+ (c) 2018 - 2023 ĉe Wolfram Diestel
+ laŭ GPL 2.0
+*/
 
-// (c) 2018 - Wolfram Diestel
-// laŭ GPL 2.0
+/// <reference types="@types/jqueryui/index.d.ts" />
+
+import * as u from '../u';
+//import * as x from '../x';
+import { HTMLFonto, HTMLTrovoDt } from './sxabloniloj';
 
 //var sercho_focused_button = null;
 console.debug("Instalante la serĉfunkciojn...");
@@ -284,7 +290,7 @@ export function citaĵoSerĉo(event) {
                 for (var i=0; i<data.length; i++) {
                     var trovo = data[i], fnt = trovo.cit.fnt;
                     let url = ( fnt.url ? fnt.url : ( fnt.bib ? _bib_url(bib_src,fnt.bib) : '') );
-                    var perc = make_percent_bar(trovo.sim*100, bar_styles[12], 20, 20);
+                    var perc = u.make_percent_bar(trovo.sim*100, bar_styles[12], 20, 20);
                     $("#sercho_trovoj").append('<dd id="trv_' + i + '">');
                     $("#trv_"  + i).Trovo(
                         {
