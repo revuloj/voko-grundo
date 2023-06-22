@@ -1327,6 +1327,7 @@ function plenigu_lingvojn() {
     // @ts-ignore .fail() volas almenaŭ unu argumenton, sed ni rifuzas provizore...
     var p_pref = $.get('revo_preflng').fail();
 
+    // prenu la lingvoliston el lingvoj.xml
     var p_lingvoj = $.ricevu('../voko/lingvoj.xml',"#traduko_error");
     /*
         $.get('../voko/lingvoj.xml')
@@ -1358,8 +1359,12 @@ function plenigu_lingvojn() {
                 var lingvoj_p_s = '';
                 var lingvoj_t_z = '';
                 var pref_lingvoj = '';
-                $("lingvo",lingvoj_data).sort(jsort_lng).each(
-                        function(i,e) {
+
+                // por ĉiu unuopa lingvo en lingvoj.xml post ordigo laŭ nomo
+                const lingvoj = $("lingvo",lingvoj_data) as any; // TS ne kapablas rekoni JQuery<T> kiel Array
+                    // kaj komplenas pri .sort - do ni artifike konvertas al "any"
+                lingvoj.sort(jsort_lng).each(
+                        function() {
                             var kodo =$(this).attr('kodo');
                             if (kodo != 'eo') {
                                 if ($.inArray(kodo, pref_lngoj) > -1) {
@@ -1413,7 +1418,7 @@ function plenigu_lingvojn_artikolo() {
     const xml = xmlarea.syncedXml();
 
     var lng_nomoj = {};
-    for (var kodo in traduk_lingvoj(xml)) {
+    for (var kodo in x.traduk_lingvoj(xml)) {
         const lnomo = $("#trd_chiuj_"+kodo).children('div').text();
         lng_nomoj[lnomo] = kodo;
     }
@@ -1665,7 +1670,7 @@ function plenigu_sxablonojn() {
 }
 
 function kiam_elektis_sxablonon(event) {
-    var sxbl = $("#sxablono_elekto").val();
+    var sxbl = $("#sxablono_elekto").val() as string;
     $("#sxablono_xml").empty();
     $("#sxablono_xml").off("keypress");
     $("#sxablono_xml").off("click");

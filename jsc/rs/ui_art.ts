@@ -15,16 +15,17 @@ declare global {
         Artikolo(methodName: "insert", xmlstr: string, sync?: boolean);
         Artikolo(methodName: "insert_post", xmlstr: string, s_id: string);
         Artikolo(methodName: "tradukoj", lng: string);
-        Artikolo(methodName: "enmetu_tradukojn", str: string);
+        Artikolo(methodName: "enmetu_tradukojn");
         Artikolo(methodName: "art_drv_mrk");
         Artikolo(methodName: "drv_before_cursor");
+        Artikolo(methodName: "drv_markoj");
         Artikolo(methodName: "snc_sen_mrk");
-        Artikolo(methodName: "klr_ppp");
+        Artikolo(methodName: "klr_ppp"): {[pos: number]: string};
         Artikolo(methodName: "markoj");
         Artikolo(methodName: "backup");
         Artikolo(methodName: "restore");
         Artikolo(methodName: "plain_text", line_numbers: boolean);
-        Artikolo(methodName: "lines_as_dict", xml: string);
+        Artikolo(methodName: "lines_as_dict", xml?: string):  {[lin: number]: string};
         Artikolo(methodName: "goto");
         Artikolo(methodName: "elekto");
         Artikolo(methodName: "elekto_menuo");
@@ -517,7 +518,7 @@ $.widget( "redaktilo.Artikolo", {
         return sncoj;
     },
 
-    // PLIBONIGU: ŝovu al xmlarea
+    // PLIBONIGU: ŝovu tiun funkcion al x/xmlarea.ts
     // klarigoj el tri punktoj kie mankas []
     klr_ppp: function() {
         const xmlarea = this.option("xmlarea");
@@ -681,6 +682,7 @@ $.widget( "redaktilo.Artikolo", {
     // transformas la rezulton de plain_text en objekton,
     // kies ŝlosiloj estas la lininumeroj kaj kies
     // valoroj estas la nudaj tekst-linioj
+    // (bezonata por vortkontrolo/analizo)
     lines_as_dict: function(xml) {
         var lines = this.plain_text(true).split('\n');
         var result = {};

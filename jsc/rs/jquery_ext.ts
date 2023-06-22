@@ -33,12 +33,13 @@ declare global {
         validate(): boolean;
         textarea_selection(): string;
         selectAll();
+        insert(text: string);
     }
 
     interface JQueryStatic {
-        alportu(url: string, params: any, error_to: string|Function);
-        alportu2(settings: any, error_to: string|Function);
-        ricevu(url: string, error_to: string|Function);
+        alportu(url: string, params: any, error_to?: string|Function);
+        alportu2(settings: any, error_to?: string|Function);
+        ricevu(url: string, error_to?: string|Function);
     }
 }
 
@@ -164,8 +165,8 @@ jQuery.fn.extend({
           }
     },
     
-    // enmetu tekston ĉe la pozicio de kursoro, resp. anstataŭigu la nuna elekton per nova teksto
-    insert: function(myValue){
+    // enmetu tekston ĉe la pozicio de kursoro, resp. anstataŭigu la nunan elekton per nova teksto
+    insert: function(myValue) {
       var is_chrome = ((navigator.userAgent.toLowerCase().indexOf('chrome') > -1) &&
                        (navigator.vendor.toLowerCase().indexOf("google") > -1));        
         

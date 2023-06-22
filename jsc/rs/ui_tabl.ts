@@ -6,7 +6,10 @@
 
 /// <reference types="@types/jqueryui/index.d.ts" />
 
+import { Xmlarea } from '../x.js';
+import { ht_element } from '../u.js';
 
+import { xpress } from './jquery_ext.js';
 import { show_xhr_error } from './ui_dlg.js';
 import { vortokontrolo, xmlkontrolo, klrkontrolo, surmetita_dialogo } from './ui_err.js';
 import { vikiSerĉo, citaĵoSerĉo, regulEsprimo, verkoListo, verkoPeriodo, verkElekto, retoSerĉo, bildoSerĉo } from './ui_srch.js';
@@ -93,7 +96,7 @@ export default function() {
     });
     $("#xml_text").keypress(xpress);
     $("#art_strukturo").on("change", function(event) {
-        const val = event.target.value;
+        const val = (event.target as HTMLInputElement).value;
     
         // tio renovigas la strukturon pro eblaj intertempaj snc-/drv-aldonoj ks...
         // do ni poste rekreos ĝin kaj devos ankaŭ marki la elektitan laŭ _item_

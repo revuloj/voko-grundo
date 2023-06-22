@@ -9,7 +9,7 @@
 *****************************************************************************/
 
 import {quoteattr} from './kodado';
-import {str_repeat} from './util';
+import {str_repeat, type LinePos} from './util';
 import {type BoolObj} from '../u';
 
 const regex_tld = new RegExp('<tld\\s+lit="([^"]+)"\\s*/>','g');
@@ -22,7 +22,7 @@ const regex_xmltag = new RegExp('<[^>]+>','g');
  * @param text - la koncerna teksto
  * @returns la pozicion kiel objekto {{line: number, pos: number}}
  */
-export function get_line_pos(inx: number, text: string) {
+export function get_line_pos(inx: number, text: string): LinePos {
     var lines = 0;
     var last_pos = 0;
     for (let i=0; i<inx; i++) { 

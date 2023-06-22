@@ -9,7 +9,7 @@
 *****************************************************************************/
 
 
-var bar_styles = [
+export const bar_styles = [
     '▁▂▃▄▅▆▇█',
     '⣀⣄⣤⣦⣶⣷⣿',
     '⣀⣄⣆⣇⣧⣷⣿',
@@ -33,7 +33,7 @@ function repeat(s: string, i: number) {
     return r;
 }
 
-export function make_percent_bar(p: number, bar_style: Array<string>, 
+export function make_percent_bar(p: number, bar_style: string, 
     min_size: number, max_size: number): {str: string, delta: number}
 {
     var d: number, full: number, m: string, middle: number, r: string, 
