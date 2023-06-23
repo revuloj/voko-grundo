@@ -21,13 +21,13 @@ type CitSercho = {
 }
 
 type TrovValoroj = { url?: string, fmt?: number, 
-    aut?: string, bib?: string, lok?: string, 
+    aut?: string, bib?: string, vrk?: string, lok?: string, 
     prm?: string, fnt?: string, frazo?: string }
 
 declare global {
     interface JQuery {
         Trovo(opcioj: any);
-        Trovo(methodName: "bildinfo", res: any, d: boolean, e: Event);
+        Trovo(methodName: "bildinfo", res: any, d: boolean, e: Function); //JQuery.Event);
         KuntekstoBtn(opcioj: any);
         RigardoBtn(opcioj: any);
         EkzemploBtn(opcioj: any);
@@ -646,14 +646,14 @@ export function retoSerĉo(event) {
         data = data.replace(rx_img_link, '');
         const ŝablono = new HTMLTrovoDt();
         
-        $(data).find(".result-link,.result-snippet").filter(function() {
+        $(data).find(".result-link,.result-snippet").each(function() {
             var self = $(this);
 
             // memoru la url kiel last_link
             if ( self.is(".result-link") )   {
                 const href = self.attr("href");
-                const hpos = href.search('http');
-                last_link = hpos>=0? decodeURIComponent(href.slice(hpos)) : href;
+                const hpos = href?.search('http');
+                last_link = hpos >= 0? decodeURIComponent(href.slice(hpos)) : href;
                 last_title = self.text();
 
             // kreu trov-eron
@@ -788,7 +788,7 @@ function _bildo_info(pageids) {
                 for (var p in results) {
                         let res = results[p];
                         let trv = $("#trv_" + res.pageid);
-                        let dosieroj = trv.Trovo("bildinfo",res,d==0,
+                        let dosieroj = trv.Trovo("bildinfo", res, d==0,
                             function(event,data) {
                                 if (data) {                       
                                     _bildo_info_2(data.title);

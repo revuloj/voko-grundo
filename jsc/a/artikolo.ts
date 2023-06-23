@@ -67,7 +67,7 @@ export namespace artikolo {
      * @memberof artikolo
      * @param artikolo - la doserinomo de la artikolo
      */
-    export function preparu_art(artikolo: string) {
+    export function preparu_art(artikolo?: string) {
         // evitu preparon, se ni troviĝas en la redaktilo kaj
         // la artikolo ne ĉeestas!
         if (! document.getElementById(sec_art)) return;
@@ -583,7 +583,7 @@ export namespace artikolo {
      * @inner
      * @param {string} artikolo - la dosiernomo de la artikolo
      */
-    function tezauro(artikolo: string) {
+    function tezauro(artikolo?: string) {
         if (!artikolo) return;
 
         function toggle_tez_btn() {

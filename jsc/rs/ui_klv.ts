@@ -13,6 +13,7 @@ export type KlavarSpec = {
     posedanto: string, // HTML id de enhava dialogo/panelo
     akampo: string, // HTML id de la apriora kampo
     reĝimpremo?: (e: Event, ui: any) => void // reago al premo de reĝimklavo   
+    postenmeto?: (e: Event, ui: any) => void // aldona tasko post enmeto   
 }
 
 declare global {

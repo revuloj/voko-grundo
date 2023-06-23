@@ -8,6 +8,7 @@
 
 declare global {
     interface JQuery {
+        Artikolo(opcioj?: any);
         Artikolo(methodName: "nova", opcioj?: any): JQuery;
         Artikolo(methodName: "load", dosiero: string, data: string): JQuery;
         Artikolo(methodName: "change_count", count?: number): number;
@@ -27,7 +28,7 @@ declare global {
         Artikolo(methodName: "plain_text", line_numbers: boolean);
         Artikolo(methodName: "lines_as_dict", xml?: string):  {[lin: number]: string};
         Artikolo(methodName: "goto");
-        Artikolo(methodName: "elekto");
+        Artikolo(methodName: "elekto", ins: string, elektita: string);
         Artikolo(methodName: "elekto_menuo");
 
     }

@@ -6,13 +6,23 @@
 
 /// <reference types="@types/jqueryui/index.d.ts" />
 
-import { Xmlarea } from '../x.js';
-import { ht_element } from '../u.js';
+import * as x from '../x';
 
-import { xpress } from './jquery_ext.js';
-import { show_xhr_error } from './ui_dlg.js';
+import { Xmlarea } from '../x';
+import { ht_element } from '../u';
+import { artikolo } from '../a/artikolo';
+
+import { xpress } from './jquery_ext';
+import { show_xhr_error } from './ui_dlg';
 import { vortokontrolo, xmlkontrolo, klrkontrolo, surmetita_dialogo } from './ui_err.js';
 import { vikiSerĉo, citaĵoSerĉo, regulEsprimo, verkoListo, verkoPeriodo, verkElekto, retoSerĉo, bildoSerĉo } from './ui_srch.js';
+
+// vd. https://mariusschulz.com/blog/declaring-global-variables-in-typescript
+// alternative oni povus uzi alnoton ty-ignore ne la malsupraj linioj kiuj uzas MathJax
+//const MathJax = (window as any).MathJax;
+declare global {
+    const MathJax: any; 
+}
 
 const revo_url = 'https://'+globalThis.revo_url; //reta-vortaro.de';
 
@@ -110,7 +120,8 @@ export default function() {
 
     $("#kromklvr").button();
     $("#kromklvr").click(() => {
-        const pressed = 1 - $("#kromklvr").val();
+        const stato = $("#kromklvr").val() as string;
+        const pressed = 1 - +stato;
         $("#kromklvr").val(pressed);
         //$("#dock_klavaro").toggle()
         if (pressed) {
@@ -455,7 +466,7 @@ export function before_activate_tab(event,ui) {
         const elektita = xmlarea.selection();
         const radiko = xmlarea.getRadiko();
        
-        var sercho = replaceTld(radiko,elektita)
+        var sercho = x.replaceTld(radiko,elektita)
            .replace(/<[^>]+>/g,'')
            .replace(/\s\s+/g,' ');
         if ( sercho.length > 0 ) {
@@ -609,7 +620,7 @@ function antaurigardo() {
                 });
 
                 // anstataŭigu GIF per SVG  
-                fix_img_svg(document.getElementById('rigardo'));
+                x.fix_img_svg(document.getElementById('rigardo'));
 
                 /** anstataŭigo de URL ne funkcias, anst. servu de la redaktilo fone (kiel proxy)...
                 $("#rigardo embed").each(function() {
@@ -661,7 +672,7 @@ function antaurigardo() {
                 if (xhr.status == 400) {
                     // alert("Eraro dum transformado: " + xhr.responseText);
                     $("#rigardo").html("<p>Eraro dum transformado:</p><pre>" 
-                        + quoteattr(xhr.responseText) + "</pre>");
+                        + x.quoteattr(xhr.responseText) + "</pre>");
                 } else {
                     /* PLIBONIGU: ĉe HTTP-500 verŝajne la seanco ne plu ekzistas,
                     ĉu ni povas distingi tion? eble mesaĝo: http_session `_53070' does not exist

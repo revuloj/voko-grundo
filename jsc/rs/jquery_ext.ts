@@ -31,6 +31,7 @@ declare global {
         xklavo(key: string): any;
         Checks: any;
         validate(): boolean;
+        selection(): string;
         textarea_selection(): string;
         selectAll();
         insert(text: string);

@@ -11,7 +11,7 @@ import { show_xhr_error } from './ui_dlg';
 import { HTMLError } from './sxabloniloj';
 
 
-interface Eraro extends Partial<x.LinePos> { id: string, cls?: string, msg: string };
+interface Eraro extends Partial<x.LinePos> { id?: string, cls?: string, msg: string };
 
 declare global {
 
@@ -388,7 +388,10 @@ export function surmetita_dialogo(url, root_el, loc = '') {
 }
 
 export function show_error_status(error) {
-    plenigu_xmleraro_liston([{"line": "nekonata", "msg": error.toString().slice(0,256)+'...'}]);
+    //plenigu_xmleraro_liston([{"line": "nekonata", "msg": error.toString().slice(0,256)+'...'}]);
+    const err: Eraro = {"line": -1, "msg": error.toString().slice(0,256)+'...'};
+    $("#dock_eraroj").Erarolisto("aldonu",err);
+
     $("#elekto_indikoj").hide();
     $("#dock_klavaro").show();
     $("#dock_kontrolo").show();
