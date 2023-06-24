@@ -16,8 +16,8 @@
 #host=retavortaro.de
 # aldonu en /etc/hosts!
 host=revo
-eldono=2i_ts
-node_eldono=2.0.9
+eldono=2j
+node_eldono=2.0.10
 revo=${host}:www/revo
 files=${host}:files
 
@@ -29,7 +29,7 @@ target="${1:-helpo}"
 JSC=build/jsc/revo-${eldono}-min.js
 CSS=build/stl/revo-${eldono}-min.css
 
-GLOBAL=jsc/u/global.js
+GLOBAL=jsc/u/global.ts
 PACKG=package.json
 
 case $target in
@@ -53,7 +53,7 @@ preparo)
     fi
 
     echo "Aktualigante skriptojn al nova eldono ${eldono}..."
-    sed -i 's/globalThis.eldono = "[1-9][a-z]";/globalThis.eldono = "'${eldono}'";/' ${GLOBAL}
+    sed -i 's/eldono = "[1-9][a-z]";/eldono = "'${eldono}'";/' ${GLOBAL}
     sed -i 's,/revo-[1-9][a-z]-min\.,/revo-'${eldono}'-min\.,g' ${PACKG}
     sed -i 's,/redaktilo-[1-9][a-z]-min\.,/redaktilo-'${eldono}'-min\.,g' ${PACKG}
     sed -i 's/"version": "[1-9].[0-9].[1-9]"/"version": "'${node_eldono}'"/' ${PACKG}
