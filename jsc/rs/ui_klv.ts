@@ -1,8 +1,26 @@
 
-/* jshint esversion: 6 */
+/* 
+ (c) 2016 - 2023 ĉe Wolfram Diestel
+ laŭ GPL 2.0
+*/
 
-// (c) 2016 - 2018 - Wolfram Diestel
-// laŭ GPL 2.0
+/// <reference types="@types/jqueryui/index.d.ts" />
+
+import * as x from '../x';
+
+export type KlavarSpec = {
+    artikolo: JQuery<HTMLElement>, // Artikolo al kiu apartenu la klavaro
+    posedanto: string, // HTML id de enhava dialogo/panelo
+    akampo: string, // HTML id de la apriora kampo
+    reĝimpremo?: (e: Event, ui: any) => void // reago al premo de reĝimklavo   
+    postenmeto?: (e: Event, ui: any) => void // aldona tasko post enmeto   
+}
+
+declare global {
+    interface JQuery {
+        Klavaro(spec: KlavarSpec);
+    }
+}
 
 console.debug("Instalante la klavarfunkciojn...");
 $.widget( "redaktilo.Klavaro", {
@@ -183,14 +201,14 @@ $.widget( "redaktilo.Klavaro", {
                 const sel = element.textarea_selection();
                 //var rad = sel.includes('<tld')? xmlGetRad($("#xml_text").val()) : '';
                 var rad = sel.includes('<tld')? radiko : '';
-                element.insert(kameligo(sel,rad));
+                element.insert(x.kameligo(sel,rad));
             
                 this._trigger("postenmeto",event,{cmd: cmd});
 
             // minuskligo
             } else if (cmd == "minuskloj"){
                 const sel = element.textarea_selection();
-                element.insert(minuskligo(sel,radiko));
+                element.insert(x.minuskligo(sel,radiko));
 
                 this._trigger("postenmeto",event,{cmd: cmd});
 

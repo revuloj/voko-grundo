@@ -1,7 +1,5 @@
 
-/* jshint esversion: 6 */
-
-// (c) 2017  - 2021 Wolfram Diestel
+// (c) 2017  - 2023 ĉe Wolfram Diestel
 // laŭ GPL 2.0
 
 /**

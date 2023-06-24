@@ -1,10 +1,108 @@
 
-/* jshint esversion: 6 */
+/*
+ (c) 2016 - 2023 ĉe Wolfram Diestel
+ laŭ GPL 2.0
+*/
 
-// (c) 2016 - 2018 - Wolfram Diestel
-// laŭ GPL 2.0
+/// <reference types="@types/jqueryui/index.d.ts" />
+
+import { XMLReferenco, XMLReferencGrupo, XMLRimarko, XMLEkzemplo, 
+         XMLFonto, XMLSenco, XMLDerivaĵo, XMLBildo, SncŜablono } from './sxabloniloj';
 
 import { show_error_status, surmetita_dialogo } from './ui_err.js';
+import { xpress } from './jquery_ext';
+import * as x from '../x';
+
+type NovaArt = { dos: string, rad: string, fin: string, dif: string };
+//type ShargArt = { dosiero: string };
+
+declare global {
+
+    namespace JQueryUI {
+        interface DialogOptions {
+            kampoj?: any;
+            valorŝanĝo?();
+        }
+
+        // CheckboxRadio mankas en DefintelyTyped,
+        // mi prenis difinojn de tie ĉi: https://gist.github.com/Tom4U/b1dedd9a1e1b461e0da5d679f7b15382
+
+        interface CheckboxRadioOptions extends CheckboxRadioEvents {
+            classes?: {[elementName: string]: string};
+            disabled?: boolean;
+            icon?: boolean;
+            label?: string;
+        }
+
+        interface CheckboxRadioEvent {
+            (event: Event, ui: SelectMenuUIParams): void;
+        }
+
+        interface CheckboxRadioEvents {
+            create?: CheckboxRadioEvent;
+            click?: CheckboxRadioEvent;
+        }
+
+        interface CheckboxRadio extends Widget, CheckboxRadioOptions {
+        }
+
+        // Controlgroup mankas en DefinitelyTyped, do ni aldonas tie ĉi, kion ni bezonas
+        interface ControlgroupOptions {
+            classes?: any;
+            direction?: "horizontal"|"vertical";
+            disabled?: boolean;
+            items?: any;
+            onlyVisible?: boolean;            
+        }
+
+        // mankas items en MenuOptions-deklaroj
+        interface MenuOptions {
+            items?: string;
+        }
+
+    }
+
+    interface Dialog {
+        options: JQueryUI.DialogOptions;
+        valoroj(values: any): any;
+        shrink();
+        expand();
+        toggle();
+    }
+    
+
+    interface JQuery {
+        dialog(methodName: 'valoroj'): any;
+        dialog(methodName: "valoroj", val: any);
+
+        // CheckboxRadio mankas en DefintelyTyped,
+        // mi prenis difinojn de tie ĉi: https://gist.github.com/Tom4U/b1dedd9a1e1b461e0da5d679f7b15382
+        checkboxradio(): JQuery;
+        checkboxradio(methodName: 'destroy'): JQuery;
+        checkboxradio(methodName: 'disable'): JQuery;
+        checkboxradio(methodName: 'enable'): JQuery;
+        checkboxradio(methodName: 'instance'): any;
+        checkboxradio(methodName: 'option'): JQuery;
+        checkboxradio(methodName: 'refresh'): JQuery;
+        checkboxradio(methodName: 'widget'): JQuery;
+        checkboxradio(methodName: string): JQuery;
+        checkboxradio(options: JQueryUI.CheckboxRadioOptions): JQuery;
+        checkboxradio(optionLiteral: string, optionName: string): any;
+        checkboxradio(optionLiteral: string, options: JQueryUI.CheckboxRadioOptions): any;
+        checkboxradio(optionLiteral: string, optionName: string, optionValue: any): JQuery;
+
+        // controlgroup()-deklaroj mankas ĉe DefintelyTyped, do ni aldonas, kion ni bezonas
+        controlgroup(): JQuery;
+        controlgroup(options: JQueryUI.ControlgroupOptions): JQuery;
+    }
+   
+
+    interface Widget {
+        checkboxradio(): any;
+    }
+}
+
+
 
 // aldonu al jQuery UI dialog proprajn metodojn
 // bezonatajn en la redaktilaj dialogoj
@@ -94,7 +192,7 @@ $.widget( "ui.dialog", $.ui.dialog, {
 export default function() {
     
     //>>>>>>>> dialogo: Nova artikolo
-    $( "#krei_dlg" ).dialog({
+    $( "#krei_dlg" ).dialog(<JQueryUI.DialogOptions>{
         kampoj: {
             dos: "#krei_dos",
             rad: "#krei_rad",
@@ -103,7 +201,8 @@ export default function() {
         },
         buttons: { 
             "Krei": function() { 
-                var art = $("#krei_dlg").dialog("valoroj");
+                // @ts-ignore
+                const art = <NovaArt>($("#krei_dlg").dialog("valoroj"));
                 $("#xml_text").Artikolo("nova",art);
                 $("#re_radiko").val(art.rad);
                 $("#dock_eraroj").empty();
@@ -146,7 +245,7 @@ export default function() {
             "Ŝargi": function(event) { 
                 event.preventDefault();
                 if (! $("#shargi_dosiero").validate()) return;
-                var values = $("#shargi_dlg").dialog("valoroj");
+                const values = $("#shargi_dlg").dialog("valoroj");
                 download_art(values.dosiero,"#shargi_error","#shargi_dlg");
                 $("#dock_eraroj").empty();
                 $("#dock_avertoj").empty();
@@ -407,7 +506,7 @@ export default function() {
             $("#bildo_error").hide();
             $("#bildo_dlg").dialog("expand"); // necesas, se la dialogo estis fermita en faldita stato...
 
-            if (parseFloat($("#bildo_fmt").val()) > 1) {
+            if (parseFloat($("#bildo_fmt").val() as string) > 1) {
                 bildo_larĝecoj([640,320],640); // eble ankaŭ 800?
             } else {
                 bildo_larĝecoj([576,360,180],360); // eble ankaŭ 450, 768?
@@ -415,7 +514,7 @@ export default function() {
             $( "#bildo_lrg input" ).checkboxradio("refresh");
         },
         valorŝanĝo: function() {
-            if (parseFloat($("#bildo_fmt").val()) > 1) {
+            if (parseFloat($("#bildo_fmt").val() as string) > 1) {
                 bildo_larĝecoj([640,320],640); // eble ankaŭ 800?
             } else {
                 bildo_larĝecoj([576,360,180],360); // eble ankaŭ 450, 768?
@@ -563,7 +662,7 @@ export default function() {
                 event.preventDefault();
                 const indent=2;
                 var rim = $("#rimarko_dlg").dialog("valoroj");
-                rim.rim = linirompo(rim.rim.replace(/~/g,'<tld/>'),indent);
+                rim.rim = x.linirompo(rim.rim.replace(/~/g,'<tld/>'),indent);
                 rim.elm = rim.adm ? 'adm' : 'rim';                   
                 var rimstr = new XMLRimarko(rim,rim.elm).xml(indent*2);
                 $("#xml_text").Artikolo("insert",rimstr);
@@ -625,6 +724,7 @@ export default function() {
     //>>>>>>>> surmetitta dialogo ekz. por deklaro pri datumprotekto, klarigoj/helpo ks
     $( "#surmetita_dlg" ).dialog({
         position: { my: "left top", at: "left+20 top+20", of: window },
+        // @ts-ignore maxWidth estas deklarita kiel /number/ - ignoru tion aŭ redeklaru ie...
         maxWidth: "90%" 
     });
 }  
@@ -1093,7 +1193,7 @@ function ekzemplo_enmeti(event, nur_fnt) {
         xmlstr = new XMLFonto(values).xml(indent);
     } else {
         const indent=2;
-        values.frazo = linirompo(values.frazo,indent);
+        values.frazo = x.linirompo(values.frazo,indent);
         xmlstr = new XMLEkzemplo(values).xml(indent+4);
     }
    
@@ -1121,7 +1221,7 @@ function bildo_enmeti(event, nur_fnt) {
     bld.fnt = encodeURI(bld.fnt);
     // ne kodigu duoble, ekz. % al %25: bld.url = encodeURI(bld.url);
     const indent = 4;
-    bld.frazo = linirompo(bld.frazo,indent);
+    bld.frazo = x.linirompo(bld.frazo,indent);
 
     var bldstr = new XMLBildo(bld).xml(indent);
     $("#xml_text").Artikolo("insert",bldstr);
@@ -1173,7 +1273,7 @@ function derivajho_enmeti(event) {
     let values = $("#derivajho_dlg").dialog("valoroj");
     //values.mrk = xmlArtDrvMrk($("#xml_text").val()); 
     const indent = 2;
-    values.dif = linirompo(values.dif,indent);
+    values.dif = x.linirompo(values.dif,indent);
     values.mrk = xmlarea.getDosiero(); 
 
     const drv = new XMLDerivaĵo(values);
@@ -1200,7 +1300,7 @@ function senco_enmeti(event) {
 
     var snc = $("#senco_dlg").dialog("valoroj");
     const indent=2;
-    snc.dif = linirompo(snc.dif,indent);
+    snc.dif = x.linirompo(snc.dif,indent);
 
     try{
         snc.drvmrk = $("#xml_text").Artikolo("drv_before_cursor").mrk;
@@ -1224,8 +1324,10 @@ function senco_enmeti(event) {
 
 // aldonu kompletan lingvoliston kaj preferatajn lingvojn al traduko-dialogo
 function plenigu_lingvojn() {
+    // @ts-ignore .fail() volas almenaŭ unu argumenton, sed ni rifuzas provizore...
     var p_pref = $.get('revo_preflng').fail();
 
+    // prenu la lingvoliston el lingvoj.xml
     var p_lingvoj = $.ricevu('../voko/lingvoj.xml',"#traduko_error");
     /*
         $.get('../voko/lingvoj.xml')
@@ -1257,8 +1359,12 @@ function plenigu_lingvojn() {
                 var lingvoj_p_s = '';
                 var lingvoj_t_z = '';
                 var pref_lingvoj = '';
-                $("lingvo",lingvoj_data).sort(jsort_lng).each(
-                        function(i,e) {
+
+                // por ĉiu unuopa lingvo en lingvoj.xml post ordigo laŭ nomo
+                const lingvoj = $("lingvo",lingvoj_data) as any; // TS ne kapablas rekoni JQuery<T> kiel Array
+                    // kaj komplenas pri .sort - do ni artifike konvertas al "any"
+                lingvoj.sort(jsort_lng).each(
+                        function() {
                             var kodo =$(this).attr('kodo');
                             if (kodo != 'eo') {
                                 if ($.inArray(kodo, pref_lngoj) > -1) {
@@ -1312,7 +1418,7 @@ function plenigu_lingvojn_artikolo() {
     const xml = xmlarea.syncedXml();
 
     var lng_nomoj = {};
-    for (var kodo in traduk_lingvoj(xml)) {
+    for (var kodo in x.traduk_lingvoj(xml)) {
         const lnomo = $("#trd_chiuj_"+kodo).children('div').text();
         lng_nomoj[lnomo] = kodo;
     }
@@ -1454,7 +1560,7 @@ function fill_tradukojn(lng,lingvo_nomo) {
                 
                 if ( trd && trd.length ) {
                     for (let j=0; j<trd.length; j++) {
-                        tableCnt += traduko_input_field(s.id,j,quoteattr(trd[j]));
+                        tableCnt += traduko_input_field(s.id,j,x.quoteattr(trd[j]));
                         tableCnt += "<br/>";
                     }
                 } else {
@@ -1564,7 +1670,7 @@ function plenigu_sxablonojn() {
 }
 
 function kiam_elektis_sxablonon(event) {
-    var sxbl = $("#sxablono_elekto").val();
+    var sxbl = $("#sxablono_elekto").val() as string;
     $("#sxablono_xml").empty();
     $("#sxablono_xml").off("keypress");
     $("#sxablono_xml").off("click");

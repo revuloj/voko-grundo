@@ -1,13 +1,55 @@
-
-/* jshint esversion: 6 */
-
 /**
- * @license (c) 2008 - 2021 Wolfram Diestel, Wieland Pusch, Bart Demeyere & al.
- * lau GPL 2.0
+ * @license (c) 2008 - 2023 ĉe Wolfram Diestel, Wieland Pusch, Bart Demeyere & al.
+ * laŭ GPL 2.0
  */
 
+
+// https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/jquery
+// https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/jqueryui
+
+// // / <reference types="@types/jquery/JQuery.d.ts" />
+import $ from "jquery";
+
+import * as x from '../x';
+
+/*
+export {};
+
+declare global {
+    interface jQuery {
+        ricevu: Function
+    }
+}
+*/
+
+// laŭ https://stackoverflow.com/questions/40948294/how-to-extend-jquery-functions-in-typescript
+// https://stackoverflow.com/questions/30960386/how-to-extend-the-window-typescript-interface#answer-30961346
+
+declare global {
+    interface JQuery {
+        form_text(): JQuery;
+        xklavo(key: string): any;
+        Checks: any;
+        validate(): boolean;
+        selection(): string;
+        textarea_selection(): string;
+        selectAll();
+        insert(text: string);
+    }
+
+    interface JQueryStatic {
+        alportu(url: string, params: any, error_to?: string|Function);
+        alportu2(settings: any, error_to?: string|Function);
+        ricevu(url: string, error_to?: string|Function);
+    }
+}
+
+
 console.debug("Etendante jQuery per kelkaj utilfunkcioj...");
+
 jQuery.extend({
+
+    //var $: JQuery = jQuery;
 
     ricevu: function(url,error_to) {
         if (error_to && typeof error_to == "string") $(error_to).hide();
@@ -97,10 +139,10 @@ jQuery.fn.extend({
         var el = this.get(0);
         if (window.getSelection) {
             // Firefox
-            return window.getSelection().toString();
+            return window.getSelection()?.toString();
         } else if (document.getSelection) {
             // IE?
-            return document.getSelection().toString();
+            return document.getSelection()?.toString();
         }
     },
 
@@ -110,6 +152,7 @@ jQuery.fn.extend({
         if ('selection' in document) {
             // Internet Explorer
             el.focus();
+            // @ts-ignore
             var sel = document.selection.createRange();
             return sel.text;
           }
@@ -123,8 +166,8 @@ jQuery.fn.extend({
           }
     },
     
-    // enmetu tekston ĉe la pozicio de kursoro, resp. anstataŭigu la nuna elekton per nova teksto
-    insert: function(myValue){
+    // enmetu tekston ĉe la pozicio de kursoro, resp. anstataŭigu la nunan elekton per nova teksto
+    insert: function(myValue) {
       var is_chrome = ((navigator.userAgent.toLowerCase().indexOf('chrome') > -1) &&
                        (navigator.vendor.toLowerCase().indexOf("google") > -1));        
         
@@ -133,7 +176,7 @@ jQuery.fn.extend({
         if (is_chrome) {
             //var tmp = this.value;
             this.focus();
-            scrollPos = $(this).scrollTop();
+            const scrollPos = $(this).scrollTop() || 0;
             ///var charBefore = this.value.charCodeAt(this.selectionStart-1);
             // en Chrome enmetaĵo foje shovighas unu signon tro frue, t.e. linirompo estos malantaŭ
             // la enmetaĵo anstataŭ antaŭ. Provu kompensi tiun problemon paŝante unu signon pli antaŭen...
@@ -151,9 +194,11 @@ jQuery.fn.extend({
             */ 
             document.execCommand("insertText", false, myValue);
             $(this).scrollTop(scrollPos);
+            // @ts-ignore
         } else if (document.selection) {
           // Internet Explorer
           this.focus();
+          // @ts-ignore
           var sel = document.selection.createRange();
           sel.text = myValue;
           this.focus();
@@ -179,7 +224,9 @@ jQuery.fn.extend({
     get_indent: function () {
         var txtarea = this.get(0);
         var indent = 0;
+        // @ts-ignore
         if (document.selection && document.selection.createRange) { // IE/Opera
+            // @ts-ignore
               var range = document.selection.createRange();
               range.moveStart('character', - 200); 
               var selText = range.text;
@@ -190,14 +237,14 @@ jQuery.fn.extend({
               const linestart = txtarea.value.substring(0, startPos).lastIndexOf("\n");
               while (txtarea.value.substring(0, startPos).charCodeAt(linestart+1+indent) == 32) {indent++;}
         }
-        return (str_repeat(" ", indent));
+        return (x.str_repeat(" ", indent));
     },
 
     // enŝovu markitan liniaron je pliaj du spacoj 
     indent: function(offset) {
         var txtarea = this.get(0);
         var selText, isSample=false;
-  
+        // @ts-ignore
         if (document.selection && document.selection.createRange) { // IE/Opera
           alert("tio ankoraux ne funkcias.");
         } else if (txtarea.selectionStart || txtarea.selectionStart==0) { // Mozilla
@@ -243,7 +290,9 @@ jQuery.fn.extend({
             pos = el.selectionStart;
         } else if('selection' in document) {
             el.focus();
+            // @ts-ignore
             var Sel = document.selection.createRange();
+            // @ts-ignore
             var SelLength = document.selection.createRange().text.length;
             Sel.moveStart('character', -el.value.length);
             pos = Sel.text.length - SelLength;
@@ -265,7 +314,7 @@ jQuery.fn.extend({
         return this.val().slice(pos-1,pos);
     },
 
-    xklavo: function(key) {
+    xklavo: function(key: string) {
 
         const cx1 = {
             s: '\u015D',
@@ -297,12 +346,13 @@ jQuery.fn.extend({
             '\u0134': 'J'
         };
         
-        function cxigi(b, key) {
-            var k=key; //String.fromCharCode(key);
+        function cxigi(b: string, key: string) {
+            const k = key; //String.fromCharCode(key);
             return (cx1[b] || (cx2[b] ? cx2[b] + k : ''));
         }
 
         var el = this.get(0);
+        // @ts-ignore
         if (document.selection && document.selection.createRange) { // IE/Opera
             /* /save window scroll position
             if (document.documentElement && document.documentElement.scrollTop)
@@ -312,6 +362,7 @@ jQuery.fn.extend({
                 */
             //get current selection  
             el.focus();
+            // @ts-ignore
             var range = document.selection.createRange();
             if (range.text != "") return true;
             range.moveStart('character', -1); 
@@ -383,9 +434,9 @@ jQuery.fn.extend({
             this.focus();
             
             // almenaŭ en IE necesas ruli al la ĝusta linio ankoraŭ, por ke ĝi estu videbla
-            var text = $(this).val();
-            var scroll_to_line = Math.max(get_line_pos(start,text).line - 5, 0);
-            var last_line = get_line_pos(text.length-1,text).line;
+            var text = $(this).val() as string;
+            var scroll_to_line = Math.max(x.get_line_pos(start,text).line - 5, 0);
+            var last_line = x.get_line_pos(text.length-1,text).line;
             this.scrollTop = this.scrollHeight * scroll_to_line / last_line;
         });
     },
@@ -406,9 +457,9 @@ jQuery.fn.extend({
 
     validate: function() {
         var valid = true;
-        this.each(function(i) {
-            var e = $(this);
-            if (e.Checks("instance")) {
+        this.each(function() {
+            const e = $(this);
+            if (e.Checks && e.Checks("instance")) {
                 if (! e.Checks("check")) valid=false;
             }
         });
@@ -416,7 +467,7 @@ jQuery.fn.extend({
     }
 });
 
-function xpress(event) {
+export function xpress(event) {
     var key = event.key;
     if (key == 'x' || key == 'X') {   // X or x
         return $(this).xklavo(key);

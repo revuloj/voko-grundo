@@ -1,3 +1,11 @@
+/*
+  (c) 2019-2023 ĉe Wolfram Diestel
+  laŭ GPL 2.0
+*/
+
+import * as u from '../u';
+
+export type ListNomo = "lingvoj" | "fakoj" | "stiloj";
 
 /**
  * Legas Revo-liston kiel lingvoj, fakoj, stiloj por montri 
@@ -35,16 +43,16 @@ export class Xlist {
   
       // unuafoje ŝargu la tutan liston el XML-dosiero
       if (! Object.keys(self.codes).length) {
-        var codes = {};
+        var codes: {[code: string]: string} = {};
   
-        HTTPRequest('GET', this.url, {},
-          function() {
+        u.HTTPRequest('GET', this.url, {},
+          function(request: XMLHttpRequest) {
               // Success!
               var parser = new DOMParser();
-              var doc = parser.parseFromString(this.response,"text/xml");
+              var doc = parser.parseFromString(request.response,"text/xml");
         
               for (var e of Array.from(doc.getElementsByTagName(self.xmlTag))) {
-                  var c = e.attributes['kodo']; // jshint ignore:line
+                  var c = e.attributes.getNamedItem('kodo'); // jshint ignore:line
                   //console.log(c);
                   codes[c.value] = e.textContent;
               } 

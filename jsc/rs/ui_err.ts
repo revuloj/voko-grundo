@@ -1,10 +1,26 @@
 
-/* jshint esversion: 6 */
+/* 
+ (c) 2016 - 2023 ĉe Wolfram Diestel
+ laŭ GPL 2.0
+*/
 
-// (c) 2016 - 2022 - Wolfram Diestel
-// laŭ GPL 2.0
+/// <reference types="@types/jqueryui/index.d.ts" />
 
-import { show_xhr_error } from './ui_dlg.js';
+import * as x from '../x';
+import { show_xhr_error } from './ui_dlg';
+import { HTMLError } from './sxabloniloj';
+
+
+interface Eraro extends Partial<x.LinePos> { id?: string, cls?: string, msg: string };
+
+declare global {
+
+    interface JQuery {
+        Erarolisto(opcioj: any);
+        Erarolisto(methodName: "aldonu", e: Eraro);
+        Erarolisto(methodName: "aldonu_liston", el: Array<Eraro>);
+    }
+}
 
 
 console.debug("Instalante la erar- kaj kontrolfunkciojn...");
@@ -101,7 +117,7 @@ $.widget( "redaktilo.Erarolisto", {
         //$("#kontrolo_list").fadeOut("fast", function() {
             // ni enŝovu la mesaĝon laŭ la ordo de linioj
             $("li",this.element).each(function(){
-                if ($(this).attr("value") > n_) {
+                if (parseInt($(this).attr("value") as string) > n_) {
                     $(this).before(li);
                 // $("#kontrolo_list").fadeIn("fast");
                     added = true;
@@ -168,7 +184,7 @@ export function xmlkontrolo() {
               $("#dock_eraroj").Erarolisto("aldonu_liston",
                 data.map(err => 
                     {
-                        if (err.msg) err.msg = quoteattr(err.msg); 
+                        if (err.msg) err.msg = x.quoteattr(err.msg); 
                         return err;
                     })
                 );
@@ -202,9 +218,10 @@ export function mrkkontrolo() {
     for (let mrk in mrkoj) {
         if (mrkoj[mrk] > 1) {
             //alert("" + mrkoj[mrk] + "-obla marko: "+ mrk);
-            var err = get_line_pos(mrkoj[mrk],xml);
-            err.line++; err.pos+=2;
-            err.msg = "marko aperas plurfoje: "+ mrk;
+            let linpos = x.get_line_pos(mrkoj[mrk],xml);
+            linpos.line++; linpos.pos+=2;
+            let err = linpos as Eraro;
+            (err as Eraro).msg = "marko aperas plurfoje: "+ mrk;
             $("#dock_eraroj").Erarolisto("aldonu",err);
         }
     }
@@ -216,18 +233,19 @@ export function mrkkontrolo() {
         var dmrk = 'xxx.0';
 
         for (let inx in sncoj) {
-            let snc = get_line_pos(inx,xml);
+            let linpos = x.get_line_pos(parseInt(inx),xml);
 
             // trovu derivaĵon antaŭ tiu senco
             for(var i=drvoj.length-1; i>=0; i--) {
                 let drv = drvoj[i];
-                if (drv.line < snc.line) {
+                if (drv.line < linpos.line) {
                     dmrk = drv.mrk;
                     break;
                 }
             }
     
-            snc.line++; snc.pos++;
+            linpos.line++; linpos.pos++;
+            let snc = linpos as Eraro;
             snc.msg = "senco sen marko, <span class='snc_mrk' title='aldonu'>aldonebla kiel: <a>"
                      + dmrk + "." + sncoj[inx] + "</a></span>";
             avt.Erarolisto("aldonu",snc);
@@ -246,9 +264,10 @@ export function klrkontrolo() {
         var avt = $("#dock_avertoj");
 
         for (let pos in klroj) {
-            let klr = get_line_pos(pos,xml);
+            let linpos = x.get_line_pos(+pos,xml);
    
-            klr.line++; klr.pos++;
+            linpos.line++; linpos.pos++;
+            let klr = linpos as Eraro;
             klr.msg = "klarigo sen krampoj, <span class='klr_ppp' title='anstataŭigu'>anstataŭigebla per: <a>" +
                 "&lt;klr&gt;[…]&lt;/klr&gt;</a></span>";
             avt.Erarolisto("aldonu",klr);
@@ -286,9 +305,9 @@ function kontrolu_liniojn(lines) {
     var k = Object.keys(lines);
     var id = "vktrl_"+k[0];
     // montru linion dum atendado...
-    $("#dock_avertoj").Erarolisto("aldonu",{
+    $("#dock_avertoj").Erarolisto("aldonu",<Eraro>{
         id: id, 
-        line: k[0],
+        line: +k[0],
         msg: "<span class=\"animated-dock-font\">kontrolante vortojn de linioj " + k[0] + ".." + k[k.length-1] + " ...</span>"
     });
 
@@ -308,7 +327,7 @@ function kontrolu_liniojn(lines) {
              //var str = data.replace('---','\u2014');
              $("#"+id).remove();
              $("#dock_avertoj").Erarolisto("aldonu_liston",
-                Object.keys(data).map(_ana2txt,data));
+                Object.keys(data).map(_ana2txt,data) as Array<Eraro>);
 
              /*
              for (n in data) {
@@ -323,7 +342,7 @@ function kontrolu_liniojn(lines) {
           });
 }
 
-export function surmetita_dialogo(url,root_el,loc) {
+export function surmetita_dialogo(url, root_el, loc = '') {
     
     $("body").css("cursor", "progress");
     $.get(
@@ -369,7 +388,10 @@ export function surmetita_dialogo(url,root_el,loc) {
 }
 
 export function show_error_status(error) {
-    plenigu_xmleraro_liston([{"line": "nekonata", "msg": error.toString().slice(0,256)+'...'}]);
+    //plenigu_xmleraro_liston([{"line": "nekonata", "msg": error.toString().slice(0,256)+'...'}]);
+    const err: Eraro = {"line": -1, "msg": error.toString().slice(0,256)+'...'};
+    $("#dock_eraroj").Erarolisto("aldonu",err);
+
     $("#elekto_indikoj").hide();
     $("#dock_klavaro").show();
     $("#dock_kontrolo").show();

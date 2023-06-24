@@ -4,12 +4,12 @@
       "target": "ES5",
       "module": "ES6",
       "moduleResolution": "node",
-      "strict": true,
+      "strict": false,
       "strictNullChecks": false,
       "esModuleInterop": true,
       "sourceMap": true,
       "rootDir": ".",
       "outDir": "../../build/ts/",
     },
-    "include": ["jsc/u.ts", "jsc/x.ts", "jsc/a/*", "jsc/rv/*"]
+    "include": ["jsc/u.ts", "jsc/x.ts", "jsc/a/*", "jsc/rs/*"]
 }

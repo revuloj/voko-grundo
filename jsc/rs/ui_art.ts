@@ -1,8 +1,42 @@
 
-/* jshint esversion: 6 */
+/* 
+ (c) 2018 - 2023 ĉe Wolfram Diestel
+ laŭ GPL 2.0
+*/
 
-// (c) 2018 - 2019 - Wolfram Diestel
-// laŭ GPL 2.0
+/// <reference types="@types/jqueryui/index.d.ts" />
+
+declare global {
+    interface JQuery {
+        Artikolo(opcioj?: any);
+        Artikolo(methodName: "nova", opcioj?: any): JQuery;
+        Artikolo(methodName: "load", dosiero: string, data: string): JQuery;
+        Artikolo(methodName: "change_count", count?: number): number;
+        Artikolo(methodName: "option", opcio: string): any;
+        Artikolo(methodName: "insert", xmlstr: string, sync?: boolean);
+        Artikolo(methodName: "insert_post", xmlstr: string, s_id: string);
+        Artikolo(methodName: "tradukoj", lng: string);
+        Artikolo(methodName: "enmetu_tradukojn");
+        Artikolo(methodName: "art_drv_mrk");
+        Artikolo(methodName: "drv_before_cursor");
+        Artikolo(methodName: "drv_markoj");
+        Artikolo(methodName: "snc_sen_mrk");
+        Artikolo(methodName: "klr_ppp"): {[pos: number]: string};
+        Artikolo(methodName: "markoj");
+        Artikolo(methodName: "backup");
+        Artikolo(methodName: "restore");
+        Artikolo(methodName: "plain_text", line_numbers: boolean);
+        Artikolo(methodName: "lines_as_dict", xml?: string):  {[lin: number]: string};
+        Artikolo(methodName: "goto");
+        Artikolo(methodName: "elekto", ins: string, elektita: string);
+        Artikolo(methodName: "elekto_menuo");
+
+    }
+}
+
+import * as x from '../x';
+import {preferoj} from '../a/preferoj';
+import {XMLArtikolo} from './sxabloniloj';
 
 console.debug("Instalante la artikolfunkciojn...");
 $.widget( "redaktilo.Artikolo", {
@@ -210,7 +244,7 @@ $.widget( "redaktilo.Artikolo", {
             var reader = new FileReader();
             reader.onload = function(ev) { 
                 // when finished reading file data.
-                var xml = ev.target.result;
+                var xml = ev.target?.result;
                 // el.val(xml);
                 const xmlarea = art.option("xmlarea");
                 xmlarea.setText(xml);
@@ -251,7 +285,7 @@ $.widget( "redaktilo.Artikolo", {
         } else if (keycode == 8) { // BACKSPACE
             if (this.elekto() == '') { // nur se nenio estas elektita!
                 var spaces = this.chars_before_pos();
-                if (spaces.length > 0 && all_spaces(spaces) && 0 == spaces.length % 2) { // forigu du anstataŭ nur unu spacon
+                if (spaces.length > 0 && x.all_spaces(spaces) && 0 == spaces.length % 2) { // forigu du anstataŭ nur unu spacon
                     event.preventDefault(); 
     
                     var el = this.element;
@@ -357,7 +391,7 @@ $.widget( "redaktilo.Artikolo", {
         var el = this.element;
         var pos = el.getCursorPosition();
         var text = this.element.val();
-        return enshovo_antaua_linio(text,pos + shift);
+        return x.enshovo_antaua_linio(text,pos + shift);
     },
 
     // eltrovu la signon antaŭ la nuna pozicio
@@ -420,7 +454,7 @@ $.widget( "redaktilo.Artikolo", {
                 // find mrk
                 var match = d.match(rx._mrk); 
                 if (match) {
-                    mrk = match[1];
+                    const mrk = match[1];
                     var dpos = match.index;
                     // count lines till <cnt
                     var lmatch2 = d.slice(0,dpos).match(rx._lbr);
@@ -428,7 +462,7 @@ $.widget( "redaktilo.Artikolo", {
                     // find kap
                     match = d.match(rx._kap); 
                     if (match) {
-                        kap = match[1]
+                        const kap = match[1]
                         .replace(rx._var,'')
                         .replace(rx._ofc,'')
                         .replace(rx._fnt,'')
@@ -455,7 +489,8 @@ $.widget( "redaktilo.Artikolo", {
         var mrkoj = {};
 
         if (xmlStr) {
-            var rx = this._regex_mrk;
+            const rx = this._regex_mrk;
+            let m;
             while ((m = rx._mrk.exec(xmlStr)) !== null) {
                 //var matches = xmlStr.match(rx._mrk);
                 let m1 = m[1];
@@ -472,7 +507,8 @@ $.widget( "redaktilo.Artikolo", {
         var sncoj = {};
 
         if (xmlStr) {
-            var rx = this._regex_mrk;
+            const rx = this._regex_mrk;
+            let m;
             while ((m = rx._snc.exec(xmlStr)) !== null) {
                 var mrk = m[1]; // la unua vorto post <snc>... 
                 // se dua estas majusklo ni supozas mallongigon, aliokaze ni minuskligas
@@ -483,7 +519,7 @@ $.widget( "redaktilo.Artikolo", {
         return sncoj;
     },
 
-    // PLIBONIGU: ŝovu al xmlarea
+    // PLIBONIGU: ŝovu tiun funkcion al x/xmlarea.ts
     // klarigoj el tri punktoj kie mankas []
     klr_ppp: function() {
         const xmlarea = this.option("xmlarea");
@@ -491,7 +527,8 @@ $.widget( "redaktilo.Artikolo", {
         var klroj = {};
 
         if (xmlStr) {
-            var rx = this._regex_klr;
+            const rx = this._regex_klr;
+            let m;
             while ((m = rx._klr.exec(xmlStr)) !== null) {
                 var klr = m[1];
                 klroj[m.index] = klr;
@@ -534,23 +571,23 @@ $.widget( "redaktilo.Artikolo", {
             var kap = '';
             //var trd = '';
             $(this).children("kap")
-                .contents()  
+                .contents()
                 .each(function(){
-                    if ( this.tagName == "tld" )
+                    if ( (this as Element).tagName == "tld" )
                         kap += '~';
                     else if ( this.nodeType === 3 ) {
                         kap += this.textContent.replace(',',',.. ');
                     }
                 });
 
-            trdj = [];
+            let trdj = [];
             $(this).children("trd[lng='"+lng+"']").each(
                 function() {
-                    trdj.push(innerXML(this));
+                    trdj.push(x.innerXML(this));
                         });
             $(this).children("trdgrp[lng='"+lng+"']").children("trd").each(
                 function() {
-                    trdj.push(innerXML(this));
+                    trdj.push(x.innerXML(this));
                 });
             tradukoj.push({mrk: mrk, kap: kap, trd: trdj});
         });
@@ -581,7 +618,7 @@ $.widget( "redaktilo.Artikolo", {
 
         const drvoj = this.drv_markoj();
         for(let i=drvoj.length-1; i>=0; i--) {
-            drv = drvoj[i];
+            const drv = drvoj[i];
             if (drv.line < line_pos.line) {
                 return drv;
             }
@@ -605,9 +642,10 @@ $.widget( "redaktilo.Artikolo", {
 
         // line numbers?
         if (line_numbers) {
-            var lines = t.split('\n');
-            t = ''; n=1;
-            for (i = 0; i<lines.length; i++) {
+            const lines = t.split('\n');
+            t = '';
+            let n = 1;
+            for (let i = 0; i<lines.length; i++) {
                 t += "[" + n + "]" + lines[i] + '\n';
                 n++;
             }
@@ -645,10 +683,11 @@ $.widget( "redaktilo.Artikolo", {
     // transformas la rezulton de plain_text en objekton,
     // kies ŝlosiloj estas la lininumeroj kaj kies
     // valoroj estas la nudaj tekst-linioj
+    // (bezonata por vortkontrolo/analizo)
     lines_as_dict: function(xml) {
         var lines = this.plain_text(true).split('\n');
         var result = {};
-        for (i=0; i<lines.length; i++) {
+        for (let i=0; i<lines.length; i++) {
             var line = lines[i];
             var d = line.indexOf(']');
             var no = line.slice(1,d);

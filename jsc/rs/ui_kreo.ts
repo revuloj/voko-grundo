@@ -1,10 +1,10 @@
 
-/* jshint esversion: 6 */
-
 /**
- * @license (c) 2016 - 2018 Wolfram Diestel
+ * @license (c) 2016 - 2023 Wolfram Diestel
  * lau GPL 2.0
  */
+
+/// <reference types="@types/jqueryui/index.d.ts" />
 
 import menu_init from './ui_menu.js';
 import dlg_init from './ui_dlg.js';

@@ -7,8 +7,10 @@
 // iloj por signaroj...
 //*********************************************************************************************
 
-interface String {
-    hashFnv32a(asString: boolean, seed: number): number|string;
+declare global {
+    interface String {
+        hashFnv32a(asString: boolean, seed: number): number|string;
+    }
 }
 
 
@@ -62,7 +64,7 @@ String.prototype.hashFnv32a = function(asString: boolean=false, seed: number): n
  * @param text 
  * @returns la teksto kun la askiigitaj supersignoj
  */ 
-function alCx(text: any) {
+export function alCx(text: any) {
     return (
       text.replace('Ĉ','Cx')
           .replace('Ĝ','Gx')
@@ -86,7 +88,7 @@ function alCx(text: any) {
  * @param preserveCR 
  * @returns la tradukita teksto
  */
-function quoteattr(s: string, preserveCR: boolean=false) {
+export function quoteattr(s: string, preserveCR: boolean=false) {
     const CR = preserveCR ? '&#13;' : '\n';
     return ('' + s) /* Forces the conversion to string. */
         .replace(/&/g, '&amp;') /* This MUST be the 1st replacement. */
@@ -110,7 +112,7 @@ function quoteattr(s: string, preserveCR: boolean=false) {
  * @returns la teksta prezento de la nombro
  * 
  */
-function formatFloat(x: number, nbDec: number) { 
+export function formatFloat(x: number, nbDec: number) { 
     if (!nbDec) nbDec = 100;
     var a = Math.abs(x);
     var e = Math.floor(a);

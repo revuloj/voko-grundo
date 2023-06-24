@@ -4,6 +4,9 @@
  laŭ GPL 2.0
 */
 
+import * as u from '../u';
+import * as x from '../x';
+
 import '../x/tekstiloj';
 import '../x/voko_entities';
 import {Strukturero} from '../x/xmlstruct';
@@ -27,8 +30,8 @@ const MathJax = (window as any).MathJax;
 // difinu ĉion sub nomprefikso "redaktilo"
 export namespace redaktilo {
 
-  var xmlarea = null;  
-  var xklavaro = null;
+  let xmlarea: Xmlarea;  
+  let xklavaro: XKlavaro;
   var redakto = 'redakto'; // 'aldono' por nova artikolo
 
   const cgi_vokosubmx = '/cgi-bin/vokosubmx.pl';
@@ -72,7 +75,7 @@ export namespace redaktilo {
    * @memberof redaktilo
    * @inner
    */
-  const xml_shbl = {
+  const xml_shbl: {[key: string]: u.ElementSpec} = {
     trd: ["trd",{},"$_"],
     trd_lng: ["trd",{lng:"$r:trdlng"},"$_"],
     trdgrp: ["trdgrp",{lng:"$r:trdlng"},[
@@ -135,7 +138,7 @@ export namespace redaktilo {
     let p_lines = 0;
 
     //function xmlstr(jlist) {
-    return [(function xmlstr(jlist) {
+    return [(function xmlstr(jlist: Array<u.ContentSpec>): string {
 
       // $_ ni anstataŭigos per la elektita teksto, 
       // $<var> per la valoro de elemento kun id="var"
@@ -146,6 +149,7 @@ export namespace redaktilo {
           : (v[0] == "$"? ie.value : v);
       }
 
+      // tradukas esprimon por /string/ al /string/
       function str(s: string): string {
         if (p_kursoro < 0 && s.indexOf("\n")>-1) p_lines++;
 
@@ -161,13 +165,16 @@ export namespace redaktilo {
             // en alternativo la unua
             // efektiva valoro haltigas la valorigadon!
             xml += v;
-            return;
+            return '';
           }
-        }
+        };
+        return '';
       }
+
+      // traduku ŝablonon al xml-teksto
       if (!jlist || !jlist[0]) {
         console.error("Nedifinita ŝablono: \""+name+"\"");
-        return;
+        return '';
       }
       let xml = "";
       for (const el of jlist) {
@@ -249,7 +256,7 @@ export namespace redaktilo {
       if (selText != "") return true;
 
       var before = xmlarea.charBefore();
-      var nova = cxigi(before, key);
+      var nova = x.cxigi(before, key);
 
       if (nova != "") {
         //range.text = nova;
@@ -297,7 +304,7 @@ export namespace redaktilo {
         // traktu enŝovojn linikomence...
         const before = xmlarea.charBefore();
         if (before == '\n') {
-          const indent = get_indent(xmlarea.txtarea,-1) || '  ';
+          const indent = x.get_indent(xmlarea.txtarea,-1) || '  ';
           xmlarea.selection(indent); 
         } else if (before == ' ') {
           const indent = '  ';
@@ -309,7 +316,7 @@ export namespace redaktilo {
     } else if (keycode == 8) { // BACKSPACE
       if (xmlarea.selection() == '') { // aparta trakto nur se nenio estas elektita!
         const spaces = xmlarea.charsFromLineStart();
-        if (spaces.length > 0 && all_spaces(spaces) && 0 == spaces.length % 2) { 
+        if (spaces.length > 0 && x.all_spaces(spaces) && 0 == spaces.length % 2) { 
             // forigu du anstataŭ nur unu spacon
             event.preventDefault(); 
 
@@ -353,9 +360,12 @@ export namespace redaktilo {
    */
   function nextTag(tag: string, dir: number) {
         
-      function lines(str){
-        try { return(str.match(/[^\n]*\n[^\n]*/gi).length); } 
-        catch(e) { return 0; }
+      function lines(str: string) {
+        try { 
+            return(str.match(/[^\n]*\n[^\n]*/gi)?.length);
+        } catch(e) { 
+          return 0; 
+        }        
       }
 
       var txtarea = document.getElementById('r:xmltxt') as HTMLInputElement;
@@ -402,7 +412,7 @@ export namespace redaktilo {
    * @memberof redaktilo
    */
   export function store_preferences() {
-    var prefs = {};
+    var prefs: {[key: string]: any} = {};
     for (var key of ['r:redaktanto','r:trdlng','r:klrtip','r:reftip','r:sxangxo','r:cx','r:xklvr']) {
       const el = document.getElementById(key) as HTMLInputElement;
       if (el) prefs[key] = el.value;
@@ -456,10 +466,10 @@ export namespace redaktilo {
     cx.value = prefs['r:cx'] || 0;
     if (prefs['r:cx']) {
       xklvr.value = "1";
-      show("r:klavaro");
+      x.show("r:klavaro");
     } else {
       xklvr.value = "0";
-      hide("r:klavaro");
+      x.hide("r:klavaro");
     }
   }
 
@@ -504,7 +514,7 @@ export namespace redaktilo {
   export function fs_toggle(id: string) {
     var el = document.getElementById(id);
     var fs_id: string;
-    if (! el.classList.contains('aktiva')) {
+    if (el && ! el.classList.contains('aktiva')) {
       for (var ch of Array.from(el.parentElement.children)) {
         ch.classList.remove('aktiva');
         fs_id = 'r:fs_'+ch.id.substring(2);
@@ -549,7 +559,7 @@ export namespace redaktilo {
       ul = elch[0];
     }
     for (var e of err) {
-      var li = ht_element("li",{},e); //createTElement("li",e);               
+      var li = u.ht_element("li",{},e); //createTElement("li",e);               
       ul.appendChild(li);       
     }
   }
@@ -583,7 +593,7 @@ export namespace redaktilo {
    * @param regex - la regulesprimo per kiu ni serĉas la uzojn
    * @returns la listo de nevalidaj koduzoj - kiel trovoj per regulesprimo
    */
-  function kontrolu_kodojn(clist: string, regex: RegExp) {
+  function kontrolu_kodojn(clist: x.ListNomo, regex: RegExp) {
     const xml = xmlarea.syncedXml(); //document.getElementById("r:xmltxt").value;
     const list = revo_codes[clist];
     let m: RegExpExecArray; 
@@ -802,11 +812,11 @@ export namespace redaktilo {
    * @param {string} xml - la sendota XML-teksto
    */
   function vokohtmlx(xml: string) {
-    HTTPRequest('POST',cgi_vokohtmlx,
+    u.HTTPRequest('POST',cgi_vokohtmlx,
     {
       xmlTxt: xml
     },
-    function (data) {
+    function (data: string) {
       // Success!
       var parser = new DOMParser();
       var doc = parser.parseFromString(data,"text/html");
@@ -815,8 +825,8 @@ export namespace redaktilo {
       var article = doc.getElementsByTagName("article")[0];
       if (article) {
         // anstataŭigu GIF per SVG  
-        fix_img_svg(article);
-        fix_art_href(article);
+        x.fix_img_svg(article);
+        x.fix_art_href(article);
 
         // enmetu la artikolan HTML je la antaŭrigardo
         rigardo.textContent = '';
@@ -871,7 +881,7 @@ export namespace redaktilo {
     // console.log("vokomailx red:"+red);
     // console.log("vokomailx sxg:"+sxg);
 
-    HTTPRequest('POST',cgi_vokosubmx,
+    u.HTTPRequest('POST',cgi_vokosubmx,
       {
         xmlTxt: xml,
         art: art,
@@ -942,11 +952,11 @@ export namespace redaktilo {
     const red = get_preference('r:redaktanto');
     if (!red) return;
 
-    HTTPRequest('POST',cgi_vokosubm_json,
+    u.HTTPRequest('POST',cgi_vokosubm_json,
     {
       email: red
     },
-    function (data) {
+    function (data: string) {
       // Success!
       if (data) {
         var json = JSON.parse(data);
@@ -1018,7 +1028,7 @@ export namespace redaktilo {
    * @param params - HTTP-parametroj, ni ekstraktas parametron 'art', kiu donas la dosiernomon de la artikolo
    */
   function load_xml(params: string) {
-    var art = getParamValue("art",params) || getParamValue("r",params);
+    var art = x.getParamValue("art",params) || x.getParamValue("r",params);
 
     function replace_entities(data: string) {
         return data.replace(/&[^;\s]+;/g, function (ent) {
@@ -1028,7 +1038,8 @@ export namespace redaktilo {
           } else if (key.match(re_dec)) {
             return String.fromCharCode(parseInt(key.substring(1),10));
           } else {
-            const val = voko_entities[key];
+            // @ts-ignore
+            const val = x.voko_entities[key];
             return (val && val.length == 1)? val : ent;
           }
         }); 
@@ -1036,7 +1047,7 @@ export namespace redaktilo {
 
     if (art) {
 
-      HTTPRequest('GET',xml_url+art+'.xml',{},
+      u.HTTPRequest('GET',xml_url+art+'.xml',{},
       function(data: string) {
           // Sukceso!
           const xmlteksto = replace_entities(data);
@@ -1065,9 +1076,9 @@ export namespace redaktilo {
     if (index == 0) sel_stru.textContent = ''; // malplenigu la liston ĉe aldono de unua ero...
 
     if (selected) {
-      sel_stru.append(ht_element('option',{value: subt.id, class: subt.el, selected: 'selected'},subt.dsc));
+      sel_stru.append(u.ht_element('option',{value: subt.id, class: subt.el, selected: 'selected'},subt.dsc));
     } else {
-      sel_stru.append(ht_element('option',{value: subt.id, class: subt.el},subt.dsc));
+      sel_stru.append(u.ht_element('option',{value: subt.id, class: subt.el},subt.dsc));
     }
   }
 
@@ -1122,7 +1133,7 @@ export namespace redaktilo {
    */
   function load_ref_sub(art: string,_mrk: string) {
 
-    HTTPRequest('GET',tez_url+art+'.json',{},
+    u.HTTPRequest('GET',tez_url+art+'.json',{},
       function (data: string) {
         const json = 
           /** @type { {mrk: Array<Array>} } */
@@ -1135,15 +1146,15 @@ export namespace redaktilo {
           rm.textContent = '';
   
           // la drv
-          rm.append(ht_element("option",{},art+_mrk));
+          rm.append(u.ht_element("option",{},art+_mrk));
           // ĉio ene (snc, subsnc, rim)
           for (const mrk of mrkj) {
             if (mrk[0].startsWith(_mrk+'.')) {
-              rm.append(ht_element("option",{},art+mrk[0]));
+              rm.append(u.ht_element("option",{},art+mrk[0]));
             }
           }
 
-          show("r:refmrk");
+          x.show("r:refmrk");
         }
       });
   }
@@ -1214,9 +1225,9 @@ export namespace redaktilo {
           const pressed = ""+(1 - parseInt(xklvr.value));
           xklvr.value = pressed;
           if (pressed) {
-            show("r:klavaro");
+            x.show("r:klavaro");
           } else {
-            hide("r:klavaro");
+            x.hide("r:klavaro");
           }
       });    
 
@@ -1227,20 +1238,20 @@ export namespace redaktilo {
       const klvr = document.getElementById("r:klavaro");
       xklavaro = new XKlavaro(klvr, null, xmltxt,
         () => xmlarea.getRadiko(),
-        (event,cmd) => { 
+        (event: Event, cmd) => { 
           // PLIBONIGU: tion ni povas ankaŭ meti en xklavaro.js!
           if (cmd.cmd == 'indiko') {
-            hide("r:klv_fak");
-            show("r:klv_ind");
-            hide("r:klv_elm");
+            x.hide("r:klv_fak");
+            x.show("r:klv_ind");
+            x.hide("r:klv_elm");
           } else if (cmd.cmd == 'fako') {
-            hide("r:klv_ind");
-            show("r:klv_fak");
-            hide("r:klv_elm");
+            x.hide("r:klv_ind");
+            x.show("r:klv_fak");
+            x.hide("r:klv_elm");
           } else if (cmd.cmd == 'klavaro') {
-            hide("r:klv_fak");
-            show("r:klv_elm");
-            hide("r:klv_ind");
+            x.hide("r:klv_fak");
+            x.show("r:klv_elm");
+            x.hide("r:klv_ind");
           }
         },
         () => xmlarea.setUnsynced())
@@ -1356,7 +1367,7 @@ export namespace redaktilo {
       } else if (b.classList.contains("help_btn")) { // (?) (<>)
         b.addEventListener("click", function(event) {
           const trg = event.currentTarget as Element;
-          helpo_pagho(trg.getAttribute("value"));
+          x.helpo_pagho(trg.getAttribute("value"));
         });
 
       } else { // ŝablon-butonoj
@@ -1384,14 +1395,14 @@ export namespace redaktilo {
     // prezento de traduklisto kiel HTML-dd-elemento
     // enhavanta la tradukojn kiel ul-listo
     function dl_dd(lng: Lingvo, trd: string[]): Element {
-      return <Element>ht_list(trd,'ul',{}, function(t: string) {
+      return <Element>u.ht_list(trd,'ul',{}, function(t: string) {
           //var t = s; // la traduko
-          const li = ht_element('li');
+          const li = u.ht_element('li');
           if (t.slice(0,2) == '?;') {
-            li.append(ht_element('span',{class: 'dubinda'},'?'));
+            li.append(u.ht_element('span',{class: 'dubinda'},'?'));
             t = t.slice(2);
           }
-          li.append(ht_element('span',{class: 'trd'},t));
+          li.append(u.ht_element('span',{class: 'trd'},t));
           return li;
       });
     } 
@@ -1401,19 +1412,19 @@ export namespace redaktilo {
       if (json) {
           // butonojn por aldoni ni montras nur, se (sub)drv|(sub)snc estas
           // elektita en la redaktilo...
-          s_trd.prepend('El ',ht_element('a',{href: uwn_url},'Universala Vortreto'),
+          s_trd.prepend('El ',u.ht_element('a',{href: uwn_url},'Universala Vortreto'),
             ', kontrolu ĝustecon antaŭ aldoni!');          
 
           for (let t in json) {
               const tv = json[t];
               // montru serĉ-rezultojn kiel html summary/details 
-              const details = ht_details(
-                tv.trd.eo.map(s => s.replace(/\?;/,'?:\u00a0'))
+              const details = u.ht_details(
+                tv.trd.eo.map((s: string) => s.replace(/\?;/,'?:\u00a0'))
                   .join(', ')||t, '',
                 function(d: Element) {
                   // esp-a difino
                   const eo = (tv.dif && tv.dif.length)? tv.dif : ['-/-'];
-                  const pe = ht_elements([
+                  const pe = u.ht_elements([
                       ['p',{},[
                           ['em',{},'eo: '],
                           ...eo
@@ -1423,7 +1434,7 @@ export namespace redaktilo {
 
                   // angla difino
                   const en = tv.dsc? tv.dsc : ['-/-'];
-                  const pa = ht_elements([
+                  const pa = u.ht_elements([
                       ['p',{},[
                         ['em',{},'en: '], 
                         en ]]
@@ -1432,7 +1443,7 @@ export namespace redaktilo {
 
                   // tradukojn prezentu kiel difinlisto (dl)
                   var nkasxitaj = 0;
-                  const dl = <Element>ht_dl(
+                  const dl = <Element>u.ht_dl(
                     tv.trd,
 
                     // tiu funkci revokiĝas por ĉiu trovita en la json-listo lingvo 
@@ -1457,20 +1468,20 @@ export namespace redaktilo {
                         // per CSS
                         //if (has_trd(lng)) cls.push('tradukita');
 
-                        var atr: AtributSpec = {};
+                        var atr: u.AtributSpec = {};
                         if (cls.length) atr = {class: cls.join(' ')};
 
                         // DT
-                        ht_attributes(dt,atr);
+                        u.ht_attributes(dt,atr);
                         dt.append('['+lng+'] ' +ln);
 
                         // DD: tradukoj estas listo, kiun ni aldonas en dd
                         atr.lang = lng; 
-                        ht_attributes(dd,atr);
+                        u.ht_attributes(dd,atr);
 
                         dd.append(dl_dd(lng,trd));
                       } // ...if ln                      
-                    }, // ht_dl callback
+                    }, // u.ht_dl callback
                     true); // true = sorted (keys=lng)
 
                     // aldonu eventon por reagi al +-butonoj
@@ -1487,20 +1498,20 @@ export namespace redaktilo {
                         // montru per hoketo, ke ni nun havas la tradukon en XML
                         const li = trg.closest('li');
                         li.classList.remove('aldonebla');
-                        li.append(ht_element('span',{class: 'ekzistas'},'\u2713'));
+                        li.append(u.ht_element('span',{class: 'ekzistas'},'\u2713'));
                         remove(li.querySelector('button'));
                       }
                     });
                     
                     // aldonu (+nn) - por videbligi la kasxitajn tradukojn
                     if (nkasxitaj) {
-                      const pli = ht_pli(nkasxitaj);
+                      const pli = u.ht_pli(nkasxitaj);
                       if (pli) dl.append(...pli);  
                     }
 
                     d.append(dl);
                 }
-              ); // ht_details
+              ); // u.ht_details
               if (details) s_trd.append(details);
 
           }  // for t in json
@@ -1509,10 +1520,10 @@ export namespace redaktilo {
           trad_ebloj();
           
           //t_red.transiro("tradukante");
-          show("r:tab_tradukoj",'collapsed');    
+          x.show("r:tab_tradukoj",'collapsed');    
       } else {
         s_trd.append("Nenio troviĝis.");
-        show("r:tab_tradukoj",'collapsed');    
+        x.show("r:tab_tradukoj",'collapsed');    
       }
     },
     start_wait,
@@ -1552,14 +1563,14 @@ export namespace redaktilo {
             const t = (trd)? trd.textContent : undefined;
             // se drv/snc estas elektita kaj la traduko ankoraŭ 
             // ne troviĝas tie, ni permesu aldoni ĝin
-            if ( ! xmlarea.tradukoj[lng] 
-              || ! xmlarea.tradukoj[lng].find(e => compareXMLStr(e,t) )
+            if ( ! xmlarea.tradukoj()[lng] 
+              || ! xmlarea.tradukoj()[lng].find((e: string) => u.compareXMLStr(e,t) )
               ) {
               // d.push('\u00a0'); // nbsp
               li.classList.add('aldonebla');
 
               if (!li.querySelector('button')) {
-                li.append(ht_element('button',{
+                li.append(u.ht_element('button',{
                   value: 'plus', 
                   title: 'aldonu al XML-(sub)drv/snc'},
                   '+'));    
@@ -1570,7 +1581,7 @@ export namespace redaktilo {
               // montru per hoketo, ke ni jam havas la tradukon en XML
               li.classList.remove('aldonebla');
               if (! li.querySelector('span.ekzistas')) {
-                li.append(ht_element('span',{class: 'ekzistas'},'\u2713'));
+                li.append(u.ht_element('span',{class: 'ekzistas'},'\u2713'));
               }
               remove(li.querySelector('button'));
             }
@@ -1582,16 +1593,16 @@ export namespace redaktilo {
           const dt = dd.previousSibling;
           if (dt instanceof Element) {
             const e = dt as Element;
-            if (xmlarea.tradukoj[lng]) {
+            if (xmlarea.tradukoj()[lng]) {
               e.classList.add('ekzistas');
               remove(dt.querySelector('span.aldonebla'));
               if (! dt.querySelector('span.ekzistas'))
-                e.append(ht_element('span',{class: 'ekzistas'},'\u2713'));
+                e.append(u.ht_element('span',{class: 'ekzistas'},'\u2713'));
             } else {
               e.classList.remove('ekzistas');
               remove(e.querySelector('span.ekzistas'));
               if (! e.querySelector('span.aldonebla'))
-                e.append(ht_element('span',{class: 'aldonebla'},'\u2026'));
+                e.append(u.ht_element('span',{class: 'aldonebla'},'\u2026'));
             }
           }
      
@@ -1601,7 +1612,7 @@ export namespace redaktilo {
       // forigas ilin, se ili restis de antaŭa elekto
       } else {
 
-        elekto.prepend(ht_element('p',{class: 'noto'},'Elektu (sub)derivaĵon aŭ (sub)sencon '
+        elekto.prepend(u.ht_element('p',{class: 'noto'},'Elektu (sub)derivaĵon aŭ (sub)sencon '
           + 'en la redaktilo, poste vi povas aldoni tie novajn tradukojn el la '
           + 'malsupraj faldlistoj per la +-butonoj.'));
 

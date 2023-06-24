@@ -1,8 +1,39 @@
 
-/* jshint esversion: 6 */
+/* 
+ (c) 2018 - 2023 ĉe Wolfram Diestel
+ laŭ GPL 2.0
+*/
 
-// (c) 2018 - Wolfram Diestel
-// laŭ GPL 2.0
+/// <reference types="@types/jqueryui/index.d.ts" />
+
+import * as u from '../u';
+import * as x from '../x';
+
+import {bar_styles, make_percent_bar} from './procentoj';
+import { HTMLFonto, HTMLTrovoDt, HTMLTrovoDdBld } from './sxabloniloj';
+
+type CitSercho = {
+    sercho: string,
+    kie?: string,
+    vrk?: string,
+    jar_de?: number,
+    jar_ghis?: number
+}
+
+type TrovValoroj = { url?: string, fmt?: number, 
+    aut?: string, bib?: string, vrk?: string, lok?: string, 
+    prm?: string, fnt?: string, frazo?: string }
+
+declare global {
+    interface JQuery {
+        Trovo(opcioj: any);
+        Trovo(methodName: "bildinfo", res: any, d: boolean, e: Function); //JQuery.Event);
+        KuntekstoBtn(opcioj: any);
+        RigardoBtn(opcioj: any);
+        EkzemploBtn(opcioj: any);
+        BildoBtn(opcioj: any);
+    }
+}
 
 //var sercho_focused_button = null;
 console.debug("Instalante la serĉfunkciojn...");
@@ -21,10 +52,12 @@ function _serĉo_preparo() {
 }
 
 /**
- * Preparas afiksojn laŭ la vortspecoj (i,a,o), al
+ * Por krei diversajn regulesprimojn ni bezonas scion pri
+ * aplikeblo de afiksoj kaj finaĵoj.
+ * La funkcio preparas afiksojn laŭ la vortspecoj (i,a,o), al
  * kiuj ili estas aplikeblaj kaj kiu vortspeco povas
  * rezulti, ekz-e "o-a", signifas aplikebla al substantivo kaj
- * rezultanta al adjektivo, "?" signifas ciuj tri vortspecoj...
+ * rezultanta al adjektivo, "?" signifas ĉiuj tri vortspecoj...
  * Alternativoj estas apartigitaj per '|', ekz-e "o-a|a-a"
  * 
  * @returns {{prefiksoj:{a,i,o},sufiksoj:{a,i,o,n}}}
@@ -33,7 +66,7 @@ const afiksoj = function() {
 
     // redonu sufiksojn aplikeblajn 
     // al radikkaraktero rk kun rezulta vortspeco vs (rk-vs|...)
-    const _sufiksoj = {
+    const _sufiksoj: u.StrObj = {
         "[aio]n?t": "i-u|i-a",
         "aĉ": "?-?",
         "ad": "i-?",
@@ -64,7 +97,7 @@ const afiksoj = function() {
         "um": "?-?",
     };
     
-    const _prefiksoj = {
+    const _prefiksoj: u.StrObj = {
         // bazaj prefiksoj
         "bo": "u-u|u-a",
         "ĉef": "o-o|o-a",
@@ -157,7 +190,7 @@ const afiksoj = function() {
         }*/
 
         for (const [affix,sk] of Object.entries(afiksoj)) {
-            const skemoj = sk.split('|');
+            const skemoj = (sk as string).split('|');
             for (const s of skemoj) {
                 const de = s[0];
                 const al = (s[2]=='u'? 'o' : s[2]); // la celon ulo ni bildigas al -o
@@ -248,9 +281,9 @@ export function citaĵoSerĉo(event) {
     if (! _serĉo_preparo()) return;
 
     // serĉesprimo: ŝablone kreita regulesprimo aŭ tajpita serĉvorto...?
-    const esprimo = $("#sercho_sercho").val();
+    const esprimo = $("#sercho_sercho").val() as string;
 
-    let sspec = {sercho: esprimo};
+    let sspec: CitSercho = {sercho: esprimo};
     if (vlist == 'klasikaj') {
         sspec.kie = 'klasikaj'
     } else if (! $("#sercho_verklisto").children().length) {
@@ -374,9 +407,9 @@ export function regulEsprimo(event) {
     //const sele = srch[0].selectionEnd;
 
     // kiu radikkaraktero estis elektita?
-    const rk = $("#regexes input[name='re_rk']:checked").val();
+    const rk = $("#regexes input[name='re_rk']:checked").val() as string;
     // kiun vortspecon ni sercu?
-    const vs = $("#regexes input[name='re_vs']:checked").val();
+    const vs = $("#regexes input[name='re_vs']:checked").val() as string;
 
     // vortkomenco?
     const vk = $("#re_b:checked").val();
@@ -580,8 +613,8 @@ export function elektitajVerkoj() {
     let vl = [];
     const vdiv = $("#sercho_verklisto");
     vdiv.find(":not(.kasxita)>:checked").each((i,e) => {
-        const v = e.value;
-        vl.push(v)            
+        const v: string = (e as HTMLInputElement).value;
+        vl.push(v);         
     });
     return vl;
 }
@@ -608,19 +641,19 @@ export function retoSerĉo(event) {
     
         let last_link = '', last_title = '';
         let n = 0;
-        const first_word = $("#sercho_sercho").val().split(' ')[0];
+        const first_word = ($("#sercho_sercho").val() as string).split(' ')[0];
         // forigu bildojn (img) kaj <link...> el la HTML, por ke ili ne automate elshutighu...
         data = data.replace(rx_img_link, '');
         const ŝablono = new HTMLTrovoDt();
         
-        $(data).find(".result-link,.result-snippet").filter(function() {
+        $(data).find(".result-link,.result-snippet").each(function() {
             var self = $(this);
 
             // memoru la url kiel last_link
             if ( self.is(".result-link") )   {
                 const href = self.attr("href");
-                const hpos = href.search('http');
-                last_link = hpos>=0? decodeURIComponent(href.slice(hpos)) : href;
+                const hpos = href?.search('http');
+                last_link = hpos >= 0? decodeURIComponent(href.slice(hpos)) : href;
                 last_title = self.text();
 
             // kreu trov-eron
@@ -755,7 +788,7 @@ function _bildo_info(pageids) {
                 for (var p in results) {
                         let res = results[p];
                         let trv = $("#trv_" + res.pageid);
-                        let dosieroj = trv.Trovo("bildinfo",res,d==0,
+                        let dosieroj = trv.Trovo("bildinfo", res, d==0,
                             function(event,data) {
                                 if (data) {                       
                                     _bildo_info_2(data.title);
@@ -803,7 +836,7 @@ function _bildeto_info(paghoj) {
                     const pageid = res.pageid;
 
                     if (res.thumbnail)
-                        $('#sercho_trovoj div.bildstriero a[href$="' + quoteattr(res.title) + '"]')
+                        $('#sercho_trovoj div.bildstriero a[href$="' + x.quoteattr(res.title) + '"]')
                             .html('<img src="'+res.thumbnail.source+'"/>');
 
                 }                  
@@ -853,13 +886,14 @@ function _bildo_info_2(dosiero) {
                         prm = '<meta-informoj mankas...>';
                     }
 
-                    let values = {};
-                    values.url = decodeURI(res.original ? res.original.source : res.canonicalurl);
-                    values.fmt = res.original ? res.original.width / res.original.height : 0;
-                    values.aut = forigu_markup(aut);
-                    values.prm = prm;
-                    values.fnt = decodeURI(res.canonicalurl);
-                    values.frazo = forigu_markup(desc);
+                    let values: TrovValoroj = {
+                        url: decodeURI(res.original ? res.original.source : res.canonicalurl),
+                        fmt: res.original ? res.original.width / res.original.height : 0,
+                        aut: x.forigu_markup(aut),
+                        prm: prm,
+                        fnt: decodeURI(res.canonicalurl),
+                        frazo: x.forigu_markup(desc)
+                    };
 
                     $("#bildo_dlg input[type!='radio']").val("");
                     $("#bildo_dlg").dialog("valoroj",values);
@@ -987,7 +1021,7 @@ $.widget( "redaktilo.Trovo", {
                 let ext = img.title.slice(-4).toLowerCase();
 
                 if (ext == '.jpg' || ext == '.png') {
-                    let iurl= "https://commons.wikimedia.org/wiki/" + quoteattr(img.title);
+                    let iurl= "https://commons.wikimedia.org/wiki/" + x.quoteattr(img.title);
                     let title = img.title.slice(5,-4); // forigu File: kaj .xxx eble pli inteligente uzu Regex...
                     let li_item_id = res.pageid + "_" + img.title.hashFnv32a(true);
 
@@ -1065,7 +1099,7 @@ $.widget( "redaktilo.Trovo", {
                             });
 
                 } else {
-                    throw nedifinita_fno;
+                    throw new Error('nedifinita fraz-n-ro');
                 }
             }
         });
@@ -1096,7 +1130,7 @@ $.widget( "redaktilo.RigardoBtn", {
                     window.open(this.options.url);
                     //console.debug("malfermas: "+url);
                 } else {
-                    throw nedifinita_url;
+                    throw new Error('nedifinita URL');
                 }
             }
         });
@@ -1124,7 +1158,7 @@ $.widget( "redaktilo.EkzemploBtn", {
 
         this._on({
             click: function(event) {
-                var values = {};
+                var values: TrovValoroj = {};
                 var data = this.options.data;
 
                 // rezulto de Tekstaro-serĉo
