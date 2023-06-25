@@ -22,6 +22,22 @@ declare global {
 }
 */
 
+// esbuild ne aŭtomate difinas $ / jQuery
+// eble vd. ankaŭ ĉe https://github.com/jquery/jquery-ui/blob/main/external/jquery/jquery.js
+// pri eblecoj difini jQuery en diversaj situacioj 
+//window.jQuery = window.$ = jQuery;
+// @ts-ignore
+//window.$ = jQuery;
+
+// problemo: esbuild provas dinamike ŝargi jQuery, sed ni volas mem ŝargi ĝin antaŭ nia kodo per <script>...
+// https://github.com/evanw/esbuild/issues/1921
+// https://esbuild.github.io/api/#external 
+// https://stackoverflow.com/questions/68423950/when-using-esbuild-with-external-react-i-get-dynamic-require-of-react-is-not-s
+
+// @ts-ignore
+// window.require = function() {};
+
+
 // laŭ https://stackoverflow.com/questions/40948294/how-to-extend-jquery-functions-in-typescript
 // https://stackoverflow.com/questions/30960386/how-to-extend-the-window-typescript-interface#answer-30961346
 
