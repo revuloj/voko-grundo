@@ -4,8 +4,9 @@
  laŭ GPL 2.0
 */
 
-/// <reference types="@types/jqueryui/index.d.ts" />
+//x/ <reference types="@types/jqueryui/index.d.ts" />
 
+/*
 declare global {
     interface JQuery {
         Artikolo(opcioj?: any);
@@ -33,73 +34,86 @@ declare global {
 
     }
 }
+*/
 
 import * as x from '../x';
-import {preferoj} from '../a/preferoj';
-import {XMLArtikolo} from './sxabloniloj';
+import { Xmlarea } from '../x';
+import { UIElement } from '../ui';
+
+import { preferoj } from '../a/preferoj';
+import { XMLArtikolo } from './sxabloniloj';
 
 console.debug("Instalante la artikolfunkciojn...");
-$.widget( "redaktilo.Artikolo", {
 
-    options: {
-        xmlarea: undefined,
+export class Artikolo extends UIElement {
+
+    static regex_mrk = {
+        _rad: new RegExp('<rad>([^<]+)</rad>',''),
+        _dos: new RegExp('<art\\s+mrk="\\$Id:\\s+([^\\.]+)\\.xml|<drv\\s+mrk="([^\\.]+)\\.',''),
+        _mrk: new RegExp('\\smrk\\s*=\\s*"([^"]+)"','g'),
+        _snc: new RegExp('<snc\\s*>\\s*(?:<[^>]+>\\s*){1,2}([^\\s\\.,;:?!()]+)','g')
+    };
+
+
+    static regex_klr = {
+        _klr: new RegExp('<klr>\\.{3}</klr>','g')
+    };
+
+    static regex_drv = {
+        _lbr: new RegExp('\n','g'),
+        _mrk: new RegExp('<drv\\s+mrk\\s*=\\s*"([^"]+)"', ''),
+        _kap: new RegExp('<drv[^>]+>\\s*<kap>([^]*)</kap>', ''),
+        _var: new RegExp('<var>[^]*</var>','g'),
+        _ofc: new RegExp('<ofc>[^]*</ofc>','g'),
+        _fnt: new RegExp('<fnt>[^]*</fnt>','g'),
+        _tl1: new RegExp('<tld\\s+lit="(.)"[^>]*>','g'),
+        _tl2: new RegExp('<tld[^>]*>','g')
+    };
+
+    static regex_txt = {
+        _tl0: new RegExp('<tld\\s*\\/>','g'),
+        _tld: new RegExp('<tld\\s+lit="([^"]+)"\\s*/>','g'),
+        _comment: new RegExp('\\s*<!--[^]*?-->[ \\t]*','g'),
+        _trdgrp: new RegExp('\\s*<trdgrp[^>]*>[^]*?</trdgrp\\s*>[ \\t]*','g'),
+        _trd: new RegExp('\\s*<trd[^>]*>[^]*?</trd\\s*>[ \\t]*','g'),
+        _fnt: new RegExp('\\s*<fnt[^>]*>[^]*?</fnt\\s*>[ \\t]*','g'),
+        _ofc: new RegExp('\\s*<ofc[^>]*>[^]*?</ofc\\s*>[ \\t]*','g'),
+        _gra: new RegExp('\\s*<gra[^>]*>[^]*?</gra\\s*>[ \\t]*','g'),
+        _uzo: new RegExp('\\s*<uzo[^>]*>[^]*?</uzo\\s*>[ \\t]*','g'),
+        _mlg: new RegExp('\\s*<mlg[^>]*>[^]*?</mlg\\s*>[ \\t]*','g'),
+        _frm: new RegExp('<frm[^>]*>[^]*?</frm\\s*>','g'),
+        _adm: new RegExp('\\s*<adm[^>]*>[^]*?</adm\\s*>[ ,\t]*','g'),
+        _aut: new RegExp('\\s*<aut[^>]*>[^]*?</aut\\s*>[ ,\t]*','g'),
+        _xmltag: new RegExp('<[^>]+>','g'),
+        _lineno: new RegExp('^(?:\\[\\d+\\])+(?=\\[\\d+\\])','mg'),
+        _nom: new RegExp('<nom[^>]*>[^]*?</nom\\s*>','g'),
+        _nac: new RegExp('<nac[^>]*>[^]*?</nac\\s*>','g'),
+        _esc: new RegExp('<esc[^>]*>[^]*?</esc\\s*>','g')
+    };
+
+    static regex_xml = {
+        _spc: new RegExp('\\s+/>','g'),
+        _amp: new RegExp('&amp;','g'),
+        _ent: new RegExp('&([a-zA-Z0-9_]+);','g')
+    };
+
+    opcioj: {
+        xmlarea: Xmlarea,
         dosiero: '',
-        reĝimo: 'redakto', // ĉe novaj artikoloj 'aldono'   
+        reĝimo: 'redakto'|'aldono', // ĉe novaj artikoloj 'aldono'   
         poziciŝanĝo: null, // evento
         tekstŝanĝo: null // evento
-    },
+    };
 
-    _create: function() {
-        this._super();
+    _change_count = 0
 
-        this._regex_mrk = {
-            _rad: new RegExp('<rad>([^<]+)</rad>',''),
-            _dos: new RegExp('<art\\s+mrk="\\$Id:\\s+([^\\.]+)\\.xml|<drv\\s+mrk="([^\\.]+)\\.',''),
-            _mrk: new RegExp('\\smrk\\s*=\\s*"([^"]+)"','g'),
-            _snc: new RegExp('<snc\\s*>\\s*(?:<[^>]+>\\s*){1,2}([^\\s\\.,;:?!()]+)','g')
-        };
+    static artikolo(element: HTMLElement|string) {        
+        let a = super.obj(element);
+        if (a instanceof Artikolo) return a;
+    };
 
-        this._regex_klr = {
-            _klr: new RegExp('<klr>\\.{3}</klr>','g')
-        };
-
-        this._regex_drv = {
-            _lbr: new RegExp('\n','g'),
-            _mrk: new RegExp('<drv\\s+mrk\\s*=\\s*"([^"]+)"', ''),
-            _kap: new RegExp('<drv[^>]+>\\s*<kap>([^]*)</kap>', ''),
-            _var: new RegExp('<var>[^]*</var>','g'),
-            _ofc: new RegExp('<ofc>[^]*</ofc>','g'),
-            _fnt: new RegExp('<fnt>[^]*</fnt>','g'),
-            _tl1: new RegExp('<tld\\s+lit="(.)"[^>]*>','g'),
-            _tl2: new RegExp('<tld[^>]*>','g')
-        };
-
-        this._regex_txt = {
-            _tl0: new RegExp('<tld\\s*\\/>','g'),
-            _tld: new RegExp('<tld\\s+lit="([^"]+)"\\s*/>','g'),
-            _comment: new RegExp('\\s*<!--[^]*?-->[ \\t]*','g'),
-            _trdgrp: new RegExp('\\s*<trdgrp[^>]*>[^]*?</trdgrp\\s*>[ \\t]*','g'),
-            _trd: new RegExp('\\s*<trd[^>]*>[^]*?</trd\\s*>[ \\t]*','g'),
-            _fnt: new RegExp('\\s*<fnt[^>]*>[^]*?</fnt\\s*>[ \\t]*','g'),
-            _ofc: new RegExp('\\s*<ofc[^>]*>[^]*?</ofc\\s*>[ \\t]*','g'),
-            _gra: new RegExp('\\s*<gra[^>]*>[^]*?</gra\\s*>[ \\t]*','g'),
-            _uzo: new RegExp('\\s*<uzo[^>]*>[^]*?</uzo\\s*>[ \\t]*','g'),
-            _mlg: new RegExp('\\s*<mlg[^>]*>[^]*?</mlg\\s*>[ \\t]*','g'),
-            _frm: new RegExp('<frm[^>]*>[^]*?</frm\\s*>','g'),
-            _adm: new RegExp('\\s*<adm[^>]*>[^]*?</adm\\s*>[ ,\t]*','g'),
-            _aut: new RegExp('\\s*<aut[^>]*>[^]*?</aut\\s*>[ ,\t]*','g'),
-            _xmltag: new RegExp('<[^>]+>','g'),
-            _lineno: new RegExp('^(?:\\[\\d+\\])+(?=\\[\\d+\\])','mg'),
-            _nom: new RegExp('<nom[^>]*>[^]*?</nom\\s*>','g'),
-            _nac: new RegExp('<nac[^>]*>[^]*?</nac\\s*>','g'),
-            _esc: new RegExp('<esc[^>]*>[^]*?</esc\\s*>','g')
-        };
-
-        this._regex_xml = {
-            _spc: new RegExp('\\s+/>','g'),
-            _amp: new RegExp('&amp;','g'),
-            _ent: new RegExp('&([a-zA-Z0-9_]+);','g')
-        };
+    constructor(element: HTMLElement|string, opcioj: any) {
+        super(element, opcioj);
 
         this.restore();
         this._change_count = 0;
@@ -114,127 +128,101 @@ $.widget( "redaktilo.Artikolo", {
             click: function(event) { this._trigger("poziciŝanĝo",event,null); }, 
             change:  this._change        
         }); // dum musalŝovo
-    },
+    };
 
-    backup: function() {
-        const xmlarea = this.option("xmlarea");
+    backup() {
+        const xmlarea = this.opcioj.xmlarea;
         const xml = xmlarea.syncedXml();
         window.localStorage.setItem("red_artikolo",JSON.stringify({
             'xml': xml, //this.element.val(), 
-            'nom': this.option.dosiero,
-            'red': this.option.reĝimo
+            'nom': this.opcioj.dosiero,
+            'red': this.opcioj.reĝimo
         }));
-    },
+    };
 
     // restarigi el loka krozil-memoro
-    restore: function() {
+    restore() {
         var str = window.localStorage.getItem("red_artikolo");
         var art = (str? JSON.parse(str) : null);
         if (art && art.xml) {
             //this.element.val(art.xml);
-            const xmlarea = this.option("xmlarea");
+            const xmlarea = this.opcioj.xmlarea;
             xmlarea.setText(art.xml);
-            this.option.reĝimo = art.red;
+            this.opcioj.reĝimo = art.red;
             // ni povus alternaitve demandi xmlarea.getDosiero(), 
             // se ni certas, ke enestas mrk
-            this.option.dosiero = art.nom;
+            this.opcioj.dosiero = art.nom;
             //this._setRadiko();
         }
 
         // preferataj lingvoj
         preferoj.restore();
-    },
+    };
 
-    nova: function(art) {
+    nova(art) {
         const nova_art = new XMLArtikolo(art).xml();
         //this.element.val();
-        const xmlarea = this.option("xmlarea");
+        const xmlarea = this.opcioj.xmlarea;
         xmlarea.setText(nova_art);
         this._change_count = 0;
 
         // notu, ke temas pri nova artikolo (aldono),
         // tion ni bezonas scii ĉe forsendo poste
-        this._setOption('reĝimo','aldono');
-        this._setOption('dosiero',art.dos);
-    },
+        this.opcioj['reĝimo'] = 'aldono';
+        this.opcioj['dosiero'] = art.dos;
+    };
 
     // aktualigu artikolon el data
-    load: function(dosiero,data) {
-        const xmlarea = this.option("xmlarea");
+    load(dosiero,data) {
+        const xmlarea = this.opcioj.xmlarea;
         xmlarea.setText(data);
 
         //var e = this.element;
         //e.val(data);
-        this.element.change();
+        
+        //this.element.change();
+        this._trigger("change");
         this._change_count = 0;
-        this._setOption("reĝimo",'redakto');
-        this._setOption("dosiero",dosiero);
-    },
+        this.opcioj["reĝimo"] = 'redakto';
+        this.opcioj["dosiero"] = dosiero;
+    };
 
-    /*
-    goto: function(line_pos,len = 1) {
-        var p = line_pos.split(":");
-        var line = p[0] || 1;
-        var lpos = p[1] || 1;
-        var e = this.element;
-        var pos = this.pos_of_line(line-1) + ( lpos>0 ? lpos-1 : 0 );
-        e.selectRange(pos); // rulu al la pozicio
-        e.selectRange(pos,pos+len); // nur nun marku <len> signojn por pli bona videbleco
-    },*/
 
     /* PLIBONIGU: ĉu ni plu bezonas insert(), aŭ ĉu ni lasu
     rekte voki al uzantaj funkcioj xmlarea.selection...?
     */
-    insert: function(xmlstr,sync=false) {
+    insert(xmlstr,sync=false) {
         const e = this.element;
         //e.insert(xmlstr);
-        const xmlarea = this.option("xmlarea");
+        const xmlarea = this.opcioj.xmlarea;
         xmlarea.selection(xmlstr);
         // se postulate, tuj sinkronigu, eventuale rekreante la strukturon
         if (sync) xmlarea.sync();
-        e.change();
-    },
+        //e.change();
+        this._trigger("change");
+    };
 
     // enŝovu novan tekston post elemento s_id
-    insert_post: function(xmlstr,s_id) {
+    insert_post(xmlstr,s_id) {
         const e = this.element;
         //e.insert(xmlstr);
-        const xmlarea = this.option("xmlarea");
+        const xmlarea = this.opcioj.xmlarea;
         xmlarea.xmlstruct.insertAfterId(s_id,xmlstr);
 
-        e.change();
-    },
+        //e.change();
+        this._trigger("change");
+    };
 
 
-    /*
-    _setOption: function( key, value ) {
-        this._super(key,value);
-        
-        if (key === "dosiero") {
-            this._setRadiko();
-        }
-    },*/
 
-    /*
-    _setRadiko: function() {
-        
-        var xml = this.element.val();
-        var m = xml.match(this._regex_mrk._rad);
-        this._radiko = m ? m[1] : '';
-        ---
-       const xmlarea = this.option("xmlarea");
-       this._radiko = xmlarea.getRadiko();
-    },
-    */
-
-    _dragOver: function(event) {
+    _dragOver(event) {
         event.stopPropagation();
         event.preventDefault();
         event.originalEvent.dataTransfer.dropEffect = 'copy';
-    },
+    };
 
     // legu artikolon el muse alŝovita teksto
-    _drop: function(event) {
+    _drop(event) {
         var el = this.element; //$(event.target);
         var art = this;
         event.stopPropagation();
@@ -244,18 +232,18 @@ $.widget( "redaktilo.Artikolo", {
             var reader = new FileReader();
             reader.onload = function(ev) { 
                 // when finished reading file data.
-                var xml = ev.target?.result;
+                const xml: string = ev.target?.result as string;
                 // el.val(xml);
-                const xmlarea = art.option("xmlarea");
+                const xmlarea = art.opcioj.xmlarea;
                 xmlarea.setText(xml);
-                art.option.reĝimo = 'redakto';
+                art.opcioj.reĝimo = 'redakto';
             };
             // start reading the file data.
             reader.readAsText(file); 
         }       
-    },
+    };
 
-    _keydown: function(event) {
+    _keydown(event) {
         var keycode = event.keyCode || event.which; 
    
         // traktu TAB por ŝovi dekstren aŭ maldekstren plurajn liniojn
@@ -295,22 +283,10 @@ $.widget( "redaktilo.Artikolo", {
                 }    
             }
         }
-    },
+    };
 
-    /*
-    _keypress: function(event) {
-        var keyCode = event.keyCode || event.which; 
 
-        if (keyCode == 13) {    
-            var enshovo = this.current_indent();     
-            console.log("nova linio..., enŝovo: "+enshovo.length);
-            this.element.insert("\n"+enshovo);
-            return false;
-        }
-    },
-    */
-
-    _keyup: function(event) {
+    _keyup(event) {
         this._trigger("poziciŝanĝo",event,{});
         
         var keycode = event.keyCode || event.which; 
@@ -327,9 +303,9 @@ $.widget( "redaktilo.Artikolo", {
             // alternative ni povas fari nur if(!this._change_count)this._change_count=1;
             if (0 == this._change_count % 20) this.backup();        
         }
-    },
+    };
 
-    _change: function(event) {
+    _change(event) {
         this._trigger("poziciŝanĝo",event,{});
         this._trigger("tekstŝanĝo",event,{});
 
@@ -340,25 +316,25 @@ $.widget( "redaktilo.Artikolo", {
         /* tie ni uzas eventon "input" rekte en xmlarea mem
         verŝajne ni devos la suprajn liniojn "tekstŝanĝo" pp ankaŭ
         pendigi al "input" anst. "change"!
-        const xmlarea = this.option("xmlarea");
+        const xmlarea = this.opcioj.xmlarea;
         xmlarea.setUnsynced();
         */
         
-    },
+    };
 
-    change_count: function() {
+    change_count() {
         return this._change_count;
-    },
+    };
 
     // redonas la radikon de la artikolo
-    radiko: function() {
+    radiko() {
         //return this._radiko;
-        const xmlarea = this.option("xmlarea");
+        const xmlarea = this.opcioj.xmlarea;
         return xmlarea.getRadiko(); 
-    },
+    };
 
     // redonas aŭ anstataŭigas la elektitan tekston
-    elekto: function(insertion,elektita) {
+    elekto(insertion,elektita) {
         var el = this.element;
         // redonu la elektitan tekston 
         if (insertion === undefined) {
@@ -371,20 +347,7 @@ $.widget( "redaktilo.Artikolo", {
             else
                 console.warn("Ne estas la teksto '" + elektita +"' ĉe la elektita loko! Do ĝi ne estas anstatŭigata.");
         }
-    },
-
-    /*
-    // kalkulu la signoindekson por certa linio
-    pos_of_line(line) {
-        var lines = this.element.val().split('\n');
-        var pos = 0;
-        
-        for (var i=0; i<line; i++) {
-            pos += lines[i].length+1;
-        }
-        return pos;
-    },
-    */
+    };
 
     // eltrovu la enŝovon de la linio antaŭ la nuna pozicio
     current_indent(shift = 0) {
@@ -392,7 +355,7 @@ $.widget( "redaktilo.Artikolo", {
         var pos = el.getCursorPosition();
         var text = this.element.val();
         return x.enshovo_antaua_linio(text,pos + shift);
-    },
+    };
 
     // eltrovu la signon antaŭ la nuna pozicio
     char_before_pos() {
@@ -400,7 +363,7 @@ $.widget( "redaktilo.Artikolo", {
         var pos = el.getCursorPosition();
         if (pos > 0)
             return this.element.val()[pos-1];
-    },
+    };
 
     // eltrovu la signojn antaŭ la nuna pozicio (ĝis la linikomenco)
     chars_before_pos() {
@@ -410,41 +373,25 @@ $.widget( "redaktilo.Artikolo", {
         var p = pos;
         while (p>0 && val[p] != '\n') p--;
         return val.substring(p+1,pos);
-    },    
-
-    /*
-    elekto_menuo: function() {
-        var ign = this._ignoreSelect
-        //console.info("ignoreSelect: "+ign);
-        
-        if ( ign > 0 ) {
-            // la truko ne funkcias en Firefox, ĉar ĝi ĵetas tri "select"-eventojn
-            // dum navigado al derivaĵo / linio
-            this._ignoreSelect = ign-1;
-        } else {
-          var elektita = this.elekto();
-          if (elektita != "<drv " && elektita != "<" && elektita != "")
-            $( "#elekto_menuo").show(); 
-        }
-    } */
+    };
 
     // redonu dosieronomon trovante ĝin en art-mrk aŭ drv-mrk
-    art_drv_mrk: function() {
-        const xmlarea = this.option("xmlarea");
+    art_drv_mrk() {
+        const xmlarea = this.opcioj.xmlarea;
         return xmlarea.getDosiero();
-    },
+    };
 
     // eltrovas la markojn (mrk=) de derivaĵoj, la korespondajn kapvortojn kaj liniojn
     // PLIBONIGU: ni povus preni tion supozeble nun rekte el la xmlarea-strukturo
     // kontrolu, kie ni fakte uzas drv_markoj...
-    drv_markoj: function() {
-        const xmlarea = this.option("xmlarea");
+    drv_markoj() {
+        const xmlarea = this.opcioj.xmlarea;
         var xmlStr = xmlarea.syncedXml(); //this.element.val();
-        var drvoj = [], pos = 0, line = 0;
+        var drvoj: Array<any> = [], pos = 0, line = 0;
 
         if (xmlStr) {
             var drv = xmlStr.split('</drv>');
-            var rx = this._regex_drv;
+            var rx = Artikolo.regex_drv;
             
             for (var i=0; i<drv.length; i++) {
                 var d = drv[i];
@@ -479,17 +426,17 @@ $.widget( "redaktilo.Artikolo", {
             }
         }
         return drvoj;
-    },
+    };
 
     // eltrovas ĉiujn markojn (mrk=) de derivaĵoj, sencoj ktp.
     // PLIBONIGU: elprenu el xmlarea anstatataŭe
-    markoj: function() {
-        const xmlarea = this.option("xmlarea");
+    markoj() {
+        const xmlarea = this.opcioj.xmlarea;
         var xmlStr = xmlarea.syncedXml(); //this.element.val();
         var mrkoj = {};
 
         if (xmlStr) {
-            const rx = this._regex_mrk;
+            const rx = Artikolo.regex_mrk;
             let m;
             while ((m = rx._mrk.exec(xmlStr)) !== null) {
                 //var matches = xmlStr.match(rx._mrk);
@@ -498,16 +445,16 @@ $.widget( "redaktilo.Artikolo", {
             }
         }
         return mrkoj;
-    },   
+    }; 
     
     // PLIBONIGU: ŝovu tiun funkcion al xmlarea
-    snc_sen_mrk: function() {
-        const xmlarea = this.option("xmlarea");
+    snc_sen_mrk() {
+        const xmlarea = this.opcioj.xmlarea;
         var xmlStr = xmlarea.syncedXml(); //this.element.val();
         var sncoj = {};
 
         if (xmlStr) {
-            const rx = this._regex_mrk;
+            const rx = Artikolo.regex_mrk;
             let m;
             while ((m = rx._snc.exec(xmlStr)) !== null) {
                 var mrk = m[1]; // la unua vorto post <snc>... 
@@ -517,17 +464,17 @@ $.widget( "redaktilo.Artikolo", {
             }
         }
         return sncoj;
-    },
+    };
 
     // PLIBONIGU: ŝovu tiun funkcion al x/xmlarea.ts
     // klarigoj el tri punktoj kie mankas []
-    klr_ppp: function() {
-        const xmlarea = this.option("xmlarea");
+    klr_ppp() {
+        const xmlarea = this.opcioj.xmlarea;
         var xmlStr = xmlarea.syncedXml(); //this.element.val();
         var klroj = {};
 
         if (xmlStr) {
-            const rx = this._regex_klr;
+            const rx = Artikolo.regex_klr;
             let m;
             while ((m = rx._klr.exec(xmlStr)) !== null) {
                 var klr = m[1];
@@ -535,68 +482,75 @@ $.widget( "redaktilo.Artikolo", {
             }
         }
         return klroj;
-    },    
+    };
 
     // elprenas la tradukojn de certa lingvo el XML-artikolo
     // PLIBONIGU: uzu xmlarea por tiu funkcio!
-    tradukoj: function(lng) {
-        var tradukoj = [];        
-        var rx = this._regex_xml;
+    tradukoj(lng) {
+        const rx = Artikolo.regex_xml;
+        const xmlarea = this.opcioj.xmlarea;
 
-        const xmlarea = this.option("xmlarea");
-        var xml = xmlarea.syncedXml() //this.element.val();
-            .replace(rx._ent,'?'); // entities cannot be resolved...
-        
-        var artikolo;
+        let tradukoj: Array<any> = [];        
+        let xml = xmlarea.syncedXml() //this.element.val();
+            .replace(rx._ent,'?'); // entities cannot be resolved...       
+        let artikolo: Element|null;
+
         try {
-            artikolo = $("vortaro",$.parseXML(xml));
+            // artikolo = $("vortaro",$.parseXML(xml));
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(xml,"text/xml");
+            artikolo = doc.querySelector("vortaro");    
         } catch(e) {
             console.error("Pro nevalida XML ne eblas trovi tradukojn.");
             //console.error(e);
             return;
         }
         
-        artikolo.find("[mrk]").each(function(index) {
-            var mrk = $(this).attr("mrk");
-            
-            // ignori artikolon kaj rimarkojn, kiuj povas havi mrk
-            if (this.tagName == "rim" || this.tagName == "art") return;
+        if (artikolo) {
+            artikolo.querySelectorAll("[mrk]").forEach((e) => {
+                var mrk = e.getAttribute("mrk");
+                
+                // ignori artikolon kaj rimarkojn, kiuj povas havi mrk
+                if (e.tagName == "rim" || e.tagName == "art") return;
 
-            // el artikolo-Id uzu ekstraktu la dosiernomon
-            //if (mrk.startsWith('$')) mrk = mrk.split(' ',2)[1].split('.')[0];
-            
-            // enshovi sencojn por pli facile legi la tabelon poste..
-            //if (this.tagName == "snc" || this.tagName == "subsnc" || this.tagName == "rim") mrk = "&nbsp;&nbsp;&nbsp;"+mrk;
-            
-            var kap = '';
-            //var trd = '';
-            $(this).children("kap")
-                .contents()
-                .each(function(){
-                    if ( (this as Element).tagName == "tld" )
-                        kap += '~';
-                    else if ( this.nodeType === 3 ) {
-                        kap += this.textContent.replace(',',',.. ');
-                    }
+                // el artikolo-Id uzu ekstraktu la dosiernomon
+                //if (mrk.startsWith('$')) mrk = mrk.split(' ',2)[1].split('.')[0];
+                
+                // enshovi sencojn por pli facile legi la tabelon poste..
+                //if (this.tagName == "snc" || this.tagName == "subsnc" || this.tagName == "rim") mrk = "&nbsp;&nbsp;&nbsp;"+mrk;
+                
+                var kap = '';
+                //var trd = '';
+                e.querySelectorAll("kap").forEach((k) => {
+                    k.childNodes
+                    .forEach((c) => {
+                        if ( c.nodeType === 1 && (c as Element).tagName == "tld" )
+                            kap += '~';
+                        else if ( c.nodeType === 3 ) {
+                            kap += c.textContent?.replace(',',',.. ');
+                        }
+                    });
                 });
 
-            let trdj = [];
-            $(this).children("trd[lng='"+lng+"']").each(
-                function() {
-                    trdj.push(x.innerXML(this));
-                        });
-            $(this).children("trdgrp[lng='"+lng+"']").children("trd").each(
-                function() {
-                    trdj.push(x.innerXML(this));
+                let trdj: Array<string> = [];
+                e.querySelectorAll("trd[lng='"+lng+"']").forEach( (c) => {                    
+                        trdj.push(c.innerHTML);
                 });
-            tradukoj.push({mrk: mrk, kap: kap, trd: trdj});
-        });
-        
+
+                e.querySelectorAll("trdgrp[lng='"+lng+"']").forEach((t) => {
+                    t.querySelectorAll("trd").forEach((t1) => {
+                        trdj.push(t1.innerHTML);
+                    });
+                    tradukoj.push({mrk: mrk, kap: kap, trd: trdj});
+                });
+            });
+        }
+
         return tradukoj;
-    },
+    };
 
-    enmetu_tradukojn: function () {
-        const xmlarea = this.option("xmlarea");
+    enmetu_tradukojn() {
+        const xmlarea = this.opcioj.xmlarea;
         const xmltrad = xmlarea.xmltrad;
 
         for (let s of xmlarea.xmlstruct.strukturo) {
@@ -607,13 +561,14 @@ $.widget( "redaktilo.Artikolo", {
             }
         }
         
-        this.element.change();    
-    },
+        //this.element.change();
+        this._trigger("change");
+    };
 
-    drv_before_cursor: function() {
+    drv_before_cursor() {
         //var line_pos = this.element.getCursorLinePos();
 
-        const xmlarea = this.option("xmlarea");
+        const xmlarea = this.opcioj.xmlarea;
         const line_pos = xmlarea.position();
 
         const drvoj = this.drv_markoj();
@@ -625,16 +580,16 @@ $.widget( "redaktilo.Artikolo", {
         }
         // aliokaze redonu la unuan
         return drvoj[0];  // kaŭzas eraron, se troviĝis neniu!
-    },
+    };
 
     // forigas XML-strukturon lasante nur la nudan tekston
     // krome aldonas lininumeron en la formo [n] komence
     // de ĉiu linio
-    plain_text: function(line_numbers=false) {
+    plain_text(line_numbers=false) {
         //var radiko = this._radiko;
-        const rx = this._regex_txt;
+        const rx = Artikolo.regex_txt;
 
-        const xmlarea = this.option("xmlarea");
+        const xmlarea = this.opcioj.xmlarea;
         const radiko = xmlarea.getRadiko();
         var t = (xmlarea.syncedXml() //this.element.val()
             .replace(rx._tl0,radiko)
@@ -678,13 +633,13 @@ $.widget( "redaktilo.Artikolo", {
             t = t.replace(rx._lineno,'');
         }
         return t;
-    },
+    };
 
     // transformas la rezulton de plain_text en objekton,
     // kies ŝlosiloj estas la lininumeroj kaj kies
     // valoroj estas la nudaj tekst-linioj
     // (bezonata por vortkontrolo/analizo)
-    lines_as_dict: function(xml) {
+    lines_as_dict(xml) {
         var lines = this.plain_text(true).split('\n');
         var result = {};
         for (let i=0; i<lines.length; i++) {
@@ -697,6 +652,6 @@ $.widget( "redaktilo.Artikolo", {
             }
         }
         return result;
-    }
-});
+    };
 
+}

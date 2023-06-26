@@ -10,6 +10,7 @@ import * as u from '../u';
 import * as x from '../x';
 import { DOM, Dialog, Valid, Eraro } from '../ui';
 
+import { Artikolo } from './ui_art';
 
 import { XMLReferenco, XMLReferencGrupo, XMLRimarko, XMLEkzemplo, 
          XMLFonto, XMLSenco, XMLDerivaĵo, XMLBildo, SncŜablono } from './sxabloniloj';
@@ -214,7 +215,7 @@ export default function() {
                 const dlg = Dialog.dialog("#krei_dlg");
                 if (dlg) {
                     const art = <NovaArt>(dlg.valoroj());
-                    $("#xml_text").Artikolo("nova",art);
+                    Artikolo.artikolo("#xml_text")?.nova(art);
                     $("#re_radiko").val(art.rad);
                     $("#dock_eraroj").empty();
                     $("#dock_avertoj").empty();
@@ -226,7 +227,8 @@ export default function() {
         open: function() {
             // ĉar tiu change_count ankaŭ sen vera ŝanĝo altiĝas, 
             // ni permesu ĝis 2 lastajn ŝanĝojn sen averti
-            if ($("#xml_text").Artikolo("change_count") > 2) {
+            const cc = Artikolo.artikolo("#xml_text")?.change_count();
+            if ( cc && cc > 2 ) {
                 $("#krei_error").html("Averto: ankoraŭ ne senditaj ŝanĝoj en la nuna artikolo perdiĝos kreante novan.")
                 $("#krei_error").show();
             } else {
@@ -234,8 +236,8 @@ export default function() {
             }
         }
     });
-    new x.XKlavaro(DOM.e("#krei_butonoj"),DOM.e("krei_dlg"),DOM.i("#krei_dif"),
-        undefined, // kiuradiko
+    new x.XKlavaro(DOM.e("#krei_butonoj")!,DOM.e("krei_dlg")!,DOM.i("#krei_dif")!,
+        undefined, // kiuradiko, provizore redonu stultaĵon
         function(event,ui) {
             if (ui.cmd == "blankigo") {
                 DOM.al_v("#krei_dlg input","");
@@ -268,18 +270,19 @@ export default function() {
             "Ŝargi": function(event) { 
                 event.preventDefault();
                 if (! $("#shargi_dosiero").validate()) return;
-                const values = $("#shargi_dlg").dialog("valoroj");
+                const values = Dialog.dialog("#shargi_dlg")?.valoroj();
                 download_art(values.dosiero,"#shargi_error","#shargi_dlg");
                 $("#dock_eraroj").empty();
                 $("#dock_avertoj").empty();
                 //$(this).dialog("close") 
             },
-            "\u2718": function() { $(this).dialog("close"); } 
+            "\u2718": function() { this.fermu(); } 
         },
         open: function() {
             // ĉar tiu change_count ankaŭ sen vera ŝanĝo altiĝas, 
             // ni permesu ĝis 2 lastajn ŝanĝojn sen averti
-            if ($("#xml_text").val() && $("#xml_text").val() && $("#xml_text").Artikolo("change_count") > 2) {
+            const cc = Artikolo.artikolo("#xml_text")?.change_count() || 0; 
+            if ($("#xml_text").val() && $("#xml_text").val() && cc > 2) {
                 $("#shargi_error").html("Averto: ankoraŭ ne senditaj ŝanĝoj en la nuna artikolo perdiĝos kreante novan.")
                 $("#shargi_error").show();
             } else {
@@ -947,7 +950,7 @@ function download_art(dosiero,err_to,dlg_id,do_close=true) {
                 $("#tabs").tabs( "option", "active", 0);
 
                 if (do_close) {
-                    Dialog.dialog(dlg_id)?.fermu();
+                    Dialog.fermu(dlg_id);
                 } else {
                     Dialog.dialog(dlg_id)?.faldu();
                 }
@@ -969,7 +972,7 @@ function download_url(url,dosiero,err_to,dlg_id,do_close=true) {
                 $("#tabs").tabs( "option", "active", 0);
 
                 if (do_close) {
-                    Dialog.dialog(dlg_id)?.fermu();
+                    Dialog.fermu(dlg_id);
                 } else {
                     Dialog.dialog(dlg_id)?.faldu();
                 }
@@ -1833,7 +1836,7 @@ function sxablono_enmeti(event) {
     $("#xml_text").Artikolo("insert",text,true);
     // $("#xml_text").insert(text);
     // $("#xml_text").change();
-    $("#sxablono_dlg").dialog("close");
+    Dialog.fermu("#sxablono_dlg");
 }
 
 function plenigu_lastaj_liston() {
@@ -1924,46 +1927,3 @@ function lastaj_tabelo_premo(event) {
     }
 }
 
-/*
-function plenigu_homonimo_liston() {
-    $("body").css("cursor", "progress");
-    $("#homonimo_error").show(); // montru la komentojn...
-    //$.get(
-    $.ricevu("homonimoj_senref", "#homonimo_error")
-    .done(
-      function(data, status, xhr) {   
-        if (xhr.status == 302) {
-            // FIXME: When session ended the OpenID redirect 302 is handled behind the scenes and here we get openid/login with status 200
-            console.debug(xhr.status + " " + xhr.statusText);
-            alert(xhr.status + " " + xhr.statusText); //'Seanco finiĝis. Bonvolu resaluti!');
-        } else {
-            var listo = '';
-            var previous = null; //{kap: '', art1: '', art2: ''};
-            
-            for (h=0; h< data.length; h++) {
-                var hom = data[h];
-                
-                if (! (previous && previous.kap == hom.kap && previous.art1 == hom.art2 && previous.art2 == hom.art1))
-                    listo += '<tr><td>' + hom.kap + '</td><td class="hom_art">' + hom.art1 + '</td><td class="hom_art">' + hom.art2 + '</td></tr>';
-                
-                previous = hom;
-            }
-            
-            $("#homonimo_listo").html(listo);
-            $("#homonimo_error").html('Aktuale ne ĉiuj interreferencoj <br/> '+
-                'kaŝitaj en (sub-)sencoj troviĝas. Do ne ĉiun okazon necesas korekti.');
-        }
-        // adaptu altecon de la dialogo, por ke la listo ruliĝu sed la titolo kaj reir-butono montriĝu...
-        var dlg = $("#homonimo_dlg").parent();
-        var view_h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
-        var decl_h = (view_h * .70) - dlg.children(".ui-dialog-titlebar").height(); // - dlg.children(".ui-dialog-buttonpane").height();
-        $("#homonimo_tabelo").height(decl_h);
-    })
-}
-
-function homonimo_tabelo_premo(event) {
-    event.preventDefault();
-    var dosiero = $(event.target).text();
-    $ ("#homonimo_dos").val(dosiero);
-}
-*/

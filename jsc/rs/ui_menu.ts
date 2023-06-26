@@ -11,6 +11,8 @@
         rimarko_dialogo, homonimo_dialogo, datumprotekto_dialogo } from './ui_dlg.js';
         */
 
+import { Menu } from '../ui';
+
 import { kontroli_artikolon, montri_indikojn } from './ui_tabl.js';
 import { surmetita_dialogo } from './ui_err.js';
 
@@ -18,7 +20,7 @@ console.debug("Instalante la menuon...");
 
 export default function() {
       // menuo
-      $( "#menu" ).menu({
+    new Menu("#menu", {
           items: "> :not(.ui-widget-header)",
           select: menu_selected
       });

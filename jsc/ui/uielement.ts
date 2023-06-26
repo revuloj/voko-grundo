@@ -51,8 +51,11 @@ export class UIElement {
         }
     };
 
-    _trigger(evnomo: string) {
-        const ev = new Event(evnomo, {'bubbles': true});
+    _trigger(evnomo: string, ev?: Event, opc?: any) {
+        if (!ev) 
+            ev = new Event(evnomo, {'bubbles': true});
+        if (opc)
+            ev.data = opc;
         this.element.dispatchEvent(ev);
     }
     

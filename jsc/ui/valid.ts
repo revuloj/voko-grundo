@@ -3,7 +3,9 @@
  * laŭ GPL 2.0
  */
 
+import { DOM } from './dom';
 import { UIElement } from './uielement';
+import { Eraro } from './erar';
 
 declare global {
     interface HTMLElement {

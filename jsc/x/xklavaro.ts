@@ -63,10 +63,10 @@ export class XKlavaro {
      * @param postenmeto - revokfunkcio, vokata post kiam tekstenmeta klavo estis premita
      */    
     constructor(public klavaro: Element, public dialogo: Element, public apriora_kampo: HTMLInputElement, 
-        public kiuradiko: Function, public reĝimpremo: Reghimpremo, public postenmeto: Function) 
+        public kiuradiko?: Function, public reĝimpremo?: Reghimpremo, public postenmeto?: Function) 
     {
         this.lasta_fokuso = this.apriora_kampo.id;
-        this.klavoj = this.klavaro.textContent;
+        this.klavoj = this.klavaro.textContent || '';
         const self = this;
         
         // kreu la klavojn

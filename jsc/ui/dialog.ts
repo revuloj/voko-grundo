@@ -32,6 +32,11 @@ export class Dialog extends UIElement {
         if (d instanceof Dialog) return d;
     }
 
+    static fermu(element: HTMLDialogElement|string) {
+        let d = super.obj(element);
+        if (d instanceof Dialog) d.fermu();
+    }
+
     constructor(element: HTMLDialogElement|string, opcioj: any) {
         super(element, opcioj);
     }
