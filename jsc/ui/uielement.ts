@@ -50,4 +50,11 @@ export class UIElement {
             this.element.addEventListener(ev,handlers[ev]);
         }
     };
+
+    _trigger(evnomo: string) {
+        const ev = new Event(evnomo, {'bubbles': true});
+        this.element.dispatchEvent(ev);
+    }
+    
+
 };

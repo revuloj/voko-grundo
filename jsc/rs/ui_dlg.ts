@@ -6,12 +6,16 @@
 
 //x/ <reference types="@types/jqueryui/index.d.ts" />
 
+import * as u from '../u';
+import * as x from '../x';
+import { DOM, Dialog, Valid, Eraro } from '../ui';
+
+
 import { XMLReferenco, XMLReferencGrupo, XMLRimarko, XMLEkzemplo, 
          XMLFonto, XMLSenco, XMLDerivaĵo, XMLBildo, SncŜablono } from './sxabloniloj';
 
 import { show_error_status, surmetita_dialogo } from './ui_err.js';
 import { xpress } from './jquery_ext';
-import * as x from '../x';
 
 type NovaArt = { dos: string, rad: string, fin: string, dif: string };
 //type ShargArt = { dosiero: string };
@@ -108,6 +112,7 @@ declare global {
 // aldonu al jQuery UI dialog proprajn metodojn
 // bezonatajn en la redaktilaj dialogoj
 console.debug("Instalante la dialogfunkciojn...");
+/*
 $.widget( "ui.dialog", $.ui.dialog, {
 
     // Default options.
@@ -124,7 +129,8 @@ $.widget( "ui.dialog", $.ui.dialog, {
             },
             valorŝanĝo: null // evento lanĉita, post voko de "valoroj" kun novaj valoroj
     },
-
+    */
+    /*
     valoroj: function(values) {
         const kampoj = this.options.kampoj;
         if (values === undefined) {
@@ -155,7 +161,8 @@ $.widget( "ui.dialog", $.ui.dialog, {
             this._trigger("valorŝanĝo");
         }
     },
-
+    */
+    /* -> faldu(bool)
     shrink: function() {
         const el = this.element;
         el.hide(); 
@@ -178,7 +185,8 @@ $.widget( "ui.dialog", $.ui.dialog, {
             of: window
         });
     },
-
+    */
+/*
     toggle: function() {
         if (this.element.is(':visible')) {
             this.shrink();
@@ -188,12 +196,13 @@ $.widget( "ui.dialog", $.ui.dialog, {
     }
 
 });
+*/
 
 
 export default function() {
     
     //>>>>>>>> dialogo: Nova artikolo
-    $( "#krei_dlg" ).dialog(<JQueryUI.DialogOptions>{
+    new Dialog("#krei_dlg", {
         kampoj: {
             dos: "#krei_dos",
             rad: "#krei_rad",
@@ -202,15 +211,17 @@ export default function() {
         },
         buttons: { 
             "Krei": function() { 
-                // @ts-ignore
-                const art = <NovaArt>($("#krei_dlg").dialog("valoroj"));
-                $("#xml_text").Artikolo("nova",art);
-                $("#re_radiko").val(art.rad);
-                $("#dock_eraroj").empty();
-                $("#dock_avertoj").empty();
-                $(this).dialog("close") ;
+                const dlg = Dialog.dialog("#krei_dlg");
+                if (dlg) {
+                    const art = <NovaArt>(dlg.valoroj());
+                    $("#xml_text").Artikolo("nova",art);
+                    $("#re_radiko").val(art.rad);
+                    $("#dock_eraroj").empty();
+                    $("#dock_avertoj").empty();
+                    dlg.fermu();    
+                }
             },
-            "\u2718": function() { $(this).dialog("close"); }
+            "\u2718": function() { this.fermu(); }
         },
         open: function() {
             // ĉar tiu change_count ankaŭ sen vera ŝanĝo altiĝas, 
@@ -223,6 +234,16 @@ export default function() {
             }
         }
     });
+    new x.XKlavaro(DOM.e("#krei_butonoj"),DOM.e("krei_dlg"),DOM.i("#krei_dif"),
+        undefined, // kiuradiko
+        function(event,ui) {
+            if (ui.cmd == "blankigo") {
+                DOM.al_v("#krei_dlg input","");
+                DOM.al_v("#krei_dif","");
+            }
+        },
+        undefined); // postenmeto
+        /*
     $( "#krei_butonoj").Klavaro({
         artikolo: $("#xml_text"),
         posedanto: "#krei_dlg",
@@ -234,11 +255,12 @@ export default function() {
             }
         }
     });
+    */
     $("#krei_rad").keypress(xpress);
     $("#krei_dif").keypress(xpress);
 
     //>>>>>>>> dialogo: Artikolon ŝargi
-    $( "#shargi_dlg" ).dialog({
+    new Dialog("#shargi_dlg", {
         kampoj: {
             dosiero: "#shargi_dosiero"
         },
@@ -272,7 +294,7 @@ export default function() {
         source: shargi_sercho_autocomplete,
         select: function(event,ui) { $("#shargi_dosiero").val(ui.item.art+'.xml'); }   
     });
-    $("#shargi_sercho").Checks({
+    Valid.aldonu("#shargi_sercho", {
         pattern: {
             regex: /^[a-zA-Z 0-9ĉĝĥĵŝŭĈĜĤĴŜŬ-]+$/,
             message: "La serĉesprimo konsistu nur el esperantaj literoj, ciferoj, streketo kaj spacsignoj. "+
@@ -280,7 +302,7 @@ export default function() {
         },
         err_to: "#shargi_error"
     });
-    $("#shargi_dosiero").Checks({
+    Valid.aldonu("#shargi_dosiero", {
         pattern: {
             message: "La dosiernomo (krom xml-finaĵo) konsistu el almenaŭ unu litero kaj eble pliaj: " +
                      "simplaj literoj kaj ciferoj",
@@ -290,7 +312,7 @@ export default function() {
     });
 
     //>>>>>>>> dialogo: Lastaj redaktoj
-    $( "#lastaj_dlg" ).dialog({
+    new Dialog("#lastaj_dlg", {
         kampoj: {
             dosiero: "#lastaj_mesagho",
         },
@@ -333,7 +355,7 @@ export default function() {
             $("#lastaj_error").show();
         }
     });    
-    $("#lastaj_dosiero").Checks({
+    Valid.aldonu("#lastaj_dosiero", {
         pattern: {
             message: "Bonvolu elekti artikolon en la listo por malfermi.",
             regex: /^[a-zA-Z][0-9_a-zA-Z]*(\.xml)?$/
@@ -350,7 +372,7 @@ export default function() {
 
 
     //>>>>>>>> dialogo: Artikolon sendi tra servilo
-    $( "#sendiservile_dlg" ).dialog({
+    new Dialog("#sendiservile_dlg", {
         buttons: { 
             "Submeti": sendi_artikolon_servile,
             "(Sendi)": sendi_artikolon_servile,
@@ -367,7 +389,7 @@ export default function() {
             }        
         }
     });
-    $("#sendiservile_komento").Checks({
+    Valid.aldonu("#sendiservile_komento", {
         nonemtpy: "Necesas doni mallongan priskribon de viaj ŝanĝoj. Kion vi redaktis?",
         pattern: {
             regex: /^[\x20-\x7E\xC0-\xFF\u0100-\u017F]+$/,
@@ -377,7 +399,7 @@ export default function() {
     });   
    
     ///>>>>>>>> dialogo: Enmeti referencon
-    $( "#referenco_dlg" ).dialog({
+    new Dialog("#referenco_dlg", {
         kampoj: {
             tip: "#referenco_tipo",
             grp: "#referenco_grp",
@@ -419,7 +441,7 @@ export default function() {
     $("#referenco_sercho").keypress(xpress);
     $("#referenco_enhavo").keypress(xpress);
 
-    $( "#referenco_sercho" ).Checks({
+    Valid.aldonu("#referenco_sercho", {
         err_to: "#referenco_error",
         pattern: {
             regex: /^[a-zA-Z 0-9ĉĝĥĵŝŭĈĜĤĴŜŬ\-]+$/,
@@ -448,7 +470,7 @@ export default function() {
     });
       
     //>>>>>>>> dialogo: Enmeti ekzemplon
-    $( "#ekzemplo_dlg" ).dialog({
+    new Dialog("#ekzemplo_dlg", {
         kampoj: {
             frazo: "#ekzemplo_frazo",
             bib: "#ekzemplo_bib",
@@ -469,6 +491,16 @@ export default function() {
         }
     });  
     plenigu_ekzemplo_bib();
+    new x.XKlavaro(DOM.e("#ekzemplo_butonoj"),DOM.e("#ekzemplo_dlg"), DOM.i("#xml_text"),
+        undefined, 
+        function(event,ui) {
+            if (ui.cmd == "blankigo") {
+                DOM.al_v("#ekzemplo_dlg input","");
+                DOM.al_v("#ekzemplo_frazo","");
+            }
+        },
+        undefined);
+/*
     $( "#ekzemplo_butonoj").Klavaro({
         artikolo: $("#xml_text"),
         posedanto: "#ekzemplo_dlg",
@@ -480,6 +512,7 @@ export default function() {
             }
         }
     });
+    */
 
     $("#ekzemplo_frazo").keypress(xpress);
     $("#ekzemplo_bib").keypress(xpress);
@@ -489,7 +522,7 @@ export default function() {
 
     
     //>>>>>>>> dialogo: Enmeti bildon
-    $( "#bildo_dlg" ).dialog({ 
+    new Dialog("#bildo_dlg", { 
         kampoj: {
             url: "#bildo_url",
             aut: "#bildo_aut",
@@ -526,6 +559,16 @@ export default function() {
 
     $( "#bildo_lrg input" ).checkboxradio();
     $( "#bildo_lrg" ).controlgroup();
+    new x.XKlavaro(DOM.e("#bildo_butonoj"), DOM.e("#bildo_dlg"), DOM.i("#bildo_frazo"),
+        undefined,
+        function(event,ui) {
+            if (ui.cmd == "blankigo") {
+                DOM.al_v("#bildo_dlg input[type!='radio']","");
+                DOM.al_v("#bildo_frazo","");
+            }
+        },
+        undefined);
+/*        
     $( "#bildo_butonoj").Klavaro({
         artikolo: $("#xml_text"),
         posedanto: "#bildo_dlg",
@@ -537,10 +580,11 @@ export default function() {
             }
         }
     });
+    */
     $("#bildo_frazo").keypress(xpress);
 
     ///>>>>>>>> dialogo: Enmeti derivaĵon
-    $("#derivajho_dlg").dialog({
+    new Dialog("#derivajho_dlg", {
         kampoj: {
             kap: "#derivajho_kap",
             dif: "#derivajho_dif",
@@ -557,6 +601,16 @@ export default function() {
             $("#derivajho_dlg").dialog("expand"); // necesas, se la dialogo estis fermita en faldita stato...
         }
     });
+    new x.Xklavaro(DOM.e("#derivajho_butonoj"),DOM.e("#derivajho_dlg"),DOM.i("#derivajho_dif"),
+        undefined,
+        function(event,ui) {
+            if (ui.cmd == "blankigo") {
+                DOM.al_v("#derivajho_dlg input","");
+                DOM.al_v("#derivajho_dif","");
+            }
+        },
+        undefined);
+    /*
     $("#derivajho_butonoj").Klavaro({
         artikolo: $("#xml_text"),
         posedanto: "#derivajho_dlg",
@@ -568,11 +622,12 @@ export default function() {
             }
         }
     });
+    */
     $("#derivajho_kap").keypress(xpress);
     $("#derivajho_dif").keypress(xpress);
 
     //>>>>>>>> dialogo: Enmeti sencon
-    $("#senco_dlg").dialog({
+    new Dialog("#senco_dlg", {
         kampoj: {
             mrk: "#senco_mrk",
             dif: "#senco_dif"
@@ -587,6 +642,16 @@ export default function() {
             $("#senco_dlg").dialog("expand"); // necesas, se la dialogo estis fermita en faldita stato...
         }
     });
+    new x.XKlavaro(DOM.e("#senco_butonoj"),DOM.e("#senco_dlg"),DOM.i("#senco_dif"),
+        undefined,
+        function(event,ui) {
+            if (ui.cmd == "blankigo") {
+                DOM.al_v("#senco_dlg input","");
+                DOM.al_v("#senco_dif","");
+            }
+        },
+        undefined)
+    /*
     $( "#senco_butonoj").Klavaro({
         artikolo: $("#xml_text"),
         posedanto: "#senco_dlg",
@@ -598,11 +663,12 @@ export default function() {
             }
         }
     });
+    */
     $("#senco_dif").keypress(xpress);
 
     //>>>>>>>> dialogo: Enmeti tradukojn
     plenigu_lingvojn();
-    $( "#traduko_dlg" ).dialog({
+    new Dialog("#traduko_dlg", {
         position: { my: "top", at: "top+10", of: window },
         buttons: {   
             "Enmeti la tradukojn": function(event) { tradukojn_enmeti(event); },
@@ -632,27 +698,30 @@ export default function() {
 
     //>>>>>>>> dialogo: Enmeti per ŝablono
     plenigu_sxablonojn();
-    $( "#sxablono_dlg" ).dialog({
+    new Dialog("#sxablono_dlg", {
         buttons: {   
             "Enmeti la tekston": sxablono_enmeti,
-            "\u25f1": function() { $("#sxablono_dlg").dialog("toggle"); },
-            "\u2718": function() { $( this ).dialog( "close" ); }
+            "\u25f1": function() { this.refaldu(); },
+            "\u2718": function() { this.fermu(); }
         },
         open: function() {
             $("#sxablono_error").hide();
-            $("#sxablono_dlg").dialog("expand"); // necesas, se la dialogo estis fermita en faldita stato...
+            this.faldu(false); // necesas, se la dialogo estis fermita en faldita stato...
         }
     });
+    new x.XKlavaro(DOM.e("#sxablono_butonoj"),DOM.e("#sxablono_dlg"), null, undefined, undefined, undefined);
+    /*
     $( "#sxablono_butonoj").Klavaro({
         artikolo: $("#xml_text"),
         posedanto: "#sxablono_dlg",
         akampo: ""
     });
+    */
     $( "#sxablono_elekto" ).change(kiam_elektis_sxablonon);     
     $( ".controlgroup-vertical" ).controlgroup({ "direction": "vertical" });
 
     //>>>>>>>> dialogo: Enmeti rimarkon
-    $( "#rimarko_dlg" ).dialog({
+    new Dialog("#rimarko_dlg", {
         kampoj: {
             aut: "#rimarko_aut",
             rim: "#rimarko_rim",
@@ -678,6 +747,16 @@ export default function() {
             $("#rimarko_dlg").dialog("expand"); // necesas, se la dialogo estis fermita en faldita stato...
         }
     });
+    new x.XKlavaro(DOM.e("#rimarko_butonoj"), DOM.e("#riarko_dlg"), DOM.i("#rimarko_rim"),
+        undefined,
+        function(event,ui) {
+            if (ui.cmd == "blankigo") {
+                DOM.al_v("#rimarko_dlg input","");
+                DOM.al_v("#rimarko_rim","");
+            }
+        },
+        undefined)
+    /*
     $( "#rimarko_butonoj").Klavaro({
         artikolo: $("#xml_text"),
         posedanto: "#riarko_dlg",
@@ -689,6 +768,7 @@ export default function() {
             }
         }
     });
+    */
     $("#rimarko_rim").keypress(xpress);
 
     /*
@@ -714,16 +794,16 @@ export default function() {
 
 
     //>>>>>>>> eraro-dialogo
-    $( "#error_dlg" ).dialog({
+    new Dialog("#error_dlg", {
         buttons: { 
             "Resaluti": function() { location.href='../auth/logout'; },
-            "\u2718": function() { $(this).dialog("close"); }
+            "\u2718": function() { this.fermu(); }
         },
         open: () => { $("#error_msg").show(); }
     });
 
     //>>>>>>>> surmetitta dialogo ekz. por deklaro pri datumprotekto, klarigoj/helpo ks
-    $( "#surmetita_dlg" ).dialog({
+    new Dialog("#surmetita_dlg", {
         position: { my: "left top", at: "left+20 top+20", of: window },
         // @ts-ignore maxWidth estas deklarita kiel /number/ - ignoru tion aŭ redeklaru ie...
         maxWidth: "90%" 
@@ -804,7 +884,7 @@ export function show_xhr_error(xhr,msg_prefix="Eraro:",msg_suffix='') {
     const msg = "Ho ve, okazis eraro: " 
      + xhr.status + " " + xhr.statusText + " " + xhr.responseText;
     $( "#error_msg" ).html(msg_prefix +  "<br/>" + msg_infix + "<br/>" +  msg_suffix);
-    $( "#error_dlg" ).dialog("open");    
+    Dialog.dialog("#error_dlg")?.malfermu();    
 }
 
 
@@ -867,9 +947,9 @@ function download_art(dosiero,err_to,dlg_id,do_close=true) {
                 $("#tabs").tabs( "option", "active", 0);
 
                 if (do_close) {
-                    $(dlg_id).dialog("close");
+                    Dialog.dialog(dlg_id)?.fermu();
                 } else {
-                    $(dlg_id).dialog("shrink");
+                    Dialog.dialog(dlg_id)?.faldu();
                 }
             } else {
                 var msg = "Okazis neatendita eraro: ";
@@ -880,8 +960,7 @@ function download_art(dosiero,err_to,dlg_id,do_close=true) {
 
 function download_url(url,dosiero,err_to,dlg_id,do_close=true) {
     
-    $.ricevu(url, err_to)
-     .done(
+    u.HTTPRequest('get', url, {}, 
         function(data) {   
             if (data.slice(0,5) == '<?xml') {
                 $("#xml_text").Artikolo("load",dosiero,data);
@@ -890,15 +969,19 @@ function download_url(url,dosiero,err_to,dlg_id,do_close=true) {
                 $("#tabs").tabs( "option", "active", 0);
 
                 if (do_close) {
-                    $(dlg_id).dialog("close");
+                    Dialog.dialog(dlg_id)?.fermu();
                 } else {
-                    $(dlg_id).dialog("shrink");
+                    Dialog.dialog(dlg_id)?.faldu();
                 }
             } else {
                 var msg = "Okazis neatendita eraro: ";
                 $(err_to).html("Okazis eraro, supozeble necesas resaluti.");
             }
-        });
+        },
+        undefined,
+        undefined,
+        err_to
+    );
 }
 
 
@@ -918,37 +1001,39 @@ function sendi_artikolon_servile(event) {
     const dosiero = (reĝimo == 'aldono')? komento: $("#xml_text").Artikolo("art_drv_mrk"); 
     const xmlarea = $("#xml_text").Artikolo("option","xmlarea");
 
-    $.alportu("revo_sendo", {
-        xml: xmlarea.normalizedXml(),
-        shangho: komento,
-        redakto: reĝimo,
-        metodo: metodo,
-        dosiero: dosiero
+        u.HTTPRequest('post', "revo_sendo", {
+            xml: xmlarea.normalizedXml(),
+            shangho: komento,
+            redakto: reĝimo,
+            metodo: metodo,
+            dosiero: dosiero
+        },
+        function(data) {   
+            // Montru sukceson...
+            var dosiero = $("#xml_text").Artikolo("option","dosiero");
+            $("#xml_text").Artikolo("change_count",0);
 
-    }, "#sendiservile_error")
-   .done( 
-       function(data) {   
-        // Montru sukceson...
-        var dosiero = $("#xml_text").Artikolo("option","dosiero");
-        $("#xml_text").Artikolo("change_count",0);
-
-        var url=data.html_url;
-        var msg = "<b>'" + dosiero  + "'</b> sendita. " +
-        (metodo == 'api'
-          ? "Kelkajn tagojn vi trovas vian redakton <a target='_new' href='"+url+"'>tie ĉi ĉe Github</a> kaj sub 'Lastaj...'."
-          : "Bv. kontroli ĉu vi ricevis kopion de la retpoŝto.\n(En tre esceptaj okazoj la spam-filtrilo povus bloki ĝin...)"
-          );
-        $("#dock_eraroj").Erarolisto("aldonu", {
-            id: "art_sendita_msg",
-            cls: "status_ok",
-            msg: msg
-        });
-        //alert("Sendita. Bv. kontroli ĉu vi ricevis kopion de la retpoŝto.\n(En tre esceptaj okazoj la spam-filtrilo povus bloki ĝin...)");
-        $("#sendiservile_dlg").dialog("close");
-        //$("#xml_text").val('');
-        xmlarea.setText('');
-        $("#shargi_dlg input").val("");
-    });
+            var url=data.html_url;
+            var msg = "<b>'" + dosiero  + "'</b> sendita. " +
+            (metodo == 'api'
+            ? "Kelkajn tagojn vi trovas vian redakton <a target='_new' href='"+url+"'>tie ĉi ĉe Github</a> kaj sub 'Lastaj...'."
+            : "Bv. kontroli ĉu vi ricevis kopion de la retpoŝto.\n(En tre esceptaj okazoj la spam-filtrilo povus bloki ĝin...)"
+            );
+            $("#dock_eraroj").Erarolisto("aldonu", {
+                id: "art_sendita_msg",
+                cls: "status_ok",
+                msg: msg
+            });
+            //alert("Sendita. Bv. kontroli ĉu vi ricevis kopion de la retpoŝto.\n(En tre esceptaj okazoj la spam-filtrilo povus bloki ĝin...)");
+            $("#sendiservile_dlg").dialog("close");
+            //$("#xml_text").val('');
+            xmlarea.setText('');
+            $("#shargi_dlg input").val("");
+        },
+        undefined,
+        undefined,
+        (msg: string) => Eraro.al("#sendiservile_error",msg)
+    );
 /*
       $("body").css("cursor", "progress");
       $.post(
@@ -1026,10 +1111,7 @@ function referenco_sercho_autocomplete(request,response) {
       var sercho = request.term; //$("#referenco_secho").val();
       var results = Array();
     
-      $.alportu("revo_sercho", 
-          { sercho: sercho, lng: "eo" },
-          "#referenco_error")
-        .done(
+      u.HTTPRequest('post', "revo_sercho", { sercho: sercho, lng: "eo" },
             function(data) {   
                 // kap+num -> enhavo
                 // mrk -> celo
@@ -1050,7 +1132,11 @@ function referenco_sercho_autocomplete(request,response) {
                        num: d.num };
                 }
                 response(results);
-            });
+            },
+            undefined,
+            undefined,
+            (msg: string) => Eraro.al("#referenco_error", msg)       
+        );
       /*
       $("body").css("cursor", "progress");
       $.post(
@@ -1134,14 +1220,17 @@ function referenco_enmeti(event) {
     $("#"+enmetu_en).change();
       
     // post refgrp venos nuda referenco sekvafoje...
-    if (ref.grp) {
-        $("#referenco_dlg").dialog("valoroj",{grp: false, tip: "nuda"});
-        $( "#referenco_listo" ).val('');
-        $( "#referenco_listo" ).prop('disabled',true);
-        //$( "#referenco_grp" ).prop("checked",false);
-        //$( "#referenco_tipo" ).val("nuda");
+    const dlg = Dialog.dialog("#referenco_dlg");
+    if (dlg) {
+        if (ref.grp) {
+            dlg.al_valoroj({grp: false, tip: "nuda"});
+            DOM.al_v("#referenco_listo",'');
+            $( "#referenco_listo" ).prop('disabled',true);
+            //$( "#referenco_grp" ).prop("checked",false);
+            //$( "#referenco_tipo" ).val("nuda");
+        };
+        dlg.fermu();
     }
-    $("#referenco_dlg").dialog("close");
 }
 
 function plenigu_ekzemplo_bib() {
@@ -1216,7 +1305,7 @@ function bildo_enmeti(event, nur_fnt) {
     event.preventDefault();
     $("#bildo_error").hide();
 
-    let bld =  $("#bildo_dlg").dialog("valoroj");
+    let bld = $("#bildo_dlg").dialog("valoroj");
     bld.lrg = $("#bildo_lrg input:checked").val() || 360;
     bld.fnt_dec = bld.fnt;
     bld.fnt = encodeURI(bld.fnt);

@@ -84,4 +84,8 @@ export class DOM {
         else
             e.classList.remove(DOM.klsKasxita);
     }
+
+    static kaŝita(e: Element) {
+        return e.classList.contains(DOM.klsKasxita);
+    }
 }

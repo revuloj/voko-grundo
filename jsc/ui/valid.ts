@@ -13,6 +13,23 @@ declare global {
 
 export class Valid extends UIElement {
 
+    static aldonu(elemento: HTMLElement|string, opcioj: any) {
+        let el: HTMLElement|null;
+        if (typeof elemento === "string") {
+            el = document.getElementById(elemento);
+        } else {
+            el = elemento;
+        }
+
+        if (el) {
+            const val = new Valid(el,opcioj);
+            if (el._valid) 
+                el._valid.push(val)
+            else
+                el._valid = [val];
+        }  
+    }
+
     static valida(elemento: HTMLElement|string) {
         let el: HTMLElement|null;
         if (typeof elemento === "string") {
