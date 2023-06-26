@@ -4,7 +4,7 @@
  laŭ GPL 2.0
 */
 
-/// <reference types="@types/jqueryui/index.d.ts" />
+//x/ <reference types="@types/jqueryui/index.d.ts" />
 
 import { XMLReferenco, XMLReferencGrupo, XMLRimarko, XMLEkzemplo, 
          XMLFonto, XMLSenco, XMLDerivaĵo, XMLBildo, SncŜablono } from './sxabloniloj';
@@ -16,6 +16,7 @@ import * as x from '../x';
 type NovaArt = { dos: string, rad: string, fin: string, dif: string };
 //type ShargArt = { dosiero: string };
 
+/*
 declare global {
 
     namespace JQueryUI {
@@ -101,7 +102,7 @@ declare global {
         checkboxradio(): any;
     }
 }
-
+*/
 
 
 // aldonu al jQuery UI dialog proprajn metodojn

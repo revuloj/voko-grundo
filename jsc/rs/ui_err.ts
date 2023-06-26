@@ -4,15 +4,19 @@
  laŭ GPL 2.0
 */
 
-/// <reference types="@types/jqueryui/index.d.ts" />
+//x/ <reference types="@types/jqueryui/index.d.ts" />
 
+import * as u from '../u';
 import * as x from '../x';
+import { DOM, UIElement, Eraro } from '../ui';
+
 import { show_xhr_error } from './ui_dlg';
 import { HTMLError } from './sxabloniloj';
 
 
-interface Eraro extends Partial<x.LinePos> { id?: string, cls?: string, msg: string };
+interface XEraro extends Partial<x.LinePos> { id?: string, cls?: string, msg: string };
 
+/*
 declare global {
 
     interface JQuery {
@@ -21,88 +25,30 @@ declare global {
         Erarolisto(methodName: "aldonu_liston", el: Array<Eraro>);
     }
 }
+*/
 
 
 console.debug("Instalante la erar- kaj kontrolfunkciojn...");
-$.widget( "redaktilo.Checks", {
 
-    options: {
-        /* e.g.
-        nonempty: 'Valoro de X devas ion enhavi',
-        pattern: /^...$/ or pattern: { regex: /^...$/, message: "bla bla" },
-        err_to: '#my_err' // kie montri la eraron
-        */
-    },
 
-    _create: function() {
-        this._creating = true;
-        this._super();
-        var id = this.element.attr("id");
-        if (this.options.nonempty) {
-            this._nonempty = true;
-            /*
-            var label = $("label[for='"+id+"']").text();
-            this._nonempty_msg = label ? 'Necesas doni valoron por ' + label : 'Mankas necesa valoro.';
-            */
-           this._nonempty_msg = this.options.nonempty;
-        }
-        //if (typeof this.options.pattern === 'regexp') {
-        if (this.options.pattern instanceof RegExp) {
-            var label = $("label[for='"+id+"']").text();
-            this._pattern  = this.options.pattern;
-            this._pattern_msg = label ? 'La donita valoro por ' + label + 'ne estas valida' : 'Nevalida valoro.';
-        } else if (typeof this.options.pattern === 'object') {
-            this._pattern  = this.options.pattern.regex;
-            this._pattern_msg = this.options.pattern.message;  
-        }
-        this._err_fld = $(this.options.err_to);
-    },
 
-    /*
-    _init: function() {
-        if (this._creating) {
-            this._creating = false
-        } else {
-            return this.check()
-        }
-    },
-    */
 
-    check: function() {
-        var e = this.element;
-        var err = this._err_fld;
-        var ok = true;
+export class Erarolisto extends UIElement {
 
-        if (this._nonempty && e.val() == '') {          
-            err.text(this._nonempty_msg);
-            err.show();  
-            ok = false;
-        } else if (this._pattern && ! e.val().match(this._pattern)) {          
-            err.text(this._pattern_msg);
-            err.show();  
-            ok = false;
-        } 
-        if (ok) err.hide();  
-        return ok;
-    }
-});
-
-$.widget( "redaktilo.Erarolisto", {
-
-    options: {
+    opcioj = {
         a_click: null
-    },
+    };
 
-    _create: function() {
-        this._super();
+    constructor(element, opcioj) {
+        super(element, opcioj);
 
         this._on({
             "click li": this._click,
             "click a": function(event) { this._trigger("a_click",event,null); } 
         });
-    }, 
+    };
 
-    aldonu: function(err) { // err: {line: <l>, pos: <p>, msg: <text>}
+    aldonu(err) { // err: {line: <l>, pos: <p>, msg: <text>}
         let added = false;
         /*
         var l = err.line || 0; // linio
@@ -131,20 +77,16 @@ $.widget( "redaktilo.Erarolisto", {
             }
        }
         //});
-    },
+    };
 
-    aldonu_liston: function(entries) {
+    aldonu_liston(entries) {
         for (var i=0; i<entries.length; i++) {
             this.aldonu(entries[i]);
         }
-    },
+    };
 
-    /*
-    forigu: function() {
-        this.element.empty();
-    },*/
     
-    _click: function(event) {
+    _click(event) {
         // la atributo value de li donas la linion en la XML-teksto,
         // la atributo title de li donas line:pos
         if (event.target.localName != "a") {
@@ -154,9 +96,9 @@ $.widget( "redaktilo.Erarolisto", {
             // okazigu eventon poziciŝanĝo ĉe Artikolo...
             $("#xml_text").Artikolo("option","poziciŝanĝo")(); 
         }
-    }
+    };
 
-});
+};
 
 export function xmlkontrolo() {
     const xmlarea = $("#xml_text").Artikolo("option","xmlarea");
@@ -181,7 +123,8 @@ export function xmlkontrolo() {
                 || data.length == 1 && Object.keys(data[0]).length === 0) {
                   data = [{ msg: "XML estas en ordo (sintakso).", cls: "status_ok" }];
               };
-              $("#dock_eraroj").Erarolisto("aldonu_liston",
+              const elisto = UIElement.obj("#dock_eraroj") as Erarolisto;
+              if (elisto) elisto.aldonu_liston(
                 data.map(err => 
                     {
                         if (err.msg) err.msg = x.quoteattr(err.msg); 
@@ -220,15 +163,15 @@ export function mrkkontrolo() {
             //alert("" + mrkoj[mrk] + "-obla marko: "+ mrk);
             let linpos = x.get_line_pos(mrkoj[mrk],xml);
             linpos.line++; linpos.pos+=2;
-            let err = linpos as Eraro;
-            (err as Eraro).msg = "marko aperas plurfoje: "+ mrk;
-            $("#dock_eraroj").Erarolisto("aldonu",err);
+            let err = linpos as XEraro;
+            (err as XEraro).msg = "marko aperas plurfoje: "+ mrk;
+            const elisto = UIElement.obj("#dock_eraroj") as Erarolisto;
+            if (elisto) elisto.aldonu(err);
         }
     }
     var sncoj = art.Artikolo("snc_sen_mrk");
 
     if (sncoj) {
-        var avt = $("#dock_avertoj");
         var drvoj = art.Artikolo("drv_markoj");
         var dmrk = 'xxx.0';
 
@@ -245,10 +188,11 @@ export function mrkkontrolo() {
             }
     
             linpos.line++; linpos.pos++;
-            let snc = linpos as Eraro;
+            let snc = linpos as XEraro;
             snc.msg = "senco sen marko, <span class='snc_mrk' title='aldonu'>aldonebla kiel: <a>"
                      + dmrk + "." + sncoj[inx] + "</a></span>";
-            avt.Erarolisto("aldonu",snc);
+            const elisto = UIElement.obj("#dock_avertoj") as Erarolisto;
+            if (elisto) elisto.aldonu(snc);
         }
     }
 }
@@ -261,16 +205,15 @@ export function klrkontrolo() {
     const klroj = art.Artikolo("klr_ppp");
 
     if (klroj) {
-        var avt = $("#dock_avertoj");
-
         for (let pos in klroj) {
             let linpos = x.get_line_pos(+pos,xml);
    
             linpos.line++; linpos.pos++;
-            let klr = linpos as Eraro;
+            let klr = linpos as XEraro;
             klr.msg = "klarigo sen krampoj, <span class='klr_ppp' title='anstataŭigu'>anstataŭigebla per: <a>" +
                 "&lt;klr&gt;[…]&lt;/klr&gt;</a></span>";
-            avt.Erarolisto("aldonu",klr);
+            const elisto = UIElement.obj("#dock_avertoj") as Erarolisto;
+            if (elisto) elisto.aldonu(klr);
         }
     }
 }
@@ -305,7 +248,8 @@ function kontrolu_liniojn(lines) {
     var k = Object.keys(lines);
     var id = "vktrl_"+k[0];
     // montru linion dum atendado...
-    $("#dock_avertoj").Erarolisto("aldonu",<Eraro>{
+    const elisto = UIElement.obj("#dock_avertoj") as Erarolisto;
+    if (elisto) elisto.aldonu(<XEraro>{
         id: id, 
         line: +k[0],
         msg: "<span class=\"animated-dock-font\">kontrolante vortojn de linioj " + k[0] + ".." + k[k.length-1] + " ...</span>"
@@ -326,8 +270,9 @@ function kontrolu_liniojn(lines) {
              // $("#kontrolo_ana").append(html);
              //var str = data.replace('---','\u2014');
              $("#"+id).remove();
-             $("#dock_avertoj").Erarolisto("aldonu_liston",
-                Object.keys(data).map(_ana2txt,data) as Array<Eraro>);
+             const elisto = UIElement.obj("#dock_avertoj") as Erarolisto;
+             if (elisto) elisto.aldonu_liston(
+                Object.keys(data).map(_ana2txt,data) as Array<XEraro>);
 
              /*
              for (n in data) {
@@ -344,11 +289,8 @@ function kontrolu_liniojn(lines) {
 
 export function surmetita_dialogo(url, root_el, loc = '') {
     
-    $("body").css("cursor", "progress");
-    $.get(
-          url, 
-          {})
-      .done(
+    u.HTTPRequest('get', url, 
+          {},
           function(data, status, xhr) {   
               if (xhr.status == 302) {
                   // FIXME: When session ended the OpenID redirect 302 is handled behind the scenes and here we get openid/login with status 200
@@ -367,30 +309,26 @@ export function surmetita_dialogo(url, root_el, loc = '') {
               $("#surmetita_dlg").dialog("open");
 
               window.location.hash=loc;
-          })
-      .fail (
-          function(xhr) {
-              console.error(xhr.status + " " + xhr.statusText);
-              if (xhr.status == 400) {
-                  $("#surmetita_error").html('Pardonu, okazis eraro dum ŝargo de la dokumento.');
-              } else {
-                  var msg = "Pardonu, okazis netandita eraro: ";
-                  $("#surmetita_error").html( msg + xhr.status + " " + xhr.statusText + xhr.responseText);
-              }
-              $("#surmetita_error").show(); 
-      })
-      .always(
-             function() {
-                 $("body").css("cursor", "default");
-             });
-
-  //$("#surmetita_dlg").dialog("open");
+        },
+        function() { $("body").css("cursor", "progress") },
+        function() { $("body").css("cursor", "default"); },
+        function(xhr) {
+            console.error(xhr.status + " " + xhr.statusText);
+            if (xhr.status == 400) {
+                $("#surmetita_error").html('Pardonu, okazis eraro dum ŝargo de la dokumento.');
+            } else {
+                var msg = "Pardonu, okazis netandita eraro: ";
+                $("#surmetita_error").html( msg + xhr.status + " " + xhr.statusText + xhr.responseText);
+            }
+            $("#surmetita_error").show(); 
+        });
 }
 
 export function show_error_status(error) {
     //plenigu_xmleraro_liston([{"line": "nekonata", "msg": error.toString().slice(0,256)+'...'}]);
-    const err: Eraro = {"line": -1, "msg": error.toString().slice(0,256)+'...'};
-    $("#dock_eraroj").Erarolisto("aldonu",err);
+    const err: XEraro = {"line": -1, "msg": error.toString().slice(0,256)+'...'};
+    const elisto = UIElement.obj("#dock_eraroj") as Erarolisto;
+    if (elisto)  elisto.aldonu(err);
 
     $("#elekto_indikoj").hide();
     $("#dock_klavaro").show();

@@ -4,26 +4,31 @@
  laŭ GPL 2.0
 */
 
-/// <reference types="@types/jqueryui/index.d.ts" />
-
 import * as u from '../u';
 import * as x from '../x';
 
-import {bar_styles, make_percent_bar} from './procentoj';
+import { DOM, UIElement, Dialog, Valid, Eraro } from '../ui';
+
+import { bar_styles, make_percent_bar } from './procentoj';
 import { HTMLFonto, HTMLTrovoDt, HTMLTrovoDdBld } from './sxabloniloj';
 
 type CitSercho = {
     sercho: string,
     kie?: string,
     vrk?: string,
-    jar_de?: number,
-    jar_ghis?: number
+    jar_de?: string|null,
+    jar_ghis?: string|null
 }
 
 type TrovValoroj = { url?: string, fmt?: number, 
     aut?: string, bib?: string, vrk?: string, lok?: string, 
-    prm?: string, fnt?: string, frazo?: string }
+    prm?: string, fnt?: string, frazo?: string };
 
+
+
+
+
+/*    
 declare global {
     interface JQuery {
         Trovo(opcioj: any);
@@ -34,6 +39,7 @@ declare global {
         BildoBtn(opcioj: any);
     }
 }
+*/
 
 //var sercho_focused_button = null;
 console.debug("Instalante la serĉfunkciojn...");
@@ -43,10 +49,17 @@ console.debug("Instalante la serĉfunkciojn...");
  * la trovokampon.
  */
 function _serĉo_preparo() {
-    if (! $("#sercho_sercho").validate()) return;
+    if (! Valid.valida("#sercho_sercho")) return;
 
-    $("#sercho_trovoj").html('');
-    $("#sercho_trovoj button").off("click");
+    const trovoj = document.getElementById("sercho_trovoj");
+    if (trovoj) {
+        // ĉu necesa? trovoj.querySelectorAll("button").forEach((b) => b.removeEventListener("click");
+        // KONTROLU: ĉu la kreitaj objektoj UIElement ankaŭ foriĝas aŭ ĉu estas problemo, ke ni
+        // havas cirklan referencon inter elementoj kaj UIElement-objektoj?
+        // vd. https://stackoverflow.com/questions/10092619/precise-explanation-of-javascript-dom-circular-reference-issue
+        // laŭ tiuj informoj nur tre malnovaj retumiloj (ekz-e IE7) havis tiun problemon.
+        trovoj.textContent = '';
+    }
 
     return true;
 }
@@ -218,14 +231,13 @@ export function vikiSerĉo(event) {
 
     if (! _serĉo_preparo()) return;
 
-    $.alportu(
-        'citajho_sercho',
+    const esprimo = (document.getElementById("sercho_sercho") as HTMLInputElement).value;
+
+    u.HTTPRequest('post','citajho_sercho',
         {   
-            sercho: $("#sercho_sercho").val(),
+            sercho: esprimo,
             kie: 'vikipedio'
         }, 
-        '#sercho_error')
-    .done(
         function(data) {   
             
             if (data.query && data.query.pages) {
@@ -236,8 +248,8 @@ export function vikiSerĉo(event) {
                     var page = pages[p];
                     var url = 'https://eo.wikipedia.org/?curid=' + page.pageid;
 
-                    $("#sercho_trovoj").append('<dd id="trv_' + page.pageid + '">');
-                    $("#trv_"  + page.pageid).Trovo(
+                    DOM.e("#sercho_trovoj")?.append('<dd id="trv_' + page.pageid + '">');
+                    new Trovo("#trv_"  + page.pageid,
                         {
                             ŝablono: ŝablono,
                             valoroj: {
@@ -250,10 +262,13 @@ export function vikiSerĉo(event) {
                     );
                 }
             } else {
-                    $("#sercho_trovoj")
-                        .append("<p>&nbsp;&nbsp;Neniuj trovoj.</p>");
+                    DOM.e("#sercho_trovoj")
+                        ?.append("<p>&nbsp;&nbsp;Neniuj trovoj.</p>");
             }
-        });
+        },
+        undefined, undefined,
+        (msg: string) => Eraro.al('#sercho_error',msg)
+    );
 }
 
 /**
@@ -281,33 +296,29 @@ export function citaĵoSerĉo(event) {
     if (! _serĉo_preparo()) return;
 
     // serĉesprimo: ŝablone kreita regulesprimo aŭ tajpita serĉvorto...?
-    const esprimo = $("#sercho_sercho").val() as string;
+    const esprimo = DOM.i("#sercho_sercho")?.value as string;
 
     let sspec: CitSercho = {sercho: esprimo};
     if (vlist == 'klasikaj') {
         sspec.kie = 'klasikaj'
-    } else if (! $("#sercho_verklisto").children().length) {
-        const handle1 = $( "#periodilo_manilo_1" );
-        const handle2 = $( "#periodilo_manilo_2" );
+    } else if (! DOM.e("#sercho_verklisto")?.children.length) {
+        const handle1 = DOM.t( "#periodilo_manilo_1" );
+        const handle2 = DOM.t( "#periodilo_manilo_2" );
         sspec.kie = 'jar';
-        sspec.jar_de = +handle1.text();
-        sspec.jar_ghis = +handle2.text();
+        sspec.jar_de = handle1;
+        sspec.jar_ghis = handle2;
     } else {
         // eltrovu ĉu la verko-listo estas limigita
         sspec.kie = 'vrk';
         sspec.vrk = elektitajVerkoj().join(',');
 
         if (! sspec.vrk) {
-            $("#sercho_error").html("Neniuj verkoj elektitaj por trarigardi!");
-            $("#sercho_error").show(); 
+            Eraro.al("#sercho_error","Neniuj verkoj elektitaj por trarigardi!");
             return;
         }
     }
 
-    $.alportu(
-        'citajho_sercho', sspec,
-        '#sercho_error')
-    .done(
+    u.HTTPRequest('post', 'citajho_sercho', sspec as u.StrObj,
         function(data) {   
             var bib_src = $( "#ekzemplo_bib" ).autocomplete( "option", "source" );
             var htmlFnt = new HTMLFonto(bib_src);
@@ -318,8 +329,8 @@ export function citaĵoSerĉo(event) {
                     var trovo = data[i], fnt = trovo.cit.fnt;
                     let url = ( fnt.url ? fnt.url : ( fnt.bib ? _bib_url(bib_src,fnt.bib) : '') );
                     var perc = make_percent_bar(trovo.sim*100, bar_styles[12], 20, 20);
-                    $("#sercho_trovoj").append('<dd id="trv_' + i + '">');
-                    $("#trv_"  + i).Trovo(
+                    DOM.e("#sercho_trovoj")?.append('<dd id="trv_' + i + '">');
+                    new Trovo("#trv_"+i,
                         {
                             ŝablono: ŝablono,
                             valoroj: {
@@ -336,10 +347,12 @@ export function citaĵoSerĉo(event) {
                     // sercho_enmetu_btn_reaction(i,trovo);
                 }
             } else {
-                    $("#sercho_trovoj")
-                        .append("<p>&nbsp;&nbsp;Neniuj trovoj.</p>");
+                    DOM.e("#sercho_trovoj")
+                        ?.append("<p>&nbsp;&nbsp;Neniuj trovoj.</p>");
             }
-        }
+        },
+        undefined, undefined,
+        (msg: string) => Eraro.al('#sercho_error',msg)   
     );
 }
 
@@ -402,20 +415,20 @@ export function regulEsprimo(event) {
         else return '';
     }
 
-    const srch = $("#sercho_sercho");
+    const srch = DOM.e("#sercho_sercho");
     //const v = srch.val();
     //const sele = srch[0].selectionEnd;
 
     // kiu radikkaraktero estis elektita?
-    const rk = $("#regexes input[name='re_rk']:checked").val() as string;
+    const rk = DOM.v("#regexes input[name='re_rk']:checked") as string;
     // kiun vortspecon ni sercu?
-    const vs = $("#regexes input[name='re_vs']:checked").val() as string;
+    const vs = DOM.v("#regexes input[name='re_vs']:checked") as string;
 
     // vortkomenco?
-    const vk = $("#re_b:checked").val();
+    const vk = DOM.v("#re_b:checked");
     // ĉu prefikso/sufikso estu aplikataj
-    const prf = $("#re_pref").prop("checked");
-    const suf = $("#re_suf").prop("checked");
+    const prf = DOM.c("#re_pref");
+    const suf = DOM.c("#re_suf");
     
     const prfj = prf? re_afx('prefiksoj',rk,vs) : '';
     // PLIBONIGU: ni elektas tie ĉi la sufiksojn laŭ radikkaraktero,
@@ -432,15 +445,15 @@ export function regulEsprimo(event) {
         '?': ''
     }[vs] : '';
 
-    const v = $("#re_radiko").val();
-    $("#re_esprimo").html(
+    const v = DOM.v("#re_radiko");
+    DOM.al_html("#re_esprimo",
         (vk?'\\b':'')
         + (prfj? prfj+"<br>":"") 
         + "<b>" + v + "</b><br>" 
         + (sufj? sufj+"<br>" : "") 
         + fin);
 
-    srch.val((vk?'\\b':'') + prfj + v + sufj + fin);
+    if (srch) (srch as HTMLInputElement).value = (vk?'\\b':'') + prfj + v + sufj + fin;
 }
 
 /**
@@ -448,24 +461,21 @@ export function regulEsprimo(event) {
  * periodo komenca jaro - fina jaro en la ŝovelektilo.
  */
 export function verkoPeriodo() {
-    const periodilo = $("#s_elektitaj_periodilo");
-    const min = periodilo.attr("data-min");
-    const max = periodilo.attr("data-max");
-    const val = periodilo.attr("data-val");
-    const values = val.split('-').map((x)=>+x); // "min-max" kiel du-nombra listo
-    const handle1 = $( "#periodilo_manilo_1" );
-    const handle2 = $( "#periodilo_manilo_2" );
+    const periodilo = DOM.i("#s_elektitaj_periodilo");
+    if (periodilo) {
+        const min = periodilo.getAttribute("data-min");
+        const max = periodilo.getAttribute("data-max");
+        const val = periodilo.getAttribute("data-val");
+        const values = val?.split('-').map((x)=>+x); // "min-max" kiel du-nombra listo
+        const handle1 = DOM.e( "#periodilo_manilo_1" );
+        const handle2 = DOM.e( "#periodilo_manilo_2" );    
+    }
 
     function adaptuVerkliston(de,ghis) {
-        $("#sercho_verklisto div").each((i,e) => {
+        DOM.idoj("#sercho_verklisto div")?.forEach((e) => {
             if (e.id != "vl_chiuj_") {
-                const el = $(e);
-                const jar = +el.attr('data-jar');
-                if (jar < de || jar > ghis) {
-                    el.addClass('kasxita');
-                } else {
-                    el.removeClass('kasxita');
-                }   
+                const jar = +(e?.getAttribute('data-jar')||0);
+                DOM.kaŝu(e, jar < de || jar > ghis); // ni kaŝas, se la argumento estas vera
             }
         });
     }
@@ -499,23 +509,20 @@ export function verkoPeriodo() {
 };
 
 function verkinformo() {
-    const montrilo = $("#sercho_verkinfo");
+    const montrilo = DOM.e("#sercho_verkinfo");
 
     // jarperiodo
-    const periodilo = $("#s_elektitaj_periodilo");
+    const periodilo = DOM.e("#s_elektitaj_periodilo");
     const periodo = periodilo.slider("option","values").join(' - ');
 
     let info = ' ' + periodo;
     
-    // titoloj, subpremu, se verkoj ankoraŭ ne ŝargitaj kaj do 
+    // titoloj; subpremu, se verkoj ankoraŭ ne ŝargitaj kaj do 
     // ankaŭ ne adaptitaj
-    if ($("#sercho_verklisto").children().length) {
-        const n = $("#sercho_verklisto")
-        .find(":not(.kasxita) input[name='cvl_elekto']:checked").length;
-        info += ', ' + n + ' titolo' + (n!=1?'j':'');
-    }
-
-    montrilo.text(info);
+    const n = DOM.idoj(`#sercho_verklisto :not(.${DOM.klsKasxita}) input[name='cvl_elekto']:checked`)?.length;
+    if (n) info += ', ' + n + ' titolo' + (n!=1?'j':'');
+    
+    if (montrilo) montrilo.textContent = info;
 }
 
 /**
@@ -530,21 +537,18 @@ export function verkoListo(event) {
 
     if (! vdiv.children().length) {
         // ni ŝargas la verkoliston...
-        $.alportu(
-            'verkaro',
+        u.HTTPRequest('post', 'verkaro',
             { 
                 kiu: 'chiuj'
             }, 
-            '#sercho_error')
-        .done(
             function(data) {
                 if (data.length && data[0].vrk) {                    
                     vdiv.append('<div id="vl_chiuj_"><label for="vl__chiuj__">ĈIUJN malelekti/elekti</label>'
                     + '<input id="vl__chiuj__" type="checkbox" checked '
                     + 'name="cvl_chiuj" value="e_chiuj"></input></div>');
 
-                    const jar_de = +$( "#periodilo_manilo_1" ).text();
-                    const jar_ghis = +$( "#periodilo_manilo_2" ).text();            
+                    const jar_de = +(DOM.t("#periodilo_manilo_1")||0);
+                    const jar_ghis = +(DOM.t("#periodilo_manilo_2")||0);
 
                     const vrkj = data.sort((a,b)=>(a.jar-b.jar||0));                  
                     for (const v of vrkj) {
@@ -560,7 +564,7 @@ export function verkoListo(event) {
                     }
                     vdiv.find("input").checkboxradio();
                     vdiv.find("input").on("change",verkinformo);
-                    $("#vl__chiuj__").on("change", (event) => {
+                    DOM.i("#vl__chiuj__")?.addEventListener("change", (event) => {
                         const check = $(event.target).is(":checked");
                         vdiv.find("input[name='cvl_elekto']").each((i,e) => {
                             const el = $(e);
@@ -568,9 +572,11 @@ export function verkoListo(event) {
                             el.checkboxradio("refresh");
                         });                        
                         verkinformo();   
-                });
+                    });
                 }
-            }
+            },
+            undefined, undefined,
+            (msg: string) => Eraro.al('#sercho_error',msg)   
         );
     }
 }
@@ -582,7 +588,7 @@ export function verkoListo(event) {
  */
 export function verkElekto(event) {
     const btn = event.target;
-    const kadr = $(btn).parent();
+    const kadr = btn.parentElement;
     const val = btn.value;
     const id = btn.id;
 
@@ -601,7 +607,7 @@ export function verkElekto(event) {
         check_uncheck(false);
     } else if (val == "preta") {
         // kaŝu la liston
-        kadr.addClass("kasxita");
+        DOM.kaŝu(kadr);
     }
 }
 
@@ -610,9 +616,9 @@ export function verkElekto(event) {
  * @returns liston de verkoj (ties identigiloj)
  */
 export function elektitajVerkoj() {
-    let vl = [];
-    const vdiv = $("#sercho_verklisto");
-    vdiv.find(":not(.kasxita)>:checked").each((i,e) => {
+    let vl: Array<string> = [];
+    DOM.ej(`#sercho_verklisto :not(.${DOM.klsKasxita})>:checked`)
+    .forEach((e) => {
         const v: string = (e as HTMLInputElement).value;
         vl.push(v);         
     });
@@ -629,19 +635,16 @@ export function retoSerĉo(event) {
 
     const rx_img_link = /<(?:img|link)\b[^>]*>/ig;
 
-    $.alportu(
-        'citajho_sercho',
+    u.HTTPRequest('post','citajho_sercho',
         { 
-            sercho: $("#sercho_sercho").val(),
+            sercho: DOM.v("#sercho_sercho")||'',
             kie: 'anaso'
         }, 
-        '#sercho_error')
-    .done(
         function(data) {   
     
         let last_link = '', last_title = '';
         let n = 0;
-        const first_word = ($("#sercho_sercho").val() as string).split(' ')[0];
+        const first_word = (DOM.v("#sercho_sercho")||'').split(' ')[0];
         // forigu bildojn (img) kaj <link...> el la HTML, por ke ili ne automate elshutighu...
         data = data.replace(rx_img_link, '');
         const ŝablono = new HTMLTrovoDt();
@@ -661,11 +664,11 @@ export function retoSerĉo(event) {
                 const snippet = self.text();
                 if ( last_title.search(first_word) >= 0 || snippet.search(first_word) >= 0 ) {
 
-                    $("#sercho_trovoj").append('<dd id="trv_' + n + '">');
+                    DOM.e("#sercho_trovoj")?.append('<dd id="trv_' + n + '">');
                     // DuckDuckGo alpendigas ĝenan parametron &rut
                     let url = last_link.replace(/&rut=[a-f0-9]+/,'');        
 
-                    $("#trv_"  + n).Trovo(
+                    new Trovo("#trv_"+n,
                         {
                             ŝablono: ŝablono,
                             valoroj: {
@@ -683,10 +686,12 @@ export function retoSerĉo(event) {
         });
         
         if ( n == 0 ) {
-            $("#sercho_trovoj")
-                    .append("<p>&nbsp;&nbsp;Neniuj trovoj.</p>");
+            DOM.e("#sercho_trovoj")
+                ?.append("<p>&nbsp;&nbsp;Neniuj trovoj.</p>");
         }
-    });
+    },
+    undefined, undefined,
+    (msg: string) => Eraro.al('#sercho_error',msg));
 }
 
 /**
@@ -703,14 +708,11 @@ export function bildoSerĉo(event) {
 
     var pageids = "";
 
-    $.alportu(
-        'bildo_sercho',
+    u.HTTPRequest('post','bildo_sercho',
         { 
-            sercho: $("#sercho_sercho").val(),
+            sercho: DOM.v("#sercho_sercho")||'',
             kie: 'vikimedio'
         },
-        '#sercho_error')
-    .done(
         function(data) {         
             var pageids = [];
             
@@ -729,7 +731,7 @@ export function bildoSerĉo(event) {
                     
 
                     $("#sercho_trovoj").append('<dd id="trv_' + res.pageid + '">');
-                    $("#trv_"  + res.pageid).Trovo(
+                    new Trovo("#trv_" +res.pageid,
                         {
                             type: "bildo",
                             ŝablono: ŝablono,
@@ -755,7 +757,9 @@ export function bildoSerĉo(event) {
                 _bildo_info(pageids.slice(0,chunk_size));
                 pageids = pageids.slice(chunk_size);
             }            
-        }
+        },
+        undefined, undefined,
+        (msg: string) => Eraro.al('#sercho_error',msg)    
     );
 }
 
@@ -769,14 +773,11 @@ function _bildo_info(pageids) {
     const ids = pageids.join('|');
 
     // alert(pageids);
-    $.alportu(
-        'bildo_info',
+    u.HTTPRequest('post','bildo_info',
         { 
             paghoj: ids,
             kie: 'vikimedio'
         },
-        '#sercho_error')
-    .done(
         function(datalist) {   
         //$("#sercho_trovoj").html('');
             for (let d=0; d<datalist.length; d++) {          
@@ -802,7 +803,10 @@ function _bildo_info(pageids) {
                     }
                 }
             }
-        });
+        },
+        undefined, undefined,
+        (msg: string) => Eraro.al('#sercho_error',msg)
+    );
 }
 
 
@@ -815,14 +819,11 @@ function _bildeto_info(paghoj) {
     const ps = paghoj.join('|');
 
     // alert(pageids);
-    $.alportu(
-        'bildeto_info',
+    u.HTTPRequest('post','bildeto_info',
         { 
             dosieroj: ps,
             kie: 'vikimedio'
         },
-        '#sercho_error')
-    .done(
         function(data) {   
         //$("#sercho_trovoj").html('');
             //for (var d=0; d<datalist.length; d++) {          
@@ -842,7 +843,10 @@ function _bildeto_info(paghoj) {
                 }                  
         //      } 
             }
-        });
+        },
+        undefined, undefined,
+        (msg: string) => Eraro.al('#sercho_error', msg)
+    );
 }
 
 /** 
@@ -851,14 +855,11 @@ function _bildeto_info(paghoj) {
  */
 function _bildo_info_2(dosiero) {
 
-    $.alportu(
-    'bildo_info_2',
+    u.HTTPRequest('post', 'bildo_info_2',
         { 
             dosiero: dosiero,
             kie: 'vikimedio'
         },
-        '#sercho_error')
-    .done(
         function(data) {   
         //$("#sercho_trovoj").html('');
         
@@ -900,34 +901,39 @@ function _bildo_info_2(dosiero) {
                     $("#bildeto_url").attr("href",values.fnt);
                 }
             }
-    });
+        },
+        undefined, undefined,
+        (msg: string) => Eraro.al('#sercho_error', msg)
+    );
 }
+
+
 
 /**
  * Difinas jqueryui-elementon por prezenti unuopan trovon.
  */
-$.widget( "redaktilo.Trovo", {
-    options: {
+class Trovo extends UIElement {
+    opcioj = {
         type: "teksto",
         ŝablono: new HTMLTrovoDt(),
         bld_ŝablonono: null,
         valoroj: {
             prompt: "&nbsp;&nbsp;&#x25B6;&#xFE0E;",
-            url: null,
+            id: '',
+            url: '',
             title: '',
             descr: '',
             data: {},
             enm_btn: true
         }
-    },
+    };
 
-    _create: function() {
-        this._super();
+    constructor(element: HTMLElement|string, options: any) {
+        super(element,options);
 
-        var o = this.options;
-        var v = o.valoroj;
-        v.id = this.element.attr("id");
-        var htmlstr = o.ŝablono.html(v);
+        let v = this.opcioj.valoroj;
+        this.opcioj.valoroj.id = this.element.id;
+        var htmlstr = this.opcioj.ŝablono.html(v);
         /*
             '<dt>' + o.prompt + ' ' + '<span class = "trovo_titolo">'
                 +  ( o.url ? 
@@ -946,31 +952,35 @@ $.widget( "redaktilo.Trovo", {
             // citaĵonumero por kunteksto estas nur en citaĵoserĉo, ne en retserĉo...:
             if (v.data.cit) {
                 // en citaĵoserĉo ebligu kuntekston
-                $("#k_" + v.id).KuntekstoBtn({fno: v.data.cit.fno});
+                new KuntekstoBtn("#k_" + v.id, {fno: v.data.cit.fno});
             } else {
                 // trovoj de retserĉo ne havu kunteksto-butonon
                 $("#k_" + v.id).remove();
             }
 
-            $("#r_" + v.id).RigardoBtn({url: v.url});
-            $("#e_" + v.id).EkzemploBtn({
+            new RigardoBtn("#r_" + v.id, {url: v.url});
+            new EkzemploBtn("#e_" + v.id, {
                 data: v.data,
                 enmetu: function(event,values) {
                     // montru enmeto-dialogon
-                    $("#ekzemplo_dlg input").val("");
-                    $("#ekzemplo_dlg").dialog("valoroj",values);
-                    $("#ekzemplo_dlg").dialog("open");
+                    DOM.al_v("#ekzemplo_dlg input","");
+                    const dlg = Dialog.dialog("#ekzemplo_dlg");
+                    if (dlg) {
+                        dlg.metu_valorojn(values);
+                        dlg.malfermu();
+                    }
                     $("#tabs").tabs( "option", "active", 0);
                 }
             });
         } else {
             // bildoj ne havu kunteksto-butonon
-            $("#k_" + v.id).remove();
+            DOM.e("#k_"+v.id)?.remove();
         }
-    },
 
-    bildinfo: function(res, first, enmetu) {
-        var o = this.options;
+    };
+
+    bildinfo(res, first, enmetu) {
+        var o = this.opcioj;
         var v = o.valoroj;
         var pageid = res.pageid;
 
@@ -981,8 +991,8 @@ $.widget( "redaktilo.Trovo", {
 
             // aldonu URL en la trov-alineo kaj aktivigu la butonojn Rigardu kaj Enmetu
 
-            $("#r_trv_" + pageid).RigardoBtn({url: v.url});
-            $("#e_trv_" + pageid).BildoBtn({
+            new RigardoBtn("#r_trv_" + pageid, {url: v.url});
+            new BildoBtn("#e_trv_" + pageid, {
                 data: v.data,
                 enmetu: enmetu // reago-funkcio por enmeto...
             });
@@ -1001,15 +1011,15 @@ $.widget( "redaktilo.Trovo", {
             $("#trv_" + pageid).html() + "</td></tr></table>";
             $("#trv_" + pageid).html(dd);
             */
-           $("#trv_" + pageid).html(
+           DOM.al_html("#trv_" + pageid,
                o.bld_ŝablono.html({
                   original: res.original.source,
                   thumbnail: res.thumbnail.source,
-                  t_html: $("#trv_" + pageid).html()
+                  t_html: DOM.html("#trv_" + pageid)
             }));
 
             if (first && res.ns == 0)
-                $("#trv_" + pageid).append('<div class="bildstrio"></div>');
+                DOM.e("#trv_" + pageid)?.append('<div class="bildstrio"></div>');
         }
 
         // se la trovita paĝo enhavas plurajn bildojn aldonu ilin tabele
@@ -1032,8 +1042,8 @@ $.widget( "redaktilo.Trovo", {
                         + "</p><a target='_new' href='" + iurl + "'>" + title 
                         + "</a></div>");
 
-                    $("#r_" + li_item_id).RigardoBtn({url: iurl});
-                    $("#e_" + li_item_id).BildoBtn({
+                    new RigardoBtn("#r_" + li_item_id, {url: iurl});
+                    new BildoBtn("#e_" + li_item_id, {
                         data: img,
                         enmetu: enmetu
                         /*
@@ -1052,24 +1062,23 @@ $.widget( "redaktilo.Trovo", {
         // ni bezonas ankaŭ bildetojn por montri ilin, necesas aparte demandi tiujn...
         return dosieroj;
     }
-});
+};
 
 /**
  * Difinas jqueryui-elementon por la butono de citaĵo-kunteksto.
  */
- $.widget( "redaktilo.KuntekstoBtn", {
-    options: {
+class KuntekstoBtn extends UIElement {
+    opcioj: {
         fno: null // frazo-numero per kiu peti kuntekston
-    },
+    };
 
-    _create: function() {
-        this._super();
+    constructor(element: HTMLElement|string, options: any) {
+        super (element,options);
 
-        var e = this.element;
-        e.attr("style","visibility: hidden");
-        e.attr("type","button");
-        e.attr("title","plia kunteksto");
-        e.html("Kunteksto");
+        this.element.setAttribute("style","visibility: hidden");
+        this.element.setAttribute("type","button");
+        this.element.setAttribute("title","plia kunteksto");
+        this.element.textContent = "Kunteksto";
 
         this._on({
             click: function(event) {
@@ -1078,14 +1087,11 @@ $.widget( "redaktilo.Trovo", {
                     const id = event.target.id;
                     const dd_id = id.substring(2); // fortranĉu 'k_'
 
-                    $.alportu(
-                        'kunteksto',
+                    u.HTTPRequest('post','kunteksto',
                             { 
                                 frazo: this.options.fno,
                                 n: 2
                             },
-                            '#sercho_error')
-                        .done(
                             function(data) {   
                                 //$("#sercho_trovoj").html('');
                                 if (data.length) {
@@ -1096,7 +1102,9 @@ $.widget( "redaktilo.Trovo", {
                                 // momente ni nur unufoje povas montri pli da kunteksto
                                 // poste eble ebligu laŭŝtupan plion...
                                 $("#"+id).remove();
-                            });
+                            },
+                            undefined, undefined,
+                            (msg: string) => Eraro.al('#sercho_error',msg));
 
                 } else {
                     throw new Error('nedifinita fraz-n-ro');
@@ -1104,24 +1112,23 @@ $.widget( "redaktilo.Trovo", {
             }
         });
     }
-});
+};
 
 /**
  * Difinas jqueryui-elementon por la butono de fonto-rigardo.
  */
-$.widget( "redaktilo.RigardoBtn", {
-    options: {
+class RigardoBtn extends UIElement {
+    opcioj: {
         url: null
-    },
+    };
 
-    _create: function() {
-        this._super();
+    constructor(element: HTMLElement|string, options: any) {
+        super(element,options);
 
-        var e = this.element;
-        e.attr("style","visibility: hidden");
-        e.attr("type","button");
-        e.attr("title","sur aparta paĝo");
-        e.html("Rigardu");
+        this.element.setAttribute("style","visibility: hidden");
+        this.element.setAttribute("type","button");
+        this.element.setAttribute("title","sur aparta paĝo");
+        this.element.textContent = "Rigardu";
 
         this._on({
             click: function(event) {
@@ -1135,26 +1142,25 @@ $.widget( "redaktilo.RigardoBtn", {
             }
         });
     }
-});
+};
 
 /**
  * Difinas jqueryui-elementon por lanĉi ekzemplo-dialogon
  * kiu helpas al uzanto enmeti la trovaĵon en la XML-artikolon.
  */
-$.widget( "redaktilo.EkzemploBtn", {
-    options: {
+class EkzemploBtn extends UIElement {
+    opcioj: {
         data: null,
         enmetu: null //event
-    },
+    };
 
-    _create: function() {
-        this._super();
+    constructor(element: HTMLElement|string, options: any) {
+        super(element,options);
 
-        var e = this.element;
-        e.attr("style","visibility: hidden");
-        e.attr("type","button");
-        e.attr("title","en la XML-tekston");
-        e.html("Enmetu");
+        this.element.setAttribute("style","visibility: hidden");
+        this.element.setAttribute("type","button");
+        this.element.setAttribute("title","en la XML-tekston");
+        this.element.textContent = "Enmetu";
 
         this._on({
             click: function(event) {
@@ -1184,7 +1190,7 @@ $.widget( "redaktilo.EkzemploBtn", {
             }
         });
     }
-});
+};
 
 
 
@@ -1192,20 +1198,19 @@ $.widget( "redaktilo.EkzemploBtn", {
  * Difinas jqueryui-elementon por lanĉi bildo-dialogon
  * kiu helpas al uzanto enmeti la trovaĵon en la XML-artikolon.
  */
-$.widget( "redaktilo.BildoBtn", {
-    options: {
+class BildoBtn extends UIElement {
+    opcioj: {
         data: null,
         enmetu: null //event
-    },
+    };
 
-    _create: function() {
-        this._super();
+    constructor(element: HTMLElement|string, options: any) {
+        super(element,options);
 
-        var e = this.element;
-        e.attr("style","visibility: hidden");
-        e.attr("type","button");
-        e.attr("title","en la XML-tekston");
-        e.html("Enmetu");
+        this.element.setAttribute("style","visibility: hidden");
+        this.element.setAttribute("type","button");
+        this.element.setAttribute("title","en la XML-tekston");
+        this.element.textContent = "Enmetu";
 
         this._on({
             click: function(event) {
@@ -1213,6 +1218,5 @@ $.widget( "redaktilo.BildoBtn", {
             }
         });
     }
-
-});
+};
             
