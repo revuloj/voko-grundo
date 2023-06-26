@@ -345,15 +345,16 @@ export default function() {
             },
             {
                 text: "\u25f1",
-                click: function() { $("#lastaj_dlg").dialog("toggle"); }
+                click: function() { this.refaldu(); }
             },
             {
                 text: "\u2718",
-                click: function() { $(this).dialog("close"); }
+                click: function() { this.fermu(); }
             }
         ], 
         open: function() {
-            $("#lastaj_dlg").dialog("expand"); // necesas, se la dialogo estis fermita en faldita stato...
+            //$("#lastaj_dlg").dialog("expand"); // necesas, se la dialogo estis fermita en faldita stato...
+            Dialog.dialog("#lastaj_dlg")?.faldu(false);
             plenigu_lastaj_liston();            
             $("#lastaj_error").show();
         }
