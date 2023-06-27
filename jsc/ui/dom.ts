@@ -83,6 +83,13 @@ export class DOM {
         if (el) el.addEventListener(evento, reago);
     }
 
+    /*
+    static ido_reago(e: Element|string, evento: string, idspec: string, reago: EventListenerOrEventListenerObject) {
+        const el = (typeof e === "string")? DOM.e(e) : e;
+        if (el) el.addEventListener(evento, reago);
+    }
+    */
+
     static klak(e: Element|string, reago: EventListenerOrEventListenerObject) {
         DOM.reago(e,"click",reago);
     };

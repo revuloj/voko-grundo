@@ -8,6 +8,8 @@
 
 import * as u from '../u';
 import * as x from '../x';
+
+import { xpress } from '../x';
 import { DOM, Dialog, Menu, Grup, Slip, Elektil, Propon, Valid, Eraro } from '../ui';
 
 import { Artikolo } from './ui_art';
@@ -25,6 +27,7 @@ type NovaArt = { dos: string, rad: string, fin: string, dif: string };
 // aldonu al jQuery UI dialog proprajn metodojn
 // bezonatajn en la redaktilaj dialogoj
 console.debug("Instalante la dialogfunkciojn...");
+
 
 export default function() {
     
@@ -95,7 +98,7 @@ export default function() {
         buttons: {
             "Ŝargi": function(event) { 
                 event.preventDefault();
-                if (! $("#shargi_dosiero").validate()) return;
+                if (! Valid.valida("#shargi_dosiero")) return;
                 const values = Dialog.dialog("#shargi_dlg")?.valoroj();
                 download_art(values.dosiero,"#shargi_error","#shargi_dlg");
                 DOM.al_t("#dock_eraroj",'');
@@ -121,7 +124,9 @@ export default function() {
     DOM.klavpremo("#shargi_sercho",xpress);
     new Propon("#shargi_sercho", {
         source: shargi_sercho_autocomplete,
-        select: function(event,ui) { $("#shargi_dosiero").val(ui.item.art+'.xml'); }   
+        select: function(event,ui) { 
+            DOM.al_v("#shargi_dosiero",ui.item.art+'.xml'); 
+        }   
     });
     Valid.aldonu("#shargi_sercho", {
         pattern: {
@@ -153,7 +158,7 @@ export default function() {
                 disabled: true,
                 click: function(event) {  
                     event.preventDefault();
-                    if (! $("#lastaj_dosiero").validate()) return;
+                    if (! Valid.valida("#lastaj_dosiero")) return;
                     if ($("#lastaj_dosiero").data("rezulto") != "eraro") {
                         DOM.al_t("#lastaj_error","Vi povas reredakti nur artikolojn, ĉe kiuj "
                         + "troviĝis eraro dum traktado de la redaktoservo.");
@@ -250,7 +255,7 @@ export default function() {
             DOM.kaŝu("#referenco_error");
             this.faldu(false); // necesas, se la dialogo estis fermita en faldita stato...
             // se io estas elektita jam serĉu
-            var sel = $("#xml_text").textarea_selection();
+            var sel = Artikolo.xmlarea("#xml_text")?.selection();
             if (sel) {
                 DOM.al_v("#referenco_celo",'');
                 DOM.al_v("#referenco_enhavo",'');
@@ -312,7 +317,7 @@ export default function() {
             "\u2718": function() { this.fermu(); }
         },
         open: function() {
-            $("#ekzemplo_error").hide();
+            DOM.kaŝu("#ekzemplo_error");
             this.faldu(false); // necesas, se la dialogo estis fermita en faldita stato...
         }
     });  
@@ -352,7 +357,7 @@ export default function() {
             DOM.kaŝu("#bildo_error");
             this.faldu(false); // necesas, se la dialogo estis fermita en faldita stato...
 
-            if (parseFloat($("#bildo_fmt").val() as string) > 1) {
+            if (parseFloat(DOM.v("#bildo_fmt")||'') > 1) {
                 bildo_larĝecoj([640,320],640); // eble ankaŭ 800?
             } else {
                 bildo_larĝecoj([576,360,180],360); // eble ankaŭ 450, 768?
@@ -360,7 +365,7 @@ export default function() {
             Elektil.refreŝigu("#bildo_lrg input");
         },
         valorŝanĝo: function() {
-            if (parseFloat($("#bildo_fmt").val() as string) > 1) {
+            if (parseFloat(DOM.v("#bildo_fmt")||'') > 1) {
                 bildo_larĝecoj([640,320],640); // eble ankaŭ 800?
             } else {
                 bildo_larĝecoj([576,360,180],360); // eble ankaŭ 450, 768?
@@ -380,7 +385,7 @@ export default function() {
             }
         },
         undefined);
-    $("#bildo_frazo").keypress(xpress);
+    DOM.klavpremo("#bildo_frazo",xpress);
 
     ///>>>>>>>> dialogo: Enmeti derivaĵon
     new Dialog("#derivajho_dlg", {
@@ -463,7 +468,7 @@ export default function() {
         }
     });
     */
-    $("#senco_dif").keypress(xpress);
+    DOM.klavpremo("#senco_dif",xpress);
 
     //>>>>>>>> dialogo: Enmeti tradukojn
     plenigu_lingvojn();
@@ -474,13 +479,13 @@ export default function() {
             "\u2718": function() { this.fermu(); }
         },
         open: function() {
-            $("#traduko_error").hide();
+            DOM.kaŝu("#traduko_error");
             //$("#traduko_tradukoj").data("trd_shanghoj",{});
             plenigu_lingvojn_artikolo();
-            $("#traduko_menuo").menu("refresh");
+            Menu.refreŝigu("#traduko_menuo");
             // jam difinita en ui_kreo... var preflng = pref_lngoj? pref_lngoj[0] : 'en'; // globala variablo
             const preflng = globalThis.preflng;
-            fill_tradukojn(preflng,$("#trd_pref_"+preflng).text());
+            fill_tradukojn(preflng,DOM.t("#trd_pref_"+preflng));
             // adaptu altecon de la tabelo
             const view_h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
             const dlg = DOM.e("#traduko_dlg")?.parentElement;
@@ -623,7 +628,7 @@ export default function() {
 
 export function shargi_sercho_autocomplete(request,response) {
     DOM.al_v("#shargi_dosiero",'');
-    if (! $("#shargi_sercho").validate()) return;
+    if (! Valid.valida("#shargi_sercho")) return;
 /*    
       if (! validate_pattern(/^[a-zA-Z 0-9ĉĝĥĵŝŭĈĜĤĴŜŬ]+$/,$("#shargi_sercho"),$("#shargi_error"),
                              "La serĉesprimo konsistu nur el esperantaj literoj, ciferoj kaj spacsignoj. Interpunkcioj kaj apostrofo ne estas permesitaj.")) {
@@ -760,15 +765,15 @@ function download_url(url,dosiero,err_to,dlg_id,do_close=true) {
 function sendi_artikolon_servile(event) {
     event.preventDefault();
     // $("#sendiservile_error").hide();
-
-    const metodo = ($(event.target).text() == 'Submeti'? 'api' : 'email');
+    const trg = event.target;
+    const metodo = DOM.t(event.target) == 'Submeti'? 'api' : 'email';
     
     // aldono (t.e. nova artikolo) aŭ redakto (t.e. ŝanĝo)
     const reĝimo = Artikolo.artikolo("#xml_text")?.opcioj["reĝimo"];
     const art_mrk = Artikolo.xmlarea("#xml_text")?.getDosiero();
 
     // ĉe novaj artikoloj komento entenas la dosiernomon
-    if (! $("#sendiservile_komento").validate()) return;
+    if (! Valid.valida("#sendiservile_komento")) return;
 
     const komento = DOM.v("#sendiservile_komento") || '';
     const dosiero = (reĝimo == 'aldono')? komento : art_mrk; //$("#xml_text").Artikolo("art_drv_mrk"); 
@@ -845,7 +850,7 @@ function sendi_artikolon_servile(event) {
 function plenigu_referenco_listojn() {
     //$("body").css("cursor", "progress");
     //$.get('../voko/klasoj.xml')
-    u.HTTPRequest('get','../voko/klasoj.xml',"#referenco_error",{},
+    u.HTTPRequest('get','../voko/klasoj.xml',{},
             function(data) {  
                 var seen = {}; // evitu duoblaĵojn
                 new Propon("#referenco_listo", {
@@ -868,7 +873,11 @@ function plenigu_referenco_listojn() {
                         }).get(),
                     select: referenco_listo_elekto
                 });
-            });
+            },
+            () => document.body.style.cursor = 'wait',
+            () => document.body.style.cursor = 'auto',
+            (msg: string) => Eraro.al("#referenco_error",msg)
+    );
 }
 
 function referenco_listo_elekto(event,ui) {
@@ -886,7 +895,7 @@ function referenco_sercho_autocomplete(request,response) {
           return;
       }
       */
-      if (! $("#referenco_sercho").validate()) return; //Checks("check")) return;
+      if (! Valid.valida("#referenco_sercho")) return; //Checks("check")) return;
     
       var sercho = request.term; //$("#referenco_secho").val();
       var results = Array();
@@ -949,7 +958,8 @@ function referenco_enmeti(event) {
         if (ref.grp) {
             dlg.al_valoroj({grp: false, tip: "nuda"});
             DOM.al_v("#referenco_listo",'');
-            $( "#referenco_listo" ).prop('disabled',true);
+            const ref_lst = DOM.i("#referenco_listo")
+            if (ref_lst) ref_lst.disabled = true;
             //$( "#referenco_grp" ).prop("checked",false);
             //$( "#referenco_tipo" ).val("nuda");
         };
@@ -1231,8 +1241,8 @@ function plenigu_lingvojn_artikolo() {
         const kodo = lng_nomoj[lnomo];
         lingvoj_html += '<li id="trd_art_' + kodo + '"><div>' + lnomo + '</div></li>';
     }
-    $("#traduko_artikolaj").empty();
-    $("#traduko_artikolaj").append(lingvoj_html);
+    DOM.al_t("#traduko_artikolaj",'');
+    DOM.e("#traduko_artikolaj")?.append(lingvoj_html);
 //    $("#traduko_menuo[id^=trd_art_]").remove();
 //    $("#traduko_artikolaj").after(lingvoj_html);
 }
@@ -1281,8 +1291,8 @@ function jsort_lng(a, b){
    // try { // 2017-06: tio ankoraŭ ne bone funkcias, ekz. en Chromium "c" venos antaŭ "ĝ" ...?
     //    $(a).text().localeCompare($(b).text(), "eo"); 
     //} catch (e) {
-        var at = $(a).text();
-        var bt = $(b).text();
+        var at = DOM.t(a)||'';
+        var bt = DOM.t(b)||'';
         var pos = 0,
           min = Math.min(at.length, bt.length);
         // ne perfekte sed pli bone ol ĉ, ĝ ... tute ĉe la fino...
@@ -1321,14 +1331,15 @@ function fill_tradukojn(lng,lingvo_nomo) {
     // aldonitaj aŭ ŝanĝitaj en la dialogo
     // var trdoj = $("#xml_text").Artikolo("tradukoj",lng); 
     const xmlarea = Artikolo.xmlarea("#xml_text");
-    const xmltrad = xmlarea.xmltrad;
-    xmltrad.preparu(xmlarea.xmlstruct);
-    xmltrad.collectTrdAllStruct(lng);
-    //const trd_shanghoj = $("#traduko_tradukoj").data("trd_shanghoj") || {};
+    if (xmlarea) {
+        const xmltrad = xmlarea.xmltrad;
+        xmltrad.preparu(xmlarea.xmlstruct);
+        xmltrad.collectTrdAllStruct(lng);    
+        //const trd_shanghoj = $("#traduko_tradukoj").data("trd_shanghoj") || {};
 
-    var tableCnt = '';
+        let tableCnt = '';
 
-    //if (trdoj) {
+        //if (trdoj) {
 
         // PLIBONIGU: estas neelegante tie pridemandi
         // .xmlstruct - pli bone xmlarea jam redonu la pretan
@@ -1339,7 +1350,7 @@ function fill_tradukojn(lng,lingvo_nomo) {
         // kiu transprentas la administradon kaj aktualigadon...
         // ŝangojn oni devus skribi tiam nur se oni ŝanĝas lingvon aŭ enmetas tradukojn
         // en la dialogon ĝin fermante...
-        if (xmlarea) for (let s of xmlarea.xmlstruct.strukturo) {
+        for (let s of xmlarea.xmlstruct.strukturo) {
             if (['drv','subdrv','snc','subsnc'].indexOf(s.el) > -1) {
                 const parts = s.dsc.split(':');
                 let dsc = parts[1] || parts[0];
@@ -1374,12 +1385,15 @@ function fill_tradukojn(lng,lingvo_nomo) {
             } // if drv..subsnc
         } // for s...
     //} // if trdj
-    $("#traduko_lingvo").text(lingvo_nomo +" ["+lng+"]");
-    $("#traduko_dlg").data("lng",lng);
-    $("#traduko_tradukoj").empty();
 
-    // enigu traduko-kampojn
-    $("#traduko_tradukoj").html(tableCnt);
+        DOM.al_t("#traduko_lingvo",lingvo_nomo +" ["+lng+"]");
+        $("#traduko_dlg").data("lng",lng);
+        DOM.al_t("#traduko_tradukoj",'');
+
+        // enigu traduko-kampojn
+        DOM.al_html("#traduko_tradukoj",tableCnt);
+    }
+    
 
     // rimarku ĉiujn ŝanĝojn de unuopaj elementoj
     $("#traduko_tradukoj").on("change","input", trd_shanghita);
@@ -1422,15 +1436,18 @@ function traduko_input_field(mrk,nro,trd) {
 }
 
 function traduko_add_btn(mrk) {
-    var id = mrk; //.replace(/\./g,'\\\\.');
-    var id_esc = mrk.replace(/\./g,'\\\.');
-    $("#traduko_tradukoj").on("click","#trdadd\\:"+id_esc,function() {
-        var first_input_of_mrk = $("#trd\\:" + id_esc + "\\:0");
+    const id = mrk; //.replace(/\./g,'\\\\.');
+    const id_esc = mrk.replace(/\./g,'\\\.');
+    DOM.klak("#trdadd\\:"+id_esc,function() {
+        const first_input_of_mrk = DOM.i("#trd\\:" + id_esc + "\\:0");
         if (first_input_of_mrk) {
-            var last_input_of_mrk = first_input_of_mrk.parent().children("input:last-of-type");
-            var parts = last_input_of_mrk.attr('id').split(':');
-            var next_id = parts[0] + ':' + parts[1] + ':' + (parseInt(parts[2]) + 1);
-            last_input_of_mrk.after('<br/><input id="' + next_id + '" type="text" name="' + next_id + '" size="30" value=""/>');
+            const last_input_of_mrk = first_input_of_mrk?.parentElement?.querySelector("input:last-of-type");
+            if (last_input_of_mrk) {
+                const parts = last_input_of_mrk.id.split(':');
+                const next_id = parts[0] + ':' + parts[1] + ':' + (parseInt(parts[2]) + 1);
+                last_input_of_mrk.after('<br/><input id="' + next_id 
+                    + '" type="text" name="' + next_id + '" size="30" value=""/>');
+            }
         } // else: estu ĉiam almenaŭ unu eĉ se malplena kampo....
     });
     return '<button id="trdadd:' + id 
@@ -1469,26 +1486,26 @@ function plenigu_sxablonojn() {
     for (let nomo in snc_sxablonoj) {
         sxbl_list += '<option>' + nomo + '</option>';
     }
-    $("#sxablono_elekto").append(sxbl_list);
+    DOM.e("#sxablono_elekto")?.append(sxbl_list);
 }
 
 function kiam_elektis_sxablonon(event) {
     var sxbl = $("#sxablono_elekto").val() as string;
-    $("#sxablono_xml").empty();
+    DOM.al_t("#sxablono_xml",'');
     $("#sxablono_xml").off("keypress");
     $("#sxablono_xml").off("click");
-    $("#sxablono_xml").append(new SncŜablono(sxbl).html());
+    DOM.e("#sxablono_xml")?.append(new SncŜablono(sxbl).html());
     /*
     var lines = new SncŜablono(sxbl).form().split('\n');
     for (var i=0; i<lines.length; i++) {
         $("#sxablono_xml").append('<tr><td><b class="sxbl">&ndash;</b></td><td><pre class="line">'+lines[i]+'</pre></td></tr>');
     }
     */
-    $("#sxablono_xml button").click(sxablono_button_click);
+    DOM.klak("#sxablono_xml button",sxablono_button_click);
     //$("#sxablono_xml input[type='checkbox']").click(sxablono_checkbox_click);
-    $("#sxablono_xml b.sxbl").click(sxablono_strike_click);
-    $("#sxablono_xml span.sxbl").click(sxablono_span_click);
-    $("#sxablono_xml input").keypress(xpress);
+    DOM.klak("#sxablono_xml b.sxbl",sxablono_strike_click);
+    DOM.klak("#sxablono_xml span.sxbl",sxablono_span_click);
+    DOM.klavpremo("#sxablono_xml input",xpress);
 }
 
 function sxablono_button_click(event) {
@@ -1512,9 +1529,9 @@ function sxablono_button_click(event) {
 
 
 function sxablono_strike_click(event) {
-    var text_line = $(event.target).closest("tr").find("pre");
-    var style = text_line.css("text-decoration-line");
-    text_line.css('text-decoration-line',style=="none"?"line-through":"none");
+    const text_line = event.target.closest("tr").querySelector("pre");
+    const style = text_line.style["text-decoration-line"];
+    text_line.style['text-decoration-line'] = (style == "none"?"line-through":"none");
 }
 
 function sxablono_span_click(event) {
@@ -1541,11 +1558,10 @@ function sxablono_span_click(event) {
 function sxablono_enmeti(event) {
     //$("#xml_text").insert($("#sxablono_xml").val());
     let text = '';
-    $("#sxablono_xml pre").each( function() {
-        var pre = $(this);
+    DOM.ej("#sxablono_xml pre").forEach( (pre) => {
         //var cb = $(this).children("input[type='checkbox']");
         //if (cb.length == 0 || cb.prop('checked'))
-        if (pre.css("text-decoration-line") != "line-through") {
+        if ((pre as HTMLElement).style["text-decoration-line"] != "line-through") {
             text += pre.form_text() + "\n";
         }
     });
@@ -1558,9 +1574,7 @@ function sxablono_enmeti(event) {
 }
 
 function plenigu_lastaj_liston() {
-    $("body").css("cursor", "progress");
-    $.ricevu("revo_lastaj_redaktoj", show_xhr_error)
-      .done(
+    u.HTTPRequest('get',"revo_lastaj_redaktoj",{},
         function(data, status, xhr) {   
             if (xhr.status == 302) {
                 // FIXME: When session ended the OpenID redirect 302 is handled 
@@ -1598,28 +1612,31 @@ function plenigu_lastaj_liston() {
                         + '</td></tr>';                    
                 }
                 
-                $("#lastaj_listo").html(listo);
+                DOM.al_html("#lastaj_listo",listo);
                 $("#lastaj_listo").data("detaloj",data);
             }
-
 
             // adaptu altecon de la dialogo, por ke la listo ruliĝu sed la titolo kaj reir-butono montriĝu...
             //var dlg = $("#lastaj_dlg").parent();
             //var view_h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
             //var decl_h = (view_h * .70) - dlg.children(".ui-dialog-titlebar").height(); // - dlg.children(".ui-dialog-buttonpane").height();
             //$("#lastaj_tabelo").height(decl_h);
-        });
+        },
+        () => document.body.style.cursor = 'wait',
+        () => document.body.style.cursor = 'auto',
+        show_xhr_error
+    );
 }
 
 
 function lastaj_tabelo_premo(event) {
     event.preventDefault();
-    var id = $(event.target).parent().attr('id');
-    var dtl = $("#lastaj_listo").data("detaloj");
-    var entry = dtl.filter(function(e) { if (e.id == id) return e; });
+    const id = event.target.parentElement.id;
+    const dtl = $("#lastaj_listo").data("detaloj");
+    const entry = dtl.filter(function(e) { if (e.id == id) return e; });
     if (entry) {
         entry = entry[0];
-        $("#lastaj_dosiero").val(entry.name);
+        DOM.al_v("#lastaj_dosiero",entry.name);
         $("#lastaj_dosiero").data("url",entry.xml_url);
         $("#lastaj_rigardu").data("url",entry.html_url);
         $("#lastaj_dosiero").data("rezulto",entry.rezulto);
@@ -1628,19 +1645,18 @@ function lastaj_tabelo_premo(event) {
         } else {
             $("#lastaj_reredakti").button("disable");
         }
-        $("#lastaj_mesagho").val('');
+        DOM.al_v("#lastaj_mesagho",'');
         if (entry.rez_url) {
-            $.ricevu(entry.rez_url)
-            .done(
+            u.HTTPRequest('post',entry.rez_url,{},
                 function(data) {  
                     var rez = JSON.parse(data); 
                     if (rez && rez.mesagho) {
                         var msg = rez.mesagho.replace(/\|\| */g,"\n").replace('[m ','[');
-                        $("#lastaj_mesagho").val(msg);
+                        DOM.al_v("#lastaj_mesagho",msg);
                     }
                 });
         } else if (! entry.rezulto) {
-            $("#lastaj_mesagho").val('Atendante traktadon...');
+            DOM.al_v("#lastaj_mesagho",'Atendante traktadon...');
         }
     }
 }

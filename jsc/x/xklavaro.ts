@@ -32,6 +32,14 @@ type Reghimpremo = (e: Event, r: {cmd: Reghimo}) => void;
 
 console.debug("Instalante la klavarfunkciojn...");
 
+
+export function xpress(event) {
+    var key = event.key;
+    if (key == 'x' || key == 'X') {   // X or x
+        return xklavo(event.target,key);
+    }
+}
+
 /*
     // Default options.
     options: {
@@ -485,3 +493,80 @@ export class XKlavaro {
     };
 
 }
+
+
+function xklavo(el: HTMLInputElement, key: string) {
+
+    const cx1 = {
+        s: '\u015D',
+        S: '\u015C',
+        c: '\u0109',
+        C: '\u0108',
+        h: '\u0125',
+        H: '\u0124',
+        g: '\u011D',
+        G: '\u011C',
+        u: '\u016D',
+        U: '\u016C',
+        j: '\u0135',
+        J: '\u0134'
+    };
+
+    const cx2 = {
+        '\u015D': 's',
+        '\u015C': 'S',
+        '\u0109': 'c',
+        '\u0108': 'C',
+        '\u0125': 'h',
+        '\u0124': 'H',
+        '\u011D': 'g',
+        '\u011C': 'G',
+        '\u016D': 'u',
+        '\u016C': 'U',
+        '\u0135': 'j',
+        '\u0134': 'J'
+    };
+    
+    function cxigi(b: string, key: string) {
+        const k = key; //String.fromCharCode(key);
+        return (cx1[b] || (cx2[b] ? cx2[b] + k : ''));
+    }
+
+    // @ts-ignore
+    if (document.selection && document.selection.createRange) { // IE/Opera
+        /* /save window scroll position
+        if (document.documentElement && document.documentElement.scrollTop)
+            var winScroll = document.documentElement.scrollTop
+        else if (document.body)
+            var winScroll = document.body.scrollTop;
+            */
+        //get current selection  
+        el.focus();
+        // @ts-ignore
+        var range = document.selection.createRange();
+        if (range.text != "") return true;
+        range.moveStart('character', -1); 
+        const nova = cxigi(range.text, key);
+        if (nova != "") {
+            range.text = nova;
+            return false;
+        }
+    } else if (el.selectionStart || el.selectionStart === 0) { // Mozilla
+        var start = el.selectionStart;
+        var end = el.selectionEnd;
+        if (start != end || start == 0) return true; 
+
+        const nova = cxigi(el.value.substring(start-1, start), key);
+        if (nova != "") {
+            //save textarea scroll position
+            var textScroll = el.scrollTop;
+            var val = el.value;
+            el.value = val.substring(0,start-1) + nova + val.substring(end,val.length);
+            el.selectionStart = start + nova.length-1;
+            el.selectionEnd = el.selectionStart;
+            //restore textarea scroll position
+            el.scrollTop = textScroll;
+            return false;
+        }
+    }
+};
