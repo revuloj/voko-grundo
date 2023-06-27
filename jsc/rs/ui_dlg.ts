@@ -8,15 +8,16 @@
 
 import * as u from '../u';
 import * as x from '../x';
-import { DOM, Dialog, Valid, Eraro } from '../ui';
+import { DOM, Dialog, Menu, Grup, Slip, Elektil, Propon, Valid, Eraro } from '../ui';
 
 import { Artikolo } from './ui_art';
+import { Erarolisto } from './ui_err';
 
 import { XMLReferenco, XMLReferencGrupo, XMLRimarko, XMLEkzemplo, 
          XMLFonto, XMLSenco, XMLDerivaĵo, XMLBildo, SncŜablono } from './sxabloniloj';
 
 import { show_error_status, surmetita_dialogo } from './ui_err.js';
-import { xpress } from './jquery_ext';
+//import { xpress } from './jquery_ext';
 
 type NovaArt = { dos: string, rad: string, fin: string, dif: string };
 //type ShargArt = { dosiero: string };
@@ -113,92 +114,6 @@ declare global {
 // aldonu al jQuery UI dialog proprajn metodojn
 // bezonatajn en la redaktilaj dialogoj
 console.debug("Instalante la dialogfunkciojn...");
-/*
-$.widget( "ui.dialog", $.ui.dialog, {
-
-    // Default options.
-    options: {
-            kampoj: {},
-            autoOpen: false,
-            width: "auto",
-            closeText: "", // fermu
-            show: {
-                effect: "fade"
-            },
-            hide: {
-                effect: "fade"
-            },
-            valorŝanĝo: null // evento lanĉita, post voko de "valoroj" kun novaj valoroj
-    },
-    */
-    /*
-    valoroj: function(values) {
-        const kampoj = this.options.kampoj;
-        if (values === undefined) {
-            // return values
-            let vals = {};
-            for (let key in kampoj) {
-                let k = $(kampoj[key]);
-                if (k.attr("type") == "checkbox" || k.attr("type") == "radio") {
-                    vals[key] = k.is(":checked");
-                } else {
-                    vals[key] = $(k).val();
-                }
-            }
-            return vals;
-        } else {
-            // set values
-            for (let key in kampoj) {
-                let k = $(kampoj[key]);
-                if (key in values) {
-                    let value = values[key] ? values[key] : '';
-                    if (k.attr("type") == "checkbox" || k.attr("type") == "radio") {
-                        k.prop("checked",values[key]);
-                    } else {
-                        k.val(value);
-                    }
-                }
-            }
-            this._trigger("valorŝanĝo");
-        }
-    },
-    */
-    /* -> faldu(bool)
-    shrink: function() {
-        const el = this.element;
-        el.hide(); 
-        el.prev(".ui-dialog-titlebar").hide();
-        this._setOption("position",{
-            my: "center top",
-            at: "center top+5",
-            of: "#xml"
-        });
-        $("#xml_text").focus();
-    },
-
-    expand: function() {
-        const el = this.element;
-        el.show(); 
-        el.prev(".ui-dialog-titlebar").show();
-        this._setOption("position",{
-            my: "center center",
-            at: "center center",
-            of: window
-        });
-    },
-    */
-/*
-    toggle: function() {
-        if (this.element.is(':visible')) {
-            this.shrink();
-        } else {
-            this.expand();
-        }
-    }
-
-});
-*/
-
 
 export default function() {
     
@@ -236,7 +151,7 @@ export default function() {
             }
         }
     });
-    new x.XKlavaro(DOM.e("#krei_butonoj")!,DOM.e("krei_dlg")!,DOM.i("#krei_dif")!,
+    new x.XKlavaro("#krei_butonoj","krei_dlg","#krei_dif",
         undefined, // kiuradiko, provizore redonu stultaĵon
         function(event,ui) {
             if (ui.cmd == "blankigo") {
@@ -274,7 +189,7 @@ export default function() {
                 download_art(values.dosiero,"#shargi_error","#shargi_dlg");
                 $("#dock_eraroj").empty();
                 $("#dock_avertoj").empty();
-                //$(this).dialog("close") 
+                //this.fermu() 
             },
             "\u2718": function() { this.fermu(); } 
         },
@@ -293,7 +208,7 @@ export default function() {
         }
     });
     $("#shargi_sercho").keypress(xpress);
-    $("#shargi_sercho").autocomplete({
+    new Propon("#shargi_sercho", {
         source: shargi_sercho_autocomplete,
         select: function(event,ui) { $("#shargi_dosiero").val(ui.item.art+'.xml'); }   
     });
@@ -339,7 +254,7 @@ export default function() {
                         download_url(url,dos,"#lastaj_error","#lastaj_dlg");
                         $("#dock_eraroj").empty();
                         $("#dock_avertoj").empty();
-                        //$(this).dialog("close") 
+                        //this.fermu() 
                     }
                 }
             },
@@ -353,7 +268,7 @@ export default function() {
             }
         ], 
         open: function() {
-            //$("#lastaj_dlg").dialog("expand"); // necesas, se la dialogo estis fermita en faldita stato...
+            //this.faldu(false); // necesas, se la dialogo estis fermita en faldita stato...
             Dialog.dialog("#lastaj_dlg")?.faldu(false);
             plenigu_lastaj_liston();            
             $("#lastaj_error").show();
@@ -380,17 +295,21 @@ export default function() {
         buttons: { 
             "Submeti": sendi_artikolon_servile,
             "(Sendi)": sendi_artikolon_servile,
-            "\u2718": function() { $(this).dialog("close"); }
+            "\u2718": function() { this.fermu(); }
         }, 
         open: function() {
             $("#sendiservile_error").hide();
-            if ($("#xml_text").Artikolo("option","reĝimo") == "aldono") {
-                $("#sendiservile_komento").val($("#krei_dos").val());
-                $("#sendiservile_komento").prop('disabled',true);
-            } else {
-                $("#sendiservile_komento").val('');
-                $("#sendiservile_komento").prop('disabled',false);
-            }        
+            const art = Artikolo.artikolo("#xml_text");
+            const komt = DOM.i("#sendiservile_komento");
+            if (komt) {
+                if (art?.opcioj["reĝimo"] == "aldono") {
+                    komt.value = DOM.v("#krei_dos") || '';
+                    komt.disabled = true;
+                } else {
+                    komt.value = '';
+                    komt.disabled = false;
+                }            
+            }
         }
     });
     Valid.aldonu("#sendiservile_komento", {
@@ -413,19 +332,19 @@ export default function() {
         },
         buttons: { 
             "Enmeti la referencon": referenco_enmeti,
-            "\u25f1": function() { $("#referenco_dlg").dialog("toggle") ;},
-            "\u2718": function() { $(this).dialog( "close" ); }
+            "\u25f1": function() { this.refaldu() ;},
+            "\u2718": function() { this.fermu(); }
         }, 
         open: function() {
             $("#referenco_error").hide();
-            $("#referenco_dlg").dialog("expand"); // necesas, se la dialogo estis fermita en faldita stato...
+            this.faldu(false); // necesas, se la dialogo estis fermita en faldita stato...
             // se io estas elektita jam serĉu
             var sel = $("#xml_text").textarea_selection();
             if (sel) {
-                $("#referenco_celo").val('');
-                $("#referenco_enhavo").val('');
-                $("#referenco_sercho").val(sel);
-                $("#referenco_sercho").autocomplete("search");
+                DOM.al_v("#referenco_celo",'');
+                DOM.al_v("#referenco_enhavo",'');
+                DOM.al_v("#referenco_sercho",sel);
+                Propon.propon("#referenco_sercho")?.proponu();
             }
         }
     }); 
@@ -453,23 +372,27 @@ export default function() {
                      "Interpunkcioj kaj apostrofo ne estas permesitaj."
         }
     });
-    $( "#referenco_listo" ).prop('disabled',( $( "#referenco_tipo" ).val() != 'lst') );
+    const ref_lst = DOM.i("#referenco_listo");
+
+    if (ref_lst) ref_lst.disabled = ( DOM.v("#referenco_tipo") != 'lst');
     $( "#referenco_tipo" ).change( function() {
-        if ($( "#referenco_tipo" ).val() == 'lst') {
-            $( "#referenco_listo" ).prop('disabled',false);
-        } else {
-            $( "#referenco_listo" ).val('');
-            $( "#referenco_listo" ).prop('disabled',true);
+        if (ref_lst) {
+            if (DOM.v("#referenco_tipo") == 'lst') {
+                ref_lst.disabled = false;
+            } else {
+                DOM.al_v("#referenco_listo",'');
+                ref_lst.disabled = true;
+            }    
         }
     });    
     plenigu_referenco_listojn();
-    $( "#referenco_sercho" ).autocomplete({
+    new Propon( "#referenco_sercho", {
         source: referenco_sercho_autocomplete,
         select: function(event,ui) {
             var item = ui.item;
             var enhavo = item.num == "" ? item.kap : item.kap + "<sncref/>";
-            $( "#referenco_celo" ).val(item.mrk);
-            $( "#referenco_enhavo" ).val(enhavo);
+            DOM.al_v("#referenco_celo",item.mrk);
+            DOM.al_v("#referenco_enhavo",enhavo);
         }   
     });
       
@@ -486,16 +409,16 @@ export default function() {
         buttons: {   
             "Enmeti la ekzemplon": function(event) { ekzemplo_enmeti(event,false); },
             "... nur la fonton": function(event) { ekzemplo_enmeti(event,true); },
-            "\u25f1": function() { $("#ekzemplo_dlg").dialog("toggle"); },
-            "\u2718": function() { $(this).dialog( "close" ); }
+            "\u25f1": function() { this.refaldu(); },
+            "\u2718": function() { this.fermu(); }
         },
         open: function() {
             $("#ekzemplo_error").hide();
-            $("#ekzemplo_dlg").dialog("expand"); // necesas, se la dialogo estis fermita en faldita stato...
+            this.faldu(false); // necesas, se la dialogo estis fermita en faldita stato...
         }
     });  
     plenigu_ekzemplo_bib();
-    new x.XKlavaro(DOM.e("#ekzemplo_butonoj"),DOM.e("#ekzemplo_dlg"), DOM.i("#xml_text"),
+    new x.XKlavaro("#ekzemplo_butonoj","#ekzemplo_dlg","#xml_text",
         undefined, 
         function(event,ui) {
             if (ui.cmd == "blankigo") {
@@ -504,19 +427,6 @@ export default function() {
             }
         },
         undefined);
-/*
-    $( "#ekzemplo_butonoj").Klavaro({
-        artikolo: $("#xml_text"),
-        posedanto: "#ekzemplo_dlg",
-        akampo: "#ekzemplo_frazo",
-        reĝimpremo: function(event,ui) {
-            if (ui.cmd == "blankigo") {
-                $("#ekzemplo_dlg input").val("");
-                $("#ekzemplo_frazo").val("");
-            }
-        }
-    });
-    */
 
     $("#ekzemplo_frazo").keypress(xpress);
     $("#ekzemplo_bib").keypress(xpress);
@@ -537,19 +447,19 @@ export default function() {
         },
         buttons: {   
             "Enmeti la bildon": function(event) { bildo_enmeti(event,false); },
-            "\u25f1": function() { $("#bildo_dlg").dialog("toggle"); },
-            "\u2718": function() { $(this).dialog("close"); }
+            "\u25f1": function() { this.refaldu(); },
+            "\u2718": function() { this.fermu(); }
         },
         open: function() {
             $("#bildo_error").hide();
-            $("#bildo_dlg").dialog("expand"); // necesas, se la dialogo estis fermita en faldita stato...
+            this.faldu(false); // necesas, se la dialogo estis fermita en faldita stato...
 
             if (parseFloat($("#bildo_fmt").val() as string) > 1) {
                 bildo_larĝecoj([640,320],640); // eble ankaŭ 800?
             } else {
                 bildo_larĝecoj([576,360,180],360); // eble ankaŭ 450, 768?
             }
-            $( "#bildo_lrg input" ).checkboxradio("refresh");
+            Elektil.refreŝigu("#bildo_lrg input");
         },
         valorŝanĝo: function() {
             if (parseFloat($("#bildo_fmt").val() as string) > 1) {
@@ -557,13 +467,13 @@ export default function() {
             } else {
                 bildo_larĝecoj([576,360,180],360); // eble ankaŭ 450, 768?
             }
-            $( "#bildo_lrg input" ).checkboxradio("refresh");
+            Elektil.refreŝigu("#bildo_lrg input");
         }
     });
 
-    $( "#bildo_lrg input" ).checkboxradio();
-    $( "#bildo_lrg" ).controlgroup();
-    new x.XKlavaro(DOM.e("#bildo_butonoj"), DOM.e("#bildo_dlg"), DOM.i("#bildo_frazo"),
+    Elektil.kreu("#bildo_lrg input");
+    new Grup("#bildo_lrg");
+    new x.XKlavaro("#bildo_butonoj","#bildo_dlg","#bildo_frazo",
         undefined,
         function(event,ui) {
             if (ui.cmd == "blankigo") {
@@ -572,19 +482,6 @@ export default function() {
             }
         },
         undefined);
-/*        
-    $( "#bildo_butonoj").Klavaro({
-        artikolo: $("#xml_text"),
-        posedanto: "#bildo_dlg",
-        akampo: "#bildo_frazo",
-        reĝimpremo: function(event,ui) {
-            if (ui.cmd == "blankigo") {
-                $("#bildo_dlg input[type!='radio']").val("");
-                $("#bildo_frazo").val("");
-            }
-        }
-    });
-    */
     $("#bildo_frazo").keypress(xpress);
 
     ///>>>>>>>> dialogo: Enmeti derivaĵon
@@ -596,16 +493,16 @@ export default function() {
         },
         buttons: {   
             "Enmeti la derivaĵon": derivajho_enmeti, 
-            "\u25f1": function() { $("#derivajho_dlg").dialog("toggle"); },
-            "\u2718": function() { $(this).dialog( "close" ); }
+            "\u25f1": function() { this.refaldu(); },
+            "\u2718": function() { this.fermu(); }
         },
         open: function() {
             plenigu_derivajxojn();
             $("#derivajho_error").hide();
-            $("#derivajho_dlg").dialog("expand"); // necesas, se la dialogo estis fermita en faldita stato...
+            this.faldu(false); // necesas, se la dialogo estis fermita en faldita stato...
         }
     });
-    new x.Xklavaro(DOM.e("#derivajho_butonoj"),DOM.e("#derivajho_dlg"),DOM.i("#derivajho_dif"),
+    new x.XKlavaro("#derivajho_butonoj","#derivajho_dlg","#derivajho_dif",
         undefined,
         function(event,ui) {
             if (ui.cmd == "blankigo") {
@@ -638,15 +535,15 @@ export default function() {
         },
         buttons: {   
             "Enmeti la sencon": senco_enmeti,
-            "\u25f1": function() { $("#senco_dlg").dialog("toggle"); },
-            "\u2718": function() { $(this).dialog( "close" ); }
+            "\u25f1": function() { this.refaldu(); },
+            "\u2718": function() { this.fermu(); }
         },
         open: function() {
             $("#senco_error").hide();
-            $("#senco_dlg").dialog("expand"); // necesas, se la dialogo estis fermita en faldita stato...
+            this.faldu(false); // necesas, se la dialogo estis fermita en faldita stato...
         }
     });
-    new x.XKlavaro(DOM.e("#senco_butonoj"),DOM.e("#senco_dlg"),DOM.i("#senco_dif"),
+    new x.XKlavaro("#senco_butonoj","#senco_dlg","#senco_dif",
         undefined,
         function(event,ui) {
             if (ui.cmd == "blankigo") {
@@ -676,7 +573,7 @@ export default function() {
         position: { my: "top", at: "top+10", of: window },
         buttons: {   
             "Enmeti la tradukojn": function(event) { tradukojn_enmeti(event); },
-            "\u2718": function() { $(this).dialog( "close" ); }
+            "\u2718": function() { this.fermu(); }
         },
         open: function() {
             $("#traduko_error").hide();
@@ -687,13 +584,18 @@ export default function() {
             const preflng = globalThis.preflng;
             fill_tradukojn(preflng,$("#trd_pref_"+preflng).text());
             // adaptu altecon de la tabelo
-            var view_h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
-            var dlg = $("#traduko_dlg").parent();
-            var tab_h = (view_h * 0.80) - dlg.children(".ui-dialog-titlebar").height() - dlg.children(".ui-dialog-buttonpane").height();
-            $(".dlg_tab_div").height(tab_h);        
+            const view_h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+            const dlg = DOM.e("#traduko_dlg")?.parentElement;
+            if (dlg) {
+                const tbar_h = +(dlg.querySelector(".ui-dialog-titlebar") as HTMLElement).style.height|| 0;
+                const pane_h = +(dlg.querySelector(".ui-dialog-buttonpane") as HTMLElement).style.height|| 0;
+                const tab_h = (view_h * 0.80) - tbar_h - pane_h;
+                const tab_div = DOM.e(".dlg_tab_div") as HTMLElement;
+                tab_div.style.height = ""+tab_h;            
+            }
         }
     }); 
-    $( "#traduko_menuo" ).menu({
+    new Menu("#traduko_menuo", {
         items: "> :not(.ui-widget-header)",
         select: shanghu_trd_lingvon
     });  
@@ -713,7 +615,7 @@ export default function() {
             this.faldu(false); // necesas, se la dialogo estis fermita en faldita stato...
         }
     });
-    new x.XKlavaro(DOM.e("#sxablono_butonoj"),DOM.e("#sxablono_dlg"), null, undefined, undefined, undefined);
+    new x.XKlavaro("#sxablono_butonoj","#sxablono_dlg",'', undefined, undefined, undefined);
     /*
     $( "#sxablono_butonoj").Klavaro({
         artikolo: $("#xml_text"),
@@ -722,7 +624,7 @@ export default function() {
     });
     */
     $( "#sxablono_elekto" ).change(kiam_elektis_sxablonon);     
-    $( ".controlgroup-vertical" ).controlgroup({ "direction": "vertical" });
+    new Grup(".controlgroup-vertical", { "direction": "vertical" });
 
     //>>>>>>>> dialogo: Enmeti rimarkon
     new Dialog("#rimarko_dlg", {
@@ -735,23 +637,23 @@ export default function() {
             "Enmeti la rimarkon": function(event) { 
                 event.preventDefault();
                 const indent=2;
-                var rim = $("#rimarko_dlg").dialog("valoroj");
+                var rim = Dialog.valoroj("#rimarko_dlg");
                 rim.rim = x.linirompo(rim.rim.replace(/~/g,'<tld/>'),indent);
                 rim.elm = rim.adm ? 'adm' : 'rim';                   
                 var rimstr = new XMLRimarko(rim,rim.elm).xml(indent*2);
-                $("#xml_text").Artikolo("insert",rimstr);
-                $("#rimarko_dlg").dialog("close");
-                $(this).dialog("close");
+                Artikolo.artikolo("#xml_text")?.insert(rimstr);
+                Dialog.fermu("#rimarko_dlg");
+                this.fermu();
             },
-            "\u25f1": function() { $("#rimarko_dlg").dialog("toggle"); },
-            "\u2718": function() { $(this).dialog("close"); }
+            "\u25f1": function() { this.refaldu(); },
+            "\u2718": function() { this.fermu(); }
         },
         open: function() {
             $("#rimarko_error").hide();
-            $("#rimarko_dlg").dialog("expand"); // necesas, se la dialogo estis fermita en faldita stato...
+            this.faldu(false); // necesas, se la dialogo estis fermita en faldita stato...
         }
     });
-    new x.XKlavaro(DOM.e("#rimarko_butonoj"), DOM.e("#riarko_dlg"), DOM.i("#rimarko_rim"),
+    new x.XKlavaro("#rimarko_butonoj","#riarko_dlg","#rimarko_rim",
         undefined,
         function(event,ui) {
             if (ui.cmd == "blankigo") {
@@ -784,11 +686,11 @@ export default function() {
         position: { my: "top", at: "top+10", of: window },
         buttons: {
             "Ŝargi": function(event) { hom_art_shargi(event) },
-            "\u25f1": function() { $("#homonimo_dlg").dialog("toggle") },
+            "\u25f1": function() { this.refaldu() },
             "\u2718": function() { $( this ).dialog( "close" ) }  
         },
         open: function() {
-            $("#homonimo_dlg").dialog("expand"); // necesas, se la dialogo estis fermita en faldita stato...
+            this.faldu(false); // necesas, se la dialogo estis fermita en faldita stato...
             plenigu_homonimo_liston();            
             $("#homonimo_error").show();  
         }
@@ -832,7 +734,7 @@ export function shargi_sercho_autocomplete(request,response) {
       */
     
       var sercho = request.term; //$("#referenco_secho").val();
-      var results = [];
+      var results: Array<any> = [];
     
   //    $("body").css("cursor", "progress");
       //$.post(
@@ -892,41 +794,6 @@ export function show_xhr_error(xhr,msg_prefix="Eraro:",msg_suffix='') {
 }
 
 
-/*
-export function shargi_sercho_select(event,ui) {
-    var item = ui.item;
-    $( "#shargi_dosiero" ).val(item.art+'.xml');
-}
-*/
-
-/*
-export function shargi_artikolon(event) {
-    event.preventDefault();
-
-    if (! $("#shargi_dosiero").Pattern("check")) return false;
-*
-     if (! validate_pattern(
-        /^[a-zA-Z][0-9_a-zA-Z]*(\.xml)?$/,
-        $("#shargi_dosiero"),$("#shargi_err"),
-            "La dosiernomo (krom xml-finaĵo) konsistu el almenaŭ unu litero kaj eble pliaj: simplaj literoj kaj ciferoj")) {
-        return;
-    }
-*
-    var values = $("#shargi_dlg").dialog("valoroj");
-    download_art(values.dosiero,"#shargi_error");
-}*/
-
-/*
-function hom_art_shargi(event) {
-     event.preventDefault();
-
-     var values = $("#homonimo_dlg").dialog("valoroj");
-
-     download_art(values.dosiero,"#homonimo_error",'#homonimo_dlg',do_close=false);
-     //shargi_art_dosieron("#homonimo_dlg","#homonimo_dos","#homonimo_error",false)
-}
-*/
-
 function download_art(dosiero,err_to,dlg_id,do_close=true) {
     
     var fin = dosiero.slice(-4);
@@ -943,13 +810,14 @@ function download_art(dosiero,err_to,dlg_id,do_close=true) {
      .done(
         function(data) {   
             if (data.slice(0,5) == '<?xml') {
-                $("#xml_text").Artikolo("load",dosiero,data);
-                const xmlarea = $("#xml_text").Artikolo("option","xmlarea");
-                $("#re_radiko").val(xmlarea.getRadiko());
-                $("#collapse_outline").accordion("option","active",0);
+                const art = Artikolo.artikolo("#xml_text");
+                const xmlarea = Artikolo.xmlarea("#xml_text");
+                art?.load(dosiero,data);
+                DOM.al_v("#re_radiko",xmlarea?.getRadiko()||'');
+                // $("#collapse_outline").accordion("option","active",0);
                 $(err_to).hide();
-                $("#tabs").tabs( "option", "active", 0);
-
+                Slip.montru("#tabs",0);
+                
                 if (do_close) {
                     Dialog.fermu(dlg_id);
                 } else {
@@ -967,8 +835,9 @@ function download_url(url,dosiero,err_to,dlg_id,do_close=true) {
     u.HTTPRequest('get', url, {}, 
         function(data) {   
             if (data.slice(0,5) == '<?xml') {
-                $("#xml_text").Artikolo("load",dosiero,data);
-                $("#collapse_outline").accordion("option","active",0);
+                const art = Artikolo.artikolo("#xml_text");
+                if (art) art.load(dosiero,data);
+                // $("#collapse_outline").accordion("option","active",0);
                 $(err_to).hide();
                 $("#tabs").tabs( "option", "active", 0);
 
@@ -996,48 +865,55 @@ function sendi_artikolon_servile(event) {
     const metodo = ($(event.target).text() == 'Submeti'? 'api' : 'email');
     
     // aldono (t.e. nova artikolo) aŭ redakto (t.e. ŝanĝo)
-    const reĝimo = $("#xml_text").Artikolo("option","reĝimo"); 
+    const reĝimo = Artikolo.artikolo("#xml_text")?.opcioj["reĝimo"];
+    const art_mrk = Artikolo.xmlarea("#xml_text")?.getDosiero();
 
     // ĉe novaj artikoloj komento entenas la dosiernomon
     if (! $("#sendiservile_komento").validate()) return;
 
-    const komento = $("#sendiservile_komento").val();
-    const dosiero = (reĝimo == 'aldono')? komento: $("#xml_text").Artikolo("art_drv_mrk"); 
-    const xmlarea = $("#xml_text").Artikolo("option","xmlarea");
+    const komento = DOM.v("#sendiservile_komento") || '';
+    const dosiero = (reĝimo == 'aldono')? komento : art_mrk; //$("#xml_text").Artikolo("art_drv_mrk"); 
+    const xmlarea = Artikolo.xmlarea("#xml_text");
+
+    if (xmlarea) {
 
         u.HTTPRequest('post', "revo_sendo", {
-            xml: xmlarea.normalizedXml(),
-            shangho: komento,
-            redakto: reĝimo,
-            metodo: metodo,
-            dosiero: dosiero
-        },
-        function(data) {   
-            // Montru sukceson...
-            var dosiero = $("#xml_text").Artikolo("option","dosiero");
-            $("#xml_text").Artikolo("change_count",0);
-
-            var url=data.html_url;
-            var msg = "<b>'" + dosiero  + "'</b> sendita. " +
-            (metodo == 'api'
-            ? "Kelkajn tagojn vi trovas vian redakton <a target='_new' href='"+url+"'>tie ĉi ĉe Github</a> kaj sub 'Lastaj...'."
-            : "Bv. kontroli ĉu vi ricevis kopion de la retpoŝto.\n(En tre esceptaj okazoj la spam-filtrilo povus bloki ĝin...)"
-            );
-            $("#dock_eraroj").Erarolisto("aldonu", {
-                id: "art_sendita_msg",
-                cls: "status_ok",
-                msg: msg
-            });
-            //alert("Sendita. Bv. kontroli ĉu vi ricevis kopion de la retpoŝto.\n(En tre esceptaj okazoj la spam-filtrilo povus bloki ĝin...)");
-            $("#sendiservile_dlg").dialog("close");
-            //$("#xml_text").val('');
-            xmlarea.setText('');
-            $("#shargi_dlg input").val("");
-        },
-        undefined,
-        undefined,
-        (msg: string) => Eraro.al("#sendiservile_error",msg)
-    );
+                xml: xmlarea.normalizedXml(),
+                shangho: komento,
+                redakto: reĝimo||'',
+                metodo: metodo,
+                dosiero: dosiero||''
+            },
+            function(data) {   
+                // Montru sukceson...
+                const art = Artikolo.artikolo("#xml_text");
+                if (art) {
+                    const dosiero = art.opcioj["dosiero"];
+                    art._change_count = 0;    
+                    
+                    const url=data.html_url;
+                    const msg = "<b>'" + dosiero  + "'</b> sendita. " +
+                    (metodo == 'api'
+                    ? "Kelkajn tagojn vi trovas vian redakton <a target='_new' href='"+url+"'>tie ĉi ĉe Github</a> kaj sub 'Lastaj...'."
+                    : "Bv. kontroli ĉu vi ricevis kopion de la retpoŝto.\n(En tre esceptaj okazoj la spam-filtrilo povus bloki ĝin...)"
+                    );
+                    Erarolisto.aldonu("#dock_eraroj", {
+                        id: "art_sendita_msg",
+                        cls: "status_ok",
+                        msg: msg
+                    });
+                    //alert("Sendita. Bv. kontroli ĉu vi ricevis kopion de la retpoŝto.\n(En tre esceptaj okazoj la spam-filtrilo povus bloki ĝin...)");
+                    Dialog.fermu("#sendiservile_dlg");
+                    //$("#xml_text").val('');
+                    xmlarea.setText('');
+                    $("#shargi_dlg input").val("");
+                }
+            },
+            undefined,
+            undefined,
+            (msg: string) => Eraro.al("#sendiservile_error",msg)
+        );
+    }
 /*
       $("body").css("cursor", "progress");
       $.post(
@@ -1074,20 +950,22 @@ function plenigu_referenco_listojn() {
      .done(
             function(data) {  
                 var seen = {}; // evitu duoblaĵojn
-                $( "#referenco_listo" ).autocomplete({
+                new Propon("#referenco_listo", {
                     source: $("kls",data).map(
-                        function(i,e) {
+                        (i,e) => {
                             //console.log(this + " "+i+" "+e);
                             //console.log($(this).attr("nom"));
-                            let nom = $(this).attr("nom").split('#')[1];
-                            let mrk = $(this).attr("mrk");
-                            let kap = $(this).attr("kap");
-                            if (seen[nom]) {
-                                return false;
-                            } else {
-                                seen[nom] = true;
-                                if (mrk) mrk = mrk.split('#')[1];
-                                return {value: nom, mrk: mrk, kap: kap};
+                            let nom = e.getAttribute("nom")?.split('#')[1];
+                            let mrk = e.getAttribute("mrk");
+                            let kap = e.getAttribute("kap");
+                            if (nom) {                                
+                                if (seen[nom]) {
+                                    return false;
+                                } else {
+                                    seen[nom] = true;
+                                    if (mrk) mrk = mrk.split('#')[1];
+                                    return {value: nom, mrk: mrk, kap: kap};
+                                }
                             }
                         }).get(),
                     select: referenco_listo_elekto
@@ -1096,9 +974,9 @@ function plenigu_referenco_listojn() {
 }
 
 function referenco_listo_elekto(event,ui) {
-    if (ui.item.mrk) $("#referenco_sercho").val('');
-    if (ui.item.mrk) $("#referenco_celo").val(ui.item.mrk);
-    if (ui.item.kap) $("#referenco_enhavo").val(ui.item.kap);
+    if (ui.item.mrk) DOM.al_v("#referenco_sercho",'');
+    if (ui.item.mrk) DOM.al_v("#referenco_celo",ui.item.mrk);
+    if (ui.item.kap) DOM.al_v("#referenco_enhavo",ui.item.kap);
 }
 
 function referenco_sercho_autocomplete(request,response) {
@@ -1204,7 +1082,7 @@ function referenco_enmeti(event) {
     event.preventDefault();
     $("#referenco_error").hide();
     //var refgrp = $( "#referenco_grp" ).is(':checked');
-    var ref = $("#referenco_dlg").dialog("valoroj");
+    var ref = Dialog.valoroj("#referenco_dlg");
 
     var refstr = '';
 
@@ -1214,12 +1092,12 @@ function referenco_enmeti(event) {
         refstr = new XMLReferenco(ref).xml();
     }
     
-    var enmetu_en = $("#referenco_dlg").dialog('option','enmetu_en') || "xml_text";
+    var enmetu_en = Dialog.dialog("#referenco_dlg")?.opcioj['enmetu_en'] || "xml_text";
     if (enmetu_en == "xml_text") {
-        $("#xml_text").Artikolo("insert",refstr);
+        Artikolo.artikolo("#xml_text")?.insert(refstr);
         //$("#"+enmetu_en).insert(refstr);
     } else {
-        $("#"+enmetu_en).text(refstr.trim());
+        DOM.al_t("#"+enmetu_en,refstr.trim());
     }
     $("#"+enmetu_en).change();
       
@@ -1242,7 +1120,7 @@ function plenigu_ekzemplo_bib() {
     $.ricevu('../voko/biblist.xml',"#ekzemplo_error")
      .done(
             function(data) {  
-                $( "#ekzemplo_bib" ).autocomplete({
+                new Propon("#ekzemplo_bib", {
                     source: $("vrk",data).map(
                         function(i,e) {
                             //console.log(this + " "+i+" "+e);
@@ -1279,7 +1157,7 @@ function ekzemplo_enmeti(event, nur_fnt) {
     event.preventDefault();
     $("#ekzemplo_error").hide();
 
-    var values = $("#ekzemplo_dlg").dialog("valoroj");
+    var values = Dialog.valoroj("#ekzemplo_dlg");
     var xmlstr = '';
 
     if (nur_fnt) {
@@ -1292,16 +1170,16 @@ function ekzemplo_enmeti(event, nur_fnt) {
     }
    
     // de kie vokiĝis la dialogo tien remetu la rezulton
-    var enmetu_en = $("#ekzemplo_dlg").dialog('option','enmetu_en') || "xml_text";
+    var enmetu_en = Dialog.dialog("#ekzemplo_dlg")?.opcioj['enmetu_en'] || "xml_text";
     if (enmetu_en == "xml_text") {
-        $("#xml_text").Artikolo("insert",xmlstr);
+        Artikolo.artikolo("#xml_text")?.insert(xmlstr);
         // $("#"+enmetu_en).insert(xmlstr);
     } else {
-        $("#"+enmetu_en).text(xmlstr.trim());
+        DOM.al_t("#"+enmetu_en,xmlstr.trim());
     }
     $("#"+enmetu_en).change();
 
-    $("#ekzemplo_dlg").dialog("close");
+    Dialog.fermu("#ekzemplo_dlg");
 }
 
 
@@ -1309,8 +1187,8 @@ function bildo_enmeti(event, nur_fnt) {
     event.preventDefault();
     $("#bildo_error").hide();
 
-    let bld = $("#bildo_dlg").dialog("valoroj");
-    bld.lrg = $("#bildo_lrg input:checked").val() || 360;
+    let bld = Dialog.valoroj("#bildo_dlg");
+    bld.lrg = DOM.v("#bildo_lrg input:checked") || 360;
     bld.fnt_dec = bld.fnt;
     bld.fnt = encodeURI(bld.fnt);
     // ne kodigu duoble, ekz. % al %25: bld.url = encodeURI(bld.url);
@@ -1318,24 +1196,29 @@ function bildo_enmeti(event, nur_fnt) {
     bld.frazo = x.linirompo(bld.frazo,indent);
 
     var bldstr = new XMLBildo(bld).xml(indent);
-    $("#xml_text").Artikolo("insert",bldstr);
+    const art = Artikolo.artikolo("#xml_text");
+    if (art) art.insert(bldstr);
     //$("#xml_text").insert(bldstr);    
     //$("#xml_text").change();
-    $("#bildo_dlg").dialog("close");
+    Dialog.fermu("#bildo_dlg");
 }
 
 function bildo_larĝecoj(lrg,chk) {
-    $("#bildo_lrg input").each(function(i) {
-        const el = $(this);
-        el.prop("checked",false);
-        let l = parseInt(el.attr("value"));
-        if (lrg.indexOf(l) >=0 ) {
-            $("#bildo_lrg label[for='bildo_lrg_" + l + "']").show();
-            if (l == chk) {
-                el.prop("checked",true);
+    DOM.ej("#bildo_lrg input").forEach((e) => {
+        if (e instanceof HTMLInputElement) {
+            e.checked = false;
+            let l = parseInt(e.getAttribute("value")||'');
+            const lbl = DOM.e("#bildo_lrg label[for='bildo_lrg_" + l + "']");
+            if (lbl) {
+                if (lrg.indexOf(l) >= 0) {
+                    DOM.kaŝu(lbl,false);
+                    if (l == chk) {
+                        e.checked = true;
+                    }
+                } else {
+                    DOM.kaŝu(lbl,true);
+                }
             }
-        } else {
-            $("#bildo_lrg label[for='bildo_lrg_" + l + "']").hide();
         }
     });
 }
@@ -1344,60 +1227,64 @@ function bildo_larĝecoj(lrg,chk) {
 
 function plenigu_derivajxojn() {
     let drv_list = '';
-    const xmlarea = $("#xml_text").Artikolo("option","xmlarea");
+    const xmlarea = Artikolo.xmlarea("#xml_text");
 
-    for (let ero of xmlarea.xmlstruct.strukturo) {
+    if (xmlarea) for (let ero of xmlarea.xmlstruct.strukturo) {
         if (ero.el == 'drv') {
             const drv = ero.dsc.split(' ').slice(2).join(' ') || ero.dsc;
             drv_list += '<option value="'+ero.id+'">' + drv + '</option>';
         }
     }
-    $("#derivajho_listo option").not(':first').remove();
-    $("#derivajho_listo").append(drv_list);
+    DOM.ej("#derivajho_listo option+option").forEach((o) => o.remove());
+    DOM.e("#derivajho_listo")?.append(drv_list);
 }
 
 function derivajho_enmeti(event) {
     event.preventDefault();
     $("#derivajho_error").hide();
 
-    const xmlarea = $("#xml_text").Artikolo("option","xmlarea");    
-    // sinkronigu unue por certe ne perdi antaŭe faritajn ŝanĝojn
-    xmlarea.sync();
-    
-    let values = $("#derivajho_dlg").dialog("valoroj");
-    //values.mrk = xmlArtDrvMrk($("#xml_text").val()); 
-    const indent = 2;
-    values.dif = x.linirompo(values.dif,indent);
-    values.mrk = xmlarea.getDosiero(); 
+    const xmlarea = Artikolo.xmlarea("#xml_text");    
+        if (xmlarea) {
+        // sinkronigu unue por certe ne perdi antaŭe faritajn ŝanĝojn
+        xmlarea.sync();
+        
+        let values = Dialog.valoroj("#derivajho_dlg");
+        //values.mrk = xmlArtDrvMrk($("#xml_text").val()); 
+        const indent = 2;
+        values.dif = x.linirompo(values.dif,indent);
+        values.mrk = xmlarea.getDosiero(); 
 
-    const drv = new XMLDerivaĵo(values);
-    
-    if (values.loko == 'kursoro') {
-        // enŝovu ĉe kursoro
-        $("#xml_text").Artikolo("insert",drv.xml(),true);
-    } else {
-        // enŝovu post donita drv 
-        $("#xml_text").Artikolo("insert_post",drv.xml(),values.loko);
+        const drv = new XMLDerivaĵo(values);
+        const art = Artikolo.artikolo("#xml_text");
+        if (art) {
+            if (values.loko == 'kursoro') {
+                // enŝovu ĉe kursoro
+                art.insert(drv.xml(),true);
+            } else {
+                // enŝovu post donita drv 
+                art.insert_post(drv.xml(),values.loko);
+            }
+        }
+        
+        // ekredaktu la novan derivaĵon
+        const mrk = drv.drv.mrk;    
+        const s_id = xmlarea.changeSubtextMrk(mrk,false); // false: ne denove sinkronigu, 
+                // kio povus perdigi ĵus aldonitan drv!
     }
-    
-    // ekredaktu la novan derivaĵon
-    const mrk = drv.drv.mrk;    
-    const s_id = xmlarea.changeSubtextMrk(mrk,false); // false: ne denove sinkronigu, 
-            // kio povus perdigi ĵus aldonitan drv!
 
-    $("#derivajho_dlg").dialog("close");
+    Dialog.fermu("#derivajho_dlg");
 }
 
 function senco_enmeti(event) {
     event.preventDefault();
     $("#senco_error").hide();
 
-    var snc = $("#senco_dlg").dialog("valoroj");
+    var snc = Dialog.valoroj("#senco_dlg");
     const indent=2;
     snc.dif = x.linirompo(snc.dif,indent);
 
     try{
-        snc.drvmrk = $("#xml_text").Artikolo("drv_before_cursor").mrk;
+        snc.drvmrk = Artikolo.artikolo("#xml_text")?.drv_before_cursor().mrk;
     } catch(e) {
           // donu aprioran valoron al mrk en kazo, ke la XML ne estas valida...
           snc.drvmrk = 'XXXXXXX.YYY';
@@ -1406,10 +1293,10 @@ function senco_enmeti(event) {
     }
     const sncxml = new XMLSenco(snc).xml();
     
-    $("#xml_text").Artikolo("insert",sncxml,true);
+    Artikolo.artikolo("#xml_text")?.insert(sncxml,true);
     // $("#xml_text").insert(sncxml);
     // $("#xml_text").change();
-    $("#senco_dlg").dialog("close");
+    Dialog.fermu("#senco_dlg");
 }
 
 
@@ -1501,15 +1388,15 @@ function plenigu_lingvojn() {
                 $("#traduko_chiuj_m_o").append(lingvoj_m_o);
                 $("#traduko_chiuj_p_s").append(lingvoj_p_s);
                 $("#traduko_chiuj_t_z").append(lingvoj_t_z);
-                $( "#traduko_menuo" ).menu("refresh");
+                Menu.refreŝigu("#traduko_menuo");
              }
         );
 }
 
 // aldonu la traduk-lingojn de la ŝargita artikolo al la traduko-dialogo (lingvo-elekto)
 function plenigu_lingvojn_artikolo() {
-    const xmlarea = $("#xml_text").Artikolo("option","xmlarea");
-    const xml = xmlarea.syncedXml();
+    const xmlarea = Artikolo.xmlarea("#xml_text");
+    const xml = xmlarea?.syncedXml() || '';
 
     var lng_nomoj = {};
     for (var kodo in x.traduk_lingvoj(xml)) {
@@ -1612,7 +1499,7 @@ function fill_tradukojn(lng,lingvo_nomo) {
     // ni kunfandas tiujn el la artikolo, kaj tiujn, kiuj jam estas
     // aldonitaj aŭ ŝanĝitaj en la dialogo
     // var trdoj = $("#xml_text").Artikolo("tradukoj",lng); 
-    const xmlarea = $("#xml_text").Artikolo("option","xmlarea");
+    const xmlarea = Artikolo.xmlarea("#xml_text");
     const xmltrad = xmlarea.xmltrad;
     xmltrad.preparu(xmlarea.xmlstruct);
     xmltrad.collectTrdAllStruct(lng);
@@ -1631,7 +1518,7 @@ function fill_tradukojn(lng,lingvo_nomo) {
         // kiu transprentas la administradon kaj aktualigadon...
         // ŝangojn oni devus skribi tiam nur se oni ŝanĝas lingvon aŭ enmetas tradukojn
         // en la dialogon ĝin fermante...
-        for (let s of xmlarea.xmlstruct.strukturo) {
+        if (xmlarea) for (let s of xmlarea.xmlstruct.strukturo) {
             if (['drv','subdrv','snc','subsnc'].indexOf(s.el) > -1) {
                 const parts = s.dsc.split(':');
                 let dsc = parts[1] || parts[0];
@@ -1685,13 +1572,13 @@ function trd_input_shanghita(element) {
     const sid = element.id.split(':')[1];
     const lng = $("#traduko_dlg").data("lng");
 
-    const xmlarea = $("#xml_text").Artikolo("option","xmlarea");
-    const xmltrad = xmlarea.xmltrad;   
+    const xmlarea = Artikolo.xmlarea("#xml_text");
+    const xmltrad = xmlarea?.xmltrad;   
 
-    // prenu ĉiujn tradukojn kun tiu marko, ne nur la ĵus ŝanĝitan
-    $("#traduko_tradukoj input[id^='trd\\:" + sid + "\\:']").each( function(){
-        var nro = this.id.split(':')[2];
-        xmltrad.putStruct(sid,lng,nro,$(this).val());                               
+    // prenu ĉiujn tradukojn kun tiu marko, ne nur la ĵus ŝanĝitane
+    DOM.ej("#traduko_tradukoj input[id^='trd\\:" + sid + "\\:']").forEach( (e) => {
+        var nro = e.id.split(':')[2];
+        xmltrad?.putStruct(sid,lng,+nro,(e as HTMLInputElement).value);                               
     });
 }
 
@@ -1744,12 +1631,13 @@ function shanghu_trd_lingvon(event,ui) {
 function tradukojn_enmeti(event) {
     // prenu la shanghitajn tradukojn
     //var trd_shanghoj = $("#traduko_tradukoj").data("trd_shanghoj"); 
+    const art = Artikolo.artikolo("#xml_text");
+    const trd_dlg = Dialog.dialog("#traduko_dlg")
     try {
-        $("#xml_text").Artikolo("enmetu_tradukojn"); //,trd_shanghoj);
-        $("#traduko_dlg").dialog( "close" );
+        art?.enmetu_tradukojn(); //,trd_shanghoj);
+        trd_dlg?.fermu();
     } catch (e) {
-        $("#traduko_error").html(e.toString());
-        $("#traduko_error").show();
+        Eraro.al("#traduko_error",e.toString());
     }
 }
 
@@ -1784,15 +1672,18 @@ function kiam_elektis_sxablonon(event) {
 
 function sxablono_button_click(event) {
     event.preventDefault(); 
-    var text_span = $(event.target).closest("button").prev("span");
-    if (text_span) {
-        if (text_span.html().startsWith('&lt;ref')) {
-            $("#referenco_dlg").dialog("option","enmetu_en",text_span[0].id);
-            $("#referenco_dlg").dialog("open");
+    const text_span = event.target.closest("button").prev("span");
+    const ref_dlg = Dialog.dialog("#referenco_dlg");
+    const ekz_dlg = Dialog.dialog("#ekzemplo_dlg");
+
+    if (text_span && ref_dlg) {
+        if (text_span.innerHTML.startsWith('&lt;ref')) {
+            ref_dlg.malfermu();
+            ref_dlg.opcioj["enmetu_en"] = text_span[0].id;
             //referenco_dialogo(text_span[0].id);
-        } else if (text_span.html().startsWith('&lt;ekz')) {
-            $("#ekzemplo_dlg").dialog("option","enmetu_en",text_span[0].id);
-            $("#ekzemplo_dlg").dialog("open");
+        } else if (text_span.innerHTML.startsWith('&lt;ekz') && ekz_dlg) {
+            ekz_dlg.opcioj["enmetu_en"] = text_span[0].id;
+            ekz_dlg.malfermu();
             //ekzemplo_dialogo(text_span[0].id);
         }
     }
@@ -1806,26 +1697,29 @@ function sxablono_strike_click(event) {
 }
 
 function sxablono_span_click(event) {
-  var text_span_id = event.target.id;
+  const text_span_id = event.target.id;
+  const ref_dlg = Dialog.dialog("#referenco_dlg");
+  const ekz_dlg = Dialog.dialog("#ekzemplo_dlg");
+
  // if (text_span_id.startsWith('o_')) {
 //      var checkbox = $("#"+text_span_id).next("input[type='checkbox']");
 //      checkbox.prop('checked',function(i,val){return !val});
 //      $("#"+text_span_id).css("text-decoration-line",checkbox.prop('checked')?"none":"line-through"); 
 //  } else 
-  if (text_span_id.startsWith('r_')) {
+  if (text_span_id.startsWith('r_') && ref_dlg) {
       //referenco_dialogo(text_span_id);
-      $("#referenco_dlg").dialog("option","enmetu_en",text_span_id);
-      $("#referenco_dlg").dialog("open");
-  } else if (text_span_id.startsWith('e_')) {
+      ref_dlg.opcioj["enmetu_en"] = text_span_id;
+      ref_dlg.malfermu();
+  } else if (text_span_id.startsWith('e_') && ekz_dlg) {
       //ekzemplo_dialogo(text_span_id);
-      $("#ekzemplo_dlg").dialog("option","enmetu_en",text_span_id);
-      $("#ekzemplo_dlg").dialog("open");
+      ekz_dlg.opcioj["enmetu_en"] = text_span_id;
+      ekz_dlg.malfermu();
     }
 }
 
 function sxablono_enmeti(event) {
     //$("#xml_text").insert($("#sxablono_xml").val());
-    var text = '';
+    let text = '';
     $("#sxablono_xml pre").each( function() {
         var pre = $(this);
         //var cb = $(this).children("input[type='checkbox']");
@@ -1834,7 +1728,9 @@ function sxablono_enmeti(event) {
             text += pre.form_text() + "\n";
         }
     });
-    $("#xml_text").Artikolo("insert",text,true);
+
+    const art = Artikolo.artikolo("#xml_text");
+    art?.insert(text,true);
     // $("#xml_text").insert(text);
     // $("#xml_text").change();
     Dialog.fermu("#sxablono_dlg");

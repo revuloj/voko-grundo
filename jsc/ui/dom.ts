@@ -1,5 +1,5 @@
 /**
- * (c) 2023 ĉ€ Wolfram Diestel
+ * (c) 2023 ĉe Wolfram Diestel
  * laŭ GPL 2.0
  */
 
@@ -78,14 +78,23 @@ export class DOM {
         return null
     }
 
-    static kaŝu(e: Element, kaŝita=true) {
-        if (kaŝita)
-            e.classList.add(DOM.klsKasxita);
-        else
-            e.classList.remove(DOM.klsKasxita);
+    static forigu(e: Element|string) {
+        const el = (typeof e === "string")? DOM.e(e) : e;
+        if (el) el.remove();
     }
 
-    static kaŝita(e: Element) {
-        return e.classList.contains(DOM.klsKasxita);
+    static kaŝu(e: Element|string, kaŝita=true) {
+        const el = (typeof e === "string")? DOM.e(e) : e;
+        if (el) {
+            if (kaŝita)
+                el.classList.add(DOM.klsKasxita);
+            else
+                el.classList.remove(DOM.klsKasxita);
+        }
+    }
+
+    static kaŝita(e: Element|string) {
+        const el = (typeof e === "string")? DOM.e(e) : e;
+            if (el) return el.classList.contains(DOM.klsKasxita);
     }
 }

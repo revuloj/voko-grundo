@@ -7,8 +7,8 @@
 // https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/jquery
 // https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/jqueryui
 
-// // / <reference types="@types/jquery/JQuery.d.ts" />
-import $ from "jquery";
+//x/ <reference types="@types/jquery/JQuery.d.ts" />
+//import $ from "jquery";
 
 import * as x from '../x';
 

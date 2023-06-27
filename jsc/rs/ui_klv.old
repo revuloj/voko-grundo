@@ -4,7 +4,7 @@
  laŭ GPL 2.0
 */
 
-/// <reference types="@types/jqueryui/index.d.ts" />
+//x/ <reference types="@types/jqueryui/index.d.ts" />
 
 import * as x from '../x';
 

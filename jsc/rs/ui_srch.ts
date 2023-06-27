@@ -7,7 +7,7 @@
 import * as u from '../u';
 import * as x from '../x';
 
-import { DOM, UIElement, Dialog, Valid, Eraro } from '../ui';
+import { DOM, UIElement, Dialog, Slip, Skal, Propon, Elektil, Valid, Eraro } from '../ui';
 
 import { bar_styles, make_percent_bar } from './procentoj';
 import { HTMLFonto, HTMLTrovoDt, HTMLTrovoDdBld } from './sxabloniloj';
@@ -320,7 +320,7 @@ export function citaĵoSerĉo(event) {
 
     u.HTTPRequest('post', 'citajho_sercho', sspec as u.StrObj,
         function(data) {   
-            var bib_src = $( "#ekzemplo_bib" ).autocomplete( "option", "source" );
+            var bib_src = Propon.propon("#ekzemplo_bib")?.opcioj["source"];
             var htmlFnt = new HTMLFonto(bib_src);
             var ŝablono = new HTMLTrovoDt();
 
@@ -371,7 +371,7 @@ export function regulEsprimo(event) {
     /* else if (re == "sercho_det_regexes") {
         // enmetu radikon, se ankoraŭ malplena
         if (event.target.open && ! $("#re_radiko").val()) {
-            const xmlarea = $("#xml_text").Artikolo("option","xmlarea");
+            const xmlarea = Artikolo.xmlarea("#xml_text");
             $("#re_radiko").val(xmlarea.getRadiko());
         }
     }*/
@@ -462,14 +462,6 @@ export function regulEsprimo(event) {
  */
 export function verkoPeriodo() {
     const periodilo = DOM.i("#s_elektitaj_periodilo");
-    if (periodilo) {
-        const min = periodilo.getAttribute("data-min");
-        const max = periodilo.getAttribute("data-max");
-        const val = periodilo.getAttribute("data-val");
-        const values = val?.split('-').map((x)=>+x); // "min-max" kiel du-nombra listo
-        const handle1 = DOM.e( "#periodilo_manilo_1" );
-        const handle2 = DOM.e( "#periodilo_manilo_2" );    
-    }
 
     function adaptuVerkliston(de,ghis) {
         DOM.idoj("#sercho_verklisto div")?.forEach((e) => {
@@ -480,32 +472,41 @@ export function verkoPeriodo() {
         });
     }
 
-    periodilo.slider({
-        range: true,
-        min: +min,
-        max: +max,
-        values: values, 
-        create: function() {
-           const de = values[0];
-           const ghis = values[1];
-           handle1.text( de );
-           handle2.text( ghis );
-           adaptuVerkliston(de,ghis);
-        },
-        slide: function(event, ui) {
-            // aktualigu la montratan periodon
-            const de = ui.values[0];
-            const ghis = ui.values[1];
-            handle1.text( de );
-            handle2.text( ghis );
+    if (periodilo) {
+        const min = periodilo.getAttribute("data-min")||1887;
+        const max = periodilo.getAttribute("data-max")||2050;
+        const val = periodilo.getAttribute("data-val");
+        const values = val?.split('-').map((x)=>+x); // "min-max" kiel du-nombra listo
 
-            // aktualigu la videblon de verkoj
-            adaptuVerkliston(de,ghis);
-            //montrilo.val( ui.values[0] + " - " + +ui.values[1] );
-            verkinformo();
-            //...
-        }
-    });
+        new Skal(periodilo, {
+            range: true,
+            min: +min,
+            max: +max,
+            values: values, 
+            create: function() {
+                if (values?.length == 2) {
+                    const de = values[0];
+                    const ghis = values[1];
+                    DOM.al_t("#periodilo_manilo_1",""+de);
+                    DOM.al_t("#periodilo_manilo_2",""+ghis);       
+                    adaptuVerkliston(de,ghis);    
+                }
+            },
+            slide: function(event, ui) {
+                // aktualigu la montratan periodon
+                const de = ui.values[0];
+                const ghis = ui.values[1];
+                DOM.al_t("#periodilo_manilo_1",de);
+                DOM.al_t("#periodilo_manilo_2",ghis);       
+
+                // aktualigu la videblon de verkoj
+                adaptuVerkliston(de,ghis);
+                //montrilo.val( ui.values[0] + " - " + +ui.values[1] );
+                verkinformo();
+                //...
+            }
+        });
+    };
 };
 
 function verkinformo() {
@@ -513,16 +514,18 @@ function verkinformo() {
 
     // jarperiodo
     const periodilo = DOM.e("#s_elektitaj_periodilo");
-    const periodo = periodilo.slider("option","values").join(' - ');
 
-    let info = ' ' + periodo;
-    
-    // titoloj; subpremu, se verkoj ankoraŭ ne ŝargitaj kaj do 
-    // ankaŭ ne adaptitaj
-    const n = DOM.idoj(`#sercho_verklisto :not(.${DOM.klsKasxita}) input[name='cvl_elekto']:checked`)?.length;
-    if (n) info += ', ' + n + ' titolo' + (n!=1?'j':'');
-    
-    if (montrilo) montrilo.textContent = info;
+    if (periodilo instanceof HTMLElement) {
+        const periodo = Skal.skal(periodilo)?.opcioj["values"].join(' - ');
+        let info = ' ' + periodo;
+        
+        // titoloj; subpremu, se verkoj ankoraŭ ne ŝargitaj kaj do 
+        // ankaŭ ne adaptitaj
+        const n = DOM.idoj(`#sercho_verklisto :not(.${DOM.klsKasxita}) input[name='cvl_elekto']:checked`)?.length;
+        if (n) info += ', ' + n + ' titolo' + (n!=1?'j':'');
+        
+        if (montrilo) montrilo.textContent = info;
+    }
 }
 
 /**
@@ -533,9 +536,9 @@ function verkinformo() {
  */
 export function verkoListo(event) {
     event.preventDefault();
-    const vdiv = $("#sercho_verklisto");
+    const vdiv = DOM.e("#sercho_verklisto");
 
-    if (! vdiv.children().length) {
+    if (vdiv && ! vdiv.children.length) {
         // ni ŝargas la verkoliston...
         u.HTTPRequest('post', 'verkaro',
             { 
@@ -562,14 +565,18 @@ export function verkoListo(event) {
                             + '<input id="'+ id +'" type="checkbox" checked '
                             + 'name="cvl_elekto" value="' + v.vrk + '"></input></div>')
                     }
-                    vdiv.find("input").checkboxradio();
-                    vdiv.find("input").on("change",verkinformo);
+                    vdiv.querySelectorAll("input").forEach((i) => {
+                        const e = new Elektil(i);
+                        e._on({change: verkinformo});
+                    });
                     DOM.i("#vl__chiuj__")?.addEventListener("change", (event) => {
-                        const check = $(event.target).is(":checked");
-                        vdiv.find("input[name='cvl_elekto']").each((i,e) => {
-                            const el = $(e);
-                            el.prop("checked",check); 
-                            el.checkboxradio("refresh");
+                        const cb = event.target as HTMLInputElement;
+                        const check = cb.checked;
+                        vdiv.querySelectorAll("input[name='cvl_elekto']").forEach((i) => {
+                            if (i instanceof HTMLInputElement) {
+                                i.checked = check; 
+                                Elektil.refreŝigu(i);
+                            }
                         });                        
                         verkinformo();   
                     });
@@ -649,19 +656,18 @@ export function retoSerĉo(event) {
         data = data.replace(rx_img_link, '');
         const ŝablono = new HTMLTrovoDt();
         
-        $(data).find(".result-link,.result-snippet").each(function() {
-            var self = $(this);
+        data.querySelectorAll(".result-link,.result-snippet").forEach((e) => {
 
             // memoru la url kiel last_link
-            if ( self.is(".result-link") )   {
-                const href = self.attr("href");
+            if ( e.calssList.contains("result-link") )   {
+                const href = e.getAttribute("href") || '';
                 const hpos = href?.search('http');
-                last_link = hpos >= 0? decodeURIComponent(href.slice(hpos)) : href;
-                last_title = self.text();
+                last_link = (hpos && hpos >= 0)? decodeURIComponent(href.slice(hpos)) : href;
+                last_title = e.textContent;
 
             // kreu trov-eron
-            } else if ( self.is(".result-snippet") ) {
-                const snippet = self.text();
+            } else if ( e.classList.contains("result-snippet") ) {
+                const snippet = e.textContent;
                 if ( last_title.search(first_word) >= 0 || snippet.search(first_word) >= 0 ) {
 
                     DOM.e("#sercho_trovoj")?.append('<dd id="trv_' + n + '">');
@@ -714,7 +720,7 @@ export function bildoSerĉo(event) {
             kie: 'vikimedio'
         },
         function(data) {         
-            var pageids = [];
+            var pageids:Array<string> = [];
             
             if (data.query && data.query.search 
                 && data.query.search.length) {
@@ -730,7 +736,7 @@ export function bildoSerĉo(event) {
                     pageids.push(res.pageid);      
                     
 
-                    $("#sercho_trovoj").append('<dd id="trv_' + res.pageid + '">');
+                    DOM.e("#sercho_trovoj")?.append('<dd id="trv_' + res.pageid + '">');
                     new Trovo("#trv_" +res.pageid,
                         {
                             type: "bildo",
@@ -746,8 +752,8 @@ export function bildoSerĉo(event) {
 
                 }
             } else {
-                $("#sercho_trovoj")
-                    .append("<p>&nbsp;&nbsp;Neniuj trovoj.</p>");
+                DOM.e("#sercho_trovoj")
+                    ?.append("<p>&nbsp;&nbsp;Neniuj trovoj.</p>");
             }
             // bildo_info(pageids.slice(0,-1));
 
@@ -788,18 +794,20 @@ function _bildo_info(pageids) {
 
                 for (var p in results) {
                         let res = results[p];
-                        let trv = $("#trv_" + res.pageid);
-                        let dosieroj = trv.Trovo("bildinfo", res, d==0,
-                            function(event,data) {
-                                if (data) {                       
-                                    _bildo_info_2(data.title);
-                                }
-                                // montru enmeto-dialogon
-                                $("#bildo_dlg").dialog("open");
-                                $("#tabs").tabs( "option", "active", 0);
-                            });
-                        // ni bezonas ankaŭ bildetojn por montri ilin, necesas aparte demandi tiujn...
-                        if (dosieroj.length) _bildeto_info(dosieroj);
+                        let trv = Trovo.trovo("#trv_" + res.pageid);
+                        if (trv) {
+                            let dosieroj = trv.bildinfo(res, d==0,
+                                function(event,data) {
+                                    if (data) {                       
+                                        _bildo_info_2(data.title);
+                                    }
+                                    // montru enmeto-dialogon
+                                    Dialog.malfermu("#bildo_dlg");
+                                    Slip.montru("#tabs", 0);
+                                });
+                            // ni bezonas ankaŭ bildetojn por montri ilin, necesas aparte demandi tiujn...
+                            if (dosieroj.length) _bildeto_info(dosieroj);    
+                        }
                     }
                 }
             }
@@ -837,8 +845,8 @@ function _bildeto_info(paghoj) {
                     const pageid = res.pageid;
 
                     if (res.thumbnail)
-                        $('#sercho_trovoj div.bildstriero a[href$="' + x.quoteattr(res.title) + '"]')
-                            .html('<img src="'+res.thumbnail.source+'"/>');
+                        DOM.al_html('#sercho_trovoj div.bildstriero a[href$="' + x.quoteattr(res.title) + '"]',
+                            '<img src="'+res.thumbnail.source+'"/>');
 
                 }                  
         //      } 
@@ -871,7 +879,7 @@ function _bildo_info_2(dosiero) {
                     const pageid = res.pageid;
 
                     if (res.thumbnail) {
-                        $('#bildo_eta').attr("src",res.thumbnail.source);
+                        DOM.e('#bildo_eta')?.setAttribute("src",res.thumbnail.source);
                     }
 
                     let desc = res.title, aut = '', prm = '';
@@ -896,9 +904,11 @@ function _bildo_info_2(dosiero) {
                         frazo: x.forigu_markup(desc)
                     };
 
-                    $("#bildo_dlg input[type!='radio']").val("");
-                    $("#bildo_dlg").dialog("valoroj",values);
-                    $("#bildeto_url").attr("href",values.fnt);
+                    DOM.al_v("#bildo_dlg input[type!='radio']","");
+                    const dlg = Dialog.dialog("#bildo_dlg");
+                    if (dlg) dlg.al_valoroj(values);
+                    if (values && values.fnt)
+                        DOM.e("#bildeto_url")?.setAttribute("href",values.fnt);
                 }
             }
         },
@@ -923,17 +933,22 @@ class Trovo extends UIElement {
             url: '',
             title: '',
             descr: '',
-            data: {},
+            data: {} as any,
             enm_btn: true
         }
     };
+
+    static trovo(element: HTMLElement|string) {
+        const t = super.obj(element);
+        if (t instanceof Trovo) return t;
+    }
 
     constructor(element: HTMLElement|string, options: any) {
         super(element,options);
 
         let v = this.opcioj.valoroj;
         this.opcioj.valoroj.id = this.element.id;
-        var htmlstr = this.opcioj.ŝablono.html(v);
+        var htmlstr = this.opcioj.ŝablono.html(v as any);
         /*
             '<dt>' + o.prompt + ' ' + '<span class = "trovo_titolo">'
                 +  ( o.url ? 
@@ -946,16 +961,16 @@ class Trovo extends UIElement {
             + '</dt>\n';
             */
         this.element.before(htmlstr);
-        if (v.descr) this.element.text(v.descr);
+        if (v.descr) this.element.textContent = v.descr;
         
-        if (o.type == "teksto") {
+        if (this.opcioj.type == "teksto") {
             // citaĵonumero por kunteksto estas nur en citaĵoserĉo, ne en retserĉo...:
             if (v.data.cit) {
                 // en citaĵoserĉo ebligu kuntekston
                 new KuntekstoBtn("#k_" + v.id, {fno: v.data.cit.fno});
             } else {
                 // trovoj de retserĉo ne havu kunteksto-butonon
-                $("#k_" + v.id).remove();
+                DOM.e("#k_" + v.id)?.remove();
             }
 
             new RigardoBtn("#r_" + v.id, {url: v.url});
@@ -966,10 +981,10 @@ class Trovo extends UIElement {
                     DOM.al_v("#ekzemplo_dlg input","");
                     const dlg = Dialog.dialog("#ekzemplo_dlg");
                     if (dlg) {
-                        dlg.metu_valorojn(values);
+                        dlg.al_valoroj(values);
                         dlg.malfermu();
                     }
-                    $("#tabs").tabs( "option", "active", 0);
+                    Slip.montru("#tabs", 0);
                 }
             });
         } else {
@@ -980,7 +995,7 @@ class Trovo extends UIElement {
     };
 
     bildinfo(res, first, enmetu) {
-        var o = this.opcioj;
+        var o: any = this.opcioj;
         var v = o.valoroj;
         var pageid = res.pageid;
 
@@ -997,8 +1012,8 @@ class Trovo extends UIElement {
                 enmetu: enmetu // reago-funkcio por enmeto...
             });
     
-            let a = $("#sercho_trovoj a[href='" + pageid +"']");
-            a.attr("href",v.url);
+            DOM.e("#sercho_trovoj a[href='" + pageid +"']")
+                ?.setAttribute("href",v.url);
             //a.after(rigardu.html(),' ',enmetu.html());
         }
 
@@ -1035,7 +1050,7 @@ class Trovo extends UIElement {
                     let title = img.title.slice(5,-4); // forigu File: kaj .xxx eble pli inteligente uzu Regex...
                     let li_item_id = res.pageid + "_" + img.title.hashFnv32a(true);
 
-                    $("#trv_" + pageid + " > div").append(
+                    DOM.e("#trv_" + pageid + " > div")?.append(
                         "<div class='bildstriero'><p class='butonoj'>" 
                         + "<button id='r_" + li_item_id + "'></button> "
                         + "<button id='e_" + li_item_id + "'></button>" 
@@ -1090,18 +1105,18 @@ class KuntekstoBtn extends UIElement {
                     u.HTTPRequest('post','kunteksto',
                             { 
                                 frazo: this.options.fno,
-                                n: 2
+                                n: "2"
                             },
                             function(data) {   
                                 //$("#sercho_trovoj").html('');
                                 if (data.length) {
                                     //console.debug(data[0]);
                                     const text = data.map(e => e.ekz).join('<br/>');
-                                    $('#'+dd_id).html(text);
+                                    DOM.al_html('#'+dd_id,text);
                                 }
                                 // momente ni nur unufoje povas montri pli da kunteksto
                                 // poste eble ebligu laŭŝtupan plion...
-                                $("#"+id).remove();
+                                DOM.e("#"+id)?.remove();
                             },
                             undefined, undefined,
                             (msg: string) => Eraro.al('#sercho_error',msg));

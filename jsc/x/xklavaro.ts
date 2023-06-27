@@ -27,7 +27,7 @@ type KlavSpec = "ctl" | "mis" | "nom" | "nac" | "esc" | "ind" | "var" | "frm"
 
 // paletro de la klavaro: klavoj por ciuj fakoj, por diversaj aliaj indikoj (vspec, stl, ofc...) kaj 
 // ceteraj klavoj por manipuli elementojn
-type Reghimo = "indiko" | "fako" | "klavaro" | null;
+type Reghimo = "indiko" | "fako" | "klavaro" | "sercho" | "blankigo" | null;
 type Reghimpremo = (e: Event, r: {cmd: Reghimo}) => void;
 
 console.debug("Instalante la klavarfunkciojn...");
@@ -47,8 +47,12 @@ console.debug("Instalante la klavarfunkciojn...");
     */
 
 export class XKlavaro {
-    public lasta_fokuso: string;
+    public klavaro: Element | null;
+    public dialogo: Element | null;
+    public apriora_kampo: HTMLInputElement | null;
+    public lasta_fokuso?: string;
     public klavoj: string;
+
 
     /**
      * Kreas XML-ekran-klavaron. La klavaro efikas ene de kadra dialogo. Fokusŝanĝoj pri enhavataj input- kaj textarea-elementoj
@@ -62,11 +66,20 @@ export class XKlavaro {
      * @param reĝimpremo - revokfunkcio, vokata kiam reĝimklavo estas premata
      * @param postenmeto - revokfunkcio, vokata post kiam tekstenmeta klavo estis premita
      */    
-    constructor(public klavaro: Element, public dialogo: Element, public apriora_kampo: HTMLInputElement, 
-        public kiuradiko?: Function, public reĝimpremo?: Reghimpremo, public postenmeto?: Function) 
+    constructor(
+        klavaro: Element|string, 
+        dialogo: Element|string, 
+        apriora_kampo: HTMLInputElement|string, 
+        public kiuradiko?: Function, 
+        public reĝimpremo?: Reghimpremo, 
+        public postenmeto?: Function) 
     {
-        this.lasta_fokuso = this.apriora_kampo.id;
-        this.klavoj = this.klavaro.textContent || '';
+        this.klavaro = (typeof klavaro === "string")? document.querySelector(klavaro) : klavaro;
+        this.dialogo = (typeof dialogo === "string")? document.querySelector(dialogo) : dialogo;
+        this.apriora_kampo = (typeof apriora_kampo === "string")? document.querySelector(apriora_kampo) : apriora_kampo;
+
+        this.lasta_fokuso = this.apriora_kampo?.id;
+        this.klavoj = this.klavaro?.textContent || '';
         const self = this;
         
         // kreu la klavojn
@@ -75,7 +88,7 @@ export class XKlavaro {
 
         // registru klak-reagon
         // vd. https://stackoverflow.com/questions/1338599/the-value-of-this-within-the-handler-using-addeventlistener
-        this.klavaro.addEventListener("click", (event) => this.premo(event));
+        this.klavaro?.addEventListener("click", (event) => this.premo(event));
 
         // certigu, ke fokus-ŝanĝoj en la posedanto (ekz. dialogo) memoriĝas
         if (this.dialogo) {
@@ -205,7 +218,7 @@ export class XKlavaro {
      */
     indiko_klavoj(klvrElm: Element, stlList: Xlist) {
     
-        this.elemento_klavoj(klvrElm,klvrElm.textContent);
+        this.elemento_klavoj(klvrElm,klvrElm.textContent||'');
         const pos = klvrElm.children.length; // tie ni poste enŝovos la stilbutonojn!
 
         let indikoj = "<div class='klv ofc' data-ofc='*' title='fundamenta (*)'><span>funda-<br/>menta</span></div>";

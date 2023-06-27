@@ -1,5 +1,5 @@
 /**
- * (c) 2023 ĉ€ Wolfram Diestel
+ * (c) 2023 ĉe Wolfram Diestel
  * laŭ GPL 2.0
  */
 
@@ -51,12 +51,10 @@ export class UIElement {
         }
     };
 
-    _trigger(evnomo: string, ev?: Event, opc?: any) {
+    _trigger(evnomo: string, ev?: Event, extra?: any) {
         if (!ev) 
             ev = new Event(evnomo, {'bubbles': true});
-        if (opc)
-            ev.data = opc;
-        this.element.dispatchEvent(ev);
+        this.element.dispatchEvent(ev); // +extra ?
     }
     
 

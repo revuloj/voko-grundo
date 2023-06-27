@@ -16,11 +16,11 @@ export class Xmlarea {
   public elekto: Strukturero; // aktuale redaktata subteksto
 
   public txtarea: HTMLInputElement; // la <textarea> kun la momente redaktata teksto
-  private xmltrad: XmlTrad; // por redaktado de tradukoj
+  public xmltrad: XmlTrad; // por redaktado de tradukoj
   private onaddsub: Function;
   private onselectsub: Function;
   private synced: boolean; // por scii, ĉu ni devos konservi la videblan (redaktatan) tekstparton
-  private ar_in_sync: boolean; // por scii, ĉu la lasta antaŭrigardo estas aktuala
+  public ar_in_sync: boolean; // por scii, ĉu la lasta antaŭrigardo estas aktuala
 
   // bezonataj regulesprimoj
   private static re_xml = {

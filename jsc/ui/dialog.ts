@@ -1,5 +1,5 @@
 /**
- * (c) 2023 ĉ€ Wolfram Diestel
+ * (c) 2023 ĉe Wolfram Diestel
  * laŭ GPL 2.0
  */
 
@@ -32,9 +32,20 @@ export class Dialog extends UIElement {
         if (d instanceof Dialog) return d;
     }
 
+    static valoroj(element: HTMLDialogElement|string) {
+        let d = super.obj(element);
+        if (d instanceof Dialog) return d.valoroj();
+    }
+
     static fermu(element: HTMLDialogElement|string) {
         let d = super.obj(element);
         if (d instanceof Dialog) d.fermu();
+    }
+
+
+    static malfermu(element: HTMLDialogElement|string) {
+        let d = super.obj(element);
+        if (d instanceof Dialog) d.malfermu();
     }
 
     constructor(element: HTMLDialogElement|string, opcioj: any) {

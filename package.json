@@ -47,8 +47,8 @@
         "build:js:debug": "tsc --noEmit -p tsconfig-rv.json && ./node_modules/.bin/esbuild --target=es6 jsc/rv/kadro.ts --bundle --outfile=build/jsc/revo-2j-min.js",
         "//build:rsj": "google-closure-compiler --compilation_level SIMPLE --process_common_js_modules --js_module_root ./jsc/rs --entry_point ./ui_kreo.js --js_output_file build/rsj/redaktilo-2j-min.js --js='jsc/u/*.js' --js='jsc/x/*.js' --js='jsc/a/*.js' --js='jsc/rs/*.js'",
         "//build:rsj:debug": "google-closure-compiler -W VERBOSE --compilation_level BUNDLE --js_module_root ./jsc/rs --entry_point ./ui_kreo.js --js_output_file build/rsj/redaktilo-2j-min.js --js='jsc/u/*.js' --js='jsc/x/*.js' --js='jsc/a/*.js' --js='jsc/rs/*.js' ",
-        "build:rsj": "tsc --noEmit -p tsconfig-rs.json && ./node_modules/.bin/esbuild --target=es6 jsc/rs/ui_kreo.ts --bundle --minify  --external:jquery --outfile=build/rsj/redaktilo-2j-min.js",
-        "build:rsj:debug": "tsc --noEmit -p tsconfig-rs.json && ./node_modules/.bin/esbuild --target=es6 jsc/rs/ui_kreo.ts --bundle  --external:jquery --outfile=build/rsj/redaktilo-2j-min.js",
+        "build:rsj": "tsc --noEmit -p tsconfig-rs.json && ./node_modules/.bin/esbuild --target=es6 jsc/rs/ui_kreo.ts --bundle --minify --outfile=build/rsj/redaktilo-2j-min.js",
+        "build:rsj:debug": "tsc --noEmit -p tsconfig-rs.json && ./node_modules/.bin/esbuild --target=es6 jsc/rs/ui_kreo.ts --bundle --outfile=build/rsj/redaktilo-2j-min.js",
         "build": "npm run build:css && npm run build:dok && npm run build:copy && npm run build:js && npm run build:rsc && npm run build:rsj"
     },
     "scriptsComments": {
@@ -58,8 +58,6 @@
         "build:svg": "kunigas piktogramojn el unuopaj SVG-dosieroj. Ne uzante docker build vi antaŭe voku bin/mp2png_svg.sh"
     },
     "dependencies": {
-        "@types/jquery": "^3.5.16",
-        "@types/jqueryui": "^1.12.17",
         "esbuild": "0.18.3",
         "typescript": "5.1.3"
     }

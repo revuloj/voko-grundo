@@ -1,5 +1,5 @@
 /**
- * (c) 2023 ĉ€ Wolfram Diestel
+ * (c) 2023 ĉe Wolfram Diestel
  * laŭ GPL 2.0
  */
 
@@ -11,7 +11,21 @@ export class Menu extends UIElement {
 
     opcioj: { }
 
+    static menu(element: HTMLElement|string) {
+        const m = super.obj(element);
+        if (m instanceof Menu) return m;
+    }
+
+    static refreŝigu(element: HTMLElement|string) {
+        const m = Menu.menu(element);
+        if (m) m.refreŝigu();
+    }
+
     constructor(element: HTMLElement|string, opcioj: any) {
         super(element, opcioj);
+    }
+
+    refreŝigu() {
+        throw "Menu.refreŝigu: Ne jam implementita!"
     }
 }

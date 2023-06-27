@@ -1,5 +1,5 @@
 /**
- * (c) 2023 ĉ€ Wolfram Diestel
+ * (c) 2023 ĉe Wolfram Diestel
  * laŭ GPL 2.0
  */
 

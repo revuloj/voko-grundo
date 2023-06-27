@@ -1,5 +1,5 @@
 /**
- * (c) 2023 ĉ€ Wolfram Diestel
+ * (c) 2023 ĉe Wolfram Diestel
  * laŭ GPL 2.0
  */
 
@@ -90,7 +90,7 @@ function() {
         }
         //if (typeof this.options.pattern === 'regexp') {
         if (this.opcioj.pattern instanceof RegExp) {
-            var label = $("label[for='"+id+"']").text();
+            var label = DOM.t("label[for='"+id+"']");
             this._pattern  = this.opcioj.pattern;
             this._pattern_msg = label ? 'La donita valoro por ' + label + 'ne estas valida' : 'Nevalida valoro.';
         } else if (typeof this.opcioj.pattern === 'object') {

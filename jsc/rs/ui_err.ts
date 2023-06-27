@@ -8,8 +8,9 @@
 
 import * as u from '../u';
 import * as x from '../x';
-import { DOM, UIElement, Eraro } from '../ui';
+import { DOM, UIElement, Dialog } from '../ui';
 
+import { Artikolo } from './ui_art';
 import { show_xhr_error } from './ui_dlg';
 import { HTMLError } from './sxabloniloj';
 
@@ -39,7 +40,14 @@ export class Erarolisto extends UIElement {
         a_click: null
     };
 
-    constructor(element, opcioj) {
+    static aldonu(element: HTMLElement|string, err) {
+        const el = super.obj(element);
+        if (el instanceof Erarolisto) {
+            el.aldonu(err);
+        }
+    }
+
+    constructor(element: HTMLElement|string, opcioj: any) {
         super(element, opcioj);
 
         this._on({
@@ -62,9 +70,9 @@ export class Erarolisto extends UIElement {
             const n_ = err.line? parseInt(err.line) : -1;
         //$("#kontrolo_list").fadeOut("fast", function() {
             // ni enŝovu la mesaĝon laŭ la ordo de linioj
-            $("li",this.element).each(function(){
-                if (parseInt($(this).attr("value") as string) > n_) {
-                    $(this).before(li);
+            this.element.querySelectorAll("li").forEach((l) => {
+                if (parseInt(l.getAttribute("value") as string) > n_) {
+                    l.before(li);
                 // $("#kontrolo_list").fadeIn("fast");
                     added = true;
                     return false;
@@ -90,19 +98,22 @@ export class Erarolisto extends UIElement {
         // la atributo value de li donas la linion en la XML-teksto,
         // la atributo title de li donas line:pos
         if (event.target.localName != "a") {
-            const line_pos = $(event.currentTarget).attr("value");
-            const xmlarea = $("#xml_text").Artikolo("option","xmlarea");
-            xmlarea.goto(line_pos);
+            const el = event.currentTarget;
+            const line_pos = el.getAttribute("value");
+            const artikolo = Artikolo.artikolo("#xml_text");
+            const xmlarea = Artikolo.xmlarea("#xml_text");
+            xmlarea?.goto(line_pos);
             // okazigu eventon poziciŝanĝo ĉe Artikolo...
-            $("#xml_text").Artikolo("option","poziciŝanĝo")(); 
+            const ps: any = artikolo?.opcioj.poziciŝanĝo;
+            if (ps instanceof Function) ps(); 
         }
     };
 
 };
 
 export function xmlkontrolo() {
-    const xmlarea = $("#xml_text").Artikolo("option","xmlarea");
-    const xml_text = xmlarea.syncedXml(); //$("#xml_text").val();
+    const xmlarea = Artikolo.xmlarea("#xml_text");
+    const xml_text = xmlarea?.syncedXml(); //$("#xml_text").val();
 
   
     if (! xml_text ) {
@@ -110,12 +121,7 @@ export function xmlkontrolo() {
         return;
     }
  
-    $("body").css("cursor", "progress");
-    $.post(
-          "revo_kontrolo", 
-          //{ art: $("shargi_dosiero").val() },
-          { xml: xml_text })
-      .done(
+    u.HTTPRequest('post', "revo_kontrolo", { xml: xml_text },
           function(data) { 
               // se la listo de eraroj estas malplena la sintakso estas bona
               // malplena listo sendiĝas kiel [] aŭ [{}]
@@ -131,8 +137,9 @@ export function xmlkontrolo() {
                         return err;
                     })
                 );
-          })
-      .fail (
+          },
+          () => document.body.style.cursor = 'wait',
+          () => document.body.style.cursor = 'auto',
           function(xhr) {
               console.error(xhr.status + " " + xhr.statusText);
               if (xhr.status == 400) {
@@ -141,10 +148,6 @@ export function xmlkontrolo() {
                   show_xhr_error(xhr,"Ho ve, okazis eraro:",
                     "Supozeble via seanco forpasis kaj vi devas resaluti.");
               }
-      })
-      .always(
-             function() {
-                 $("body").css("cursor", "default");
       });
 
     // povas okazi dum atendi la rezulton de XML-kontrolo
@@ -153,75 +156,80 @@ export function xmlkontrolo() {
 
 
 export function mrkkontrolo() {
-    const art = $("#xml_text");
-    const xmlarea = art.Artikolo("option","xmlarea");
-    const xml = xmlarea.syncedXml(); //$("#xml_text").val();
+    const art = Artikolo.artikolo("#xml_text");
+    const xmlarea = Artikolo.xmlarea("#xml_text");
 
-    var mrkoj = art.Artikolo("markoj");
-    for (let mrk in mrkoj) {
-        if (mrkoj[mrk] > 1) {
-            //alert("" + mrkoj[mrk] + "-obla marko: "+ mrk);
-            let linpos = x.get_line_pos(mrkoj[mrk],xml);
-            linpos.line++; linpos.pos+=2;
-            let err = linpos as XEraro;
-            (err as XEraro).msg = "marko aperas plurfoje: "+ mrk;
-            const elisto = UIElement.obj("#dock_eraroj") as Erarolisto;
-            if (elisto) elisto.aldonu(err);
-        }
-    }
-    var sncoj = art.Artikolo("snc_sen_mrk");
+    if (art && xmlarea) {
+        const xml = xmlarea.syncedXml(); //$("#xml_text").val();
 
-    if (sncoj) {
-        var drvoj = art.Artikolo("drv_markoj");
-        var dmrk = 'xxx.0';
-
-        for (let inx in sncoj) {
-            let linpos = x.get_line_pos(parseInt(inx),xml);
-
-            // trovu derivaĵon antaŭ tiu senco
-            for(var i=drvoj.length-1; i>=0; i--) {
-                let drv = drvoj[i];
-                if (drv.line < linpos.line) {
-                    dmrk = drv.mrk;
-                    break;
-                }
+        var mrkoj = art.markoj();
+        for (let mrk in mrkoj) {
+            if (mrkoj[mrk] > 1) {
+                //alert("" + mrkoj[mrk] + "-obla marko: "+ mrk);
+                let linpos = x.get_line_pos(mrkoj[mrk],xml);
+                linpos.line++; linpos.pos+=2;
+                let err = linpos as XEraro;
+                (err as XEraro).msg = "marko aperas plurfoje: "+ mrk;
+                const elisto = UIElement.obj("#dock_eraroj") as Erarolisto;
+                if (elisto) elisto.aldonu(err);
             }
+        }
+        var sncoj = art.snc_sen_mrk();
     
-            linpos.line++; linpos.pos++;
-            let snc = linpos as XEraro;
-            snc.msg = "senco sen marko, <span class='snc_mrk' title='aldonu'>aldonebla kiel: <a>"
-                     + dmrk + "." + sncoj[inx] + "</a></span>";
-            const elisto = UIElement.obj("#dock_avertoj") as Erarolisto;
-            if (elisto) elisto.aldonu(snc);
+        if (sncoj) {
+            var drvoj = art.drv_markoj();
+            var dmrk = 'xxx.0';
+    
+            for (let inx in sncoj) {
+                let linpos = x.get_line_pos(parseInt(inx),xml);
+    
+                // trovu derivaĵon antaŭ tiu senco
+                for(var i=drvoj.length-1; i>=0; i--) {
+                    let drv = drvoj[i];
+                    if (drv.line < linpos.line) {
+                        dmrk = drv.mrk;
+                        break;
+                    }
+                }
+        
+                linpos.line++; linpos.pos++;
+                let snc = linpos as XEraro;
+                snc.msg = "senco sen marko, <span class='snc_mrk' title='aldonu'>aldonebla kiel: <a>"
+                         + dmrk + "." + sncoj[inx] + "</a></span>";
+                const elisto = UIElement.obj("#dock_avertoj") as Erarolisto;
+                if (elisto) elisto.aldonu(snc);
+            }
         }
     }
 }
 
 
 export function klrkontrolo() {
-    const art = $("#xml_text");
-    const xmlarea = art.Artikolo("option","xmlarea");
-    const xml = xmlarea.syncedXml(); //$("#xml_text").val();
-    const klroj = art.Artikolo("klr_ppp");
-
-    if (klroj) {
-        for (let pos in klroj) {
-            let linpos = x.get_line_pos(+pos,xml);
-   
-            linpos.line++; linpos.pos++;
-            let klr = linpos as XEraro;
-            klr.msg = "klarigo sen krampoj, <span class='klr_ppp' title='anstataŭigu'>anstataŭigebla per: <a>" +
-                "&lt;klr&gt;[…]&lt;/klr&gt;</a></span>";
-            const elisto = UIElement.obj("#dock_avertoj") as Erarolisto;
-            if (elisto) elisto.aldonu(klr);
+    const art = Artikolo.artikolo("#xml_text");
+    const xmlarea = Artikolo.xmlarea("#xml_text");
+    if (art && xmlarea) {
+        const xml = xmlarea.syncedXml(); //$("#xml_text").val();
+        const klroj = art.klr_ppp();
+    
+        if (klroj) {
+            for (let pos in klroj) {
+                let linpos = x.get_line_pos(+pos,xml);
+       
+                linpos.line++; linpos.pos++;
+                let klr = linpos as XEraro;
+                klr.msg = "klarigo sen krampoj, <span class='klr_ppp' title='anstataŭigu'>anstataŭigebla per: <a>" +
+                    "&lt;klr&gt;[…]&lt;/klr&gt;</a></span>";
+                const elisto = UIElement.obj("#dock_avertoj") as Erarolisto;
+                if (elisto) elisto.aldonu(klr);
+            }
         }
     }
 }
 
 
 export function vortokontrolo() {
-
-    var lines = $("#xml_text").Artikolo("lines_as_dict");
+    const art = Artikolo.artikolo("#xml_text");
+    const lines = art?.lines_as_dict();
 
     var chunk_size = 20;
     var i = 0;
@@ -244,7 +252,8 @@ export function vortokontrolo() {
 }
 
 function kontrolu_liniojn(lines) {   
-    $("body").css("cursor", "progress");
+    //$("body").css("cursor", "progress");
+    document.body.style.cursor = 'wait';
     var k = Object.keys(lines);
     var id = "vktrl_"+k[0];
     // montru linion dum atendado...
@@ -257,19 +266,16 @@ function kontrolu_liniojn(lines) {
 
     // redonu nur kontrolendajn analiz-rezultojn    
     lines.moduso = "kontrolendaj"; 
-    $.alportu2(
+    u.HTTPRequest('post',"analinioj",
         {
-            url: "analinioj",
-            //{ art: $("shargi_dosiero").val() },
             data: JSON.stringify(lines),
             contentType: 'application/json'
-        })
-      .done(
+        },
           function(data) {  
              //var html = n + ": " + data;
              // $("#kontrolo_ana").append(html);
              //var str = data.replace('---','\u2014');
-             $("#"+id).remove();
+             DOM.e("#"+id)?.remove();
              const elisto = UIElement.obj("#dock_avertoj") as Erarolisto;
              if (elisto) elisto.aldonu_liston(
                 Object.keys(data).map(_ana2txt,data) as Array<XEraro>);
@@ -279,48 +285,61 @@ function kontrolu_liniojn(lines) {
                 vrtkontrolo_aldonu_linion(n,data[n]); 
              }
              */
-          })
-       .fail (
+          },
+          () => document.body.style.cursor = 'wait',
+          () => document.body.style.cursor = 'auto',
             function(xhr) {
                 console.error(xhr.status + " " + xhr.statusText);
-                $("#"+id).html("Okazis erraro dum kontrolo: " + xhr.statusText);
+                DOM.al_html("#"+id,"Okazis erraro dum kontrolo: " + xhr.statusText);
           });
 }
 
 export function surmetita_dialogo(url, root_el, loc = '') {
     
-    u.HTTPRequest('get', url, 
-          {},
+    u.HTTPRequest('get', url, {},
           function(data, status, xhr) {   
               if (xhr.status == 302) {
                   // FIXME: When session ended the OpenID redirect 302 is handled behind the scenes and here we get openid/login with status 200
                 show_xhr_error(xhr,"Via seanco finiĝis. Bonvolu resaluti!");
               } else {
-                  $("#surmetita").html(data);
-                  $("#surmetita_dlg").dialog("option", "title", $("#surmetita h1").text());
-                  $("#surmetita h1").remove("h1");
-              }
-              // adaptu altecon de la dialogo, por ke la deklaro ruliĝu sed la titolo kaj reir-butono montriĝu...
-              var dlg = $("#surmetita_dlg").parent();
-              var view_h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
-              var decl_h = (view_h * 0.70) - dlg.children(".ui-dialog-titlebar").height(); // - dlg.children(".ui-dialog-buttonpane").height();
-              $("#"+root_el).height(decl_h);
+                const srm = Dialog.dialog("#surmetita");
+                if (srm) {
+                    srm.element.innerHTML = data;
+                    srm.opcioj['title'] = DOM.t("#surmetita h1");
+                        DOM.e("#surmetita h1")?.remove();
+                    //  $("#surmetita").html(data);
+                    //  $("#surmetita_dlg").dialog("option", "title", $("#surmetita h1").text());
+                    //  $("#surmetita h1").remove("h1");
+                    
+                    // adaptu altecon de la dialogo, por ke la deklaro ruliĝu sed la titolo kaj reir-butono montriĝu...
+                    const dlg = srm.element.parentElement;
+                    if (dlg) {
+                        const view_h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+                        const tbar = dlg.querySelector(".ui-dialog-titlebar") as HTMLElement;
+                        if (tbar) {
+                            const dlg_h = +tbar.style.height;
+                            const decl_h = (view_h * 0.70) - dlg_h; // - dlg.children(".ui-dialog-buttonpane").height();
+                            const dr = DOM.e("#"+root_el) as HTMLElement;
+                            if (dr) dr.style.height = ""+decl_h;        
+                        }
+                    }
 
-              $("#surmetita_dlg").dialog("open");
-
-              window.location.hash=loc;
+                    srm.malfermu();
+                }
+                window.location.hash = loc;
+            } // else
         },
-        function() { $("body").css("cursor", "progress") },
-        function() { $("body").css("cursor", "default"); },
+        function() { document.body.style.cursor = 'wait' },
+        function() { document.body.style.cursor = 'auto' },
         function(xhr) {
             console.error(xhr.status + " " + xhr.statusText);
             if (xhr.status == 400) {
-                $("#surmetita_error").html('Pardonu, okazis eraro dum ŝargo de la dokumento.');
+                DOM.al_html("#surmetita_error",'Pardonu, okazis eraro dum ŝargo de la dokumento.');
             } else {
                 var msg = "Pardonu, okazis netandita eraro: ";
-                $("#surmetita_error").html( msg + xhr.status + " " + xhr.statusText + xhr.responseText);
+                DOM.al_html("#surmetita_error", msg + xhr.status + " " + xhr.statusText + xhr.responseText);
             }
-            $("#surmetita_error").show(); 
+            DOM.kaŝu("#surmetita_error",false); 
         });
 }
 
@@ -330,9 +349,9 @@ export function show_error_status(error) {
     const elisto = UIElement.obj("#dock_eraroj") as Erarolisto;
     if (elisto)  elisto.aldonu(err);
 
-    $("#elekto_indikoj").hide();
-    $("#dock_klavaro").show();
-    $("#dock_kontrolo").show();
+    DOM.kaŝu("#elekto_indikoj");
+    DOM.kaŝu("#dock_klavaro",false);
+    DOM.kaŝu("#dock_kontrolo",false);
 }
 
 function _ana2txt(line) {

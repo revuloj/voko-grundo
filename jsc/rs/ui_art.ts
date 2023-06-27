@@ -112,6 +112,11 @@ export class Artikolo extends UIElement {
         if (a instanceof Artikolo) return a;
     };
 
+    static xmlarea(element: HTMLElement|string) { 
+        const art = Artikolo.artikolo(element);
+        if (art) return art.opcioj.xmlarea;
+    }
+
     constructor(element: HTMLElement|string, opcioj: any) {
         super(element, opcioj);
 
@@ -244,21 +249,24 @@ export class Artikolo extends UIElement {
     };
 
     _keydown(event) {
-        var keycode = event.keyCode || event.which; 
+        const keycode = event.keyCode || event.which;
+        const xmlarea = this.opcioj.xmlarea; 
    
         // traktu TAB por ŝovi dekstren aŭ maldekstren plurajn liniojn
         if (keycode == 9) {  // TAB
            event.preventDefault(); 
 
-           var elekto = this.elekto();
+           var elekto = this.elekto()||'';
 
            // se pluraj linioj estas elektitaj
            if (elekto.indexOf('\n') > -1) {
                 // indent
                 if (event.shiftKey == false)
-                    this.element.indent(2);
+                    //this.element.indent(2);
+                    xmlarea.indent(2);
                 else
-                    this.element.indent(-2);
+                    //this.element.indent(-2);
+                    xmlarea.indent(-2);
             } else if ( !elekto ) {
                 // traktu enŝovojn linikomence...
                 var before = this.char_before_pos();
@@ -276,10 +284,13 @@ export class Artikolo extends UIElement {
                 if (spaces.length > 0 && x.all_spaces(spaces) && 0 == spaces.length % 2) { // forigu du anstataŭ nur unu spacon
                     event.preventDefault(); 
     
-                    var el = this.element;
-                    var pos = el.getCursorPosition();
-                    el.selectRange(pos-2, pos);
-                    el.insert(''); 
+                    var el = this.element as HTMLInputElement;
+                    var pos = xmlarea.positionNo(); // el.getCursorPosition();
+                    //el.selectRange(pos-2, pos);
+                    //el.insert(''); 
+                    el.selectionStart = pos-2;
+                    el.selectionEnd = pos;
+                    xmlarea.selection('');
                 }    
             }
         }
@@ -334,16 +345,16 @@ export class Artikolo extends UIElement {
     };
 
     // redonas aŭ anstataŭigas la elektitan tekston
-    elekto(insertion,elektita) {
-        var el = this.element;
+    elekto(insertion?,elektita?) {
+        const xmlarea = this.opcioj.xmlarea;
         // redonu la elektitan tekston 
         if (insertion === undefined) {
-            return el.textarea_selection();
+            return xmlarea.selection();
         // enŝovu la tekston anstataŭ la elektita 
         } else {
             // se necese, kontrolu, ĉu elektita teksto kongruas kun parametro <elektita> 
-            if (elektita == el.textarea_selection() || !elektita)
-                el.insert(insertion);
+            if (elektita == xmlarea.selection() || !elektita)
+                xmlarea.selection(insertion);
             else
                 console.warn("Ne estas la teksto '" + elektita +"' ĉe la elektita loko! Do ĝi ne estas anstatŭigata.");
         }
@@ -351,27 +362,34 @@ export class Artikolo extends UIElement {
 
     // eltrovu la enŝovon de la linio antaŭ la nuna pozicio
     current_indent(shift = 0) {
-        var el = this.element;
-        var pos = el.getCursorPosition();
-        var text = this.element.val();
+        const xmlarea = this.opcioj.xmlarea;
+        const pos = xmlarea.positionNo();
+        var text = (this.element as HTMLInputElement).value;
         return x.enshovo_antaua_linio(text,pos + shift);
     };
 
     // eltrovu la signon antaŭ la nuna pozicio
     char_before_pos() {
+        const xmlarea = this.opcioj.xmlarea;
+        return xmlarea.charBefore();
+        /*
         var el = this.element;
         var pos = el.getCursorPosition();
         if (pos > 0)
             return this.element.val()[pos-1];
+            */
     };
 
     // eltrovu la signojn antaŭ la nuna pozicio (ĝis la linikomenco)
     chars_before_pos() {
-        var el = this.element;
-        var pos = el.getCursorPosition();
-        var val = this.element.val();
+        //var el = this.element;
+        // var pos = el.getCursorPosition();
+        // var val = this.element.val();
+        const xmlarea = this.opcioj.xmlarea;
+        const pos = xmlarea.positionNo();
+        const val = (this.element as HTMLInputElement).value;
         var p = pos;
-        while (p>0 && val[p] != '\n') p--;
+        while (p > 0 && val[p] != '\n') p--;
         return val.substring(p+1,pos);
     };
 
@@ -639,7 +657,7 @@ export class Artikolo extends UIElement {
     // kies ŝlosiloj estas la lininumeroj kaj kies
     // valoroj estas la nudaj tekst-linioj
     // (bezonata por vortkontrolo/analizo)
-    lines_as_dict(xml) {
+    lines_as_dict() {
         var lines = this.plain_text(true).split('\n');
         var result = {};
         for (let i=0; i<lines.length; i++) {

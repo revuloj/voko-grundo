@@ -4,8 +4,8 @@
  * lau GPL 2.0
  */
 
-/// <reference types="@types/jqueryui/index.d.ts" />
-
+//x/ <reference types="@types/jqueryui/index.d.ts" />
+import { when_doc_ready } from '../x';
 import menu_init from './ui_menu.js';
 import dlg_init from './ui_dlg.js';
 import tabl_init from './ui_tabl.js';
@@ -19,19 +19,18 @@ import tabl_init from './ui_tabl.js';
 // var preflng='en';
 
 console.debug("Instalante la enirfunkcion...");
-$(document).ready(function () {
+
+when_doc_ready(function () {
        
     // prepari la redaktilo-aranĝon
-    $(function () {
-      console.debug("Preparante la redaktilon...");
-      tabl_init();
-      menu_init();
-      dlg_init();
+    console.debug("Preparante la redaktilon...");
+    tabl_init();
+    menu_init();
+    dlg_init();
 
-      // mus-notoj
-      $( document ).tooltip();
-      console.debug("La redaktilo estas laborpreta!");   
-    });
+    // mus-notoj
+    $( document ).tooltip();
+    console.debug("La redaktilo estas laborpreta!");   
 });
 
 
