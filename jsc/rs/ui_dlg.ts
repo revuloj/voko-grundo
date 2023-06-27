@@ -22,95 +22,6 @@ import { show_error_status, surmetita_dialogo } from './ui_err.js';
 type NovaArt = { dos: string, rad: string, fin: string, dif: string };
 //type ShargArt = { dosiero: string };
 
-/*
-declare global {
-
-    namespace JQueryUI {
-        interface DialogOptions {
-            kampoj?: any;
-            valorŝanĝo?();
-        }
-
-        // CheckboxRadio mankas en DefintelyTyped,
-        // mi prenis difinojn de tie ĉi: https://gist.github.com/Tom4U/b1dedd9a1e1b461e0da5d679f7b15382
-
-        interface CheckboxRadioOptions extends CheckboxRadioEvents {
-            classes?: {[elementName: string]: string};
-            disabled?: boolean;
-            icon?: boolean;
-            label?: string;
-        }
-
-        interface CheckboxRadioEvent {
-            (event: Event, ui: SelectMenuUIParams): void;
-        }
-
-        interface CheckboxRadioEvents {
-            create?: CheckboxRadioEvent;
-            click?: CheckboxRadioEvent;
-        }
-
-        interface CheckboxRadio extends Widget, CheckboxRadioOptions {
-        }
-
-        // Controlgroup mankas en DefinitelyTyped, do ni aldonas tie ĉi, kion ni bezonas
-        interface ControlgroupOptions {
-            classes?: any;
-            direction?: "horizontal"|"vertical";
-            disabled?: boolean;
-            items?: any;
-            onlyVisible?: boolean;            
-        }
-
-        // mankas items en MenuOptions-deklaroj
-        interface MenuOptions {
-            items?: string;
-        }
-
-    }
-
-    interface Dialog {
-        options: JQueryUI.DialogOptions;
-        valoroj(values: any): any;
-        shrink();
-        expand();
-        toggle();
-    }
-    
-
-    interface JQuery {
-        dialog(methodName: 'valoroj'): any;
-        dialog(methodName: "valoroj", val: any);
-
-        // CheckboxRadio mankas en DefintelyTyped,
-        // mi prenis difinojn de tie ĉi: https://gist.github.com/Tom4U/b1dedd9a1e1b461e0da5d679f7b15382
-        checkboxradio(): JQuery;
-        checkboxradio(methodName: 'destroy'): JQuery;
-        checkboxradio(methodName: 'disable'): JQuery;
-        checkboxradio(methodName: 'enable'): JQuery;
-        checkboxradio(methodName: 'instance'): any;
-        checkboxradio(methodName: 'option'): JQuery;
-        checkboxradio(methodName: 'refresh'): JQuery;
-        checkboxradio(methodName: 'widget'): JQuery;
-        checkboxradio(methodName: string): JQuery;
-        checkboxradio(options: JQueryUI.CheckboxRadioOptions): JQuery;
-        checkboxradio(optionLiteral: string, optionName: string): any;
-        checkboxradio(optionLiteral: string, options: JQueryUI.CheckboxRadioOptions): any;
-        checkboxradio(optionLiteral: string, optionName: string, optionValue: any): JQuery;
-
-        // controlgroup()-deklaroj mankas ĉe DefintelyTyped, do ni aldonas, kion ni bezonas
-        controlgroup(): JQuery;
-        controlgroup(options: JQueryUI.ControlgroupOptions): JQuery;
-    }
-   
-
-    interface Widget {
-        checkboxradio(): any;
-    }
-}
-*/
-
-
 // aldonu al jQuery UI dialog proprajn metodojn
 // bezonatajn en la redaktilaj dialogoj
 console.debug("Instalante la dialogfunkciojn...");
@@ -131,9 +42,9 @@ export default function() {
                 if (dlg) {
                     const art = <NovaArt>(dlg.valoroj());
                     Artikolo.artikolo("#xml_text")?.nova(art);
-                    $("#re_radiko").val(art.rad);
-                    $("#dock_eraroj").empty();
-                    $("#dock_avertoj").empty();
+                    DOM.al_v("#re_radiko",art.rad);
+                    DOM.al_t("#dock_eraroj",'');
+                    DOM.al_t("#dock_avertoj",'');
                     dlg.fermu();    
                 }
             },
@@ -144,10 +55,10 @@ export default function() {
             // ni permesu ĝis 2 lastajn ŝanĝojn sen averti
             const cc = Artikolo.artikolo("#xml_text")?.change_count();
             if ( cc && cc > 2 ) {
-                $("#krei_error").html("Averto: ankoraŭ ne senditaj ŝanĝoj en la nuna artikolo perdiĝos kreante novan.")
-                $("#krei_error").show();
+                DOM.al_html("#krei_error","Averto: ankoraŭ ne senditaj ŝanĝoj en la nuna artikolo perdiĝos kreante novan.")
+                DOM.kaŝu("#krei_error",false);
             } else {
-                $("#krei_error").hide();
+                DOM.kaŝu("#krei_error");
             }
         }
     });
@@ -173,8 +84,8 @@ export default function() {
         }
     });
     */
-    $("#krei_rad").keypress(xpress);
-    $("#krei_dif").keypress(xpress);
+    DOM.klavpremo("#krei_rad",xpress);
+    DOM.klavpremo("#krei_dif",xpress);
 
     //>>>>>>>> dialogo: Artikolon ŝargi
     new Dialog("#shargi_dlg", {
@@ -187,8 +98,8 @@ export default function() {
                 if (! $("#shargi_dosiero").validate()) return;
                 const values = Dialog.dialog("#shargi_dlg")?.valoroj();
                 download_art(values.dosiero,"#shargi_error","#shargi_dlg");
-                $("#dock_eraroj").empty();
-                $("#dock_avertoj").empty();
+                DOM.al_t("#dock_eraroj",'');
+                DOM.al_t("#dock_avertoj",'');
                 //this.fermu() 
             },
             "\u2718": function() { this.fermu(); } 
@@ -197,17 +108,17 @@ export default function() {
             // ĉar tiu change_count ankaŭ sen vera ŝanĝo altiĝas, 
             // ni permesu ĝis 2 lastajn ŝanĝojn sen averti
             const cc = Artikolo.artikolo("#xml_text")?.change_count() || 0; 
-            if ($("#xml_text").val() && $("#xml_text").val() && cc > 2) {
+            if (DOM.v("#xml_text") && cc > 2) {
                 $("#shargi_error").html("Averto: ankoraŭ ne senditaj ŝanĝoj en la nuna artikolo perdiĝos kreante novan.")
-                $("#shargi_error").show();
+                DOM.kaŝu("#shargi_error",false);
             } else {
-                $("#shargi_error").hide();
+                DOM.kaŝu("#shargi_error");
             }
 
             $("#shargi_sercho").selectAll();
         }
     });
-    $("#shargi_sercho").keypress(xpress);
+    DOM.klavpremo("#shargi_sercho",xpress);
     new Propon("#shargi_sercho", {
         source: shargi_sercho_autocomplete,
         select: function(event,ui) { $("#shargi_dosiero").val(ui.item.art+'.xml'); }   
@@ -244,16 +155,16 @@ export default function() {
                     event.preventDefault();
                     if (! $("#lastaj_dosiero").validate()) return;
                     if ($("#lastaj_dosiero").data("rezulto") != "eraro") {
-                        $("#lastaj_error").text("Vi povas reredakti nur artikolojn, ĉe kiuj "
+                        DOM.al_t("#lastaj_error","Vi povas reredakti nur artikolojn, ĉe kiuj "
                         + "troviĝis eraro dum traktado de la redaktoservo.");
-                        $("#lastaj_error").show();
+                        DOM.kaŝu("#lastaj_error",false);
                         return;
                     } else {
                         var url = $("#lastaj_dosiero").data("url");
-                        var dos = $("#lastaj_dosiero").val();
+                        var dos = DOM.v("#lastaj_dosiero");
                         download_url(url,dos,"#lastaj_error","#lastaj_dlg");
-                        $("#dock_eraroj").empty();
-                        $("#dock_avertoj").empty();
+                        DOM.al_t("#dock_eraroj",'');
+                        DOM.al_t("#dock_avertoj",'');
                         //this.fermu() 
                     }
                 }
@@ -271,7 +182,7 @@ export default function() {
             //this.faldu(false); // necesas, se la dialogo estis fermita en faldita stato...
             Dialog.dialog("#lastaj_dlg")?.faldu(false);
             plenigu_lastaj_liston();            
-            $("#lastaj_error").show();
+            DOM.kaŝu("#lastaj_error",false);
         }
     });    
     Valid.aldonu("#lastaj_dosiero", {
@@ -282,10 +193,10 @@ export default function() {
         err_to: "#lastaj_error"
     });
     $( "#lastaj_tabelo" ).on("click","td",lastaj_tabelo_premo);
-    $( "#lastaj_rigardu").click(
+    DOM.klak("#lastaj_rigardu",
         function(event) {
             event.preventDefault();
-            var url = $(this).data("url");
+            var url = event.target.data("url");
             window.open(url);
         });
 
@@ -298,7 +209,7 @@ export default function() {
             "\u2718": function() { this.fermu(); }
         }, 
         open: function() {
-            $("#sendiservile_error").hide();
+            DOM.kaŝu("#sendiservile_error");
             const art = Artikolo.artikolo("#xml_text");
             const komt = DOM.i("#sendiservile_komento");
             if (komt) {
@@ -336,7 +247,7 @@ export default function() {
             "\u2718": function() { this.fermu(); }
         }, 
         open: function() {
-            $("#referenco_error").hide();
+            DOM.kaŝu("#referenco_error");
             this.faldu(false); // necesas, se la dialogo estis fermita en faldita stato...
             // se io estas elektita jam serĉu
             var sel = $("#xml_text").textarea_selection();
@@ -348,21 +259,9 @@ export default function() {
             }
         }
     }); 
-    /*
-    $( "#referenco_butonoj").Klavaro({
-        artikolo: $("#xml_text"),
-        posedanto: "#referenco_sercho",
-        akampo: "#referenco_sercho"
-    });
-    $( "#referenco_butonoj2").Klavaro({
-        artikolo: $("#xml_text"),
-        posedanto: "#referenco_sercho",
-        akampo: "#referenco_sercho"
-    });
-    */
-    $("#referenco_listo").keypress(xpress);
-    $("#referenco_sercho").keypress(xpress);
-    $("#referenco_enhavo").keypress(xpress);
+    DOM.klavpremo("#referenco_listo",xpress);
+    DOM.klavpremo("#referenco_sercho",xpress);
+    DOM.klavpremo("#referenco_enhavo",xpress);
 
     Valid.aldonu("#referenco_sercho", {
         err_to: "#referenco_error",
@@ -375,7 +274,7 @@ export default function() {
     const ref_lst = DOM.i("#referenco_listo");
 
     if (ref_lst) ref_lst.disabled = ( DOM.v("#referenco_tipo") != 'lst');
-    $( "#referenco_tipo" ).change( function() {
+    DOM.ŝanĝo( "#referenco_tipo",function() {
         if (ref_lst) {
             if (DOM.v("#referenco_tipo") == 'lst') {
                 ref_lst.disabled = false;
@@ -428,12 +327,11 @@ export default function() {
         },
         undefined);
 
-    $("#ekzemplo_frazo").keypress(xpress);
-    $("#ekzemplo_bib").keypress(xpress);
-    $("#ekzemplo_vrk").keypress(xpress);
-    $("#ekzemplo_aut").keypress(xpress);
-    $("#ekzemplo_lok").keypress(xpress);
-
+    DOM.klavpremo("#ekzemplo_frazo",xpress);
+    DOM.klavpremo("#ekzemplo_bib",xpress);
+    DOM.klavpremo("#ekzemplo_vrk",xpress);
+    DOM.klavpremo("#ekzemplo_aut",xpress);
+    DOM.klavpremo("#ekzemplo_lok",xpress);
     
     //>>>>>>>> dialogo: Enmeti bildon
     new Dialog("#bildo_dlg", { 
@@ -451,7 +349,7 @@ export default function() {
             "\u2718": function() { this.fermu(); }
         },
         open: function() {
-            $("#bildo_error").hide();
+            DOM.kaŝu("#bildo_error");
             this.faldu(false); // necesas, se la dialogo estis fermita en faldita stato...
 
             if (parseFloat($("#bildo_fmt").val() as string) > 1) {
@@ -498,7 +396,7 @@ export default function() {
         },
         open: function() {
             plenigu_derivajxojn();
-            $("#derivajho_error").hide();
+            DOM.kaŝu("#derivajho_error");
             this.faldu(false); // necesas, se la dialogo estis fermita en faldita stato...
         }
     });
@@ -524,8 +422,8 @@ export default function() {
         }
     });
     */
-    $("#derivajho_kap").keypress(xpress);
-    $("#derivajho_dif").keypress(xpress);
+    DOM.klavpremo("#derivajho_kap",xpress);
+    DOM.klavpremo("#derivajho_dif",xpress);
 
     //>>>>>>>> dialogo: Enmeti sencon
     new Dialog("#senco_dlg", {
@@ -539,7 +437,7 @@ export default function() {
             "\u2718": function() { this.fermu(); }
         },
         open: function() {
-            $("#senco_error").hide();
+            DOM.kaŝu("#senco_error");
             this.faldu(false); // necesas, se la dialogo estis fermita en faldita stato...
         }
     });
@@ -611,7 +509,7 @@ export default function() {
             "\u2718": function() { this.fermu(); }
         },
         open: function() {
-            $("#sxablono_error").hide();
+            DOM.kaŝu("#sxablono_error");
             this.faldu(false); // necesas, se la dialogo estis fermita en faldita stato...
         }
     });
@@ -623,7 +521,7 @@ export default function() {
         akampo: ""
     });
     */
-    $( "#sxablono_elekto" ).change(kiam_elektis_sxablonon);     
+    DOM.ŝanĝo("#sxablono_elekto",kiam_elektis_sxablonon);     
     new Grup(".controlgroup-vertical", { "direction": "vertical" });
 
     //>>>>>>>> dialogo: Enmeti rimarkon
@@ -649,7 +547,7 @@ export default function() {
             "\u2718": function() { this.fermu(); }
         },
         open: function() {
-            $("#rimarko_error").hide();
+            DOM.kaŝu("#rimarko_error");
             this.faldu(false); // necesas, se la dialogo estis fermita en faldita stato...
         }
     });
@@ -675,7 +573,7 @@ export default function() {
         }
     });
     */
-    $("#rimarko_rim").keypress(xpress);
+    DOM.klavpremo("#rimarko_rim",xpress);
 
     /*
     //>>>>>>>> dialogo: Kontroli > homonimojn
@@ -705,7 +603,7 @@ export default function() {
             "Resaluti": function() { location.href='../auth/logout'; },
             "\u2718": function() { this.fermu(); }
         },
-        open: () => { $("#error_msg").show(); }
+        open: () => { DOM.kaŝu("#error_msg",false); }
     });
 
     //>>>>>>>> surmetitta dialogo ekz. por deklaro pri datumprotekto, klarigoj/helpo ks
@@ -724,7 +622,7 @@ export default function() {
 
 
 export function shargi_sercho_autocomplete(request,response) {
-    $("#shargi_dosiero").val('');
+    DOM.al_v("#shargi_dosiero",'');
     if (! $("#shargi_sercho").validate()) return;
 /*    
       if (! validate_pattern(/^[a-zA-Z 0-9ĉĝĥĵŝŭĈĜĤĴŜŬ]+$/,$("#shargi_sercho"),$("#shargi_error"),
@@ -738,14 +636,11 @@ export function shargi_sercho_autocomplete(request,response) {
     
   //    $("body").css("cursor", "progress");
       //$.post(
-          $.alportu(
-            "revo_sercho", 
-            //{ art: $("shargi_dosiero").val() },
+        u.HTTPRequest('post',"revo_sercho", 
             { 
                 sercho: sercho,
                 lng: "eo" 
-            }, show_xhr_error) //"#shargi_error")
-        .done(
+            }, 
             function(data, status, xhr) {   
                 if (xhr.status == 302) {
                     // FIXME: When session ended the OpenID redirect 302 is handled behind the scenes and here we get openid/login with status 200
@@ -761,7 +656,11 @@ export function shargi_sercho_autocomplete(request,response) {
                     }
                 }
                 response(results);
-            });
+            },
+            () => document.body.style.cursor = 'wait',
+            () => document.body.style.cursor = 'auto',
+            show_xhr_error //"#shargi_error")
+            );
 /*            
         .fail (
             function(xhr) {
@@ -789,7 +688,7 @@ export function show_xhr_error(xhr,msg_prefix="Eraro:",msg_suffix='') {
     // alert(xhr.status + " " + xhr.statusText); 
     const msg = "Ho ve, okazis eraro: " 
      + xhr.status + " " + xhr.statusText + " " + xhr.responseText;
-    $( "#error_msg" ).html(msg_prefix +  "<br/>" + msg_infix + "<br/>" +  msg_suffix);
+    DOM.al_html("#error_msg", msg_prefix +  "<br/>" + msg_infix + "<br/>" +  msg_suffix);
     Dialog.dialog("#error_dlg")?.malfermu();    
 }
 
@@ -801,13 +700,9 @@ function download_art(dosiero,err_to,dlg_id,do_close=true) {
         dosiero = dosiero.slice(0,-4);
     }
 
-    $.alportu2({
-          url: "revo_artikolo", 
-          method: "POST",
-          //{ art: $("shargi_dosiero").val() },
+    u.HTTPRequest('post',"revo_artikolo", {
           data: { art: dosiero }
-      }, err_to)
-     .done(
+      },
         function(data) {   
             if (data.slice(0,5) == '<?xml') {
                 const art = Artikolo.artikolo("#xml_text");
@@ -827,7 +722,11 @@ function download_art(dosiero,err_to,dlg_id,do_close=true) {
                 var msg = "Okazis neatendita eraro: ";
                 $(err_to).html("Okazis eraro, supozeble necesas resaluti.");
             }
-        });
+        },
+        () => document.body.style.cursor = 'wait',
+        () => document.body.style.cursor = 'auto',
+        err_to
+        );
 }
 
 function download_url(url,dosiero,err_to,dlg_id,do_close=true) {
@@ -838,8 +737,8 @@ function download_url(url,dosiero,err_to,dlg_id,do_close=true) {
                 const art = Artikolo.artikolo("#xml_text");
                 if (art) art.load(dosiero,data);
                 // $("#collapse_outline").accordion("option","active",0);
-                $(err_to).hide();
-                $("#tabs").tabs( "option", "active", 0);
+                DOM.kaŝu(err_to);
+                Slip.montru("#tabs", 0);
 
                 if (do_close) {
                     Dialog.fermu(dlg_id);
@@ -848,11 +747,11 @@ function download_url(url,dosiero,err_to,dlg_id,do_close=true) {
                 }
             } else {
                 var msg = "Okazis neatendita eraro: ";
-                $(err_to).html("Okazis eraro, supozeble necesas resaluti.");
+                Eraro.al(err_to,"Okazis eraro, supozeble necesas resaluti.");
             }
         },
-        undefined,
-        undefined,
+        () => document.body.style.cursor = 'wait',
+        () => document.body.style.cursor = 'auto',
         err_to
     );
 }
@@ -946,8 +845,7 @@ function sendi_artikolon_servile(event) {
 function plenigu_referenco_listojn() {
     //$("body").css("cursor", "progress");
     //$.get('../voko/klasoj.xml')
-    $.ricevu('../voko/klasoj.xml',"#referenco_error")
-     .done(
+    u.HTTPRequest('get','../voko/klasoj.xml',"#referenco_error",{},
             function(data) {  
                 var seen = {}; // evitu duoblaĵojn
                 new Propon("#referenco_listo", {
@@ -1015,72 +913,16 @@ function referenco_sercho_autocomplete(request,response) {
                 }
                 response(results);
             },
-            undefined,
-            undefined,
+            () => document.body.style.cursor = 'wait',
+            () => document.body.style.cursor = 'auto',
             (msg: string) => Eraro.al("#referenco_error", msg)       
         );
-      /*
-      $("body").css("cursor", "progress");
-      $.post(
-            "revo_sercho", 
-            //{ art: $("shargi_dosiero").val() },
-            { sercho: sercho,
-              lng: "eo" })
-        .done(
-            function(data) {   
-                // kap+num -> enhavo
-                // mrk -> celo
-                //var enhavo = (data.num != "")? data.kap + "<sncref/>" : data.kap;
-                //$( "#referenco_celo").val(data.mrk);
-                //$( "#referenco_enhavo").val(enhavo)
-                var i;
-                for (i=0; i<data.length; i++) {
-                   var d = data[i];
-                   var label = d.kap; //(d.num != "")? d.kap + " " + d.num : d.kap;
-                    
-                   // ĉe pluraj sencoj aldonu numeron kaj lastan parton de mrk por pli bone distingi
-                   if (d.num) {  
-                       
-                      label += " " + d.num + " [" + d.mrk.split('.').slice(2) + "]";
-                   };
-                   results[i] = { 
-                       value: label, 
-                       mrk: d.mrk, 
-                       kap: d.kap, 
-                       num: d.num } 
-                }
-            })
-        .fail (
-            function(xhr) {
-                console.error(xhr.status + " " + xhr.statusText);
-                if (xhr.status == 400) {
-                    $("#referenco_error").html('Pardonu, jen malbona serĉesprimo. Ĝi ne enhavu interpunkcion aŭ eĉ apostrofon.')
-                } else {
-                    var msg = "Pardonu, okazis netandita eraro: ";
-                    $("#referenco_error").html( msg + xhr.status + " " + xhr.statusText + xhr.responseText);
-                };
-                $("#referenco_error").show()  
-        })
-        .always(
-               function() {
-                   $("body").css("cursor", "default");
-                   response(results)
-               });
-               */
 }
 
-/*
-function referenco_sercho_select(event,ui) {
-    var item = ui.item;
-    var enhavo = item.num == "" ? item.kap : item.kap + "<sncref/>";
-    $( "#referenco_celo" ).val(item.mrk);
-    $( "#referenco_enhavo" ).val(enhavo)
-}
-*/
 
 function referenco_enmeti(event) {
     event.preventDefault();
-    $("#referenco_error").hide();
+    DOM.kaŝu("#referenco_error");
     //var refgrp = $( "#referenco_grp" ).is(':checked');
     var ref = Dialog.valoroj("#referenco_dlg");
 
@@ -1117,8 +959,7 @@ function referenco_enmeti(event) {
 
 function plenigu_ekzemplo_bib() {
     //$("body").css("cursor", "progress");
-    $.ricevu('../voko/biblist.xml',"#ekzemplo_error")
-     .done(
+    u.HTTPRequest('get','../voko/biblist.xml',{},
             function(data) {  
                 new Propon("#ekzemplo_bib", {
                     source: $("vrk",data).map(
@@ -1132,30 +973,17 @@ function plenigu_ekzemplo_bib() {
                             };
                         }).get()
                 });
-            });
-/*            
-        .fail (
-            function(xhr) {
-                console.error(xhr.status + " " + xhr.statusText);
-                if (xhr.status == 404) {
-                    $("#ekzemplo_error").html('Pardonu, la bibliografio ne troviĝis sur la servilo.')
-                } else {
-                    var msg = "Pardonu, okazis netandita eraro: ";
-                    $("#ekzemplo_error").html( msg + xhr.status + " " + xhr.statusText + xhr.responseText);
-                };
-                $("#ekzemplo_error").show()  
-        })
-        */
-//        .always(
-//               function() {
-//                  null; // $("body").css("cursor", "default");
-//               });
+            },
+            () => document.body.style.cursor = 'wait',
+            () => document.body.style.cursor = 'auto',
+            (msg: string) => Eraro.al("#ekzemplo_error",msg)
+        );
 }
 
 
 function ekzemplo_enmeti(event, nur_fnt) {
     event.preventDefault();
-    $("#ekzemplo_error").hide();
+    DOM.kaŝu("#ekzemplo_error");
 
     var values = Dialog.valoroj("#ekzemplo_dlg");
     var xmlstr = '';
@@ -1185,7 +1013,7 @@ function ekzemplo_enmeti(event, nur_fnt) {
 
 function bildo_enmeti(event, nur_fnt) {
     event.preventDefault();
-    $("#bildo_error").hide();
+    DOM.kaŝu("#bildo_error");
 
     let bld = Dialog.valoroj("#bildo_dlg");
     bld.lrg = DOM.v("#bildo_lrg input:checked") || 360;
@@ -1241,7 +1069,7 @@ function plenigu_derivajxojn() {
 
 function derivajho_enmeti(event) {
     event.preventDefault();
-    $("#derivajho_error").hide();
+    DOM.kaŝu("#derivajho_error");
 
     const xmlarea = Artikolo.xmlarea("#xml_text");    
         if (xmlarea) {
@@ -1277,7 +1105,7 @@ function derivajho_enmeti(event) {
 
 function senco_enmeti(event) {
     event.preventDefault();
-    $("#senco_error").hide();
+    DOM.kaŝu("#senco_error");
 
     var snc = Dialog.valoroj("#senco_dlg");
     const indent=2;
@@ -1309,20 +1137,13 @@ function plenigu_lingvojn() {
     var p_pref = $.get('revo_preflng').fail();
 
     // prenu la lingvoliston el lingvoj.xml
-    var p_lingvoj = $.ricevu('../voko/lingvoj.xml',"#traduko_error");
-    /*
-        $.get('../voko/lingvoj.xml')
-        .fail (
-            function(xhr) {
-                console.error(xhr.status + " " + xhr.statusText);
-                if (xhr.status == 404) {
-                    $("#traduko_error").html('Pardonu, la listo de lingvoj ne troviĝis sur la servilo.')
-                } else {
-                    var msg = "Pardonu, okazis netandita eraro: ";
-                    $("#traduko_error").html( msg + xhr.status + " " + xhr.statusText + xhr.responseText);
-                };
-        });
-        */
+    let p_lingvoj;
+    u.HTTPRequest('get','../voko/lingvoj.xml',{},
+        () => p_lingvoj = data,
+        () => document.body.style.cursor = 'wait',
+        () => document.body.style.cursor = 'auto',
+        (msg: string) =>  Eraro.al("#traduko_error",msg)
+    );
 
     $.when(p_pref,p_lingvoj)
          .done(
@@ -1380,14 +1201,14 @@ function plenigu_lingvojn() {
                             }
                         });
                 // $("#traduko_lingvoj").html(pref_lingvoj +  '<option disabled>────────────────────</option>' +lingvoj); 
-                $("#traduko_aliaj").before(pref_lingvoj);
-                $("#traduko_chiuj_a_b").append(lingvoj_a_b);
-                $("#traduko_chiuj_c_g").append(lingvoj_c_g);
-                $("#traduko_chiuj_h_j").append(lingvoj_h_j);
-                $("#traduko_chiuj_k_l").append(lingvoj_k_l);
-                $("#traduko_chiuj_m_o").append(lingvoj_m_o);
-                $("#traduko_chiuj_p_s").append(lingvoj_p_s);
-                $("#traduko_chiuj_t_z").append(lingvoj_t_z);
+                DOM.e("#traduko_aliaj")?.before(pref_lingvoj);
+                DOM.e("#traduko_chiuj_a_b")?.append(lingvoj_a_b);
+                DOM.e("#traduko_chiuj_c_g")?.append(lingvoj_c_g);
+                DOM.e("#traduko_chiuj_h_j")?.append(lingvoj_h_j);
+                DOM.e("#traduko_chiuj_k_l")?.append(lingvoj_k_l);
+                DOM.e("#traduko_chiuj_m_o")?.append(lingvoj_m_o);
+                DOM.e("#traduko_chiuj_p_s")?.append(lingvoj_p_s);
+                DOM.e("#traduko_chiuj_t_z")?.append(lingvoj_t_z);
                 Menu.refreŝigu("#traduko_menuo");
              }
         );

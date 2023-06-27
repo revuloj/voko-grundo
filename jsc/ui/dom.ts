@@ -78,6 +78,31 @@ export class DOM {
         return null
     }
 
+    static reago(e: Element|string, evento: string, reago: EventListenerOrEventListenerObject) {
+        const el = (typeof e === "string")? DOM.e(e) : e;
+        if (el) el.addEventListener(evento, reago);
+    }
+
+    static klak(e: Element|string, reago: EventListenerOrEventListenerObject) {
+        DOM.reago(e,"click",reago);
+    };
+
+    static klavpremo(e: Element|string, reago: EventListenerOrEventListenerObject) {
+        DOM.reago(e,"keypress",reago);
+    };
+
+    static klaveko(e: Element|string, reago: EventListenerOrEventListenerObject) {
+        DOM.reago(e,"keydown",reago);
+    };
+
+    static klavlaso(e: Element|string, reago: EventListenerOrEventListenerObject) {
+        DOM.reago(e,"keyup",reago);
+    };
+
+    static ŝanĝo(e: Element|string, reago: EventListenerOrEventListenerObject) {
+        DOM.reago(e,"change",reago);
+    };
+
     static forigu(e: Element|string) {
         const el = (typeof e === "string")? DOM.e(e) : e;
         if (el) el.remove();
