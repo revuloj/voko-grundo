@@ -11,7 +11,7 @@ import {artikolo} from '../a/artikolo';
 import {preferoj} from '../a/preferoj';
 
 import {Transiroj} from '../u/transiroj';
-import {Xlist} from '../x/xlisto';
+import {RevoListoj} from '../x/xlisto';
 
 import {Sercho, Lingvo, TrovEo, TrovTrd} from './sercho';
 import {redaktilo} from './redaktilo';
@@ -29,26 +29,19 @@ type SubmetoStato = "nov" | "trakt" | "erar" | "arkiv";
 type Submeto = { state: SubmetoStato, fname: string, desc: string, time: string, result: string };
 type Bibliogr = { bib: string, aut?: string, trd?: string, tit?: string, url?: string, ald?: string, eld?: string };
 
-// statoj kaj transiroj - ni uzas tri diversajn statomaŝinojn por la tri paĝoj navigilo, ĉefpago kaj redaktilo
-const t_nav  = new Transiroj("nav","start",["ĉefindekso","subindekso","serĉo","redaktilo"]);
-const t_main = new Transiroj("main","start",["titolo","artikolo","red_xml","red_rigardo"]);
-export const t_red  = new Transiroj("red","ne_redaktante",["ne_redaktante","redaktante","tradukante","sendita"]);
 
 // vd. https://mariusschulz.com/blog/declaring-global-variables-in-typescript
 // alternative oni povus uzi alnoton ty-ignore ne la malsupraj linioj kiuj uzas MathJax
 const MathJax = (window as any).MathJax;
 
 
-/**
- * Kodlistoj agorditaj por Reta Vortaro: lingvoj, fakoj, stiloj
- */
-export const revo_codes = {
-    lingvoj: new Xlist('lingvo', '/revo/cfg/lingvoj.xml'),
-    fakoj: new Xlist('fako','/revo/cfg/fakoj.xml'),
-    stiloj: new Xlist('stilo','/revo/cfg/stiloj.xml')
-};
-revo_codes.lingvoj.load();
-  
+// statoj kaj transiroj - ni uzas tri diversajn statomaŝinojn por la tri paĝoj navigilo, ĉefpago kaj redaktilo
+const t_nav  = new Transiroj("nav","start",["ĉefindekso","subindekso","serĉo","redaktilo"]);
+const t_main = new Transiroj("main","start",["titolo","artikolo","red_xml","red_rigardo"]);
+export const t_red  = new Transiroj("red","ne_redaktante",["ne_redaktante","redaktante","tradukante","sendita"]);
+
+const revo_listoj = new RevoListoj();
+ 
 
 /**
  * Helpofunkcio, por instali klak-reagojn
@@ -638,6 +631,8 @@ function load_page(trg: string, url: string, push_state: boolean=true, whenLoade
 
         if (filename && filename.startsWith("redaktmenu")) {
             redaktilo.preparu_menu(); // redaktilo-paĝo
+            redaktilo.revo_listoj = revo_listoj;
+            
             // butono por rezigni
             const rzg = document.getElementById("r:rezignu");
             if (rzg) rzg.addEventListener("click",function() {
@@ -1044,7 +1039,7 @@ function serchu_q(esprimo: string) {
 
             var div = u.ht_elements([
                 ["div",{},
-                    [["h1",{}, revo_codes.lingvoj.codes[lng]||lng ]]
+                    [["h1",{}, revo_listoj.lingvoj.codes[lng]||lng ]]
                 ]
             ])[0] as Element;
             var dl = u.ht_element("dl");

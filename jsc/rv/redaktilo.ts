@@ -15,7 +15,7 @@ import {XKlavaro} from '../x/xklavaro';
 
 import {artikolo} from '../a/artikolo';
 import {preferoj} from '../a/preferoj';
-import {revo_codes, t_red, start_wait, stop_wait} from './kadro';
+import {t_red, start_wait, stop_wait} from './kadro';
 import {Sercho, Lingvo} from './sercho';
 
 // vd. https://mariusschulz.com/blog/declaring-global-variables-in-typescript
@@ -32,6 +32,8 @@ export namespace redaktilo {
 
   let xmlarea: Xmlarea;  
   let xklavaro: XKlavaro;
+  export let revo_listoj: x.RevoListoj;
+
   var redakto = 'redakto'; // 'aldono' por nova artikolo
 
   const cgi_vokosubmx = '/cgi-bin/vokosubmx.pl';
@@ -595,7 +597,7 @@ export namespace redaktilo {
    */
   function kontrolu_kodojn(clist: x.ListNomo, regex: RegExp) {
     const xml = xmlarea.syncedXml(); //document.getElementById("r:xmltxt").value;
-    const list = revo_codes[clist];
+    const list = revo_listoj[clist];
     let m: RegExpExecArray; 
     let invalid = [];
 
@@ -1256,8 +1258,8 @@ export namespace redaktilo {
         },
         () => xmlarea.setUnsynced())
     }
-    xklavaro.indiko_klavoj(document.getElementById("r:klv_ind"),revo_codes.stiloj);
-    xklavaro.fako_klavoj(document.getElementById("r:klv_fak"),revo_codes.fakoj);
+    xklavaro.indiko_klavoj(document.getElementById("r:klv_ind"), revo_listoj.stiloj);
+    xklavaro.fako_klavoj(document.getElementById("r:klv_fak"), revo_listoj.fakoj);
     const klv_elm = document.getElementById("r:klv_elm");
     xklavaro.elemento_klavoj(klv_elm,klv_elm.textContent);
 
@@ -1450,7 +1452,7 @@ export namespace redaktilo {
                     // kun listo de tradukoj
                     function(lng: Lingvo, trd: string[], dt: Element, dd: Element) {
                       // lingvonomo
-                      const ln = revo_codes.lingvoj.codes[lng];
+                      const ln = revo_listoj.lingvoj.codes[lng];
 
                       // ni ne montras nekonatajn lingvojn, ĉar enmeto
                       // en la artikolon ne havas sencon aktuale...

@@ -7,6 +7,25 @@ import * as u from '../u';
 
 export type ListNomo = "lingvoj" | "fakoj" | "stiloj";
 
+
+/**
+ * Kodlistoj agorditaj por Reta Vortaro: lingvoj, fakoj, stiloj
+ */
+export class RevoListoj {
+  public lingvoj: Xlist;
+  public fakoj: Xlist;
+  public stiloj: Xlist;
+
+  constructor(url_path: string = '/revo/cfg') {
+    this.lingvoj = new Xlist('lingvo', url_path + '/lingvoj.xml'),
+    this.fakoj = new Xlist('fako',url_path + '/fakoj.xml'),
+    this.stiloj = new Xlist('stilo',url_path + '/stiloj.xml')
+
+    // antaŭŝargu
+    this.lingvoj.load();  
+  }
+}
+
 /**
  * Legas Revo-liston kiel lingvoj, fakoj, stiloj por montri 
  * elektilojn en la redaktilo kaj traduki lingvojn en la

@@ -6,6 +6,9 @@
 
 //x/ <reference types="@types/jqueryui/index.d.ts" />
 import { when_doc_ready } from '../x';
+
+import { Musnot } from '../ui';
+
 import menu_init from './ui_menu.js';
 import dlg_init from './ui_dlg.js';
 import tabl_init from './ui_tabl.js';
@@ -29,7 +32,7 @@ when_doc_ready(function () {
     dlg_init();
 
     // mus-notoj
-    $( document ).tooltip();
+    new Musnot(document);
     console.debug("La redaktilo estas laborpreta!");   
 });
 

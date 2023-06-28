@@ -33,12 +33,23 @@ type Reghimpremo = (e: Event, r: {cmd: Reghimo}) => void;
 console.debug("Instalante la klavarfunkciojn...");
 
 
-export function xpress(event) {
-    var key = event.key;
-    if (key == 'x' || key == 'X') {   // X or x
-        return xklavo(event.target,key);
+export function xpress(event: KeyboardEvent) {
+    const key = event.key;
+    const trg = event.target;
+    if (trg instanceof HTMLInputElement && (key == 'x' || key == 'X')) {   // X or x
+        return xklavo(trg,key);
     }
 }
+
+/**
+ * Kodlistoj agorditaj por Reta Vortaro: lingvoj, fakoj, stiloj
+ */
+export const revo_codes = {
+    lingvoj: new Xlist('lingvo', '/revo/cfg/lingvoj.xml'),
+    fakoj: new Xlist('fako','/revo/cfg/fakoj.xml'),
+    stiloj: new Xlist('stilo','/revo/cfg/stiloj.xml')
+};
+revo_codes.lingvoj.load();
 
 /*
     // Default options.
@@ -497,7 +508,7 @@ export class XKlavaro {
 
 function xklavo(el: HTMLInputElement, key: string) {
 
-    const cx1 = {
+    const cx1: any = {
         s: '\u015D',
         S: '\u015C',
         c: '\u0109',
@@ -512,7 +523,7 @@ function xklavo(el: HTMLInputElement, key: string) {
         J: '\u0134'
     };
 
-    const cx2 = {
+    const cx2: any = {
         '\u015D': 's',
         '\u015C': 'S',
         '\u0109': 'c',

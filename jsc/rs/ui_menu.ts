@@ -11,7 +11,7 @@
         rimarko_dialogo, homonimo_dialogo, datumprotekto_dialogo } from './ui_dlg.js';
         */
 
-import { Menu } from '../ui';
+import { Menu, Dialog } from '../ui';
 
 import { kontroli_artikolon, montri_indikojn } from './ui_tabl.js';
 import { surmetita_dialogo } from './ui_err.js';
@@ -42,48 +42,51 @@ export default function() {
 
 
 function menu_selected(event, ui) {
-    var id = ui.item.attr('id');
+    const id = ui.item.attr('id');
+    let dlg;
     switch (id) {
         case "nova_menu_item":
-            $("#krei_dlg").dialog("open");
+            Dialog.malfermu("#krei_dlg");
             break;            
         case "shargi_menu_item":
-            $("#shargi_dlg").dialog("open");
+            Dialog.malfermu("#shargi_dlg");
             break;
         case "lastaj_menu_item":
-            $("#lastaj_dlg").dialog("open");
+            Dialog.malfermu("#lastaj_dlg");
             break;
         case "sendiservile_menu_item":
-            $("#sendiservile_dlg").dialog("open");
+            Dialog.malfermu("#sendiservile_dlg");
             break;
         case "kontroli_menu_item":
             kontroli_artikolon();
             break;
         case "referenco_menu_item":
-            $("#referenco_dlg").dialog("option","enmetu_en",'xml_text');
-            $("#referenco_dlg").dialog("open");
+            dlg = Dialog.dialog("#referenco_dlg");
+            if (dlg) dlg.opcioj["enmetu_en"]='xml_text';
+            Dialog.malfermu("#referenco_dlg");
             break;
         case "ekzemplo_menu_item":
-            $("#ekzemplo_dlg").dialog("option","enmetu_en",'xml_text');
-            $("#ekzemplo_dlg").dialog("open");
+            dlg = Dialog.dialog("#ekzemplo_dlg");
+            if (dlg) dlg.opcioj["enmetu_en"]='xml_text';
+            Dialog.malfermu("#ekzemplo_dlg");
             break;      
         case "bildo_menu_item":
-            $("#bildo_dlg").dialog("open");
+            Dialog.malfermu("#bildo_dlg");
             break;      
         case "derivajho_menu_item":
-            $("#derivajho_dlg").dialog("open");
+            Dialog.malfermu("#derivajho_dlg");
             break;                 
         case "senco_menu_item":
-            $("#senco_dlg").dialog("open");
+            Dialog.malfermu("#senco_dlg");
             break;                 
        case "tradukoj_menu_item":
-            $("#traduko_dlg").dialog("open");
+            Dialog.malfermu("#traduko_dlg");
             break;            
         case "sxablono_menu_item":
-            $("#sxablono_dlg").dialog("open");
+            Dialog.malfermu("#sxablono_dlg");
             break;                 
         case "rimarko_menu_item":
-            $("#rimarko_dlg").dialog("open");
+            Dialog.malfermu("#rimarko_dlg");
             break;
         case "indiko_menu_item":
             montri_indikojn();

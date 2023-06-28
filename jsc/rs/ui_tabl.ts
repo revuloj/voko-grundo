@@ -9,9 +9,9 @@
 import * as u from '../u';
 import * as x from '../x';
 
-import { Xmlarea } from '../x';
+import { Xmlarea, RevoListoj } from '../x';
 import { ht_element } from '../u';
-import { DOM, Slip, Elektil, Eraro, Valid } from '../ui';
+import { DOM, Slip, Buton, Elektil, Eraro, Valid } from '../ui';
 
 import { Erarolisto } from './ui_err';
 import { artikolo } from '../a/artikolo';
@@ -31,6 +31,8 @@ declare global {
 }
 
 const revo_url = 'https://'+globalThis.revo_url; //reta-vortaro.de';
+
+const revo_listoj = new RevoListoj('../voko');
 
 //var sercho_focused_button = null;
 //var change_count = 0;
@@ -54,7 +56,7 @@ export default function() {
     // ni povus meti la klasojn rekte al CSS aŭ opcioj de objekto Slip
     const sl = DOM.e("#tabs");
     if (sl) {                    
-        sl.classList.add("ui-tabs-vertical ui-helper-clearfix");
+        sl.classList.add("ui-tabs-vertical","ui-helper-clearfix");
         sl.querySelector("ul")?.classList.add("ui-corner-all");
         slipoj.langetoj()?.forEach((l) => {
             const cl = l.classList;
@@ -63,12 +65,12 @@ export default function() {
         });    
     }
        
-    $(".menu_toggle").button();
-    $(".menu_toggle").click(
+    new Buton(".menu_toggle");
+    DOM.klak(".menu_toggle",
         () => {
-            const sb = DOM.e("#xml_sidebar");
-            sb.toggle();
-            if (sb.is(":visible")) {
+            const sb_videbla = ! DOM.kaŝita("#xml_sidebar");
+            DOM.kaŝu("#xml_sidebar",sb_videbla);
+            if (sb_videbla) {
                 DOM.al_t("#menu_show_btn","\u00ab");
             } else {
                 DOM.al_t("#menu_show_btn","\u2630");
@@ -91,7 +93,7 @@ export default function() {
             const xmlarea = Artikolo.artikolo("#xml_text")?.opcioj.xmlarea;
             if (xmlarea) {
                 const pos = xmlarea.position();
-                $("#position").text((1+pos.line)+":"+(1+pos.pos));    
+                DOM.al_t("#position",(1+pos.line)+":"+(1+pos.pos));    
             }
         },
         tekstŝanĝo: function() {
@@ -115,12 +117,12 @@ export default function() {
                 }
             },
             function(subt) { // reago al interna elektoŝanĝo: elektu ankaŭ en la listo art_strukturo
-                $("#art_strukturo option[value='"+subt.id+"']").prop('selected', true);
+                DOM.e("#art_strukturo option[value='"+subt.id+"']")?.setAttribute('selected','selected');
             }
         )        
     });
-    $("#xml_text").keypress(xpress);
-    $("#art_strukturo").on("change", function(event) {
+    DOM.klavpremo("#xml_text",x.xpress);
+    DOM.ŝanĝo("#art_strukturo", function(event) {
         const val = (event.target as HTMLInputElement).value;
     
         // tio renovigas la strukturon pro eblaj intertempaj snc-/drv-aldonoj ks...
@@ -136,9 +138,9 @@ export default function() {
         //show_pos();
     });
 
-    $("#kromklvr").button();
-    $("#kromklvr").click(() => {
-        const stato = $("#kromklvr").val() as string;
+    new Buton("#kromklvr");
+    DOM.klak("#kromklvr", () => {
+        const stato = DOM.v("#kromklvr")||0;
         const pressed = "" + (1 - +stato);
         DOM.al_v("#kromklvr",pressed);
         //$("#dock_klavaro").toggle()
@@ -184,14 +186,15 @@ export default function() {
     });
 
     // Helpo-butono
-    $( "#help_btn" ).button({});
-    $( "#help_btn" ).on( "click", function( event, ui ) {
-        window.open($("#help_btn > a").attr("href"));
+    new Buton( "#help_btn", {});
+    DOM.klak("#help_btn", function( event ) {
+        const href = DOM.e("#help_btn > a")?.getAttribute("href");
+        if (href) window.open(href);
     });
 
     // Adiaŭ-butono
-    $( "#logout_btn" ).button({});
-    $( "#logout_btn" ).on( "click", function( event, ui ) {
+    new Buton( "#logout_btn",{});
+    DOM.klak( "#logout_btn", function( event ) {
         location.href='../auth/logout';
     });
 
@@ -225,7 +228,7 @@ export default function() {
 
     // kromklavarbutonon kaŝu komence
     DOM.kaŝu("#kromklavaro");
-    $("#kromklavaro").click(function() {    
+    DOM.klak("#kromklavaro", function() {    
         switch_dock_klavaro_kontrolo();            
     });
 
@@ -243,30 +246,30 @@ export default function() {
     plenigu_elekto_indikoj();
     
   //### antaŭrigardo
-    $( "#re_antaurigardo" ).click(function() {
+    DOM.klak( "#re_antaurigardo", function() {
         const slip = Slip.montru("#tabs",1);
         //iru_al(pozicio_html);
         antaurigardo();
     });
 
     //### subpaĝo "serĉo"
-    $("#s_klasikaj").click("klasikaj",citaĵoSerĉo);
-    $("#s_elektitaj").click("elektitaj",citaĵoSerĉo);
+    DOM.ido_reago("#s_klasikaj","click","klasikaj",citaĵoSerĉo);
+    DOM.ido_reago("#s_elektitaj","click","elektitaj",citaĵoSerĉo);
 
-    $("#sercho_det_regexes").on("toggle",() => {
-        if (! $("#re_radiko").val()) {
+    DOM.reago("#sercho_det_regexes","toggle",() => {
+        if (! DOM.v("#re_radiko")) {
             const xmlarea = Artikolo.xmlarea("#xml_text");
             const rad = xmlarea?.getRadiko() || '';
             DOM.al_v("#re_radiko",rad);
         }
     });
-    $("#sercho_det_verklisto").on("toggle",verkoListo);
-    $("#sercho_verklisto button").click(verkElekto);
+    DOM.reago("#sercho_det_verklisto","toggle",verkoListo);
+    DOM.klak("#sercho_verklisto button",verkElekto);
     verkoPeriodo();
 
-    $("#s_vikipedio").click(vikiSerĉo);
-    $("#s_anaso").click(retoSerĉo);
-    $("#s_bildoj").click(bildoSerĉo);
+    DOM.klak("#s_vikipedio",vikiSerĉo);
+    DOM.klak("#s_anaso",retoSerĉo);
+    DOM.klak("#s_bildoj",bildoSerĉo);
 
     //$("#regexes input[type='button']").button();
     Elektil.kreu("#regexes input[type='radio']");
@@ -276,8 +279,8 @@ export default function() {
         () => $("#sercho_sercho")
             .val("\\b"+$("#sercho_sercho").val())
     );*/
-    $("#regexes input").click(regulEsprimo);
-    $("#re_radiko").on("input",regulEsprimo);
+    DOM.klak("#regexes input",regulEsprimo);
+    DOM.reago("#re_radiko","input",regulEsprimo);
 
     new x.XKlavaro("#sercho_butonoj","#sercho_sercho","#sercho_sercho",
         undefined,
@@ -288,8 +291,8 @@ export default function() {
         },
         undefined
     );
-    $("#sercho_sercho").keypress(xpress);
-    $("#re_radiko").keypress(xpress);
+    DOM.klavpremo("#sercho_sercho",x.xpress);
+    DOM.klavpremo("#re_radiko",x.xpress);
 
     DOM.kaŝu("#sercho_error");
     Valid.aldonu("#sercho_sercho",{
@@ -302,7 +305,7 @@ export default function() {
     });
 
     // ne plu funkcias? 
-    $(window).on("unload", function() { 
+    DOM.reago(window, "unload", function() { 
     //do_before_unload(() => {
         console.debug("sekurigante la aktualan XML-tekston...");
         const art = Artikolo.artikolo("#xml_text");
@@ -397,7 +400,7 @@ export function before_activate_tab(event,ui) {
         }
 
     } else if (old_p == "html" && new_p == "sercho") {
-        var selection = $("#rigardo").selection();
+        var selection = DOM.elekto("#rigardo")||''; // $("#rigardo").selection();
         if ( selection.length > 0 ) {
             DOM.al_v("#sercho_sercho",selection);
             DOM.e("#sercho_det_regexes")?.removeAttribute("open");
@@ -488,11 +491,15 @@ function antaurigardo() {
             function(data) {   
                 // ial elektilo "article" ne funkcias tie ĉi !?
                 //const article = $( data ).find( "article" );
-                const article = $(data).find("#s_artikolo").parent();
+                const article = data.querySelector("#s_artikolo").parentElement;
                 const footer = article.next();
 
                 //$("#rigardo").html(data);
-                $("#rigardo").empty().append(article).append(footer);
+                const rig = DOM.e("#rigardo");
+                if (rig) {
+                    rig.textContent = '';
+                    rig.append(article,footer);    
+                }
                 xmlarea.ar_in_sync = true;
                 xmlarea.saltu();
 
@@ -579,7 +586,7 @@ function antaurigardo() {
                 console.error(xhr.status + " " + xhr.statusText);
                 if (xhr.status == 400) {
                     // alert("Eraro dum transformado: " + xhr.responseText);
-                    $("#rigardo").html("<p>Eraro dum transformado:</p><pre>" 
+                    DOM.al_html("#rigardo","<p>Eraro dum transformado:</p><pre>" 
                         + x.quoteattr(xhr.responseText) + "</pre>");
                 } else {
                     /* PLIBONIGU: ĉe HTTP-500 verŝajne la seanco ne plu ekzistas,
@@ -609,7 +616,46 @@ function antaurigardo() {
 // FARENDA: ĉu ŝovi tion al ui_btn -> ui_klv
 function plenigu_elekto_indikoj() {
     //$("body").css("cursor", "progress");
-    
+
+    const klvr = DOM.e("#elekto_indikoj");
+    const xmltxt = DOM.e("#xml_text");
+    const xmlarea = Artikolo.xmlarea("#xml_text");
+
+    // PLIBONIGU: enkonduku apartajn elementojn span...
+    const klv_fak = klvr;
+    const klv_ind = klvr;
+
+    if (klvr && xmlarea) {
+        
+        // PLIBONIGU: tiu sama/simila kodo estas en rv/redaktilo,
+        // pli bone ŝovu ĝin al x/xklavar
+        // @ts-ignore
+        const xklavaro = new x.XKlavaro(klvr, null, xmltxt,
+            () => xmlarea.getRadiko(),
+            (event: Event, cmd) => { 
+                // PLIBONIGU: tion ni povas ankaŭ meti en xklavaro.js!
+                if (cmd.cmd == 'indiko') {
+                x.hide("r:klv_fak");
+                x.show("r:klv_ind");
+                x.hide("r:klv_elm");
+                } else if (cmd.cmd == 'fako') {
+                x.hide("r:klv_ind");
+                x.show("r:klv_fak");
+                x.hide("r:klv_elm");
+                } else if (cmd.cmd == 'klavaro') {
+                x.hide("r:klv_fak");
+                x.show("r:klv_elm");
+                x.hide("r:klv_ind");
+                }
+            },
+            () => xmlarea.setUnsynced()
+        );
+
+        if (klv_fak) xklavaro.fako_klavoj(klv_fak, revo_listoj.fakoj);
+        if (klv_ind) xklavaro.indiko_klavoj(klv_ind, revo_listoj.stiloj);
+    }
+
+/*    
     let get_stiloj; 
     u.HTTPRequest('get','../voko/stiloj.xml',{},
         (data) => get_stiloj = data,
@@ -617,20 +663,6 @@ function plenigu_elekto_indikoj() {
         () => document.body.style.cursor = 'auto',
         (msg: string) => Eraro.al("#elekto_indikoj",msg)
     );
-    /*
-      $.get('../voko/stiloj.xml')
-        .fail (
-            function(xhr) {
-                console.error(xhr.status + " " + xhr.statusText);
-                if (xhr.status == 404) {
-                    $("#elekto_indikoj").html('Pardonu, la listo de stiloj ne troviĝis sur la servilo.')
-                } else {
-                    var msg = "Pardonu, okazis netandita eraro: ";
-                    $("#elekto_indikoj").html( msg + xhr.status + " " + xhr.statusText + xhr.responseText);
-                };
-                //$("#referenco_error").show()  
-        });
-        */
     
     let get_fakoj;
     u.HTTPRequest('get','../voko/fakoj.xml',{},
@@ -639,28 +671,13 @@ function plenigu_elekto_indikoj() {
         () => document.body.style.cursor = 'auto',
         (msg: string) => Eraro.al("#elekto_indikoj",msg)
     );
-    /*
-      $.get('../voko/fakoj.xml')
-        .fail (
-            function(xhr) {
-                console.error(xhr.status + " " + xhr.statusText);
-                if (xhr.status == 404) {
-                    $("#elekto_indikoj").html('Pardonu, la listo de stiloj ne troviĝis sur la servilo.')
-                } else {
-                    var msg = "Pardonu, okazis netandita eraro: ";
-                    $("#elekto_indikoj").html( msg + xhr.status + " " + xhr.statusText + xhr.responseText);
-                };
-                //$("#referenco_error").show()  
-        });
-        */
     
     $.when(get_stiloj,get_fakoj)
      .done(
         function(stiloj_data,fakoj_data) {  
            var indikoj='';
             
-           indikoj += /*<div class='reghim_btn' data-cmd='fermu' title='kaŝu la klavaron'><span>kaŝu<br/>&#x2b07;&#xFE0E;</span></div>"
-                    +*/ "<div class='reghim_btn' data-cmd='klavaro' title='krom-klavaro'><span>&lt;&hellip;&gt;<br/>[&hellip;]</span></div>";
+           indikoj +=  "<div class='reghim_btn' data-cmd='klavaro' title='krom-klavaro'><span>&lt;&hellip;&gt;<br/>[&hellip;]</span></div>";
 
            
             stiloj_data.querySelectorAll("stilo").forEach(
@@ -718,9 +735,10 @@ function plenigu_elekto_indikoj() {
             
             DOM.al_html( "#elekto_indikoj",indikoj);
             
-            $( "#elekto_indikoj" ).on("click","div",indikon_enmeti);
+            DOM.ido_reago( "#elekto_indikoj" ,"click","div",indikon_enmeti);
             
         });
+        */
 }
 
 /**

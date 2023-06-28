@@ -11,8 +11,8 @@ declare global {
 }
 
 export class UIElement {
-    element: HTMLElement;
-    opcioj: any;
+    public element: HTMLElement;
+    public opcioj: any;
 
     static obj(element: HTMLElement|string) {
         let el: HTMLElement|null;
@@ -27,22 +27,14 @@ export class UIElement {
     }
 
     constructor(element: HTMLElement|string, opcioj: any) {
-        let el: HTMLElement|null;
-
-        if (typeof element === "string") {
-            el = document.querySelector(element) as HTMLElement;
-        } else {
-            el = element;
-        }
+        const el = (typeof element === "string")? document.querySelector(element) as HTMLElement : element;
 
         if (el) {
             this.element = el;
             el._uielement = this;
         }
 
-        for (let o in opcioj) {
-            this.opcioj[o] = opcioj[o];
-        }
+        this.opcioj = Object.assign({}, opcioj);
     };
 
     _on(handlers: any) {

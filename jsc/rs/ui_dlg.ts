@@ -10,7 +10,7 @@ import * as u from '../u';
 import * as x from '../x';
 
 import { xpress } from '../x';
-import { DOM, Dialog, Menu, Grup, Slip, Elektil, Propon, Valid, Eraro } from '../ui';
+import { DOM, Dialog, Menu, Grup, Slip, Buton, Elektil, Propon, Valid, Eraro } from '../ui';
 
 import { Artikolo } from './ui_art';
 import { Erarolisto } from './ui_err';
@@ -112,13 +112,13 @@ export default function() {
             // ni permesu ĝis 2 lastajn ŝanĝojn sen averti
             const cc = Artikolo.artikolo("#xml_text")?.change_count() || 0; 
             if (DOM.v("#xml_text") && cc > 2) {
-                $("#shargi_error").html("Averto: ankoraŭ ne senditaj ŝanĝoj en la nuna artikolo perdiĝos kreante novan.")
+                DOM.al_html("#shargi_error","Averto: ankoraŭ ne senditaj ŝanĝoj en la nuna artikolo perdiĝos kreante novan.")
                 DOM.kaŝu("#shargi_error",false);
             } else {
                 DOM.kaŝu("#shargi_error");
             }
 
-            $("#shargi_sercho").selectAll();
+            DOM.elektu("#shargi_sercho");
         }
     });
     DOM.klavpremo("#shargi_sercho",xpress);
@@ -159,13 +159,13 @@ export default function() {
                 click: function(event) {  
                     event.preventDefault();
                     if (! Valid.valida("#lastaj_dosiero")) return;
-                    if ($("#lastaj_dosiero").data("rezulto") != "eraro") {
+                    if (DOM.datum("#lastaj_dosiero","rezulto") != "eraro") {
                         DOM.al_t("#lastaj_error","Vi povas reredakti nur artikolojn, ĉe kiuj "
                         + "troviĝis eraro dum traktado de la redaktoservo.");
                         DOM.kaŝu("#lastaj_error",false);
                         return;
                     } else {
-                        var url = $("#lastaj_dosiero").data("url");
+                        var url = DOM.datum("#lastaj_dosiero","url");
                         var dos = DOM.v("#lastaj_dosiero");
                         download_url(url,dos,"#lastaj_error","#lastaj_dlg");
                         DOM.al_t("#dock_eraroj",'');
@@ -197,12 +197,14 @@ export default function() {
         },
         err_to: "#lastaj_error"
     });
-    $( "#lastaj_tabelo" ).on("click","td",lastaj_tabelo_premo);
+    DOM.ido_reago("#lastaj_tabelo","click","td",lastaj_tabelo_premo);
     DOM.klak("#lastaj_rigardu",
         function(event) {
             event.preventDefault();
-            var url = event.target.data("url");
-            window.open(url);
+            if (event.target instanceof Element) {
+                const url = DOM.datum(event.target,"url");
+                window.open(url);    
+            }
         });
 
 
@@ -502,8 +504,8 @@ export default function() {
         items: "> :not(.ui-widget-header)",
         select: shanghu_trd_lingvon
     });  
-    $( "#traduko_tabelo" ).on("blur","input",traduko_memoru_fokuson);
-    $( "#traduko_butonoj" ).on("click","div",traduko_butono_premo);
+    DOM.ido_reago("#traduko_tabelo","blur","input",traduko_memoru_fokuson);
+    DOM.ido_reago("#traduko_butonoj","click","div",traduko_butono_premo);
 
     //>>>>>>>> dialogo: Enmeti per ŝablono
     plenigu_sxablonojn();
@@ -705,9 +707,7 @@ function download_art(dosiero,err_to,dlg_id,do_close=true) {
         dosiero = dosiero.slice(0,-4);
     }
 
-    u.HTTPRequest('post',"revo_artikolo", {
-          data: { art: dosiero }
-      },
+    u.HTTPRequest('post',"revo_artikolo", { art: dosiero },
         function(data) {   
             if (data.slice(0,5) == '<?xml') {
                 const art = Artikolo.artikolo("#xml_text");
@@ -715,7 +715,7 @@ function download_art(dosiero,err_to,dlg_id,do_close=true) {
                 art?.load(dosiero,data);
                 DOM.al_v("#re_radiko",xmlarea?.getRadiko()||'');
                 // $("#collapse_outline").accordion("option","active",0);
-                $(err_to).hide();
+                DOM.kaŝu(err_to);
                 Slip.montru("#tabs",0);
                 
                 if (do_close) {
@@ -724,8 +724,7 @@ function download_art(dosiero,err_to,dlg_id,do_close=true) {
                     Dialog.dialog(dlg_id)?.faldu();
                 }
             } else {
-                var msg = "Okazis neatendita eraro: ";
-                $(err_to).html("Okazis eraro, supozeble necesas resaluti.");
+                Eraro.al(err_to,"Okazis eraro, supozeble necesas resaluti.");
             }
         },
         () => document.body.style.cursor = 'wait',
@@ -810,7 +809,7 @@ function sendi_artikolon_servile(event) {
                     Dialog.fermu("#sendiservile_dlg");
                     //$("#xml_text").val('');
                     xmlarea.setText('');
-                    $("#shargi_dlg input").val("");
+                    DOM.al_v("#shargi_dlg input","");
                 }
             },
             undefined,
@@ -854,8 +853,8 @@ function plenigu_referenco_listojn() {
             function(data) {  
                 var seen = {}; // evitu duoblaĵojn
                 new Propon("#referenco_listo", {
-                    source: $("kls",data).map(
-                        (i,e) => {
+                    source: data.querySelectorAll("kls").map(
+                        (e) => {
                             //console.log(this + " "+i+" "+e);
                             //console.log($(this).attr("nom"));
                             let nom = e.getAttribute("nom")?.split('#')[1];
@@ -950,7 +949,7 @@ function referenco_enmeti(event) {
     } else {
         DOM.al_t("#"+enmetu_en,refstr.trim());
     }
-    $("#"+enmetu_en).change();
+    DOM.evento("#"+enmetu_en,"change");
       
     // post refgrp venos nuda referenco sekvafoje...
     const dlg = Dialog.dialog("#referenco_dlg");
@@ -972,14 +971,14 @@ function plenigu_ekzemplo_bib() {
     u.HTTPRequest('get','../voko/biblist.xml',{},
             function(data) {  
                 new Propon("#ekzemplo_bib", {
-                    source: $("vrk",data).map(
-                        function(i,e) {
+                    source: data.querySelectorAll("vrk").map(
+                        (e: Element) => {
                             //console.log(this + " "+i+" "+e);
                             //console.debug($(this).children("bib").text() +  ": " + $(this).children("text").text());
                             return {
-                                value: $(this).children("bib").text(),
-                                label: $(this).children("text").text(),
-                                url: $(this).children("url").text()
+                                value: e.querySelector("bib")?.textContent,
+                                label: e.querySelector("text")?.textContent,
+                                url: e.querySelector("url")?.textContent
                             };
                         }).get()
                 });
@@ -1015,7 +1014,7 @@ function ekzemplo_enmeti(event, nur_fnt) {
     } else {
         DOM.al_t("#"+enmetu_en,xmlstr.trim());
     }
-    $("#"+enmetu_en).change();
+    DOM.evento("#"+enmetu_en,"change");
 
     Dialog.fermu("#ekzemplo_dlg");
 }
@@ -1149,15 +1148,17 @@ function plenigu_lingvojn() {
     // prenu la lingvoliston el lingvoj.xml
     let p_lingvoj;
     u.HTTPRequest('get','../voko/lingvoj.xml',{},
-        () => p_lingvoj = data,
+        (data) => p_lingvoj = data,
         () => document.body.style.cursor = 'wait',
         () => document.body.style.cursor = 'auto',
         (msg: string) =>  Eraro.al("#traduko_error",msg)
     );
 
-    $.when(p_pref,p_lingvoj)
-         .done(
-             function(pref_data,lingvoj_data) {
+    //$.when(p_pref,p_lingvoj)
+    // KOREKTU: tio provizore ne funkcios
+    Promise.all([p_pref,p_lingvoj])
+         .then(
+             function([pref_data,lingvoj_data]) {
 
                 //console.debug(pref_data);
                 var pref_lngoj = pref_data[0];
@@ -1173,26 +1174,19 @@ function plenigu_lingvojn() {
                 var pref_lingvoj = '';
 
                 // por ĉiu unuopa lingvo en lingvoj.xml post ordigo laŭ nomo
-                const lingvoj = $("lingvo",lingvoj_data) as any; // TS ne kapablas rekoni JQuery<T> kiel Array
+                const lingvoj = lingvoj_data.querySelectorAll("lingvo"); // TS ne kapablas rekoni JQuery<T> kiel Array
                     // kaj komplenas pri .sort - do ni artifike konvertas al "any"
-                lingvoj.sort(jsort_lng).each(
-                        function() {
-                            var kodo =$(this).attr('kodo');
+                lingvoj.sort(jsort_lng).forEach(
+                        function(l) {
+                            const kodo = l.getAttribute('kodo');
                             if (kodo != 'eo') {
-                                if ($.inArray(kodo, pref_lngoj) > -1) {
-                                    pref_lingvoj += '<li id="trd_pref_' + $(this).attr('kodo') + '"><div>' + $(this).text() + '</div></li>';
-                                    /*
-                                    if (kodo == preflng) {
-                                        pref_lingvoj += '<li id="trd_pref_' + $(this).attr('kodo') + '"><div>' + $(this).text() + '</div></li>';
-                                    } else {
-                                        pref_lingvoj += '<option value="' + $(this).attr('kodo') + '">' + $(this).text() + '</option>';
-                                    }
-                                    */
+                                if (pref_lngoj.indexOf(kodo) > -1) {
+                                    pref_lingvoj += '<li id="trd_pref_' + kodo + '"><div>' + l.textContent + '</div></li>';
                                     
                                 } // else {
-                                    var lnomo = $(this).text();
+                                    var lnomo = l.textContent;
                                     var letter = lnomo.charAt(0);
-                                    var lkodo = $(this).attr('kodo');
+                                    var lkodo = kodo;
                                     if (letter >= 'a' && letter <= 'b')
                                         lingvoj_a_b += '<li id="trd_chiuj_' + lkodo + '"><div>' + lnomo + '</div></li>';
                                     else if (letter >= 'c' && letter <= 'g' || letter == 'ĉ' || letter == 'ĝ')
@@ -1231,8 +1225,8 @@ function plenigu_lingvojn_artikolo() {
 
     var lng_nomoj = {};
     for (var kodo in x.traduk_lingvoj(xml)) {
-        const lnomo = $("#trd_chiuj_"+kodo).children('div').text();
-        lng_nomoj[lnomo] = kodo;
+        const lnomo = DOM.e("#trd_chiuj_"+kodo).querySelector('div').textContent;
+        if (lnomo) lng_nomoj[lnomo] = kodo;
     }
     var lingvoj = Object.keys(lng_nomoj).sort(sort_lng);
     var lingvoj_html = '';
@@ -1248,38 +1242,40 @@ function plenigu_lingvojn_artikolo() {
 }
 
 function traduko_memoru_fokuson(event) {
-    $("#traduko_dlg").data("last-focus",this.id);
+    DOM.al_datum("#traduko_dlg","last-focus",this.id);
 }
 
 function traduko_butono_premo(event) {
     ////var text = $(this).attr("data-btn");
-    var cmd = $(this).attr("data-cmd");
+    var cmd = event.target.getAttribute("data-cmd");
     //var form_element = $( document.activeElement );
-    var form_element_id = $("#traduko_dlg").data("last-focus")
+    var form_element_id = DOM.datum("#traduko_dlg","last-focus")
         .replace(/\./g,'\\\.')
         .replace(/\:/g,'\\\:') || '';
 
     if ( form_element_id ) {
-        var element = $("#" + form_element_id);
-        // var form_element = $("#ekzemplo_form input:focus");
-    //    if (text) {
-    //        element.insert(text);
-    //    } else 
-        var sel = element.textarea_selection();
-        var s_ = '';
-        if (cmd == "[]" || cmd == "()") {
-            s_ = sel || "\u2026";
-            s_ = ('<klr>' + ( sel[0] != cmd[0]? cmd[0]:"" ) 
-                + s_ + ( sel[sel.length-1] != cmd[1]? cmd[1]:"" ) +  '</klr>');
-        // elemento-klavo
-        } else {
-            s_ = sel || "\u2026";
-            s_ = ('<' + cmd + '>' + s_ + '</' + cmd + '>');
-        } 
+        const el = DOM.e("#" + form_element_id);
+        if (el instanceof HTMLInputElement) {
+            // var form_element = $("#ekzemplo_form input:focus");
+        //    if (text) {
+        //        element.insert(text);
+        //    } else 
+            var sel = DOM.elekto(el); // el.textarea_selection();
+            var s_ = '';
+            if (cmd == "[]" || cmd == "()") {
+                s_ = sel || "\u2026";
+                s_ = ('<klr>' + ( sel[0] != cmd[0]? cmd[0]:"" ) 
+                    + s_ + ( sel[sel.length-1] != cmd[1]? cmd[1]:"" ) +  '</klr>');
+            // elemento-klavo
+            } else {
+                s_ = sel || "\u2026";
+                s_ = ('<' + cmd + '>' + s_ + '</' + cmd + '>');
+            } 
 
-        element.insert(s_);
-        
-        trd_input_shanghita(element[0]);
+            DOM.enigu(el,s_);
+            
+            trd_input_shanghita(el[0]);
+        }
     }
 }
 
@@ -1323,8 +1319,8 @@ function sort_lng(at, bt){
 
 function fill_tradukojn(lng,lingvo_nomo) {
     // forigu antauajn eventojn por ne multobligi ilin...
-    $("#traduko_tradukoj").off("click");
-    $("#traduko_tradukoj").off("change");
+    DOM.malreago("#traduko_tradukoj","click");
+    DOM.malreago("#traduko_tradukoj","change");
     
     // ĉar la tradukdialogo montras samtempe ĉiam nur tradukojn de unu lingvo
     // ni kunfandas tiujn el la artikolo, kaj tiujn, kiuj jam estas
@@ -1387,7 +1383,7 @@ function fill_tradukojn(lng,lingvo_nomo) {
     //} // if trdj
 
         DOM.al_t("#traduko_lingvo",lingvo_nomo +" ["+lng+"]");
-        $("#traduko_dlg").data("lng",lng);
+        DOM.al_datum("#traduko_dlg","lng",lng);
         DOM.al_t("#traduko_tradukoj",'');
 
         // enigu traduko-kampojn
@@ -1396,7 +1392,7 @@ function fill_tradukojn(lng,lingvo_nomo) {
     
 
     // rimarku ĉiujn ŝanĝojn de unuopaj elementoj
-    $("#traduko_tradukoj").on("change","input", trd_shanghita);
+    DOM.ido_reago("#traduko_tradukoj","change","input", trd_shanghita);
 }
 
 function trd_shanghita() {
@@ -1405,7 +1401,7 @@ function trd_shanghita() {
 
 function trd_input_shanghita(element) {
     const sid = element.id.split(':')[1];
-    const lng = $("#traduko_dlg").data("lng");
+    const lng = DOM.datum("#traduko_dlg","lng");
 
     const xmlarea = Artikolo.xmlarea("#xml_text");
     const xmltrad = xmlarea?.xmltrad;   
@@ -1462,7 +1458,7 @@ function shanghu_trd_lingvon(event,ui) {
         //alert($("#traduko_lingvoj").val())
         fill_tradukojn(lng,lingvo_nomo);
     }
-    $("#traduko_dlg").data("last-focus",'');
+    DOM.al_datum("#traduko_dlg","last-focus",'');
 }
 
 // enmetu ŝanĝitajn kaj aldonitajn tradukojn en la XML-artikolon
@@ -1490,11 +1486,11 @@ function plenigu_sxablonojn() {
 }
 
 function kiam_elektis_sxablonon(event) {
-    var sxbl = $("#sxablono_elekto").val() as string;
+    var sxbl = DOM.v("#sxablono_elekto");
     DOM.al_t("#sxablono_xml",'');
-    $("#sxablono_xml").off("keypress");
-    $("#sxablono_xml").off("click");
-    DOM.e("#sxablono_xml")?.append(new SncŜablono(sxbl).html());
+    DOM.malreago("#sxablono_xml","keypress");
+    DOM.malreago("#sxablono_xml","click");
+    DOM.e("#sxablono_xml")?.append(new SncŜablono(sxbl as string).html());
     /*
     var lines = new SncŜablono(sxbl).form().split('\n');
     for (var i=0; i<lines.length; i++) {
@@ -1557,12 +1553,27 @@ function sxablono_span_click(event) {
 
 function sxablono_enmeti(event) {
     //$("#xml_text").insert($("#sxablono_xml").val());
+
+    function form_text(e): string {
+        var all_text = '';
+        e.childNodes.forEach((c) => {
+            if ( c.nodeType === 3 ) {
+               all_text += this.textContent;
+            } else if ( c instanceof HTMLInputElement && c.tagName == 'INPUT' ) {
+               all_text += c.value;
+            } else if ( c.nodeType === 1 ) {
+               all_text += form_text(c);
+            }
+        });
+        return all_text;
+    }
+
     let text = '';
     DOM.ej("#sxablono_xml pre").forEach( (pre) => {
         //var cb = $(this).children("input[type='checkbox']");
         //if (cb.length == 0 || cb.prop('checked'))
         if ((pre as HTMLElement).style["text-decoration-line"] != "line-through") {
-            text += pre.form_text() + "\n";
+            text += form_text(pre) + "\n";
         }
     });
 
@@ -1613,7 +1624,7 @@ function plenigu_lastaj_liston() {
                 }
                 
                 DOM.al_html("#lastaj_listo",listo);
-                $("#lastaj_listo").data("detaloj",data);
+                DOM.al_datum("#lastaj_listo","detaloj",data);
             }
 
             // adaptu altecon de la dialogo, por ke la listo ruliĝu sed la titolo kaj reir-butono montriĝu...
@@ -1632,18 +1643,18 @@ function plenigu_lastaj_liston() {
 function lastaj_tabelo_premo(event) {
     event.preventDefault();
     const id = event.target.parentElement.id;
-    const dtl = $("#lastaj_listo").data("detaloj");
-    const entry = dtl.filter(function(e) { if (e.id == id) return e; });
+    const dtl = DOM.datum("#lastaj_listo","detaloj");
+    let entry = dtl.filter(function(e) { if (e.id == id) return e; });
     if (entry) {
         entry = entry[0];
         DOM.al_v("#lastaj_dosiero",entry.name);
-        $("#lastaj_dosiero").data("url",entry.xml_url);
-        $("#lastaj_rigardu").data("url",entry.html_url);
-        $("#lastaj_dosiero").data("rezulto",entry.rezulto);
+        DOM.al_datum("#lastaj_dosiero","url",entry.xml_url);
+        DOM.al_datum("#lastaj_rigardu","url",entry.html_url);
+        DOM.al_datum("#lastaj_dosiero","rezulto",entry.rezulto);
         if (entry.rezulto == 'eraro') {
-            $("#lastaj_reredakti").button("enable");
+            Buton.aktiva("#lastaj_reredakti",true);
         } else {
-            $("#lastaj_reredakti").button("disable");
+            Buton.aktiva("#lastaj_reredakti",false);
         }
         DOM.al_v("#lastaj_mesagho",'');
         if (entry.rez_url) {

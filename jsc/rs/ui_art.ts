@@ -4,37 +4,6 @@
  laŭ GPL 2.0
 */
 
-//x/ <reference types="@types/jqueryui/index.d.ts" />
-
-/*
-declare global {
-    interface JQuery {
-        Artikolo(opcioj?: any);
-        Artikolo(methodName: "nova", opcioj?: any): JQuery;
-        Artikolo(methodName: "load", dosiero: string, data: string): JQuery;
-        Artikolo(methodName: "change_count", count?: number): number;
-        Artikolo(methodName: "option", opcio: string): any;
-        Artikolo(methodName: "insert", xmlstr: string, sync?: boolean);
-        Artikolo(methodName: "insert_post", xmlstr: string, s_id: string);
-        Artikolo(methodName: "tradukoj", lng: string);
-        Artikolo(methodName: "enmetu_tradukojn");
-        Artikolo(methodName: "art_drv_mrk");
-        Artikolo(methodName: "drv_before_cursor");
-        Artikolo(methodName: "drv_markoj");
-        Artikolo(methodName: "snc_sen_mrk");
-        Artikolo(methodName: "klr_ppp"): {[pos: number]: string};
-        Artikolo(methodName: "markoj");
-        Artikolo(methodName: "backup");
-        Artikolo(methodName: "restore");
-        Artikolo(methodName: "plain_text", line_numbers: boolean);
-        Artikolo(methodName: "lines_as_dict", xml?: string):  {[lin: number]: string};
-        Artikolo(methodName: "goto");
-        Artikolo(methodName: "elekto", ins: string, elektita: string);
-        Artikolo(methodName: "elekto_menuo");
-
-    }
-}
-*/
 
 import * as x from '../x';
 import { Xmlarea } from '../x';
@@ -97,7 +66,7 @@ export class Artikolo extends UIElement {
         _ent: new RegExp('&([a-zA-Z0-9_]+);','g')
     };
 
-    opcioj: {
+    static _opcioj: {
         xmlarea: Xmlarea,
         dosiero: '',
         reĝimo: 'redakto'|'aldono', // ĉe novaj artikoloj 'aldono'   
@@ -119,6 +88,8 @@ export class Artikolo extends UIElement {
 
     constructor(element: HTMLElement|string, opcioj: any) {
         super(element, opcioj);
+
+        this.opcioj = Object.assign(this.opcioj,Artikolo._opcioj,opcioj);
 
         this.restore();
         this._change_count = 0;
