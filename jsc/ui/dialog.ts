@@ -9,7 +9,7 @@ import { UIElement } from './uielement';
 export class Dialog extends UIElement {
     //valoroj: any;
 
-    opcioj: {
+    static _default: {
         kampoj: {},
         /*
         autoOpen: false,
@@ -50,6 +50,10 @@ export class Dialog extends UIElement {
 
     constructor(element: HTMLDialogElement|string, opcioj: any) {
         super(element, opcioj);
+
+        this.opcioj = Object.assign(this.opcioj,Dialog._default,opcioj);
+        // evtl. kaŝu
+        if (this.element.tagName != "dialog") DOM.kaŝu(this.element);
     }
 
     malfermu() {
