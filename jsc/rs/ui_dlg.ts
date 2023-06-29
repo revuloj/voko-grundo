@@ -1177,25 +1177,34 @@ function senco_enmeti(event) {
 // aldonu kompletan lingvoliston kaj preferatajn lingvojn al traduko-dialogo
 function plenigu_lingvojn() {
     // @ts-ignore .fail() volas almenaŭ unu argumenton, sed ni rifuzas provizore...
-    var p_pref = $.get('revo_preflng').fail();
+    let p_pref = new Promise((resolve, reject) => { 
+        u.HTTPRequest('get','revo_preflng',{},
+            (data) => resolve(data),
+            () => document.body.style.cursor = 'wait',
+            () => document.body.style.cursor = 'auto',
+            (msg: string) =>  Eraro.al("#traduko_error",msg)
+        )
+    });
 
     // prenu la lingvoliston el lingvoj.xml
-    let p_lingvoj;
-    u.HTTPRequest('get','../voko/lingvoj.xml',{},
-        (data) => p_lingvoj = data,
-        () => document.body.style.cursor = 'wait',
-        () => document.body.style.cursor = 'auto',
-        (msg: string) =>  Eraro.al("#traduko_error",msg)
-    );
+    let p_lingvoj = new Promise((resolve, reject) => { 
+        u.HTTPRequest('get','../voko/lingvoj.xml',{},
+            (data) => resolve(data),
+            () => document.body.style.cursor = 'wait',
+            () => document.body.style.cursor = 'auto',
+            (msg: string) =>  Eraro.al("#traduko_error",msg)
+        )
+    });
 
     //$.when(p_pref,p_lingvoj)
     // KOREKTU: tio provizore ne funkcios
     Promise.all([p_pref,p_lingvoj])
          .then(
-             function([pref_data,lingvoj_data]) {
+             function(rezultoj) {
+                const pref_lngoj = JSON.parse(rezultoj[0] as string);
+                const lingvoj_data = rezultoj[1] as string;
 
                 //console.debug(pref_data);
-                var pref_lngoj = pref_data[0];
                 globalThis.preflng = pref_lngoj[0] || 'en'; // globala variablo (ui_kreo)
                  
                 var lingvoj_a_b = '';
@@ -1321,8 +1330,8 @@ function jsort_lng(a, b){
    // try { // 2017-06: tio ankoraŭ ne bone funkcias, ekz. en Chromium "c" venos antaŭ "ĝ" ...?
     //    $(a).text().localeCompare($(b).text(), "eo"); 
     //} catch (e) {
-        var at = DOM.t(a)||'';
-        var bt = DOM.t(b)||'';
+        var at = a.textContent||'';
+        var bt = b.textContent||'';
         var pos = 0,
           min = Math.min(at.length, bt.length);
         // ne perfekte sed pli bone ol ĉ, ĝ ... tute ĉe la fino...
