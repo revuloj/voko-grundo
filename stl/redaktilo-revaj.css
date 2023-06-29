@@ -352,7 +352,10 @@ fieldset legend {
 
 dialog {
     width: min-content;
-    background-color: var(--main-bgr-clr);
+    color: var(--main-fnt-clr) !important;
+    background-color: var(--ovr-bgr-clr);
+    border: 2px dotted var(--ovr-brd-clr);
+    box-shadow: 5px 5px 10px;
     z-index: 200;
     margin-top: 4em;
     padding: .1em;
