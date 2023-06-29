@@ -331,7 +331,10 @@ export default function() {
         }
     });  
     plenigu_ekzemplo_bib();
-    new x.XKlavaro("#ekzemplo_butonoj","#ekzemplo_dlg","#xml_text",
+
+    klv = DOM.e("#ekzemplo_butonoj");
+    if (klv) {
+      const xklv = new x.XKlavaro("#ekzemplo_butonoj","#ekzemplo_dlg","#xml_text",
         undefined, 
         function(event,ui) {
             if (ui.cmd == "blankigo") {
@@ -340,6 +343,8 @@ export default function() {
             }
         },
         undefined);
+      xklv.elemento_klavoj(klv);
+    }
 
     DOM.klavpremo("#ekzemplo_frazo",xpress);
     DOM.klavpremo("#ekzemplo_bib",xpress);
@@ -385,7 +390,10 @@ export default function() {
 
     Elektil.kreu("#bildo_lrg input");
     new Grup("#bildo_lrg");
-    new x.XKlavaro("#bildo_butonoj","#bildo_dlg","#bildo_frazo",
+
+    klv = DOM.e("#bildo_butonoj");
+    if (klv) {
+      const xklv = new x.XKlavaro("#bildo_butonoj","#bildo_dlg","#bildo_frazo",
         undefined,
         function(event,ui) {
             if (ui.cmd == "blankigo") {
@@ -394,6 +402,8 @@ export default function() {
             }
         },
         undefined);
+      xklv.elemento_klavoj(klv);
+    }
     DOM.klavpremo("#bildo_frazo",xpress);
 
     ///>>>>>>>> dialogo: Enmeti derivaĵon
@@ -414,7 +424,10 @@ export default function() {
             this.faldu(false); // necesas, se la dialogo estis fermita en faldita stato...
         }
     });
-    new x.XKlavaro("#derivajho_butonoj","#derivajho_dlg","#derivajho_dif",
+
+    klv = DOM.e("#derivajho_butonoj");
+    if (klv) {
+      const xklv = new x.XKlavaro("#derivajho_butonoj","#derivajho_dlg","#derivajho_dif",
         undefined,
         function(event,ui) {
             if (ui.cmd == "blankigo") {
@@ -423,6 +436,8 @@ export default function() {
             }
         },
         undefined);
+      xklv.elemento_klavoj(klv);
+    }
     /*
     $("#derivajho_butonoj").Klavaro({
         artikolo: $("#xml_text"),
@@ -455,7 +470,10 @@ export default function() {
             this.faldu(false); // necesas, se la dialogo estis fermita en faldita stato...
         }
     });
-    new x.XKlavaro("#senco_butonoj","#senco_dlg","#senco_dif",
+
+    klv = DOM.e("#senco_butonoj");
+    if (klv) {
+      const xklv = new x.XKlavaro("#senco_butonoj","#senco_dlg","#senco_dif",
         undefined,
         function(event,ui) {
             if (ui.cmd == "blankigo") {
@@ -463,7 +481,9 @@ export default function() {
                 DOM.al_v("#senco_dif","");
             }
         },
-        undefined)
+        undefined);
+      xklv.elemento_klavoj(klv);
+    }
     /*
     $( "#senco_butonoj").Klavaro({
         artikolo: $("#xml_text"),
@@ -565,7 +585,10 @@ export default function() {
             this.faldu(false); // necesas, se la dialogo estis fermita en faldita stato...
         }
     });
-    new x.XKlavaro("#rimarko_butonoj","#riarko_dlg","#rimarko_rim",
+
+    klv = DOM.e("#rimarko_butonoj");
+    if (klv) {
+      const xklv = new x.XKlavaro("#rimarko_butonoj","#riarko_dlg","#rimarko_rim",
         undefined,
         function(event,ui) {
             if (ui.cmd == "blankigo") {
@@ -573,7 +596,9 @@ export default function() {
                 DOM.al_v("#rimarko_rim","");
             }
         },
-        undefined)
+        undefined);
+      xklv.elemento_klavoj(klv);
+    }
     /*
     $( "#rimarko_butonoj").Klavaro({
         artikolo: $("#xml_text"),
