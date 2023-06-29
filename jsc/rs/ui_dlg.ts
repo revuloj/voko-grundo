@@ -71,7 +71,7 @@ export default function() {
     klv = DOM.e("#krei_butonoj");
     if (klv) {
       const xklv = new x.XKlavaro("#krei_butonoj","krei_dlg","#krei_dif",
-        undefined, // kiuradiko, provizore redonu stultaĵon
+        () => Artikolo.xmlarea("#xml_text").getRadiko(), 
         function(event,ui) {
             if (ui.cmd == "blankigo") {
                 DOM.al_v("#krei_dlg input","");
@@ -335,8 +335,8 @@ export default function() {
     klv = DOM.e("#ekzemplo_butonoj");
     if (klv) {
       const xklv = new x.XKlavaro("#ekzemplo_butonoj","#ekzemplo_dlg","#xml_text",
-        undefined, 
-        function(event,ui) {
+      () => Artikolo.xmlarea("#xml_text").getRadiko(), 
+      function(event,ui) {
             if (ui.cmd == "blankigo") {
                 DOM.al_v("#ekzemplo_dlg input","");
                 DOM.al_v("#ekzemplo_frazo","");
@@ -394,8 +394,8 @@ export default function() {
     klv = DOM.e("#bildo_butonoj");
     if (klv) {
       const xklv = new x.XKlavaro("#bildo_butonoj","#bildo_dlg","#bildo_frazo",
-        undefined,
-        function(event,ui) {
+      () => Artikolo.xmlarea("#xml_text").getRadiko(), 
+      function(event,ui) {
             if (ui.cmd == "blankigo") {
                 DOM.al_v("#bildo_dlg input[type!='radio']","");
                 DOM.al_v("#bildo_frazo","");
@@ -428,8 +428,8 @@ export default function() {
     klv = DOM.e("#derivajho_butonoj");
     if (klv) {
       const xklv = new x.XKlavaro("#derivajho_butonoj","#derivajho_dlg","#derivajho_dif",
-        undefined,
-        function(event,ui) {
+      () => Artikolo.xmlarea("#xml_text").getRadiko(), 
+      function(event,ui) {
             if (ui.cmd == "blankigo") {
                 DOM.al_v("#derivajho_dlg input","");
                 DOM.al_v("#derivajho_dif","");
@@ -474,8 +474,8 @@ export default function() {
     klv = DOM.e("#senco_butonoj");
     if (klv) {
       const xklv = new x.XKlavaro("#senco_butonoj","#senco_dlg","#senco_dif",
-        undefined,
-        function(event,ui) {
+      () => Artikolo.xmlarea("#xml_text").getRadiko(), 
+      function(event,ui) {
             if (ui.cmd == "blankigo") {
                 DOM.al_v("#senco_dlg input","");
                 DOM.al_v("#senco_dif","");
@@ -547,7 +547,9 @@ export default function() {
             this.faldu(false); // necesas, se la dialogo estis fermita en faldita stato...
         }
     });
-    new x.XKlavaro("#sxablono_butonoj","#sxablono_dlg",'', undefined, undefined, undefined);
+    new x.XKlavaro("#sxablono_butonoj","#sxablono_dlg",'',         
+        () => Artikolo.xmlarea("#xml_text").getRadiko(), 
+        undefined, undefined);
     /*
     $( "#sxablono_butonoj").Klavaro({
         artikolo: $("#xml_text"),
