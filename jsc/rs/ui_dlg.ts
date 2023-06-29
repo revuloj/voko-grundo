@@ -263,7 +263,7 @@ export default function() {
         malfermu: function() {
             DOM.kaŝu("#referenco_error");
             this.faldu(false); // necesas, se la dialogo estis fermita en faldita stato...
-            // se io estas elektita jam serĉu
+            // se io estas elektita, jam serĉu
             var sel = Artikolo.xmlarea("#xml_text")?.selection();
             if (sel) {
                 DOM.al_v("#referenco_celo",'');

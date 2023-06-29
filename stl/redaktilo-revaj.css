@@ -388,6 +388,10 @@ dialog .butonujo {
     gap: .5em;
 }
 
+dialog .butonujo button {
+    white-space: nowrap;
+}
+
 #tabs {
     display: flex; 
     flex-direction: row-reverse;

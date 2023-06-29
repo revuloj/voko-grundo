@@ -52,6 +52,8 @@ export class Dialog extends UIElement {
         if (d instanceof Dialog) d.malfermu();
     }
 
+    public faldita: boolean = false;
+
     constructor(element: HTMLDialogElement|string, opcioj: any) {
         super(element, opcioj);
 
@@ -132,6 +134,8 @@ export class Dialog extends UIElement {
         Array.from(el.getElementsByClassName(Dialog.faldebla_klaso)).forEach((f) => {
             DOM.kaŝu(f, faldita);
         });
+
+        this.faldita = faldita;
         
             /*
         if (faldita) {
@@ -155,7 +159,7 @@ export class Dialog extends UIElement {
     };
 
     refaldu() {
-        this.faldu(DOM.kaŝita(this.element));
+        this.faldu(!this.faldita);
     }
 
     /*

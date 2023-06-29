@@ -43,10 +43,18 @@ export class UIElement {
         }
     };
 
+    /**
+     * Trovas reagon en opcioj kaj vokas la koncernan funkcion
+     * @param evnomo 
+     * @param ev 
+     * @param extra 
+     */
     _trigger(evnomo: string, ev?: Event, extra?: any) {
-        if (!ev) 
-            ev = new Event(evnomo, {'bubbles': true});
-        this.element.dispatchEvent(ev); // +extra ?
+        if (evnomo in this.opcioj) {
+            const reago = this.opcioj[evnomo];
+            if (reago instanceof Function)
+                reago.call(this,ev,extra);
+        }
     }
     
 
