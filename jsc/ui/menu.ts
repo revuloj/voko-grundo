@@ -7,8 +7,12 @@ import { UIElement } from './uielement';
 
 export class Menu extends UIElement {
     //valoroj: any;
+    static menu_item_class = "ui-menu-item";
 
-    opcioj: { }
+    static _default: {
+        eroj: "li",
+        reago: undefined
+     }
 
     static menu(element: HTMLElement|string) {
         const m = super.obj(element);
@@ -22,9 +26,17 @@ export class Menu extends UIElement {
 
     constructor(element: HTMLElement|string, opcioj: any) {
         super(element, opcioj);
+
+        this.opcioj = Object.assign(this.opcioj,Menu._default,opcioj)
+
+        // preparu la menuerojn
+        this.element.querySelectorAll(this.opcioj.eroj).forEach((i) => {
+            i.classList.add(Menu.menu_item_class);
+            i.addEventListener("click",this.opcioj.reago);
+        });
     }
 
     refreŝigu() {
-        throw "Menu.refreŝigu: Ne jam implementita!"
+        console.error("Menu.refreŝigu: Ne jam implementita!");
     }
 }

@@ -21,9 +21,9 @@ import tabl_init from './ui_tabl.js';
 // ŝovita al global.js
 // var preflng='en';
 
-console.debug("Instalante la enirfunkcion...");
 
 when_doc_ready(function () {
+    console.debug("Instalante la enirfunkcion...");
        
     // prepari la redaktilo-aranĝon
     console.debug("Preparante la redaktilon...");

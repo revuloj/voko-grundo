@@ -12,6 +12,7 @@ import * as x from '../x';
 import { xpress } from '../x';
 import { DOM, Dialog, Menu, Grup, Slip, Buton, Elektil, Propon, Valid, Eraro } from '../ui';
 
+import * as sbl from './sxablonoj';
 import { Artikolo } from './ui_art';
 import { Erarolisto } from './ui_err';
 
@@ -24,12 +25,13 @@ import { show_error_status, surmetita_dialogo } from './ui_err.js';
 type NovaArt = { dos: string, rad: string, fin: string, dif: string };
 //type ShargArt = { dosiero: string };
 
-// aldonu al jQuery UI dialog proprajn metodojn
-// bezonatajn en la redaktilaj dialogoj
-console.debug("Instalante la dialogfunkciojn...");
 
-
+/**
+ * Preparas ĉiujn dialogojn
+ */
 export default function() {
+    console.debug("Instalante la dialogfunkciojn...");
+    let klv: Element|null;
     
     //>>>>>>>> dialogo: Nova artikolo
     new Dialog("#krei_dlg", {
@@ -39,7 +41,7 @@ export default function() {
             fin: "#krei_fin",
             dif: "#krei_dif"    
         },
-        buttons: { 
+        butonoj: { 
             "Krei": function() { 
                 const dlg = Dialog.dialog("#krei_dlg");
                 if (dlg) {
@@ -53,7 +55,7 @@ export default function() {
             },
             "\u2718": function() { this.fermu(); }
         },
-        open: function() {
+        malfermu: function() {
             // ĉar tiu change_count ankaŭ sen vera ŝanĝo altiĝas, 
             // ni permesu ĝis 2 lastajn ŝanĝojn sen averti
             const cc = Artikolo.artikolo("#xml_text")?.change_count();
@@ -65,7 +67,10 @@ export default function() {
             }
         }
     });
-    new x.XKlavaro("#krei_butonoj","krei_dlg","#krei_dif",
+
+    klv = DOM.e("#krei_butonoj");
+    if (klv) {
+      const xklv = new x.XKlavaro("#krei_butonoj","krei_dlg","#krei_dif",
         undefined, // kiuradiko, provizore redonu stultaĵon
         function(event,ui) {
             if (ui.cmd == "blankigo") {
@@ -74,6 +79,8 @@ export default function() {
             }
         },
         undefined); // postenmeto
+      xklv.elemento_klavoj(klv);
+    };
         /*
     $( "#krei_butonoj").Klavaro({
         artikolo: $("#xml_text"),
@@ -95,7 +102,7 @@ export default function() {
         kampoj: {
             dosiero: "#shargi_dosiero"
         },
-        buttons: {
+        butonoj: {
             "Ŝargi": function(event) { 
                 event.preventDefault();
                 if (! Valid.valida("#shargi_dosiero")) return;
@@ -107,7 +114,7 @@ export default function() {
             },
             "\u2718": function() { this.fermu(); } 
         },
-        open: function() {
+        malfermu: function() {
             // ĉar tiu change_count ankaŭ sen vera ŝanĝo altiĝas, 
             // ni permesu ĝis 2 lastajn ŝanĝojn sen averti
             const cc = Artikolo.artikolo("#xml_text")?.change_count() || 0; 
@@ -151,7 +158,7 @@ export default function() {
             dosiero: "#lastaj_mesagho",
         },
         position: { my: "top", at: "top+10", of: window },
-        buttons: [
+        butonoj: [
             { 
                 text: "Reredakti",
                 id: "lastaj_reredakti",
@@ -183,7 +190,7 @@ export default function() {
                 click: function() { this.fermu(); }
             }
         ], 
-        open: function() {
+        malfermu: function() {
             //this.faldu(false); // necesas, se la dialogo estis fermita en faldita stato...
             Dialog.dialog("#lastaj_dlg")?.faldu(false);
             plenigu_lastaj_liston();            
@@ -210,12 +217,12 @@ export default function() {
 
     //>>>>>>>> dialogo: Artikolon sendi tra servilo
     new Dialog("#sendiservile_dlg", {
-        buttons: { 
+        butonoj: { 
             "Submeti": sendi_artikolon_servile,
             "(Sendi)": sendi_artikolon_servile,
             "\u2718": function() { this.fermu(); }
         }, 
-        open: function() {
+        malfermu: function() {
             DOM.kaŝu("#sendiservile_error");
             const art = Artikolo.artikolo("#xml_text");
             const komt = DOM.i("#sendiservile_komento");
@@ -248,12 +255,12 @@ export default function() {
             lst: "#referenco_listo",
             enh: "#referenco_enhavo"
         },
-        buttons: { 
+        butonoj: { 
             "Enmeti la referencon": referenco_enmeti,
             "\u25f1": function() { this.refaldu() ;},
             "\u2718": function() { this.fermu(); }
         }, 
-        open: function() {
+        malfermu: function() {
             DOM.kaŝu("#referenco_error");
             this.faldu(false); // necesas, se la dialogo estis fermita en faldita stato...
             // se io estas elektita jam serĉu
@@ -312,13 +319,13 @@ export default function() {
             url: "#ekzemplo_url",
             lok: "#ekzemplo_lok"
         },
-        buttons: {   
+        butonoj: {   
             "Enmeti la ekzemplon": function(event) { ekzemplo_enmeti(event,false); },
             "... nur la fonton": function(event) { ekzemplo_enmeti(event,true); },
             "\u25f1": function() { this.refaldu(); },
             "\u2718": function() { this.fermu(); }
         },
-        open: function() {
+        malfermu: function() {
             DOM.kaŝu("#ekzemplo_error");
             this.faldu(false); // necesas, se la dialogo estis fermita en faldita stato...
         }
@@ -350,12 +357,12 @@ export default function() {
             fmt: "#bildo_fmt",
             frazo: "#bildo_frazo"
         },
-        buttons: {   
+        butonoj: {   
             "Enmeti la bildon": function(event) { bildo_enmeti(event,false); },
             "\u25f1": function() { this.refaldu(); },
             "\u2718": function() { this.fermu(); }
         },
-        open: function() {
+        malfermu: function() {
             DOM.kaŝu("#bildo_error");
             this.faldu(false); // necesas, se la dialogo estis fermita en faldita stato...
 
@@ -396,12 +403,12 @@ export default function() {
             dif: "#derivajho_dif",
             loko: "#derivajho_listo"
         },
-        buttons: {   
+        butonoj: {   
             "Enmeti la derivaĵon": derivajho_enmeti, 
             "\u25f1": function() { this.refaldu(); },
             "\u2718": function() { this.fermu(); }
         },
-        open: function() {
+        malfermu: function() {
             plenigu_derivajxojn();
             DOM.kaŝu("#derivajho_error");
             this.faldu(false); // necesas, se la dialogo estis fermita en faldita stato...
@@ -438,12 +445,12 @@ export default function() {
             mrk: "#senco_mrk",
             dif: "#senco_dif"
         },
-        buttons: {   
+        butonoj: {   
             "Enmeti la sencon": senco_enmeti,
             "\u25f1": function() { this.refaldu(); },
             "\u2718": function() { this.fermu(); }
         },
-        open: function() {
+        malfermu: function() {
             DOM.kaŝu("#senco_error");
             this.faldu(false); // necesas, se la dialogo estis fermita en faldita stato...
         }
@@ -476,11 +483,11 @@ export default function() {
     plenigu_lingvojn();
     new Dialog("#traduko_dlg", {
         position: { my: "top", at: "top+10", of: window },
-        buttons: {   
+        butonoj: {   
             "Enmeti la tradukojn": function(event) { tradukojn_enmeti(event); },
             "\u2718": function() { this.fermu(); }
         },
-        open: function() {
+        malfermu: function() {
             DOM.kaŝu("#traduko_error");
             //$("#traduko_tradukoj").data("trd_shanghoj",{});
             plenigu_lingvojn_artikolo();
@@ -510,12 +517,12 @@ export default function() {
     //>>>>>>>> dialogo: Enmeti per ŝablono
     plenigu_sxablonojn();
     new Dialog("#sxablono_dlg", {
-        buttons: {   
+        butonoj: {   
             "Enmeti la tekston": sxablono_enmeti,
             "\u25f1": function() { this.refaldu(); },
             "\u2718": function() { this.fermu(); }
         },
-        open: function() {
+        malfermu: function() {
             DOM.kaŝu("#sxablono_error");
             this.faldu(false); // necesas, se la dialogo estis fermita en faldita stato...
         }
@@ -538,7 +545,7 @@ export default function() {
             rim: "#rimarko_rim",
             adm: "#rimarko_adm"
         },
-        buttons: {   
+        butonoj: {   
             "Enmeti la rimarkon": function(event) { 
                 event.preventDefault();
                 const indent=2;
@@ -553,7 +560,7 @@ export default function() {
             "\u25f1": function() { this.refaldu(); },
             "\u2718": function() { this.fermu(); }
         },
-        open: function() {
+        malfermu: function() {
             DOM.kaŝu("#rimarko_error");
             this.faldu(false); // necesas, se la dialogo estis fermita en faldita stato...
         }
@@ -589,12 +596,12 @@ export default function() {
             dosiero: "#homonimo_dos",
         },
         position: { my: "top", at: "top+10", of: window },
-        buttons: {
+        butonoj: {
             "Ŝargi": function(event) { hom_art_shargi(event) },
             "\u25f1": function() { this.refaldu() },
             "\u2718": function() { $( this ).dialog( "close" ) }  
         },
-        open: function() {
+        malfermu: function() {
             this.faldu(false); // necesas, se la dialogo estis fermita en faldita stato...
             plenigu_homonimo_liston();            
             $("#homonimo_error").show();  
@@ -606,11 +613,11 @@ export default function() {
 
     //>>>>>>>> eraro-dialogo
     new Dialog("#error_dlg", {
-        buttons: { 
+        butonoj: { 
             "Resaluti": function() { location.href='../auth/logout'; },
             "\u2718": function() { this.fermu(); }
         },
-        open: () => { DOM.kaŝu("#error_msg",false); }
+        malfermu: () => { DOM.kaŝu("#error_msg",false); }
     });
 
     //>>>>>>>> surmetitta dialogo ekz. por deklaro pri datumprotekto, klarigoj/helpo ks
@@ -853,7 +860,7 @@ function plenigu_referenco_listojn() {
             function(data) {  
                 var seen = {}; // evitu duoblaĵojn
                 new Propon("#referenco_listo", {
-                    source: data.querySelectorAll("kls").map(
+                    source: Array.from(x.xml_filtro(data,"kls")).map(
                         (e) => {
                             //console.log(this + " "+i+" "+e);
                             //console.log($(this).attr("nom"));
@@ -869,7 +876,7 @@ function plenigu_referenco_listojn() {
                                     return {value: nom, mrk: mrk, kap: kap};
                                 }
                             }
-                        }).get(),
+                        }),
                     select: referenco_listo_elekto
                 });
             },
@@ -971,7 +978,7 @@ function plenigu_ekzemplo_bib() {
     u.HTTPRequest('get','../voko/biblist.xml',{},
             function(data) {  
                 new Propon("#ekzemplo_bib", {
-                    source: data.querySelectorAll("vrk").map(
+                    source: Array.from(x.xml_filtro(data,"vrk")).map(
                         (e: Element) => {
                             //console.log(this + " "+i+" "+e);
                             //console.debug($(this).children("bib").text() +  ": " + $(this).children("text").text());
@@ -980,7 +987,7 @@ function plenigu_ekzemplo_bib() {
                                 label: e.querySelector("text")?.textContent,
                                 url: e.querySelector("url")?.textContent
                             };
-                        }).get()
+                        }),
                 });
             },
             () => document.body.style.cursor = 'wait',
@@ -1174,7 +1181,7 @@ function plenigu_lingvojn() {
                 var pref_lingvoj = '';
 
                 // por ĉiu unuopa lingvo en lingvoj.xml post ordigo laŭ nomo
-                const lingvoj = lingvoj_data.querySelectorAll("lingvo"); // TS ne kapablas rekoni JQuery<T> kiel Array
+                const lingvoj = Array.from(x.xml_filtro(lingvoj_data,"lingvo")); // TS ne kapablas rekoni JQuery<T> kiel Array
                     // kaj komplenas pri .sort - do ni artifike konvertas al "any"
                 lingvoj.sort(jsort_lng).forEach(
                         function(l) {
@@ -1225,7 +1232,7 @@ function plenigu_lingvojn_artikolo() {
 
     var lng_nomoj = {};
     for (var kodo in x.traduk_lingvoj(xml)) {
-        const lnomo = DOM.e("#trd_chiuj_"+kodo).querySelector('div').textContent;
+        const lnomo = DOM.e("#trd_chiuj_"+kodo)?.querySelector('div')?.textContent;
         if (lnomo) lng_nomoj[lnomo] = kodo;
     }
     var lingvoj = Object.keys(lng_nomoj).sort(sort_lng);
@@ -1479,7 +1486,7 @@ function tradukojn_enmeti(event) {
 
 function plenigu_sxablonojn() {
     var sxbl_list = '';
-    for (let nomo in snc_sxablonoj) {
+    for (let nomo in sbl.snc_sxablonoj) {
         sxbl_list += '<option>' + nomo + '</option>';
     }
     DOM.e("#sxablono_elekto")?.append(sxbl_list);

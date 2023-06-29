@@ -5,7 +5,7 @@
 /**
  * Ŝablonoj por enmeti dialogenhavon en XML
  */
-var xml_sxablonoj = {
+export const xml_sxablonoj = {
   art:
   ':<?xml version="1.0"?>\n' +
   ':<!DOCTYPE vortaro SYSTEM "../dtd/vokoxml.dtd">\n\n' +
@@ -117,7 +117,7 @@ var xml_sxablonoj = {
   '        :</bld>\n'
 };
 
-var html_sxablonoj = {
+export const html_sxablonoj = {
   vrk:
   'vrk && url : <a href="{url}" target="_new">{vrk}</a>\n' +
   'vrk && !url: {vrk}\n',
@@ -187,9 +187,8 @@ if (bib) {
 */
 
 
-
 // ŝablonoj por novaj sencoj
-var snc_sxablonoj =
+export const snc_sxablonoj =
 {
 ĉefurbo: 
 `  <snc mrk="xxx.B0o.cxefurbo">

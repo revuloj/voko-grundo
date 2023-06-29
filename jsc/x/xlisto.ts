@@ -27,6 +27,16 @@ export class RevoListoj {
 }
 
 /**
+ * Transformas la xml-tekston en dokumentstrukturon kaj
+ * elfiltras per elektilo la interesajn elementojn
+ */
+export function xml_filtro(xml: string, elektilo: string): NodeListOf<Element> {
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(xml,"text/xml");
+  return doc.querySelectorAll(elektilo);
+}
+
+/**
  * Legas Revo-liston kiel lingvoj, fakoj, stiloj por montri 
  * elektilojn en la redaktilo kaj traduki lingvojn en la
  * serĉilo
@@ -58,23 +68,25 @@ export class Xlist {
      * @param {Function} aldonilo - se donita, revokfuncio ald(kodo,nomo) aldonante unuopan listeron al io
      */
     this.load = function(aldonilo?: Function) {
-      var self = this;
+      let self = this;
   
       // unuafoje ŝargu la tutan liston el XML-dosiero
       if (! Object.keys(self.codes).length) {
-        var codes: {[code: string]: string} = {};
+        let codes: {[code: string]: string} = {};
   
         u.HTTPRequest('GET', this.url, {},
           function(request: XMLHttpRequest) {
               // Success!
-              var parser = new DOMParser();
-              var doc = parser.parseFromString(request.response,"text/xml");
+              //var parser = new DOMParser();
+              //var doc = parser.parseFromString(request.response,"text/xml");
         
-              for (var e of Array.from(doc.getElementsByTagName(self.xmlTag))) {
-                  var c = e.attributes.getNamedItem('kodo'); // jshint ignore:line
-                  //console.log(c);
-                  codes[c.value] = e.textContent;
-              } 
+              //for (var e of Array.from(doc.getElementsByTagName(self.xmlTag))) {
+              xml_filtro(request.response,self.xmlTag).forEach((e) => {
+                  const c = e.attributes.getNamedItem('kodo'); // jshint ignore:line
+                  if (c)
+                    //console.log(c);
+                    codes[c.value] = e.textContent||'';
+              });
               self.codes = codes;
   
               if (aldonilo) {

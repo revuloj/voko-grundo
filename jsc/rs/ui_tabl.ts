@@ -41,13 +41,14 @@ var pozicio_xml = '';
 var pozicio_html = '';
 */
 
-console.debug("Instalante la ĉefan redaktilopaĝon...");
 
 /**
  * Preparas la ĉefan laborfenestron kaj la unuopajn partojn
  * uzante la rimedojn de jQuery UI
  */
 export default function() {    
+    console.debug("Instalante la ĉefan redaktilopaĝon...");
+
     const slipoj = new Slip("#tabs", {
         activate: activate_tab,
         beforeActivate: before_activate_tab
@@ -199,7 +200,9 @@ export default function() {
     });
 
     // ekrana klavaro
-    new x.XKlavaro("#dock_klavaro","#xml_text","#xml_text",
+    const klv = DOM.e("#dock_klavaro");
+    if (klv) {
+      const xklv = new x.XKlavaro(klv,"#xml_text","#xml_text",
         undefined,
         function(event,ui) {
             switch (ui.cmd) {
@@ -223,7 +226,9 @@ export default function() {
             const xmlarea = Artikolo.xmlarea("#xml_text");
             xmlarea?.setUnsynced();
         }
-    );
+      );
+      xklv.elemento_klavoj(klv);
+    }
     
 
     // kromklavarbutonon kaŝu komence

@@ -7,6 +7,7 @@
 *****************************************************************************/
 
 import * as x from '../x';
+import * as sbl from './sxablonoj';
 
 /** ŝablonoj por flekseble enmeti referencojn, fontojn ktp. **/
 
@@ -69,7 +70,7 @@ class XMLŜablono {
 export class XMLArtikolo extends XMLŜablono {
     
     constructor(public art: Valoroj) {
-        super(xml_sxablonoj.art);
+        super(sbl.xml_sxablonoj.art);
         art.dif = art.dif.replace(/~/g,'<tld/>');
     };   
 
@@ -84,7 +85,7 @@ export class XMLArtikolo extends XMLŜablono {
  */
 export class XMLDerivaĵo extends XMLŜablono {
     constructor(public drv: Valoroj) {
-        super(xml_sxablonoj.drv);
+        super(sbl.xml_sxablonoj.drv);
         drv.dif = drv.dif.replace(/\n/g,"\n       ").replace(/~/g,'<tld/>');
         drv.mrk = x.alCx(drv.mrk + '.' + drv.kap.replace(/~/g,'0').replace(/ /g,'_'));
         drv.kap = drv.kap.replace(/~/g,'<tld/>');
@@ -101,7 +102,7 @@ export class XMLDerivaĵo extends XMLŜablono {
  */
 export class XMLSenco extends XMLŜablono {
     constructor(public snc: { dif: string; drvmrk: string; mrk?: string}) {
-        super(xml_sxablonoj.snc);
+        super(sbl.xml_sxablonoj.snc);
         snc.dif = snc.dif.replace(/\n/g,"\n       ").replace(/~/g,'<tld/>');
         snc.mrk = snc.drvmrk + '.' + snc.mrk;     
     }; 
@@ -117,7 +118,7 @@ export class XMLSenco extends XMLŜablono {
  */
 export class XMLFonto extends XMLŜablono {
     constructor(public fnt: Valoroj) {
-        super(xml_sxablonoj.fnt);
+        super(sbl.xml_sxablonoj.fnt);
     };
 
     xml(indent?: number) {
@@ -133,7 +134,7 @@ export class XMLEkzemplo extends XMLŜablono {
     public frazo: string;
 
     constructor(ekz: Valoroj) {
-        super(xml_sxablonoj.ekz);
+        super(sbl.xml_sxablonoj.ekz);
         this.fonto = new XMLFonto(ekz);
         // anstataŭigu tildojn 
         ekz.frazo = ekz.frazo
@@ -159,7 +160,7 @@ export class XMLEkzemplo extends XMLŜablono {
 export class XMLReferenco extends XMLŜablono {
 
     constructor(public ref: Valoroj) {
-        super(xml_sxablonoj.ref);
+        super(sbl.xml_sxablonoj.ref);
         if (ref.tip == 'nuda') { ref.tip = ''; }
     };
 
@@ -174,7 +175,7 @@ export class XMLReferenco extends XMLŜablono {
 
 export class XMLReferencGrupo extends XMLŜablono {
     constructor(public ref: Valoroj) {
-        super(xml_sxablonoj.refgrp);
+        super(sbl.xml_sxablonoj.refgrp);
         if (ref.tip == 'nuda') { ref.tip = ''; }
     };
 
@@ -189,7 +190,7 @@ export class XMLReferencGrupo extends XMLŜablono {
  */
 export class XMLRimarko extends XMLŜablono {
     constructor(public rim: Valoroj, tip: any='rim') {
-        super((tip=='rim'?xml_sxablonoj.rim:xml_sxablonoj.adm));
+        super((tip=='rim'? sbl.xml_sxablonoj.rim : sbl.xml_sxablonoj.adm));
     };
 
     xml(indent?: number) {
@@ -203,7 +204,7 @@ export class XMLRimarko extends XMLŜablono {
  */
 export class XMLBildo extends XMLŜablono {
     constructor(public bld: Valoroj) {
-        super(xml_sxablonoj.bld);
+        super(sbl.xml_sxablonoj.bld);
 
         // https://upload.wikimedia.org/wikipedia/commons/6/61/Glaciar_del_Aneto_%283.404m%29.jpg
         // -> https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/Glaciar_del_Aneto_%283.404m%29.jpg/640px-Glaciar_del_Aneto_%283.404m%29.jpg
@@ -242,10 +243,10 @@ export class HTMLFonto {
 
     constructor(bib_src: any) {
         this.source = bib_src;
-        this.v = new XMLŜablono(html_sxablonoj.vrk);
-        this.b = new XMLŜablono(html_sxablonoj.bib);
-        this.vt = new XMLŜablono(html_sxablonoj.vrk_title);
-        this.bt = new XMLŜablono(html_sxablonoj.bib_title);
+        this.v = new XMLŜablono(sbl.html_sxablonoj.vrk);
+        this.b = new XMLŜablono(sbl.html_sxablonoj.bib);
+        this.vt = new XMLŜablono(sbl.html_sxablonoj.vrk_title);
+        this.bt = new XMLŜablono(sbl.html_sxablonoj.bib_title);
     };
 
     bib_text(bib: any) {
@@ -289,8 +290,8 @@ export class HTMLTrovoDt {
     private tc: XMLŜablono;
 
     constrcutor() {
-        this.t = new XMLŜablono(html_sxablonoj.dt_trovo); // sen URL
-        this.tc = new XMLŜablono(html_sxablonoj.dt_trovo_cit); // kun URL
+        this.t = new XMLŜablono(sbl.html_sxablonoj.dt_trovo); // sen URL
+        this.tc = new XMLŜablono(sbl.html_sxablonoj.dt_trovo_cit); // kun URL
     };
 
     html(trv: Valoroj) {
@@ -310,7 +311,7 @@ export class HTMLTrovoDdBld {
     private dd: XMLŜablono;
 
     constrcutor() {
-        this.dd = new XMLŜablono(html_sxablonoj.dd_trovo_bld);
+        this.dd = new XMLŜablono(sbl.html_sxablonoj.dd_trovo_bld);
     };
 
     html(res: Valoroj) {
@@ -325,7 +326,7 @@ export class HTMLError {
     private li: XMLŜablono;
 
     constructor() {
-        this.li = new XMLŜablono(html_sxablonoj.err_msg);
+        this.li = new XMLŜablono(sbl.html_sxablonoj.err_msg);
     };
 
     html(err: Valoroj) {
@@ -342,7 +343,7 @@ export class SncŜablono {
     private sxablono: string;
 
     constructor(sxbl: string) {
-        this.sxablono = snc_sxablonoj[sxbl];
+        this.sxablono = sbl.snc_sxablonoj[sxbl];
     };
 
     form() {

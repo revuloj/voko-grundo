@@ -129,8 +129,11 @@ export class DOM {
 
     static ido_reago(e: Element|string, evento: string, idspec: string, reago: EventListenerOrEventListenerObject) {
         const el = (typeof e === "string")? DOM.e(e) : e;
-        if (el) el.addEventListener(evento, reago);
-        throw "reago por idoj ne jam implementita!";
+        if (el) {
+            el.querySelectorAll(idspec).forEach((id) => {
+                id.addEventListener(evento, reago);
+            });
+        }
     }
 
     static klak(e: EventTarget|string, reago: EventListenerOrEventListenerObject) {

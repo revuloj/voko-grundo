@@ -8,9 +8,12 @@ import { UIElement } from './uielement';
 
 export class Dialog extends UIElement {
     //valoroj: any;
+    static butonujo_klaso = "butonujo";
 
     static _default: {
         kampoj: {},
+        butonoj: undefined,
+        malfermu: undefined,
         /*
         autoOpen: false,
         width: "auto",
@@ -53,19 +56,54 @@ export class Dialog extends UIElement {
 
         this.opcioj = Object.assign(this.opcioj,Dialog._default,opcioj);
         // evtl. kaŝu
-        if (this.element.tagName != "dialog") DOM.kaŝu(this.element);
+        if (this.element.tagName != "DIALOG") DOM.kaŝu(this.element);
+        // aldonu kruceton por fermi en la titollinio
+        const h = this.element.querySelector("h1,h2,h3,h4");
+        if (h) {
+            const fb = document.createElement('button');
+            fb.textContent = '\u2718';
+            h.append(fb);
+            fb.addEventListener("click",() => this.fermu());
+        }
+        // aldonu butonojn
+        if (this.opcioj.butonoj) {
+            const butonujo = document.createElement("div");
+            butonujo.classList.add("butonujo");
+            for (let [nomo, reago] of Object.entries(this.opcioj.butonoj)) {
+                //kial ne funkcias? if (reago instanceof EventListener) {
+                    const btn = document.createElement("button");
+                    btn.textContent = nomo;
+                    btn.addEventListener("click",(reago as EventListener).bind(this));
+                    butonujo.append(btn);    
+                //}
+            }
+            this.element.append(butonujo);
+        }
     }
 
     malfermu() {
-        (this.element as HTMLDialogElement).show();
+        // preparu la dialogon
+        if (this.opcioj.malfermu instanceof Function) this.opcioj.malfermu();
+        // montru la dialogon
+        if (this.element.tagName != "DIALOG") 
+            DOM.kaŝu(this.element,false);
+        else
+            (this.element as HTMLDialogElement).show();
     }
 
     malfermu_insiste() {
-        (this.element as HTMLDialogElement).showModal();
+        if (this.element.tagName != "DIALOG") 
+            DOM.kaŝu(this.element,false);
+        else
+            (this.element as HTMLDialogElement).showModal();
     }
 
     fermu() {
-        (this.element as HTMLDialogElement).close();
+        // evtl. kaŝu
+        if (this.element.tagName != "DIALOG") 
+            DOM.kaŝu(this.element);
+        else
+           (this.element as HTMLDialogElement).close();
     }
 
     faldu(faldita = true) {

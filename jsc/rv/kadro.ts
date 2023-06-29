@@ -794,7 +794,7 @@ function adaptu_paghon(root_el: Element, url: string) {
     // index Esperanto. Atentu! Ni nun uzas _plena. (vd. malsupre)
     if ( filename.startsWith('_eo.') ) {
         root_el.querySelectorAll(".kls_nom").forEach((n) => {
-            if (n.tagName != "summary") {
+            if (n.tagName != "SUMMARY") {
                 n.classList.add("maletendita");
 
                 n.addEventListener("click", function(event) {

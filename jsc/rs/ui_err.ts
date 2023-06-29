@@ -17,22 +17,8 @@ import { HTMLError } from './sxabloniloj';
 
 interface XEraro extends Partial<x.LinePos> { id?: string, cls?: string, msg: string };
 
-/*
-declare global {
 
-    interface JQuery {
-        Erarolisto(opcioj: any);
-        Erarolisto(methodName: "aldonu", e: Eraro);
-        Erarolisto(methodName: "aldonu_liston", el: Array<Eraro>);
-    }
-}
-*/
-
-
-console.debug("Instalante la erar- kaj kontrolfunkciojn...");
-
-
-
+// console.debug("Instalante la erar- kaj kontrolfunkciojn...");
 
 export class Erarolisto extends UIElement {
 
@@ -125,13 +111,14 @@ export function xmlkontrolo() {
           function(data) { 
               // se la listo de eraroj estas malplena la sintakso estas bona
               // malplena listo sendiĝas kiel [] aŭ [{}]
-              if ( data.length === 0
-                || data.length == 1 && Object.keys(data[0]).length === 0) {
-                  data = [{ msg: "XML estas en ordo (sintakso).", cls: "status_ok" }];
+              let json = JSON.parse(data);
+              if ( json.length === 0
+                || json.length == 1 && Object.keys(data[0]).length === 0) {
+                  json = [{ msg: "XML estas en ordo (sintakso).", cls: "status_ok" }];
               };
               const elisto = UIElement.obj("#dock_eraroj") as Erarolisto;
               if (elisto) elisto.aldonu_liston(
-                data.map(err => 
+                json.map(err => 
                     {
                         if (err.msg) err.msg = x.quoteattr(err.msg); 
                         return err;
@@ -271,14 +258,15 @@ function kontrolu_liniojn(lines) {
             data: JSON.stringify(lines),
             contentType: 'application/json'
         },
-          function(data) {  
+          function(data) {
+            const json = JSON.parse(data);
              //var html = n + ": " + data;
              // $("#kontrolo_ana").append(html);
              //var str = data.replace('---','\u2014');
              DOM.e("#"+id)?.remove();
              const elisto = UIElement.obj("#dock_avertoj") as Erarolisto;
              if (elisto) elisto.aldonu_liston(
-                Object.keys(data).map(_ana2txt,data) as Array<XEraro>);
+                Object.keys(json).map(_ana2txt,data) as Array<XEraro>);
 
              /*
              for (n in data) {

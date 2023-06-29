@@ -25,30 +25,15 @@ type TrovValoroj = { url?: string, fmt?: number,
     prm?: string, fnt?: string, frazo?: string };
 
 
-
-
-
-/*    
-declare global {
-    interface JQuery {
-        Trovo(opcioj: any);
-        Trovo(methodName: "bildinfo", res: any, d: boolean, e: Function); //JQuery.Event);
-        KuntekstoBtn(opcioj: any);
-        RigardoBtn(opcioj: any);
-        EkzemploBtn(opcioj: any);
-        BildoBtn(opcioj: any);
-    }
-}
-*/
-
-//var sercho_focused_button = null;
-console.debug("Instalante la serĉfunkciojn...");
-
 /**
  * Preparas la serĉon, kontrolante, ĉu estas valida serĉesprimo, malplenigante
  * la trovokampon.
  */
 function _serĉo_preparo() {
+
+    //var sercho_focused_button = null;
+    console.debug("Instalante la serĉfunkciojn...");
+
     if (! Valid.valida("#sercho_sercho")) return;
 
     const trovoj = document.getElementById("sercho_trovoj");

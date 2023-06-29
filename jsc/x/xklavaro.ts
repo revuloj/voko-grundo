@@ -32,7 +32,6 @@ type Reghimpremo = (e: Event, r: {cmd: Reghimo}) => void;
 
 console.debug("Instalante la klavarfunkciojn...");
 
-
 export function xpress(event: KeyboardEvent) {
     const key = event.key;
     const trg = event.target;
@@ -41,17 +40,6 @@ export function xpress(event: KeyboardEvent) {
     }
 }
 
-/**
- * Kodlistoj agorditaj por Reta Vortaro: lingvoj, fakoj, stiloj
- */
-/*
-export const revo_codes = {
-    lingvoj: new Xlist('lingvo', '/revo/cfg/lingvoj.xml'),
-    fakoj: new Xlist('fako','/revo/cfg/fakoj.xml'),
-    stiloj: new Xlist('stilo','/revo/cfg/stiloj.xml')
-};
-revo_codes.lingvoj.load();
-*/
 
 /*
     // Default options.
@@ -97,7 +85,8 @@ export class XKlavaro {
     {
         this.klavaro = (typeof klavaro === "string")? document.querySelector(klavaro) : klavaro;
         this.dialogo = (typeof dialogo === "string")? document.querySelector(dialogo) : dialogo;
-        this.apriora_kampo = (typeof apriora_kampo === "string")? document.querySelector(apriora_kampo) : apriora_kampo;
+        if (apriora_kampo) this.apriora_kampo = (typeof apriora_kampo === "string")? 
+            document.querySelector(apriora_kampo) : apriora_kampo;
 
         this.lasta_fokuso = this.apriora_kampo?.id;
         this.klavoj = this.klavaro?.textContent || '';
@@ -122,7 +111,7 @@ export class XKlavaro {
     }
 
     /**
-     * Kreas elemento-klavojn laŭ tekstra priskribo. Ekz-e
+     * Kreas elemento-klavojn laŭ teksta priskribo. Ekz-e
      * [indiko] &#x2015; &middot; &nbsp; &#x202f;
      * tld [] () &#x201e;&#x201c; &sbquo;&#x2018; 
      * ctl nom nac esc ind var frm

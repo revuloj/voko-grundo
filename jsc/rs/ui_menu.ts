@@ -16,13 +16,14 @@ import { Menu, Dialog } from '../ui';
 import { kontroli_artikolon, montri_indikojn } from './ui_tabl.js';
 import { surmetita_dialogo } from './ui_err.js';
 
-console.debug("Instalante la menuon...");
 
 export default function() {
-      // menuo
+    console.debug("Instalante la menuon...");
+
+    // menuo
     new Menu("#menu", {
-          items: "> :not(.ui-widget-header)",
-          select: menu_selected
+          eroj: ":not(.ui-widget-header)",
+          reago: menu_selected
       });
         
       // loka menuo
@@ -41,10 +42,14 @@ export default function() {
 //*********************************************************************************************
 
 
-function menu_selected(event, ui) {
-    const id = ui.item.attr('id');
-    let dlg;
-    switch (id) {
+function menu_selected(event) {
+    const menuero = event.target;
+    if (menuero instanceof Element) {
+
+        const id = menuero.id;
+        let dlg;
+
+        switch (id) {
         case "nova_menu_item":
             Dialog.malfermu("#krei_dlg");
             break;            
@@ -79,7 +84,7 @@ function menu_selected(event, ui) {
         case "senco_menu_item":
             Dialog.malfermu("#senco_dlg");
             break;                 
-       case "tradukoj_menu_item":
+        case "tradukoj_menu_item":
             Dialog.malfermu("#traduko_dlg");
             break;            
         case "sxablono_menu_item":
@@ -102,6 +107,7 @@ function menu_selected(event, ui) {
             break;
         default:
             alert('Neniu ago difinita por menuero '+id);
+        }
     }
 }
 
