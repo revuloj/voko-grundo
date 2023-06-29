@@ -330,22 +330,22 @@ export class XKlavaro {
         } else if (btn.classList.contains("stl")) {
             const stl = btn.getAttribute("data-stl");
             this.enmeto('<uzo tip="stl">' + stl + '</uzo>');
-            this.postenmeto(event);
+            if (this.postenmeto) this.postenmeto(event);
 
         } else if (btn.classList.contains("fak")) {
             const fak = btn.getAttribute("data-fak");
             this.enmeto('<uzo tip="fak">' + fak + '</uzo>');
-            this.postenmeto(event);
+            if (this.postenmeto) this.postenmeto(event);
 
         } else if (btn.classList.contains("ofc")) {
             const ofc = btn.getAttribute("data-ofc");
             this.enmeto('<ofc>' + ofc + '</ofc>');
-            this.postenmeto(event);
+            if (this.postenmeto) this.postenmeto(event);
 
         } else if (btn.classList.contains("gra")) {
             const vspec = btn.getAttribute("data-vspec");
             this.enmeto('<gra><vspec>' + vspec + '</vspec></gra>');
-            this.postenmeto(event);
+            if (this.postenmeto) this.postenmeto(event);
 
         } else if (btn.classList.contains("tab_btn")) {
             // butonoj por en-/elŝovo
@@ -357,7 +357,7 @@ export class XKlavaro {
                     const i_ = get_indent(ta).length;
                     if (i_ % 2 == 1) n = n/2; // ŝovu nur unu (±2/2) ĉe momente nepara enŝovo!
                     indent(ta,n);
-                    this.postenmeto(event);
+                    if (this.postenmeto) this.postenmeto(event);
                 }
             }
 
@@ -378,7 +378,7 @@ export class XKlavaro {
                 }
             }
 
-            this.postenmeto(event,{cmd: cmd});
+            if (this.postenmeto) this.postenmeto(event,{cmd: cmd});
 
         // majusklaj komencliteroj de vortoj
         } else if (cmd == "kamelo"){
@@ -386,19 +386,19 @@ export class XKlavaro {
             //var rad = sel.includes('<tld')? xmlGetRad($("#xml_text").val()) : '';
             const rad = sel.includes('<tld')? radiko : '';
             this.enmeto(kameligo(sel,rad));    
-            this.postenmeto(event,{cmd: cmd});
+            if (this.postenmeto) this.postenmeto(event,{cmd: cmd});
 
         // minuskligo
         } else if (cmd == "minuskloj"){
             const sel = this.elekto();
             this.enmeto(minuskligo(sel,radiko));
-            this.postenmeto(event,{cmd: cmd});
+            if (this.postenmeto) this.postenmeto(event,{cmd: cmd});
 
         // aliajn kazojn traktu per _ekran_klavo...
         } else {
             const sel = this.elekto();
             this.enmeto(this.ekran_klavo(text,cmd,sel));
-            this.postenmeto(event,{cmd: cmd});
+            if (this.postenmeto) this.postenmeto(event,{cmd: cmd});
         }
     };
 
