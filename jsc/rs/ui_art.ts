@@ -66,7 +66,7 @@ export class Artikolo extends UIElement {
         _ent: new RegExp('&([a-zA-Z0-9_]+);','g')
     };
 
-    static _opcioj: {
+    static default: {
         xmlarea: Xmlarea,
         dosiero: '',
         reĝimo: 'redakto'|'aldono', // ĉe novaj artikoloj 'aldono'   
@@ -89,7 +89,7 @@ export class Artikolo extends UIElement {
     constructor(element: HTMLElement|string, opcioj: any) {
         super(element, opcioj);
 
-        this.opcioj = Object.assign(this.opcioj,Artikolo._opcioj,opcioj);
+        this.opcioj = Object.assign(this.opcioj,Artikolo.default,opcioj);
 
         this.restore();
         this._change_count = 0;
@@ -102,7 +102,7 @@ export class Artikolo extends UIElement {
             keyup: this._keyup, // traktu tekstŝanĝojn
             focus: function(event) { this._trigger("poziciŝanĝo",event,null); }, 
             click: function(event) { this._trigger("poziciŝanĝo",event,null); }, 
-            change:  this._change        
+            change: this._change        
         }); // dum musalŝovo
     };
 

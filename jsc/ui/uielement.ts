@@ -39,7 +39,7 @@ export class UIElement {
 
     _on(handlers: any) {
         for (let ev in handlers) {
-            this.element.addEventListener(ev,handlers[ev]);
+            this.element.addEventListener(ev,handlers[ev].bind(this));
         }
     };
 

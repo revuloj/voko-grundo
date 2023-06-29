@@ -9,6 +9,7 @@ import { UIElement } from './uielement';
 export class Dialog extends UIElement {
     //valoroj: any;
     static butonujo_klaso = "butonujo";
+    static faldebla_klaso = "faldebla";
 
     static _default: {
         kampoj: {},
@@ -57,6 +58,7 @@ export class Dialog extends UIElement {
         this.opcioj = Object.assign(this.opcioj,Dialog._default,opcioj);
         // evtl. kaŝu
         if (this.element.tagName != "DIALOG") DOM.kaŝu(this.element);
+        
         // aldonu kruceton por fermi en la titollinio
         const h = this.element.querySelector("h1,h2,h3,h4");
         if (h) {
@@ -66,14 +68,17 @@ export class Dialog extends UIElement {
             fb.addEventListener("click",() => this.fermu());
         }
         // aldonu butonojn
-        if (this.opcioj.butonoj) {
+        const bopc = this.opcioj.butonoj;
+        if (bopc) {
             const butonujo = document.createElement("div");
             butonujo.classList.add("butonujo");
-            for (let [nomo, reago] of Object.entries(this.opcioj.butonoj)) {
+
+            if (bopc instanceof Array) {
+                bopc.forEach( (bo) => butonujo.append(this.butono(bo)) );
+            } else 
+                for (let [text, click] of Object.entries(this.opcioj.butonoj)) {
                 //kial ne funkcias? if (reago instanceof EventListener) {
-                    const btn = document.createElement("button");
-                    btn.textContent = nomo;
-                    btn.addEventListener("click",(reago as EventListener).bind(this));
+                    const btn = this.butono({text: text, click: click})
                     butonujo.append(btn);    
                 //}
             }
@@ -81,9 +86,24 @@ export class Dialog extends UIElement {
         }
     }
 
+    /**
+     * Kreas unuopan butonon laŭ donitaj ecoj
+     */
+    butono(ecoj): Element {
+        // ĉu ni uzu klason Buton el ./buton.ts?
+        const btn = document.createElement("button");
+        btn.textContent = ecoj.text;
+        if (ecoj.id) btn.id = ecoj.id;
+        btn.addEventListener("click",(ecoj.click as EventListener).bind(this));
+        return btn;
+    }
+
+
     malfermu() {
         // preparu la dialogon
-        if (this.opcioj.malfermu instanceof Function) this.opcioj.malfermu();
+        if (this.opcioj.malfermu instanceof Function) 
+            this.opcioj.malfermu.call(this);
+            
         // montru la dialogon
         if (this.element.tagName != "DIALOG") 
             DOM.kaŝu(this.element,false);
@@ -108,17 +128,19 @@ export class Dialog extends UIElement {
 
     faldu(faldita = true) {
         const el = this.element;
-        DOM.kaŝu(el, faldita);
+
+        Array.from(el.getElementsByClassName(Dialog.faldebla_klaso)).forEach((f) => {
+            DOM.kaŝu(f, faldita);
+        });
         
-        if (faldita) {
             /*
+        if (faldita) {
             el.prev(".ui-dialog-titlebar").hide();
             this._setOption("position",{
                 my: "center top",
                 at: "center top+5",
                 of: "#xml"
             });
-            */
             DOM.i("#xml_text")?.focus();
         } else {    
             /*        
@@ -128,8 +150,8 @@ export class Dialog extends UIElement {
                 at: "center center",
                 of: window
             });
-            */           
         }
+            */           
     };
 
     refaldu() {
