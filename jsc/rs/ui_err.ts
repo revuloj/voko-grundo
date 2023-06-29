@@ -285,16 +285,16 @@ function kontrolu_liniojn(lines) {
 export function surmetita_dialogo(url, root_el, loc = '') {
     
     u.HTTPRequest('get', url, {},
-          function(data, status, xhr) {   
-              if (xhr.status == 302) {
+          function(data) {   
+              if (this.status == 302) {
                   // FIXME: When session ended the OpenID redirect 302 is handled behind the scenes and here we get openid/login with status 200
-                show_xhr_error(xhr,"Via seanco finiĝis. Bonvolu resaluti!");
+                show_xhr_error(this,"Via seanco finiĝis. Bonvolu resaluti!");
               } else {
-                const srm = Dialog.dialog("#surmetita");
+                const srm = Dialog.dialog("#surmetita_dlg");
                 if (srm) {
                     srm.element.innerHTML = data;
-                    srm.opcioj['title'] = DOM.t("#surmetita h1");
-                        DOM.e("#surmetita h1")?.remove();
+                    srm.opcioj['title'] = DOM.t("#surmetita_dlg h2");
+                        DOM.e("#surmetita_dlg h2")?.remove();
                     //  $("#surmetita").html(data);
                     //  $("#surmetita_dlg").dialog("option", "title", $("#surmetita h1").text());
                     //  $("#surmetita h1").remove("h1");
@@ -319,13 +319,13 @@ export function surmetita_dialogo(url, root_el, loc = '') {
         },
         function() { document.body.style.cursor = 'wait' },
         function() { document.body.style.cursor = 'auto' },
-        function(xhr) {
-            console.error(xhr.status + " " + xhr.statusText);
-            if (xhr.status == 400) {
+        function() {
+            console.error(this.status + " " + this.statusText);
+            if (this.status == 400) {
                 DOM.al_html("#surmetita_error",'Pardonu, okazis eraro dum ŝargo de la dokumento.');
             } else {
                 var msg = "Pardonu, okazis netandita eraro: ";
-                DOM.al_html("#surmetita_error", msg + xhr.status + " " + xhr.statusText + xhr.responseText);
+                DOM.al_html("#surmetita_error", msg + this.status + " " + this.statusText + this.responseText);
             }
             DOM.kaŝu("#surmetita_error",false); 
         });

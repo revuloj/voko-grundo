@@ -1027,8 +1027,16 @@ dialog .butonujo button {
     text-indent: -2.5ex;
 }
 
+#surmetita_dlg {
+    width: fit-content;
+    height: fit-content;
+    max-width: 92%;
+    max-height: 92%;
+}
+
 #surmetita {
     background-color: var(--ovr-bgr-clr);
+    overflow-y: scroll;
 }
 
 .perc_bar {

@@ -19,7 +19,7 @@ import { Erarolisto } from './ui_err';
 import { XMLReferenco, XMLReferencGrupo, XMLRimarko, XMLEkzemplo, 
          XMLFonto, XMLSenco, XMLDerivaĵo, XMLBildo, SncŜablono } from './sxabloniloj';
 
-import { show_error_status, surmetita_dialogo } from './ui_err.js';
+import { show_error_status } from './ui_err.js';
 //import { xpress } from './jquery_ext';
 
 type NovaArt = { dos: string, rad: string, fin: string, dif: string };
