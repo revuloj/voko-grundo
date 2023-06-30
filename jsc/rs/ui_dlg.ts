@@ -302,9 +302,8 @@ export default function() {
     new Propon( "#referenco_sercho", {
         source: referenco_sercho_autocomplete,
         select: function(event,ui) {
-            var item = ui.item;
-            var enhavo = item.num == "" ? item.kap : item.kap + "<sncref/>";
-            DOM.al_v("#referenco_celo",item.mrk);
+            var enhavo = ui.num == "" ? ui.kap : ui.kap + "<sncref/>";
+            DOM.al_v("#referenco_celo",ui.mrk);
             DOM.al_v("#referenco_enhavo",enhavo);
         }   
     });
@@ -914,9 +913,9 @@ function plenigu_referenco_listojn() {
 }
 
 function referenco_listo_elekto(event,ui) {
-    if (ui.item.mrk) DOM.al_v("#referenco_sercho",'');
-    if (ui.item.mrk) DOM.al_v("#referenco_celo",ui.item.mrk);
-    if (ui.item.kap) DOM.al_v("#referenco_enhavo",ui.item.kap);
+    if (ui.mrk) DOM.al_v("#referenco_sercho",'');
+    if (ui.mrk) DOM.al_v("#referenco_celo",ui.mrk);
+    if (ui.kap) DOM.al_v("#referenco_enhavo",ui.kap);
 }
 
 function referenco_sercho_autocomplete(request,response) {
@@ -1632,11 +1631,11 @@ function sxablono_enmeti(event) {
 
 function plenigu_lastaj_liston() {
     u.HTTPRequest('get',"revo_lastaj_redaktoj",{},
-        function(data, status, xhr) {   
-            if (xhr.status == 302) {
+        function(data) {   
+            if (this.status == 302) {
                 // FIXME: When session ended the OpenID redirect 302 is handled 
                 // behind the scenes and here we get openid/login with status 200
-                show_xhr_error(xhr,"Via seanco finiĝis. Bonvolu resaluti!");
+                show_xhr_error(this,"Via seanco finiĝis. Bonvolu resaluti!");
             } else {
                 var listo = '';
                 var previous = null; //{kap: '', art1: '', art2: ''};
