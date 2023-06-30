@@ -55,8 +55,8 @@ export class Erarolisto extends UIElement {
             const ul = document.createElement("ul");
             const html = new HTMLError().html(err);
 
-            if (!html)
-                debugger;
+            // if (!html)
+            //     debugger;
 
             ul.innerHTML = html;
             const li = ul.children[0];
