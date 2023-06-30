@@ -82,7 +82,7 @@ export function HTTPRequestFull(method: string, url: string, headers: Kapoj, par
     
     request.onload = function() {
       if (request.status >= 200 && request.status < 400) {
-          onSuccess.call(request,/**@type{string}*/(request.response));
+          onSuccess.call(request,request.response);
       } else {
           // post konektiĝo okazis eraro
           console.error('Eraro dum ŝargo de ' + url);  
@@ -101,6 +101,58 @@ export function HTTPRequestFull(method: string, url: string, headers: Kapoj, par
     //request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
     request.send(data);  
 }
+
+/**
+ * Sendas JSON-dokumenton al la servilo kaj Ŝargas la rezulton atendante ankaŭ JSON per XMLHttpRequest
+ * @param method - la HTTP-metodo
+ * @param url - la URL
+ * @param headers - la HTTP-kapoj
+ * @param json - la JSON-dokumento por sendi
+ * @param onSuccess - vokata post sukceso
+ * @param onStart - vokata antaŭ la ŝargo
+ * @param onFinish - vokata fine
+ * @param onError - vokata kiam okazas eraro
+ */
+export function HTTPRequestJSON(method: string, url: string, headers: Kapoj, json: any, 
+    onSuccess: Function, onStart?: Function, onFinish?: Function, onError?: Function) {        
+
+    const request = new XMLHttpRequest();
+    const data = JSON.stringify(json);
+    const _headers = Object.assign(headers||{},{ "Content-Type": "application/json" })
+
+    if (onStart) onStart();
+    request.open(method, url , true);
+
+  // kapo-linioj
+    for (let [key,value] of Object.entries(_headers)) {
+      request.setRequestHeader(key,value);
+    }      
+    
+    request.onload = function() {
+      if (request.status >= 200 && request.status < 400) {
+          if (!request.response) {
+            console.error('Ni atendis JSON kiel rezulto de '+url);  
+          } else {
+            onSuccess.call(request,JSON.parse(request.response));
+          }
+      } else {
+          // post konektiĝo okazis eraro
+          console.error('Eraro dum ŝargo de ' + url);  
+          if (onError) onError(request);
+      }
+      if (onFinish) onFinish();
+    };
+    
+    request.onerror = function() {
+      // konekteraro
+      console.error('Eraro dum konektiĝo por ' + url);
+      if (onError) onError(request);
+      if (onFinish) onFinish();
+    };
+    
+    request.send(data);  
+}
+
 
 /**
  * Ŝargas fonan dokumenton de la servilo per XMLHttpRequest

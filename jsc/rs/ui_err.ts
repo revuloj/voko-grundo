@@ -52,7 +52,15 @@ export class Erarolisto extends UIElement {
         var item =  '<li value="' + v + (t? '" title="' + t :"") + (err.id?' id="'+err.id+'"':'') + '">'  + err.msg  + '</li>';
         */
         if (err && err.msg) {
-            const li = new HTMLError().html(err);
+            const ul = document.createElement("ul");
+            const html = new HTMLError().html(err);
+
+            if (!html)
+                debugger;
+
+            ul.innerHTML = html;
+            const li = ul.children[0];
+
             const n_ = err.line? parseInt(err.line) : -1;
         //$("#kontrolo_list").fadeOut("fast", function() {
             // ni enŝovu la mesaĝon laŭ la ordo de linioj
@@ -253,33 +261,47 @@ function kontrolu_liniojn(lines) {
 
     // redonu nur kontrolendajn analiz-rezultojn    
     lines.moduso = "kontrolendaj"; 
-    u.HTTPRequest('post',"analinioj",
-        {
-            data: JSON.stringify(lines),
-            contentType: 'application/json'
-        },
-          function(data) {
-            const json = JSON.parse(data);
-             //var html = n + ": " + data;
-             // $("#kontrolo_ana").append(html);
-             //var str = data.replace('---','\u2014');
-             DOM.e("#"+id)?.remove();
-             const elisto = UIElement.obj("#dock_avertoj") as Erarolisto;
-             if (elisto) elisto.aldonu_liston(
-                Object.keys(json).map(_ana2txt,data) as Array<XEraro>);
+    u.HTTPRequestJSON('post',"analinioj",{},lines,
+        function(json) {
+            //var html = n + ": " + data;
+            // $("#kontrolo_ana").append(html);
+            //var str = data.replace('---','\u2014');
+            DOM.e("#"+id)?.remove();
 
-             /*
-             for (n in data) {
-                vrtkontrolo_aldonu_linion(n,data[n]); 
-             }
-             */
-          },
-          () => document.body.style.cursor = 'wait',
-          () => document.body.style.cursor = 'auto',
-            function(xhr) {
-                console.error(xhr.status + " " + xhr.statusText);
-                DOM.al_html("#"+id,"Okazis erraro dum kontrolo: " + xhr.statusText);
-          });
+            if (json && Object.keys(json).length) {
+                const elisto = UIElement.obj("#dock_avertoj") as Erarolisto;
+                if (elisto) elisto.aldonu_liston(
+                Object.keys(json).map(_ana2txt,json) as Array<XEraro>);    
+            }
+
+            /*
+            for (n in data) {
+            vrtkontrolo_aldonu_linion(n,data[n]); 
+            }
+            */
+        },
+        () => document.body.style.cursor = 'wait',
+        () => document.body.style.cursor = 'auto',
+        function() {
+            console.error(this.status + " " + this.statusText);
+            DOM.al_html("#"+id,"Okazis erraro dum kontrolo: " + this.statusText);
+        });
+}
+
+
+function _ana2txt(line) {
+    var ana_arr = this[line]; 
+    var txt = '';
+    for(let i = 0; i<ana_arr.length; i++) {
+        if (i>0) txt += "; ";
+        const ana = ana_arr[i];
+        txt += "<span class='" + ana.takso + "'>";
+        txt += ana.analizo || ana.vorto;
+        txt += "</span>";
+        txt += " - kontrolinda ĉar <span class='ana_klarigo' data-takso='" + ana.takso + "'>";
+        txt += ana.takso + " <a>\u24D8</a></span>";
+    }
+    return {line: line, msg: txt};
 }
 
 export function surmetita_dialogo(url, root_el, loc = '') {
@@ -331,6 +353,8 @@ export function surmetita_dialogo(url, root_el, loc = '') {
         });
 }
 
+
+
 export function show_error_status(error) {
     //plenigu_xmleraro_liston([{"line": "nekonata", "msg": error.toString().slice(0,256)+'...'}]);
     const err: XEraro = {"line": -1, "msg": error.toString().slice(0,256)+'...'};
@@ -342,17 +366,3 @@ export function show_error_status(error) {
     DOM.kaŝu("#dock_kontrolo",false);
 }
 
-function _ana2txt(line) {
-    var ana_arr = this[line]; 
-    var txt = '';
-    for(let i = 0; i<ana_arr.length; i++) {
-        if (i>0) txt += "; ";
-        const ana = ana_arr[i];
-        txt += "<span class='" + ana.takso + "'>";
-        txt += ana.analizo || ana.vorto;
-        txt += "</span>";
-        txt += " - kontrolinda ĉar <span class='ana_klarigo' data-takso='" + ana.takso + "'>";
-        txt += ana.takso + " <a>\u24D8</a></span>";
-    }
-    return {line: line, msg: txt};
-}
