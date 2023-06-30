@@ -132,7 +132,7 @@ export default function() {
     new Propon("#shargi_sercho", {
         source: shargi_sercho_autocomplete,
         select: function(event,ui) { 
-            DOM.al_v("#shargi_dosiero",ui.item.art+'.xml'); 
+            DOM.al_v("#shargi_dosiero",ui.art+'.xml'); 
         }   
     });
     Valid.aldonu("#shargi_sercho", {
@@ -682,19 +682,19 @@ export function shargi_sercho_autocomplete(request,response) {
                 sercho: sercho,
                 lng: "eo" 
             }, 
-            function(data, status, xhr) {   
-                if (xhr.status == 302) {
+            function(data) {   
+                if (this.status == 302) {
                     // FIXME: When session ended the OpenID redirect 302 is handled behind the scenes and here we get openid/login with status 200
-                    show_xhr_error(xhr,"Via seanco finiĝis. Bonvolu resaluti!");
+                    show_xhr_error(this,"Via seanco finiĝis. Bonvolu resaluti!");
                 } else {
-                    var i;
-                    for (i=0; i<data.length; i++) {
-                       var label = (data[i].num != "")? data[i].kap + " " + data[i].num : data[i].kap;
-                       results[i] = { 
+                    const json = JSON.parse(data);
+                    json.forEach((d) => {
+                       var label = (d.num != "")? d.kap + " " + d.num : d.kap;
+                       results.push({ 
                            value: label, 
-                           art: data[i].art
-                       }; 
-                    }
+                           art: d.art
+                       }); 
+                    });
                 }
                 response(results);
             },
@@ -957,7 +957,10 @@ function referenco_sercho_autocomplete(request,response) {
             },
             () => document.body.style.cursor = 'wait',
             () => document.body.style.cursor = 'auto',
-            (msg: string) => Eraro.al("#referenco_error", msg)       
+            (msg: string) => {
+                Eraro.al("#referenco_error", msg);
+                response(undefined);
+            }     
         );
 }
 

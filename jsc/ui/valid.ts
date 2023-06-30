@@ -51,7 +51,8 @@ export class Valid extends UIElement {
             })
 
             return _valida_;
-        }
+        } else
+            return true; // se neniu testo difinitia, tiam apriore valida
     }
 
 /*
