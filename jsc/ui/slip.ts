@@ -18,9 +18,9 @@ export class Slip extends UIElement {
         if (s instanceof Slip) return s;
     }
 
-    static montru(element: HTMLDialogElement|string, n: number) {
+    static montru(element: HTMLDialogElement|string, akt: number) {
         const s = Slip.slip(element);
-        if (s) s.opcioj.aktiva = n;
+        if (s) s.montru(akt);
     }
 
     constructor(element: HTMLDialogElement|string, opcioj: any) {
@@ -33,13 +33,42 @@ export class Slip extends UIElement {
         let n = 0;
         const aktiva = this.opcioj.aktiva;
 
+        this.montru(aktiva);
+
         this.langetoj()?.forEach((l) => {   
-            const s = this.slipo(l);
-            if (s) {
-                DOM.kaŝu(s, n!= aktiva); // alternative ni povus memori la valoron de CSS display kaj poste ŝalti al "display:none"
-                n++;
-            }
-        })
+            // kreu reagon
+            l.addEventListener("click",() => this._lelekto.call(this,l));
+        });
+    }
+
+    _videbleco(langeto) {
+        const sl0 = this.slipo(langeto);
+        this.langetoj()?.forEach((l) => {
+            const sl = this.slipo(l);
+            if (sl) DOM.kaŝu(sl,(sl0 !== sl));
+        });
+    }
+
+    _lslip_id(langeto) {
+        const href = langeto.querySelector("a[href]")?.getAttribute("href");
+        if (href) {
+            return href.split('#')[1];  
+        }
+    }
+
+    _lelekto(langeto) {
+        const lgoj = this.langetoj();
+        if (lgoj) {
+            const n = Array.from(lgoj).indexOf(langeto);
+            this.montru(n);
+        }
+    }
+
+    montru(akt: number) {
+        this.opcioj.aktiva = akt;
+        const ln = this.langetoj()?.item(akt);
+
+        this._videbleco(ln);
     }
 
     /**
@@ -51,15 +80,12 @@ export class Slip extends UIElement {
     }
 
     /**
-     * Redonas la slipon, kiu apartenas al la donia langeto
+     * Redonas la slipon, kiu apartenas al la donita langeto
      * @param 
      */
-    slipo(l: HTMLElement) {
-        const href = l.querySelector("a[href]")?.getAttribute("href");
-        if (href) {
-            const hash = href.split('#')[1];
-            return document.getElementById(hash);
-        }
+    slipo(langeto: HTMLElement) {
+        const sl_id = this._lslip_id(langeto);
+        return document.getElementById(sl_id);
     }
 
 }    
