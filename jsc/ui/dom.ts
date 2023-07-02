@@ -94,11 +94,14 @@ export class DOM {
     }
 
     /**
-     * Ligas datumojnal elemento (ev. identigebla per elektilo)
+     * Ligas datumojn al elemento (ev. identigebla per elektilo)
      */
     static al_datum(e: Element|string, nomo: string, datumo: any) {
         const el = (typeof e === "string")? DOM.e(e) : e;
-        if (el) return el._datumo[nomo] = datumo;
+        if (el) {
+            if (! el._datumo) el._datumo = {};
+            el._datumo[nomo] = datumo;
+        }
     }
 
     /**
@@ -123,7 +126,11 @@ export class DOM {
     static malreago(e: EventTarget|string, evento: string) {
         const el = (typeof e === "string")? DOM.e(e) : e;
         //if (el) el.removeEventListener(evento, reago);
-        throw ("DOM.malreago ankoraŭ ne implementita!");
+        console.error("DOM.malreago ankoraŭ ne implementita!");
+
+        // ne ekzistas normigita maniero eltrovi registritajn evento-reagojn por forigi ilin
+        // do nencesus mem registri ilin por poste povi forigi ilin, vd.:
+        // https://www.sqlpac.com/en/documents/javascript-listing-active-event-listeners.html#listing-the-events-added-with-the-method-addeventlistener
        
     }
 

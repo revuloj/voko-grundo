@@ -518,8 +518,8 @@ export default function() {
             const view_h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
             const dlg = DOM.e("#traduko_dlg")?.parentElement;
             if (dlg) {
-                const tbar_h = +(dlg.querySelector(".ui-dialog-titlebar") as HTMLElement).style.height|| 0;
-                const pane_h = +(dlg.querySelector(".ui-dialog-buttonpane") as HTMLElement).style.height|| 0;
+                const tbar_h = +(dlg.querySelector("h2") as HTMLElement).style.height|| 0;
+                const pane_h = +(dlg.querySelector("form") as HTMLElement).style.height|| 0;
                 const tab_h = (view_h * 0.80) - tbar_h - pane_h;
                 const tab_div = DOM.e(".dlg_tab_div") as HTMLElement;
                 tab_div.style.height = ""+tab_h;            
@@ -527,8 +527,8 @@ export default function() {
         }
     }); 
     new Menu("#traduko_menuo", {
-        items: "> :not(.ui-widget-header)",
-        select: shanghu_trd_lingvon
+        eroj: "li",
+        reago: shanghu_trd_lingvon
     });  
     DOM.ido_reago("#traduko_tabelo","blur","input",traduko_memoru_fokuson);
     DOM.ido_reago("#traduko_butonoj","click","div",traduko_butono_premo);
@@ -1226,38 +1226,41 @@ function plenigu_lingvojn() {
                             const kodo = l.getAttribute('kodo');
                             if (kodo != 'eo') {
                                 if (pref_lngoj.indexOf(kodo) > -1) {
-                                    pref_lingvoj += '<li id="trd_pref_' + kodo + '"><div>' + l.textContent + '</div></li>';
+                                    pref_lingvoj += '<li id="trd_pref_' + kodo + '">' + l.textContent + '</li>';
                                     
                                 } // else {
                                     var lnomo = l.textContent;
                                     var letter = lnomo.charAt(0);
                                     var lkodo = kodo;
                                     if (letter >= 'a' && letter <= 'b')
-                                        lingvoj_a_b += '<li id="trd_chiuj_' + lkodo + '"><div>' + lnomo + '</div></li>';
+                                        lingvoj_a_b += '<li id="trd_chiuj_' + lkodo + '">' + lnomo + '</li>';
                                     else if (letter >= 'c' && letter <= 'g' || letter == 'ĉ' || letter == 'ĝ')
-                                        lingvoj_c_g += '<li id="trd_chiuj_' + lkodo + '"><div>' + lnomo + '</div></li>';
+                                        lingvoj_c_g += '<li id="trd_chiuj_' + lkodo + '">' + lnomo + '</li>';
                                     else if (letter >= 'h' && letter <= 'j' || letter == 'ĥ' || letter == 'ĵ')
-                                        lingvoj_h_j += '<li id="trd_chiuj_' + lkodo + '"><div>' + lnomo + '</div></li>';
+                                        lingvoj_h_j += '<li id="trd_chiuj_' + lkodo + '">' + lnomo + '</li>';
                                     else if (letter >= 'k' && letter <= 'l')
-                                        lingvoj_k_l += '<li id="trd_chiuj_' + lkodo + '"><div>' + lnomo + '</div></li>';
+                                        lingvoj_k_l += '<li id="trd_chiuj_' + lkodo + '">' + lnomo + '</li>';
                                     else if (letter >= 'm' && letter <= 'o')
-                                        lingvoj_m_o += '<li id="trd_chiuj_' + lkodo + '"><div>' + lnomo + '</div></li>';
+                                        lingvoj_m_o += '<li id="trd_chiuj_' + lkodo + '">' + lnomo + '</li>';
                                     else if (letter >= 'p' && letter <= 's' || letter == 'ŝ')
-                                        lingvoj_p_s += '<li id="trd_chiuj_' + lkodo + '"><div>' + lnomo + '</div></li>';
+                                        lingvoj_p_s += '<li id="trd_chiuj_' + lkodo + '">' + lnomo + '</li>';
                                     else if (letter >= 't' && letter <= 'z' || letter == 'ŭ')
-                                        lingvoj_t_z += '<li id="trd_chiuj_' + lkodo + '"><div>' + lnomo + '</div></li>';
+                                        lingvoj_t_z += '<li id="trd_chiuj_' + lkodo + '">' + lnomo + '</li>';
                                 //}
                             }
                         });
                 // $("#traduko_lingvoj").html(pref_lingvoj +  '<option disabled>────────────────────</option>' +lingvoj); 
-                DOM.e("#traduko_aliaj")?.before(pref_lingvoj);
-                DOM.e("#traduko_chiuj_a_b")?.append(lingvoj_a_b);
-                DOM.e("#traduko_chiuj_c_g")?.append(lingvoj_c_g);
-                DOM.e("#traduko_chiuj_h_j")?.append(lingvoj_h_j);
-                DOM.e("#traduko_chiuj_k_l")?.append(lingvoj_k_l);
-                DOM.e("#traduko_chiuj_m_o")?.append(lingvoj_m_o);
-                DOM.e("#traduko_chiuj_p_s")?.append(lingvoj_p_s);
-                DOM.e("#traduko_chiuj_t_z")?.append(lingvoj_t_z);
+                const pl_ul = document.createElement("ul");
+                pl_ul.innerHTML = pref_lingvoj;
+                const pl_li = pl_ul.children[0];
+                DOM.e("#traduko_menuo")?.prepend(pl_li);
+                DOM.al_html("#traduko_chiuj_a_b",lingvoj_a_b);
+                DOM.al_html("#traduko_chiuj_c_g",lingvoj_c_g);
+                DOM.al_html("#traduko_chiuj_h_j",lingvoj_h_j);
+                DOM.al_html("#traduko_chiuj_k_l",lingvoj_k_l);
+                DOM.al_html("#traduko_chiuj_m_o",lingvoj_m_o);
+                DOM.al_html("#traduko_chiuj_p_s",lingvoj_p_s);
+                DOM.al_html("#traduko_chiuj_t_z",lingvoj_t_z);
                 Menu.refreŝigu("#traduko_menuo");
              }
         );
@@ -1281,7 +1284,7 @@ function plenigu_lingvojn_artikolo() {
         lingvoj_html += '<li id="trd_art_' + kodo + '"><div>' + lnomo + '</div></li>';
     }
     DOM.al_t("#traduko_artikolaj",'');
-    DOM.e("#traduko_artikolaj")?.append(lingvoj_html);
+    DOM.al_html("#traduko_artikolaj",lingvoj_html);
 //    $("#traduko_menuo[id^=trd_art_]").remove();
 //    $("#traduko_artikolaj").after(lingvoj_html);
 }

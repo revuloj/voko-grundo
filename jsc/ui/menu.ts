@@ -30,6 +30,10 @@ export class Menu extends UIElement {
         this.opcioj = Object.assign(this.opcioj,Menu._default,opcioj)
 
         // preparu la menuerojn
+        this._preparu();
+    }
+
+    _preparu() {
         this.element.querySelectorAll(this.opcioj.eroj).forEach((i) => {
             i.classList.add(Menu.menu_item_class);
             i.addEventListener("click",this.opcioj.reago);
@@ -37,6 +41,6 @@ export class Menu extends UIElement {
     }
 
     refreŝigu() {
-        console.error("Menu.refreŝigu: Ne jam implementita!");
+        this._preparu();
     }
 }
