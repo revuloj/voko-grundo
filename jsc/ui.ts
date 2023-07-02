@@ -5,7 +5,7 @@ export * from "./ui/dialog";
 export * from "./ui/buton";
 export * from "./ui/elektil";
 export * from "./ui/propon";
-export * from "./ui/slip";
+export * from "./ui/slipar";
 export * from "./ui/skal";
 export * from "./ui/grup";
 export * from "./ui/musnot";

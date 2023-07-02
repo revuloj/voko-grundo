@@ -6,34 +6,38 @@
 import { DOM } from './dom';
 import { UIElement } from './uielement';
 
-export class Slip extends UIElement {
+export class Slipar extends UIElement {
     //valoroj: any;
 
     static _default: { 
         aktiva: number;
+        poste: undefined;
+        antaŭe: undefined;
     };
 
-    static slip(element: HTMLDialogElement|string) {
+    static slipar(element: HTMLDialogElement|string) {
         let s = super.obj(element);
-        if (s instanceof Slip) return s;
+        if (s instanceof Slipar) return s;
     }
 
     static montru(element: HTMLDialogElement|string, akt: number) {
-        const s = Slip.slip(element);
+        const s = Slipar.slipar(element);
         if (s) s.montru(akt);
     }
 
     constructor(element: HTMLDialogElement|string, opcioj: any) {
         super(element, opcioj);
 
-        this.opcioj = Object.assign(this.opcioj,Slip._default,opcioj)
+        this.opcioj = Object.assign(this.opcioj,Slipar._default,opcioj)
 
         // kaŝu ĉiujn krom la aktiva
         if (this.opcioj.aktiva == undefined) this.opcioj.aktiva = 0;
         let n = 0;
         const aktiva = this.opcioj.aktiva;
 
-        this.montru(aktiva);
+        this.opcioj.aktiva = 0;
+        this._videbleco(this.langetoj()?.item(0));
+
 
         this.langetoj()?.forEach((l) => {   
             // kreu reagon
@@ -65,10 +69,42 @@ export class Slip extends UIElement {
     }
 
     montru(akt: number) {
-        this.opcioj.aktiva = akt;
-        const ln = this.langetoj()?.item(akt);
+        const ln_malnov = this.langetoj()?.item(this.opcioj.aktiva);
+        const sl_malnov = ln_malnov? this.slipo(ln_malnov) : undefined;
+        const ln_nov = this.langetoj()?.item(akt);
+        const sl_nov = ln_nov? this.slipo(ln_nov) : undefined;
 
-        this._videbleco(ln);
+        if (ln_nov !== ln_malnov && sl_malnov && sl_nov) {
+            let ŝanĝu = true;
+
+            if (this.opcioj.antaŭe instanceof Function) {
+                //ŝanĝu = 
+                this.opcioj.antaŭe.call(this,
+                {
+                    slipo_malnova: sl_malnov,
+                    slipo_nova: sl_nov,
+                    langeto_malnova: ln_malnov,
+                    langeto_nova: ln_nov
+                });
+            };
+
+            if (ŝanĝu) {
+                this.opcioj.aktiva = akt;
+                this._videbleco(ln_nov);
+
+                if (this.opcioj.poste instanceof Function) {
+                    ŝanĝu = this.opcioj.poste.call(this,
+                    {
+                        slipo_malnova: sl_malnov,
+                        slipo_nova: sl_nov,
+                        langeto_malnova: ln_malnov,
+                        langeto_nova: ln_nov
+                    });
+                };
+        
+            }
+    
+        }
     }
 
     /**

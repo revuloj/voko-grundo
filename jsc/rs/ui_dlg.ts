@@ -10,7 +10,7 @@ import * as u from '../u';
 import * as x from '../x';
 
 import { xpress } from '../x';
-import { DOM, Dialog, Menu, Grup, Slip, Buton, Elektil, Propon, Valid, Eraro } from '../ui';
+import { DOM, Dialog, Menu, Grup, Slipar, Buton, Elektil, Propon, Valid, Eraro } from '../ui';
 
 import * as sbl from './sxablonoj';
 import { Artikolo } from './ui_art';
@@ -749,7 +749,7 @@ function download_art(dosiero,err_to,dlg_id,do_close=true) {
                 DOM.al_v("#re_radiko",xmlarea?.getRadiko()||'');
                 // $("#collapse_outline").accordion("option","active",0);
                 DOM.kaŝu(err_to);
-                Slip.montru("#tabs",0);
+                Slipar.montru("#tabs",0);
                 
                 if (do_close) {
                     Dialog.fermu(dlg_id);
@@ -775,7 +775,7 @@ function download_url(url,dosiero,err_to,dlg_id,do_close=true) {
                 if (art) art.load(dosiero,data);
                 // $("#collapse_outline").accordion("option","active",0);
                 DOM.kaŝu(err_to);
-                Slip.montru("#tabs", 0);
+                Slipar.montru("#tabs", 0);
 
                 if (do_close) {
                     Dialog.fermu(dlg_id);

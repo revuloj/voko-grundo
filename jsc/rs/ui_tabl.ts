@@ -11,7 +11,7 @@ import * as x from '../x';
 
 import { Xmlarea, RevoListoj } from '../x';
 import { ht_element } from '../u';
-import { DOM, Slip, Buton, Elektil, Eraro, Valid } from '../ui';
+import { DOM, Slipar, Buton, Elektil, Eraro, Valid } from '../ui';
 
 import { Erarolisto } from './ui_err';
 import { artikolo } from '../a/artikolo';
@@ -49,9 +49,9 @@ var pozicio_html = '';
 export default function() {    
     console.debug("Instalante la ĉefan redaktilopaĝon...");
 
-    const slipoj = new Slip("#tabs", {
-        activate: activate_tab,
-        beforeActivate: before_activate_tab
+    const sliparo = new Slipar("#tabs", {
+        poste: nova_slipo,
+        antaŭe: antaŭ_slipŝanĝo
     });
     // PLIBONIGU: ĉar ni implementas slipojn nun mem anst. jQuery UI tabs,
     // ni povus meti la klasojn rekte al CSS aŭ opcioj de objekto Slip
@@ -59,7 +59,7 @@ export default function() {
     if (sl) {                    
         sl.classList.add("ui-tabs-vertical","ui-helper-clearfix");
         sl.querySelector("ul")?.classList.add("ui-corner-all");
-        slipoj.langetoj()?.forEach((l) => {
+        sliparo.langetoj()?.forEach((l) => {
             const cl = l.classList;
             cl.add("ui-corner-right");
             cl.remove("ui-corner-top");
@@ -218,7 +218,7 @@ export default function() {
                     break;
                 case "sercho":
                     // iru al paĝo serĉo...
-                    const slip = Slip.montru("#tabs",2);
+                    const slip = Slipar.montru("#tabs",2);
                     break;
             }
         },
@@ -252,7 +252,7 @@ export default function() {
     
   //### antaŭrigardo
     DOM.klak( "#re_antaurigardo", function() {
-        const slip = Slip.montru("#tabs",1);
+        const slip = Slipar.montru("#tabs",1);
         //iru_al(pozicio_html);
         antaurigardo();
     });
@@ -378,10 +378,10 @@ function switch_dock_klavaro_kontrolo() {
  * @param {*} event 
  * @param {*} ui 
  */
-export function before_activate_tab(event,ui) {
-    var old_p = ui.oldPanel[0].id;
-    var new_p = ui.newPanel[0].id;
-    var new_t = ui.newTab[0].id;
+export function antaŭ_slipŝanĝo(ui) {
+    var old_p = ui.slipo_malnova.id;
+    var new_p = ui.slipo_nova.id;
+    var new_t = ui.langeto_nova.id;
 
     // transirante al serĉo prenu markitan tekston kiel serĉaĵo
     if (old_p == "xml" && new_p == "sercho") {
@@ -427,11 +427,11 @@ export function before_activate_tab(event,ui) {
 /**
  * Aktivigas alian subpaĝon
  * @param {*} event 
- * @param {*} ui - enhavas informojn pri al paĝŝanĝo (oldPanel, newPanel)
+ * @param {*} ui - enhavas informojn pri al paĝŝanĝo (slipo_malnova, slipo_nova)
  */
-export function activate_tab(event,ui) {
-    var old_p = ui.oldPanel[0].id;
-    var new_p = ui.newPanel[0].id;
+export function nova_slipo(ui) {
+    var old_p = ui.slipo_malnova.id;
+    var new_p = ui.slipo_nova.id;
     
     /*
     if (old_p == "xml" && new_p == "html") {
@@ -492,96 +492,101 @@ function antaurigardo() {
         }
         
         
-    u.HTTPRequest('post',"revo_rigardo", { xml: xml_text },
+        u.HTTPRequest('post',"revo_rigardo", { xml: xml_text },
             function(data) {   
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(data,"text/html");       
+
                 // ial elektilo "article" ne funkcias tie ĉi !?
                 //const article = $( data ).find( "article" );
-                const article = data.querySelector("#s_artikolo").parentElement;
-                const footer = article.next();
+                const article = doc.querySelector("#s_artikolo")?.parentElement;
+                if (article) {
+                    const footer = article.nextSibling;
 
-                //$("#rigardo").html(data);
-                const rig = DOM.e("#rigardo");
-                if (rig) {
-                    rig.textContent = '';
-                    rig.append(article,footer);    
-                }
-                xmlarea.ar_in_sync = true;
-                xmlarea.saltu();
-
-                // refaru matematikajn formulojn, se estas
-                if (typeof(MathJax) != 'undefined' && MathJax.Hub) {
-                    MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
-                }
-                
-                // korektu ligilojn en <a href...
-                DOM.ej("#rigardo a").forEach((a) => {
-                    const href = a.getAttribute('href');
-                    let newUrl;
-                    if (href && href[0] != '#' && href.slice(0,4) != 'http') {
-                        if (href[0] != '/' && href[0] != '.') {
-                        // referenco al alia artikolo
-                            // var newUrl = revo_url + '/revo/art/' + href;
-                            const mrk = href.split('#')[1] || href.split('.')[0];
-                            newUrl = revo_url + '/index.html#' + mrk;
-                            //console.debug(href+" -> "+newUrl);
-                            a.setAttribute('href', newUrl);
-                            a.setAttribute('target', '_new');
-                        } else if (href.slice(0,3) == '../' ) {
-                        // relativa referenco al Revo-dosiero, ekz-e indekso
-                            newUrl = revo_url + '/revo/'+href.slice(3);
-                            //console.debug(href+" -> "+newUrl);
-                            a.setAttribute('href', newUrl);
-                            a.setAttribute('target', '_new');
-                        } else if (href[0] == '/' ) {
-                        // absoluta referenco al Revo-dosiero
-                            newUrl = revo_url + href;
-                            //console.debug(href+" -> "+newUrl);
-                            a.setAttribute('href', newUrl);
-                            a.setAttribute('target', '_new');
-//                        } else {
-                            //console.debug("lasita: " + href);
-//                            null
+                    //$("#rigardo").html(data);
+                    const rig = DOM.e("#rigardo");
+                    if (rig) {
+                        rig.textContent = '';
+                        rig.append(article,footer as Node);    
+                    }
+                    xmlarea.ar_in_sync = true;
+                    xmlarea.saltu();
+    
+                    // refaru matematikajn formulojn, se estas
+                    if (typeof(MathJax) != 'undefined' && MathJax.Hub) {
+                        MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+                    }
+                    
+                    // korektu ligilojn en <a href...
+                    DOM.ej("#rigardo a").forEach((a) => {
+                        const href = a.getAttribute('href');
+                        let newUrl;
+                        if (href && href[0] != '#' && href.slice(0,4) != 'http') {
+                            if (href[0] != '/' && href[0] != '.') {
+                            // referenco al alia artikolo
+                                // var newUrl = revo_url + '/revo/art/' + href;
+                                const mrk = href.split('#')[1] || href.split('.')[0];
+                                newUrl = revo_url + '/index.html#' + mrk;
+                                //console.debug(href+" -> "+newUrl);
+                                a.setAttribute('href', newUrl);
+                                a.setAttribute('target', '_new');
+                            } else if (href.slice(0,3) == '../' ) {
+                            // relativa referenco al Revo-dosiero, ekz-e indekso
+                                newUrl = revo_url + '/revo/'+href.slice(3);
+                                //console.debug(href+" -> "+newUrl);
+                                a.setAttribute('href', newUrl);
+                                a.setAttribute('target', '_new');
+                            } else if (href[0] == '/' ) {
+                            // absoluta referenco al Revo-dosiero
+                                newUrl = revo_url + href;
+                                //console.debug(href+" -> "+newUrl);
+                                a.setAttribute('href', newUrl);
+                                a.setAttribute('target', '_new');
+    //                        } else {
+                                //console.debug("lasita: " + href);
+    //                            null
+                            }
                         }
+                    });  
+                    
+                    DOM.ej("#rigardo img").forEach((e) => {
+                        var src = e.getAttribute('src');
+                        if ( src && src.slice(0,7) == '../bld/' ) {
+                            e.setAttribute('src',revo_url + '/revo/bld/'+src.slice(7));
+                        }
+                    });
+    
+                    // anstataŭigu GIF per SVG  
+                    const ar = DOM.e('#rigardo');
+                    if (ar) x.fix_img_svg(ar);
+    
+                    DOM.ej("#rigardo source").forEach((e) => {
+                        const src = e.getAttribute('srcset');
+                        if ( src && src.slice(0,7) == '../bld/' ) {
+                            e.setAttribute('srcset', revo_url + '/revo/bld/'+src.slice(7));
+                        }
+                    });
+    
+                    // preparu la artikolon per ties JS!
+                    /// KOREKTU: ni elprenis <head>, do ni devos alie provitzi tion:
+                    //restore_preferences();    
+                    globalThis.lingvoj_xml = '../voko/lingvoj.xml'; // PLIBONIGU: distingu redaktilojn iel
+                                // anstataŭ manipuli tie ĉi centran agordon!
+                    artikolo.preparu_art();
+    
+                    // ankoraŭ reduktu la piedlinion
+                    // PLIBONIGU: eble permesu kaŝi ilin per CSS uzante apartajn
+                    // klasojn en la elementoj de la piedlinio
+                    if (footer) {
+                        DOM.al_t("#rigardo footer a[href*='/dok/']",".");
+                        DOM.al_t("#rigardo footer a[href*='/xml/']",".");
+                        DOM.al_t("#rigardo footer a[href*='/cgi-bin/']",".");
                     }
-                });  
-                
-                DOM.ej("#rigardo img").forEach((e) => {
-                    var src = e.getAttribute('src');
-                    if ( src && src.slice(0,7) == '../bld/' ) {
-                        e.setAttribute('src',revo_url + '/revo/bld/'+src.slice(7));
-                    }
-                });
-
-                // anstataŭigu GIF per SVG  
-                const ar = DOM.e('#rigardo');
-                if (ar) x.fix_img_svg(ar);
-
-                DOM.ej("#rigardo source").forEach((e) => {
-                    const src = e.getAttribute('srcset');
-                    if ( src && src.slice(0,7) == '../bld/' ) {
-                        e.setAttribute('srcset', revo_url + '/revo/bld/'+src.slice(7));
-                    }
-                });
-
-                // preparu la artikolon per ties JS!
-                /// KOREKTU: ni elprenis <head>, do ni devos alie provitzi tion:
-                //restore_preferences();    
-                globalThis.lingvoj_xml = '../voko/lingvoj.xml'; // PLIBONIGU: distingu redaktilojn iel
-                            // anstataŭ manipuli tie ĉi centran agordon!
-                artikolo.preparu_art();
-
-                // ankoraŭ reduktu la piedlinion
-                // PLIBONIGU: eble permesu kaŝi ilin per CSS uzante apartajn
-                // klasojn en la elementoj de la piedlinio
-                if (footer) {
-                    DOM.al_t("#rigardo footer a[href*='/dok/']",".");
-                    DOM.al_t("#rigardo footer a[href*='/xml/']",".");
-                    DOM.al_t("#rigardo footer a[href*='/cgi-bin/']",".");
+    
+                    /*
+                    iru_al(pozicio_html);
+                    */
                 }
-
-                /*
-                iru_al(pozicio_html);
-                */
             },
             () => document.body.style.cursor = 'wait',
             () => document.body.style.cursor = 'auto',

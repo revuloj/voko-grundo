@@ -7,7 +7,7 @@
 import * as u from '../u';
 import * as x from '../x';
 
-import { DOM, UIElement, Dialog, Slip, Skal, Propon, Elektil, Valid, Eraro } from '../ui';
+import { DOM, UIElement, Dialog, Slipar, Skal, Propon, Elektil, Valid, Eraro } from '../ui';
 
 import { bar_styles, make_percent_bar } from './procentoj';
 import { HTMLFonto, HTMLTrovoDt, HTMLTrovoDdBld } from './sxabloniloj';
@@ -788,7 +788,7 @@ function _bildo_info(pageids) {
                                     }
                                     // montru enmeto-dialogon
                                     Dialog.malfermu("#bildo_dlg");
-                                    Slip.montru("#tabs", 0);
+                                    Slipar.montru("#tabs", 0);
                                 });
                             // ni bezonas ankaŭ bildetojn por montri ilin, necesas aparte demandi tiujn...
                             if (dosieroj.length) _bildeto_info(dosieroj);    
@@ -969,7 +969,7 @@ class Trovo extends UIElement {
                         dlg.al_valoroj(values);
                         dlg.malfermu();
                     }
-                    Slip.montru("#tabs", 0);
+                    Slipar.montru("#tabs", 0);
                 }
             });
         } else {
