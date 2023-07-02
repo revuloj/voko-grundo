@@ -322,7 +322,7 @@ export class XKlavaro {
         const element = this.klavaro;
 
         // MANKAS ankoraŭ...
-        const radiko =  this.kiuradiko();
+        const radiko =  this.kiuradiko? this.kiuradiko() : '';
 
         if (btn.classList.contains("reghim_btn")) {
             this.reĝimpremo(event,{cmd: cmd as Reghimo});

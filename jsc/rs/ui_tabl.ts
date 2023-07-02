@@ -200,7 +200,7 @@ export default function() {
     });
 
     // ekrana klavaro
-    const klv = DOM.e("#dock_klavaro");
+    let klv = DOM.e("#dock_klavaro");
     if (klv) {
       const xklv = new x.XKlavaro(klv,"#xml_text","#xml_text",
         undefined,
@@ -287,15 +287,19 @@ export default function() {
     DOM.klak("#regexes input",regulEsprimo);
     DOM.reago("#re_radiko","input",regulEsprimo);
 
-    new x.XKlavaro("#sercho_butonoj","#sercho_sercho","#sercho_sercho",
-        undefined,
-        function(event,ui) {
-            if (ui.cmd == "blankigo") {
-                DOM.al_v("#sercho_sercho","");
-            }
-        },
-        undefined
-    );
+    klv = DOM.e("#sercho_butonoj");
+    if (klv) {
+        const xklv = new x.XKlavaro("#sercho_butonoj","#sercho_kampo","#sercho_sercho",
+            ()=>'',
+            function(event,ui) {
+                if (ui.cmd == "blankigo") {
+                    DOM.al_v("#sercho_sercho","");
+                }
+            },
+            undefined
+        );
+        xklv.elemento_klavoj(klv);
+    }
     DOM.klavpremo("#sercho_sercho",x.xpress);
     DOM.klavpremo("#re_radiko",x.xpress);
 
@@ -637,13 +641,11 @@ function plenigu_elekto_indikoj() {
 
     if (klvr && xmlarea) {
         
-        // PLIBONIGU: tiu sama/simila kodo estas en rv/redaktilo,
-        // pli bone ŝovu ĝin al x/xklavar
         // @ts-ignore
         const xklavaro = new x.XKlavaro(klvr, null, xmltxt,
             () => xmlarea.getRadiko(),
             (event: Event, cmd) => { 
-                // PLIBONIGU: tion ni povas ankaŭ meti en xklavaro.js!
+                // KOREKTU: ...
                 if (cmd.cmd == 'indiko') {
                 x.hide("r:klv_fak");
                 x.show("r:klv_ind");
