@@ -529,7 +529,7 @@ dialog .butonujo button {
    background-position: bottom
 }
 
-#menu li {
+#menu li, #traduko_menuo li {
   width: 100%;
   color: var(--nav-fnt-clr);
   border-radius: 0 !important;
@@ -540,6 +540,10 @@ dialog .butonujo button {
 .ui-menu-item {
     border-bottom: 1px solid silver;
     font-size: 85%
+}
+
+.ui-menu-sub-fermita::after {
+    content: "\00a0\2bc8";
 }
 
 .ui-state-error {
@@ -1160,7 +1164,8 @@ dialog .butonujo button {
 }
 
 #traduko_dlg {
-    padding-left: 0;
+    width: fit-content;
+    padding-left: 0;   
 }
 
 #traduko_dlg tr.tr_drv {
