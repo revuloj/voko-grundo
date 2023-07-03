@@ -12,7 +12,7 @@ declare global {
 
 export class UIElement {
     public element: HTMLElement;
-    public opcioj: any;
+    public opcioj: any;    
 
     static obj(element: HTMLElement|string) {
         let el: HTMLElement|null;
@@ -25,6 +25,7 @@ export class UIElement {
 
         if (el && el._uielement) return el._uielement;
     }
+
 
     constructor(element: HTMLElement|string, opcioj: any) {
         const el = (typeof element === "string")? document.querySelector(element) as HTMLElement : element;
@@ -55,7 +56,7 @@ export class UIElement {
             if (reago instanceof Function)
                 reago.call(this,ev,extra);
         }
-    }
+    } 
     
 
 };

@@ -920,7 +920,7 @@ function _bildo_info_2(dosiero) {
 class Trovo extends UIElement {
     static _default = {
         type: "teksto",
-        ŝablono: new HTMLTrovoDt(),
+        ŝablono: null,
         bld_ŝablonono: null,
         valoroj: {
             prompt: "&nbsp;&nbsp;&#x25B6;&#xFE0E;",
@@ -941,7 +941,8 @@ class Trovo extends UIElement {
     constructor(element: HTMLElement|string, opcioj: any) {
         super(element,opcioj);
 
-        this.opcioj = Object.assign(this.opcioj,Trovo._default,opcioj);
+        this.opcioj = x.fandu(x.fandu(Trovo._default,this.opcioj),opcioj);
+        this.opcioj.ŝablono = new HTMLTrovoDt();
 
         let v = this.opcioj.valoroj;
         this.opcioj.valoroj.id = this.element.id;
@@ -970,9 +971,8 @@ class Trovo extends UIElement {
                 DOM.e("#k_" + v.id)?.remove();
             }
 
-            const dt = this.element.querySelector("dt");
-            if (dt) {
-                dt.insertAdjacentHTML("beforeend",`<button id="#r_${v.id}"/><button id="#e_${v.id}"/>`);
+            const dt = this.element.previousSibling;
+            if (dt instanceof HTMLElement) {
                 new RigardoBtn("#r_" + v.id, {url: v.url});
                 new EkzemploBtn("#e_" + v.id, {
                     data: v.data,

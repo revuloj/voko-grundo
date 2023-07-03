@@ -47,6 +47,62 @@ export function group_by(key: string|number, array: Array<any>): {[key: string]:
   return grouped;
 }
 
+/**
+ * Testas, ĉu io estas nura objekto, sed ne de tipo Array
+ * @param item 
+ * @returns 
+ */
+export function isObject(item) {
+  return (item && typeof item === 'object' && !Array.isArray(item));
+};
+
+
+/**
+ * profunda detrua fando de objektoj
+ * @param target
+ * @param ...sources
+ */
+export function enfandu(target, ...sources) {
+    if (!sources.length) return target;
+    const source = sources.shift();
+
+    if (isObject(target) && isObject(source)) {
+      for (const key in source) {
+          if (isObject(source[key])) {
+          if (!target[key]) Object.assign(target, { [key]: {} });
+          enfandu(target[key], source[key]);
+          } else {
+          Object.assign(target, { [key]: source[key] });
+          }
+      }
+    }
+
+    return enfandu(target, ...sources);
+}    
+
+
+/**
+ * profunda nedetrua fando de du objektoj
+ * @param target
+ * @param source
+ */
+export function fandu(target, source) {
+  let output = Object.assign({}, target);
+  if (isObject(target) && isObject(source)) {
+    Object.keys(source).forEach(key => {
+      if (isObject(source[key])) {
+        if (!(key in target))
+          Object.assign(output, { [key]: source[key] });
+        else
+          output[key] = fandu(target[key], source[key]);
+      } else {
+        Object.assign(output, { [key]: source[key] });
+      }
+    });
+  }
+  return output;
+}
+
 
 /**
  * Transformas markon al href por artikolo
