@@ -38,23 +38,43 @@ export class Menu extends UIElement {
     }
 
     _preparu() {
-        this.element.querySelectorAll(this.opcioj.eroj).forEach((i) => {
-            i.classList.add(Menu.menu_item_class);
+        this.element.querySelectorAll(this.opcioj.eroj).forEach((menuero) => {
+            menuero.classList.add(Menu.menu_item_class);
 
             // traktu evtl. submenuon            
-            const sub = i.querySelector("ul,ol");
+            const sub = this._submenuo(menuero);
             if (sub) {
-                i.classList.add(Menu.menu_sub_fermita_class);
+                menuero.classList.add(Menu.menu_sub_fermita_class);
+                sub.classList.add(Menu.menu_class);
                 DOM.kaŝu(sub);
-                i.addEventListener("click",(event)=> {
-                    const kaŝita = DOM.kaŝita(sub);
-                    DOM.kaŝu(sub,!kaŝita);
+                // ni aldonas klak-reagon al la menuero
+                menuero.addEventListener("click",(event)=> {
+                    this.element.querySelectorAll(this.opcioj.eroj).forEach((m_ero) => {
+                        // estas la menuero mem
+                        if (m_ero === menuero) {
+                            const kaŝita = DOM.kaŝita(sub);
+                            DOM.kaŝu(sub,!kaŝita);
+                            if (!kaŝita) {
+                                // metu la sumenuon tuj apud la menueron
+                                sub.style.left = ""+(menuero.offsetLeft+menuero.offsetWidth)+"px";
+                                sub.style.top = ""+menuero.offsetTop+"px";
+                            }
+                        } else { // ĉiujn aliajn submenuojn kaŝu kiam ni klakas sur unu el la ĉef-menueroj!
+                            DOM.kaŝu(this._submenuo(m_ero));
+                        }
+                    });
                 });
             } else {
-                i.addEventListener("click",this.opcioj.reago);
+                // reago al elekto de menuero (kiu ne estas submenuo)
+                menuero.addEventListener("click",(event) => 
+                    this.opcioj.reago.call(this,event,{menuero: menuero}));
             }
 
         });
+    }
+
+    _submenuo(menuero) {
+        return menuero.querySelector("ul,ol");
     }
 
     refreŝigu() {

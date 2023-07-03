@@ -247,8 +247,8 @@ export function vikiSerĉo(event) {
                     );
                 }
             } else {
-                    DOM.e("#sercho_trovoj")
-                        ?.append("<p>&nbsp;&nbsp;Neniuj trovoj.</p>");
+                const s_tr = DOM.e("#sercho_trovoj");
+                if (s_tr) s_tr.innerHTML = "<p>&nbsp;&nbsp;Neniuj trovoj.</p>";
             }
         },
         undefined, undefined,
@@ -332,8 +332,8 @@ export function citaĵoSerĉo(event) {
                     // sercho_enmetu_btn_reaction(i,trovo);
                 }
             } else {
-                    DOM.e("#sercho_trovoj")
-                        ?.append("<p>&nbsp;&nbsp;Neniuj trovoj.</p>");
+                const s_tr = DOM.e("#sercho_trovoj");
+                if (s_tr) s_tr.innerHTML = "<p>&nbsp;&nbsp;Neniuj trovoj.</p>";
             }
         },
         undefined, undefined,
@@ -446,7 +446,7 @@ export function regulEsprimo(event) {
  * periodo komenca jaro - fina jaro en la ŝovelektilo.
  */
 export function verkoPeriodo() {
-    const periodilo = DOM.i("#s_elektitaj_periodilo");
+    const periodilo = DOM.e("#s_elektitaj_periodilo");
 
     function adaptuVerkliston(de,ghis) {
         DOM.idoj("#sercho_verklisto div")?.forEach((e) => {
@@ -457,7 +457,7 @@ export function verkoPeriodo() {
         });
     }
 
-    if (periodilo) {
+    if (periodilo instanceof HTMLElement) {
         const min = periodilo.getAttribute("data-min")||1887;
         const max = periodilo.getAttribute("data-max")||2050;
         const val = periodilo.getAttribute("data-val");
@@ -467,8 +467,8 @@ export function verkoPeriodo() {
             range: true,
             min: +min,
             max: +max,
-            values: values, 
-            create: function() {
+            valoroj: values, 
+            kreo: function() {
                 if (values?.length == 2) {
                     const de = values[0];
                     const ghis = values[1];
@@ -477,7 +477,7 @@ export function verkoPeriodo() {
                     adaptuVerkliston(de,ghis);    
                 }
             },
-            slide: function(event, ui) {
+            movo: function(event, ui) {
                 // aktualigu la montratan periodon
                 const de = ui.values[0];
                 const ghis = ui.values[1];
@@ -501,7 +501,7 @@ function verkinformo() {
     const periodilo = DOM.e("#s_elektitaj_periodilo");
 
     if (periodilo instanceof HTMLElement) {
-        const periodo = Skal.skal(periodilo)?.opcioj["values"].join(' - ');
+        const periodo = Skal.skal(periodilo)?.opcioj["valoroj"].join(' - ');
         let info = ' ' + periodo;
         
         // titoloj; subpremu, se verkoj ankoraŭ ne ŝargitaj kaj do 
@@ -530,25 +530,26 @@ export function verkoListo(event) {
                 kiu: 'chiuj'
             }, 
             function(data) {
-                if (data.length && data[0].vrk) {                    
-                    vdiv.append('<div id="vl_chiuj_"><label for="vl__chiuj__">ĈIUJN malelekti/elekti</label>'
+                const json = JSON.parse(data);
+                if (json.length && json[0].vrk) {                    
+                    vdiv.insertAdjacentHTML("beforeend",'<div id="vl_chiuj_"><label for="vl__chiuj__">ĈIUJN malelekti/elekti</label>'
                     + '<input id="vl__chiuj__" type="checkbox" checked '
                     + 'name="cvl_chiuj" value="e_chiuj"></input></div>');
 
                     const jar_de = +(DOM.t("#periodilo_manilo_1")||0);
                     const jar_ghis = +(DOM.t("#periodilo_manilo_2")||0);
 
-                    const vrkj = data.sort((a,b)=>(a.jar-b.jar||0));                  
+                    const vrkj = json.sort((a,b)=>(a.jar-b.jar||0));                  
                     for (const v of vrkj) {
                         const id = "vl_"+v.vrk;
                         let txt = v.aut? v.aut+': ':'';
                         txt += v.tit? v.tit : v.nom;
                         txt += v.jar? ' ('+v.jar+')' : '';
                         const cls = v.jar >= jar_de && v.jar <= jar_ghis? '' : ' class="kasxita"';
-                        vdiv.append('<div data-jar="' + +v.jar + '"' + cls +'><label for="'+ id + '">' 
+                        vdiv.insertAdjacentHTML("beforeend",'<div data-jar="' + +v.jar + '"' + cls +'><label for="'+ id + '">' 
                             + txt + '</label>'
                             + '<input id="'+ id +'" type="checkbox" checked '
-                            + 'name="cvl_elekto" value="' + v.vrk + '"></input></div>')
+                            + 'name="cvl_elekto" value="' + v.vrk + '"></input></div>');
                     }
                     vdiv.querySelectorAll("input").forEach((i) => {
                         const e = new Elektil(i);
@@ -634,55 +635,56 @@ export function retoSerĉo(event) {
         }, 
         function(data) {   
     
-        let last_link = '', last_title = '';
-        let n = 0;
-        const first_word = (DOM.v("#sercho_sercho")||'').split(' ')[0];
-        // forigu bildojn (img) kaj <link...> el la HTML, por ke ili ne automate elshutighu...
-        data = data.replace(rx_img_link, '');
-        const ŝablono = new HTMLTrovoDt();
-        
-        data.querySelectorAll(".result-link,.result-snippet").forEach((e) => {
+            let last_link = '', last_title = '';
+            let n = 0;
+            const first_word = (DOM.v("#sercho_sercho")||'').split(' ')[0];
+            // forigu bildojn (img) kaj <link...> el la HTML, por ke ili ne automate elshutighu...
+            data = data.replace(rx_img_link, '');
+            const ŝablono = new HTMLTrovoDt();
+            
+            data.querySelectorAll(".result-link,.result-snippet").forEach((e) => {
 
-            // memoru la url kiel last_link
-            if ( e.calssList.contains("result-link") )   {
-                const href = e.getAttribute("href") || '';
-                const hpos = href?.search('http');
-                last_link = (hpos && hpos >= 0)? decodeURIComponent(href.slice(hpos)) : href;
-                last_title = e.textContent;
+                // memoru la url kiel last_link
+                if ( e.calssList.contains("result-link") )   {
+                    const href = e.getAttribute("href") || '';
+                    const hpos = href?.search('http');
+                    last_link = (hpos && hpos >= 0)? decodeURIComponent(href.slice(hpos)) : href;
+                    last_title = e.textContent;
 
-            // kreu trov-eron
-            } else if ( e.classList.contains("result-snippet") ) {
-                const snippet = e.textContent;
-                if ( last_title.search(first_word) >= 0 || snippet.search(first_word) >= 0 ) {
+                // kreu trov-eron
+                } else if ( e.classList.contains("result-snippet") ) {
+                    const snippet = e.textContent;
+                    if ( last_title.search(first_word) >= 0 || snippet.search(first_word) >= 0 ) {
 
-                    DOM.e("#sercho_trovoj")?.append('<dd id="trv_' + n + '">');
-                    // DuckDuckGo alpendigas ĝenan parametron &rut
-                    let url = last_link.replace(/&rut=[a-f0-9]+/,'');        
+                        DOM.e("#sercho_trovoj")?.append('<dd id="trv_' + n + '">');
+                        // DuckDuckGo alpendigas ĝenan parametron &rut
+                        let url = last_link.replace(/&rut=[a-f0-9]+/,'');        
 
-                    new Trovo("#trv_"+n,
-                        {
-                            ŝablono: ŝablono,
-                            valoroj: {
-                                url: url,
-                                title: last_title,
-                                descr: snippet,
-                                data: {url: url, title: last_title, snip: snippet}
+                        new Trovo("#trv_"+n,
+                            {
+                                ŝablono: ŝablono,
+                                valoroj: {
+                                    url: url,
+                                    title: last_title,
+                                    descr: snippet,
+                                    data: {url: url, title: last_title, snip: snippet}
+                                }
                             }
-                        }
-                    );
+                        );
 
-                    n++;
+                        n++;
+                    }
                 }
-            }
-        });
+            });
         
-        if ( n == 0 ) {
-            DOM.e("#sercho_trovoj")
-                ?.append("<p>&nbsp;&nbsp;Neniuj trovoj.</p>");
-        }
-    },
-    undefined, undefined,
-    (msg: string) => Eraro.al('#sercho_error',msg));
+            if ( n == 0 ) {
+                const s_tr = DOM.e("#sercho_trovoj");
+                if (s_tr) s_tr.innerHTML = "<p>&nbsp;&nbsp;Neniuj trovoj.</p>";
+            }
+        },
+        undefined, undefined,
+        (msg: string) => Eraro.al('#sercho_error',msg)
+    );
 }
 
 /**
@@ -705,11 +707,13 @@ export function bildoSerĉo(event) {
             kie: 'vikimedio'
         },
         function(data) {         
-            var pageids:Array<string> = [];
+            const json = JSON.parse(data);
+            const s_tr = DOM.e("#sercho_trovoj");
+            let pageids:Array<string> = [];
             
-            if (data.query && data.query.search 
-                && data.query.search.length) {
-                var results = data.query.search;
+            if (json.query && json.query.search 
+                && json.query.search.length && s_tr) {
+                var results = json.query.search;
 
 
                 var ŝablono = new HTMLTrovoDt();
@@ -721,7 +725,7 @@ export function bildoSerĉo(event) {
                     pageids.push(res.pageid);      
                     
 
-                    DOM.e("#sercho_trovoj")?.append('<dd id="trv_' + res.pageid + '">');
+                    s_tr.innerHTML = '<dd id="trv_' + res.pageid + '">';
                     new Trovo("#trv_" +res.pageid,
                         {
                             type: "bildo",
@@ -737,8 +741,7 @@ export function bildoSerĉo(event) {
 
                 }
             } else {
-                DOM.e("#sercho_trovoj")
-                    ?.append("<p>&nbsp;&nbsp;Neniuj trovoj.</p>");
+                if (s_tr) s_tr.innerHTML = "<p>&nbsp;&nbsp;Neniuj trovoj.</p>";
             }
             // bildo_info(pageids.slice(0,-1));
 

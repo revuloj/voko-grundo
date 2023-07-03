@@ -372,9 +372,11 @@ dialog label {
 dialog h2 {
     font-size: 105%;
     background-color: var(--mh2-bgr-clr);
+    /*border-bottom: 1px solid var(--nav-brd-clr);*/
+    border-radius: 0.1em;
     display: flex;
     justify-content: space-between;
-    margin: 0;
+    margin: 0.1em;
     padding: .3em;
 }
 
@@ -421,9 +423,23 @@ dialog .butonujo button {
     margin-right: 5px;
 }
 
+
 .ui-tabs-nav li {
+    list-style-type: none;
     background-color: var(--tab-bgr-clr) !important;
     box-shadow: inset 0 1px 2px;
+}
+
+/* kreas spacon inter langetoj */
+.ui-tabs-nav li:empty {
+    visibility: hidden;
+    height: 0.3em;
+    width: 0.3em;
+}
+
+.ui-tabs-nav a {
+    text-decoration: none;
+    color: var(--nav-fnt-clr);
 }
 
 .ui-tabs-nav li.ui-tabs-active,
@@ -432,6 +448,7 @@ dialog .butonujo button {
     color: black;
     box-shadow: 0 1px 2px rgba(0,0,0,.4);;
 }
+
 
 .ui-tabs-vertical {
     width: 3em; 
@@ -459,6 +476,8 @@ dialog .butonujo button {
     padding-left: .1em; 
     border-left-width: 1px; 
 }
+
+
 /*
 .ui-tabs-vertical .ui-tabs-panel { 
     padding: 1em; 
@@ -531,15 +550,27 @@ dialog .butonujo button {
 
 #menu li, #traduko_menuo li {
   width: 100%;
-  color: var(--nav-fnt-clr);
   border-radius: 0 !important;
-  background-color: var(--nav-bgr-clr);
   border-color: var(--nav-brd-clr);
+  color: var(--nav-fnt-clr);
+  background-color: var(--nav-bgr-clr);
+}
+
+.ui-menu {
+    color: var(--nav-fnt-clr);
+    background-color: var(--nav-bgr-clr);
 }
 
 .ui-menu-item {
     border-bottom: 1px solid silver;
     font-size: 85%
+}
+
+/* submenuoj */
+.ui-menu .ui-menu {
+    position: absolute;
+    padding: 0.1em;
+    border: 1px solid var(--nav-brd-clr);
 }
 
 .ui-menu-sub-fermita::after {
@@ -921,6 +952,17 @@ dialog .butonujo button {
 }
 */
 
+.ui-slider {
+    border: 1px solid var(--main-brd-clr);
+    border-radius: 5px / 50%;
+}
+
+.ui-slider-handle {
+    border: 1px solid var(--main-brd-clr);
+    background-color: var(--main-bgr-clr);
+    border-radius: 5px;
+}
+
 .periodilo {
     display: inline-block;
     min-width: 30em;
@@ -1015,19 +1057,30 @@ dialog .butonujo button {
     max-height: 60vh;
 }
 
-/*
-#sercho_verklisto .ui-button {
-    padding: 0;
+
+#sercho_verklisto div {
+    padding: 0.12em;
+    border: 1px hidden !important;
+    display: flex;
+    flex-direction: row-reverse;
 }
-*/
+
+
+#sercho_verklisto input {
+    border: 1px hidden !important;
+    box-shadow: none;
+    margin-left: 0.3em;
+    margin-right: 0.05em;
+}
 
 #sercho_verklisto label {
     width: 50em;
     text-align: left;
-    border: 1px solid gray !important;
+    /*border: 1px solid gray !important;*/
+    border: 1px hidden !important;
     margin: 1px !important;
     padding: 0.1em !important;
-    padding-left: 4.5ex !important;
+    padding-left: 4ex !important;
     text-indent: -2.5ex;
 }
 

@@ -8,6 +8,8 @@ import { UIElement } from './uielement';
 
 export class Slipar extends UIElement {
     //valoroj: any;
+    static langetaro_klaso = "ui-tabs-nav";
+    static langeto_aktiva_klaso = "ui-tabs-active";
 
     static _default: { 
         aktiva: number;
@@ -30,6 +32,9 @@ export class Slipar extends UIElement {
 
         this.opcioj = Object.assign(this.opcioj,Slipar._default,opcioj)
 
+        this.element.querySelector("ul,ol")
+            ?.classList.add(Slipar.langetaro_klaso);
+
         // kaŝu ĉiujn krom la aktiva
         if (this.opcioj.aktiva == undefined) this.opcioj.aktiva = 0;
         let n = 0;
@@ -49,7 +54,12 @@ export class Slipar extends UIElement {
         const sl0 = this.slipo(langeto);
         this.langetoj()?.forEach((l) => {
             const sl = this.slipo(l);
-            if (sl) DOM.kaŝu(sl,(sl0 !== sl));
+            if (sl) DOM.kaŝu(sl,sl0 !== sl);
+            if (l === langeto) {
+                l.classList.add(Slipar.langeto_aktiva_klaso);
+            } else {
+                l.classList.remove(Slipar.langeto_aktiva_klaso);
+            }
         });
     }
 
@@ -90,7 +100,7 @@ export class Slipar extends UIElement {
 
             if (ŝanĝu) {
                 this.opcioj.aktiva = akt;
-                this._videbleco(ln_nov);
+                this._videbleco(ln_nov);                
 
                 if (this.opcioj.poste instanceof Function) {
                     ŝanĝu = this.opcioj.poste.call(this,
@@ -106,6 +116,7 @@ export class Slipar extends UIElement {
     
         }
     }
+
 
     /**
      * Redonas la langetojn, supozante ke ili estas li-elementoj ene de ul aŭ ol

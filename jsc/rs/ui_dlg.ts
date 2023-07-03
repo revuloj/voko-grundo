@@ -1436,6 +1436,28 @@ function fill_tradukojn(lng,lingvo_nomo) {
 
         // enigu traduko-kampojn
         DOM.al_html("#traduko_tradukoj",tableCnt);
+
+        // aldonu reagon por +-butonoj
+        document.querySelectorAll("#traduko_tradukoj button").forEach((b) => {
+            b.addEventListener("click", (event) => {
+                const trg = event.currentTarget;
+                if (trg instanceof HTMLElement) {
+                    const i_ref = trg.getAttribute("formaction")?.substring(1)+":0";
+                    const first_input_of_mrk = document.getElementById(i_ref);
+                    if (first_input_of_mrk) {
+                        const last_input_of_mrk = first_input_of_mrk?.parentElement
+                            ?.querySelector("input:last-of-type");
+
+                        if (last_input_of_mrk) {
+                            const parts = last_input_of_mrk.id.split(':');
+                            const next_id = parts[0] + ':' + parts[1] + ':' + (parseInt(parts[2]) + 1);
+                            last_input_of_mrk.insertAdjacentHTML("afterend",'<br/><input id="' + next_id 
+                                + '" type="text" name="' + next_id + '" size="30" value=""/>');
+                        }
+                    } // else: estu ĉiam almenaŭ unu eĉ se malplena kampo....
+                }
+            });
+        });         
     }
     
 
@@ -1481,28 +1503,14 @@ function traduko_input_field(mrk,nro,trd) {
 
 function traduko_add_btn(mrk) {
     const id = mrk; //.replace(/\./g,'\\\\.');
-    const id_esc = mrk.replace(/\./g,'\\\.');
-    DOM.klak("#trdadd\\:"+id_esc,function() {
-        const first_input_of_mrk = DOM.i("#trd\\:" + id_esc + "\\:0");
-        if (first_input_of_mrk) {
-            const last_input_of_mrk = first_input_of_mrk?.parentElement?.querySelector("input:last-of-type");
-            if (last_input_of_mrk) {
-                const parts = last_input_of_mrk.id.split(':');
-                const next_id = parts[0] + ':' + parts[1] + ':' + (parseInt(parts[2]) + 1);
-                last_input_of_mrk.after('<br/><input id="' + next_id 
-                    + '" type="text" name="' + next_id + '" size="30" value=""/>');
-            }
-        } // else: estu ĉiam almenaŭ unu eĉ se malplena kampo....
-    });
-    return '<button id="trdadd:' + id 
-        + '" class="ui-button ui-widget ui-corner-all" title="Aldonu"><b>+</b></button>';
+    return `<button formaction="#trd:${id}" class="ui-button ui-widget ui-corner-all" title="Aldonu"><b>+</b></button>`;
 }
 
 function shanghu_trd_lingvon(event,ui) {
-    var id = ui.item.attr('id');
+    var id = ui.menuero.id;
     if (id && id.slice(0,4) == "trd_") {
         var lng= id.split('_')[2];
-        var lingvo_nomo = ui.item.text();
+        var lingvo_nomo = ui.menuero.textContent;
         //alert($("#traduko_lingvoj").val())
         fill_tradukojn(lng,lingvo_nomo);
     }
