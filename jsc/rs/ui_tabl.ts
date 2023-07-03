@@ -258,8 +258,8 @@ export default function() {
     });
 
     //### subpaĝo "serĉo"
-    DOM.ido_reago("#s_klasikaj","click","klasikaj",citaĵoSerĉo);
-    DOM.ido_reago("#s_elektitaj","click","elektitaj",citaĵoSerĉo);
+    DOM.reago("#s_klasikaj","click",citaĵoSerĉo);
+    DOM.reago("#s_elektitaj","click",citaĵoSerĉo);
 
     DOM.reago("#sercho_det_regexes","toggle",() => {
         if (! DOM.v("#re_radiko")) {

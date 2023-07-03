@@ -289,7 +289,7 @@ export class HTMLTrovoDt {
     private t: XMLŜablono;
     private tc: XMLŜablono;
 
-    constrcutor() {
+    constructor() {
         this.t = new XMLŜablono(sbl.html_sxablonoj.dt_trovo); // sen URL
         this.tc = new XMLŜablono(sbl.html_sxablonoj.dt_trovo_cit); // kun URL
     };
@@ -310,7 +310,7 @@ export class HTMLTrovoDt {
 export class HTMLTrovoDdBld {
     private dd: XMLŜablono;
 
-    constrcutor() {
+    constructor() {
         this.dd = new XMLŜablono(sbl.html_sxablonoj.dd_trovo_bld);
     };
 

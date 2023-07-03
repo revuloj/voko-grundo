@@ -276,7 +276,7 @@ function _bib_url(source,bib) {
  */
 export function citaĵoSerĉo(event) {
     event.preventDefault();
-    const vlist = event.data;
+    const vlist = event.currentTarget.id == "s_klasikaj"? "klasikaj" : "elektitaj";
 
     if (! _serĉo_preparo()) return;
 
@@ -304,17 +304,20 @@ export function citaĵoSerĉo(event) {
     }
 
     u.HTTPRequest('post', 'citajho_sercho', sspec as u.StrObj,
-        function(data) {   
-            var bib_src = Propon.propon("#ekzemplo_bib")?.opcioj["source"];
-            var htmlFnt = new HTMLFonto(bib_src);
-            var ŝablono = new HTMLTrovoDt();
+        function(data) {
+            const s_tr = DOM.e("#sercho_trovoj");
+            const json = JSON.parse(data);
+            const bib_src = Propon.propon("#ekzemplo_bib")?.opcioj["source"];
+            const htmlFnt = new HTMLFonto(bib_src);
+            const ŝablono = new HTMLTrovoDt();
 
-            if (data.length && data[0].cit) {
-                for (var i=0; i<data.length; i++) {
-                    var trovo = data[i], fnt = trovo.cit.fnt;
-                    let url = ( fnt.url ? fnt.url : ( fnt.bib ? _bib_url(bib_src,fnt.bib) : '') );
-                    var perc = make_percent_bar(trovo.sim*100, bar_styles[12], 20, 20);
-                    DOM.e("#sercho_trovoj")?.append('<dd id="trv_' + i + '">');
+            if (s_tr && json.length && json[0].cit) {
+                for (let i = 0; i < json.length; i++) {
+                    const trovo = json[i], fnt = trovo.cit.fnt;
+                    const url = ( fnt.url ? fnt.url : ( fnt.bib ? _bib_url(bib_src,fnt.bib) : '') );
+                    const perc = make_percent_bar(trovo.sim*100, bar_styles[12], 20, 20);
+
+                    s_tr.insertAdjacentHTML("beforeend",'<dd id="trv_' + i + '">');
                     new Trovo("#trv_"+i,
                         {
                             ŝablono: ŝablono,
@@ -634,6 +637,9 @@ export function retoSerĉo(event) {
             kie: 'anaso'
         }, 
         function(data) {   
+            //const json = JSON.parse(data);
+            const s_tr = DOM.e("#sercho_trovoj");
+            if (!s_tr) throw new Error("Mankas elemento por prezenti la trovojn!");
     
             let last_link = '', last_title = '';
             let n = 0;
@@ -656,7 +662,8 @@ export function retoSerĉo(event) {
                     const snippet = e.textContent;
                     if ( last_title.search(first_word) >= 0 || snippet.search(first_word) >= 0 ) {
 
-                        DOM.e("#sercho_trovoj")?.append('<dd id="trv_' + n + '">');
+                        s_tr.insertAdjacentHTML("beforeend",'<dd id="trv_' + n + '">');
+
                         // DuckDuckGo alpendigas ĝenan parametron &rut
                         let url = last_link.replace(/&rut=[a-f0-9]+/,'');        
 
@@ -725,7 +732,7 @@ export function bildoSerĉo(event) {
                     pageids.push(res.pageid);      
                     
 
-                    s_tr.innerHTML = '<dd id="trv_' + res.pageid + '">';
+                    s_tr.insertAdjacentHTML("beforeend",'<dd id="trv_' + res.pageid + '">');
                     new Trovo("#trv_" +res.pageid,
                         {
                             type: "bildo",
@@ -911,7 +918,7 @@ function _bildo_info_2(dosiero) {
  * Difinas jqueryui-elementon por prezenti unuopan trovon.
  */
 class Trovo extends UIElement {
-    opcioj = {
+    static _default = {
         type: "teksto",
         ŝablono: new HTMLTrovoDt(),
         bld_ŝablonono: null,
@@ -931,8 +938,10 @@ class Trovo extends UIElement {
         if (t instanceof Trovo) return t;
     }
 
-    constructor(element: HTMLElement|string, options: any) {
-        super(element,options);
+    constructor(element: HTMLElement|string, opcioj: any) {
+        super(element,opcioj);
+
+        this.opcioj = Object.assign(this.opcioj,Trovo._default,opcioj);
 
         let v = this.opcioj.valoroj;
         this.opcioj.valoroj.id = this.element.id;
@@ -948,7 +957,7 @@ class Trovo extends UIElement {
                 + ( o.enm_btn ? '<button id="e_' + id + '"/> ' : '' )
             + '</dt>\n';
             */
-        this.element.before(htmlstr);
+        this.element.insertAdjacentHTML("beforebegin",htmlstr);
         if (v.descr) this.element.textContent = v.descr;
         
         if (this.opcioj.type == "teksto") {
@@ -961,20 +970,24 @@ class Trovo extends UIElement {
                 DOM.e("#k_" + v.id)?.remove();
             }
 
-            new RigardoBtn("#r_" + v.id, {url: v.url});
-            new EkzemploBtn("#e_" + v.id, {
-                data: v.data,
-                enmetu: function(event,values) {
-                    // montru enmeto-dialogon
-                    DOM.al_v("#ekzemplo_dlg input","");
-                    const dlg = Dialog.dialog("#ekzemplo_dlg");
-                    if (dlg) {
-                        dlg.al_valoroj(values);
-                        dlg.malfermu();
+            const dt = this.element.querySelector("dt");
+            if (dt) {
+                dt.insertAdjacentHTML("beforeend",`<button id="#r_${v.id}"/><button id="#e_${v.id}"/>`);
+                new RigardoBtn("#r_" + v.id, {url: v.url});
+                new EkzemploBtn("#e_" + v.id, {
+                    data: v.data,
+                    enmetu: function(event,values) {
+                        // montru enmeto-dialogon
+                        DOM.al_v("#ekzemplo_dlg input","");
+                        const dlg = Dialog.dialog("#ekzemplo_dlg");
+                        if (dlg) {
+                            dlg.al_valoroj(values);
+                            dlg.malfermu();
+                        }
+                        Slipar.montru("#tabs", 0);
                     }
-                    Slipar.montru("#tabs", 0);
-                }
-            });
+                });
+            }
         } else {
             // bildoj ne havu kunteksto-butonon
             DOM.e("#k_"+v.id)?.remove();
