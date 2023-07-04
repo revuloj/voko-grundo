@@ -11,7 +11,7 @@ export class Slipar extends UIElement {
     static langetaro_klaso = "ui-tabs-nav";
     static langeto_aktiva_klaso = "ui-tabs-active";
 
-    static _default: { 
+    static aprioraj: { 
         aktiva: number;
         poste: undefined;
         antaŭe: undefined;
@@ -28,9 +28,7 @@ export class Slipar extends UIElement {
     }
 
     constructor(element: HTMLDialogElement|string, opcioj: any) {
-        super(element, opcioj);
-
-        this.opcioj = Object.assign(this.opcioj,Slipar._default,opcioj)
+        super(element, opcioj,Slipar.aprioraj);
 
         this.element.querySelector("ul,ol")
             ?.classList.add(Slipar.langetaro_klaso);

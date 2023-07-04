@@ -6,7 +6,7 @@
 import * as u from '../u';
 
 export type ListNomo = "lingvoj" | "fakoj" | "stiloj";
-
+export type ListAldonilo = (kod: string, nom: string) => {};
 
 /**
  * Kodlistoj agorditaj por Reta Vortaro: lingvoj, fakoj, stiloj
@@ -58,47 +58,56 @@ export class Xlist {
      * Plenigas ion per la kodlisto, vokante 'aldonilo' por ĉiu paro kodo-nomo
      * @param aldonilo - 'id' de HTML-elemento plenigenda per 'option'-elementoj 
      */
-    this.fill = function(aldonilo: Function) {   
+    this.fill = function(aldonilo: ListAldonilo) {      
       for (const [kod, nom] of Object.entries(this.codes))
-        aldonilo(kod,nom);
+        if (typeof nom == 'string')
+          aldonilo(kod,nom);
     };
   
     /**
      * Ŝargas la kodliston de la donita URL.
      * @param {Function} aldonilo - se donita, revokfuncio ald(kodo,nomo) aldonante unuopan listeron al io
      */
-    this.load = function(aldonilo?: Function) {
+    this.load = function(aldonilo?: ListAldonilo) {
       let self = this;
+      let ŝargante = false;
   
       // unuafoje ŝargu la tutan liston el XML-dosiero
-      if (! Object.keys(self.codes).length) {
+      if (! Object.keys(self.codes).length && !ŝargante) {
+        ŝargante = true;
         let codes: {[code: string]: string} = {};
   
         u.HTTPRequest('GET', this.url, {},
-          function(request: XMLHttpRequest) {
+          function(xmldata) {
               // Success!
               //var parser = new DOMParser();
               //var doc = parser.parseFromString(request.response,"text/xml");
         
               //for (var e of Array.from(doc.getElementsByTagName(self.xmlTag))) {
-              xml_filtro(request.response,self.xmlTag).forEach((e) => {
+              xml_filtro(xmldata,self.xmlTag).forEach((e) => {
                   const c = e.attributes.getNamedItem('kodo'); // jshint ignore:line
                   if (c)
                     //console.log(c);
                     codes[c.value] = e.textContent||'';
               });
               self.codes = codes;
+              ŝargante = false;
   
               if (aldonilo) {
                 self.fill.call(self,aldonilo);
               } 
           });
   
-      // se ni jam ŝargis iam antaŭw, ni eble nur devas plenigi la videbalan elektilon
-      } else {
+      // se ni jam ŝargis iam antaŭe, ni eble nur devas plenigi la videbalan elektilon
+      } else if (!ŝargante) {
         if (aldonilo) {
           self.fill.call(self,aldonilo);
         } 
+      } else {
+        throw new Error("Du ŝargoj samtempe ne devas okazi. Necesas adapti la kodon, kiu ŝargigas la liston!");
+        // mi evitas ankoraŭ uzi Promise-objekton en la komuna kodo, por subteni ankaŭ
+        // iom malnovajn retumilojn en reta-vortaro. Uzante liston en Cetonio ni povas
+        // ĝin envolvi en Promise-objekton.
       }
     };  
   }

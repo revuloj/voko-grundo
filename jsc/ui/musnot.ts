@@ -8,8 +8,6 @@ import { UIElement } from './uielement';
 export class Musnot extends UIElement {
     //valoroj: any;
 
-    opcioj: { }
-
     static musnot(element: HTMLElement|Document|string) {
         const e = (element instanceof Document)? super.obj(element.body) : super.obj(element);
         if (e instanceof Musnot) return e;

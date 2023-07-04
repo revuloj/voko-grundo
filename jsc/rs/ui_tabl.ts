@@ -32,7 +32,7 @@ declare global {
 
 const revo_url = 'https://'+globalThis.revo_url; //reta-vortaro.de';
 
-const revo_listoj = new RevoListoj('../voko');
+export const revo_listoj = new RevoListoj('../voko');
 
 //var sercho_focused_button = null;
 //var change_count = 0;
@@ -284,7 +284,7 @@ export default function() {
         () => $("#sercho_sercho")
             .val("\\b"+$("#sercho_sercho").val())
     );*/
-    DOM.klak("#regexes input",regulEsprimo);
+    DOM.ido_reago("#regexes","click","input",regulEsprimo);
     DOM.reago("#re_radiko","input",regulEsprimo);
 
     klv = DOM.e("#sercho_butonoj");

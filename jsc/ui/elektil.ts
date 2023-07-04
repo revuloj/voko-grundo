@@ -8,7 +8,6 @@ import { UIElement } from './uielement';
 export class Elektil extends UIElement {
     //valoroj: any;
 
-    opcioj: { }
 
     static kreu(spec: string, opcioj?: any) {
         document.querySelectorAll(spec).forEach((e) => {
@@ -22,17 +21,19 @@ export class Elektil extends UIElement {
         if (e instanceof Elektil) return e;
     }
 
+    /*
     static refreŝigu(element: HTMLElement|string) {
         const e = Elektil.elektil(element);
         if (e) e.refreŝigu();
-    }
+    }*/
 
     constructor(element: HTMLInputElement|string, opcioj?: any) {
         super(element, opcioj);
     }
 
+    /*
     refreŝigu() {
-        throw "Elektil.refreŝigu: Ne jam implementita!"
-    }
+        console.error("Elektil.refreŝigu: Ne jam implementita!");
+    }*/
 
 }

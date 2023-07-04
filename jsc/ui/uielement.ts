@@ -3,6 +3,7 @@
  * laŭ GPL 2.0
  */
 
+import { fandu } from '../x';
 
 declare global {
     interface HTMLElement {
@@ -27,7 +28,7 @@ export class UIElement {
     }
 
 
-    constructor(element: HTMLElement|string, opcioj: any) {
+    constructor(element: HTMLElement|string, opcioj: any, aprioraj = {}) {
         const el = (typeof element === "string")? document.querySelector(element) as HTMLElement : element;
 
         if (el) {
@@ -35,7 +36,7 @@ export class UIElement {
             el._uielement = this;
         }
 
-        this.opcioj = Object.assign({}, opcioj);
+        this.opcioj = fandu(aprioraj, opcioj);
     };
 
     _on(handlers: any) {

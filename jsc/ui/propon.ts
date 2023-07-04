@@ -12,7 +12,7 @@ export class Propon extends UIElement {
      */
     static revo_option_obj = "_ReVo_Trovo";
 
-    static _default: { 
+    static aprioraj: { 
         source: undefined,
         select: undefined
     }
@@ -23,8 +23,8 @@ export class Propon extends UIElement {
     }
 
     constructor(element: HTMLInputElement|string, opcioj?: any) {
-        super(element, opcioj);
-        this.opcioj = Object.assign(this.opcioj,Propon._default,opcioj);
+        super(element, opcioj,Propon.aprioraj);
+
         if (this.element instanceof HTMLInputElement) {
             this.element.setAttribute("autocomplete","off");
             this.element.addEventListener("input",this._input.bind(this));

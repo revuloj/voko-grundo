@@ -11,7 +11,7 @@ export class Dialog extends UIElement {
     static butonujo_klaso = "butonujo";
     static faldebla_klaso = "faldebla";
 
-    static _default: {
+    static aprioraj: {
         kampoj: {},
         butonoj: undefined,
         malfermu: undefined,
@@ -55,9 +55,8 @@ export class Dialog extends UIElement {
     public faldita: boolean = false;
 
     constructor(element: HTMLDialogElement|string, opcioj: any) {
-        super(element, opcioj);
+        super(element, opcioj, Dialog.aprioraj);
 
-        this.opcioj = Object.assign(this.opcioj,Dialog._default,opcioj);
         // evtl. kaŝu
         if (this.element.tagName != "DIALOG") DOM.kaŝu(this.element);
         
@@ -181,7 +180,7 @@ export class Dialog extends UIElement {
             if (k) {
                 const tp = k.getAttribute("type")
                 if (tp == "checkbox" || tp == "radio") {
-                    valj[nomo] = k.checked;
+                    valj[nomo] = (k as HTMLInputElement).checked;
                 } else {
                     valj[nomo] = k.value;
                 }
@@ -197,9 +196,9 @@ export class Dialog extends UIElement {
             if (k) {
                 if (nomo in valj) {
                     let val = valj[nomo] || '';
-                    const tp = k.getAttribute("type")
+                    const tp = k.getAttribute("type");
                     if (tp == "checkbox" || tp == "radio") {
-                        k.checked = valj[nomo];
+                        (k as HTMLInputElement).checked = valj[nomo];
                     } else {
                         k.value = val;
                     }

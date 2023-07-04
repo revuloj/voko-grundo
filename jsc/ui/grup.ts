@@ -8,8 +8,6 @@ import { UIElement } from './uielement';
 export class Grup extends UIElement {
     //valoroj: any;
 
-    opcioj: { }
-
     static grup(element: HTMLElement|string) {
         const e = super.obj(element);
         if (e instanceof Grup) return e;

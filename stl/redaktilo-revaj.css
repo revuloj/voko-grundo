@@ -174,6 +174,14 @@ select {
     border: 2px solid var(--input-brd-clr);
 }
 
+.lbl_radio, .lbl_checkbox {
+    background-color: var(--btn-bgr-clr);
+    color: var(--main-fnt-clr);
+    margin: .1em;
+    padding: .2em;
+    border-radius: 3px;    
+}
+
 
 textarea {
     resize: none;
@@ -359,6 +367,10 @@ dialog {
     z-index: 200;
     margin-top: 4em;
     padding: .1em;
+}
+
+#sxablono_dlg {
+    z-index: 180;
 }
 
 dialog form {
@@ -987,11 +999,14 @@ dialog .butonujo button {
 #re_esprimo,
 #re_radiko {
     word-break: break-all;
-    padding: .5em;
-    border-radius: 4px;
+    border-radius: 3px;
     background-color: var(--main-ac2-bgr-clr);
     border-left: 2px dotted var(--main-brd-clr);
     margin-top: .2em;
+    margin-bottom: .2em;
+}
+#re_esprimo {
+    padding: .4em;
 }
 
 #sercho_trovoj {

@@ -15,6 +15,7 @@ import { DOM, Dialog, Menu, Grup, Slipar, Buton, Elektil, Propon, Valid, Eraro }
 import * as sbl from './sxablonoj';
 import { Artikolo } from './ui_art';
 import { Erarolisto } from './ui_err';
+import { revo_listoj } from './ui_tabl';
 
 import { XMLReferenco, XMLReferencGrupo, XMLRimarko, XMLEkzemplo, 
          XMLFonto, XMLSenco, XMLDerivaĵo, XMLBildo, SncŜablono } from './sxabloniloj';
@@ -375,7 +376,7 @@ export default function() {
             } else {
                 bildo_larĝecoj([576,360,180],360); // eble ankaŭ 450, 768?
             }
-            Elektil.refreŝigu("#bildo_lrg input");
+            //Elektil.refreŝigu("#bildo_lrg input");
         },
         valorŝanĝo: function() {
             if (parseFloat(DOM.v("#bildo_fmt")||'') > 1) {
@@ -383,7 +384,7 @@ export default function() {
             } else {
                 bildo_larĝecoj([576,360,180],360); // eble ankaŭ 450, 768?
             }
-            Elektil.refreŝigu("#bildo_lrg input");
+            //Elektil.refreŝigu("#bildo_lrg input");
         }
     });
 
@@ -695,6 +696,11 @@ export function shargi_sercho_autocomplete(request,response) {
                        }); 
                     });
                 }
+                // se estas nur unu rezulto ni tuj plenigas la dosiernomon
+                if (results.length == 1) {
+                    DOM.al_v("#shargi_dosiero",results[0].art);
+                }
+                // redonu la liston por montrado
                 response(results);
             },
             () => document.body.style.cursor = 'wait',
@@ -1178,16 +1184,34 @@ function senco_enmeti(event) {
 
 // aldonu kompletan lingvoliston kaj preferatajn lingvojn al traduko-dialogo
 function plenigu_lingvojn() {
+
     // @ts-ignore .fail() volas almenaŭ unu argumenton, sed ni rifuzas provizore...
     let p_pref = new Promise((resolve, reject) => { 
         u.HTTPRequest('get','revo_preflng',{},
-            (data) => resolve(data),
+            function(data) {
+                const pref_lngoj = JSON.parse(data);
+                globalThis.preflng = pref_lngoj[0] || 'en'; // globala variablo (ui_kreo)
+                 
+                const trd_aliaj = DOM.e("#traduko_aliaj");
+
+                pref_lngoj.forEach(     //.sort(jsort_lng).forEach(
+                    function(lng) {
+                        if (lng != 'eo') {
+                            const lng_html = `<li id="trd_pref_${lng}">${lng}</li>`;
+                            trd_aliaj?.insertAdjacentHTML("beforebegin",lng_html);  
+                        }
+                    }
+                );
+              
+                resolve(true);
+            },
             () => document.body.style.cursor = 'wait',
             () => document.body.style.cursor = 'auto',
             (msg: string) =>  Eraro.al("#traduko_error",msg)
         )
     });
 
+    /*
     // prenu la lingvoliston el lingvoj.xml
     let p_lingvoj = new Promise((resolve, reject) => { 
         u.HTTPRequest('get','../voko/lingvoj.xml',{},
@@ -1197,96 +1221,61 @@ function plenigu_lingvojn() {
             (msg: string) =>  Eraro.al("#traduko_error",msg)
         )
     });
+    */
 
-    //$.when(p_pref,p_lingvoj)
-    // KOREKTU: tio provizore ne funkcios
-    Promise.all([p_pref,p_lingvoj])
-         .then(
-             function(rezultoj) {
-                const pref_lngoj = JSON.parse(rezultoj[0] as string);
-                const lingvoj_data = rezultoj[1] as string;
+    // alfabetaj listoj
+    const m_a_b = DOM.e("#traduko_chiuj_a_b");
+    const m_c_g = DOM.e("#traduko_chiuj_c_g");
+    const m_h_j = DOM.e("#traduko_chiuj_h_j");
+    const m_k_l = DOM.e("#traduko_chiuj_k_l");
+    const m_m_o = DOM.e("#traduko_chiuj_m_o");
+    const m_p_s = DOM.e("#traduko_chiuj_p_s");
+    const m_t_z = DOM.e("#traduko_chiuj_t_z");
 
-                //console.debug(pref_data);
-                globalThis.preflng = pref_lngoj[0] || 'en'; // globala variablo (ui_kreo)
-                 
-                var lingvoj_a_b = '';
-                var lingvoj_c_g = '';
-                var lingvoj_h_j = '';
-                var lingvoj_k_l = '';
-                var lingvoj_m_o = '';
-                var lingvoj_p_s = '';
-                var lingvoj_t_z = '';
-                var pref_lingvoj = '';
+    revo_listoj.lingvoj.load((kodo,nomo) => {
+        const komenca = nomo.charAt(0);
+        const lng_html = `<li id="trd_chiuj_${kodo}">${nomo}</li>`;
 
-                // por ĉiu unuopa lingvo en lingvoj.xml post ordigo laŭ nomo
-                const lingvoj = Array.from(x.xml_filtro(lingvoj_data,"lingvo")); // TS ne kapablas rekoni JQuery<T> kiel Array
-                    // kaj komplenas pri .sort - do ni artifike konvertas al "any"
-                lingvoj.sort(jsort_lng).forEach(
-                        function(l) {
-                            const kodo = l.getAttribute('kodo');
-                            if (kodo != 'eo') {
-                                if (pref_lngoj.indexOf(kodo) > -1) {
-                                    pref_lingvoj += '<li id="trd_pref_' + kodo + '">' + l.textContent + '</li>';
-                                    
-                                } // else {
-                                    var lnomo = l.textContent;
-                                    var letter = lnomo.charAt(0);
-                                    var lkodo = kodo;
-                                    if (letter >= 'a' && letter <= 'b')
-                                        lingvoj_a_b += '<li id="trd_chiuj_' + lkodo + '">' + lnomo + '</li>';
-                                    else if (letter >= 'c' && letter <= 'g' || letter == 'ĉ' || letter == 'ĝ')
-                                        lingvoj_c_g += '<li id="trd_chiuj_' + lkodo + '">' + lnomo + '</li>';
-                                    else if (letter >= 'h' && letter <= 'j' || letter == 'ĥ' || letter == 'ĵ')
-                                        lingvoj_h_j += '<li id="trd_chiuj_' + lkodo + '">' + lnomo + '</li>';
-                                    else if (letter >= 'k' && letter <= 'l')
-                                        lingvoj_k_l += '<li id="trd_chiuj_' + lkodo + '">' + lnomo + '</li>';
-                                    else if (letter >= 'm' && letter <= 'o')
-                                        lingvoj_m_o += '<li id="trd_chiuj_' + lkodo + '">' + lnomo + '</li>';
-                                    else if (letter >= 'p' && letter <= 's' || letter == 'ŝ')
-                                        lingvoj_p_s += '<li id="trd_chiuj_' + lkodo + '">' + lnomo + '</li>';
-                                    else if (letter >= 't' && letter <= 'z' || letter == 'ŭ')
-                                        lingvoj_t_z += '<li id="trd_chiuj_' + lkodo + '">' + lnomo + '</li>';
-                                //}
-                            }
-                        });
-                // $("#traduko_lingvoj").html(pref_lingvoj +  '<option disabled>────────────────────</option>' +lingvoj); 
-                const pl_ul = document.createElement("ul");
-                pl_ul.innerHTML = pref_lingvoj;
-                const pl_li = pl_ul.children[0];
-                DOM.e("#traduko_menuo")?.prepend(pl_li);
-                DOM.al_html("#traduko_chiuj_a_b",lingvoj_a_b);
-                DOM.al_html("#traduko_chiuj_c_g",lingvoj_c_g);
-                DOM.al_html("#traduko_chiuj_h_j",lingvoj_h_j);
-                DOM.al_html("#traduko_chiuj_k_l",lingvoj_k_l);
-                DOM.al_html("#traduko_chiuj_m_o",lingvoj_m_o);
-                DOM.al_html("#traduko_chiuj_p_s",lingvoj_p_s);
-                DOM.al_html("#traduko_chiuj_t_z",lingvoj_t_z);
-                Menu.refreŝigu("#traduko_menuo");
-             }
-        );
+        if (komenca >= 'a' && komenca <= 'b')
+            m_a_b?.insertAdjacentHTML("beforeend",lng_html);
+        else if (komenca >= 'c' && komenca <= 'g' || komenca == 'ĉ' || komenca == 'ĝ')
+            m_c_g?.insertAdjacentHTML("beforeend",lng_html);
+        else if (komenca >= 'h' && komenca <= 'j' || komenca == 'ĥ' || komenca == 'ĵ')
+            m_h_j?.insertAdjacentHTML("beforeend",lng_html);
+        else if (komenca >= 'k' && komenca <= 'l')
+            m_k_l?.insertAdjacentHTML("beforeend",lng_html);
+        else if (komenca >= 'm' && komenca <= 'o')
+            m_m_o?.insertAdjacentHTML("beforeend",lng_html);
+        else if (komenca >= 'p' && komenca <= 's' || komenca == 'ŝ')
+            m_p_s?.insertAdjacentHTML("beforeend",lng_html);
+        else if (komenca >= 't' && komenca <= 'z' || komenca == 'ŭ')
+            m_t_z?.insertAdjacentHTML("beforeend",lng_html);
+    });
+
+    // se mabaŭ lingvolistoj (preferataj kaj alfabetaj)
+    // ests fintraktitaj ni ankoraŭ refreŝigu la menuon
+    p_pref.then(() => Menu.refreŝigu("#traduko_menuo"));
 }
 
 // aldonu la traduk-lingojn de la ŝargita artikolo al la traduko-dialogo (lingvo-elekto)
 function plenigu_lingvojn_artikolo() {
     const xmlarea = Artikolo.xmlarea("#xml_text");
-    const xml = xmlarea?.syncedXml() || '';
+    const trd_art = DOM.e("#traduko_artikolaj");
 
-    var lng_nomoj = {};
-    for (var kodo in x.traduk_lingvoj(xml)) {
-        const lnomo = DOM.e("#trd_chiuj_"+kodo)?.querySelector('div')?.textContent;
-        if (lnomo) lng_nomoj[lnomo] = kodo;
+    if (xmlarea && trd_art) {
+        trd_art.textContent = '';
+
+        const xml = xmlarea.syncedXml() || '';
+        const traduk_lingvoj = x.traduk_lingvoj(xml);
+
+        // ŝargu, se ne jam ŝargita kaj trakuru la lingvolston
+        revo_listoj.lingvoj.load((kodo,nomo) => {
+            if (kodo in traduk_lingvoj) {
+                const lingvo_html = `<li id="trd_art_${kodo}">${nomo}</li>`;
+                trd_art.insertAdjacentHTML("beforeend",lingvo_html);
+            }
+        });
     }
-    var lingvoj = Object.keys(lng_nomoj).sort(sort_lng);
-    var lingvoj_html = '';
-    for (var i=0; i<lingvoj.length; i++) {
-        const lnomo = lingvoj[i];
-        const kodo = lng_nomoj[lnomo];
-        lingvoj_html += '<li id="trd_art_' + kodo + '"><div>' + lnomo + '</div></li>';
-    }
-    DOM.al_t("#traduko_artikolaj",'');
-    DOM.al_html("#traduko_artikolaj",lingvoj_html);
-//    $("#traduko_menuo[id^=trd_art_]").remove();
-//    $("#traduko_artikolaj").after(lingvoj_html);
 }
 
 function traduko_memoru_fokuson(event) {
@@ -1538,7 +1527,7 @@ function plenigu_sxablonojn() {
     for (let nomo in sbl.snc_sxablonoj) {
         sxbl_list += '<option>' + nomo + '</option>';
     }
-    DOM.e("#sxablono_elekto")?.append(sxbl_list);
+    DOM.al_html("#sxablono_elekto",sxbl_list);
 }
 
 function kiam_elektis_sxablonon(event) {
@@ -1546,7 +1535,7 @@ function kiam_elektis_sxablonon(event) {
     DOM.al_t("#sxablono_xml",'');
     DOM.malreago("#sxablono_xml","keypress");
     DOM.malreago("#sxablono_xml","click");
-    DOM.e("#sxablono_xml")?.append(new SncŜablono(sxbl as string).html());
+    DOM.al_html("#sxablono_xml", new SncŜablono(sxbl as string).html());
     /*
     var lines = new SncŜablono(sxbl).form().split('\n');
     for (var i=0; i<lines.length; i++) {
@@ -1562,17 +1551,19 @@ function kiam_elektis_sxablonon(event) {
 
 function sxablono_button_click(event) {
     event.preventDefault(); 
-    const text_span = event.target.closest("button").prev("span");
+    const text_span = event.target.closest("button").previousElementSibling; //("span");    
     const ref_dlg = Dialog.dialog("#referenco_dlg");
     const ekz_dlg = Dialog.dialog("#ekzemplo_dlg");
+
+    if (text_span.tagName != "SPAN") throw new Error("Eraro en ŝablono: atendis SPAN!");
 
     if (text_span && ref_dlg) {
         if (text_span.innerHTML.startsWith('&lt;ref')) {
             ref_dlg.malfermu();
-            ref_dlg.opcioj["enmetu_en"] = text_span[0].id;
+            ref_dlg.opcioj["enmetu_en"] = text_span.id;
             //referenco_dialogo(text_span[0].id);
         } else if (text_span.innerHTML.startsWith('&lt;ekz') && ekz_dlg) {
-            ekz_dlg.opcioj["enmetu_en"] = text_span[0].id;
+            ekz_dlg.opcioj["enmetu_en"] = text_span.id;
             ekz_dlg.malfermu();
             //ekzemplo_dialogo(text_span[0].id);
         }
@@ -1648,11 +1639,12 @@ function plenigu_lastaj_liston() {
                 // behind the scenes and here we get openid/login with status 200
                 show_xhr_error(this,"Via seanco finiĝis. Bonvolu resaluti!");
             } else {
-                var listo = '';
-                var previous = null; //{kap: '', art1: '', art2: ''};
+                const json = JSON.parse(data);
+                let listo = '';
+                // let previous = null; //{kap: '', art1: '', art2: ''};
                 
-                for (let h=0; h< data.length; h++) {
-                    var entry = data[h];
+                for (let h=0; h < json.length; h++) {
+                    var entry = json[h];
                     var status_icon;
                     switch (entry.rezulto) {
                         case 'eraro':
@@ -1680,7 +1672,7 @@ function plenigu_lastaj_liston() {
                 }
                 
                 DOM.al_html("#lastaj_listo",listo);
-                DOM.al_datum("#lastaj_listo","detaloj",data);
+                DOM.al_datum("#lastaj_listo","detaloj",json);
             }
 
             // adaptu altecon de la dialogo, por ke la listo ruliĝu sed la titolo kaj reir-butono montriĝu...

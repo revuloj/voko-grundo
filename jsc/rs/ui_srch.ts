@@ -558,16 +558,18 @@ export function verkoListo(event) {
                         const e = new Elektil(i);
                         e._on({change: verkinformo});
                     });
-                    DOM.i("#vl__chiuj__")?.addEventListener("change", (event) => {
-                        const cb = event.target as HTMLInputElement;
-                        const check = cb.checked;
-                        vdiv.querySelectorAll("input[name='cvl_elekto']").forEach((i) => {
-                            if (i instanceof HTMLInputElement) {
-                                i.checked = check; 
-                                Elektil.refreŝigu(i);
-                            }
-                        });                        
-                        verkinformo();   
+                    DOM.reago("#vl__chiuj__","change", (event) => {
+                        const cb = event.target;
+                        if (cb instanceof HTMLInputElement) {
+                            const check = cb.checked;
+                            vdiv.querySelectorAll("input[name='cvl_elekto']").forEach((i) => {
+                                if (i instanceof HTMLInputElement) {
+                                    i.checked = check; 
+                                    //Elektil.refreŝigu(i);
+                                }
+                            });                        
+                            verkinformo();       
+                        }
                     });
                 }
             },
@@ -586,13 +588,15 @@ export function verkElekto(event) {
     const btn = event.target;
     const kadr = btn.parentElement;
     const val = btn.value;
-    const id = btn.id;
 
     function check_uncheck(v) {
         // (mal)elektu ĉiujn
-        const inputs = kadr.find("input");
-        inputs.prop("checked",v);
-        inputs.checkboxradio("refresh");
+        DOM.ej("#sercho_verkolisto input")?.forEach((i) => {
+            if (i instanceof HTMLInputElement) {
+                i.checked = v;
+                //Elektil.refreŝigu(i);
+            }
+        });
     }
 
     if (val == "1") {
@@ -918,7 +922,7 @@ function _bildo_info_2(dosiero) {
  * Difinas jqueryui-elementon por prezenti unuopan trovon.
  */
 class Trovo extends UIElement {
-    static _default = {
+    static aprioraj = {
         type: "teksto",
         ŝablono: null,
         bld_ŝablonono: null,
@@ -939,9 +943,8 @@ class Trovo extends UIElement {
     }
 
     constructor(element: HTMLElement|string, opcioj: any) {
-        super(element,opcioj);
+        super(element,opcioj,Trovo.aprioraj);
 
-        this.opcioj = x.fandu(x.fandu(Trovo._default,this.opcioj),opcioj);
         this.opcioj.ŝablono = new HTMLTrovoDt();
 
         let v = this.opcioj.valoroj;
@@ -1084,12 +1087,12 @@ class Trovo extends UIElement {
  * Difinas jqueryui-elementon por la butono de citaĵo-kunteksto.
  */
 class KuntekstoBtn extends UIElement {
-    opcioj: {
+    static aprioraj: {
         fno: null // frazo-numero per kiu peti kuntekston
     };
 
-    constructor(element: HTMLElement|string, options: any) {
-        super (element,options);
+    constructor(element: HTMLElement|string, opcioj: any) {
+        super(element,opcioj,KuntekstoBtn.aprioraj);
 
         this.element.setAttribute("style","visibility: hidden");
         this.element.setAttribute("type","button");
@@ -1098,21 +1101,22 @@ class KuntekstoBtn extends UIElement {
 
         this._on({
             click: function(event) {
-                if (this.options.fno) {
+                if (this.opcioj.fno) {
                     event.preventDefault();
                     const id = event.target.id;
                     const dd_id = id.substring(2); // fortranĉu 'k_'
 
                     u.HTTPRequest('post','kunteksto',
                             { 
-                                frazo: this.options.fno,
+                                frazo: this.opcioj.fno,
                                 n: "2"
                             },
-                            function(data) {   
+                            function(data) {  
+                                const json = JSON.parse(data); 
                                 //$("#sercho_trovoj").html('');
-                                if (data.length) {
+                                if (json.length) {
                                     //console.debug(data[0]);
-                                    const text = data.map(e => e.ekz).join('<br/>');
+                                    const text = json.map(e => e.ekz).join('<br/>');
                                     DOM.al_html('#'+dd_id,text);
                                 }
                                 // momente ni nur unufoje povas montri pli da kunteksto
@@ -1134,12 +1138,12 @@ class KuntekstoBtn extends UIElement {
  * Difinas jqueryui-elementon por la butono de fonto-rigardo.
  */
 class RigardoBtn extends UIElement {
-    opcioj: {
+    static aprioraj: {
         url: null
     };
 
-    constructor(element: HTMLElement|string, options: any) {
-        super(element,options);
+    constructor(element: HTMLElement|string, opcioj: any) {
+        super(element,opcioj,RigardoBtn.aprioraj);
 
         this.element.setAttribute("style","visibility: hidden");
         this.element.setAttribute("type","button");
@@ -1148,9 +1152,9 @@ class RigardoBtn extends UIElement {
 
         this._on({
             click: function(event) {
-                if (this.options.url) {
+                if (this.opcioj.url) {
                     event.preventDefault();
-                    window.open(this.options.url);
+                    window.open(this.opcioj.url);
                     //console.debug("malfermas: "+url);
                 } else {
                     throw new Error('nedifinita URL');
@@ -1165,13 +1169,13 @@ class RigardoBtn extends UIElement {
  * kiu helpas al uzanto enmeti la trovaĵon en la XML-artikolon.
  */
 class EkzemploBtn extends UIElement {
-    opcioj: {
+    static aprioraj: {
         data: null,
         enmetu: null //event
     };
 
-    constructor(element: HTMLElement|string, options: any) {
-        super(element,options);
+    constructor(element: HTMLElement|string, opcioj: any) {
+        super(element, opcioj, EkzemploBtn.aprioraj);
 
         this.element.setAttribute("style","visibility: hidden");
         this.element.setAttribute("type","button");
@@ -1180,29 +1184,29 @@ class EkzemploBtn extends UIElement {
 
         this._on({
             click: function(event) {
-                var values: TrovValoroj = {};
-                var data = this.options.data;
+                let valoroj: TrovValoroj = {};
+                const data = this.opcioj.data;
 
                 // rezulto de Tekstaro-serĉo
                 if (data.cit) {
-                    values = data.cit.fnt;
-                    values.frazo = data.cit.ekz;
+                    valoroj = data.cit.fnt;
+                    valoroj.frazo = data.cit.ekz;
 
                 // rezulto de Vikipedio-serĉo
                 } else if(data.pageid) {
-                    values.url = 'https://eo.wikipedia.org/?curid=' + data.pageid;
-                    values.bib = 'Viki';
-                    values.lok = data.title;
-                    values.frazo = data.title;
+                    valoroj.url = 'https://eo.wikipedia.org/?curid=' + data.pageid;
+                    valoroj.bib = 'Viki';
+                    valoroj.lok = data.title;
+                    valoroj.frazo = data.title;
 
                 // rezulto de Anaso-serĉo
                 } else if (data.snip) {
-                    values.frazo = data.snip;
-                    values.url = data.url;        
-                    values.vrk = data.title;
+                    valoroj.frazo = data.snip;
+                    valoroj.url = data.url;        
+                    valoroj.vrk = data.title;
                 }
 
-                this._trigger("enmetu",event,values);
+                this._trigger("enmetu",event,valoroj);
             }
         });
     }
@@ -1215,13 +1219,13 @@ class EkzemploBtn extends UIElement {
  * kiu helpas al uzanto enmeti la trovaĵon en la XML-artikolon.
  */
 class BildoBtn extends UIElement {
-    opcioj: {
+    static aprioraj: {
         data: null,
         enmetu: null //event
     };
 
-    constructor(element: HTMLElement|string, options: any) {
-        super(element,options);
+    constructor(element: HTMLElement|string, opcioj: any) {
+        super(element,opcioj,BildoBtn.aprioraj);
 
         this.element.setAttribute("style","visibility: hidden");
         this.element.setAttribute("type","button");
@@ -1230,7 +1234,7 @@ class BildoBtn extends UIElement {
 
         this._on({
             click: function(event) {
-                this._trigger("enmetu",event,this.options.data);
+                this._trigger("enmetu",event,this.opcioj.data);
             }
         });
     }

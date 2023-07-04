@@ -8,8 +8,6 @@ import { UIElement } from './uielement';
 export class Buton extends UIElement {
     //valoroj: any;
 
-    opcioj: { }
-
     static buton(element: HTMLInputElement|string): Buton|undefined {
         const e = super.obj(element);
         if (e instanceof Buton) return e;

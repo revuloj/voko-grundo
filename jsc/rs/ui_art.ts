@@ -66,7 +66,7 @@ export class Artikolo extends UIElement {
         _ent: new RegExp('&([a-zA-Z0-9_]+);','g')
     };
 
-    static default: {
+    static aprioraj: {
         xmlarea: Xmlarea,
         dosiero: '',
         reĝimo: 'redakto'|'aldono', // ĉe novaj artikoloj 'aldono'   
@@ -87,9 +87,7 @@ export class Artikolo extends UIElement {
     }
 
     constructor(element: HTMLElement|string, opcioj: any) {
-        super(element, opcioj);
-
-        this.opcioj = Object.assign(this.opcioj,Artikolo.default,opcioj);
+        super(element, opcioj, Artikolo.aprioraj);
 
         this.restore();
         this._change_count = 0;

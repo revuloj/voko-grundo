@@ -23,30 +23,32 @@ export class DOM {
     }
 
     // trovas input-elementon en HTML-dokumento per elektilo, ekz-e #el_id
-    static i(elektilo: string): HTMLInputElement|null {
+    static i(elektilo: string): HTMLInputElement|HTMLTextAreaElement|HTMLSelectElement|null {
         const e = DOM.e(elektilo);
-        if (e instanceof HTMLInputElement) return e;
+        if (e instanceof HTMLInputElement 
+         || e instanceof HTMLTextAreaElement
+         || e instanceof HTMLSelectElement) return e;
         return null;
     }
 
     // trovas elementon en HTML-dokumento per elektilo, ekz-e #el_id
-    // kaj redonas la listond e idoj kiel Array
-    static idoj(elektilo: string): Array<Element>|undefined {
-        const e = DOM.e(elektilo);
-        if (e) return Array.from(e.children);
+    // kaj redonas la liston de idoj kiel Array
+    static idoj(e: Element|string): Array<Element>|undefined {
+        const el = (typeof e === "string")? DOM.e(e) : e;
+        if (el) return Array.from(el.children);
     }
 
     // Redonas la tekst-enhavon de HTML-elemento, identigita per elektilo 
-    static t(elektilo: string): string|null {
-        const e = DOM.e(elektilo);
-        if (e) return e.textContent;
+    static t(e: Element|string): string|null {
+        const el = (typeof e === "string")? DOM.e(e) : e;
+        if (el) return el.textContent;
         return null;
     }
 
     // Metas la tekst-enhavon de HTML-elemento, identigita per elektilo 
-    static al_t(elektilo: string, teksto: string) {
-        const e = DOM.e(elektilo);
-        if (e) return e.textContent = teksto;
+    static al_t(e: Element|string, teksto: string) {
+        const el = (typeof e === "string")? DOM.e(e) : e;
+        if (el) return el.textContent = teksto;
     }
     
 
@@ -81,7 +83,7 @@ export class DOM {
     // elektita (angle: checked)
     static c(elektilo: string): boolean|null {
         const i = DOM.i(elektilo);
-        if (i) return i.checked;
+        if (i instanceof HTMLInputElement) return i.checked;
         return null
     }
 
@@ -190,7 +192,7 @@ export class DOM {
      */
     static elektu(e: HTMLInputElement|string, start?: number, end?: number) {
         const i = (typeof e === "string")? DOM.i(e) : e;
-        if (i) {
+        if (i instanceof HTMLInputElement || i instanceof HTMLTextAreaElement) {
             if (start === undefined) {
                 start = 0;
                 end = i.value.length;
@@ -209,7 +211,7 @@ export class DOM {
      */
     static elekto(e: HTMLInputElement|string): string {
         const i = (typeof e === "string")? DOM.i(e) : e;
-        if (i) {
+        if (i instanceof HTMLInputElement || i instanceof HTMLTextAreaElement) {
             const start = i.selectionStart||0;
             const end = i.selectionEnd||0;
             return i.value.substring(start, end);
@@ -221,7 +223,7 @@ export class DOM {
      */
     static enigu(e: HTMLInputElement|string, teksto: string) {
         const i = (typeof e === "string")? DOM.i(e) : e;
-        if (i) {
+        if (i instanceof HTMLInputElement || i instanceof HTMLTextAreaElement) {
             if (i.selectionStart || i.selectionStart === 0) {
                 // Firefox and Webkit based
                 var startPos = i.selectionStart;

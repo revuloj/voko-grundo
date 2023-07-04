@@ -9,7 +9,7 @@ import { UIElement } from './uielement';
 export class Skal extends UIElement {
     //valoroj: any;
 
-    static _default: {
+    static aprioraj: {
         min?: number,
         max?: number,
         valoroj?: Array<number>,
@@ -23,8 +23,7 @@ export class Skal extends UIElement {
     }
 
     constructor(element: HTMLElement|string, opcioj?: any) {
-        super(element, opcioj);
-        this.opcioj = Object.assign(this.opcioj,Skal._default,opcioj);
+        super(element, opcioj,Skal.aprioraj);
 
         this.element.classList.add("ui-slider","ui-slider-horizontal");
 

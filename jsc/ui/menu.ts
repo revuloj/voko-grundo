@@ -12,7 +12,7 @@ export class Menu extends UIElement {
     static menu_class = "ui-menu";
     static menu_sub_fermita_class = "ui-menu-sub-fermita";
 
-    static _default: {
+    static aprioraj: {
         eroj: "li",
         reago: undefined
      }
@@ -28,9 +28,8 @@ export class Menu extends UIElement {
     }
 
     constructor(element: HTMLElement|string, opcioj: any) {
-        super(element, opcioj);
+        super(element, opcioj, Menu.aprioraj);
 
-        this.opcioj = Object.assign(this.opcioj,Menu._default,opcioj);
         this.element.classList.add(Menu.menu_class);
 
         // preparu la menuerojn
