@@ -268,7 +268,7 @@ export class XKlavaro {
                 .insertAdjacentElement('afterend', btn[0] as Element);
         }
         
-        stlList.load(stilKlavoHtml);
+        stlList.load(null,stilKlavoHtml);
     };
 
     /**
@@ -295,7 +295,7 @@ export class XKlavaro {
         }            
 
         this.elemento_klavoj(klvrElm,klvrElm.textContent);
-        fakList.load(fakoKlavoHtml);
+        fakList.load(null,fakoKlavoHtml);
     };
 
     /**

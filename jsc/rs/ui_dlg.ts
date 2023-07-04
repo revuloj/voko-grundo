@@ -1185,76 +1185,67 @@ function senco_enmeti(event) {
 // aldonu kompletan lingvoliston kaj preferatajn lingvojn al traduko-dialogo
 function plenigu_lingvojn() {
 
-    // @ts-ignore .fail() volas almenaŭ unu argumenton, sed ni rifuzas provizore...
-    let p_pref = new Promise((resolve, reject) => { 
+    new Promise((resolve1) => { 
+        // alfabetaj listoj
+        const m_a_b = DOM.e("#traduko_chiuj_a_b");
+        const m_c_g = DOM.e("#traduko_chiuj_c_g");
+        const m_h_j = DOM.e("#traduko_chiuj_h_j");
+        const m_k_l = DOM.e("#traduko_chiuj_k_l");
+        const m_m_o = DOM.e("#traduko_chiuj_m_o");
+        const m_p_s = DOM.e("#traduko_chiuj_p_s");
+        const m_t_z = DOM.e("#traduko_chiuj_t_z");
+
+        revo_listoj.lingvoj.load(resolve1(true),(kodo,nomo) => {
+            const komenca = nomo.charAt(0);
+            const lng_html = `<li id="trd_chiuj_${kodo}">${nomo}</li>`;
+
+            if (komenca >= 'a' && komenca <= 'b')
+                m_a_b?.insertAdjacentHTML("beforeend",lng_html);
+            else if (komenca >= 'c' && komenca <= 'g' || komenca == 'ĉ' || komenca == 'ĝ')
+                m_c_g?.insertAdjacentHTML("beforeend",lng_html);
+            else if (komenca >= 'h' && komenca <= 'j' || komenca == 'ĥ' || komenca == 'ĵ')
+                m_h_j?.insertAdjacentHTML("beforeend",lng_html);
+            else if (komenca >= 'k' && komenca <= 'l')
+                m_k_l?.insertAdjacentHTML("beforeend",lng_html);
+            else if (komenca >= 'm' && komenca <= 'o')
+                m_m_o?.insertAdjacentHTML("beforeend",lng_html);
+            else if (komenca >= 'p' && komenca <= 's' || komenca == 'ŝ')
+                m_p_s?.insertAdjacentHTML("beforeend",lng_html);
+            else if (komenca >= 't' && komenca <= 'z' || komenca == 'ŭ')
+                m_t_z?.insertAdjacentHTML("beforeend",lng_html);
+        });
+    })
+    .then(() => {
+        new Promise((resolve2) => {
         u.HTTPRequest('get','revo_preflng',{},
             function(data) {
                 const pref_lngoj = JSON.parse(data);
                 globalThis.preflng = pref_lngoj[0] || 'en'; // globala variablo (ui_kreo)
-                 
+                
                 const trd_aliaj = DOM.e("#traduko_aliaj");
 
                 pref_lngoj.forEach(     //.sort(jsort_lng).forEach(
                     function(lng) {
                         if (lng != 'eo') {
-                            const lng_html = `<li id="trd_pref_${lng}">${lng}</li>`;
+                            const nomo = revo_listoj.lingvoj.codes[lng];
+                            const lng_html = `<li id="trd_pref_${lng}">${nomo}</li>`;
                             trd_aliaj?.insertAdjacentHTML("beforebegin",lng_html);  
                         }
                     }
                 );
-              
-                resolve(true);
+            
+                resolve2(true);
             },
             () => document.body.style.cursor = 'wait',
             () => document.body.style.cursor = 'auto',
             (msg: string) =>  Eraro.al("#traduko_error",msg)
-        )
-    });
-
-    /*
-    // prenu la lingvoliston el lingvoj.xml
-    let p_lingvoj = new Promise((resolve, reject) => { 
-        u.HTTPRequest('get','../voko/lingvoj.xml',{},
-            (data) => resolve(data),
-            () => document.body.style.cursor = 'wait',
-            () => document.body.style.cursor = 'auto',
-            (msg: string) =>  Eraro.al("#traduko_error",msg)
-        )
-    });
-    */
-
-    // alfabetaj listoj
-    const m_a_b = DOM.e("#traduko_chiuj_a_b");
-    const m_c_g = DOM.e("#traduko_chiuj_c_g");
-    const m_h_j = DOM.e("#traduko_chiuj_h_j");
-    const m_k_l = DOM.e("#traduko_chiuj_k_l");
-    const m_m_o = DOM.e("#traduko_chiuj_m_o");
-    const m_p_s = DOM.e("#traduko_chiuj_p_s");
-    const m_t_z = DOM.e("#traduko_chiuj_t_z");
-
-    revo_listoj.lingvoj.load((kodo,nomo) => {
-        const komenca = nomo.charAt(0);
-        const lng_html = `<li id="trd_chiuj_${kodo}">${nomo}</li>`;
-
-        if (komenca >= 'a' && komenca <= 'b')
-            m_a_b?.insertAdjacentHTML("beforeend",lng_html);
-        else if (komenca >= 'c' && komenca <= 'g' || komenca == 'ĉ' || komenca == 'ĝ')
-            m_c_g?.insertAdjacentHTML("beforeend",lng_html);
-        else if (komenca >= 'h' && komenca <= 'j' || komenca == 'ĥ' || komenca == 'ĵ')
-            m_h_j?.insertAdjacentHTML("beforeend",lng_html);
-        else if (komenca >= 'k' && komenca <= 'l')
-            m_k_l?.insertAdjacentHTML("beforeend",lng_html);
-        else if (komenca >= 'm' && komenca <= 'o')
-            m_m_o?.insertAdjacentHTML("beforeend",lng_html);
-        else if (komenca >= 'p' && komenca <= 's' || komenca == 'ŝ')
-            m_p_s?.insertAdjacentHTML("beforeend",lng_html);
-        else if (komenca >= 't' && komenca <= 'z' || komenca == 'ŭ')
-            m_t_z?.insertAdjacentHTML("beforeend",lng_html);
-    });
-
-    // se mabaŭ lingvolistoj (preferataj kaj alfabetaj)
-    // ests fintraktitaj ni ankoraŭ refreŝigu la menuon
-    p_pref.then(() => Menu.refreŝigu("#traduko_menuo"));
+        )})
+    })
+    .then(() => {
+        // se ambaŭ lingvolistoj (preferataj kaj alfabetaj)
+        // estas fintraktitaj ni ankoraŭ refreŝigu la menuon
+        Menu.refreŝigu("#traduko_menuo");
+    });    
 }
 
 // aldonu la traduk-lingojn de la ŝargita artikolo al la traduko-dialogo (lingvo-elekto)
@@ -1269,12 +1260,14 @@ function plenigu_lingvojn_artikolo() {
         const traduk_lingvoj = x.traduk_lingvoj(xml);
 
         // ŝargu, se ne jam ŝargita kaj trakuru la lingvolston
-        revo_listoj.lingvoj.load((kodo,nomo) => {
-            if (kodo in traduk_lingvoj) {
-                const lingvo_html = `<li id="trd_art_${kodo}">${nomo}</li>`;
-                trd_art.insertAdjacentHTML("beforeend",lingvo_html);
+        revo_listoj.lingvoj.load(()=>Menu.refreŝigu("#traduko_menuo"),
+            (kodo,nomo) => {
+                if (kodo in traduk_lingvoj) {
+                    const lingvo_html = `<li id="trd_art_${kodo}">${nomo}</li>`;
+                    trd_art.insertAdjacentHTML("beforeend",lingvo_html);
+                }
             }
-        });
+        );
     }
 }
 

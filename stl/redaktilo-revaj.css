@@ -1293,6 +1293,7 @@ dialog .butonujo button {
 
 #traduko_menuo .ui-menu-divider {
     margin: 0;
+    border-width: 1px 0 1px 0;
 }
 
 #traduko_aliaj {

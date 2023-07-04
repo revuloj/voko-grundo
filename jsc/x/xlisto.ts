@@ -6,8 +6,8 @@
 import * as u from '../u';
 
 export type ListNomo = "lingvoj" | "fakoj" | "stiloj";
-export type ListAldonilo = (kod: string, nom: string) => {};
-
+export type ListAldono = (kod: string, nom: string) => {};
+export type ListFino = () => {};
 /**
  * Kodlistoj agorditaj por Reta Vortaro: lingvoj, fakoj, stiloj
  */
@@ -58,17 +58,17 @@ export class Xlist {
      * Plenigas ion per la kodlisto, vokante 'aldonilo' por ĉiu paro kodo-nomo
      * @param aldonilo - 'id' de HTML-elemento plenigenda per 'option'-elementoj 
      */
-    this.fill = function(aldonilo: ListAldonilo) {      
+    this.fill = function(fine?: ListFino, aldone?: ListAldono) {      
       for (const [kod, nom] of Object.entries(this.codes))
-        if (typeof nom == 'string')
-          aldonilo(kod,nom);
+        if (typeof nom == 'string' && aldone)
+          aldone(kod,nom);
     };
   
     /**
      * Ŝargas la kodliston de la donita URL.
      * @param {Function} aldonilo - se donita, revokfuncio ald(kodo,nomo) aldonante unuopan listeron al io
      */
-    this.load = function(aldonilo?: ListAldonilo) {
+    this.load = function(fine?: ListFino, aldone?: ListAldono) {
       let self = this;
       let ŝargante = false;
   
@@ -93,15 +93,15 @@ export class Xlist {
               self.codes = codes;
               ŝargante = false;
   
-              if (aldonilo) {
-                self.fill.call(self,aldonilo);
+              if (aldone) {
+                self.fill.call(self,fine,aldone);
               } 
           });
   
       // se ni jam ŝargis iam antaŭe, ni eble nur devas plenigi la videbalan elektilon
       } else if (!ŝargante) {
-        if (aldonilo) {
-          self.fill.call(self,aldonilo);
+        if (aldone) {
+          self.fill.call(self,fine,aldone);
         } 
       } else {
         throw new Error("Du ŝargoj samtempe ne devas okazi. Necesas adapti la kodon, kiu ŝargigas la liston!");

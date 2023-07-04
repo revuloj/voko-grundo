@@ -10,6 +10,7 @@ export class Menu extends UIElement {
     //valoroj: any;
     static menu_item_class = "ui-menu-item";
     static menu_class = "ui-menu";
+    static menu_divid_class = "ui-menu-divider";
     static menu_sub_fermita_class = "ui-menu-sub-fermita";
 
     static aprioraj: {
@@ -40,7 +41,7 @@ export class Menu extends UIElement {
         this.element.querySelectorAll(this.opcioj.eroj).forEach((menuero) => {
             menuero.classList.add(Menu.menu_item_class);
 
-            // traktu evtl. submenuon            
+            // ĉu submenu? traktu tiun submenuon            
             const sub = this._submenuo(menuero);
             if (sub) {
                 menuero.classList.add(Menu.menu_sub_fermita_class);
@@ -63,6 +64,9 @@ export class Menu extends UIElement {
                         }
                     });
                 });
+            } else if (menuero.textContent == '-') {
+                // apartigilo sen kroma funkcio
+                menuero.classList.add(Menu.menu_divid_class);
             } else {
                 // reago al elekto de menuero (kiu ne estas submenuo)
                 menuero.addEventListener("click",(event) => 

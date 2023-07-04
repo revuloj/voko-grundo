@@ -3,7 +3,6 @@
 (c) 2023 Wolfram Diestel
 */
 
-//import {Xlist} from './xlisto';
 import {XmlStruct, XElPos} from './xmlstruct';
 
 /* FARENDA:
