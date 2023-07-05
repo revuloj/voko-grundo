@@ -69,9 +69,9 @@ export default function() {
     new Buton(".menu_toggle");
     DOM.klak(".menu_toggle",
         () => {
-            const sb_videbla = ! DOM.kaŝita("#xml_sidebar");
+            const sb_videbla = !DOM.kaŝita("#xml_sidebar");
             DOM.kaŝu("#xml_sidebar",sb_videbla);
-            if (sb_videbla) {
+            if (!sb_videbla) {
                 DOM.al_t("#menu_show_btn","\u00ab");
             } else {
                 DOM.al_t("#menu_show_btn","\u2630");
@@ -142,14 +142,10 @@ export default function() {
     new Buton("#kromklvr");
     DOM.klak("#kromklvr", () => {
         const stato = DOM.v("#kromklvr")||0;
-        const pressed = "" + (1 - +stato);
-        DOM.al_v("#kromklvr",pressed);
+        const ŝaltita = (1 - +stato);
+        DOM.al_v("#kromklvr",""+ŝaltita);
         //$("#dock_klavaro").toggle()
-        if (pressed) {
-            DOM.kaŝu("#dock",false);
-        } else {
-            DOM.kaŝu("#dock",true);
-        }
+        DOM.kaŝu("#dock",ŝaltita==0);
     });    
     
     // outline
@@ -202,17 +198,34 @@ export default function() {
     // ekrana klavaro
     let klv = DOM.e("#dock_klavaro");
     if (klv) {
-      const xklv = new x.XKlavaro(klv,"#xml_text","#xml_text",
-        undefined,
+      const xklv = new x.XKlavaro(klv,null,"#xml_text",
+      () => Artikolo.xmlarea("#xml_text").getRadiko(),
+      (event: Event, ui) => { 
+            // PLIBONIGU: tion ni povas ankaŭ meti en xklavaro.js!
+            if (ui.cmd == 'indiko') {
+              x.hide("r:klv_fak");
+              x.show("r:klv_ind");
+              x.hide("r:klv_elm");
+            } else if (ui.cmd == 'fako') {
+              x.hide("r:klv_ind");
+              x.show("r:klv_fak");
+              x.hide("r:klv_elm");
+            } else if (ui.cmd == 'klavaro') {
+              x.hide("r:klv_fak");
+              x.show("r:klv_elm");
+              x.hide("r:klv_ind");
+            }
+          },
+/*
         function(event,ui) {
             switch (ui.cmd) {
-                /*
+                
                 case "fermu":
                     $("#dock_klavaro").hide();
                     //this.element.hide();
                     //$("#kromklavaro").show(); // butono por reaperigi ĝin poste
                     break;
-                    */
+                    
                 case "indiko":
                     montri_indikojn();
                     break;
@@ -221,13 +234,16 @@ export default function() {
                     const slip = Slipar.montru("#tabs",2);
                     break;
             }
-        },
+        },*/
         function(event,ui) {
             const xmlarea = Artikolo.xmlarea("#xml_text");
             xmlarea?.setUnsynced();
         }
       );
-      xklv.elemento_klavoj(klv);
+      xklv.indiko_klavoj(DOM.e("#r\\:klv_ind"), revo_listoj.stiloj);
+      xklv.fako_klavoj(DOM.e("#r\\:klv_fak"), revo_listoj.fakoj);
+      const klv_elm = DOM.e("#r\\:klv_elm");
+      if (klv_elm) xklv.elemento_klavoj(klv_elm,klv_elm.textContent);
     }
     
 

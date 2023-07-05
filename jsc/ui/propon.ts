@@ -3,14 +3,10 @@
  * laŭ GPL 2.0
  */
 
+import { DOM } from './dom';
 import { UIElement } from './uielement';
 
 export class Propon extends UIElement {
-    /**
-     * Ŝlosilo, sub kiu ni alkroĉas trovojn en la DOM-strukturo
-     * ĉe datalist/option-elementoj
-     */
-    static revo_option_obj = "_ReVo_Trovo";
 
     static aprioraj: { 
         source: undefined,
@@ -76,7 +72,7 @@ export class Propon extends UIElement {
                         return (o.value == val)
                     });
                     if (opt_elektita) {
-                        const alkroĉita = opt_elektita[Propon.revo_option_obj];
+                        const alkroĉita = opt_elektita._voko_propono;
                         // kion ni faru per la rezulto, prefere la uzanto de Propon provizu
                         // reagon al kiu ni sendu tion, kaj ĝi decidu mem pri kion fari!
                         elekt_reago("elektita",alkroĉita);
@@ -97,7 +93,7 @@ export class Propon extends UIElement {
                 const val = e.value;
                 const opt = document.createElement("option");
                 opt.setAttribute("value",val);
-                opt[Propon.revo_option_obj] = e;
+                opt._voko_propono = e;
                 datalist.append(opt);
             });
         } 

@@ -7,11 +7,6 @@ import { DOM } from './dom';
 import { UIElement } from './uielement';
 import { Eraro } from './erar';
 
-declare global {
-    interface HTMLElement {
-        _valid?: Array<Valid>;
-    }
-}
 
 export class Valid extends UIElement {
 
@@ -25,10 +20,10 @@ export class Valid extends UIElement {
 
         if (el) {
             const val = new Valid(el,opcioj);
-            if (el._valid) 
-                el._valid.push(val)
+            if (el._voko_valid) 
+                el._voko_valid.push(val)
             else
-                el._valid = [val];
+                el._voko_valid = [val];
         }  
     }
 
@@ -40,11 +35,11 @@ export class Valid extends UIElement {
             el = elemento;
         }
 
-        if (el && el._valid) {
+        if (el && el._voko_valid) {
             //return el._valid();
             let _valida_ = true;
 
-            const validigoj: Array<Valid> = el._valid;
+            const validigoj: Array<Valid> = el._voko_valid;
 
             validigoj.forEach((v) => {
                 if (! v.check()) _valida_ = false;

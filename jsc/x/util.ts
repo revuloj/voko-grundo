@@ -81,28 +81,6 @@ export function enfandu(target, ...sources) {
 }    
 
 
-/**
- * profunda nedetrua fando de du objektoj
- * @param target
- * @param source
- */
-export function fandu(target, source) {
-  let output = Object.assign({}, target);
-  if (isObject(target) && isObject(source)) {
-    Object.keys(source).forEach(key => {
-      if (isObject(source[key])) {
-        if (!(key in target))
-          Object.assign(output, { [key]: source[key] });
-        else
-          output[key] = fandu(target[key], source[key]);
-      } else {
-        Object.assign(output, { [key]: source[key] });
-      }
-    });
-  }
-  return output;
-}
-
 
 /**
  * Transformas markon al href por artikolo

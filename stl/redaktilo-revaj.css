@@ -30,6 +30,14 @@ body {
     overflow: auto !important;
 }
 
+.ui-dialog.faldita {
+    margin-top: 1.8em;
+    margin-right: 7em;
+    background: rgba(100,100,100,40%);
+    /*background-color: rgba()*/
+    /*filter: alpha(opacity=60);*/
+}
+
 .flex-form {
     display: flex;
     flex-wrap: wrap;
@@ -264,15 +272,16 @@ input[type='button']:focus,
     padding: .18em;
     margin: 2px;
     */
-    margin: 0;
-    margin-right: .1em;
+    border: 1px solid var(--btn-brd-clr);
+
+    margin: 1px 0px 2px 0px;
     padding: .18em;
     color: black !important;
     font-weight: normal !important;
-    box-shadow: none !important;
+    /*box-shadow: none !important;*/
 
     box-sizing: border-box;   
-    height: 100%;
+    height: 96%;
 }
 .kklvbtn[value='1'] {
     background-color: var(--btn-act-bgr-clr) !important;
@@ -363,7 +372,7 @@ dialog {
     color: var(--main-fnt-clr) !important;
     background-color: var(--ovr-bgr-clr);
     border: 2px dotted var(--ovr-brd-clr);
-    box-shadow: 5px 5px 10px;
+    box-shadow: 5px 5px 10px var(--ovr-shd-clr);
     z-index: 200;
     margin-top: 4em;
     padding: .1em;
@@ -378,7 +387,7 @@ dialog form {
 }
 
 dialog label {
-    font-size: 80%;
+    font-size: 90%;
 }
 
 dialog h2 {
@@ -429,10 +438,12 @@ dialog .butonujo button {
 #tab-buttons {
     border-top-right-radius: 4px;
     border-bottom-right-radius: 4px;
-    box-shadow: 2px 1px 2px rgba(0,0,0,.4);
+    border: 1px solid gray;
     border-left: none;
     margin-left: -1px;
     margin-right: 5px;
+    /*box-shadow: 2px 1px 2px rgba(0,0,0,.4);*/
+    box-shadow: 1px 2px 5px black;
 }
 
 
@@ -501,7 +512,13 @@ dialog .butonujo button {
     width: 2.5em;
     padding: .4em !important;
     z-index: 100; /* kovru la ombron de la menuo! */
-    box-shadow: 0 0 4px black;
+    /*box-shadow: 0 0 4px black;*/
+
+    margin: 0px 1px 1px 0px;
+    border-radius: 0;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+    border: 1px dotted var(--nav-brd-clr);
 }
 
 #right_side {
@@ -548,29 +565,56 @@ dialog .butonujo button {
     text-decoration: none;
 }
 
+nav {
+    height: 100%;
+    background-image: url(kaefer1.jpg);
+    background-repeat: repeat;
+    background-position: bottom
+}
+
 #menu {
-   height: 100%; /*99.8%;*/
+   height: fit-content; /* 100%; */
    border: none !important;
 
-   padding: 0;
+   opacity: 0.94;
+   /*padding: 0;*/
    margin: 0;
-
-   background-image: url(kaefer1.jpg);
-   background-repeat: repeat;
-   background-position: bottom
+   box-shadow: 1px 2px 5px;
 }
 
 #menu li, #traduko_menuo li {
+  box-sizing: border-box;
   width: 100%;
   border-radius: 0 !important;
-  border-color: var(--nav-brd-clr);
+  /*border-color: var(--nav-brd-clr);*/
+  border: none;
   color: var(--nav-fnt-clr);
   background-color: var(--nav-bgr-clr);
+}
+
+#traduko_menuo li span {
+    display: inline-block;
+    width: 80%;
 }
 
 .ui-menu {
     color: var(--nav-fnt-clr);
     background-color: var(--nav-bgr-clr);
+}
+
+.ui-widget-header {
+    margin-left: -18px;
+}
+
+ul.ui-menu {
+    padding-inline-start: 20px;
+}
+
+.ui-menu li {
+    list-style-type: circle;
+    background-color: var(--nav-bgr-clr) !important;
+    padding: 0.1em;
+    padding-left: 0.3em;
 }
 
 .ui-menu-item {
@@ -581,7 +625,7 @@ dialog .butonujo button {
 /* submenuoj */
 .ui-menu .ui-menu {
     position: absolute;
-    padding: 0.1em;
+    /*padding: 0.1em;*/
     border: 1px solid var(--nav-brd-clr);
 }
 
@@ -606,6 +650,8 @@ dialog .butonujo button {
     position: relative;
     justify-content: stretch;
     -webkit-justify-content: stretch;
+
+    background-image: linear-gradient(rgba(0,0,0,0%),rgba(0,0,0,10%));    
 }
 
 #dock_eraroj:empty,
@@ -708,6 +754,7 @@ dialog .butonujo button {
     background-color: greenyellow;
 }
 
+/****
 #elekto_indikoj {
     max-height: 27ex;
     overflow: auto; 
@@ -716,14 +763,13 @@ dialog .butonujo button {
 }
 
 #elekto_indikoj div {
-    /*display: inline-block;*/ /*float; //inline-block; inline-block aldonas spaceton inter la linioj */
     float: left;
     height: 3em;
     max-height: 3em;
     width: 4em;
     overflow: hidden;
     border: 1px solid #e3a345;
-    color: var(--nav-fnt-clr); /* pli bone estus difini apartan var...*/
+    color: var(--nav-fnt-clr); 
     border-radius: 4px;
     padding: 0.1em;
     margin: 0;
@@ -734,19 +780,19 @@ dialog .butonujo button {
 
 #elekto_indikoj .stl {
   font-stretch: condensed;
-  background-color: burlywood; /*#e5e3c5;  */
+  background-color: burlywood;
 }
 
 #elekto_indikoj .fak {
-  background-color: khaki; /*#d5e3d5;  */
+  background-color: khaki;
 }
 
 #elekto_indikoj .ofc {
-  background-color: blanchedalmond; /*#d5d3e5*/;  
+  background-color: blanchedalmond;   
 }
 
 #elekto_indikoj .gra {
-  background-color: beige; /*#e5d3e5;  */
+  background-color: beige; 
 }
 
 
@@ -787,24 +833,20 @@ dialog .butonujo button {
 }
 
 .butonoj div {
-    display: inline-block; /* inline-block aldonas spaceton inter la linioj */
-    /* float: left; */
+    display: inline-block; 
     vertical-align: inherit;
     height: 1.3em;
     max-height: 1.6em;
     min-width: 1.6em;
     overflow: hidden;
     border: 1px solid #e3a345;
-    color: var(--nav-fnt-clr); /* pli bone estus difini apartan var...*/
+    color: var(--nav-fnt-clr); 
     border-radius: 4px;
     padding: 0.1em;
     margin: 0 0.1em 0 0.1em;
     padding-top: 0.5em;
     line-height: 1em;
     text-align: center;
-    /*
-    background-color: #e5e3c5;  
-    */
     background-color: khaki;
 }
 
@@ -821,7 +863,6 @@ dialog .butonujo button {
 
 
 .elm_btn {
-    /*background-color: #d5e3d5 !important;*/
     background-color: burlywood !important;
 }
 
@@ -829,13 +870,9 @@ dialog .butonujo button {
    background-color: var(--btn-bgr-clr) !important;
    border-color: var(--btn-brd-clr) !important;
    color: var(--main-fnt-clr) !important;
-   /*
-   border-color: #327E04 !important;
-   background-color: #459e00 !important;
-   color: white !important;    
-   */
    font-weight: bold !important;
 }
+*/
 
 #xml {
     display: flex;
@@ -1293,6 +1330,9 @@ dialog .butonujo button {
 
 #traduko_menuo .ui-menu-divider {
     margin: 0;
+    padding: 0;
+    height: 0;
+    color: rgba(0,0,0,0);
     border-width: 1px 0 1px 0;
 }
 

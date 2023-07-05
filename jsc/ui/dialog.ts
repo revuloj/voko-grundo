@@ -3,13 +3,12 @@
  * laŭ GPL 2.0
  */
 
-import { DOM } from './dom';
+import { DOM, HTMLCheckControlElement } from './dom';
 import { UIElement } from './uielement';
+import { UIStil } from './uistil';
 
 export class Dialog extends UIElement {
     //valoroj: any;
-    static butonujo_klaso = "butonujo";
-    static faldebla_klaso = "faldebla";
 
     static aprioraj: {
         kampoj: {},
@@ -56,6 +55,8 @@ export class Dialog extends UIElement {
 
     constructor(element: HTMLDialogElement|string, opcioj: any) {
         super(element, opcioj, Dialog.aprioraj);
+
+        this.element.classList.add(UIStil.dialogo);
 
         // evtl. kaŝu
         if (this.element.tagName != "DIALOG") DOM.kaŝu(this.element);
@@ -130,11 +131,17 @@ export class Dialog extends UIElement {
     faldu(faldita = true) {
         const el = this.element;
 
-        Array.from(el.getElementsByClassName(Dialog.faldebla_klaso)).forEach((f) => {
+        Array.from(el.getElementsByClassName(UIStil.faldebla)).forEach((f) => {
             DOM.kaŝu(f, faldita);
         });
 
         this.faldita = faldita;
+
+        if (faldita) {
+            this.element.classList.add(UIStil.faldita);
+        } else {
+            this.element.classList.remove(UIStil.faldita);
+        }
         
             /*
         if (faldita) {
@@ -180,7 +187,7 @@ export class Dialog extends UIElement {
             if (k) {
                 const tp = k.getAttribute("type")
                 if (tp == "checkbox" || tp == "radio") {
-                    valj[nomo] = (k as HTMLInputElement).checked;
+                    valj[nomo] = DOM.c(k);
                 } else {
                     valj[nomo] = k.value;
                 }
@@ -197,8 +204,8 @@ export class Dialog extends UIElement {
                 if (nomo in valj) {
                     let val = valj[nomo] || '';
                     const tp = k.getAttribute("type");
-                    if (tp == "checkbox" || tp == "radio") {
-                        (k as HTMLInputElement).checked = valj[nomo];
+                    if (DOM.isCheckElement(k) && tp == "checkbox" || tp == "radio") {
+                        (k as HTMLCheckControlElement).checked = valj[nomo];
                     } else {
                         k.value = val;
                     }

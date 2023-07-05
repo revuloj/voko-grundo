@@ -3,14 +3,46 @@
  * laŭ GPL 2.0
  */
 
+import { UIElement } from './uielement';
+import { UIStil } from './uistil';
+import { Valid } from './valid';
+
 declare global {
     interface Element {
-        _datumo: any;
+        _voko_datumo: any; // iuj datumoj alkroĉitaj al DOM-elemento
+    }
+
+    interface HTMLElement {
+        _voko_ui?: UIElement;
+        _voko_valid?: Array<Valid>; // testoj por validigi enkroĉitaj en DOM
+    }
+
+    interface HTMLOptionElement {
+        _voko_propono?: any; // iu objekto, kiun ni provizas kun proponoj el datalist/option-elemento
     }
 }
 
+//HTMLInputElement|HTMLTextAreaElement|HTMLSelectElement|HTMLButtonElement;
+export interface HTMLFormControlElement extends HTMLElement {
+    value: string|null;
+    disabled: boolean;
+    type: string; // atentu, ke "type" povas havi diversajn informojn ekz-e ĉe <input>, <select>, <menu>...
+    focus(): Function;
+}
+
+export interface HTMLCheckControlElement extends HTMLFormControlElement {
+    checked: boolean;
+}
+
 export class DOM {
-    static klsKasxita = 'kasxita'; // CSS-klaso kiun ni aplikas al kaŝitaj elementoj
+
+    static isCheckElement(obj: any): obj is HTMLCheckControlElement {
+        return ('cheked' in obj);
+    }
+
+    static isFormElement(obj: any): obj is HTMLFormControlElement {
+        return ('value' in obj && 'disabled' in obj && 'focus' in obj);
+    }
 
     // trovas elementon en HTML-dokumento per elektilo, ekz-e #el_id
     static e(elektilo: string): Element|null {
@@ -23,11 +55,16 @@ export class DOM {
     }
 
     // trovas input-elementon en HTML-dokumento per elektilo, ekz-e #el_id
-    static i(elektilo: string): HTMLInputElement|HTMLTextAreaElement|HTMLSelectElement|null {
+    static i(elektilo: string): HTMLFormControlElement|null {
         const e = DOM.e(elektilo);
-        if (e instanceof HTMLInputElement 
+        // PRIPENSU: iom ĝenas ke estas pluraj JS-klasoj kiuj havas .value sed
+        // ne havas komunan bazolason kun tiu atributo
+        // ni difinis TS-interfacon, sed oni ne povas rekte testi kontraŭ tiu
+        /*if (e instanceof HTMLInputElement 
          || e instanceof HTMLTextAreaElement
-         || e instanceof HTMLSelectElement) return e;
+         || e instanceof HTMLSelectElement
+         || e instanceof HTMLButtonElement) */
+        if (DOM.isFormElement(e)) return (<HTMLFormControlElement>e);
         return null;
     }
 
@@ -81,9 +118,9 @@ export class DOM {
 
     // trovas input-elementon en HTML-dokumento per elektilo kaj redonas ĉu ĝi estas
     // elektita (angle: checked)
-    static c(elektilo: string): boolean|null {
-        const i = DOM.i(elektilo);
-        if (i instanceof HTMLInputElement) return i.checked;
+    static c(i: Element|string): boolean|null {
+        const el = (typeof i === "string")? DOM.i(i) : i;
+        if (DOM.isCheckElement(el)) return el.checked;
         return null
     }
 
@@ -92,7 +129,7 @@ export class DOM {
      */
     static datum(e: Element|string, nomo: string): any {
         const el = (typeof e === "string")? DOM.e(e) : e;
-        if (el) return el._datumo[nomo];
+        if (el) return el._voko_datumo[nomo];
     }
 
     /**
@@ -101,8 +138,8 @@ export class DOM {
     static al_datum(e: Element|string, nomo: string, datumo: any) {
         const el = (typeof e === "string")? DOM.e(e) : e;
         if (el) {
-            if (! el._datumo) el._datumo = {};
-            el._datumo[nomo] = datumo;
+            if (! el._voko_datumo) el._voko_datumo = {};
+            el._voko_datumo[nomo] = datumo;
         }
     }
 
@@ -174,15 +211,15 @@ export class DOM {
         const el = (typeof e === "string")? DOM.e(e) : e;
         if (el) {
             if (kaŝita)
-                el.classList.add(DOM.klsKasxita);
+                el.classList.add(UIStil.kaŝita);
             else
-                el.classList.remove(DOM.klsKasxita);
+                el.classList.remove(UIStil.kaŝita);
         }
     }
 
     static kaŝita(e: Element|string) {
         const el = (typeof e === "string")? DOM.e(e) : e;
-            if (el) return el.classList.contains(DOM.klsKasxita);
+            if (el) return el.classList.contains(UIStil.kaŝita);
     }
 
     /**
@@ -209,7 +246,7 @@ export class DOM {
     /**
      * Redonas tekstelekton de aktiva formularkampo
      */
-    static elekto(e: HTMLInputElement|string): string {
+    static elekto(e: HTMLInputElement|string): string|undefined {
         const i = (typeof e === "string")? DOM.i(e) : e;
         if (i instanceof HTMLInputElement || i instanceof HTMLTextAreaElement) {
             const start = i.selectionStart||0;
@@ -227,7 +264,7 @@ export class DOM {
             if (i.selectionStart || i.selectionStart === 0) {
                 // Firefox and Webkit based
                 var startPos = i.selectionStart;
-                var endPos = i.selectionEnd;
+                var endPos = i.selectionEnd||startPos;
                 var scrollTop = i.scrollTop;
                 const val:string = i.value||'';
                 i.value = val.substring(0, startPos) + teksto + val.substring(endPos, val.length);

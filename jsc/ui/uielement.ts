@@ -3,13 +3,6 @@
  * laŭ GPL 2.0
  */
 
-import { fandu } from '../x';
-
-declare global {
-    interface HTMLElement {
-        _uielement: UIElement;
-    }
-}
 
 export class UIElement {
     public element: HTMLElement;
@@ -24,19 +17,46 @@ export class UIElement {
             el = element;
         }
 
-        if (el && el._uielement) return el._uielement;
+        if (el && el._voko_ui) return el._voko_ui;
     }
 
+    /**
+     * profunda nedetrua fando de du objektoj
+     * @param target
+     * @param source
+     */
+    static fandu(target, source) {
+        function isObject(item) {
+            return (item && typeof item === 'object' && !Array.isArray(item));
+        };
+
+      let output = Object.assign({}, target);
+      if (isObject(target) && isObject(source)) {
+        Object.keys(source).forEach(key => {
+          if (isObject(source[key])) {
+            if (!(key in target))
+              Object.assign(output, { [key]: source[key] });
+            else
+              output[key] = UIElement.fandu(target[key], source[key]);
+          } else {
+            Object.assign(output, { [key]: source[key] });
+          }
+        });
+      }
+      return output;
+    }
+    
 
     constructor(element: HTMLElement|string, opcioj: any, aprioraj = {}) {
         const el = (typeof element === "string")? document.querySelector(element) as HTMLElement : element;
 
         if (el) {
             this.element = el;
-            el._uielement = this;
+            if (el._voko_ui) console.warn("Jam ekzistas UI-elemento ĉe tiu ĉi HTML-elemento. La nova forviŝas ĝin!");
+            el._voko_ui = this;
         }
 
-        this.opcioj = fandu(aprioraj, opcioj);
+        this.opcioj = UIElement.fandu(aprioraj, opcioj);
     };
 
     _on(handlers: any) {

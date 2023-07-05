@@ -5,11 +5,11 @@
 
 import { DOM } from './dom';
 import { UIElement } from './uielement';
+import { UIStil } from './uistil';
+
 
 export class Slipar extends UIElement {
     //valoroj: any;
-    static langetaro_klaso = "ui-tabs-nav";
-    static langeto_aktiva_klaso = "ui-tabs-active";
 
     static aprioraj: { 
         aktiva: number;
@@ -31,7 +31,7 @@ export class Slipar extends UIElement {
         super(element, opcioj,Slipar.aprioraj);
 
         this.element.querySelector("ul,ol")
-            ?.classList.add(Slipar.langetaro_klaso);
+            ?.classList.add(UIStil.langetaro);
 
         // kaŝu ĉiujn krom la aktiva
         if (this.opcioj.aktiva == undefined) this.opcioj.aktiva = 0;
@@ -54,9 +54,9 @@ export class Slipar extends UIElement {
             const sl = this.slipo(l);
             if (sl) DOM.kaŝu(sl,sl0 !== sl);
             if (l === langeto) {
-                l.classList.add(Slipar.langeto_aktiva_klaso);
+                l.classList.add(UIStil.langeto_aktiva);
             } else {
-                l.classList.remove(Slipar.langeto_aktiva_klaso);
+                l.classList.remove(UIStil.langeto_aktiva);
             }
         });
     }

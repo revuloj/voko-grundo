@@ -801,7 +801,7 @@ nav li {
 
     padding: 0.5em;
     border: 2px dotted var(--ovr-brd-clr);
-    box-shadow: 5px 5px 10px;
+    box-shadow: 5px 5px 10px var(--ovr-shd-clr);
 }
 
 .overlay .fermu {

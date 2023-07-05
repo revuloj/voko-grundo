@@ -71,30 +71,17 @@ export default function() {
 
     klv = DOM.e("#krei_butonoj");
     if (klv) {
-      const xklv = new x.XKlavaro("#krei_butonoj","krei_dlg","#krei_dif",
-        () => Artikolo.xmlarea("#xml_text").getRadiko(), 
-        function(event,ui) {
-            if (ui.cmd == "blankigo") {
-                DOM.al_v("#krei_dlg input","");
-                DOM.al_v("#krei_dif","");
-            }
-        },
-        undefined); // postenmeto
-      xklv.elemento_klavoj(klv);
+        new x.XKlavaro("#krei_butonoj","krei_dlg","#krei_dif",
+            () => Artikolo.xmlarea("#xml_text").getRadiko(), 
+            function(event,ui) {
+                if (ui.cmd == "blankigo") {
+                    DOM.al_v("#krei_dlg input","");
+                    DOM.al_v("#krei_dif","");
+                }
+            },
+            undefined) // postenmeto
+        .elemento_klavoj(klv);
     };
-        /*
-    $( "#krei_butonoj").Klavaro({
-        artikolo: $("#xml_text"),
-        posedanto: "#krei_dlg",
-        akampo: "#krei_dif",
-        reĝimpremo: function(event,ui) {
-            if (ui.cmd == "blankigo") {
-                $("#krei_dlg input").val("");
-                $("#krei_dif").val("");
-            }
-        }
-    });
-    */
     DOM.klavpremo("#krei_rad",xpress);
     DOM.klavpremo("#krei_dif",xpress);
 
@@ -131,7 +118,7 @@ export default function() {
     });
     DOM.klavpremo("#shargi_sercho",xpress);
     new Propon("#shargi_sercho", {
-        source: shargi_sercho_autocomplete,
+        source: shargo_dlg_serĉo,
         select: function(event,ui) { 
             DOM.al_v("#shargi_dosiero",ui.art+'.xml'); 
         }   
@@ -299,9 +286,9 @@ export default function() {
             }    
         }
     });    
-    plenigu_referenco_listojn();
+    referenco_dlg_preparu();
     new Propon( "#referenco_sercho", {
-        source: referenco_sercho_autocomplete,
+        source: referenco_dlg_serĉo,
         select: function(event,ui) {
             var enhavo = ui.num == "" ? ui.kap : ui.kap + "<sncref/>";
             DOM.al_v("#referenco_celo",ui.mrk);
@@ -330,20 +317,20 @@ export default function() {
             this.faldu(false); // necesas, se la dialogo estis fermita en faldita stato...
         }
     });  
-    plenigu_ekzemplo_bib();
+    ekzemplo_dlg_preparo();
 
     klv = DOM.e("#ekzemplo_butonoj");
     if (klv) {
-      const xklv = new x.XKlavaro("#ekzemplo_butonoj","#ekzemplo_dlg","#xml_text",
-      () => Artikolo.xmlarea("#xml_text").getRadiko(), 
-      function(event,ui) {
-            if (ui.cmd == "blankigo") {
-                DOM.al_v("#ekzemplo_dlg input","");
-                DOM.al_v("#ekzemplo_frazo","");
-            }
-        },
-        undefined);
-      xklv.elemento_klavoj(klv);
+        new x.XKlavaro("#ekzemplo_butonoj","#ekzemplo_dlg","#xml_text",
+            () => Artikolo.xmlarea("#xml_text").getRadiko(), 
+            function(event,ui) {
+                if (ui.cmd == "blankigo") {
+                    DOM.al_v("#ekzemplo_dlg input","");
+                    DOM.al_v("#ekzemplo_frazo","");
+                }
+            },
+            undefined)
+        .elemento_klavoj(klv);
     }
 
     DOM.klavpremo("#ekzemplo_frazo",xpress);
@@ -393,16 +380,16 @@ export default function() {
 
     klv = DOM.e("#bildo_butonoj");
     if (klv) {
-      const xklv = new x.XKlavaro("#bildo_butonoj","#bildo_dlg","#bildo_frazo",
-      () => Artikolo.xmlarea("#xml_text").getRadiko(), 
-      function(event,ui) {
-            if (ui.cmd == "blankigo") {
-                DOM.al_v("#bildo_dlg input[type!='radio']","");
-                DOM.al_v("#bildo_frazo","");
-            }
-        },
-        undefined);
-      xklv.elemento_klavoj(klv);
+        new x.XKlavaro("#bildo_butonoj","#bildo_dlg","#bildo_frazo",
+            () => Artikolo.xmlarea("#xml_text").getRadiko(), 
+            function(event,ui) {
+                if (ui.cmd == "blankigo") {
+                    DOM.al_v("#bildo_dlg input[type!='radio']","");
+                    DOM.al_v("#bildo_frazo","");
+                }
+            },
+            undefined)
+        .elemento_klavoj(klv);
     }
     DOM.klavpremo("#bildo_frazo",xpress);
 
@@ -427,30 +414,17 @@ export default function() {
 
     klv = DOM.e("#derivajho_butonoj");
     if (klv) {
-      const xklv = new x.XKlavaro("#derivajho_butonoj","#derivajho_dlg","#derivajho_dif",
-      () => Artikolo.xmlarea("#xml_text").getRadiko(), 
-      function(event,ui) {
-            if (ui.cmd == "blankigo") {
-                DOM.al_v("#derivajho_dlg input","");
-                DOM.al_v("#derivajho_dif","");
-            }
-        },
-        undefined);
-      xklv.elemento_klavoj(klv);
+        new x.XKlavaro("#derivajho_butonoj","#derivajho_dlg","#derivajho_dif",
+            () => Artikolo.xmlarea("#xml_text").getRadiko(), 
+            function(event,ui) {
+                if (ui.cmd == "blankigo") {
+                    DOM.al_v("#derivajho_dlg input","");
+                    DOM.al_v("#derivajho_dif","");
+                }
+            },
+            undefined)
+        .elemento_klavoj(klv);
     }
-    /*
-    $("#derivajho_butonoj").Klavaro({
-        artikolo: $("#xml_text"),
-        posedanto: "#derivajho_dlg",
-        akampo: "#derivajho_dif",
-        reĝimpremo: function(event,ui) {
-            if (ui.cmd == "blankigo") {
-                $("#derivajho_dlg input").val("");
-                $("#derivajho_dif").val("");
-            }
-        }
-    });
-    */
     DOM.klavpremo("#derivajho_kap",xpress);
     DOM.klavpremo("#derivajho_dif",xpress);
 
@@ -473,34 +447,21 @@ export default function() {
 
     klv = DOM.e("#senco_butonoj");
     if (klv) {
-      const xklv = new x.XKlavaro("#senco_butonoj","#senco_dlg","#senco_dif",
-      () => Artikolo.xmlarea("#xml_text").getRadiko(), 
-      function(event,ui) {
-            if (ui.cmd == "blankigo") {
-                DOM.al_v("#senco_dlg input","");
-                DOM.al_v("#senco_dif","");
-            }
-        },
-        undefined);
-      xklv.elemento_klavoj(klv);
+        new x.XKlavaro("#senco_butonoj","#senco_dlg","#senco_dif",
+            () => Artikolo.xmlarea("#xml_text").getRadiko(), 
+            function(event,ui) {
+                if (ui.cmd == "blankigo") {
+                    DOM.al_v("#senco_dlg input","");
+                    DOM.al_v("#senco_dif","");
+                }
+            },
+            undefined)
+        .elemento_klavoj(klv);
     }
-    /*
-    $( "#senco_butonoj").Klavaro({
-        artikolo: $("#xml_text"),
-        posedanto: "#senco_dlg",
-        akampo: "#senco_dif",
-        reĝimpremo: function(event,ui) {
-            if (ui.cmd == "blankigo") {
-                $("#senco_dlg input").val("");
-                $("#senco_dif").val("");
-            }
-        }
-    });
-    */
     DOM.klavpremo("#senco_dif",xpress);
 
     //>>>>>>>> dialogo: Enmeti tradukojn
-    plenigu_lingvojn();
+    traduko_dlg_preparo();
     new Dialog("#traduko_dlg", {
         position: { my: "top", at: "top+10", of: window },
         butonoj: {   
@@ -510,11 +471,11 @@ export default function() {
         malfermu: function() {
             DOM.kaŝu("#traduko_error");
             //$("#traduko_tradukoj").data("trd_shanghoj",{});
-            plenigu_lingvojn_artikolo();
+            traduko_dlg_art_lingvoj();
             Menu.refreŝigu("#traduko_menuo");
             // jam difinita en ui_kreo... var preflng = pref_lngoj? pref_lngoj[0] : 'en'; // globala variablo
             const preflng = globalThis.preflng;
-            fill_tradukojn(preflng,DOM.t("#trd_pref_"+preflng));
+            traduko_dlg_plenigu_trd(preflng,DOM.t("#trd_pref_"+preflng));
             // adaptu altecon de la tabelo
             const view_h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
             const dlg = DOM.e("#traduko_dlg")?.parentElement;
@@ -531,11 +492,20 @@ export default function() {
         eroj: "li",
         reago: shanghu_trd_lingvon
     });  
-    DOM.ido_reago("#traduko_tabelo","blur","input",traduko_memoru_fokuson);
-    DOM.ido_reago("#traduko_butonoj","click","div",traduko_butono_premo);
+
+    klv = DOM.e("#traduko_butonoj");
+    if (klv) {
+        new x.XKlavaro("#traduko_butonoj","#traduko_dlg",null,
+            () => Artikolo.xmlarea("#xml_text").getRadiko(), 
+            undefined,
+            undefined)
+        .elemento_klavoj(klv);
+        //DOM.ido_reago("#traduko_tabelo","blur","input",traduko_memoru_fokuson.bind(xklv));
+        //DOM.ido_reago("#traduko_butonoj","click","div",traduko_butono_premo.bind(xklv));
+    }
 
     //>>>>>>>> dialogo: Enmeti per ŝablono
-    plenigu_sxablonojn();
+    sxablono_dlg_preparo();
     new Dialog("#sxablono_dlg", {
         butonoj: {   
             "Enmeti la tekston": sxablono_enmeti,
@@ -590,53 +560,18 @@ export default function() {
 
     klv = DOM.e("#rimarko_butonoj");
     if (klv) {
-      const xklv = new x.XKlavaro("#rimarko_butonoj","#riarko_dlg","#rimarko_rim",
-        undefined,
-        function(event,ui) {
-            if (ui.cmd == "blankigo") {
-                DOM.al_v("#rimarko_dlg input","");
-                DOM.al_v("#rimarko_rim","");
-            }
-        },
-        undefined);
-      xklv.elemento_klavoj(klv);
+        new x.XKlavaro("#rimarko_butonoj","#riarko_dlg","#rimarko_rim",
+            undefined,
+            function(event,ui) {
+                if (ui.cmd == "blankigo") {
+                    DOM.al_v("#rimarko_dlg input","");
+                    DOM.al_v("#rimarko_rim","");
+                }
+            },
+            undefined)
+        .elemento_klavoj(klv);
     }
-    /*
-    $( "#rimarko_butonoj").Klavaro({
-        artikolo: $("#xml_text"),
-        posedanto: "#riarko_dlg",
-        akampo: "#rimarko_rim",
-        reĝimpremo: function(event,ui) {
-            if (ui.cmd == "blankigo") {
-                $("#rimarko_dlg input").val("");
-                $("#rimarko_rim").val("");
-            }
-        }
-    });
-    */
     DOM.klavpremo("#rimarko_rim",xpress);
-
-    /*
-    //>>>>>>>> dialogo: Kontroli > homonimojn
-    $( "#homonimo_dlg" ).dialog({
-        kampoj: {
-            dosiero: "#homonimo_dos",
-        },
-        position: { my: "top", at: "top+10", of: window },
-        butonoj: {
-            "Ŝargi": function(event) { hom_art_shargi(event) },
-            "\u25f1": function() { this.refaldu() },
-            "\u2718": function() { $( this ).dialog( "close" ) }  
-        },
-        malfermu: function() {
-            this.faldu(false); // necesas, se la dialogo estis fermita en faldita stato...
-            plenigu_homonimo_liston();            
-            $("#homonimo_error").show();  
-        }
-    });  
-    $( "#homonimo_tabelo" ).on("click","td.hom_art",homonimo_tabelo_premo);
-              */
-
 
     //>>>>>>>> eraro-dialogo
     new Dialog("#error_dlg", {
@@ -662,7 +597,7 @@ export default function() {
 
 
 
-export function shargi_sercho_autocomplete(request,response) {
+export function shargo_dlg_serĉo(request,response) {
     DOM.al_v("#shargi_dosiero",'');
     if (! Valid.valida("#shargi_sercho")) return;
 /*    
@@ -885,7 +820,7 @@ function sendi_artikolon_servile(event) {
 }
 
 
-function plenigu_referenco_listojn() {
+function referenco_dlg_preparu() {
     //$("body").css("cursor", "progress");
     //$.get('../voko/klasoj.xml')
     u.HTTPRequest('get','../voko/klasoj.xml',{},
@@ -924,7 +859,7 @@ function referenco_listo_elekto(event,ui) {
     if (ui.kap) DOM.al_v("#referenco_enhavo",ui.kap);
 }
 
-function referenco_sercho_autocomplete(request,response) {
+function referenco_dlg_serĉo(request,response) {
     /*
       $("#referenco_error").hide();
     
@@ -1008,7 +943,7 @@ function referenco_enmeti(event) {
     }
 }
 
-function plenigu_ekzemplo_bib() {
+function ekzemplo_dlg_preparo() {
     //$("body").css("cursor", "progress");
     u.HTTPRequest('get','../voko/biblist.xml',{},
             function(data) {  
@@ -1183,7 +1118,7 @@ function senco_enmeti(event) {
 
 
 // aldonu kompletan lingvoliston kaj preferatajn lingvojn al traduko-dialogo
-function plenigu_lingvojn() {
+function traduko_dlg_preparo() {
 
     new Promise((resolve1) => { 
         // alfabetaj listoj
@@ -1249,7 +1184,7 @@ function plenigu_lingvojn() {
 }
 
 // aldonu la traduk-lingojn de la ŝargita artikolo al la traduko-dialogo (lingvo-elekto)
-function plenigu_lingvojn_artikolo() {
+function traduko_dlg_art_lingvoj() {
     const xmlarea = Artikolo.xmlarea("#xml_text");
     const trd_art = DOM.e("#traduko_artikolaj");
 
@@ -1272,9 +1207,12 @@ function plenigu_lingvojn_artikolo() {
 }
 
 function traduko_memoru_fokuson(event) {
-    DOM.al_datum("#traduko_dlg","last-focus",this.id);
+    //DOM.al_datum("#traduko_dlg","last-focus",this.id);
+    const id = event.currentTarget.id;
+    this.lasta_fokuso = id;
 }
 
+/*
 function traduko_butono_premo(event) {
     ////var text = $(this).attr("data-btn");
     var cmd = event.target.getAttribute("data-cmd");
@@ -1308,7 +1246,7 @@ function traduko_butono_premo(event) {
         }
     }
 }
-
+*/
 
 
 // lingvoj - sort function callback for jQuery
@@ -1347,7 +1285,7 @@ function sort_lng(at, bt){
 }
 
 
-function fill_tradukojn(lng,lingvo_nomo) {
+function traduko_dlg_plenigu_trd(lng,lingvo_nomo) {
     // forigu antauajn eventojn por ne multobligi ilin...
     DOM.malreago("#traduko_tradukoj","click");
     DOM.malreago("#traduko_tradukoj","change");
@@ -1442,9 +1380,9 @@ function fill_tradukojn(lng,lingvo_nomo) {
         });         
     }
     
-
     // rimarku ĉiujn ŝanĝojn de unuopaj elementoj
     DOM.ido_reago("#traduko_tradukoj","change","input", trd_shanghita);
+    //DOM.ido_reago("#traduko_tabelo","blur","input",traduko_memoru_fokuson.bind(xklv));
 }
 
 function trd_shanghita() {
@@ -1494,7 +1432,7 @@ function shanghu_trd_lingvon(event,ui) {
         var lng= id.split('_')[2];
         var lingvo_nomo = ui.menuero.textContent;
         //alert($("#traduko_lingvoj").val())
-        fill_tradukojn(lng,lingvo_nomo);
+        traduko_dlg_plenigu_trd(lng,lingvo_nomo);
     }
     DOM.al_datum("#traduko_dlg","last-focus",'');
 }
@@ -1515,7 +1453,7 @@ function tradukojn_enmeti(event) {
 
 /***************** ŝablono-dialogo ********************************************************************/
 
-function plenigu_sxablonojn() {
+function sxablono_dlg_preparo() {
     var sxbl_list = '';
     for (let nomo in sbl.snc_sxablonoj) {
         sxbl_list += '<option>' + nomo + '</option>';

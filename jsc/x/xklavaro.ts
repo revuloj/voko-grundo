@@ -77,7 +77,7 @@ export class XKlavaro {
      */    
     constructor(
         klavaro: Element|string, 
-        dialogo: Element|string, 
+        dialogo: Element|string|null, 
         apriora_kampo: HTMLInputElement|string, 
         public kiuradiko?: Function, 
         public reĝimpremo?: Reghimpremo, 
@@ -102,11 +102,16 @@ export class XKlavaro {
 
         // certigu, ke fokus-ŝanĝoj en la posedanto (ekz. dialogo) memoriĝas
         if (this.dialogo) {
+            this.dialogo.addEventListener("focusout",function(event) {
+                self.lasta_fokuso = (event.target as Element).id;
+            });            
+            /*
             this.dialogo.querySelectorAll("textarea,input").forEach( (e) =>
                 e.addEventListener("blur", function(event) {
                     self.lasta_fokuso = (event.target as Element).id;
                 })
             );
+            */
         }            
     }
 
@@ -194,16 +199,16 @@ export class XKlavaro {
                             break;
                     case 'sup':
                         html += '<div class="klv elm_btn" data-cmd="sup" title="suprigite" ' +
-                                'style="padding-top:0.25em; padding-bottom:0.35em ">a<sup>s</sup></div>';
+                                'style="padding-top:0.35em; padding-bottom:0.15em ">a<sup>s</sup></div>';
                         break;
                     case 'sub':
                         html += '<div class="klv elm_btn" data-cmd="sub" title="subigite">a<sub>s</sub></div>';
                         break;
                     case 'minuskle':
-                        html += '<div class="klv elm_btn" data-cmd="minuskloj" title="minuskligo">A&#x2192;a</div>';
+                        html += '<div class="klv elm_btn" data-cmd="minuskloj" title="minuskligo">A&#x2b9a;a</div>';
                         break;
                     case 'kamele':
-                        html += '<div class="klv elm_btn" data-cmd="kamelo" title="komenc-majuskloj">&#x2192;Ab</div>';
+                        html += '<div class="klv elm_btn" data-cmd="kamelo" title="komenc-majuskloj">&#x2b9a;Ab</div>';
                         break;
                     case 'dekstren':
                         html += '<div value="+2i" class="klv tab_btn" title="Ŝovu la markitan tekston dekstren.">&#x21E5;</div>';

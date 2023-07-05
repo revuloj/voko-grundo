@@ -5,13 +5,10 @@
 
 import { DOM } from './dom';
 import { UIElement } from './uielement';
+import { UIStil } from './uistil';
 
 export class Menu extends UIElement {
     //valoroj: any;
-    static menu_item_class = "ui-menu-item";
-    static menu_class = "ui-menu";
-    static menu_divid_class = "ui-menu-divider";
-    static menu_sub_fermita_class = "ui-menu-sub-fermita";
 
     static aprioraj: {
         eroj: "li",
@@ -31,7 +28,7 @@ export class Menu extends UIElement {
     constructor(element: HTMLElement|string, opcioj: any) {
         super(element, opcioj, Menu.aprioraj);
 
-        this.element.classList.add(Menu.menu_class);
+        this.element.classList.add(UIStil.menuo);
 
         // preparu la menuerojn
         this._preparu();
@@ -39,13 +36,13 @@ export class Menu extends UIElement {
 
     _preparu() {
         this.element.querySelectorAll(this.opcioj.eroj).forEach((menuero) => {
-            menuero.classList.add(Menu.menu_item_class);
+            menuero.classList.add(UIStil.menuero);
 
             // ĉu submenu? traktu tiun submenuon            
             const sub = this._submenuo(menuero);
             if (sub) {
-                menuero.classList.add(Menu.menu_sub_fermita_class);
-                sub.classList.add(Menu.menu_class);
+                menuero.classList.add(UIStil.submenuo_fermita);
+                sub.classList.add(UIStil.menuo);
                 DOM.kaŝu(sub);
                 // ni aldonas klak-reagon al la menuero
                 menuero.addEventListener("click",(event)=> {
@@ -66,7 +63,7 @@ export class Menu extends UIElement {
                 });
             } else if (menuero.textContent == '-') {
                 // apartigilo sen kroma funkcio
-                menuero.classList.add(Menu.menu_divid_class);
+                menuero.classList.add(UIStil.menudividilo);
             } else {
                 // reago al elekto de menuero (kiu ne estas submenuo)
                 menuero.addEventListener("click",(event) => 

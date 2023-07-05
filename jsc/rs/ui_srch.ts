@@ -7,7 +7,7 @@
 import * as u from '../u';
 import * as x from '../x';
 
-import { DOM, UIElement, Dialog, Slipar, Skal, Propon, Elektil, Valid, Eraro } from '../ui';
+import { DOM, UIElement, UIStil, Dialog, Slipar, Skal, Propon, Elektil, Valid, Eraro } from '../ui';
 
 import { bar_styles, make_percent_bar } from './procentoj';
 import { HTMLFonto, HTMLTrovoDt, HTMLTrovoDdBld } from './sxabloniloj';
@@ -509,7 +509,7 @@ function verkinformo() {
         
         // titoloj; subpremu, se verkoj ankoraŭ ne ŝargitaj kaj do 
         // ankaŭ ne adaptitaj
-        const n = DOM.idoj(`#sercho_verklisto :not(.${DOM.klsKasxita}) input[name='cvl_elekto']:checked`)?.length;
+        const n = DOM.idoj(`#sercho_verklisto :not(.${UIStil.kaŝita}) input[name='cvl_elekto']:checked`)?.length;
         if (n) info += ', ' + n + ' titolo' + (n!=1?'j':'');
         
         if (montrilo) montrilo.textContent = info;
@@ -617,7 +617,7 @@ export function verkElekto(event) {
  */
 export function elektitajVerkoj() {
     let vl: Array<string> = [];
-    DOM.ej(`#sercho_verklisto :not(.${DOM.klsKasxita})>:checked`)
+    DOM.ej(`#sercho_verklisto :not(.${UIStil.kaŝita})>:checked`)
     .forEach((e) => {
         const v: string = (e as HTMLInputElement).value;
         vl.push(v);         

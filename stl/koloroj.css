@@ -50,6 +50,7 @@
 
     --ovr-bgr-clr: #F5F5D5;
     --ovr-brd-clr: green;
+    --ovr-shd-clr: gray;
 
     --a-fnt-clr: darkblue;
  
@@ -68,7 +69,7 @@
     --btn-act-brd-clr: black;
     --btn-dis-bgr-clr: #999;
 
-    --tab-bgr-clr: #999;
+    --tab-bgr-clr: #aaa;
     --tab-act-bgr-clr: khaki;
 
     /* input-elementoj */
@@ -157,6 +158,7 @@
 
     --ovr-bgr-clr: #0f0800;
     --ovr-brd-clr: palegoldenrod;
+    --ovr-shd-clr: cornflowerblue;
 
     --a-fnt-clr: skyblue;
 
