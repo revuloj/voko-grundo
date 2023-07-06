@@ -303,9 +303,9 @@ export default function() {
     DOM.ido_reago("#regexes","click","input",regulEsprimo);
     DOM.reago("#re_radiko","input",regulEsprimo);
 
-    klv = DOM.e("#sercho_butonoj");
+    klv = DOM.e("#sercho_malplenigo");
     if (klv) {
-        const xklv = new x.XKlavaro("#sercho_butonoj","#sercho_kampo","#sercho_sercho",
+        const xklv = new x.XKlavaro("#sercho_malplenigo","#sercho_kampo","#sercho_sercho",
             ()=>'',
             function(event,ui) {
                 if (ui.cmd == "blankigo") {
@@ -435,11 +435,11 @@ export function antaŭ_slipŝanĝo(ui) {
     // alirante la serĉon ni distingas internan kaj eksteran serĉadon
     if (new_p == "sercho") {
         if(new_t == "t_s_ext") {
-            DOM.kaŝu("#sercho_form .s_ext",false);
-            DOM.kaŝu("#sercho_form .s_int");
+            DOM.kaŝu_plurajn("#sercho_form .s_ext",false);
+            DOM.kaŝu_plurajn("#sercho_form .s_int");
         } else {
-            DOM.kaŝu("#sercho_form .s_ext");
-            DOM.kaŝu("#sercho_form .s_int",false);
+            DOM.kaŝu_plurajn("#sercho_form .s_ext");
+            DOM.kaŝu_plurajn("#sercho_form .s_int",false);
         }
     }
 }

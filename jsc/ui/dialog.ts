@@ -63,11 +63,14 @@ export class Dialog extends UIElement {
         
         // aldonu kruceton por fermi en la titollinio
         const h = this.element.querySelector("h1,h2,h3,h4");
-        if (h) {
+        if (h instanceof HTMLElement) {
             const fb = document.createElement('button');
             fb.textContent = '\u2718';
             h.append(fb);
             fb.addEventListener("click",() => this.fermu());
+
+            // h.onpointerdown = this.komencuMovon.bind(this);
+            // h.onpointerup = this.finuMovon.bind(this);
         }
         // aldonu butonojn
         const bopc = this.opcioj.butonoj;
@@ -214,6 +217,43 @@ export class Dialog extends UIElement {
         }
         this._trigger("valorŝanĝo");        
     };
+
+
+    komencuMovon(event) {
+        const h = event.currentTarget;
+        if (h instanceof HTMLElement) {
+            this.element.style["margin-top"] = this.element.offsetTop;
+            this.element.style["margin-left"] = this.element.offsetLeft;
+            this.element.style.cursor = "move";
+            //h.classList.add("ui-state-active");
+            h.onpointermove = this.movu.bind(this);
+            h.setPointerCapture(event.pointerId);    
+        }
+    }
+      
+    finuMovon(event) {
+        const h = event.currentTarget;
+        if (h instanceof HTMLElement) {
+            //h.classList.remove("ui-state-active");
+            this.element.style.cursor = "auto";
+
+            h.onpointermove = null;
+            h.releasePointerCapture(event.pointerId);
+        }
+    }
+      
+    // por movi, vd. ekz-e
+    // https://developer.mozilla.org/en-US/docs/Web/API/Element/setPointerCapture
+    // https://www.w3schools.com/howto/howto_js_draggable.asp
+    movu(event: MouseEvent) {
+        const h = event.currentTarget;
+        if (h instanceof HTMLElement) {
+            const mx = event.movementX;
+            const my = event.movementY;
+            this.element.style["margin-top"] += my;
+            this.element.style["margin-left"] += mx;
+        }
+    }
 
 
 }

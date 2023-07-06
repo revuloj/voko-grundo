@@ -217,6 +217,7 @@ export function vikiSerĉo(event) {
     if (! _serĉo_preparo()) return;
 
     const esprimo = (document.getElementById("sercho_sercho") as HTMLInputElement).value;
+    const s_tr = DOM.e("#sercho_trovoj");
 
     u.HTTPRequest('post','citajho_sercho',
         {   
@@ -224,16 +225,16 @@ export function vikiSerĉo(event) {
             kie: 'vikipedio'
         }, 
         function(data) {   
-            
-            if (data.query && data.query.pages) {
-                var pages = data.query.pages;
-                var ŝablono = new HTMLTrovoDt();
+            const json = JSON.parse(data);
+            if (json.query && json.query.pages && s_tr) {
+                const pages = json.query.pages;
+                const ŝablono = new HTMLTrovoDt();
 
                 for (let p in pages) {
                     var page = pages[p];
                     var url = 'https://eo.wikipedia.org/?curid=' + page.pageid;
 
-                    DOM.e("#sercho_trovoj")?.append('<dd id="trv_' + page.pageid + '">');
+                    s_tr.insertAdjacentHTML("beforeend",'<dd id="trv_' + page.pageid + '">');
                     new Trovo("#trv_"  + page.pageid,
                         {
                             ŝablono: ŝablono,
@@ -640,8 +641,8 @@ export function retoSerĉo(event) {
             sercho: DOM.v("#sercho_sercho")||'',
             kie: 'anaso'
         }, 
-        function(data) {   
-            //const json = JSON.parse(data);
+        function(data) {
+
             const s_tr = DOM.e("#sercho_trovoj");
             if (!s_tr) throw new Error("Mankas elemento por prezenti la trovojn!");
     
@@ -650,16 +651,20 @@ export function retoSerĉo(event) {
             const first_word = (DOM.v("#sercho_sercho")||'').split(' ')[0];
             // forigu bildojn (img) kaj <link...> el la HTML, por ke ili ne automate elshutighu...
             data = data.replace(rx_img_link, '');
+
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(data,"text/html");
+
             const ŝablono = new HTMLTrovoDt();
             
-            data.querySelectorAll(".result-link,.result-snippet").forEach((e) => {
+            doc.querySelectorAll(".result-link,.result-snippet").forEach((e) => {
 
                 // memoru la url kiel last_link
-                if ( e.calssList.contains("result-link") )   {
+                if ( e.classList.contains("result-link") )   {
                     const href = e.getAttribute("href") || '';
                     const hpos = href?.search('http');
                     last_link = (hpos && hpos >= 0)? decodeURIComponent(href.slice(hpos)) : href;
-                    last_title = e.textContent;
+                    last_title = e.textContent||'';
 
                 // kreu trov-eron
                 } else if ( e.classList.contains("result-snippet") ) {
@@ -770,7 +775,7 @@ export function bildoSerĉo(event) {
 
 /**
  * Akiras la informojn pri bildoj el Wikimedia laŭ ties paĝ-indentigiloj
- * kaj prezentas enŝovas la rezultojn en la bildoprezento.
+ * kaj enŝovas la rezultojn en la bildoprezenton, t.e. (Trovo-objekto).
  * @param {Array<string>} pageids
  */
 function _bildo_info(pageids) {
@@ -783,19 +788,24 @@ function _bildo_info(pageids) {
             paghoj: ids,
             kie: 'vikimedio'
         },
-        function(datalist) {   
+        function(datalist) {
         //$("#sercho_trovoj").html('');
-            for (let d=0; d<datalist.length; d++) {          
-                const data = datalist[d];
+            const json = JSON.parse(datalist);
+
+            for (let d = 0; d < json.length; d++) {          
+                const jdata = json[d];
         
-                if (data.query && data.query.pages) {
-                let results = data.query.pages;
+                if (jdata.query && jdata.query.pages) {
+                let results = jdata.query.pages;
 
                 for (var p in results) {
                         let res = results[p];
                         let trv = Trovo.trovo("#trv_" + res.pageid);
                         if (trv) {
                             let dosieroj = trv.bildinfo(res, d==0,
+                                // tiu funkcio akiras informojn (titolo, aŭtoro, permesilo...) 
+                                // pri la bildo kaze de enmeto (butonpremo Enmetu) per
+                                // kaj malfermas la bildo-dialogon
                                 function(event,data) {
                                     if (data) {                       
                                         _bildo_info_2(data.title);
@@ -835,13 +845,14 @@ function _bildeto_info(paghoj) {
         //$("#sercho_trovoj").html('');
             //for (var d=0; d<datalist.length; d++) {          
             //    data = datalist[d];
+            const json = JSON.parse(data);
         
-            if (data.query && data.query.pages) {
-                var results = data.query.pages;
+            if (json.query && json.query.pages) {
+                var results = json.query.pages;
 
                 for (let p in results) {
                     const res = results[p];
-                    const pageid = res.pageid;
+                    //const pageid = res.pageid;
 
                     if (res.thumbnail)
                         DOM.al_html('#sercho_trovoj div.bildstriero a[href$="' + x.quoteattr(res.title) + '"]',
@@ -869,9 +880,10 @@ function _bildo_info_2(dosiero) {
         },
         function(data) {   
         //$("#sercho_trovoj").html('');
+            const json = JSON.parse(data);
         
-            if (data.query && data.query.pages) {
-                const results = data.query.pages;
+            if (json.query && json.query.pages) {
+                const results = json.query.pages;
 
                 for (var p in results) {
                     const res = results[p];
@@ -903,7 +915,7 @@ function _bildo_info_2(dosiero) {
                         frazo: x.forigu_markup(desc)
                     };
 
-                    DOM.al_v("#bildo_dlg input[type!='radio']","");
+                    DOM.malplenigu("#bildo_dlg input:not([type='radio'])");
                     const dlg = Dialog.dialog("#bildo_dlg");
                     if (dlg) dlg.al_valoroj(values);
                     if (values && values.fnt)
@@ -919,7 +931,7 @@ function _bildo_info_2(dosiero) {
 
 
 /**
- * Difinas jqueryui-elementon por prezenti unuopan trovon.
+ * Difinas elementon por prezenti unuopan trovon ene de la trovlisto
  */
 class Trovo extends UIElement {
     static aprioraj = {
@@ -942,6 +954,10 @@ class Trovo extends UIElement {
         if (t instanceof Trovo) return t;
     }
 
+    /**
+     * Kreas la HTML-elemento-strukturon por prezenti trovon kune kun
+     * butonoj Kunteksto/Rigardu/Enemetu
+     */
     constructor(element: HTMLElement|string, opcioj: any) {
         super(element,opcioj,Trovo.aprioraj);
 
@@ -962,7 +978,7 @@ class Trovo extends UIElement {
             + '</dt>\n';
             */
         this.element.insertAdjacentHTML("beforebegin",htmlstr);
-        if (v.descr) this.element.textContent = v.descr;
+        if (v.descr) this.element.innerHTML = v.descr;
         
         if (this.opcioj.type == "teksto") {
             // citaĵonumero por kunteksto estas nur en citaĵoserĉo, ne en retserĉo...:
@@ -999,9 +1015,10 @@ class Trovo extends UIElement {
     };
 
     bildinfo(res, first, enmetu) {
-        var o: any = this.opcioj;
-        var v = o.valoroj;
-        var pageid = res.pageid;
+        const o: any = this.opcioj;
+        const v = o.valoroj;
+        const pageid = res.pageid;
+        const trv = DOM.e("#trv_" + pageid);
 
         v.data = res;
         v.url = res.canonicalurl;
@@ -1022,7 +1039,7 @@ class Trovo extends UIElement {
         }
 
         // se ekzistas bildeto aldonu ĝin ankaŭ
-        if (res.thumbnail) {
+        if (res.thumbnail && trv) {
 
 /*
             let dd = '<table><tr><td><a href="' + res.original.source + '" target="_new">' +
@@ -1037,14 +1054,17 @@ class Trovo extends UIElement {
                   t_html: DOM.html("#trv_" + pageid)
             }));
 
-            if (first && res.ns == 0)
-                DOM.e("#trv_" + pageid)?.append('<div class="bildstrio"></div>');
+            // ĉe la unua bildo ni aldonas bildstrion kiel div-elemento. La bildetoj
+            // enŝoviĝos tie poste.
+            if (first && res.ns == 0) {
+                trv.insertAdjacentHTML("beforeend",'<div class="bildstrio"></div>');
+            }
         }
 
         // se la trovita paĝo enhavas plurajn bildojn aldonu ilin tabele
         var dosieroj = Array();
 
-        if (res.images) {
+        if (res.images && trv) {
             for (var i in res.images) {
                 let img = res.images[i];
                 let ext = img.title.slice(-4).toLowerCase();
@@ -1054,26 +1074,29 @@ class Trovo extends UIElement {
                     let title = img.title.slice(5,-4); // forigu File: kaj .xxx eble pli inteligente uzu Regex...
                     let li_item_id = res.pageid + "_" + img.title.hashFnv32a(true);
 
-                    DOM.e("#trv_" + pageid + " > div")?.append(
-                        "<div class='bildstriero'><p class='butonoj'>" 
-                        + "<button id='r_" + li_item_id + "'></button> "
-                        + "<button id='e_" + li_item_id + "'></button>" 
-                        + "</p><a target='_new' href='" + iurl + "'>" + title 
-                        + "</a></div>");
+                    const bildstrio = trv.querySelector("div");
+                    if (bildstrio) {
+                        bildstrio.insertAdjacentHTML("beforeend",
+                            "<div class='bildstriero'><p class='butonoj'>" 
+                            + "<button id='r_" + li_item_id + "'></button> "
+                            + "<button id='e_" + li_item_id + "'></button>" 
+                            + "</p><a target='_new' href='" + iurl + "'>" + title 
+                            + "</a></div>");
 
-                    new RigardoBtn("#r_" + li_item_id, {url: iurl});
-                    new BildoBtn("#e_" + li_item_id, {
-                        data: img,
-                        enmetu: enmetu
-                        /*
-                        enmetu: function(event,values) {
-                            // montru enmeto-dialogon
-                            $("#bildo_dlg").dialog("valoroj",values);
-                            $("#bildo_dlg").dialog("open");
-                            $("#tabs").tabs( "option", "active", 0);
-                        } */
-                    });
-                    
+                        new RigardoBtn("#r_" + li_item_id, {url: iurl});
+                        new BildoBtn("#e_" + li_item_id, {
+                            data: img,
+                            enmetu: enmetu
+                            /*
+                            enmetu: function(event,values) {
+                                // montru enmeto-dialogon
+                                $("#bildo_dlg").dialog("valoroj",values);
+                                $("#bildo_dlg").dialog("open");
+                                $("#tabs").tabs( "option", "active", 0);
+                            } */
+                        });
+                    }
+
                     dosieroj.push(img.title);
                 }
             }

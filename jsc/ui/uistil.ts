@@ -28,4 +28,9 @@ export class UIStil {
     static langetaro = "ui-tabs-nav";
     static langeto_aktiva = "ui-tabs-active";
 
+    // skalo
+    static skalo = "ui-slider";
+    static skalo_horizonta = "ui-slider-horizontal"; // aldonu vertikalan okaze...!
+    static manilo = "ui-slider-handle";
+
 }

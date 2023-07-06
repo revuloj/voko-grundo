@@ -116,6 +116,17 @@ export class DOM {
         if (i) return i.value = val;
     }
 
+    /**
+     * Malplenigas la valoron (atributo value), sed temas pri elemento de formularo.
+     * Se temas pri alia elemento, ĝi forigas la tutan enhavon (textContent).
+     */
+    static malplenigu(elektilo: string) {
+        document.querySelectorAll(elektilo).forEach((e) => {
+            if (DOM.isFormElement(e)) e.value = ''
+            else e.textContent = '';
+        });
+    }
+
     // trovas input-elementon en HTML-dokumento per elektilo kaj redonas ĉu ĝi estas
     // elektita (angle: checked)
     static c(i: Element|string): boolean|null {
@@ -220,6 +231,15 @@ export class DOM {
     static kaŝita(e: Element|string) {
         const el = (typeof e === "string")? DOM.e(e) : e;
             if (el) return el.classList.contains(UIStil.kaŝita);
+    }
+
+    static kaŝu_plurajn(elektilo: string, kaŝita=true) {
+        document.querySelectorAll(elektilo).forEach((el) => {
+            if (kaŝita)
+                el.classList.add(UIStil.kaŝita);
+            else
+                el.classList.remove(UIStil.kaŝita);
+        });
     }
 
     /**

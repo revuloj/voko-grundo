@@ -1025,12 +1025,12 @@ function bildo_larĝecoj(lrg,chk) {
             const lbl = DOM.e("#bildo_lrg label[for='bildo_lrg_" + l + "']");
             if (lbl) {
                 if (lrg.indexOf(l) >= 0) {
-                    DOM.kaŝu(lbl,false);
+                    DOM.kaŝu(lbl.parentElement as Element,false);
                     if (l == chk) {
                         e.checked = true;
                     }
                 } else {
-                    DOM.kaŝu(lbl,true);
+                    DOM.kaŝu(lbl.parentElement as Element,true);
                 }
             }
         }

@@ -162,6 +162,14 @@ IMG.ref {
     border: 1px hidden !important;
 }
 
+#sercho_malplenigo {
+    display: inline;
+}
+
+#sercho_malplenigo div {
+    display: inline-block;
+}
+
 #kash_btn {
     /* ni ŝovu pli maldekstren, ĉar dekstre jam
     estas la ŝaltstrio...!*/
@@ -588,8 +596,6 @@ nav {
   border-radius: 0 !important;
   /*border-color: var(--nav-brd-clr);*/
   border: none;
-  color: var(--nav-fnt-clr);
-  background-color: var(--nav-bgr-clr);
 }
 
 #traduko_menuo li span {
@@ -600,6 +606,7 @@ nav {
 .ui-menu {
     color: var(--nav-fnt-clr);
     background-color: var(--nav-bgr-clr);
+    cursor: default;
 }
 
 .ui-widget-header {
@@ -612,14 +619,21 @@ ul.ui-menu {
 
 .ui-menu li {
     list-style-type: circle;
-    background-color: var(--nav-bgr-clr) !important;
     padding: 0.1em;
     padding-left: 0.3em;
 }
 
 .ui-menu-item {
+    color: var(--nav-fnt-clr);
+    background-color: var(--nav-bgr-clr);  
     border-bottom: 1px solid silver;
-    font-size: 85%
+    font-size: 85%;
+    cursor: default;
+}
+
+.ui-menu-item:hover,
+.ui-menu-item:active {
+    background-color: var(--nav-act-bgr-clr);
 }
 
 /* submenuoj */
@@ -754,126 +768,6 @@ ul.ui-menu {
     background-color: greenyellow;
 }
 
-/****
-#elekto_indikoj {
-    max-height: 27ex;
-    overflow: auto; 
-    margin: 1px;
-    padding: 0px;
-}
-
-#elekto_indikoj div {
-    float: left;
-    height: 3em;
-    max-height: 3em;
-    width: 4em;
-    overflow: hidden;
-    border: 1px solid #e3a345;
-    color: var(--nav-fnt-clr); 
-    border-radius: 4px;
-    padding: 0.1em;
-    margin: 0;
-    font-size: small;
-    line-height: 1em;
-    text-align: center;
-}
-
-#elekto_indikoj .stl {
-  font-stretch: condensed;
-  background-color: burlywood;
-}
-
-#elekto_indikoj .fak {
-  background-color: khaki;
-}
-
-#elekto_indikoj .ofc {
-  background-color: blanchedalmond;   
-}
-
-#elekto_indikoj .gra {
-  background-color: beige; 
-}
-
-
-#elekto_indikoj div:hover {
-   background-color: #f5f3e5; 
-   cursor: pointer
-}
-
-#elekto_indikoj div:active {
-   background-color: #c5c3b5; 
-   color: white;  
-   cursor: pointer
-}
-
-#elekto_indikoj div span {
-    line-height: 1.5em
-}
-
-
-#elekto_indikoj img {
-    height: 1.7em;
-    max-height: 1.7em;
-    overflow: hidden;
-}
-
-#bildo_eta {
-    border-color: #cccccc; 
-    border-width: 1px; 
-    background: #E0E0A0; 
-    border-style: solid; 
-    padding: 2px; 
-    margin: 0
-}
-
-.butonoj {
-    text-align: center;
-    margin-top: 0.5em;
-}
-
-.butonoj div {
-    display: inline-block; 
-    vertical-align: inherit;
-    height: 1.3em;
-    max-height: 1.6em;
-    min-width: 1.6em;
-    overflow: hidden;
-    border: 1px solid #e3a345;
-    color: var(--nav-fnt-clr); 
-    border-radius: 4px;
-    padding: 0.1em;
-    margin: 0 0.1em 0 0.1em;
-    padding-top: 0.5em;
-    line-height: 1em;
-    text-align: center;
-    background-color: khaki;
-}
-
-.butonoj div:hover {
-    background-color: #f5f3e5; 
-    cursor: pointer
-}
-
-.butonoj div:active {
-   background-color: #c5c3b5; 
-   color: white;  
-   cursor: pointer
-}
-
-
-.elm_btn {
-    background-color: burlywood !important;
-}
-
-.reghim_btn {
-   background-color: var(--btn-bgr-clr) !important;
-   border-color: var(--btn-brd-clr) !important;
-   color: var(--main-fnt-clr) !important;
-   font-weight: bold !important;
-}
-*/
-
 #xml {
     display: flex;
     flex-direction: row;
@@ -1004,6 +898,7 @@ ul.ui-menu {
 .ui-slider {
     border: 1px solid var(--main-brd-clr);
     border-radius: 5px / 50%;
+    height: 0.5em;
 }
 
 .ui-slider-handle {
@@ -1023,7 +918,7 @@ ul.ui-menu {
 .manilo {
     width: 3em !important;
     height: 1.6em !important;
-    top: 50% !important;
+    /*top: 50% !important;*/
     margin-top: -.8em;
     text-align: center;
     line-height: 1.6em;
@@ -1378,20 +1273,6 @@ pre.line {
     cursor: pointer;
 }
 
-/*
-.hom_art {
-    background-color: #ffedad; 
-}
-
-.hom_art:hover {
-    background-color: #e3a345; 
-    cursor: pointer;
-}
-
-#hom_dos_div {
-    border-top: 1px solid #327e04;
-}
-*/
 
 /* stiloj por analizo (vort-kontrolo) */
 .malstrikte { color: black }
@@ -1407,6 +1288,14 @@ pre.line {
     flex-direction: row;
     flex-wrap: wrap;
 }
+
+.bildstrio .butonoj {
+    font-size: 1em;
+    min-height: 1em;
+    margin-bottom: 0.1em;
+    height: fit-content;
+}
+
 .bildstriero {
     font-size: small;
     height: 150px;
@@ -1421,6 +1310,10 @@ pre.line {
 
 .bildstriero p {
     margin: 0px
+}
+
+span.searchmatch {
+    font-weight: bold;
 }
 
 .animated-dock-font {
