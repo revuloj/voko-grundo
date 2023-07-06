@@ -9,6 +9,8 @@ import { UIStil } from './uistil';
 
 export class Dialog extends UIElement {
     //valoroj: any;
+    start_pos: {x: number, y: number};
+    start_offs: {x: number, y: number};
 
     static aprioraj: {
         kampoj: {},
@@ -69,8 +71,8 @@ export class Dialog extends UIElement {
             h.append(fb);
             fb.addEventListener("click",() => this.fermu());
 
-            // h.onpointerdown = this.komencuMovon.bind(this);
-            // h.onpointerup = this.finuMovon.bind(this);
+            h.onpointerdown = this.komencuMovon.bind(this);
+            h.onpointerup = this.finuMovon.bind(this);
         }
         // aldonu butonojn
         const bopc = this.opcioj.butonoj;
@@ -218,16 +220,22 @@ export class Dialog extends UIElement {
         this._trigger("valorŝanĝo");        
     };
 
-
     komencuMovon(event) {
         const h = event.currentTarget;
-        if (h instanceof HTMLElement) {
-            this.element.style["margin-top"] = this.element.offsetTop;
-            this.element.style["margin-left"] = this.element.offsetLeft;
+        //console.debug("mtrg:"+event.target.tagName);
+
+        if (h instanceof HTMLElement && h == event.target) { // do aparte, ne reagu, se ni trafis la fermo-butonon
+            this.start_pos = {x: event.clientX, y: event.clientY};
+            this.start_offs = {x: this.element.offsetLeft, y: this.element.offsetTop};
+            // ŝanĝu aprioran margin (auto) al fiksa
+            this.element.style["margin-top"] = this.element.offsetTop+"px";
+            this.element.style["margin-left"] = this.element.offsetLeft+"px";
             this.element.style.cursor = "move";
+
+
             //h.classList.add("ui-state-active");
             h.onpointermove = this.movu.bind(this);
-            h.setPointerCapture(event.pointerId);    
+            h.setPointerCapture(event.pointerId); 
         }
     }
       
@@ -248,10 +256,12 @@ export class Dialog extends UIElement {
     movu(event: MouseEvent) {
         const h = event.currentTarget;
         if (h instanceof HTMLElement) {
-            const mx = event.movementX;
-            const my = event.movementY;
-            this.element.style["margin-top"] += my;
-            this.element.style["margin-left"] += mx;
+            // const mx = event.movementX;
+            // const my = event.movementY;
+            const mx = event.clientX - this.start_pos.x;
+            const my = event.clientY - this.start_pos.y;
+            this.element.style["margin-top"] = Math.max(0, this.start_offs.y + my)+"px";
+            this.element.style["margin-left"] = Math.max(0, this.start_offs.x + mx)+"px";
         }
     }
 
