@@ -37,11 +37,11 @@ export interface HTMLCheckControlElement extends HTMLFormControlElement {
 export class DOM {
 
     static isCheckElement(obj: any): obj is HTMLCheckControlElement {
-        return ('cheked' in obj);
+        return (obj && 'checked' in obj);
     }
 
     static isFormElement(obj: any): obj is HTMLFormControlElement {
-        return ('value' in obj && 'disabled' in obj && 'focus' in obj);
+        return (obj && 'value' in obj && 'disabled' in obj && 'focus' in obj);
     }
 
     // trovas elementon en HTML-dokumento per elektilo, ekz-e #el_id
