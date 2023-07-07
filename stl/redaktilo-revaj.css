@@ -369,7 +369,7 @@ fieldset legend {
     position: relative;
     top: 0;
     height: 100%;
-    flex: 0.1 0.1 4em;
+    flex: 0.1 0.1 5em;
     -webkit-flex: 0.1 0.1 4em;
     min-width: 4em;
     width: 15%;
@@ -634,6 +634,11 @@ ul.ui-menu {
     border-bottom: 1px solid silver;
     font-size: 85%;
     cursor: default;
+}
+
+.ui-menu-item u {
+    border: inherit;
+    font-size: inherit;
 }
 
 .ui-menu-item:hover,
