@@ -59,11 +59,16 @@ body {
 .ui-tooltip {
     max-width: 30em;
 }
-   
+
+.ui-state-error {
+    border: 1px solid var(--err-brd-clr);
+    background-color: var(--err-bgr-clr);
+    color: var(--err-fnt-clr);
+}
 
 @media only screen and (max-width: 768px) {
     .ui-menu-item {
-        font-size: 120% !important;
+        font-size: 120%;
     }
     .ui-dialog {
         max-width: 95% !important;
@@ -364,9 +369,9 @@ fieldset legend {
     position: relative;
     top: 0;
     height: 100%;
-    flex: 0.1 0.1 10em;
-    -webkit-flex: 0.1 0.1 10em;
-    min-width: 8em;
+    flex: 0.1 0.1 4em;
+    -webkit-flex: 0.1 0.1 4em;
+    min-width: 4em;
     width: 15%;
     /*border: 0px solid red*/
 
@@ -772,6 +777,7 @@ ul.ui-menu {
     display: flex;
     flex-direction: row;
     -webkit-flex-direction: row;
+    width: 100%;
     flex: 1;
     margin: 0;
     padding: 0;
@@ -1034,8 +1040,11 @@ ul.ui-menu {
 #surmetita_dlg {
     width: fit-content;
     height: fit-content;
+    /*
     max-width: 92%;
     max-height: 92%;
+    */
+    margin: .5em;
 }
 
 #surmetita {

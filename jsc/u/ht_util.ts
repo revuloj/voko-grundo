@@ -1,5 +1,3 @@
-/* jshint esversion: 6 */
-
 /* 
   (c) 2021-2023 ĉe Wolfram Diestel
 */

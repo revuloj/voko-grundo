@@ -10,15 +10,10 @@ import { Eraro } from './erar';
 
 export class Valid extends UIElement {
 
-    static aldonu(elemento: HTMLElement|string, opcioj: any) {
-        let el: HTMLElement|null;
-        if (typeof elemento === "string") {
-            el = document.getElementById(elemento);
-        } else {
-            el = elemento;
-        }
+    static aldonu(e: HTMLElement|string, opcioj: any) {
+        const el = (typeof e === "string")? document.querySelector(e) : e;
 
-        if (el) {
+        if (el instanceof HTMLElement) {
             const val = new Valid(el,opcioj);
             if (el._voko_valid) 
                 el._voko_valid.push(val)
@@ -27,15 +22,10 @@ export class Valid extends UIElement {
         }  
     }
 
-    static valida(elemento: HTMLElement|string) {
-        let el: HTMLElement|null;
-        if (typeof elemento === "string") {
-            el = document.getElementById(elemento);
-        } else {
-            el = elemento;
-        }
+    static valida(e: HTMLElement|string) {
+        const el = (typeof e === "string")? document.querySelector(e) : e;
 
-        if (el && el._voko_valid) {
+        if (el instanceof HTMLElement && el._voko_valid) {
             //return el._valid();
             let _valida_ = true;
 
@@ -63,12 +53,14 @@ function() {
 }
 */
 
-    opcioj: any = {
+/*
+    _default: any = {
         // testoj kun mesaĝoj, montrendaj, se la koncerna testo malsukcesas, ekz-e:
         // nonempty: 'Valoro de X devas ion enhavi',
         // pattern: /^...$/ or pattern: { regex: /^...$/, message: "bla bla" },
         // err_to: '#my_err' // kie montri la eraron        
     };
+    */
 
     _nonempty?: boolean;
     _nonempty_msg?: string;

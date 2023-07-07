@@ -788,7 +788,7 @@ function sendi_artikolon_servile(event) {
             },
             undefined,
             undefined,
-            (msg: string) => Eraro.al("#sendiservile_error",msg)
+            (xhr: XMLHttpRequest) => Eraro.http("#sendiservile_error",xhr)
         );
     }
 /*
@@ -849,7 +849,7 @@ function referenco_dlg_preparu() {
             },
             () => document.body.style.cursor = 'wait',
             () => document.body.style.cursor = 'auto',
-            (msg: string) => Eraro.al("#referenco_error",msg)
+            (xhr: XMLHttpRequest) => Eraro.http("#referenco_error",xhr)
     );
 }
 
@@ -897,8 +897,8 @@ function referenco_dlg_serĉo(request,response) {
             },
             () => document.body.style.cursor = 'wait',
             () => document.body.style.cursor = 'auto',
-            (msg: string) => {
-                Eraro.al("#referenco_error", msg);
+            (xhr: XMLHttpRequest) => {
+                Eraro.http("#referenco_error", xhr);
                 response(undefined);
             }     
         );
@@ -962,7 +962,7 @@ function ekzemplo_dlg_preparo() {
             },
             () => document.body.style.cursor = 'wait',
             () => document.body.style.cursor = 'auto',
-            (msg: string) => Eraro.al("#ekzemplo_error",msg)
+            (xhr: XMLHttpRequest) => Eraro.http("#ekzemplo_error",xhr)
         );
 }
 
@@ -1173,7 +1173,7 @@ function traduko_dlg_preparo() {
             },
             () => document.body.style.cursor = 'wait',
             () => document.body.style.cursor = 'auto',
-            (msg: string) =>  Eraro.al("#traduko_error",msg)
+            (xhr: XMLHttpRequest) =>  Eraro.http("#traduko_error",xhr)
         )})
     })
     .then(() => {

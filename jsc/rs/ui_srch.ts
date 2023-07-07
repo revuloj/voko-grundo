@@ -24,15 +24,15 @@ type TrovValoroj = { url?: string, fmt?: number,
     aut?: string, bib?: string, vrk?: string, lok?: string, 
     prm?: string, fnt?: string, frazo?: string };
 
+//var sercho_focused_button = null;
+console.debug("Instalante la serĉfunkciojn...");
+
 
 /**
  * Preparas la serĉon, kontrolante, ĉu estas valida serĉesprimo, malplenigante
  * la trovokampon.
  */
 function _serĉo_preparo() {
-
-    //var sercho_focused_button = null;
-    console.debug("Instalante la serĉfunkciojn...");
 
     if (! Valid.valida("#sercho_sercho")) return;
 
@@ -253,7 +253,7 @@ export function vikiSerĉo(event) {
             }
         },
         undefined, undefined,
-        (msg: string) => Eraro.al('#sercho_error',msg)
+        (xhr: XMLHttpRequest) => Eraro.http('#sercho_error',xhr)
     );
 }
 
@@ -341,7 +341,7 @@ export function citaĵoSerĉo(event) {
             }
         },
         undefined, undefined,
-        (msg: string) => Eraro.al('#sercho_error',msg)   
+        (xhr: XMLHttpRequest) => Eraro.http('#sercho_error',xhr)   
     );
 }
 
@@ -575,7 +575,7 @@ export function verkoListo(event) {
                 }
             },
             undefined, undefined,
-            (msg: string) => Eraro.al('#sercho_error',msg)   
+            (xhr: XMLHttpRequest) => Eraro.http('#sercho_error',xhr)   
         );
     }
 }
@@ -699,7 +699,7 @@ export function retoSerĉo(event) {
             }
         },
         undefined, undefined,
-        (msg: string) => Eraro.al('#sercho_error',msg)
+        (xhr: XMLHttpRequest) => Eraro.http('#sercho_error',xhr)
     );
 }
 
@@ -769,7 +769,7 @@ export function bildoSerĉo(event) {
             }            
         },
         undefined, undefined,
-        (msg: string) => Eraro.al('#sercho_error',msg)    
+        (xhr: XMLHttpRequest) => Eraro.http('#sercho_error',xhr)    
     );
 }
 
@@ -822,7 +822,7 @@ function _bildo_info(pageids) {
             }
         },
         undefined, undefined,
-        (msg: string) => Eraro.al('#sercho_error',msg)
+        (xhr: XMLHttpRequest) => Eraro.http('#sercho_error',xhr)
     );
 }
 
@@ -863,7 +863,7 @@ function _bildeto_info(paghoj) {
             }
         },
         undefined, undefined,
-        (msg: string) => Eraro.al('#sercho_error', msg)
+        (xhr: XMLHttpRequest) => Eraro.http('#sercho_error', xhr)
     );
 }
 
@@ -924,7 +924,7 @@ function _bildo_info_2(dosiero) {
             }
         },
         undefined, undefined,
-        (msg: string) => Eraro.al('#sercho_error', msg)
+        (xhr: XMLHttpRequest) => Eraro.http('#sercho_error', xhr)
     );
 }
 
@@ -1147,7 +1147,7 @@ class KuntekstoBtn extends UIElement {
                                 DOM.e("#"+id)?.remove();
                             },
                             undefined, undefined,
-                            (msg: string) => Eraro.al('#sercho_error',msg));
+                            (xhr: XMLHttpRequest) => Eraro.http('#sercho_error',xhr));
 
                 } else {
                     throw new Error('nedifinita fraz-n-ro');

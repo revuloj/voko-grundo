@@ -125,6 +125,12 @@
     --shb-bgr-clr: #e5e3d5;
     --sh2-bgr-clr: #ffedad;
     --shb-hov-bgr-clr: #e3a345;
+
+    /* erarmesaĝoj */
+
+    --err-brd-clr: #f8684c;
+    --err-bgr-clr: #ffc198;
+    --err-fnt-clr: #190b0b;
 }
 
 

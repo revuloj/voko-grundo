@@ -18,4 +18,9 @@ export class Eraro {
             el.classList.remove("kasxita");
         }
     }
+
+    static http(element: HTMLElement|string, request: XMLHttpRequest) {
+        const url = request.responseURL.split("/").slice(-1);
+        Eraro.al(element,"Eraro "+request.status+" dum ŝargo de "+url+": "+request.responseText);
+    }
 }
