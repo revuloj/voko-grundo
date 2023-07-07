@@ -7,7 +7,7 @@
 
 import * as x from '../x';
 import { Xmlarea } from '../x';
-import { UIElement } from '../ui';
+import { UIElement, DOM } from '../ui';
 
 import { preferoj } from '../a/preferoj';
 import { XMLArtikolo } from './sxabloniloj';
@@ -261,6 +261,12 @@ export class Artikolo extends UIElement {
                     el.selectionEnd = pos;
                     xmlarea.selection('');
                 }    
+            }
+        } else if (keycode == 93 || keycode == 77 && event.ctrlKey) {
+            const menu = DOM.e("#kontroli_menu_item");
+            if (menu instanceof HTMLElement) {
+                event.preventDefault();
+                menu.focus();
             }
         }
     };

@@ -32,6 +32,9 @@ export class Menu extends UIElement {
 
         // preparu la menuerojn
         this._preparu();
+
+        // traktu klavpremojn por navigado
+        document.addEventListener("keydown",this._klavpremo.bind(this));
     }
 
     _preparu() {
@@ -41,21 +44,15 @@ export class Menu extends UIElement {
             // ĉu submenu? traktu tiun submenuon            
             const sub = this._submenuo(menuero);
             if (sub) {
-                menuero.classList.add(UIStil.submenuo_fermita);
-                sub.classList.add(UIStil.menuo);
-                DOM.kaŝu(sub);
+                this._montru_submenuon(menuero,false); // kaŝu
+
                 // ni aldonas klak-reagon al la menuero
                 menuero.addEventListener("click",(event)=> {
                     this.element.querySelectorAll(this.opcioj.eroj).forEach((m_ero) => {
-                        // estas la menuero mem
+                        // estas la menuero mem, ni montras aŭ kaŝas ĝian submenuon
                         if (m_ero === menuero) {
                             const kaŝita = DOM.kaŝita(sub);
-                            DOM.kaŝu(sub,!kaŝita);
-                            if (!kaŝita) {
-                                // metu la sumenuon tuj apud la menueron
-                                sub.style.left = ""+(menuero.offsetLeft+menuero.offsetWidth)+"px";
-                                sub.style.top = ""+menuero.offsetTop+"px";
-                            }
+                            this._montru_submenuon(menuero,!kaŝita);
                         } else { // ĉiujn aliajn submenuojn kaŝu kiam ni klakas sur unu el la ĉef-menueroj!
                             DOM.kaŝu(this._submenuo(m_ero));
                         }
@@ -73,8 +70,62 @@ export class Menu extends UIElement {
         });
     }
 
+    _klavpremo(event) {
+        const el = event.target;
+        function iru(el: Element|null, malsupren: boolean) {
+            let mi = el;
+            if (mi) do {
+                mi = malsupren? mi.nextElementSibling : mi.previousElementSibling;
+            } while (mi instanceof HTMLElement && !mi.classList.contains("ui-menu-item"));
+                
+            // ĉu ni trovis najbaran menueron?
+            if (mi instanceof HTMLElement && mi.classList.contains("ui-menu-item")) {
+                event.preventDefault();
+                mi.focus();
+            }
+        }
+
+        if (el instanceof HTMLElement) {
+            switch (event.key) {
+                case "ArrowDown": 
+                    iru(el,true); 
+                    break;
+                case "ArrowUp":
+                    iru(el,false);
+                    break;
+                case "ArrowRight":
+                    this._montru_submenuon(el,true);
+                    break;
+                case "ArrowLeft":
+                case "Dead":
+                    this._montru_submenuon(el,false);
+                    break;
+                case "Enter":
+                case "Space":
+                        el.click();
+                    break;
+            }
+        }
+    }
+
     _submenuo(menuero) {
         return menuero.querySelector("ul,ol");
+    }
+
+    _montru_submenuon(menuero, montru = true) {
+        const sub = this._submenuo(menuero);
+        if (sub) {
+            if (montru) {
+                DOM.kaŝu(sub,false);
+                // metu la sumenuon tuj apud la menueron
+                sub.style.left = ""+(menuero.offsetLeft+menuero.offsetWidth)+"px";
+                sub.style.top = ""+menuero.offsetTop+"px";
+            } else {
+                menuero.classList.add(UIStil.submenuo_fermita);
+                sub.classList.add(UIStil.menuo);
+                DOM.kaŝu(sub);    
+            }
+        }
     }
 
     refreŝigu() {
