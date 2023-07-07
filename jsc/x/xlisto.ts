@@ -78,7 +78,7 @@ export class Xlist {
         let codes: {[code: string]: string} = {};
   
         u.HTTPRequest('GET', this.url, {},
-          function(xmldata) {
+          function(xmldata: string) {
               // Success!
               //var parser = new DOMParser();
               //var doc = parser.parseFromString(request.response,"text/xml");

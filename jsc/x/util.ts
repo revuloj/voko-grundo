@@ -52,7 +52,7 @@ export function group_by(key: string|number, array: Array<any>): {[key: string]:
  * @param item 
  * @returns 
  */
-export function isObject(item) {
+export function isObject(item: any) {
   return (item && typeof item === 'object' && !Array.isArray(item));
 };
 
@@ -62,7 +62,7 @@ export function isObject(item) {
  * @param target
  * @param ...sources
  */
-export function enfandu(target, ...sources) {
+export function enfandu(target: any, ...sources: any) {
     if (!sources.length) return target;
     const source = sources.shift();
 
