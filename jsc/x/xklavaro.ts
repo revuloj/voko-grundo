@@ -36,7 +36,8 @@ export function xpress(event: KeyboardEvent) {
     const key = event.key;
     const trg = event.target;
     if (trg instanceof HTMLInputElement && (key == 'x' || key == 'X')) {   // X or x
-        return xklavo(trg,key);
+        const res = xklavo(trg,key);
+        if (!res) event.preventDefault();
     }
 }
 
@@ -551,7 +552,7 @@ function xklavo(el: HTMLInputElement, key: string) {
         el.focus();
         // @ts-ignore
         var range = document.selection.createRange();
-        if (range.text != "") return true;
+        if (range.text != "") return true; // la retumilo traktu la eventon mem
         range.moveStart('character', -1); 
         const nova = cxigi(range.text, key);
         if (nova != "") {
@@ -561,7 +562,7 @@ function xklavo(el: HTMLInputElement, key: string) {
     } else if (el.selectionStart || el.selectionStart === 0) { // Mozilla
         var start = el.selectionStart;
         var end = el.selectionEnd;
-        if (start != end || start == 0) return true; 
+        if (start != end || start == 0) return true; // la retumilo traktu la eventon mem
 
         const nova = cxigi(el.value.substring(start-1, start), key);
         if (nova != "") {
@@ -575,5 +576,6 @@ function xklavo(el: HTMLInputElement, key: string) {
             el.scrollTop = textScroll;
             return false;
         }
-    }
+    };
+    return true;  // la retumilo traktu la eventon mem
 };
