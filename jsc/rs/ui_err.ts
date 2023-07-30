@@ -320,9 +320,16 @@ export function surmetita_dialogo(url, root_el, loc = '') {
               } else {
                 const srm = Dialog.dialog("#surmetita_dlg");
                 if (srm) {
-                    srm.element.innerHTML = data;
-                    srm.opcioj['title'] = DOM.t("#surmetita_dlg h2");
-                        DOM.e("#surmetita_dlg h2")?.remove();
+                    DOM.al_html("#surmetita",data);
+                    const titolo = DOM.t("#surmetita h1");
+                    const h2 = DOM.e("#surmetita_dlg h2");
+                    if (titolo && h2) {
+                        const h2t = h2.firstChild;
+                        if (h2t?.nodeType == Node.TEXT_NODE)
+                            h2t.nodeValue = titolo;
+                        //DOM.al_t("#surmetita_dlg h2",titolo);
+                        DOM.e("#surmetita h1")?.remove();
+                    };
                     //  $("#surmetita").html(data);
                     //  $("#surmetita_dlg").dialog("option", "title", $("#surmetita h1").text());
                     //  $("#surmetita h1").remove("h1");

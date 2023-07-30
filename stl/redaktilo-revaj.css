@@ -1042,6 +1042,11 @@ ul.ui-menu {
     text-indent: -2.5ex;
 }
 
+#surmetita_dlg[open] {
+    display: flex;
+    flex-direction: column;
+}
+
 #surmetita_dlg {
     width: fit-content;
     height: fit-content;
@@ -1052,7 +1057,12 @@ ul.ui-menu {
     margin: .5em;
 }
 
+#surmetita_dlg>* {
+    flex: 0;
+}
+
 #surmetita {
+    flex: 1;
     background-color: var(--ovr-bgr-clr);
     overflow-y: scroll;
 }
