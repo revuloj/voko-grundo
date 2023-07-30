@@ -22,7 +22,7 @@ interface XEraro extends Partial<x.LinePos> { id?: string, cls?: string, msg: st
 
 export class Erarolisto extends UIElement {
 
-    opcioj = {
+    static aprioraj: {
         a_click: null
     };
 
@@ -34,11 +34,19 @@ export class Erarolisto extends UIElement {
     }
 
     constructor(element: HTMLElement|string, opcioj: any) {
-        super(element, opcioj);
+        super(element, opcioj, Erarolisto.aprioraj);
+
 
         this._on({
+            "click": (event) => {
+                const trg = event.target;
+                if (trg.tagName == "LI") this._click(event);
+                else if (trg.tagName == "A") this._trigger("a_click",event,null);
+            }
+            /*
             "click li": this._click,
             "click a": function(event) { this._trigger("a_click",event,null); } 
+            */
         });
     };
 
@@ -91,16 +99,14 @@ export class Erarolisto extends UIElement {
     _click(event) {
         // la atributo value de li donas la linion en la XML-teksto,
         // la atributo title de li donas line:pos
-        if (event.target.localName != "a") {
-            const el = event.currentTarget;
-            const line_pos = el.getAttribute("value");
-            const artikolo = Artikolo.artikolo("#xml_text");
-            const xmlarea = Artikolo.xmlarea("#xml_text");
-            xmlarea?.goto(line_pos);
-            // okazigu eventon poziciŝanĝo ĉe Artikolo...
-            const ps: any = artikolo?.opcioj.poziciŝanĝo;
-            if (ps instanceof Function) ps(); 
-        }
+        const el = event.target;
+        const line_pos = el.getAttribute("value");
+        const artikolo = Artikolo.artikolo("#xml_text");
+        const xmlarea = Artikolo.xmlarea("#xml_text");
+        xmlarea?.goto(line_pos);
+        // okazigu eventon poziciŝanĝo ĉe Artikolo...
+        const ps: any = artikolo?.opcioj.poziciŝanĝo;
+        if (ps instanceof Function) ps(); 
     };
 
 };

@@ -164,17 +164,17 @@ export default function() {
     new Erarolisto("#dock_eraroj",{});
     new Erarolisto("#dock_avertoj", {
         a_click: function(event) {
-            const a = event.currentTarget;
+            const a = event.target;
             const span = a.parentElement;
             const xmlarea = artikolo.opcioj.xmlarea;
-            if (span.hasClass('snc_mrk')) {
+            if (span.classList.contains('snc_mrk')) {
                 //const art = $("#xml_text");
                 xmlarea.goto(span.parentElement.getAttribute("value"),4);
-                artikolo.elekto("<snc mrk=\"" + a.text() + "\"","<snc");
+                artikolo.elekto("<snc mrk=\"" + a.textContent + "\"","<snc");
                 span.parentElement.remove();
-            } else if (span.hasClass('klr_ppp')) {
+            } else if (span.classList.contains('klr_ppp')) {
                 xmlarea.goto(span.parentElement.getAttribute("value"),14);
-                artikolo.elekto(a.text(),"<klr>...</klr>");
+                artikolo.elekto(a.textContent,"<klr>...</klr>");
                 span.parentElement.remove();
             } else {
                 surmetita_dialogo("static/anaklar.html","klarigo_teksto", "klarigo_" + span.getAttribute("data-takso"));

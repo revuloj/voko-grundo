@@ -19,7 +19,7 @@ export class Propon extends UIElement {
     }
 
     constructor(element: HTMLInputElement|string, opcioj?: any) {
-        super(element, opcioj,Propon.aprioraj);
+        super(element, opcioj, Propon.aprioraj);
 
         if (this.element instanceof HTMLInputElement) {
             this.element.setAttribute("autocomplete","off");
