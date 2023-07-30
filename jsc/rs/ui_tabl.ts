@@ -319,6 +319,24 @@ export default function() {
     DOM.klavpremo("#sercho_sercho",x.xpress);
     DOM.klavpremo("#re_radiko",x.xpress);
 
+    DOM.reago("#sercho_trovoj", "click", (event) => {
+
+            // forigu antaŭan aktivan elementon
+            const aktiva = DOM.e("#sercho_trovoj .active");
+            if (aktiva instanceof HTMLElement) aktiva.classList.remove("active");
+
+            // aktivigu alklakitan
+            const trg = event.target;
+            if (trg instanceof HTMLElement) {
+
+                const listero = trg.closest("dt,li,.bildstriero");
+                if (listero) {
+                    listero.classList.add("active");
+                }    
+            }
+        }
+    );
+
     DOM.kaŝu("#sercho_error");
     Valid.aldonu("#sercho_sercho",{
         nonempty: "Malplena serĉokampo. Kion vi volas serĉi?",

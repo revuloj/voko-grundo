@@ -184,6 +184,14 @@ export class DOM {
        
     }
 
+    /**
+     * Registras reagojn al certa evento ĉe la idoj de elemento.
+     * La idoj estas donitaj per CSS-elektilo aplikata al la enhavanta elmento
+     * @param e 
+     * @param evento 
+     * @param idspec 
+     * @param reago 
+     */
     static ido_reago(e: Element|string, evento: string, idspec: string, reago: EventListenerOrEventListenerObject) {
         const el = (typeof e === "string")? DOM.e(e) : e;
         if (el) {

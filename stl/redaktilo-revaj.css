@@ -342,17 +342,15 @@ fieldset legend {
    /*border: 1px solid black;*/
 }
 
-#sercho_trovoj dt:hover button {
+#sercho_trovoj dt:hover button,
+#sercho_trovoj dt.active button,
+#sercho_trovoj li:hover button,
+#sercho_trovoj li.active button,
+#sercho_trovoj .bildstriero:hover button,
+#sercho_trovoj .bildstriero.active button
+{
    visibility: visible !important;  
 }
-
-#sercho_trovoj li:hover button {
-    visibility: visible !important;  
- }
-
-#sercho_trovoj .bildstriero:hover button {
-    visibility: visible !important;  
- } 
 
 #sercho_error {
    margin: 0 !important;
