@@ -10,7 +10,7 @@ import * as u from '../u';
 import * as x from '../x';
 
 import { xpress } from '../x';
-import { DOM, Dialog, Menu, Grup, Slipar, Buton, Elektil, Propon, Valid, Eraro } from '../ui';
+import { DOM, Dialog, Menu, Grup, Slipar, Buton, Elektil, List, Propon, Valid, Eraro } from '../ui';
 
 import * as sbl from './sxablonoj';
 import { Artikolo } from './ui_art';
@@ -192,6 +192,7 @@ export default function() {
         },
         err_to: "#lastaj_error"
     });
+    new List("#lastaj_tabelo");
     DOM.ido_reago("#lastaj_tabelo","click","td",lastaj_tabelo_premo);
     DOM.klak("#lastaj_rigardu",
         function(event) {
@@ -703,8 +704,8 @@ function download_art(dosiero,err_to,dlg_id,do_close=true) {
         },
         () => document.body.style.cursor = 'wait',
         () => document.body.style.cursor = 'auto',
-        err_to
-        );
+        (xhr: XMLHttpRequest) => Eraro.http(err_to,xhr)
+    );
 }
 
 function download_url(url,dosiero,err_to,dlg_id,do_close=true) {
@@ -730,7 +731,7 @@ function download_url(url,dosiero,err_to,dlg_id,do_close=true) {
         },
         () => document.body.style.cursor = 'wait',
         () => document.body.style.cursor = 'auto',
-        err_to
+        (xhr: XMLHttpRequest) => Eraro.http(err_to,xhr)
     );
 }
 
@@ -874,13 +875,13 @@ function referenco_dlg_serĉo(request,response) {
       var results = Array();
     
       u.HTTPRequest('post', "revo_sercho", { sercho: sercho, lng: "eo" },
-            function(data) {   
+            function(data) {
+                const json = JSON.parse(data);
                 // kap+num -> enhavo
                 // mrk -> celo
                 //var enhavo = (data.num != "")? data.kap + "<sncref/>" : data.kap;
-                var i;
-                for (i=0; i<data.length; i++) {
-                   var d = data[i];
+                for (let i=0; i<json.length; i++) {
+                   var d = json[i];
                    var label = d.kap; //(d.num != "")? d.kap + " " + d.num : d.kap;
                     
                    // ĉe pluraj sencoj aldonu numeron kaj lastan parton de mrk por pli bone distingi
