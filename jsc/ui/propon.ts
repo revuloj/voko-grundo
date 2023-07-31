@@ -25,6 +25,12 @@ export class Propon extends UIElement {
             this.element.setAttribute("autocomplete","off");
             this.element.addEventListener("input",this._input.bind(this));
         }
+
+        // se ni ricevis la proponliston kiel areo, ni tuj plenigas la elementon "datalist"
+        if (this.opcioj.source instanceof Array) {
+            // la fonto estas areo de objektoj, kies atributoj "value" enhavas la unuopajn vortojn
+            this.proponlisto(this.opcioj.source);
+        }
     }
 
     _datalist() {
@@ -45,8 +51,15 @@ export class Propon extends UIElement {
 
         if (term && dlist_subteno) {
             if (this.opcioj.source instanceof Function) {
+                // la fonto estas vokenda funkcio. Ni vokas ĝin transdonante la serĉata vorton (term)
                 this.opcioj.source({term: term},this.proponlisto.bind(this));
+            } 
+            /*
+            else if (this.opcioj.source instanceof Array) {
+                // la fonto estas areo de objektoj, kies atributoj "value" enhavas la unuopajn vortojn
+                this.proponlisto(this.opcioj.source);
             }
+            */
         }
     }
 
@@ -59,6 +72,7 @@ export class Propon extends UIElement {
             event.inputType === 'insertReplacementText'; // Firefox
               // kio pri Safari?
 
+        // la uzanto elektis listeron, enmetu ties datumojn en la formularkampo(j)n
         if (dlist_elekto) {
             // ni redonu la elementon alkroĉitan al la listero
             const val = (this.element as HTMLInputElement).value;
@@ -79,8 +93,9 @@ export class Propon extends UIElement {
                     }
                 }
             }
-
+        
         } else {
+            // la uzanto tajpis ion en la serĉkampo, proponu konvenajn vortojn el la listo
             this.proponu();
         }
     }
