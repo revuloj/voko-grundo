@@ -41,14 +41,13 @@ FROM ubuntu:focal as builder
 RUN apt-get update && apt-get install -y curl xsltproc rxp default-jre libsaxonb-java \
  && curl -sL https://deb.nodesource.com/setup_19.x | bash -E - \
  && apt-get install -y nodejs
-
 WORKDIR /usr/app
 COPY ./ /usr/app
 COPY --from=metapost /build/ /usr/app/build/
 
 # aldonu eble:  npm audit fix, kelkfoje ni devas uzi -g npm@next - se ekzistas posta eldono
 # mi ne scias npm sufiĉe bone por forumli aktualigan komandon, kiu fidinde ĉiam funkcias...
-
+# oni eble povus kombini ambaŭ per aŭ: { npm install -g npm@latest || npm install -g npm@next }
 RUN npm install -g npm@latest && npm ci && npm run build && tst/xml-test.sh
 
 
