@@ -57,7 +57,7 @@ export function replaceTld(radiko: string, str: string) {
  * @param xmlStr - la XML-teksto
  * @returns la lingvoj kiel objekto
  */
-export function traduk_lingvoj(xmlStr: string): BoolObj {
+export function traduk_lingvoj(xmlStr: string): BoolObj|undefined {
     const rx_ent = /&[a-zA-Z0-9_]+;/g;
     const xml = xmlStr.replace(rx_ent,'?'); // entities cannot be resolved...
 
@@ -68,23 +68,20 @@ export function traduk_lingvoj(xmlStr: string): BoolObj {
         //var artikolo = $("vortaro",$.parseXML(xml));
         const parser = new DOMParser();
         const doc = parser.parseFromString(xml,"text/xml");
-        artikolo = doc.querySelector("vortaro");
+        const artikolo = doc.querySelector("vortaro");
+
+        if (artikolo) artikolo.querySelectorAll("trd[lng],trdgrp[lng]").forEach( (t) => {
+            const lng = t.getAttribute("lng");
+            if (lng) lingvoj[lng] = true;
+        });
+    
+    return lingvoj;
 
     } catch(e) {
         console.error("Pro nevalida XML ne eblas trovi traduklingvojn.");
         //console.error(e);
         return;
     }
-    
-    //artikolo.find("trd[lng],trdgrp[lng]").each(function(index) {
-    //    lingvoj[$(this).attr('lng')] = true;
-    //});
-    artikolo.querySelectorAll("trd[lng],trdgrp[lng]").forEach( (t) => {
-        const lng = t.getAttribute("lng");
-        lingvoj[lng] = true;
-    });
-    
-    return lingvoj;
 }
 
 /**
