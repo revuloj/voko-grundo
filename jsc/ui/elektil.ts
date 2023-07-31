@@ -5,6 +5,9 @@
 
 import { UIElement } from './uielement';
 
+/**
+ * Klaso por trakti elektilojn konsistantaj el komcernaj formularkampoj 'checkbox' aŭ 'radiobutton'
+ */
 export class Elektil extends UIElement {
     //valoroj: any;
 

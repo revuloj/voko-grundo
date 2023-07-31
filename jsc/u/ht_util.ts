@@ -84,16 +84,16 @@ export function HTTPRequestFull(method: string, url: string, headers: Kapoj, par
       } else {
           // post konektiĝo okazis eraro
           console.error('Eraro dum ŝargo de ' + url);  
-          if (onError) onError(request);
+          if (onError instanceof Function) onError(request);
       }
-      if (onFinish) onFinish();
+      if (onFinish instanceof Function) onFinish();
     };
     
     request.onerror = function() {
       // konekteraro
       console.error('Eraro dum konektiĝo por ' + url);
-      if (onError) onError(request);
-      if (onFinish) onFinish();
+      if (onError instanceof Function) onError(request);
+      if (onFinish instanceof Function) onFinish();
     };
     
     //request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');

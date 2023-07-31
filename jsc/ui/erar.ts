@@ -21,6 +21,12 @@ export class Eraro {
 
     static http(element: HTMLElement|string, request: XMLHttpRequest) {
         const url = request.responseURL.split("/").slice(-1);
-        Eraro.al(element,"Eraro "+request.status+" dum ŝargo de "+url+": "+request.responseText);
+        let msg = "";
+        switch (request.status) {
+            case 404: msg = "La petita dosiero ("+url+") ne ekzistas"; break;
+            case 400: msg = "Nevalida peto"; break;
+        }
+        if (request.responseText) msg += ": "+request.responseText;
+        Eraro.al(element,msg);
     }
 }
