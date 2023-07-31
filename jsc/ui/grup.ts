@@ -5,6 +5,10 @@
 
 import { UIElement } from './uielement';
 
+/**
+ * Klaso por trakti grupojn de formularelementoj
+ */
+
 export class Grup extends UIElement {
     //valoroj: any;
 
