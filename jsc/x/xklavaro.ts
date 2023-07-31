@@ -206,10 +206,10 @@ export class XKlavaro {
                         html += '<div class="klv elm_btn" data-cmd="sub" title="subigite">a<sub>s</sub></div>';
                         break;
                     case 'minuskle':
-                        html += '<div class="klv elm_btn" data-cmd="minuskloj" title="minuskligo">A&#x2b9a;a</div>';
+                        html += '<div class="klv elm_btn" data-cmd="minuskloj" title="minuskligo">A&#x23f5;a</div>';
                         break;
                     case 'kamele':
-                        html += '<div class="klv elm_btn" data-cmd="kamelo" title="komenc-majuskloj">&#x2b9a;Ab</div>';
+                        html += '<div class="klv elm_btn" data-cmd="kamelo" title="komenc-majuskloj">&#x23f5;Ab</div>';
                         break;
                     case 'dekstren':
                         html += '<div value="+2i" class="klv tab_btn" title="Ŝovu la markitan tekston dekstren.">&#x21E5;</div>';
