@@ -75,8 +75,8 @@ export default function() {
             () => Artikolo.xmlarea("#xml_text").getRadiko(), 
             function(event,ui) {
                 if (ui.cmd == "blankigo") {
-                    DOM.al_v("#krei_dlg input","");
-                    DOM.al_v("#krei_dif","");
+                    DOM.malplenigu("#krei_dlg input");
+                    DOM.malplenigu("#krei_dif");
                 }
             },
             undefined) // postenmeto
@@ -326,8 +326,8 @@ export default function() {
             () => Artikolo.xmlarea("#xml_text").getRadiko(), 
             function(event,ui) {
                 if (ui.cmd == "blankigo") {
-                    DOM.al_v("#ekzemplo_dlg input","");
-                    DOM.al_v("#ekzemplo_frazo","");
+                    DOM.malplenigu("#ekzemplo_dlg input");
+                    DOM.malplenigu("#ekzemplo_frazo");
                 }
             },
             undefined)
@@ -385,8 +385,8 @@ export default function() {
             () => Artikolo.xmlarea("#xml_text").getRadiko(), 
             function(event,ui) {
                 if (ui.cmd == "blankigo") {
-                    DOM.al_v("#bildo_dlg input[type!='radio']","");
-                    DOM.al_v("#bildo_frazo","");
+                    DOM.malplenigu("#bildo_frazo");
+                    DOM.malplenigu("#bildo_dlg input[type!='radio']");
                 }
             },
             undefined)
@@ -419,8 +419,8 @@ export default function() {
             () => Artikolo.xmlarea("#xml_text").getRadiko(), 
             function(event,ui) {
                 if (ui.cmd == "blankigo") {
-                    DOM.al_v("#derivajho_dlg input","");
-                    DOM.al_v("#derivajho_dif","");
+                    DOM.malplenigu("#derivajho_dlg input");
+                    DOM.malplenigu("#derivajho_dif");
                 }
             },
             undefined)
@@ -452,8 +452,8 @@ export default function() {
             () => Artikolo.xmlarea("#xml_text").getRadiko(), 
             function(event,ui) {
                 if (ui.cmd == "blankigo") {
-                    DOM.al_v("#senco_dlg input","");
-                    DOM.al_v("#senco_dif","");
+                    DOM.malplenigu("#senco_dlg input");
+                    DOM.malplenigu("#senco_dif");
                 }
             },
             undefined)
@@ -565,8 +565,8 @@ export default function() {
             undefined,
             function(event,ui) {
                 if (ui.cmd == "blankigo") {
-                    DOM.al_v("#rimarko_dlg input","");
-                    DOM.al_v("#rimarko_rim","");
+                    DOM.malplenigu("#rimarko_dlg input");
+                    DOM.malplenigu("#rimarko_rim");
                 }
             },
             undefined)
