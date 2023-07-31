@@ -22,7 +22,7 @@ export default function() {
 
     // menuo
     new Menu("#menu", {
-          eroj: ":not(.ui-widget-header)",
+          eroj: "li:not(.ui-widget-header)",
           reago: menu_selected
       });
         
@@ -43,7 +43,7 @@ export default function() {
 
 
 function menu_selected(event) {
-    const menuero = event.target;
+    const menuero = event.currentTarget;
     if (menuero instanceof Element) {
 
         const id = menuero.id;
