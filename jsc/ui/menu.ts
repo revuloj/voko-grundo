@@ -41,7 +41,7 @@ export class Menu extends UIElement {
         this.element.querySelectorAll(this.opcioj.eroj).forEach((menuero) => {
             menuero.classList.add(UIStil.menuero);
 
-            // ĉu submenu? traktu tiun submenuon            
+            // ĉu submenuo? traktu tiun submenuon            
             const sub = this._submenuo(menuero);
             if (sub) {
                 this._montru_submenuon(menuero,false); // kaŝu
@@ -52,7 +52,7 @@ export class Menu extends UIElement {
                         // estas la menuero mem, ni montras aŭ kaŝas ĝian submenuon
                         if (m_ero === menuero) {
                             const kaŝita = DOM.kaŝita(sub);
-                            this._montru_submenuon(menuero,!kaŝita);
+                            this._montru_submenuon(menuero,kaŝita);
                         } else { // ĉiujn aliajn submenuojn kaŝu kiam ni klakas sur unu el la ĉef-menueroj!
                             DOM.kaŝu(this._submenuo(m_ero));
                         }
@@ -117,6 +117,7 @@ export class Menu extends UIElement {
         if (sub) {
             if (montru) {
                 DOM.kaŝu(sub,false);
+                menuero.classList.remove(UIStil.submenuo_fermita);
                 // metu la sumenuon tuj apud la menueron
                 sub.style.left = ""+(menuero.offsetLeft+menuero.offsetWidth)+"px";
                 sub.style.top = ""+menuero.offsetTop+"px";
