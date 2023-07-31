@@ -336,18 +336,20 @@ fieldset legend {
    padding: 0.5em; 
 }
 
-#sercho_trovoj dt:hover {
+#sercho_trovoj dt:hover,
+#sercho_trovoj dt.aktiva
+{
    background-color: var(--main-ac2-bgr-clr); /*#e5e3d5;  */
    color: var(--main-act-fnt-clr);
    /*border: 1px solid black;*/
 }
 
 #sercho_trovoj dt:hover button,
-#sercho_trovoj dt.active button,
+#sercho_trovoj dt.aktiva button,
 #sercho_trovoj li:hover button,
-#sercho_trovoj li.active button,
+#sercho_trovoj li.aktiva button,
 #sercho_trovoj .bildstriero:hover button,
-#sercho_trovoj .bildstriero.active button
+#sercho_trovoj .bildstriero.aktiva button
 {
    visibility: visible !important;  
 }
