@@ -11,7 +11,7 @@ import * as x from '../x';
 
 import { Xmlarea, RevoListoj } from '../x';
 import { ht_element } from '../u';
-import { DOM, Slipar, Buton, Elektil, Eraro, Valid } from '../ui';
+import { DOM, Slipar, Buton, Elektil, List, Valid } from '../ui';
 
 import { Erarolisto } from './ui_err';
 import { artikolo } from '../a/artikolo';
@@ -319,6 +319,8 @@ export default function() {
     DOM.klavpremo("#sercho_sercho",x.xpress);
     DOM.klavpremo("#re_radiko",x.xpress);
 
+    new List("#sercho_trovoj","dt,li,.bildstriero");
+    /*
     DOM.reago("#sercho_trovoj", "click", (event) => {
 
             // forigu antaŭan aktivan elementon
@@ -336,6 +338,7 @@ export default function() {
             }
         }
     );
+    */
 
     DOM.kaŝu("#sercho_error");
     Valid.aldonu("#sercho_sercho",{

@@ -11,6 +11,7 @@
 export class UIStil {
     // ĝenerale / DOM
     static kaŝita = 'kasxita'; // CSS-klaso kiun ni aplikas al kaŝitaj elementoj
+    static aktiva = 'aktiva'; // CSS-klaso kiun ni aplikas al aktivaj elementoj
 
     // dialogoj
     static dialogo = "ui-dialog";
