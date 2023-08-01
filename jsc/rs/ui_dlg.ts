@@ -1135,7 +1135,7 @@ function traduko_dlg_preparo() {
             const komenca = nomo.charAt(0);
             const lng = u.ht_html(`<li id="trd_chiuj_${kodo}" value="${nomo}">${nomo}</li>`);
 
-            if (lng) {
+            if (lng && kodo != 'eo') {
                 if (komenca >= 'a' && komenca <= 'b')
                     m_a_b.aldonu(nomo,lng);
                 else if (komenca >= 'c' && komenca <= 'g' || komenca == 'ĉ' || komenca == 'ĝ')
