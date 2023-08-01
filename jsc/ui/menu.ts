@@ -21,7 +21,7 @@ class Menuer extends UIElement {
 
     _click(event) {
         const menuo = Menuer.menuo(event.currentTarget);
-        if (menuo) menuo.elekto(event,this);
+        if (menuo) menuo.elekto(event,event.currentTarget);
     };
 }
 
@@ -65,17 +65,23 @@ class Submenu extends Menuer {
 
         const m_el = event.currentTarget;
         const subm = Submenu.submenuo(m_el);
+        const menuo = Menuer.menuo(m_el)
 
         console.debug("submenuo: "+m_el.textContent);
 
-
         const sublst = Submenu.sublisto(m_el);
-        if (subm && sublst instanceof HTMLElement) {
-            // malfermu, ser fermita; fermu, se malfermiata
+        if (subm && menuo && sublst instanceof HTMLElement) {
+            // se menuero en la submenuo estis klakita, reagu per
+            // la ago registrita ĉe la menuo
+            if (sublst.contains(event.target)) {
+                const li = event.target.closest("li");
+                if (li) menuo.elekto(event,li);
+            }
+
+            // malfermu, se fermita; fermu, se malfermiata
             const kaŝita = DOM.kaŝita(sublst);
 
             // evtl. fermu ĉiujn aliajn
-            const menuo = Menuer.menuo(m_el)
             if (menuo) menuo.fermu_submenuojn();
 
             // montru ĉi-tiun, se antaŭe estis kaŝita
@@ -176,9 +182,9 @@ export class Menu extends UIElement {
         }
     }
 
-    elekto(event,menuero) {
+    elekto(event,menuero_elm) {
         this.opcioj.reago
-            .call(this,event,{menuero: menuero.element});
+            .call(this,event,{menuero: menuero_elm});
     }
 
     fermu_submenuojn() {
