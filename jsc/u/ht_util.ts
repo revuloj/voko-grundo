@@ -236,6 +236,18 @@ export function ht_elements(jlist: Array<ContentSpec>): Array<Node> {
 }
 
 /**
+ * Kreas unuopan HTML-elementon el HTML-teksto
+ * @param html 
+ * @returns 
+ */
+export function ht_html(html: string): HTMLElement|undefined {
+  var div = document.createElement('div');
+  div.innerHTML = html.trim();
+  if (div.firstChild instanceof HTMLElement) 
+    return div.firstChild;
+}
+
+/**
  * Kreas kaj redonas <br>-elementon
  */
 export function ht_br() {

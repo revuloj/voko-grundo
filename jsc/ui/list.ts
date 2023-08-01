@@ -7,11 +7,14 @@ import { UIElement } from './uielement';
 import { UIStil } from './uistil';
 
 /**
- * Klaso por trakti listojn, aparte, se unuopaj elementoj estu aktivigeblaj
+ * Klaso por trakti listojn, aparte, se ni bezonas ordigadon kaj unuopaj elementoj estu aktivigeblaj/elekteblaj
  */
 export class List extends UIElement {
-    static aprioraj: {
-        listero: "li" // CSS-elektilo por listeroj
+    static kmp_eo = new Intl.Collator('eo').compare;
+
+    static aprioraj = {
+        listero: "li", // CSS-elektilo por listeroj
+        komparo: List.kmp_eo
     };
 
     static kreu(spec: string, opcioj?: any) {
@@ -48,6 +51,27 @@ export class List extends UIElement {
                 }    
             }
         });
+    }
+
+    /**
+     * Aldonas listeron.
+     * @param val la valoro, kiu uziĝas por ordigi la liston
+     * @param listero la HTML-elemento de la listero por aldoni
+     * @param obj  aldona objekto kunigita kun la listero, kaj kiun ni povas rericevi ĉe elekto de listero
+     */
+    aldonu(val: string|number, listero: Element, obj?: any) {
+        const kmp = this.opcioj.komparo;
+
+        const aldonita = Array.from(this.element.querySelectorAll(this.opcioj.listero)).some((l) => {
+            if ( kmp(l.getAttribute("value"),val) > 0 ) {
+                l.before(listero);
+                return true;
+            }
+        });
+        // se ni ne jam enŝovis ie, ni alpendigas en la fino
+        if ( !aldonita ) {
+            this.element.append(listero);
+        }        
     }
 
 }

@@ -1123,32 +1123,34 @@ function traduko_dlg_preparo() {
 
     new Promise((resolve1) => { 
         // alfabetaj listoj
-        const m_a_b = DOM.e("#traduko_chiuj_a_b");
-        const m_c_g = DOM.e("#traduko_chiuj_c_g");
-        const m_h_j = DOM.e("#traduko_chiuj_h_j");
-        const m_k_l = DOM.e("#traduko_chiuj_k_l");
-        const m_m_o = DOM.e("#traduko_chiuj_m_o");
-        const m_p_s = DOM.e("#traduko_chiuj_p_s");
-        const m_t_z = DOM.e("#traduko_chiuj_t_z");
+        const m_a_b = new List("#traduko_chiuj_a_b");
+        const m_c_g = new List("#traduko_chiuj_c_g");
+        const m_h_j = new List("#traduko_chiuj_h_j");
+        const m_k_l = new List("#traduko_chiuj_k_l");
+        const m_m_o = new List("#traduko_chiuj_m_o");
+        const m_p_s = new List("#traduko_chiuj_p_s");
+        const m_t_z = new List("#traduko_chiuj_t_z");
 
         revo_listoj.lingvoj.load(resolve1(true),(kodo,nomo) => {
             const komenca = nomo.charAt(0);
-            const lng_html = `<li id="trd_chiuj_${kodo}">${nomo}</li>`;
+            const lng = u.ht_html(`<li id="trd_chiuj_${kodo}" value="${nomo}">${nomo}</li>`);
 
-            if (komenca >= 'a' && komenca <= 'b')
-                m_a_b?.insertAdjacentHTML("beforeend",lng_html);
-            else if (komenca >= 'c' && komenca <= 'g' || komenca == 'ĉ' || komenca == 'ĝ')
-                m_c_g?.insertAdjacentHTML("beforeend",lng_html);
-            else if (komenca >= 'h' && komenca <= 'j' || komenca == 'ĥ' || komenca == 'ĵ')
-                m_h_j?.insertAdjacentHTML("beforeend",lng_html);
-            else if (komenca >= 'k' && komenca <= 'l')
-                m_k_l?.insertAdjacentHTML("beforeend",lng_html);
-            else if (komenca >= 'm' && komenca <= 'o')
-                m_m_o?.insertAdjacentHTML("beforeend",lng_html);
-            else if (komenca >= 'p' && komenca <= 's' || komenca == 'ŝ')
-                m_p_s?.insertAdjacentHTML("beforeend",lng_html);
-            else if (komenca >= 't' && komenca <= 'z' || komenca == 'ŭ')
-                m_t_z?.insertAdjacentHTML("beforeend",lng_html);
+            if (lng) {
+                if (komenca >= 'a' && komenca <= 'b')
+                    m_a_b.aldonu(nomo,lng);
+                else if (komenca >= 'c' && komenca <= 'g' || komenca == 'ĉ' || komenca == 'ĝ')
+                    m_c_g.aldonu(nomo,lng);
+                else if (komenca >= 'h' && komenca <= 'j' || komenca == 'ĥ' || komenca == 'ĵ')
+                    m_h_j.aldonu(nomo,lng);
+                else if (komenca >= 'k' && komenca <= 'l')
+                    m_k_l.aldonu(nomo,lng);
+                else if (komenca >= 'm' && komenca <= 'o')
+                    m_m_o.aldonu(nomo,lng);
+                else if (komenca >= 'p' && komenca <= 's' || komenca == 'ŝ')
+                    m_p_s.aldonu(nomo,lng);
+                else if (komenca >= 't' && komenca <= 'z' || komenca == 'ŭ')
+                    m_t_z.aldonu(nomo,lng);
+            }
         });
     })
     .then(() => {
@@ -1187,23 +1189,25 @@ function traduko_dlg_preparo() {
 // aldonu la traduk-lingojn de la ŝargita artikolo al la traduko-dialogo (lingvo-elekto)
 function traduko_dlg_art_lingvoj() {
     const xmlarea = Artikolo.xmlarea("#xml_text");
-    const trd_art = DOM.e("#traduko_artikolaj");
+    const trd_art = new List("#traduko_artikolaj");
 
     if (xmlarea && trd_art) {
-        trd_art.textContent = '';
+        DOM.malplenigu("#traduko_artikolaj");
 
         const xml = xmlarea.syncedXml() || '';
         const traduk_lingvoj = x.traduk_lingvoj(xml);
 
-        // ŝargu, se ne jam ŝargita kaj trakuru la lingvolston
-        revo_listoj.lingvoj.load(()=>Menu.refreŝigu("#traduko_menuo"),
-            (kodo,nomo) => {
-                if (kodo in traduk_lingvoj) {
-                    const lingvo_html = `<li id="trd_art_${kodo}">${nomo}</li>`;
-                    trd_art.insertAdjacentHTML("beforeend",lingvo_html);
+        if (traduk_lingvoj) {
+            // ŝargu, se ne jam ŝargita kaj trakuru la lingvolston
+            revo_listoj.lingvoj.load(()=>Menu.refreŝigu("#traduko_menuo"),
+                (kodo,nomo) => {
+                    if (kodo in traduk_lingvoj) {
+                        const lingvo = u.ht_html(`<li id="trd_art_${kodo}" value="${nomo}">${nomo}</li>`);
+                        if (lingvo) trd_art.aldonu(nomo,lingvo);
+                    }
                 }
-            }
-        );
+            );
+        }
     }
 }
 
