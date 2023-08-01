@@ -40,8 +40,8 @@ export class Erarolisto extends UIElement {
         this._on({
             "click": (event) => {
                 const trg = event.target;
-                if (trg.tagName == "LI") this._click(event);
-                else if (trg.tagName == "A") this._trigger("a_click",event,null);
+                if (trg.tagName == "A") this._trigger("a_click",event,null);
+                else this._click(event);
             }
             /*
             "click li": this._click,
@@ -51,7 +51,6 @@ export class Erarolisto extends UIElement {
     };
 
     aldonu(err) { // err: {line: <l>, pos: <p>, msg: <text>}
-        let added = false;
         /*
         var l = err.line || 0; // linio
         var p = err.pos || 0;  // posicio
@@ -60,30 +59,27 @@ export class Erarolisto extends UIElement {
         var item =  '<li value="' + v + (t? '" title="' + t :"") + (err.id?' id="'+err.id+'"':'') + '">'  + err.msg  + '</li>';
         */
         if (err && err.msg) {
-            const ul = document.createElement("ul");
             const html = new HTMLError().html(err);
 
             // if (!html)
             //     debugger;
 
-            ul.innerHTML = html;
-            const li = ul.children[0];
-
             const n_ = err.line? parseInt(err.line) : -1;
         //$("#kontrolo_list").fadeOut("fast", function() {
             // ni enŝovu la mesaĝon laŭ la ordo de linioj
-            this.element.querySelectorAll("li").forEach((l) => {
+            const aldonita = Array.from(this.element.querySelectorAll("li")).some((l) => {
                 if (parseInt(l.getAttribute("value") as string) > n_) {
-                    l.before(li);
+                    l.insertAdjacentHTML("beforebegin",html);
                 // $("#kontrolo_list").fadeIn("fast");
-                    added = true;
-                    return false;
+                    console.debug("enmetas "+err.line+" antaŭ "+n_);
+                    return true;
                 }
             });
             // se ni ne jam enŝovis ie, ni alpendigas en la fino
-            if ( !added ) {
-                this.element.append(li);
-            // $("#kontrolo_list").fadeIn("fast");
+            if ( !aldonita ) {
+                this.element.insertAdjacentHTML("beforeend",html);
+                console.debug("enmetas "+err.line+" ĉe fino");
+                // $("#kontrolo_list").fadeIn("fast");
             }
        }
         //});
@@ -100,13 +96,17 @@ export class Erarolisto extends UIElement {
         // la atributo value de li donas la linion en la XML-teksto,
         // la atributo title de li donas line:pos
         const el = event.target;
-        const line_pos = el.getAttribute("value");
-        const artikolo = Artikolo.artikolo("#xml_text");
-        const xmlarea = Artikolo.xmlarea("#xml_text");
-        xmlarea?.goto(line_pos);
-        // okazigu eventon poziciŝanĝo ĉe Artikolo...
-        const ps: any = artikolo?.opcioj.poziciŝanĝo;
-        if (ps instanceof Function) ps(); 
+        if (el instanceof HTMLElement) {
+            const line_pos = el.closest("li")?.getAttribute("value");
+            if (line_pos) {
+                const artikolo = Artikolo.artikolo("#xml_text");
+                const xmlarea = Artikolo.xmlarea("#xml_text");
+                xmlarea?.goto(line_pos);
+                // okazigu eventon poziciŝanĝo ĉe Artikolo...
+                const ps: any = artikolo?.opcioj.poziciŝanĝo;
+                if (ps instanceof Function) ps();         
+            }
+        }
     };
 
 };
