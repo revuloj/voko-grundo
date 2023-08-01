@@ -490,7 +490,7 @@ export default function() {
         }
     }); 
     new Menu("#traduko_menuo", {
-        eroj: "li",
+        eroj: ":scope>li",
         reago: shanghu_trd_lingvon
     });  
 

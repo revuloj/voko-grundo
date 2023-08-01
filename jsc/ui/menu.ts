@@ -7,13 +7,91 @@ import { DOM } from './dom';
 import { UIElement } from './uielement';
 import { UIStil } from './uistil';
 
+class Menuer extends UIElement {
+    static menuo(element: HTMLElement|string) {
+        const menuer = UIElement.obj(element);
+        if (menuer instanceof Menuer) return menuer.menuo;
+    }
+
+    constructor(element: HTMLElement|string, public menuo: Menu) {
+        super(element,{});
+        // aldonu klakreagon
+        this.element.addEventListener("click",this._click);
+    };
+
+    _click(event) {
+        const menuo = Menuer.menuo(event.currentTarget);
+        if (menuo) menuo.elekto(event,this);
+    };
+}
+
+class Submenu extends Menuer {
+    static submenuo(element: HTMLElement|string) {
+        const sm = UIElement.obj(element);
+        if (sm instanceof Submenu) return sm;
+    }
+
+    static sublisto(element: HTMLElement|string) {
+        const el = element instanceof HTMLElement? element: DOM.e(element);
+        return el?.querySelector("ul,ol");
+    }
+
+    constructor(element: HTMLElement|string, menuo: Menu) {
+        super(element,menuo);
+        this.montru(false); // kaŝu komence
+        // aldonu klakreagon
+        this.element.addEventListener("click",this._click);
+    };
+
+    montru(montru = true) {
+        const sublst = Submenu.sublisto(this.element);
+        
+        if (sublst instanceof HTMLElement) {
+            if (montru) {
+                this.element.classList.remove(UIStil.submenuo_fermita);
+                DOM.kaŝu(sublst,false); // malkaŝu
+                // metu la submenuon tuj apud la menueron
+                sublst.style.left = ""+(this.element.offsetLeft+this.element.offsetWidth)+"px";
+                sublst.style.top = ""+this.element.offsetTop+"px";
+            } else {
+                this.element.classList.add(UIStil.submenuo_fermita);
+                sublst.classList.add(UIStil.menuo);
+                DOM.kaŝu(sublst);    
+            }
+        }
+    }
+
+    _click(event) {
+
+        const m_el = event.currentTarget;
+        const subm = Submenu.submenuo(m_el);
+
+        console.debug("submenuo: "+m_el.textContent);
+
+
+        const sublst = Submenu.sublisto(m_el);
+        if (subm && sublst instanceof HTMLElement) {
+            // malfermu, ser fermita; fermu, se malfermiata
+            const kaŝita = DOM.kaŝita(sublst);
+
+            // evtl. fermu ĉiujn aliajn
+            const menuo = Menuer.menuo(m_el)
+            if (menuo) menuo.fermu_submenuojn();
+
+            // montru ĉi-tiun, se antaŭe estis kaŝita
+            if (kaŝita) subm.montru(true);
+        }
+    }
+}    
+
+
 export class Menu extends UIElement {
     //valoroj: any;
 
     static aprioraj: {
-        eroj: "li",
+        eroj: ":scope>li",
         reago: undefined
-     }
+    }
 
     static menu(element: HTMLElement|string) {
         const m = super.obj(element);        
@@ -38,40 +116,30 @@ export class Menu extends UIElement {
     }
 
     _preparu() {
-        this.element.querySelectorAll(this.opcioj.eroj).forEach((menuero) => {
-            menuero.classList.add(UIStil.menuero);
+
+        this.element.querySelectorAll(this.opcioj.eroj).forEach((ero) => {
+            ero.classList.add(UIStil.menuero);
 
             // ĉu submenuo? traktu tiun submenuon            
-            const sub = this._submenuo(menuero);
-            if (sub) {
-                this._montru_submenuon(menuero,false); // kaŝu
+            const sublst = Submenu.sublisto(ero);
+            if (sublst) {
+                const subm = new Submenu(ero,this);
 
-                // ni aldonas klak-reagon al la menuero
-                menuero.addEventListener("click",(event)=> {
-                    this.element.querySelectorAll(this.opcioj.eroj).forEach((m_ero) => {
-                        // estas la menuero mem, ni montras aŭ kaŝas ĝian submenuon
-                        if (m_ero === menuero) {
-                            const kaŝita = DOM.kaŝita(sub);
-                            this._montru_submenuon(menuero,kaŝita);
-                        } else { // ĉiujn aliajn submenuojn kaŝu kiam ni klakas sur unu el la ĉef-menueroj!
-                            DOM.kaŝu(this._submenuo(m_ero));
-                        }
-                    });
-                });
-            } else if (menuero.textContent == '-') {
+            } else if (ero.textContent == '-') {
                 // apartigilo sen kroma funkcio
-                menuero.classList.add(UIStil.menudividilo);
-            } else {
-                // reago al elekto de menuero (kiu ne estas submenuo)
-                menuero.addEventListener("click",(event) => 
-                    this.opcioj.reago.call(this,event,{menuero: menuero}));
-            }
+                ero.classList.add(UIStil.menudividilo);
 
+            } else {
+                // simpla (sen submenuo)
+                new Menuer(ero,this);
+            }
         });
     }
 
     _klavpremo(event) {
         const el = event.target;
+        const subm = Submenu.submenuo(el);
+
         function iru(el: Element|null, malsupren: boolean) {
             let mi = el;
             if (mi) do {
@@ -94,11 +162,11 @@ export class Menu extends UIElement {
                     iru(el,false);
                     break;
                 case "ArrowRight":
-                    this._montru_submenuon(el,true);
+                    if (subm) subm.montru(true);
                     break;
                 case "ArrowLeft":
                 case "Dead":
-                    this._montru_submenuon(el,false);
+                    if (subm) subm.montru(false);
                     break;
                 case "Enter":
                 case "Space":
@@ -108,25 +176,16 @@ export class Menu extends UIElement {
         }
     }
 
-    _submenuo(menuero) {
-        return menuero.querySelector("ul,ol");
+    elekto(event,menuero) {
+        this.opcioj.reago
+            .call(this,event,{menuero: menuero.element});
     }
 
-    _montru_submenuon(menuero, montru = true) {
-        const sub = this._submenuo(menuero);
-        if (sub) {
-            if (montru) {
-                DOM.kaŝu(sub,false);
-                menuero.classList.remove(UIStil.submenuo_fermita);
-                // metu la sumenuon tuj apud la menueron
-                sub.style.left = ""+(menuero.offsetLeft+menuero.offsetWidth)+"px";
-                sub.style.top = ""+menuero.offsetTop+"px";
-            } else {
-                menuero.classList.add(UIStil.submenuo_fermita);
-                sub.classList.add(UIStil.menuo);
-                DOM.kaŝu(sub);    
-            }
-        }
+    fermu_submenuojn() {
+        this.element.querySelectorAll(this.opcioj.eroj).forEach((ero) => {
+            const subm = Submenu.submenuo(ero)
+            if (subm) subm.montru(false);
+        });
     }
 
     refreŝigu() {

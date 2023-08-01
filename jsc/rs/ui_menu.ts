@@ -22,7 +22,7 @@ export default function() {
 
     // menuo
     new Menu("#menu", {
-          eroj: "li:not(.ui-widget-header)",
+          eroj: ":scope>li:not(.ui-widget-header)",
           reago: menu_selected
       });
         
