@@ -29,8 +29,8 @@ export class List extends UIElement {
         if (e instanceof List) return e;
     }
 
-    constructor(element: HTMLElement|string, opcioj?: any) {
-        super(element, opcioj, List.aprioraj);
+    constructor(element: HTMLElement|string, opcioj?: any, aprioraj = List.aprioraj) {
+        super(element, opcioj, aprioraj);
     
         // listerojn ni povas aktivigi per alklako
         // la aperon de alklakita listero vi povas infuli per
@@ -61,13 +61,18 @@ export class List extends UIElement {
      */
     aldonu(val: string|number, listero: Element, obj?: any) {
         const kmp = this.opcioj.komparo;
+        let aldonita = false;
 
-        const aldonita = Array.from(this.element.querySelectorAll(this.opcioj.listero)).some((l) => {
-            if ( kmp(l.getAttribute("value"),val) > 0 ) {
-                l.before(listero);
-                return true;
-            }
-        });
+        if (val && kmp) {
+            // provu aldoni la listeron la ordo (val)
+            aldonita = Array.from(this.element.querySelectorAll(this.opcioj.listero)).some((l) => {
+                if ( kmp(l.getAttribute("value"),val) > 0 ) {
+                    l.before(listero);
+                    return true;
+                }
+            });
+        };
+
         // se ni ne jam enŝovis ie, ni alpendigas en la fino
         if ( !aldonita ) {
             this.element.append(listero);

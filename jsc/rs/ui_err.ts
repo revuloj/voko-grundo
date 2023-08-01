@@ -8,7 +8,7 @@
 
 import * as u from '../u';
 import * as x from '../x';
-import { DOM, UIElement, Dialog } from '../ui';
+import { DOM, UIElement, List, Dialog } from '../ui';
 
 import { Artikolo } from './ui_art';
 import { show_xhr_error } from './ui_dlg';
@@ -20,11 +20,12 @@ interface XEraro extends Partial<x.LinePos> { id?: string, cls?: string, msg: st
 
 // console.debug("Instalante la erar- kaj kontrolfunkciojn...");
 
-export class Erarolisto extends UIElement {
+export class Erarolisto extends List {
 
-    static aprioraj: {
-        a_click: null
-    };
+    static aprioraj = Object.assign(List.aprioraj,{
+        a_click: null,
+        komparo: (a,b) => +a - +b
+    });
 
     static aldonu(element: HTMLElement|string, err) {
         const el = super.obj(element);
@@ -60,13 +61,11 @@ export class Erarolisto extends UIElement {
         */
         if (err && err.msg) {
             const html = new HTMLError().html(err);
-
-            // if (!html)
-            //     debugger;
-
             const n_ = err.line? parseInt(err.line) : -1;
-        //$("#kontrolo_list").fadeOut("fast", function() {
-            // ni enŝovu la mesaĝon laŭ la ordo de linioj
+            const ero = u.ht_html(html);
+
+            if (ero) super.aldonu(n_,ero);
+/*
             const aldonita = Array.from(this.element.querySelectorAll("li")).some((l) => {
                 if (parseInt(l.getAttribute("value") as string) > n_) {
                     l.insertAdjacentHTML("beforebegin",html);
@@ -81,8 +80,8 @@ export class Erarolisto extends UIElement {
                 console.debug("enmetas "+err.line+" ĉe fino");
                 // $("#kontrolo_list").fadeIn("fast");
             }
+            */
        }
-        //});
     };
 
     aldonu_liston(entries) {
