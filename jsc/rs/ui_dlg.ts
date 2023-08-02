@@ -1158,7 +1158,7 @@ function traduko_dlg_preparo() {
         u.HTTPRequest('get','revo_preflng',{},
             function(data) {
                 const pref_lngoj = JSON.parse(data);
-                u.agordo.preflng = pref_lngoj[0] || 'en'; // globala variablo (ui_kreo)
+                u.agordo.preflng = pref_lngoj[0] || 'en'; // malloka variablo (ui_kreo)
                 
                 const trd_aliaj = DOM.e("#traduko_aliaj");
 

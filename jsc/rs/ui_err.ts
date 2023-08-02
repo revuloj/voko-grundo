@@ -22,10 +22,11 @@ interface XEraro extends Partial<x.LinePos> { id?: string, cls?: string, msg: st
 
 export class Erarolisto extends List {
 
-    static aprioraj = Object.assign(List.aprioraj,{
+    static aprioraj = {
         a_click: null,
+        listero: "li", // CSS-elektilo por listeroj
         komparo: (a,b) => +a - +b
-    });
+    };
 
     static aldonu(element: HTMLElement|string, err) {
         const el = super.obj(element);
@@ -36,7 +37,6 @@ export class Erarolisto extends List {
 
     constructor(element: HTMLElement|string, opcioj: any) {
         super(element, opcioj, Erarolisto.aprioraj);
-
 
         this._on({
             "click": (event) => {
