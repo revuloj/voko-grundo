@@ -475,7 +475,7 @@ export default function() {
             traduko_dlg_art_lingvoj();
             Menu.refreŝigu("#traduko_menuo");
             // jam difinita en ui_kreo... var preflng = pref_lngoj? pref_lngoj[0] : 'en'; // globala variablo
-            const preflng = globalThis.preflng;
+            const preflng = u.agordo.preflng;
             traduko_dlg_plenigu_trd(preflng,DOM.t("#trd_pref_"+preflng));
             // adaptu altecon de la tabelo
             const view_h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
@@ -1158,7 +1158,7 @@ function traduko_dlg_preparo() {
         u.HTTPRequest('get','revo_preflng',{},
             function(data) {
                 const pref_lngoj = JSON.parse(data);
-                globalThis.preflng = pref_lngoj[0] || 'en'; // globala variablo (ui_kreo)
+                u.agordo.preflng = pref_lngoj[0] || 'en'; // globala variablo (ui_kreo)
                 
                 const trd_aliaj = DOM.e("#traduko_aliaj");
 

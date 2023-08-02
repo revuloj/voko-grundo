@@ -30,7 +30,7 @@ declare global {
     const MathJax: any; 
 }
 
-const revo_url = 'https://'+globalThis.revo_url; //reta-vortaro.de';
+const revo_url = 'https://' + u.agordo.revo_url; //reta-vortaro.de';
 
 export const revo_listoj = new RevoListoj('../voko');
 
@@ -611,7 +611,7 @@ function antaurigardo() {
                     // preparu la artikolon per ties JS!
                     /// KOREKTU: ni elprenis <head>, do ni devos alie provitzi tion:
                     //restore_preferences();    
-                    globalThis.lingvoj_xml = '../voko/lingvoj.xml'; // PLIBONIGU: distingu redaktilojn iel
+                    u.agordo.lingvoj_xml = '../voko/lingvoj.xml'; // PLIBONIGU: distingu redaktilojn iel
                                 // anstataŭ manipuli tie ĉi centran agordon!
                     artikolo.preparu_art();
     

@@ -1,9 +1,6 @@
 /**
- * Por eviti problemojn kun enpakado de moduloj (konkrete en google-closure-compiler)
- * ni kreas tie ĉi centre globajn variablojn. Vi povas aldoni pliajn kaj aliri ilin 
- * per   export const mia_variablo.
- * 
- * vd. ekz-e https://www.contentful.com/blog/2017/01/17/the-globalThis-object-in-javascript/
+ * Mallokaj variabloj. Vi povas aldoni pliajn kaj aliri ilin 
+ * per u.agordo.xxx 
  */
 
 export type StrObj = { [key: string]: string};
@@ -38,13 +35,13 @@ export namespace agordo {
   export const help_base_url = 'https://revuloj.github.io/temoj/';
   export const help_regulesp = 'sercho#ser%C4%89i-per-regulesprimoj';
 
-  export const lingvoj_xml = "../cfg/lingvoj.xml";
 // en Cetonio: '../voko/lingvoj.xml'
 
     // export const hazarda_url = "/cgi-bin/hazarda_art.pl";
     //export const inx_eo_url = "/revo/inx/_eo.html";
 
-// rigardata kiel variablo
+// rigardataj kiel variabloj
+  export let lingvoj_xml = "../cfg/lingvoj.xml";
   export let preflng = 'en';
 
 }

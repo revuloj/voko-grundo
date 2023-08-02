@@ -382,39 +382,33 @@ export namespace artikolo {
      */
     function maletendu_ekz(dif: Element) {
         var ekz_cnt = 0;
-        dif.childNodes.forEach( (ch) => {
-            if (ch.nodeType == 1) { // Element
-                const e = ch as Element;
-                // ekz
-                if (e.classList && e.classList.contains("ekz")) {
-                    ekz_cnt += 1;
-                    if (ekz_cnt > ekz_sojlo) {
-                        e.classList.add("kasxita");
-                    }            
-                } else {
-                    // se ni ĵus kaŝis iujn ekzemplojn, ni montru
-                    // etendilon "+nn..."
-                    if (ekz_cnt > ekz_sojlo) {
-                        var maletenditaj = ekz_cnt - ekz_sojlo;
-                        var pli = u.ht_elements([
-                                ["i",{class: "ekz pli"},
-                                    ["(",["A",{href: "#", class: "pli etendilo"},"+"+maletenditaj],")"]
-                                ]])[0];
-                        pli.addEventListener("click",etendu_ekz);
-                        dif.insertBefore(pli,ch);        
-                    }
-                    // ni rekomencu kalkuladon - atentu, ke ekzemploj de difino
-                    // ne nepre estas unu post alia, sed povas esti pli distritaj...
-                    ekz_cnt = 0;
+
+        for (const ch of Array.from(dif.childNodes)) {            
+            if (ch instanceof HTMLElement && ch.classList && ch.classList.contains("ekz")) {
+                ekz_cnt += 1;
+                if (ekz_cnt > ekz_sojlo) {
+                    ch.classList.add("kasxita");
                 }
-            }
-            // !Element
-            /*
-            else if ( ch.nextSibling && ch.nodeType == 3 && ! ch.nodeValue.trim() ) {
-                // ignoru "blankjn" tekstojn
+            } else if ( ch.nextSibling && ch.nodeType == Node.TEXT_NODE && ! ch.nodeValue.trim() ) {
+                // ignoru "blankajn" tekstojn
                 continue;
-            }*/
-        }); 
+            } else {
+                // se ni ĵus kaŝis iujn ekzemplojn, ni montru
+                // etendilon "+nn..."
+                if (ekz_cnt > ekz_sojlo) {
+                    var maletenditaj = ekz_cnt - ekz_sojlo;
+                    var pli = u.ht_elements([
+                            ["i",{class: "ekz pli"},
+                                ["(",["A",{href: "#", class: "pli etendilo"},"+"+maletenditaj],")"]
+                            ]])[0];
+                    pli.addEventListener("click",etendu_ekz);
+                    dif.insertBefore(pli,ch);        
+                }
+                // ni rekomencu kalkuladon - atentu, ke ekzemploj de difino
+                // ne nepre estas unu post alia, sed povas esti pli distritaj...
+                ekz_cnt = 0;
+            }
+        };    
     }
 
     /**
@@ -507,7 +501,7 @@ export namespace artikolo {
             }
         }
 
-        if (pied) { // en la redeaktilo eble jam foriĝis...
+        if (pied) { // en la redaktilo eble jam foriĝis...
             // aldonu ligilon "preferoj"
             const first_a = pied.querySelector("A");
             if (first_a) {                

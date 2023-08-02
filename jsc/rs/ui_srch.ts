@@ -354,7 +354,7 @@ export function regulEsprimo(event) {
     // eble traktu la helpopeton en aparta metodo!
     const re = event.target.id;
     if (re == "re_helpo") {
-        window.open(globalThis.help_base_url + globalThis.help_regulesp);
+        window.open(u.agordo.help_base_url + u.agordo.help_regulesp);
         return;
     };
     /* else if (re == "sercho_det_regexes") {
@@ -997,7 +997,7 @@ class Trovo extends UIElement {
                     data: v.data,
                     enmetu: function(event,values) {
                         // montru enmeto-dialogon
-                        DOM.al_v("#ekzemplo_dlg input","");
+                        DOM.malplenigu("#ekzemplo_dlg input");
                         const dlg = Dialog.dialog("#ekzemplo_dlg");
                         if (dlg) {
                             dlg.al_valoroj(values);
