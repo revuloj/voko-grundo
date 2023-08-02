@@ -383,6 +383,17 @@ export namespace artikolo {
     function maletendu_ekz(dif: Element) {
         var ekz_cnt = 0;
 
+        /*
+            Sisekvajn ekzemplojn ni montras nur ĝis ekz_sojlo poste kaŝas kaj antataŭigas per
+            etendilo [+N]. Se aperas iu alia intera dif-teksto, la kalkulo rekomenciĝas. Tiel ni
+            ne konfuza kaŝas iujn unuopajn postajn ekzemplojn, kiuj pli klarigas la difinon k.s.
+            Blankajn intertekstojn ni ignoras - krom la lasta, ĉe kiu ni aldonas [+N]. Ni supozas,
+            ke ĉiam post la lasta ekz-o venas almenaŭ iom da blanka teksto. Se iam tio ne validus
+            plu, necesus fina kontrolo ĉu faldiĝis ekz-oj sen jam aldoni [+N], kaj tiam aldoni ĝin antaŭ </dif>
+
+            Noto: tion ni ne povus atingi per pli simpla dif.querySelectorAll(".ekz+.ekz"), ĉar
+            ĝi ne konsiderus la intertekstojn, sed nur elementojn.
+        */
         for (const ch of Array.from(dif.childNodes)) {            
             if (ch instanceof HTMLElement && ch.classList && ch.classList.contains("ekz")) {
                 ekz_cnt += 1;
@@ -390,10 +401,10 @@ export namespace artikolo {
                     ch.classList.add("kasxita");
                 }
             } else if ( ch.nextSibling && ch.nodeType == Node.TEXT_NODE && ! ch.nodeValue.trim() ) {
-                // ignoru "blankajn" tekstojn
+                // ignoru "blankajn" tekstojn (krom evtl. lasta)
                 continue;
             } else {
-                // se ni ĵus kaŝis iujn ekzemplojn, ni montru
+                // Se ni ĵus kaŝis iujn ekzemplojn, ni montru
                 // etendilon "+nn..."
                 if (ekz_cnt > ekz_sojlo) {
                     var maletenditaj = ekz_cnt - ekz_sojlo;
