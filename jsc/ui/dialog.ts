@@ -14,20 +14,9 @@ export class Dialog extends UIElement {
 
     static aprioraj = {
         kampoj: {},
+        /* 'undefined' ne superŝargiĝos en UIElement.fandu, ĉu adapti tie?
         butonoj: undefined,
         malfermu: undefined,
-        /*
-        autoOpen: false,
-        width: "auto",
-        closeText: "", // fermu
-        */
-        /*
-        show: {
-            effect: "fade"
-        },
-        hide: {
-            effect: "fade"
-        },
         */
         valorŝanĝo: null // evento lanĉita, post voko de "valoroj" kun novaj valoroj
     };
