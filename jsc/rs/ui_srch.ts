@@ -1110,7 +1110,7 @@ class Trovo extends UIElement {
  * Difinas jqueryui-elementon por la butono de citaĵo-kunteksto.
  */
 class KuntekstoBtn extends UIElement {
-    static aprioraj: {
+    static aprioraj = {
         fno: null // frazo-numero per kiu peti kuntekston
     };
 
@@ -1161,7 +1161,7 @@ class KuntekstoBtn extends UIElement {
  * Difinas jqueryui-elementon por la butono de fonto-rigardo.
  */
 class RigardoBtn extends UIElement {
-    static aprioraj: {
+    static aprioraj = {
         url: null
     };
 
@@ -1192,7 +1192,7 @@ class RigardoBtn extends UIElement {
  * kiu helpas al uzanto enmeti la trovaĵon en la XML-artikolon.
  */
 class EkzemploBtn extends UIElement {
-    static aprioraj: {
+    static aprioraj = {
         data: null,
         enmetu: null //event
     };
@@ -1242,7 +1242,7 @@ class EkzemploBtn extends UIElement {
  * kiu helpas al uzanto enmeti la trovaĵon en la XML-artikolon.
  */
 class BildoBtn extends UIElement {
-    static aprioraj: {
+    static aprioraj = {
         data: null,
         enmetu: null //event
     };

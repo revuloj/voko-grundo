@@ -94,7 +94,7 @@ class Submenu extends Menuer {
 export class Menu extends UIElement {
     //valoroj: any;
 
-    static aprioraj: {
+    static aprioraj = {
         eroj: ":scope>li",
         reago: undefined
     }

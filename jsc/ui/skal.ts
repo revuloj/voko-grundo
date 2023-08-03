@@ -9,13 +9,17 @@ import { UIStil } from './uistil';
 export class Skal extends UIElement {
     //valoroj: any;
 
-    static aprioraj: {
+    /*
+    public opcioj: {
         min?: number,
         max?: number,
         valoroj?: Array<number>,
         kreo?: Function,
         movo?: Function
     }
+    */
+
+    static aprioraj = {};
 
     static skal(element: HTMLElement|string) {
         const e = super.obj(element);

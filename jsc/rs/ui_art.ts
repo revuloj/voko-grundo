@@ -66,13 +66,23 @@ export class Artikolo extends UIElement {
         _ent: new RegExp('&([a-zA-Z0-9_]+);','g')
     };
 
-    static aprioraj: {
+    /*
+    public opcioj: {
         xmlarea: Xmlarea,
-        dosiero: '',
+        dosiero: string,
         reĝimo: 'redakto'|'aldono', // ĉe novaj artikoloj 'aldono'   
-        poziciŝanĝo: null, // evento
-        tekstŝanĝo: null // evento
+        poziciŝanĝo: Function, // evento
+        tekstŝanĝo: Function // evento
     };
+    */
+
+    static aprioraj = {
+        //xmlarea: undefined, // 'undefined' ne superŝargiĝos en UIElement.fandu, ĉu ni ŝanĝu tie?
+        dosiero: '',
+        reĝimo: 'redakto', 
+        poziciŝanĝo: null, 
+        tekstŝanĝo: null 
+    }
 
     _change_count = 0
 
@@ -118,9 +128,10 @@ export class Artikolo extends UIElement {
     restore() {
         var str = window.localStorage.getItem("red_artikolo");
         var art = (str? JSON.parse(str) : null);
-        if (art && art.xml) {
+        const xmlarea = this.opcioj.xmlarea;
+
+        if (xmlarea && art && art.xml) {
             //this.element.val(art.xml);
-            const xmlarea = this.opcioj.xmlarea;
             xmlarea.setText(art.xml);
             this.opcioj.reĝimo = art.red;
             // ni povus alternaitve demandi xmlarea.getDosiero(), 

@@ -11,10 +11,10 @@ import { UIStil } from './uistil';
 export class Slipar extends UIElement {
     //valoroj: any;
 
-    static aprioraj: { 
-        aktiva: number;
-        poste: undefined;
-        antaŭe: undefined;
+    static aprioraj = { 
+        aktiva: 0,
+        poste: undefined,
+        antaŭe: undefined
     };
 
     static slipar(element: HTMLDialogElement|string) {

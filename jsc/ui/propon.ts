@@ -8,9 +8,16 @@ import { UIElement } from './uielement';
 
 export class Propon extends UIElement {
 
-    static aprioraj: { 
-        source: undefined,
-        select: undefined
+    static aprioraj = { 
+        /* ĉar datalist ne sendas eventon, kiam ni elektas ion, ni
+        bezonas iel distingi entajpitajn vortojn de elektitaj, resp. certigi
+        ke elektante listeron, tiu distingiĝu de la entajpita vorto, por kaŭzi
+        input/change-eventon ĉe la celkampo. 
+        Tiucele ni aldonas sufikson al la listeroj, per kiu ni distinas ilin.
+        Apriore ni uzas nerompeblan spaceton. */
+        sufikso: '\u202f',
+        source: undefined, // la fonto povas esti areo aŭ funkcio, kiu liveras la erojn
+        select: undefined // reago al elekto
     }
 
     static propon(element: HTMLElement|string) {
@@ -102,12 +109,14 @@ export class Propon extends UIElement {
 
     proponlisto(listo: Array<any>) {
         const datalist = this._datalist();
+        const suff = this.opcioj.sufikso;
+
         if (datalist instanceof HTMLElement) {
             datalist.textContent = ''; // evtl. malplenigu                
             listo.forEach((e) => {
                 const val = e.value;
                 const opt = document.createElement("option");
-                opt.setAttribute("value",val);
+                opt.setAttribute("value",val+suff);
                 opt._voko_propono = e;
                 datalist.append(opt);
             });

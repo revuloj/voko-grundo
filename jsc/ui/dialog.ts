@@ -12,7 +12,7 @@ export class Dialog extends UIElement {
     start_pos: {x: number, y: number};
     start_offs: {x: number, y: number};
 
-    static aprioraj: {
+    static aprioraj = {
         kampoj: {},
         butonoj: undefined,
         malfermu: undefined,
