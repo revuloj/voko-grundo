@@ -104,7 +104,10 @@ export class XKlavaro {
         // certigu, ke fokus-ŝanĝoj en la posedanto (ekz. dialogo) memoriĝas
         if (this.dialogo) {
             this.dialogo.addEventListener("focusout",function(event) {
-                self.lasta_fokuso = (event.target as Element).id;
+                const element = event.target;
+                if (element instanceof HTMLElement && element.id 
+                    && (element.tagName == "INPUT" || element.tagName == "TEXTAREA"))
+                    self.lasta_fokuso = element.id;
             });            
             /*
             this.dialogo.querySelectorAll("textarea,input").forEach( (e) =>

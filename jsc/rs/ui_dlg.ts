@@ -499,7 +499,7 @@ export default function() {
         new x.XKlavaro("#traduko_butonoj","#traduko_dlg",null,
             () => Artikolo.xmlarea("#xml_text").getRadiko(), 
             undefined,
-            undefined)
+            function() { trd_input_shanghita(this.celo()) })
         .elemento_klavoj(klv);
         //DOM.ido_reago("#traduko_tabelo","blur","input",traduko_memoru_fokuson.bind(xklv));
         //DOM.ido_reago("#traduko_butonoj","click","div",traduko_butono_premo.bind(xklv));
@@ -1211,11 +1211,13 @@ function traduko_dlg_art_lingvoj() {
     }
 }
 
+/*
 function traduko_memoru_fokuson(event) {
     //DOM.al_datum("#traduko_dlg","last-focus",this.id);
     const id = event.currentTarget.id;
     this.lasta_fokuso = id;
 }
+*/
 
 /*
 function traduko_butono_premo(event) {
@@ -1253,42 +1255,35 @@ function traduko_butono_premo(event) {
 }
 */
 
-
+/*
 // lingvoj - sort function callback for jQuery
 function jsort_lng(a, b){
-    //return ($(b).text()) < ($(a).text()) ? 1 : -1;    
-   // try { // 2017-06: tio ankoraŭ ne bone funkcias, ekz. en Chromium "c" venos antaŭ "ĝ" ...?
-    //    $(a).text().localeCompare($(b).text(), "eo"); 
-    //} catch (e) {
-        var at = a.textContent||'';
-        var bt = b.textContent||'';
-        var pos = 0,
-          min = Math.min(at.length, bt.length);
-        // ne perfekte sed pli bone ol ĉ, ĝ ... tute ĉe la fino...
-        var alphabet = 'AaBbCĈcĉDdEeFfGĜgĝHĤhĥIiJĴjĵKkLlMmNnOoPpRrSŜsŝTtUŬuŭVvZz';
+    var at = a.textContent||'';
+    var bt = b.textContent||'';
+    var pos = 0,
+        min = Math.min(at.length, bt.length);
+    // ne perfekte sed pli bone ol ĉ, ĝ ... tute ĉe la fino...
+    var alphabet = 'AaBbCĈcĉDdEeFfGĜgĝHĤhĥIiJĴjĵKkLlMmNnOoPpRrSŜsŝTtUŬuŭVvZz';
 
-        while(at.charAt(pos) === bt.charAt(pos) && pos < min) { pos++; }
-        return alphabet.indexOf(at.charAt(pos)) > alphabet.indexOf(bt.charAt(pos)) ?
-          1 : -1;
-   // }
+    while(at.charAt(pos) === bt.charAt(pos) && pos < min) { pos++; }
+    return alphabet.indexOf(at.charAt(pos)) > alphabet.indexOf(bt.charAt(pos)) ?
+        1 : -1;
 }
+*/
 
+/*
 // lingvoj - sort function callback for normal strings
 function sort_lng(at, bt){
-    //try { // 2017-06: tio ankoraŭ ne bone funkcias, ekz. en Chromium "c" venos antaŭ "ĝ" ...?
-    //    at.localeCompare(bt, "eo"); 
-    //} catch (e) {
-        var pos = 0,
-          min = Math.min(at.length, bt.length);
-        // ne perfekte sed pli bone ol ĉ, ĝ ... tute ĉe la fino...
-        var alphabet = 'AaBbCĈcĉDdEeFfGĜgĝHĤhĥIiJĴjĵKkLlMmNnOoPpRrSŜsŝTtUŬuŭVvZz';
+    var pos = 0,
+        min = Math.min(at.length, bt.length);
+    // ne perfekte sed pli bone ol ĉ, ĝ ... tute ĉe la fino...
+    var alphabet = 'AaBbCĈcĉDdEeFfGĜgĝHĤhĥIiJĴjĵKkLlMmNnOoPpRrSŜsŝTtUŬuŭVvZz';
 
-        while(at.charAt(pos) === bt.charAt(pos) && pos < min) { pos++; }
-        return alphabet.indexOf(at.charAt(pos)) > alphabet.indexOf(bt.charAt(pos)) ?
-          1 : -1;
-    //}
+    while(at.charAt(pos) === bt.charAt(pos) && pos < min) { pos++; }
+    return alphabet.indexOf(at.charAt(pos)) > alphabet.indexOf(bt.charAt(pos)) ?
+        1 : -1;
 }
-
+*/
 
 function traduko_dlg_plenigu_trd(lng,lingvo_nomo) {
     // forigu antauajn eventojn por ne multobligi ilin...
@@ -1378,7 +1373,14 @@ function traduko_dlg_plenigu_trd(lng,lingvo_nomo) {
                             const next_id = parts[0] + ':' + parts[1] + ':' + (parseInt(parts[2]) + 1);
                             last_input_of_mrk.insertAdjacentHTML("afterend",'<br/><input id="' + next_id 
                                 + '" type="text" name="' + next_id + '" size="30" value=""/>');
+
+                            // reago al ŝanĝo de enhavo
+                            const aldonita = document.getElementById(next_id);
+                            if (aldonita) {
+                                DOM.reago(aldonita, "change", trd_shanghita);
+                            }
                         }
+
                     } // else: estu ĉiam almenaŭ unu eĉ se malplena kampo....
                 }
             });
