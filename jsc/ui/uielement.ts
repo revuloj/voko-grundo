@@ -30,7 +30,7 @@ export class UIElement {
             return (item && typeof item === 'object' && !Array.isArray(item));
         };
 
-      let output = Object.assign({}, target);
+    let output = Object.assign({}, target);
       if (isObject(target) && isObject(source)) {
         Object.keys(source).forEach(key => {
           if (isObject(source[key])) { // la fonto enhavas objekton kiel valoro de 'key'
@@ -39,14 +39,14 @@ export class UIElement {
             else // se ambaŭ enhavas 'key', ni kunfandas ambaŭ en unu objekton
               output[key] = UIElement.fandu(target[key], source[key]);
           } else { // la fontvaloro ne estas objekto, tiam ni transprenas ĝian valoron
-                   // evt-e anstataŭigante tiun de la celobjekto
+                    // evt-e anstataŭigante tiun de la celobjekto
             Object.assign(output, { [key]: source[key] });
           }
         });
-      } else {
+      } else if (source) {
         // se target ne estas objekto ni anstataŭigas ĝian valoron
         output = source;
-      }
+      }  
       return output;
     }
     
