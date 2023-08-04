@@ -41,6 +41,7 @@ export class Dialog extends UIElement {
     }
 
     public faldita: boolean = false;
+    private unua: HTMLElement | null;
 
     constructor(element: HTMLDialogElement|string, opcioj: any) {
         super(element, opcioj, Dialog.aprioraj);
@@ -49,6 +50,16 @@ export class Dialog extends UIElement {
 
         // evtl. kaŝu
         if (this.element.tagName != "DIALOG") DOM.kaŝu(this.element);
+
+        // la komenca enigkampo povas markiĝis per tabindex=1, sed ni
+        // nun forigas tiun atributon por ne konfuzi la enfermo-algoritmon
+        this.unua = this.element.querySelector("[tabindex='1']");
+        if (this.unua) {
+            this.unua.setAttribute("tabindex","0");
+        } else {
+            // alie ni prenos la nun unuan konvenan kampon (poste la unua estos la fermo-butono in la titolo....)
+            this.unua = this.element.querySelector("input,textarea,button,selection");
+        }
         
         // aldonu kruceton por fermi en la titollinio
         const h = this.element.querySelector("h1,h2,h3,h4");
@@ -78,6 +89,8 @@ export class Dialog extends UIElement {
             }
             this.element.append(butonujo);
         }
+        // per keydown-evento ni enfermas TAB-premojn por ke ili ne povu forlasi la dialogon
+        this.element.addEventListener("keydown",this.tab_enfermo.bind(this));
     }
 
     /**
@@ -103,6 +116,11 @@ export class Dialog extends UIElement {
             DOM.kaŝu(this.element,false);
         else
             (this.element as HTMLDialogElement).show();
+
+        // metu la fokuson sur la unuan elementon (kiu havis tabindex=1)
+        if (this.unua) {
+            this.unua.focus();
+        }
     }
 
     malfermu_insiste() {
@@ -118,6 +136,26 @@ export class Dialog extends UIElement {
             DOM.kaŝu(this.element);
         else
            (this.element as HTMLDialogElement).close();
+    }
+
+    tab_enfermo(evento) {
+        if (evento.keyCode === 9) { // TAB
+            const fokuseblaj = this.element.querySelectorAll("input,button,textarea,selection");
+            if (fokuseblaj.length) {
+               const unua = <HTMLElement>fokuseblaj[0];
+               const lasta = <HTMLElement>fokuseblaj[fokuseblaj.length - 1];
+               const shift = evento.shiftKey;
+               if (shift) {
+                    if (evento.target === unua) { // shift-tab premita ĉe unua fokusebla dialog-elemento
+                        lasta.focus();
+                        evento.preventDefault();
+                    }
+                } else if (evento.target === lasta) { // tab pressed on last input in dialog
+                    unua.focus();
+                    evento.preventDefault();
+                }
+            }
+        }
     }
 
     faldu(faldita = true) {
