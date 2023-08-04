@@ -4,11 +4,10 @@
  */
 
 import { DOM } from './dom';
-import { UIElement } from './uielement';
 import { Eraro } from './erar';
 
 
-export class Valid extends UIElement {
+export class Valid {
 
     static aldonu(e: HTMLElement|string, opcioj: any) {
         const el = (typeof e === "string")? document.querySelector(e) : e;
@@ -40,52 +39,37 @@ export class Valid extends UIElement {
             return true; // se neniu testo difinitia, tiam apriore valida
     }
 
-/*
-function() {
-    var valid = true;
-    this.each(function() {
-        const e = $(this);
-        if (e.Checks && e.Checks("instance")) {
-            if (! e.Checks("check")) valid=false;
-        }
-    });
-    return valid;
-}
-*/
-
-/*
-    _default: any = {
-        // testoj kun mesaĝoj, montrendaj, se la koncerna testo malsukcesas, ekz-e:
-        // nonempty: 'Valoro de X devas ion enhavi',
-        // pattern: /^...$/ or pattern: { regex: /^...$/, message: "bla bla" },
-        // err_to: '#my_err' // kie montri la eraron        
-    };
-    */
-
     _nonempty?: boolean;
     _nonempty_msg?: string;
     _pattern?: RegExp;
     _pattern_msg?: string;
     _err_fld?: string;
 
-    constructor(element: HTMLElement, opcioj: any) {
-        super(element,opcioj);
+    public element;
 
-        const id = this.element.id;
-        if (this.opcioj.nonempty) {
-           this._nonempty = true;
-           this._nonempty_msg = this.opcioj.nonempty;
+    constructor(element: HTMLElement|string, public opcioj: any) {
+
+        const el = (typeof element === "string")? document.querySelector(element) as HTMLElement : element;
+
+        if (el) {
+            this.element = el;
+
+            const id = this.element.id;
+            if (this.opcioj.nonempty) {
+                this._nonempty = true;
+                this._nonempty_msg = this.opcioj.nonempty;
+            }
+            //if (typeof this.options.pattern === 'regexp') {
+            if (this.opcioj.pattern instanceof RegExp) {
+                var label = DOM.t("label[for='"+id+"']");
+                this._pattern  = this.opcioj.pattern;
+                this._pattern_msg = label ? 'La donita valoro por ' + label + 'ne estas valida' : 'Nevalida valoro.';
+            } else if (typeof this.opcioj.pattern === 'object') {
+                this._pattern  = this.opcioj.pattern.regex;
+                this._pattern_msg = this.opcioj.pattern.message;  
+            }
+            this._err_fld = this.opcioj.err_to;
         }
-        //if (typeof this.options.pattern === 'regexp') {
-        if (this.opcioj.pattern instanceof RegExp) {
-            var label = DOM.t("label[for='"+id+"']");
-            this._pattern  = this.opcioj.pattern;
-            this._pattern_msg = label ? 'La donita valoro por ' + label + 'ne estas valida' : 'Nevalida valoro.';
-        } else if (typeof this.opcioj.pattern === 'object') {
-            this._pattern  = this.opcioj.pattern.regex;
-            this._pattern_msg = this.opcioj.pattern.message;  
-        }
-        this._err_fld = this.opcioj.err_to;
     };
 
     check() {
