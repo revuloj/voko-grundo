@@ -35,7 +35,8 @@ console.debug("Instalante la klavarfunkciojn...");
 export function xpress(event: KeyboardEvent) {
     const key = event.key;
     const trg = event.target;
-    if (trg instanceof HTMLInputElement && (key == 'x' || key == 'X')) {   // X or x
+    if ((trg instanceof HTMLInputElement || trg instanceof HTMLTextAreaElement) 
+        && (key == 'x' || key == 'X')) {   // X or x
         const res = xklavo(trg,key);
         if (!res) event.preventDefault();
     }
@@ -506,7 +507,7 @@ export class XKlavaro {
 }
 
 
-function xklavo(el: HTMLInputElement, key: string) {
+function xklavo(el: HTMLInputElement|HTMLTextAreaElement, key: string) {
 
     const cx1: any = {
         s: '\u015D',
