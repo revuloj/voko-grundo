@@ -258,6 +258,7 @@ export default function() {
                 DOM.al_v("#referenco_celo",'');
                 DOM.al_v("#referenco_enhavo",'');
                 DOM.al_v("#referenco_sercho",sel);
+                // trovu proponojn por la teksto en serĉkampo
                 Propon.propon("#referenco_sercho")?.proponu();
             }
         }

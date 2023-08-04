@@ -7,6 +7,7 @@ import { DOM } from './dom';
 import { UIElement } from './uielement';
 
 export class Propon extends UIElement {
+    private temp;
 
     static aprioraj = { 
         /* ĉar datalist ne sendas eventon, kiam ni elektas ion, ni
@@ -25,6 +26,7 @@ export class Propon extends UIElement {
         if (e instanceof Propon) return e;
     }
 
+
     constructor(element: HTMLInputElement|string, opcioj?: any) {
         super(element, opcioj, Propon.aprioraj);
 
@@ -38,6 +40,31 @@ export class Propon extends UIElement {
             // la fonto estas areo de objektoj, kies atributoj "value" enhavas la unuopajn vortojn
             this.proponlisto(this.opcioj.source);
         }
+
+        // Ni volas, ke la listo ankaŭ montriĝu, kiam ni montras per la muso al la kampo, ne nur post
+        // iu entajpo,
+        // vd. https://stackoverflow.com/questions/15622076/making-html5-datalist-visible-when-focus-event-fires-on-input
+        this.element.addEventListener("click", () => {
+            const dl = this._datalist();
+            if (dl instanceof HTMLElement) {
+                dl.style.display = "block";        
+                dl.style.display = "none";    
+            }
+            
+/*
+        this.element.addEventListener("mousedown", () => {
+            if (this.element instanceof HTMLInputElement) {
+                this.temp = this.element.value; 
+                this.element.value = ''    
+            }
+            */
+        });
+        /*
+        this.element.addEventListener("mouseup", () => {
+            if (this.element instanceof HTMLInputElement) 
+                this.element.value = this.temp
+        });
+        */
     }
 
     _datalist() {
