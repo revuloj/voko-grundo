@@ -856,8 +856,13 @@ function referenco_dlg_preparu() {
 }
 
 function referenco_listo_elekto(event,ui) {
-    if (ui.mrk) DOM.al_v("#referenco_sercho",'');
-    if (ui.mrk) DOM.al_v("#referenco_celo",ui.mrk);
+    // forigu sufikson de la listonomo
+    const lst = DOM.v("#referenco_listo").trim();
+    DOM.al_v("#referenco_listo",lst);
+    if (ui.mrk) {
+        DOM.al_v("#referenco_sercho",'');
+        DOM.al_v("#referenco_celo",ui.mrk);
+    }
     if (ui.kap) DOM.al_v("#referenco_enhavo",ui.kap);
 }
 
