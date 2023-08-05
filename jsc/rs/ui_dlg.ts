@@ -193,7 +193,7 @@ export default function() {
         err_to: "#lastaj_error"
     });
     new List("#lastaj_tabelo");
-    DOM.ido_reago("#lastaj_tabelo","click","td",lastaj_tabelo_premo);
+    DOM.klak("#lastaj_tabelo",lastaj_tabelo_premo);
     DOM.klak("#lastaj_rigardu",
         function(event) {
             event.preventDefault();
@@ -1634,7 +1634,8 @@ function plenigu_lastaj_liston() {
 
 function lastaj_tabelo_premo(event) {
     event.preventDefault();
-    const id = event.target.parentElement.id;
+    const trg = event.target;
+    const id = trg.closest("tr").id;
     const dtl = DOM.datum("#lastaj_listo","detaloj");
     let entry = dtl.filter(function(e) { if (e.id == id) return e; });
     if (entry) {
