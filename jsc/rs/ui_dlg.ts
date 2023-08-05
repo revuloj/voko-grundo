@@ -1651,7 +1651,7 @@ function lastaj_tabelo_premo(event) {
         }
         DOM.al_v("#lastaj_mesagho",'');
         if (entry.rez_url) {
-            u.HTTPRequest('post',entry.rez_url,{},
+            u.HTTPRequest('get',entry.rez_url,{},
                 function(data) {  
                     var rez = JSON.parse(data); 
                     if (rez && rez.mesagho) {
