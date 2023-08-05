@@ -622,6 +622,7 @@ function antaurigardo() {
                         DOM.al_t("#rigardo footer a[href*='/dok/']",".");
                         DOM.al_t("#rigardo footer a[href*='/xml/']",".");
                         DOM.al_t("#rigardo footer a[href*='/cgi-bin/']",".");
+                        DOM.al_t("#rigardo footer a[href*='?r=']",".");
                     }
     
                     /*
