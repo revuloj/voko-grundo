@@ -248,6 +248,12 @@ input[type='button']:focus,
     background-color: var(--btn-act-bgr-clr);
 }
 
+input[type='radio'],
+input[type='checkbox'] {
+    accent-color: var(--input-brd-clr);
+}
+
+
 .ui-button-icon,
 .ui-button-icon-only {
     background-color: var(--ibt-bgr-clr) !important;
