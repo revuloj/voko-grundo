@@ -641,7 +641,7 @@ function load_page(trg: string, url: string, push_state: boolean=true, whenLoade
         } else if (filename.startsWith("_plena")) {
             viaj_submetoj();
         } else if (filename == "bibliogr") {
-            bibliogr();
+            bibliogr(<string>url.split('#').pop());
         } else if (filename == "eraroj") {
             mrk_eraroj();
         }
@@ -1325,7 +1325,7 @@ function mrk_eraroj() {
  * Pridemandas la bibliografion kiel JSON de la servilo kaj prezentas ĝin kiel HTML
  * @param sort_by se donita, ni ordigos la bibliografion laŭ tiu kampo (bib,aut,tit)
  */
-function bibliogr(sort_by?: "bib"|"aut"|"tit") {
+function bibliogr(bib: string, sort_by?: "bib"|"aut"|"tit") {
     u.HTTPRequest('POST', g.bib_json_url, {x: "1"}, // ni sendu ion per POST por ĉiam havi aktualan liston
         function(data: string) {
             var json = (JSON.parse(data) as Array<Bibliogr>);
@@ -1367,6 +1367,10 @@ function bibliogr(sort_by?: "bib"|"aut"|"tit") {
                 }; // if json
                 const h1 = u.ht_element('h1',{},'bibliografio');
                 enh.append(h1,dl);
+
+                // rulu al la ĝusta bib-ero
+                const ero = document.getElementById(bib);
+                ero?.scrollIntoView();
             }
         },
         start_wait,
