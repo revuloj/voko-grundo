@@ -7,6 +7,8 @@
 // iloj por signaroj...
 //*********************************************************************************************
 
+import { voko_entities } from './voko_entities';
+
 declare global {
     interface String {
         hashFnv32a(asString: boolean, seed: number): number|string;
@@ -121,5 +123,16 @@ export function formatFloat(x: number, nbDec: number) {
     var decStr = d.toString(); var tmp = 10; while(tmp<nbDec && d*tmp < nbDec) {decStr = "0"+decStr; tmp*=10;}
     var eStr = e.toString();
     return signStr+eStr+","+decStr;
+}
+
+/**
+ * Anstataŭigas DTD-mallongigojn el vokourl.dtd
+ */
+export function dtd_url(str: string) {
+    for (const [mlg,val] of Object.entries(voko_entities)) {
+        if (val.startsWith("http") && str.indexOf(val) > -1) {
+            return str.replace(val,`&${mlg};`);
+        }
+    }
 }
 

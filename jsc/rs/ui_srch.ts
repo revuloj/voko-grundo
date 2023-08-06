@@ -1214,6 +1214,8 @@ class EkzemploBtn extends UIElement {
                 if (data.cit) {
                     valoroj = data.cit.fnt;
                     valoroj.frazo = data.cit.ekz;
+                    // evtl. uzu DTD-mallongigojn el vokourl.dtd
+                    if (valoroj.url) valoroj.url = x.dtd_url(valoroj.url);
 
                 // rezulto de Vikipedio-serĉo
                 } else if(data.pageid) {
