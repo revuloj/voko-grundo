@@ -48,7 +48,6 @@ export class Xmlarea {
     this.onselectsub = onSelectSub;
     this.synced = true;
     this.ar_in_sync = false; // por scii, ĉu la lasta antaŭrigardo estas aktuala...
-
   }
 
 
@@ -62,6 +61,7 @@ export class Xmlarea {
     // elektu la unuan (art)
     this.elekto = this.xmlstruct.strukturo[0];
     this.txtarea.value = this.xmlstruct.getSubtext(this.elekto);
+    this.ar_in_sync = false;
     this.resetCursor();   
   };
 

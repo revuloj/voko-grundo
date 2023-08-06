@@ -564,6 +564,10 @@ export class Artikolo extends UIElement {
                 xmlarea.replaceTrd(s.id,lng,trd);
             }
         }
+
+        xmlarea.setUnsynced(); // normale tio devus okazi per evento "change",
+                 // set foriginte jquery, tio ne plu funkcias kiel antaŭe, ĉar
+                 // _trigger ne kreas realan retumilan eventon, sed nur reagon laŭ opcioj.
         
         //this.element.change();
         this._trigger("change");
