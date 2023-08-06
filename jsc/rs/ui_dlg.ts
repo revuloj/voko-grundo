@@ -335,6 +335,12 @@ export default function() {
         .elemento_klavoj(klv);
     }
 
+    DOM.klak("#ekzemplo_amp",(ev) => {
+        ev.preventDefault();
+        const url = DOM.v("#ekzemplo_url"); 
+        if (url) DOM.al_v("#ekzemplo_url",x.amp_url(url));
+    });
+
     DOM.klavpremo("#ekzemplo_frazo",xpress);
     DOM.klavpremo("#ekzemplo_bib",xpress);
     DOM.klavpremo("#ekzemplo_vrk",xpress);

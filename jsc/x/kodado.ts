@@ -126,9 +126,23 @@ export function formatFloat(x: number, nbDec: number) {
 }
 
 /**
+ * Anstataŭigas & per &amp; en URL-oj post '?'
+ */
+export function amp_url(str: string): string {
+    // anstataŭigu & post ? per &amp;
+    const d = str.indexOf('?');
+    if (d > 1) {
+        return str.substring(0,d) + str.substring(d).replace(/&/g,'&amp;');
+    }
+    return str;
+}
+
+
+/**
  * Anstataŭigas DTD-mallongigojn el vokourl.dtd
  */
-export function dtd_url(str: string) {
+export function dtd_url(str: string): string {
+    // anstataŭigu URL-ojn per mallongigoj el vokourl.dtd
     for (const [mlg,val] of Object.entries(voko_entities)) {
         if (val.startsWith("http") && str.indexOf(val) > -1) {
             return str.replace(val,`&${mlg};`);
