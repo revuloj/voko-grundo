@@ -39,10 +39,10 @@ export namespace preferoj {
      */
     function load_pref_lng() {
         u.HTTPRequest('GET', g.lingvoj_xml, {},
-        function(request: XMLHttpRequest) {
+        function(data: string) {
             // Success!
             const parser = new DOMParser();
-            const doc = parser.parseFromString(request.response,"text/xml");
+            const doc = parser.parseFromString(data,"text/xml");
             const plist = document.getElementById("pref_lng");
             const alist = document.getElementById("alia_lng");
 

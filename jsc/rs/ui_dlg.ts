@@ -1057,7 +1057,7 @@ function plenigu_derivajxojn() {
         }
     }
     DOM.ej("#derivajho_listo option+option").forEach((o) => o.remove());
-    DOM.e("#derivajho_listo")?.append(drv_list);
+    DOM.e("#derivajho_listo")?.insertAdjacentHTML("beforeend",drv_list);
 }
 
 function derivajho_enmeti(event) {
