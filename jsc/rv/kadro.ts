@@ -1344,7 +1344,7 @@ function bibliogr(sort_by?: "bib"|"aut"|"tit") {
                 if (json) {
                     for (const bib of json) {          
                         // dt: la mallongigo evtl. kun href/url      
-                        const dt = u.ht_element('dt');
+                        const dt = u.ht_element('dt',{id: bib.bib});
                         if (bib.url) {
                             const a = u.ht_elements([
                                 ['a',{href: bib.url, target: '_new'},
