@@ -215,6 +215,9 @@ export class XKlavaro {
                     case 'kamele':
                         html += '<div class="klv elm_btn" data-cmd="kamelo" title="komenc-majuskloj">&#x23f5;Ab</div>';
                         break;
+                    case 'trd':
+                        html += '<div class="klv elm_btn" data-cmd="trd" title="traduko">trd</div>';
+                        break;
                     case 'dekstren':
                         html += '<div value="+2i" class="klv tab_btn" title="Ŝovu la markitan tekston dekstren.">&#x21E5;</div>';
                         break;
@@ -390,8 +393,15 @@ export class XKlavaro {
 
             if (this.postenmeto) this.postenmeto(event,{cmd: cmd});
 
+        // traduko
+        } else if (cmd == "trd") {
+            const sel = this.elekto();
+            const enm = '<trd lng="">' + sel + '</trd>';
+            this.enmeto(enm);
+            if (this.postenmeto) this.postenmeto(event,{cmd: cmd});
+
         // majusklaj komencliteroj de vortoj
-        } else if (cmd == "kamelo"){
+        } else if (cmd == "kamelo") {
             const sel = this.elekto();
             //var rad = sel.includes('<tld')? xmlGetRad($("#xml_text").val()) : '';
             const rad = sel.includes('<tld')? radiko : '';
@@ -399,7 +409,7 @@ export class XKlavaro {
             if (this.postenmeto) this.postenmeto(event,{cmd: cmd});
 
         // minuskligo
-        } else if (cmd == "minuskloj"){
+        } else if (cmd == "minuskloj") {
             const sel = this.elekto();
             this.enmeto(minuskligo(sel,radiko));
             if (this.postenmeto) this.postenmeto(event,{cmd: cmd});
