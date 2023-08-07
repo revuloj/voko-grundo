@@ -529,10 +529,11 @@ function antaurigardo() {
         
         if (! xml_text) {
             // PLIBONIGU: eble aldone testu: xml.startsWith("<?xml")
+
+            DOM.al_html("#rigardo","<br>¬ xml:<br>Nu, unue vi ŝargu aŭ kreu XML-tekston, poste la antaŭrigardo estos pli impresa.");
             return;
         }
-        
-        
+
         u.HTTPRequest('post',"revo_rigardo", { xml: xml_text },
             function(data) {   
                 const parser = new DOMParser();
