@@ -396,7 +396,11 @@ export class XKlavaro {
         // traduko
         } else if (cmd == "trd") {
             const sel = this.elekto();
-            const enm = '<trd lng="">' + sel + '</trd>';
+            // PLIBONIGU: principe povus interesti alilingva traduko
+            // do pli bone uzu regulesprimon, krome ni ankaŭ povus rigardi en antau_elekto()
+            const enm = this.post_elekto().indexOf("</trdgrp")>-1
+                ? '<trd>' + sel + '</trd>' 
+                : '<trd lng="">' + sel + '</trd>';
             this.enmeto(enm);
             if (this.postenmeto) this.postenmeto(event,{cmd: cmd});
 
@@ -478,7 +482,19 @@ export class XKlavaro {
         }*/
     };
 
+    antau_elekto(): string {
+        const element = this.celo();
+        return element.value.substring(
+            Math.max(0,element.selectionStart-20),
+            element.selectionStart);
+    }
 
+    post_elekto(): string {
+        const element = this.celo();
+        return element.value.substring(
+            element.selectionEnd,
+            element.selectionEnd+20);
+    }
         
     /**
      * Enmetas tekston ĉe la pozicio de kursoro, resp. anstataŭigas la nunan elekton per nova teksto.
