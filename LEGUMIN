@@ -3,6 +3,11 @@
 Por helpi fari programi kaj fari novajn eldonojn vi povas uzi la skriptojn `bin/eldono.sh` 
 kaj `bin/deplojo.sh`. Vd. README.md pri detaloj.
 
+Krei SVG-piktogramojn loke
+-------------------------
+- aldone al npm instalu texlive-metapost
+- npm run build:mp:loke
+
 Eventuala problemoj
 -------------------
 

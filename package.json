@@ -29,7 +29,7 @@
         "build:lint": "jshint build/rsj/*-2f-min.js",
         "doc": "jsdoc -d jsdoc jsc/*/*.js",
         "prebuild": "mkdir -p build",
-        "//prebuild:svg": "bin/mp2png_svg.sh",
+        "build:mp:loke": "bin/mp2png_svg.sh",
         "prebuild:css": "mkdir -p build/stl",
         "build:mp": "bin/mp2png_svg.sh",
         "build:svg": "bin/svg2css.sh build/smb/[ir]_*.svg > build/stl/piktogramoj.css",
