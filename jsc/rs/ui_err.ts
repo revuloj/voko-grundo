@@ -126,8 +126,8 @@ export function xmlkontrolo() {
               // malplena listo sendiĝas kiel [] aŭ [{}]
               let json = JSON.parse(data);
               if ( json.length === 0
-                || json.length == 1 && Object.keys(data[0]).length === 0) {
-                  json = [{ msg: "XML estas en ordo (sintakso).", cls: "status_ok" }];
+                || json.length == 1 && Object.keys(json[0]).length === 0) {
+                  json = [{ msg: "XML-sintakso estas en ordo.", cls: "status_ok" }];
               };
               const elisto = UIElement.obj("#dock_eraroj") as Erarolisto;
               if (elisto) elisto.aldonu_liston(
