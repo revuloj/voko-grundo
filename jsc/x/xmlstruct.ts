@@ -181,11 +181,11 @@ export class XmlStruct {
         // se la elemento havas markon, tio estas la plej bona identigilo
         return hash_str(subt.mrk);
       } else {
-        // se ne, ni uzas la unuajn aperantajn latinajn literojn por
+        // se ne, ni uzas la numeron kaj la unuajn aperantajn latinajn literojn por
         // identigi, ja konsciante, ke tiuj povos ŝanĝiĝi, sed tiam
         // ni rekalkulas la strukturon kaj akceptas, ke ni ne
         // retrovas la antaŭan elekton...
-        return hash_str(xmlteksto.substring(subt.de,subt.de+120).replace(rx,''));
+        return hash_str('_'+subt.no+'_'+xmlteksto.substring(subt.de,subt.de+120).replace(rx,''));
       }
     }
     // trovas la finon de elemento 'elm'
