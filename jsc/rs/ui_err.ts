@@ -25,7 +25,7 @@ export class Erarolisto extends List {
     static aprioraj = {
         a_click: null,
         listero: "li", // CSS-elektilo por listeroj
-        komparo: (a,b) => +a - +b
+        komparo: (a,b) => parseInt(a) - parseInt(b)
     };
 
     static aldonu(element: HTMLElement|string, err) {
