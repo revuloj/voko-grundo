@@ -289,10 +289,7 @@ export class XmlStruct {
     this.setText(
       this.xmlteksto.substring(0,s.al) 
       + "\n"+ xml 
-      + this.xmlteksto.substring(s.al+1));
-    // FARENDA: laŭeble ni ankaŭ elektu la novan subtekston, sed
-    // ni nur post la analizo scias ties id kaj mrk! Do ni ne povas 
-    // doni tiun kiel argumenton al structure()
+      + this.xmlteksto.substring(s.al));
   }
 
   /**
