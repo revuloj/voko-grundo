@@ -272,14 +272,18 @@ export class DOM {
     }
 
     /**
-     * Redonas tekstelekton de aktiva formularkampo
+     * Redonas tekstelekton de aktiva formularkampo aŭ alia HTML-elemento
      */
-    static elekto(e: HTMLInputElement|string): string|undefined {
-        const i = (typeof e === "string")? DOM.i(e) : e;
-        if (i instanceof HTMLInputElement || i instanceof HTMLTextAreaElement) {
-            const start = i.selectionStart||0;
-            const end = i.selectionEnd||0;
-            return i.value.substring(start, end);
+    static elekto(e: HTMLElement|string): string|undefined {
+        const el = (typeof e === "string")? DOM.i(e) : e;
+        if (el instanceof HTMLTextAreaElement || el instanceof HTMLInputElement) {
+            const start = el.selectionStart||0;
+            const end = el.selectionEnd||0;
+            return el.value.substring(start, end);
+        } else {
+            // PLIBONIGU: fakte tie ĉi ne gravas la elemento, povas esti pluraj eĉ en HTML-paĝo
+            // eble ni ankaŭ por Input/TextArea uzu window.getSelection, ĉu?
+            return window.getSelection()?.toString();
         }
     }
 
