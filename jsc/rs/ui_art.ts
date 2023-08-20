@@ -198,8 +198,6 @@ export class Artikolo extends UIElement {
         this._trigger("change");
     };
 
-
-
     _dragOver(event) {
         event.stopPropagation();
         event.preventDefault();

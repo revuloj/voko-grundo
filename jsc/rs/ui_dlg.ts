@@ -966,9 +966,10 @@ function ekzemplo_dlg_preparo() {
                             //console.log(this + " "+i+" "+e);
                             //console.debug($(this).children("bib").text() +  ": " + $(this).children("text").text());
                             return {
-                                value: e.querySelector("bib")?.textContent,
-                                label: e.querySelector("text")?.textContent,
-                                url: e.querySelector("url")?.textContent
+                                bib: e.querySelector("bib")?.textContent.trim(),
+                                value: e.querySelector("bib")?.textContent.trim() + ": " 
+                                    + e.querySelector("text")?.textContent.trim(),
+                                url: e.querySelector("url")?.textContent.trim()
                             };
                         }),
                 });
@@ -986,6 +987,8 @@ function ekzemplo_enmeti(event, nur_fnt) {
 
     var values = Dialog.valoroj("#ekzemplo_dlg");
     var xmlstr = '';
+
+    values.bib = values.bib.split(':')[0]|| '';
 
     if (nur_fnt) {
         const indent=8;
