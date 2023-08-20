@@ -631,6 +631,14 @@ function load_page(trg: string, url: string, push_state: boolean=true, whenLoade
 
         if (filename && filename.startsWith("redaktmenu")) {
             redaktilo.preparu_menu(); // redaktilo-paĝo
+
+            // ŝargu laŭbezone ankoraŭ fakojn kaj stiloj kaj
+            // transdonu la listojn al la redaktilo por poste kontrolado
+            // de stiloj kaj fakoj en la XML-artikolo
+            // teorie kontrolu povus okazi antaŭ finŝargo
+            // do pli ĝuste oni devus uzi promes-objektojn (Promis())
+            revo_listoj.stiloj.load();
+            revo_listoj.fakoj.load();
             redaktilo.revo_listoj = revo_listoj;
             
             // butono por rezigni

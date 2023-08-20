@@ -12,6 +12,7 @@ import '../x/voko_entities';
 import {Strukturero} from '../x/xmlstruct';
 import {Xmlarea} from '../x/xmlarea';
 import {XKlavaro} from '../x/xklavaro';
+import {RevoListoj} from '../x/xlisto';
 
 import {artikolo} from '../a/artikolo';
 import {preferoj} from '../a/preferoj';
@@ -32,7 +33,7 @@ export namespace redaktilo {
 
   let xmlarea: Xmlarea;  
   let xklavaro: XKlavaro;
-  export let revo_listoj: x.RevoListoj;
+  export let revo_listoj: RevoListoj; // ni ricevos la listojn de la kadro
 
   var redakto = 'redakto'; // 'aldono' por nova artikolo
 
@@ -551,18 +552,17 @@ export namespace redaktilo {
    * @param err la listo de eraroj
    */
   function listigu_erarojn(err: Array<string>) {
-    var el = document.getElementById("r:eraroj");
-    var elch = el.children;
-    var ul: Element;
-    if (! elch.length) {
-      ul = document.createElement("ul");                
-      el.appendChild(ul);
-    } else {
-      ul = elch[0];
-    }
-    for (var e of err) {
-      var li = u.ht_element("li",{},e); //createTElement("li",e);               
-      ul.appendChild(li);       
+    const el = document.getElementById("r:eraroj");
+    if (el) {      
+      let ul = el.querySelector("ul");
+      if (! ul) {
+        ul = document.createElement("ul");                
+        el.appendChild(ul);
+      } 
+      for (var e of err) {
+        var li = u.ht_element("li",{},e); //createTElement("li",e);               
+        ul.appendChild(li);       
+      }
     }
   }
 
@@ -586,6 +586,28 @@ export namespace redaktilo {
       listigu_erarojn(errors);
   }
 
+
+  /**
+   * Preparas kontrolon, montras tion al la uzanto
+   */
+  function kontrolo_start(msg: string) {
+    const err = document.getElementById("r:eraroj");
+    if (err) {
+      err.textContent='';
+      err.insertAdjacentHTML("afterbegin",
+      `<span id='r:kontrolante' class='animated-nav-font'>${msg}...</span>`);
+      err.classList.remove("collapsed"); // ĉu nur kiam certe estas eraroj?
+      (err.parentNode as Element).setAttribute("open","open");    
+    }
+  }
+
+  /**
+   * Forigas la atendomesaĝon montratan dum kontrolado
+   */
+  function kontrolo_halt() {
+    document.getElementById("r:kontrolante")?.remove();
+  }
+
   /**
    * Kontrolas en la XML-teksto per regulesprimo, ĉu la uzitaj kodoj (lingvoj, stiloj, fakoj)
    * esas validaj. Uzoj de nevalidaj kodoj estas redonataj kiel rezultoj de la regulesprimo
@@ -598,6 +620,7 @@ export namespace redaktilo {
   function kontrolu_kodojn(clist: x.ListNomo, regex: RegExp) {
     const xml = xmlarea.syncedXml(); //document.getElementById("r:xmltxt").value;
     const list = revo_listoj[clist];
+
     let m: RegExpExecArray; 
     let invalid = [];
 
@@ -720,16 +743,12 @@ export namespace redaktilo {
     // eblas, ke en "nav" montriĝas indekso, ĉar la uzanto foiris de la redaktado tie
     // ni testas do antaŭ kontroli erarojn
     // alternative ni povus renavigi al la navigilo...!?
-    if (eraroj) {
-      eraroj.textContent='';
-      eraroj.classList.remove("collapsed"); // ĉu nur kiam certe estas eraroj?
-      (eraroj.parentNode as Element).setAttribute("open","open");  
+    kontrolo_start("kontrolante kaj transformante...");
 
-      kontrolu_xml_loke(art,xml);
-      if (xml.startsWith("<?xml")) {
-        vokomailx("nur_kontrolo",art,xml);
-      }
-    }
+    kontrolu_xml_loke(art,xml);
+    if (xml.startsWith("<?xml")) {
+      vokomailx("nur_kontrolo",art,xml);
+    }    
 
     if (xml.startsWith("<?xml")) {
       vokohtmlx(xml);
@@ -746,9 +765,7 @@ export namespace redaktilo {
     const art = (document.getElementById("r:art") as HTMLInputElement).value;
     const xml = xmlarea.syncedXml();
 
-    eraroj.textContent='';
-    eraroj.classList.remove("collapsed"); // ĉu nur kiam certe estas eraroj?
-    (eraroj.parentNode as Element).setAttribute("open","open");
+    kontrolo_start("kontrolante...");
 
     kontrolu_xml_loke(art,xml);
     if (xml.startsWith("<?xml")) {
@@ -790,23 +807,22 @@ export namespace redaktilo {
     const art = (document.getElementById("r:art") as HTMLInputElement).value;
     const xml = xmlarea.syncedXml();
 
-    let eraroj = document.getElementById("r:eraroj");
-    eraroj.textContent='';
-    eraroj.classList.remove("collapsed"); // ĉu nur kiam certe estas eraroj?
-    (eraroj.parentNode as Element).setAttribute("open","open");
+    kontrolo_start("kontrolante kaj submetante...")
 
     // kontrolu loke revenas nur post kontrolo,
     // dum kontrole ene de vokomailx as nesinkrona
     kontrolu_xml_loke(art,xml);
 
     if (xml.startsWith("<?xml") &&
-      document.getElementById("r:eraroj").textContent == '') {
+      document.getElementById("r:eraroj")?.textContent == '') {
         const nxml = xmlarea.normalizedXml();
         // forsendu la redaktitan artikolon
         vokomailx("forsendo",art,nxml);
         // memoru enhavon de kelkaj kampoj
         store_preferences();
-      }
+    } else {
+      kontrolo_halt();
+    }
   }
 
   /**
@@ -899,41 +915,44 @@ export namespace redaktilo {
         const parser = new DOMParser();
         const doc = parser.parseFromString(data,"text/html");
 
+        kontrolo_halt();
+
         const err_list = document.getElementById("r:eraroj");
+        if (err_list) {
+          //for (div of doc.body.getElementsByClassName("eraroj")) {
+          doc.body.querySelectorAll(".eraroj").forEach((div) => {
+            // debugging...
+            console.log("div id=" + div.id);
+            div.innerHTML = div.innerHTML
+              .replace(re_enk,'<span class="$1">$1</span>:')
+              .replace(re_pos,'<a href="#">$1</a>');
+            err_list.appendChild(div);
+          });
 
-        //for (div of doc.body.getElementsByClassName("eraroj")) {
-        doc.body.querySelectorAll(".eraroj").forEach((div) => {
-          // debugging...
-          console.log("div id=" + div.id);
-          div.innerHTML = div.innerHTML
-            .replace(re_enk,'<span class="$1">$1</span>:')
-            .replace(re_pos,'<a href="#">$1</a>');
-          err_list.appendChild(div);
-        });
+          const konfirmo = doc.getElementById("konfirmo");
+          if (konfirmo) {
+            // debugging...
+            console.log("div id=" + konfirmo.id);
+            err_list.appendChild(konfirmo);
+            err_list.classList.add("konfirmo");
+        
+            // adaptu staton kaj rilatajn butonojn...
+            // tio pli bone estu en kadro.js(?)
+            t_red.transiro("sendita");
 
-        const konfirmo = doc.getElementById("konfirmo");
-        if (konfirmo) {
-          // debugging...
-          console.log("div id=" + konfirmo.id);
-          err_list.appendChild(konfirmo);
-          err_list.classList.add("konfirmo");
-      
-          // adaptu staton kaj rilatajn butonojn...
-          // tio pli bone estu en kadro.js(?)
-          t_red.transiro("sendita");
+            // finu redaktadon
+            //hide("x:redakt_btn");
+            //hide("x:rigardo_btn");
 
-          // finu redaktadon
-          //hide("x:redakt_btn");
-          //hide("x:rigardo_btn");
-
-        } else if (command == "nur_kontrolo" &&
-          err_list.textContent.replace(/\s+/,'') == '') {
-          // nur kontrolo kaj neniu eraro
-          err_list.appendChild(
-            document.createTextNode("Bone! Neniu eraro troviĝis."));
-          err_list.classList.add("konfirmo");
-        } else {
-          err_list.classList.remove("konfirmo");
+          } else if (command == "nur_kontrolo" &&
+            err_list.textContent.replace(/\s+/,'') == '') {
+            // nur kontrolo kaj neniu eraro
+            err_list.appendChild(
+              document.createTextNode("Bone! Neniu eraro troviĝis."));
+            err_list.classList.add("konfirmo");
+          } else {
+            err_list.classList.remove("konfirmo");
+          }
         }
       });
   }
