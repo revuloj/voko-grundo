@@ -1031,6 +1031,26 @@ function serchu(event: any) {
  * @param esprimo 
  */
 function serchu_q(esprimo: string) {
+    function nav_enh() {
+        const nav = document.getElementById("navigado");
+        return nav?.querySelector(".enhavo");
+    }
+
+    function sercho_start() {
+        start_wait();
+        const inx_enh = nav_enh();
+        if (inx_enh) {
+            inx_enh.textContent = '';
+            inx_enh.insertAdjacentHTML("afterbegin",
+            "<span id='x:serchante' class='animated-nav-font'>serĉante...</span>");
+        }
+    }
+
+    function sercho_halt() {
+        stop_wait();
+        const s = document.getElementById("x:serchante");
+        if (s) s.remove();
+    }
 
     const srch = new Sercho();
     srch.serchu(esprimo, function() {
@@ -1196,8 +1216,8 @@ function serchu_q(esprimo: string) {
             if (subm) nav.removeChild(subm);    
         }
     },
-    start_wait,
-    stop_wait 
+    sercho_start,
+    sercho_halt 
     );
 
 }

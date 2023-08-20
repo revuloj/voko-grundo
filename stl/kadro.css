@@ -244,6 +244,17 @@ nav {
 }
 */
 
+
+@keyframes nav-font-color-change {
+    0% {color: var(--nav-fnt-clr);}
+    50% {color: var(--nav-bgr-clr);}
+    0% {color: var(--nav-fnt-clr);}
+}
+
+.animated-nav-font {
+    animation: nav-font-color-change 3s infinite;
+}
+
 nav::-webkit-scrollbar-corner,
 nav::-moz-scrollbar-corner { /* FF ne funkcias, sed uzas body-backround-color...? */
     background-color: var(--nav-bgr-clr);
