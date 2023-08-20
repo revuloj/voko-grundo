@@ -631,15 +631,6 @@ function load_page(trg: string, url: string, push_state: boolean=true, whenLoade
 
         if (filename && filename.startsWith("redaktmenu")) {
             redaktilo.preparu_menu(); // redaktilo-paĝo
-
-            // ŝargu laŭbezone ankoraŭ fakojn kaj stiloj kaj
-            // transdonu la listojn al la redaktilo por poste kontrolado
-            // de stiloj kaj fakoj en la XML-artikolo
-            // teorie kontrolu povus okazi antaŭ finŝargo
-            // do pli ĝuste oni devus uzi promes-objektojn (Promis())
-            revo_listoj.stiloj.load();
-            revo_listoj.fakoj.load();
-            redaktilo.revo_listoj = revo_listoj;
             
             // butono por rezigni
             const rzg = document.getElementById("r:rezignu");
@@ -673,6 +664,15 @@ function load_page(trg: string, url: string, push_state: boolean=true, whenLoade
 
         if (filename && filename.startsWith("redaktilo")) {
             const params = filename.split('?').pop() || '';
+
+            // la ekranklavaro ŝargos la fak- kaj la stil-listojn
+            // do ni ne bezonas fari tion tie ĉi!
+            // revo_listoj.stiloj.load();
+            // revo_listoj.fakoj.load();
+
+            // transdonu la listojn al la redaktilo por poste kontrolado
+            // de stiloj kaj fakoj en la XML-artikolo
+            redaktilo.revo_listoj = revo_listoj;
             redaktilo.preparu_red(params); // redaktilo-paĝo
             
         } else {
