@@ -781,7 +781,7 @@ export namespace redaktilo {
    */
   function rkonservo() {
     // PLIBONIGU: estas ioma risko ke tiel oni retrovas unuon en la ŝlosilnomo de jam anstataŭigita unuo
-    // do eble estus plibone trakuri la tekston signon post signo, ignori dume xml-nomoj sed
+    // do eble estus plibone trakuri la tekston signon post signo, ignori dume xml-nomojn sed
     // konsideru nur atributojn kaj tekstojn. Kaj se komenco de signovico identas kun unuo-valoro
     // anstataŭigi, sed poste rigardi nur la restantan tekston...
     // Tiam oni povus ankaŭ anstataŭigi unuojn de longeco 1 kaj forigi revo:encode en la servila flanko!
@@ -814,7 +814,12 @@ export namespace redaktilo {
     kontrolu_xml_loke(art,xml);
 
     if (xml.startsWith("<?xml") &&
-      document.getElementById("r:eraroj")?.textContent == '') {
+      // PLIBONIGU: tio estas iom malbela por testi, ĉu estis eraroj
+      // enestas ankoraŭ la atendomesaĝo. Do:
+      // eble apartigu la atendomesaĝon de la eraroj pli klare
+      // uzu abstahitan listo-objekton por eraroj, kiun ni povas demandi pri
+      // sia kategoria enhavo
+      ! document.getElementById("r:eraroj")?.querySelector("ul")) {
         const nxml = xmlarea.normalizedXml();
         // forsendu la redaktitan artikolon
         vokomailx("forsendo",art,nxml);
