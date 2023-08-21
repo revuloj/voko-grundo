@@ -1,4 +1,3 @@
-
 // (c) 2020 - 2023 Wolfram Diestel
 // laŭ permesilo GPL 2.0
 
@@ -15,6 +14,8 @@ import {RevoListoj} from '../x/xlisto';
 
 import {Sercho, Lingvo, TrovEo, TrovTrd} from './sercho';
 import {redaktilo} from './redaktilo';
+
+type BibOrd = "bib"|"aut"|"tit";
 
 // keydown / keyup mankas apriore en difinoj de TypeScript...!
 declare global {
@@ -1351,9 +1352,10 @@ function mrk_eraroj() {
 
 /**
  * Pridemandas la bibliografion kiel JSON de la servilo kaj prezentas ĝin kiel HTML
+ * @param bib kodo de bibliografero, al kiu ni saltu post ŝargo
  * @param sort_by se donita, ni ordigos la bibliografion laŭ tiu kampo (bib,aut,tit)
  */
-function bibliogr(bib: string, sort_by?: "bib"|"aut"|"tit") {
+function bibliogr(bib: string, sort_by?: BibOrd) {
     u.HTTPRequest('POST', g.bib_json_url, {x: "1"}, // ni sendu ion per POST por ĉiam havi aktualan liston
         function(data: string) {
             var json = (JSON.parse(data) as Array<Bibliogr>);
@@ -1395,6 +1397,22 @@ function bibliogr(bib: string, sort_by?: "bib"|"aut"|"tit") {
                 }; // if json
                 const h1 = u.ht_element('h1',{},'bibliografio');
                 enh.append(h1,dl);
+                h1.insertAdjacentHTML('afterend',
+                    `<span id="bibliogr_ordo">ordo laŭ: `
+                    + `${!sort_by || sort_by=="bib"?"<u>kodo</u>":"<a href='#bib'>kodo</a>"} `
+                    + `| ${sort_by=="aut"?"<u>aŭtoro</u>":"<a href='#aut'>aŭtoro</a>"} `
+                    + `| ${sort_by=="tit"?"<u>titolo</u>":"<a href='#tit'>titolo</a>"}</span>`);
+
+                // reago al ordo-ŝanĝo
+                const ordo = document.getElementById("bibliogr_ordo");
+                ordo?.addEventListener("click",(event)=> {
+                    const a = (event.target as HTMLElement).closest("a");
+                    if (a) {
+                        const lau = a.getAttribute("href")?.substring(1) || "bib";
+                        // reŝargu bibliogration kun nova ordo
+                        bibliogr(bib,lau as BibOrd);
+                    }
+                })
 
                 // rulu al la ĝusta bib-ero
                 const ero = document.getElementById(bib);

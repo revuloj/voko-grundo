@@ -1467,7 +1467,7 @@ export namespace redaktilo {
                   const dl = <Element>u.ht_dl(
                     tv.trd,
 
-                    // tiu funkci revokiĝas por ĉiu trovita en la json-listo lingvo 
+                    // tiu funkcio revokiĝas por ĉiu trovita en la json-listo lingvo 
                     // kun listo de tradukoj
                     function(lng: Lingvo, trd: string[], dt: Element, dd: Element) {
                       // lingvonomo
