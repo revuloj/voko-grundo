@@ -264,11 +264,8 @@ export function vikiSerĉo(event) {
  * @returns la URL 
  */
 function _bib_url(source,bib) {
-    for (var entry of source) {
-        if (entry.value == bib) {
-            return entry.url;
-        }
-    }
+    const verko = source.find((ero) => ero.bib == bib);
+    return verko?.url;
 }
 
 /**

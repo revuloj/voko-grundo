@@ -250,12 +250,8 @@ export class HTMLFonto {
     };
 
     bib_text(bib: any) {
-        for (let i=0;i<this.source.length;i++) {
-            const entry = this.source[i];
-            if (entry.value == bib) {
-                return entry.label;
-            }
-        }
+        const verko = this.source.find((ero) => ero.bib == bib);
+        return verko?.value;
     };
     
     html(fnt: Valoroj) {
