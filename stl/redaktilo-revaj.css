@@ -189,6 +189,7 @@ IMG.ref {
 
 
 input[type='text'],
+input[type='search'],
 select {
     background-color: var(--input-bgr-clr) !important;
     color: var(--input-fnt-clr) !important;
