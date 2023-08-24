@@ -210,10 +210,10 @@ export class XKlavaro {
                         html += '<div class="klv elm_btn" data-cmd="sub" title="subigite">a<sub>s</sub></div>';
                         break;
                     case 'minuskle':
-                        html += '<div class="klv elm_btn" data-cmd="minuskloj" title="minuskligo">A&#x23f5;a</div>';
+                        html += '<div class="klv elm_btn" data-cmd="minuskloj" title="minuskligo">A&#x25ba;a</div>';
                         break;
                     case 'kamele':
-                        html += '<div class="klv elm_btn" data-cmd="kamelo" title="komenc-majuskloj">&#x23f5;Ab</div>';
+                        html += '<div class="klv elm_btn" data-cmd="kamelo" title="komenc-majuskloj">&#x25ba;Ab</div>';
                         break;
                     case 'trd':
                         html += '<div class="klv elm_btn" data-cmd="trd" title="traduko">trd</div>';
