@@ -84,7 +84,7 @@ export namespace artikolo {
         /* aktivigu nur por longaj artikoloj... */
         var d = document.getElementsByClassName("kasxebla");
          //if (d.length > js_sojlo) {
-        piedlinio_modifo();
+        piedlinio_modifo(artikolo); // artikolo: por referenci
         preparu_kashu_sekciojn();
         preparu_malkashu_fontojn();
         preparu_maletendu_sekciojn();
@@ -469,7 +469,7 @@ export namespace artikolo {
      * @memberof artikolo
      * @inner
      */
-    function piedlinio_modifo() { //artikolo) {
+    function piedlinio_modifo(artikolo?: string) { //artikolo) {
         const pied = document.body.getElementsByTagName("FOOTER")[0];
 
         /**
