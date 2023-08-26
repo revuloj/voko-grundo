@@ -24,6 +24,12 @@ binmode(STDOUT, "encoding(UTF-8)");
 
 $debug = 0;
 $reverse = 0; # skribo de dekstre maldekstren (ekz-e hebrea)
+
+# regulesprimo por trovi klarigojn ene de tradukoj
+# ni rekonas klarigojn per teksto en rondaj krampoj
+# aŭ en angulaj/rondaj laŭ azia/japana skribo
+$trd_klr = '(.*?)([\(（［].*?[\)）］])';
+
 unless ($#ARGV>1) {
     print "\n=> Certigu, ke vi troviĝas en la dosierujo kie enestas la artikoloj al kiuj\n";
     print "vi volas aldoni tradukojn el CSV-dosiero. Poste voku tiel:\n";
@@ -214,7 +220,8 @@ sub make_el{
 sub make_trd {
     my $trd = shift;
     my $el = make_el('trd',('lng'=>$lingvo));
-    $el->appendText($trd);
+    # $el->appendText($trd);
+    trd_enhavo($el,$trd);
     return $el;
 }
 
@@ -225,7 +232,9 @@ sub make_trdgrp {
     my $first = 1;
     for my $t (@trd) {
         my $te = make_el('trd');
-        $te->appendText($t);
+        # $te->appendText($t);
+        trd_enhavo($te,$t);
+
         # aldonu tradukon en grupo
         if ($first) {
             $el->appendText("\n    ");
@@ -239,6 +248,23 @@ sub make_trdgrp {
     }
     $el->appendText("\n  ");
     return $el;
+}
+
+sub trd_enhavo {
+    my $el = shift;
+    my $txt = shift;
+
+    while ($txt =~ s/^$trd_klr//) {
+        $t = $1;
+        $k = $2;
+        $el->appendText($t);
+        $klr = make_el('klr');
+        $klr->appendText($k);
+        $el->appendChild($klr);
+    }
+
+    # se estas alpendigu ceteran tekstojn
+    $el->appendText($txt) if ($txt);
 }
 
 # trovu ĉiujn kapvortojn inkl. variaĵojn kaj referencu la derivaĵon ($node)
