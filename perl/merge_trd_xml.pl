@@ -28,7 +28,8 @@ $reverse = 0; # skribo de dekstre maldekstren (ekz-e hebrea)
 # regulesprimo por trovi klarigojn ene de tradukoj
 # ni rekonas klarigojn per teksto en rondaj krampoj
 # aŭ en angulaj/rondaj laŭ azia/japana skribo
-$trd_klr = '(.*?)([\(（［].*?[\)）］])';
+$trd_klr = '(.*?)([\(（].*?[\)）])';
+$trd_ind = '(.*?)([\[［].*?[\]］])';
 
 unless ($#ARGV>1) {
     print "\n=> Certigu, ke vi troviĝas en la dosierujo kie enestas la artikoloj al kiuj\n";
@@ -254,13 +255,25 @@ sub trd_enhavo {
     my $el = shift;
     my $txt = shift;
 
-    while ($txt =~ s/^$trd_klr//) {
-        $t = $1;
-        $k = $2;
-        $el->appendText($t);
-        $klr = make_el('klr');
-        $klr->appendText($k);
-        $el->appendChild($klr);
+    if ($lingvo eq 'ja') {
+        while ($txt =~ s/^$trd_ind//) {
+            $t = $1;
+            $i = $2;
+            $el->appendText($t." [");
+            $ind = make_el('ind');
+            $ind->appendText($k);
+            $el->appendChild($ind);
+            $el->appendText("]");
+        }
+    } else {
+        while ($txt =~ s/^$trd_klr//) {
+            $t = $1;
+            $k = $2;
+            $el->appendText($t);
+            $klr = make_el('klr');
+            $klr->appendText($k);
+            $el->appendChild($klr);
+        }
     }
 
     # se estas alpendigu ceteran tekstojn
