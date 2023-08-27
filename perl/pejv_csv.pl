@@ -37,7 +37,8 @@ while(<F>) {
 	# forigu gramatikajn kaj aliajn komentojn
 	$ja =~ s/［.*?］//g;
 	$ja =~ s/（.*?）//g;
-
+	$ja =~ s/《.*?》//g;
+	
 	# forigu restintajn komojn, specojn en la fino
 	$ja =~ s/[,\s]+$//;
 
@@ -66,7 +67,12 @@ sub furagana {
 		utf8::decode($f);
 		$f =~ s/^\s+//;
 		$f =~ s/\s+$//;
-		push @fj, ("$v \[$f\]");
+
+		if ($f ne $v) {
+			push @fj, ("$v \[$f\]");
+		} else {
+			push @fj, ("$v");
+		}
 	}
 
 	return join(',',@fj);

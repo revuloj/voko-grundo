@@ -29,7 +29,7 @@ $reverse = 0; # skribo de dekstre maldekstren (ekz-e hebrea)
 # ni rekonas klarigojn per teksto en rondaj krampoj
 # aŭ en angulaj/rondaj laŭ azia/japana skribo
 $trd_klr = '(.*?)([\(（].*?[\)）])';
-$trd_ind = '(.*?)([\[［].*?[\]］])';
+$trd_ind = '(.*?)[\[［](.*?)[\]］]';
 
 unless ($#ARGV>1) {
     print "\n=> Certigu, ke vi troviĝas en la dosierujo kie enestas la artikoloj al kiuj\n";
@@ -261,7 +261,7 @@ sub trd_enhavo {
             $i = $2;
             $el->appendText($t." [");
             $ind = make_el('ind');
-            $ind->appendText($k);
+            $ind->appendText($i);
             $el->appendChild($ind);
             $el->appendText("]");
         }
