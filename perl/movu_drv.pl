@@ -12,7 +12,8 @@
 #  - simile pri la snc/subsnc-markoj
 #  - trovu la kapvorton kaj anstataŭigu la tildon, simile al la mrk-adapto
 #  - trovu ĉiujn tildojn en ekzemploj kaj anstataŭigu same
-#  - malfermu la celartikolon kaj enmetu la derivaĵon (donante cel-mrk anst. artikolon, ni enŝovos post tiu, aliokaze en la fino)
+#  - malfermu la celartikolon kaj enmetu la derivaĵon (donante cel-mrk anst. artikolon, 
+#    ni enŝovos post tiu, aliokaze en la fino)
 #  - truvo referencojn al la origina derivaĵo kaj adaptu la celon al la nova artikolo
 #  -- ĉe ĉiuj adaptitaj artikoloj ankaŭ altigu la version kaj aldonu ŝanĝkomenton
 #

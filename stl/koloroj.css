@@ -50,6 +50,7 @@
 
     --ovr-bgr-clr: #F5F5D5;
     --ovr-brd-clr: green;
+    --ovr-shd-clr: gray;
 
     --a-fnt-clr: darkblue;
  
@@ -68,7 +69,7 @@
     --btn-act-brd-clr: black;
     --btn-dis-bgr-clr: #999;
 
-    --tab-bgr-clr: #999;
+    --tab-bgr-clr: #aaa;
     --tab-act-bgr-clr: khaki;
 
     /* input-elementoj */
@@ -124,6 +125,12 @@
     --shb-bgr-clr: #e5e3d5;
     --sh2-bgr-clr: #ffedad;
     --shb-hov-bgr-clr: #e3a345;
+
+    /* erarmesaĝoj */
+
+    --err-brd-clr: #f8684c;
+    --err-bgr-clr: #ffc198;
+    --err-fnt-clr: #190b0b;
 }
 
 
@@ -157,6 +164,7 @@
 
     --ovr-bgr-clr: #0f0800;
     --ovr-brd-clr: palegoldenrod;
+    --ovr-shd-clr: cornflowerblue;
 
     --a-fnt-clr: skyblue;
 

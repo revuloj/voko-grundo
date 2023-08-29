@@ -30,6 +30,14 @@ body {
     overflow: auto !important;
 }
 
+.ui-dialog.faldita {
+    margin-top: 1.8em;
+    margin-right: 7em;
+    background: rgba(100,100,100,40%);
+    /*background-color: rgba()*/
+    /*filter: alpha(opacity=60);*/
+}
+
 .flex-form {
     display: flex;
     flex-wrap: wrap;
@@ -51,11 +59,16 @@ body {
 .ui-tooltip {
     max-width: 30em;
 }
-   
+
+.ui-state-error {
+    border: 1px solid var(--err-brd-clr);
+    background-color: var(--err-bgr-clr);
+    color: var(--err-fnt-clr);
+}
 
 @media only screen and (max-width: 768px) {
     .ui-menu-item {
-        font-size: 120% !important;
+        font-size: 120%;
     }
     .ui-dialog {
         max-width: 95% !important;
@@ -154,6 +167,14 @@ IMG.ref {
     border: 1px hidden !important;
 }
 
+#sercho_malplenigo {
+    display: inline;
+}
+
+#sercho_malplenigo div {
+    display: inline-block;
+}
+
 #kash_btn {
     /* ni ŝovu pli maldekstren, ĉar dekstre jam
     estas la ŝaltstrio...!*/
@@ -168,10 +189,20 @@ IMG.ref {
 
 
 input[type='text'],
+input[type='search'],
 select {
+    -webkit-appearance: none;
     background-color: var(--input-bgr-clr) !important;
     color: var(--input-fnt-clr) !important;
     border: 2px solid var(--input-brd-clr);
+}
+
+.lbl_radio, .lbl_checkbox {
+    background-color: var(--btn-bgr-clr);
+    color: var(--main-fnt-clr);
+    margin: .1em;
+    padding: .2em;
+    border-radius: 3px;    
 }
 
 
@@ -219,6 +250,12 @@ input[type='button']:focus,
     background-color: var(--btn-act-bgr-clr);
 }
 
+input[type='radio'],
+input[type='checkbox'] {
+    accent-color: var(--input-brd-clr);
+}
+
+
 .ui-button-icon,
 .ui-button-icon-only {
     background-color: var(--ibt-bgr-clr) !important;
@@ -256,15 +293,16 @@ input[type='button']:focus,
     padding: .18em;
     margin: 2px;
     */
-    margin: 0;
-    margin-right: .1em;
+    border: 1px solid var(--btn-brd-clr);
+
+    margin: 1px 0px 2px 0px;
     padding: .18em;
     color: black !important;
     font-weight: normal !important;
-    box-shadow: none !important;
+    /*box-shadow: none !important;*/
 
     box-sizing: border-box;   
-    height: 100%;
+    height: 96%;
 }
 .kklvbtn[value='1'] {
     background-color: var(--btn-act-bgr-clr) !important;
@@ -306,23 +344,23 @@ fieldset legend {
    padding: 0.5em; 
 }
 
-#sercho_trovoj dt:hover {
+#sercho_trovoj dt:hover,
+#sercho_trovoj dt.aktiva
+{
    background-color: var(--main-ac2-bgr-clr); /*#e5e3d5;  */
    color: var(--main-act-fnt-clr);
    /*border: 1px solid black;*/
 }
 
-#sercho_trovoj dt:hover button {
+#sercho_trovoj dt:hover button,
+#sercho_trovoj dt.aktiva button,
+#sercho_trovoj li:hover button,
+#sercho_trovoj li.aktiva button,
+#sercho_trovoj .bildstriero:hover button,
+#sercho_trovoj .bildstriero.aktiva button
+{
    visibility: visible !important;  
 }
-
-#sercho_trovoj li:hover button {
-    visibility: visible !important;  
- }
-
-#sercho_trovoj .bildstriero:hover button {
-    visibility: visible !important;  
- } 
 
 #sercho_error {
    margin: 0 !important;
@@ -339,15 +377,66 @@ fieldset legend {
     position: relative;
     top: 0;
     height: 100%;
-    flex: 0.1 0.1 10em;
-    -webkit-flex: 0.1 0.1 10em;
-    min-width: 8em;
+    flex: 0.1 0.1 5em;
+    -webkit-flex: 0.1 0.1 4em;
+    min-width: 4em;
     width: 15%;
     /*border: 0px solid red*/
 
     border: none !important;
     box-shadow: 0 0 4px black;
     z-index: 100;
+}
+
+dialog {
+    width: min-content;
+    color: var(--main-fnt-clr) !important;
+    background-color: var(--ovr-bgr-clr);
+    border: 2px dotted var(--ovr-brd-clr);
+    box-shadow: 5px 5px 10px var(--ovr-shd-clr);
+    z-index: 200;
+    margin-top: 4em;
+    padding: .1em;
+}
+
+#sxablono_dlg {
+    z-index: 180;
+}
+
+dialog form {
+    padding: .3em;
+}
+
+dialog label {
+    font-size: 90%;
+}
+
+dialog h2 {
+    font-size: 105%;
+    background-color: var(--mh2-bgr-clr);
+    /*border-bottom: 1px solid var(--nav-brd-clr);*/
+    border-radius: 0.1em;
+    display: flex;
+    justify-content: space-between;
+    margin: 0.1em;
+    padding: .3em;
+}
+
+dialog h2 button {
+    padding: 0.1em;
+    font-size: 75%;
+}
+
+dialog .butonujo {
+    display: flex;
+    border-top: 1px solid var(--main-brd-clr);
+    padding: .5em;
+    justify-content: flex-end;
+    gap: .5em;
+}
+
+dialog .butonujo button {
+    white-space: nowrap;
 }
 
 #tabs {
@@ -370,15 +459,31 @@ fieldset legend {
 #tab-buttons {
     border-top-right-radius: 4px;
     border-bottom-right-radius: 4px;
-    box-shadow: 2px 1px 2px rgba(0,0,0,.4);
+    border: 1px solid gray;
     border-left: none;
     margin-left: -1px;
     margin-right: 5px;
+    /*box-shadow: 2px 1px 2px rgba(0,0,0,.4);*/
+    box-shadow: 1px 2px 5px black;
 }
 
+
 .ui-tabs-nav li {
+    list-style-type: none;
     background-color: var(--tab-bgr-clr) !important;
     box-shadow: inset 0 1px 2px;
+}
+
+/* kreas spacon inter langetoj */
+.ui-tabs-nav li:empty {
+    visibility: hidden;
+    height: 0.3em;
+    width: 0.3em;
+}
+
+.ui-tabs-nav a {
+    text-decoration: none;
+    color: var(--nav-fnt-clr);
 }
 
 .ui-tabs-nav li.ui-tabs-active,
@@ -387,6 +492,7 @@ fieldset legend {
     color: black;
     box-shadow: 0 1px 2px rgba(0,0,0,.4);;
 }
+
 
 .ui-tabs-vertical {
     width: 3em; 
@@ -414,6 +520,8 @@ fieldset legend {
     padding-left: .1em; 
     border-left-width: 1px; 
 }
+
+
 /*
 .ui-tabs-vertical .ui-tabs-panel { 
     padding: 1em; 
@@ -425,7 +533,13 @@ fieldset legend {
     width: 2.5em;
     padding: .4em !important;
     z-index: 100; /* kovru la ombron de la menuo! */
-    box-shadow: 0 0 4px black;
+    /*box-shadow: 0 0 4px black;*/
+
+    margin: 0px 1px 1px 0px;
+    border-radius: 0;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+    border: 1px dotted var(--nav-brd-clr);
 }
 
 #right_side {
@@ -472,29 +586,83 @@ fieldset legend {
     text-decoration: none;
 }
 
-#menu {
-   height: 100%; /*99.8%;*/
-   border: none !important;
-
-   padding: 0;
-   margin: 0;
-
-   background-image: url(kaefer1.jpg);
-   background-repeat: repeat;
-   background-position: bottom
+nav {
+    height: 100%;
+    background-image: url(kaefer1.jpg);
+    background-repeat: repeat;
+    background-position: bottom
 }
 
-#menu li {
-  width: 100%;
-  color: var(--nav-fnt-clr);
+#menu {
+   height: fit-content; /* 100%; */
+   border: none !important;
+
+   opacity: 0.94;
+   /*padding: 0;*/
+   margin: 0;
+   box-shadow: 1px 2px 5px;
+}
+
+#menu li, #traduko_menuo li {
+  box-sizing: border-box;
+  /*width: 100%;*/
   border-radius: 0 !important;
-  background-color: var(--nav-bgr-clr);
-  border-color: var(--nav-brd-clr);
+  /*border-color: var(--nav-brd-clr);*/
+  border: none;
+}
+
+#traduko_menuo li span {
+    display: inline-block;
+    width: 80%;
+}
+
+.ui-menu {
+    color: var(--nav-fnt-clr);
+    background-color: var(--nav-bgr-clr);
+    cursor: default;
+}
+
+.ui-widget-header {
+    margin-left: -18px;
+}
+
+ul.ui-menu {
+    padding-inline-start: 20px;
+}
+
+.ui-menu li {
+    list-style-type: circle;
+    padding: 0.1em;
+    padding-left: 0.3em;
 }
 
 .ui-menu-item {
+    color: var(--nav-fnt-clr);
+    background-color: var(--nav-bgr-clr);  
     border-bottom: 1px solid silver;
-    font-size: 85%
+    font-size: 85%;
+    cursor: default;
+}
+
+.ui-menu-item u {
+    border: inherit;
+    font-size: inherit;
+}
+
+.ui-menu-item:hover,
+.ui-menu-item:active {
+    background-color: var(--nav-act-bgr-clr);
+}
+
+/* submenuoj */
+.ui-menu .ui-menu {
+    position: absolute;
+    /*padding: 0.1em;*/
+    border: 1px solid var(--nav-brd-clr);
+}
+
+.ui-menu-sub-fermita::after {
+    content: "\00a0\2bc8";
 }
 
 .ui-state-error {
@@ -514,6 +682,8 @@ fieldset legend {
     position: relative;
     justify-content: stretch;
     -webkit-justify-content: stretch;
+
+    background-image: linear-gradient(rgba(0,0,0,0%),rgba(0,0,0,10%));    
 }
 
 #dock_eraroj:empty,
@@ -616,139 +786,11 @@ fieldset legend {
     background-color: greenyellow;
 }
 
-#elekto_indikoj {
-    max-height: 27ex;
-    overflow: auto; 
-    margin: 1px;
-    padding: 0px;
-}
-
-#elekto_indikoj div {
-    /*display: inline-block;*/ /*float; //inline-block; inline-block aldonas spaceton inter la linioj */
-    float: left;
-    height: 3em;
-    max-height: 3em;
-    width: 4em;
-    overflow: hidden;
-    border: 1px solid #e3a345;
-    color: var(--nav-fnt-clr); /* pli bone estus difini apartan var...*/
-    border-radius: 4px;
-    padding: 0.1em;
-    margin: 0;
-    font-size: small;
-    line-height: 1em;
-    text-align: center;
-}
-
-#elekto_indikoj .stl {
-  font-stretch: condensed;
-  background-color: burlywood; /*#e5e3c5;  */
-}
-
-#elekto_indikoj .fak {
-  background-color: khaki; /*#d5e3d5;  */
-}
-
-#elekto_indikoj .ofc {
-  background-color: blanchedalmond; /*#d5d3e5*/;  
-}
-
-#elekto_indikoj .gra {
-  background-color: beige; /*#e5d3e5;  */
-}
-
-
-#elekto_indikoj div:hover {
-   background-color: #f5f3e5; 
-   cursor: pointer
-}
-
-#elekto_indikoj div:active {
-   background-color: #c5c3b5; 
-   color: white;  
-   cursor: pointer
-}
-
-#elekto_indikoj div span {
-    line-height: 1.5em
-}
-
-
-#elekto_indikoj img {
-    height: 1.7em;
-    max-height: 1.7em;
-    overflow: hidden;
-}
-
-#bildo_eta {
-    border-color: #cccccc; 
-    border-width: 1px; 
-    background: #E0E0A0; 
-    border-style: solid; 
-    padding: 2px; 
-    margin: 0
-}
-
-.butonoj {
-    text-align: center;
-    margin-top: 0.5em;
-}
-
-.butonoj div {
-    display: inline-block; /* inline-block aldonas spaceton inter la linioj */
-    /* float: left; */
-    vertical-align: inherit;
-    height: 1.3em;
-    max-height: 1.6em;
-    min-width: 1.6em;
-    overflow: hidden;
-    border: 1px solid #e3a345;
-    color: var(--nav-fnt-clr); /* pli bone estus difini apartan var...*/
-    border-radius: 4px;
-    padding: 0.1em;
-    margin: 0 0.1em 0 0.1em;
-    padding-top: 0.5em;
-    line-height: 1em;
-    text-align: center;
-    /*
-    background-color: #e5e3c5;  
-    */
-    background-color: khaki;
-}
-
-.butonoj div:hover {
-    background-color: #f5f3e5; 
-    cursor: pointer
-}
-
-.butonoj div:active {
-   background-color: #c5c3b5; 
-   color: white;  
-   cursor: pointer
-}
-
-
-.elm_btn {
-    /*background-color: #d5e3d5 !important;*/
-    background-color: burlywood !important;
-}
-
-.reghim_btn {
-   background-color: var(--btn-bgr-clr) !important;
-   border-color: var(--btn-brd-clr) !important;
-   color: var(--main-fnt-clr) !important;
-   /*
-   border-color: #327E04 !important;
-   background-color: #459e00 !important;
-   color: white !important;    
-   */
-   font-weight: bold !important;
-}
-
 #xml {
     display: flex;
     flex-direction: row;
     -webkit-flex-direction: row;
+    width: 100%;
     flex: 1;
     margin: 0;
     padding: 0;
@@ -872,6 +914,18 @@ fieldset legend {
 }
 */
 
+.ui-slider {
+    border: 1px solid var(--main-brd-clr);
+    border-radius: 5px / 50%;
+    height: 0.5em;
+}
+
+.ui-slider-handle {
+    border: 1px solid var(--main-brd-clr);
+    background-color: var(--main-bgr-clr);
+    border-radius: 5px;
+}
+
 .periodilo {
     display: inline-block;
     min-width: 30em;
@@ -883,7 +937,7 @@ fieldset legend {
 .manilo {
     width: 3em !important;
     height: 1.6em !important;
-    top: 50% !important;
+    /*top: 50% !important;*/
     margin-top: -.8em;
     text-align: center;
     line-height: 1.6em;
@@ -896,11 +950,14 @@ fieldset legend {
 #re_esprimo,
 #re_radiko {
     word-break: break-all;
-    padding: .5em;
-    border-radius: 4px;
+    border-radius: 3px;
     background-color: var(--main-ac2-bgr-clr);
     border-left: 2px dotted var(--main-brd-clr);
     margin-top: .2em;
+    margin-bottom: .2em;
+}
+#re_esprimo {
+    padding: .4em;
 }
 
 #sercho_trovoj {
@@ -966,24 +1023,56 @@ fieldset legend {
     max-height: 60vh;
 }
 
-/*
-#sercho_verklisto .ui-button {
-    padding: 0;
+
+#sercho_verklisto div {
+    padding: 0.12em;
+    border: 1px hidden !important;
+    display: flex;
+    flex-direction: row-reverse;
 }
-*/
+
+
+#sercho_verklisto input {
+    border: 1px hidden !important;
+    box-shadow: none;
+    margin-left: 0.3em;
+    margin-right: 0.05em;
+}
 
 #sercho_verklisto label {
     width: 50em;
     text-align: left;
-    border: 1px solid gray !important;
+    /*border: 1px solid gray !important;*/
+    border: 1px hidden !important;
     margin: 1px !important;
     padding: 0.1em !important;
-    padding-left: 4.5ex !important;
+    padding-left: 4ex !important;
     text-indent: -2.5ex;
 }
 
+#surmetita_dlg[open] {
+    display: flex;
+    flex-direction: column;
+}
+
+#surmetita_dlg {
+    width: fit-content;
+    height: fit-content;
+    /*
+    max-width: 92%;
+    max-height: 92%;
+    */
+    margin: .5em;
+}
+
+#surmetita_dlg>* {
+    flex: 0;
+}
+
 #surmetita {
+    flex: 1;
     background-color: var(--ovr-bgr-clr);
+    overflow-y: scroll;
 }
 
 .perc_bar {
@@ -1107,7 +1196,8 @@ fieldset legend {
 }
 
 #traduko_dlg {
-    padding-left: 0;
+    width: fit-content;
+    padding-left: 0;   
 }
 
 #traduko_dlg tr.tr_drv {
@@ -1167,6 +1257,10 @@ fieldset legend {
 
 #traduko_menuo .ui-menu-divider {
     margin: 0;
+    padding: 0;
+    height: 0;
+    color: rgba(0,0,0,0);
+    border-width: 1px 0 1px 0;
 }
 
 #traduko_aliaj {
@@ -1211,20 +1305,6 @@ pre.line {
     cursor: pointer;
 }
 
-/*
-.hom_art {
-    background-color: #ffedad; 
-}
-
-.hom_art:hover {
-    background-color: #e3a345; 
-    cursor: pointer;
-}
-
-#hom_dos_div {
-    border-top: 1px solid #327e04;
-}
-*/
 
 /* stiloj por analizo (vort-kontrolo) */
 .malstrikte { color: black }
@@ -1240,6 +1320,14 @@ pre.line {
     flex-direction: row;
     flex-wrap: wrap;
 }
+
+.bildstrio .butonoj {
+    font-size: 1em;
+    min-height: 1em;
+    margin-bottom: 0.1em;
+    height: fit-content;
+}
+
 .bildstriero {
     font-size: small;
     height: 150px;
@@ -1254,6 +1342,10 @@ pre.line {
 
 .bildstriero p {
     margin: 0px
+}
+
+span.searchmatch {
+    font-weight: bold;
 }
 
 .animated-dock-font {

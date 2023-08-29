@@ -1,7 +1,0 @@
-Klarigo pri la dosierujonomoj:
-
-u: tre bazaj util-funkcioj
-x: utilfunkcioj kaj objektoj pri XML-traktado
-a: JS por la artikolo mem
-rv: JS por la paĝoj de reta-vortaro.de, inkl. la tiea redaktilo (Araneo)
-rs: JS por la paĝoj ĉe revaj.steloj.de, t.e. la redaktilo Cetonio

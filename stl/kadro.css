@@ -244,6 +244,17 @@ nav {
 }
 */
 
+
+@keyframes nav-font-color-change {
+    0% {color: var(--nav-fnt-clr);}
+    50% {color: var(--nav-bgr-clr);}
+    0% {color: var(--nav-fnt-clr);}
+}
+
+.animated-nav-font {
+    animation: nav-font-color-change 3s infinite;
+}
+
 nav::-webkit-scrollbar-corner,
 nav::-moz-scrollbar-corner { /* FF ne funkcias, sed uzas body-backround-color...? */
     background-color: var(--nav-bgr-clr);
@@ -801,7 +812,7 @@ nav li {
 
     padding: 0.5em;
     border: 2px dotted var(--ovr-brd-clr);
-    box-shadow: 5px 5px 10px;
+    box-shadow: 5px 5px 10px var(--ovr-shd-clr);
 }
 
 .overlay .fermu {

@@ -30,8 +30,9 @@
             <h1>Strukturaj neregulaĵoj trovitaj per RelaxNG (jing)</h1>
 
         <p>
-          La struktura kontrolo per <a target="_new" href="../dtd/vokoxml.rnc">vokoxml.rnc</a>
-          (RelaxNG) estas pli strikta ol la kontrolo per la 
+          La struktura kontrolo per 
+          <a target="_new" href="https://revuloj.github.io/temoj/rnc">vokoxml.rnc
+          (RelaxNG)</a> estas pli strikta ol la kontrolo per la 
           <a target="_new" href="../dtd/vokoxml.dtd">dokumenttipdifino</a> (DTD).
           La malsupraj trovaĵoj do striktasence ne estas eraroj. Sed la neregulaĵoj povas
           montri erarojn, ekz. mislokitajn tradukojn inter sencoj atribuitaj al la derivaĵo 

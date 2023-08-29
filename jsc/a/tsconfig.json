@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+      "lib": ["ES2017","DOM"],
+      "target": "ES5",
+      "module": "commonjs",
+      "sourceMap": true,
+      "rootDir": ".",
+      "outDir": "../../build/js/a",
+      "composite": true 
+    },
+    "references": [
+      { "path": "../u" },
+      { "path": "../x" }
+    ]
+}
