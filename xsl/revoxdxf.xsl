@@ -115,7 +115,7 @@ name="redcgi">/cgi-bin/vokomail.pl?art=</xsl:variable -->
            </def>
          </xsl:when>
          <xsl:otherwise>
-           <xsl:apply-templates select="subdrv|snc"/>
+           <xsl:apply-templates select="subdrv|snc|snc/subsnc"/>
            <xsl:apply-templates select="trdgrp|trd"/>
          </xsl:otherwise>
      </xsl:choose>
@@ -127,7 +127,7 @@ name="redcgi">/cgi-bin/vokomail.pl?art=</xsl:variable -->
     <xsl:number from="drv|subart" level="any" count="subdrv" format="A."/>
     <xsl:text> </xsl:text>
     <xsl:apply-templates select="uzo|dif|ekz"/>
-    <xsl:apply-templates select="snc"/>
+    <xsl:apply-templates select="snc|snc/subsnc"/>
     <xsl:if test="refgrp|ref">
       <sr>
         <xsl:apply-templates select="refgrp|ref"/>
@@ -141,7 +141,7 @@ name="redcgi">/cgi-bin/vokomail.pl?art=</xsl:variable -->
   <def>
     <xsl:if test="count(ancestor::node()[self::drv or self::subart][1]//snc)>1 
       and not(ancestor::node()[self::subdrv])">
-      <xsl:number from="drv|subart" level="any" count="snc" format="1."/>
+      <xsl:number from="drv|subart" level="multiple" count="snc|subsnc" format="1.a"/>
       <xsl:text> </xsl:text>
     </xsl:if>
     <xsl:apply-templates select="uzo|dif|ekz"/>
