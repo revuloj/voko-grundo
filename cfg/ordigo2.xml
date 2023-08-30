@@ -1383,81 +1383,95 @@ http://www.thlib.org/reference/dictionaries/tibetan-dictionary/translate.php
 </lingvo>
 
 <!-- japana -->
+<!--
+    Ni indeksas laŭ la prononco, kiu estas
+    ordinare donita per la signoj de hiragano
+    https://de.wikipedia.org/wiki/Unicodeblock_Hiragana
+
+
+    La strekaj kanaoj havas 1-1 respondojn de hiragano,
+    do por ili oni ofte ne esprimas la prononcon aparte
+    en hiragano:
+    https://de.wikipedia.org/wiki/Unicodeblock_Hiragana
+
+    Por tamen ankaŭ ilin enordigi, ni aldonas ilin post la
+    signoj de hiragano.
+-->
 <lingvo lng="ja">
- <l name="a">&#x3042;&#x3041;</l>
- <l name="i">&#x3044;&#x3043;</l>
- <l name="u">&#x3046;&#x3045;</l>
- <l name="e">&#x3048;&#x3047;</l>
- <l name="o">&#x304a;&#x3049;</l>
- <l name="ka">&#x304b;</l>
- <l name="ga">&#x304c;</l>
- <l name="ki">&#x304d;</l>
- <l name="gi">&#x304e;</l>
- <l name="ku">&#x304f;</l>
- <l name="gu">&#x3050;</l>
- <l name="ke">&#x3051;</l>
- <l name="ge">&#x3052;</l>
- <l name="ko">&#x3053;</l>
- <l name="go">&#x3054;</l>
- <l name="sa">&#x3055;</l>
- <l name="za">&#x3056;</l>
- <l name="si">&#x3057;</l>
- <l name="zi">&#x3058;</l>
- <l name="su">&#x3059;</l>
- <l name="zu">&#x305a;</l>
- <l name="se">&#x305b;</l>
- <l name="ze">&#x305c;</l>
- <l name="so">&#x305d;</l>
- <l name="zo">&#x305e;</l>
- <l name="ta">&#x305f;</l>
- <l name="da">&#x3060;</l>
- <l name="ti">&#x3061;</l>
- <l name="di">&#x3062;</l>
- <l name="tu">&#x3064;&#x3063;</l>
- <l name="du">&#x3065;</l>
- <l name="te">&#x3066;</l>
- <l name="de">&#x3067;</l>
- <l name="to">&#x3068;</l>
- <l name="do">&#x3069;</l>
- <l name="na">&#x306a;</l>
- <l name="ni">&#x306b;</l>
- <l name="nu">&#x306c;</l>
- <l name="ne">&#x306d;</l>
- <l name="no">&#x306e;</l>
- <l name="ha">&#x306f;</l>
- <l name="ba">&#x3070;</l>
- <l name="pa">&#x3071;</l>
- <l name="hi">&#x3072;</l>
- <l name="bi">&#x3073;</l>
- <l name="pi">&#x3074;</l>
- <l name="hu">&#x3075;</l>
- <l name="bu">&#x3076;</l>
- <l name="pu">&#x3077;</l>
- <l name="he">&#x3078;</l>
- <l name="be">&#x3079;</l>
- <l name="pe">&#x307a;</l>
- <l name="ho">&#x307b;</l>
- <l name="bo">&#x307c;</l>
- <l name="po">&#x307d;</l>
- <l name="ma">&#x307e;</l>
- <l name="mi">&#x307f;</l>
- <l name="mu">&#x3080;</l>
- <l name="me">&#x3081;</l>
- <l name="mo">&#x3082;</l>
- <l name="ya">&#x3084;&#x3083;</l>
- <l name="yu">&#x3086;&#x3085;</l>
- <l name="yo">&#x3088;&#x3087;</l>
- <l name="ra">&#x3089;</l>
- <l name="ri">&#x308a;</l>
- <l name="ru">&#x308b;</l>
- <l name="re">&#x308c;</l>
- <l name="ro">&#x308d;</l>
- <l name="wa">&#x308f;&#x308e;</l>
- <l name="wi">&#x3090;</l>
- <l name="we">&#x3091;</l>
- <l name="wo">&#x3092;</l>
- <l name="n">&#x3093;</l>
- <l name="vu">&#x3094;</l>
+ <l name="a">&#x3042;&#x3041;&#x30A2;&#x30A1;</l>
+ <l name="i">&#x3044;&#x3043;&#x30A4;&#x30A3;</l>
+ <l name="u">&#x3046;&#x3045;&#x30A6;&#x30A5;</l>
+ <l name="e">&#x3048;&#x3047;&#x30A8;&#x30A7;</l>
+ <l name="o">&#x304a;&#x3049;&#x30Aa;&#x30A9;</l>
+ <l name="ka">&#x304b;&#x30ab;</l>
+ <l name="ga">&#x304c;&#x30ac;</l>
+ <l name="ki">&#x304d;&#x30ad;</l>
+ <l name="gi">&#x304e;&#x30ae;</l>
+ <l name="ku">&#x304f;&#x30af;</l>
+ <l name="gu">&#x3050;&#x30b0;</l>
+ <l name="ke">&#x3051;&#x30b1;</l>
+ <l name="ge">&#x3052;&#x30b2;</l>
+ <l name="ko">&#x3053;&#x30b3;</l>
+ <l name="go">&#x3054;&#x30b4;</l>
+ <l name="sa">&#x3055;&#x30b5;</l>
+ <l name="za">&#x3056;&#x30b6;</l>
+ <l name="si">&#x3057;&#x30b7;</l>
+ <l name="zi">&#x3058;&#x30b8;</l>
+ <l name="su">&#x3059;&#x30b9;</l>
+ <l name="zu">&#x305a;&#x30ba;</l>
+ <l name="se">&#x305b;&#x30bb;</l>
+ <l name="ze">&#x305c;&#x30bc;</l>
+ <l name="so">&#x305d;&#x30bd;</l>
+ <l name="zo">&#x305e;&#x30be;</l>
+ <l name="ta">&#x305f;&#x30bf;</l>
+ <l name="da">&#x3060;&#x30c0;</l>
+ <l name="ti">&#x3061;&#x30c1;</l>
+ <l name="di">&#x3062;&#x30c2;</l>
+ <l name="tu">&#x3064;&#x3063;&#x30c3;&#x30c4;</l>
+ <l name="du">&#x3065;&#x30c5;</l>
+ <l name="te">&#x3066;&#x30c6;</l>
+ <l name="de">&#x3067;&#x30c7;</l>
+ <l name="to">&#x3068;&#x30c8;</l>
+ <l name="do">&#x3069;&#x30c9;</l>
+ <l name="na">&#x306a;&#x30ca;</l>
+ <l name="ni">&#x306b;&#x30cb;</l>
+ <l name="nu">&#x306c;&#x30cc;</l>
+ <l name="ne">&#x306d;&#x30cd;</l>
+ <l name="no">&#x306e;&#x30ce;</l>
+ <l name="ha">&#x306f;&#x30cf;</l>
+ <l name="ba">&#x3070;&#x30d0;</l>
+ <l name="pa">&#x3071;&#x30d1;</l>
+ <l name="hi">&#x3072;&#x30d2;</l>
+ <l name="bi">&#x3073;&#x30d3;</l>
+ <l name="pi">&#x3074;&#x30d4;</l>
+ <l name="hu">&#x3075;&#x30d5;</l>
+ <l name="bu">&#x3076;&#x30d6;</l>
+ <l name="pu">&#x3077;&#x30d7;</l>
+ <l name="he">&#x3078;&#x30d8;</l>
+ <l name="be">&#x3079;&#x30d9;</l>
+ <l name="pe">&#x307a;&#x30da;</l>
+ <l name="ho">&#x307b;&#x30db;</l>
+ <l name="bo">&#x307c;&#x30dc;</l>
+ <l name="po">&#x307d;&#x30dd;</l>
+ <l name="ma">&#x307e;&#x30de;</l>
+ <l name="mi">&#x307f;&#x30df;</l>
+ <l name="mu">&#x3080;&#x30e0;</l>
+ <l name="me">&#x3081;&#x30e1;</l>
+ <l name="mo">&#x3082;&#x30e2;</l>
+ <l name="ya">&#x3084;&#x3083;&#x30e4;&#x30e3;</l>
+ <l name="yu">&#x3086;&#x3085;&#x30e6;&#x30e5;</l>
+ <l name="yo">&#x3088;&#x3087;&#x30e8;&#x30e7;</l>
+ <l name="ra">&#x3089;&#x30e9;</l>
+ <l name="ri">&#x308a;&#x30ea;</l>
+ <l name="ru">&#x308b;&#x30eb;</l>
+ <l name="re">&#x308c;&#x30ec;</l>
+ <l name="ro">&#x308d;&#x30ed;</l>
+ <l name="wa">&#x308f;&#x308e;&#x30ef;&#x30ee;</l>
+ <l name="wi">&#x3090;&#x30f0;</l>
+ <l name="we">&#x3091;&#x30f1;</l>
+ <l name="wo">&#x3092;&#x30f2;</l>
+ <l name="n">&#x3093;&#x30f3;</l>
+ <l name="vu">&#x3094;&#x30f4;</l>
 </lingvo>
 
 <!-- kartvela (mkhedruli)
@@ -1908,6 +1922,64 @@ https://en.wikipedia.org/wiki/Malayalam_script
  <l name="s">സ</l> 	
  <l name="h">ഹ</l> 	
  <l name="ttt">ഺ</l> 
+</lingvo>
+
+<!-- mandarena
+
+ni indeksas laŭ bopomofo, necesas do aldoni
+la prononcon ĉe ĉiu vorto per [<ind>...</ind>]
+vd https://en.wikipedia.org/wiki/Bopomofo
+   https://de.wikipedia.org/wiki/Zhuyin
+
+unikodo: &#x3105; .. &#x312f;
+
+-->
+<lingvo lng="cmn">
+ <l name="b">ㄅ</l>
+ <l name="p">ㄆ</l>
+ <l name="m">ㄇ</l>
+ <l name="f">ㄈ</l>
+ <l name="d">ㄉ</l>
+ <l name="t">ㄊ</l>
+ <l name="n">ㄋ</l>
+ <l name="l">ㄌ</l>
+ <l name="g">ㄍ</l>
+ <l name="k">ㄎ</l>
+ <l name="h">ㄏ</l>
+ <l name="j">ㄐ</l>
+ <l name="q">ㄑ</l>
+ <l name="x">ㄒ</l>
+ <l name="zh">ㄓ</l>
+ <l name="ch">ㄔ</l>
+ <l name="sh">ㄕ</l>
+ <l name="r">ㄖ</l>
+ <l name="z">ㄗ</l>
+ <l name="c">ㄘ</l>
+ <l name="s">ㄙ</l>
+ <l name="a">ㄚ</l>
+ <l name="o">ㄛ</l>
+ <l name="e">ㄜ</l>
+ <l name="ie">ㄝ</l>
+ <l name="ai">ㄞ</l>
+ <l name="ei">ㄟ</l>
+ <l name="ao">ㄠ</l>
+ <l name="ou">ㄡ</l>
+ <l name="an">ㄢ</l>
+ <l name="en">ㄣ</l>
+ <l name="ang">ㄤ</l>
+ <l name="eng">ㄥ</l>
+ <l name="er">ㄦ</l>
+ <l name="yi">ㄧ</l>
+ <l name="w">ㄨ</l>
+ <l name="yu">ㄩ</l>
+ <l name="v">ㄪ</l>
+ <l name="ng">ㄫ</l>
+ <l name="gn">ㄬ</l>
+ <l name="i">ㄭ</l>
+<!--
+ㄮ	
+ㄯ
+-->
 </lingvo>
 
 <!-- mongola
