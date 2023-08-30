@@ -252,7 +252,8 @@ export function vikiSerĉo(event) {
                 if (s_tr) s_tr.innerHTML = "<p>&nbsp;&nbsp;Neniuj trovoj.</p>";
             }
         },
-        undefined, undefined,
+        () => document.body.style.cursor = 'wait',
+        () => document.body.style.cursor = 'auto',
         (xhr: XMLHttpRequest) => Eraro.http('#sercho_error',xhr)
     );
 }
@@ -337,7 +338,8 @@ export function citaĵoSerĉo(event) {
                 if (s_tr) s_tr.innerHTML = "<p>&nbsp;&nbsp;Neniuj trovoj.</p>";
             }
         },
-        undefined, undefined,
+        () => document.body.style.cursor = 'wait',
+        () => document.body.style.cursor = 'auto',
         (xhr: XMLHttpRequest) => Eraro.http('#sercho_error',xhr)   
     );
 }
@@ -571,7 +573,8 @@ export function verkoListo(event) {
                     });
                 }
             },
-            undefined, undefined,
+            () => document.body.style.cursor = 'wait',
+            () => document.body.style.cursor = 'auto',
             (xhr: XMLHttpRequest) => Eraro.http('#sercho_error',xhr)   
         );
     }
@@ -695,7 +698,8 @@ export function retoSerĉo(event) {
                 if (s_tr) s_tr.innerHTML = "<p>&nbsp;&nbsp;Neniuj trovoj.</p>";
             }
         },
-        undefined, undefined,
+        () => document.body.style.cursor = 'wait',
+        () => document.body.style.cursor = 'auto',
         (xhr: XMLHttpRequest) => Eraro.http('#sercho_error',xhr)
     );
 }
@@ -765,7 +769,8 @@ export function bildoSerĉo(event) {
                 pageids = pageids.slice(chunk_size);
             }            
         },
-        undefined, undefined,
+        () => document.body.style.cursor = 'wait',
+        () => document.body.style.cursor = 'auto',
         (xhr: XMLHttpRequest) => Eraro.http('#sercho_error',xhr)    
     );
 }
@@ -818,7 +823,8 @@ function _bildo_info(pageids) {
                 }
             }
         },
-        undefined, undefined,
+        () => document.body.style.cursor = 'wait',
+        () => document.body.style.cursor = 'auto',
         (xhr: XMLHttpRequest) => Eraro.http('#sercho_error',xhr)
     );
 }
@@ -859,7 +865,8 @@ function _bildeto_info(paghoj) {
         //      } 
             }
         },
-        undefined, undefined,
+        () => document.body.style.cursor = 'wait',
+        () => document.body.style.cursor = 'auto',
         (xhr: XMLHttpRequest) => Eraro.http('#sercho_error', xhr)
     );
 }
@@ -920,7 +927,8 @@ function _bildo_info_2(dosiero) {
                 }
             }
         },
-        undefined, undefined,
+        () => document.body.style.cursor = 'wait',
+        () => document.body.style.cursor = 'auto',
         (xhr: XMLHttpRequest) => Eraro.http('#sercho_error', xhr)
     );
 }
@@ -1143,7 +1151,8 @@ class KuntekstoBtn extends UIElement {
                                 // poste eble ebligu laŭŝtupan plion...
                                 DOM.e("#"+id)?.remove();
                             },
-                            undefined, undefined,
+                            () => document.body.style.cursor = 'wait',
+                            () => document.body.style.cursor = 'auto',
                             (xhr: XMLHttpRequest) => Eraro.http('#sercho_error',xhr));
 
                 } else {
