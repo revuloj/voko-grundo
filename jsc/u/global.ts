@@ -9,7 +9,7 @@ export type BoolObj = { [key: string]: boolean};
 export namespace agordo {
 
 // rigardataj kiel konstantoj:
-  export const eldono = "2j";
+  export const eldono = "2k";
   export const debug = false;
 
 // agordoj pri reta-vortaro.de
