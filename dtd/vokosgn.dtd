@@ -129,8 +129,15 @@
 
 <!ENTITY Abreve "&#x0102;">
 <!ENTITY abreve "&#x0103;">
+<!--
+    arkaika /moldava/gagaŭza alfabeto:
 <!ENTITY Tcedil "&#x0162;">
 <!ENTITY tcedil "&#x0163;">
+-->
+<!ENTITY Tcomma "&#x021A;">
+<!ENTITY tcomma "&#x021B;">
+<!ENTITY Scomma "&#x0218;">
+<!ENTITY scomma "&#x0219;">
 
 <!-- grekaj -->
 
