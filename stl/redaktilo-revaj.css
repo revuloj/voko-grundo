@@ -1072,6 +1072,10 @@ ul.ui-menu {
 #surmetita {
     flex: 1;
     background-color: var(--ovr-bgr-clr);
+}
+
+
+#surmetita>div:first-of-type {
     overflow-y: scroll;
 }
 

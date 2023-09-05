@@ -8,7 +8,7 @@
 
 
 <!-- 
-  Kolektante la kapvortojn, markojn, referencojn kaj tradukojn ene de artikolo:
+  Kolektanta la kapvortojn, markojn, referencojn kaj tradukojn ene de artikolo:
   - metas art-mrk kiel ŝlosilon
   - forigas art-mrk kiel prefikso de mrk-oj
   - forigas prefikson "voko:" de listoj
@@ -292,7 +292,7 @@ aperi kiel ref@cel, t.e. referencitaj de iu ajn artikolo
 </xsl:template>
 
 <xsl:template name="trd-join">
-  <!-- kuni ĉion al signoĉeno kaj pote normigi spacojn en XSL 1.0 estas iom malsimpla... -->
+  <!-- kuni ĉion al signoĉeno kaj poste normigi spacojn en XSL 1.0 estas iom malsimpla... -->
   <xsl:call-template name="normalize">
     <xsl:with-param name="str">
       <xsl:for-each select="text()|ind|klr">
