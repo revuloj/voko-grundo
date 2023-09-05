@@ -44,7 +44,7 @@ export class XmlStruct {
   private static re_stru = {
     _elm: /[ \t]*<((?:sub)?(?:art|drv|snc))[>\s]/g,
     _eoe: />[ \t]*\n?/g,
-    _mrk: /\s*mrk\s*=\s*(['"])([^>"']*?)\1/g,
+    _mrk: /(?:\s*ref\s*=\s*['"][^>"']*['"])?\s*mrk\s*=\s*(['"])([^>"']*?)\1/g,
     _kap: /<kap>([^]*)<\/kap>/,
     _rad: /<rad>([^<]+)<\/rad>/,
     _dos: /<art\s+mrk="\$Id:\s+([^\.]+)\.xml|<drv\s+mrk="([^\.]+)\./,
