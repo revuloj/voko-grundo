@@ -1,5 +1,7 @@
 -- skemo uzata de Cetonio kiel serĉindekso 
 -- kaj de Formiko por regule krei tian indeks-datumbazon por Cetonio
+--
+-- (la SQL-skemo de la mysql-datumbazo de la retservo Araneo troviĝas en la projekto voko-abelo/schema)
 
 CREATE TABLE nodo (
   mrk TEXT PRIMARY KEY NOT NULL,
