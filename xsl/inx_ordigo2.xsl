@@ -362,7 +362,15 @@ class="net.sf.saxon.sort.CodepointCollator"/ -->
   <xsl:copy><xsl:apply-templates/></xsl:copy>
 </xsl:template -->
 
-<xsl:template match="k|r|t1|u|t"><xsl:copy-of select="."/></xsl:template>
+<!--
+  k: kapvorto
+  r: radiko
+  t1: traduko
+  u: substrkeo (ind)
+  s: transskribo
+  t: indeksenda tradukvorto (el trd/ind/ts/baz)
+-->
+<xsl:template match="k|r|t1|u|s|t"><xsl:copy-of select="."/></xsl:template>
 
 <!-- xsl:template match="t">
   <xsl:copy><xsl:value-of select="normalize-space(.)"/></xsl:copy>

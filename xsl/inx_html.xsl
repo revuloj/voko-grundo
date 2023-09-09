@@ -903,6 +903,9 @@
   <u><xsl:apply-templates/></u>
 </xsl:template>
 
+<xsl:template match="s">
+  <span class="ts"><xsl:text>[</xsl:text><xsl:apply-templates/><xsl:text>]</xsl:text></span>
+</xsl:template>
 
 <xsl:template match="mankoj/v">
   <xsl:number/>

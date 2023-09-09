@@ -323,7 +323,7 @@ sama lingvo.
 <!-- [trd] Traduko konsistas el traduka vorto aŭ frazo
 kaj klarigoj, poste povos sekvi aliaj elementoj.
 -->
-<!ELEMENT trd (#PCDATA|klr|ind|t|mll|ofc|baz)*>
+<!ELEMENT trd (#PCDATA|klr|ind|ts|mll|ofc|baz)*>
 <!ATTLIST trd
 	lng CDATA #IMPLIED
         fnt CDATA #IMPLIED
@@ -336,12 +336,12 @@ kiu rilatas internaj tradukoj ktp.
 -->
 <!ELEMENT ind (#PCDATA|tld|klr|mll)*>
 
-<!-- [t] Transskribo de traduko, kiel oni uzas por japanaj lingvoj (pinjino, bopomofo, hiragano ks)
+<!-- [ts] Transskribo de traduko, kiel oni uzas por japanaj lingvoj (pinjino, bopomofo, hiragano ks)
 Se traduko havas transskribon, ni uzos tiun por la indeksado/enordigo en literĉaptiron de la indekso.
 Pro la limigita nombro de literoj/literumaj signoj, tio ebligas ĉapitrigi la lingvoindeksojn de
 silabaj lingvoj. Ankaŭ ni ebligas serĉadon laŭ transskribo aldone al la ideografia skribmaniero.
 -->
-<!ELEMENT t (#PCDATA)>
+<!ELEMENT ts (#PCDATA)>
 
 <!-- [baz] Baza formo de traduko, sub kiu la vorto subordiĝos en la indekso. Tion ni uzas
   ekzemple en la indonezia indekso, kie sub "ajar" aperas "belajar", "mengajar" ktp.  

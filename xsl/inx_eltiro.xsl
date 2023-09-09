@@ -63,7 +63,7 @@
           <xsl:apply-templates select="mll|baz"/>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:apply-templates/> <!-- tio krom teksto ankaŭ transprenas trd-internajn ind, t, klr, baz -->
+          <xsl:apply-templates/> <!-- tio krom teksto ankaŭ transprenas trd-internajn ind, ts, klr, baz -->
         </xsl:otherwise>
       </xsl:choose>
     </trd>
@@ -77,7 +77,7 @@
           <xsl:apply-templates select="@lng|mll|baz"/>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:apply-templates select="@lng|text()|ind|t|klr[@tip='ind' or @tip='amb']|baz"/>
+          <xsl:apply-templates select="@lng|text()|ind|ts|klr[@tip='ind' or @tip='amb']|baz"/>
         </xsl:otherwise>
       </xsl:choose>
   </xsl:copy>
@@ -91,7 +91,7 @@
 </xsl:template>
 
 <xsl:template match="kap|ofc|var|@mrk|@lng|uzo[@tip='fak']|mlg
-  |ind|t|klr[@tip='ind' or @tip='amb']|baz">
+  |ind|ts|klr[@tip='ind' or @tip='amb']|baz">
   <xsl:copy><xsl:apply-templates/></xsl:copy>
 </xsl:template>
 
