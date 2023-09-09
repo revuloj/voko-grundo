@@ -8,7 +8,7 @@
 
 -->
 
-<!-- (c) 2006 - 2020 ĉe Wolfram Diestel
+<!-- (c) 2006 - 2023 ĉe Wolfram Diestel
      licenco GPL 2.0
 -->
 
@@ -63,7 +63,7 @@
           <xsl:apply-templates select="mll|baz"/>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:apply-templates/>
+          <xsl:apply-templates/> <!-- tio krom teksto ankaŭ transprenas trd-internajn ind, t, klr, baz -->
         </xsl:otherwise>
       </xsl:choose>
     </trd>
@@ -77,7 +77,7 @@
           <xsl:apply-templates select="@lng|mll|baz"/>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:apply-templates select="@lng|text()|ind|klr[@tip='ind' or @tip='amb']|baz"/>
+          <xsl:apply-templates select="@lng|text()|ind|t|klr[@tip='ind' or @tip='amb']|baz"/>
         </xsl:otherwise>
       </xsl:choose>
   </xsl:copy>
@@ -91,7 +91,7 @@
 </xsl:template>
 
 <xsl:template match="kap|ofc|var|@mrk|@lng|uzo[@tip='fak']|mlg
-  |ind|klr[@tip='ind' or @tip='amb']|baz">
+  |ind|t|klr[@tip='ind' or @tip='amb']|baz">
   <xsl:copy><xsl:apply-templates/></xsl:copy>
 </xsl:template>
 

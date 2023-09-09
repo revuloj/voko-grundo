@@ -2,7 +2,7 @@
                 version="1.0">
 
 
-<!-- (c) 2006-2020 ĉe Wolfram Diestel
+<!-- (c) 2006-2023 ĉe Wolfram Diestel
      licenco GPL 2.0
 -->
 
@@ -391,6 +391,7 @@ U.V = 2629 U.V radikoj + 141 fundamentaj (60+80+1) = 2770 (<>2768 r. !)    + 303
   </v>
 </xsl:template>
 
+<!-- traduko enhavas elementon 'ind', sub kiu ĝi indeksiĝu -->
 <xsl:template match="trd[.//ind]">
   <v>
     <xsl:attribute name="mrk">
@@ -409,6 +410,26 @@ U.V = 2629 U.V radikoj + 141 fundamentaj (60+80+1) = 2770 (<>2768 r. !)    + 303
   </v>
 </xsl:template>
 
+<!-- traduko enhavas elementon 't' (transskribo), sub kiu ĝi indeksiĝu -->
+<xsl:template match="trd[.//t]">
+  <v>
+    <xsl:attribute name="mrk">
+      <xsl:value-of select="ancestor::node()[@mrk][1]/@mrk"/>
+    </xsl:attribute>
+    <t>
+      <xsl:value-of select="normalize-space(.//t)"/>
+    </t>
+    <t1>
+      <xsl:apply-templates/>
+    </t1>
+    <k>
+     <xsl:apply-templates
+  select="(ancestor::art/kap|ancestor::drv/kap|ancestor::ekz/ind|ancestor::bld/ind)[last()]"/>
+    </k>
+  </v>
+</xsl:template>
+
+<!-- traduko enhavas elementon 'baz' (bazformo), sub kiu ĝi indeksiĝu -->
 <xsl:template match="trd[.//baz]">
   <v>
     <xsl:attribute name="mrk">
@@ -427,7 +448,7 @@ U.V = 2629 U.V radikoj + 141 fundamentaj (60+80+1) = 2770 (<>2768 r. !)    + 303
   </v>
 </xsl:template>
 
-<!-- indiksita vorto aperas substrekite (u) -->
+<!-- indeksita vorto aperos substrekite (u) -->
 <xsl:template match="trd/ind|mll/ind">
   <u>
     <xsl:apply-templates/>
