@@ -623,7 +623,7 @@ attlist-trdgrp &= attribute lng { text }
 ## kaj klarigoj, poste povos sekvi aliaj elementoj.
 # FARENDA: difinu trd engrupa (sen lng) kaj memstara, sola
 
-trd = element trd { attlist-trd, (text | klr | ind | mll | ofc | baz)* }
+trd = element trd { attlist-trd, (text | klr | ind | t | mll | ofc | baz)* }
 attlist-trd &=
   attribute lng { text }?,
   attribute fnt { text }?
@@ -637,6 +637,14 @@ attlist-trd &=
 ind = element ind { attlist-ind, (text | tld | klr | mll)* }
 attlist-ind &= empty
 
+## [t]
+## Transliterumo de traduko, kiel oni uzas por japanaj lingvoj (pinjino, bopomofo, hiragano ks)
+## Se traduko havas transliterumon, ni uzos tiun por la indeksado/enordigo en literĉaptiron de la indekso.
+## Pro la limigita nombro de literoj/literumaj signoj, tio ebligas ĉapitrigi la lingvoindeksojn de
+## silabaj lingvoj. Ankaŭ ni ebligas serĉadon laŭ transliterumo aldone al la ideografia skribmaniero.
+t = element t { attlist-t, text* }
+attlist-t &= empty
+
 ## [mll]
 ## Mallongigita traduko, por ekz. ne montri tutan frazon en la indekso oni
 ## povas aperigi tie nur komencon, finon aŭ mezon.
@@ -646,6 +654,7 @@ attlist-mll &= attribute tip { "kom" | "mez" | "fin" }?
 
 ## [baz]
 ## Baza formo de traduko, sub kiu la vorto subordiĝos en la indekso.
+## Tion ni uzas ekzemple en la indonezia indekso, kie sub "ajar" aperas "belajar", "mengajar" ktp. 
 baz = element baz { attlist-baz, text* }
 attlist-baz &= empty
 

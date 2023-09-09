@@ -2,6 +2,7 @@
 
 use strict;
 use warnings;
+use POSIX qw(strftime);
 
 my $basedir = $ENV{'VOKO'} || '.';
 my $rnc_file = $basedir."/dtd/vokoxml.rnc";
@@ -17,6 +18,9 @@ my @toc_hlp;
 my @toc_elm;
 
 rnc2md(); 
+
+my $dato = strftime "%Y-%m-%d", localtime;
+print "<!-- kreita je $dato el voko-grundo/dtd/vokoxml.rnc per voko-grundo/perl/rnc2md.pl -->\n\n";
 
 print "![ulmobranĉo](../assets/img/ulmo.jpg){: style=\"float: right; margin-left: 2em; max-width: 20%; border: solid gray 1px\"}\n\n";
 print "# Enhavo\n\n";
