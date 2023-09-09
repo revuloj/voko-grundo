@@ -336,10 +336,10 @@ kiu rilatas internaj tradukoj ktp.
 -->
 <!ELEMENT ind (#PCDATA|tld|klr|mll)*>
 
-<!-- [t] Transliterumo de traduko, kiel oni uzas por japanaj lingvoj (pinjino, bopomofo, hiragano ks)
-Se traduko havas transliterumon, ni uzos tiun por la indeksado/enordigo en literĉaptiron de la indekso.
+<!-- [t] Transskribo de traduko, kiel oni uzas por japanaj lingvoj (pinjino, bopomofo, hiragano ks)
+Se traduko havas transskribon, ni uzos tiun por la indeksado/enordigo en literĉaptiron de la indekso.
 Pro la limigita nombro de literoj/literumaj signoj, tio ebligas ĉapitrigi la lingvoindeksojn de
-silabaj lingvoj. Ankaŭ ni ebligas serĉadon laŭ transliterumo aldone al la ideografia skribmaniero.
+silabaj lingvoj. Ankaŭ ni ebligas serĉadon laŭ transskribo aldone al la ideografia skribmaniero.
 -->
 <!ELEMENT t (#PCDATA)>
 

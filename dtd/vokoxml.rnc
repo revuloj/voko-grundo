@@ -638,10 +638,10 @@ ind = element ind { attlist-ind, (text | tld | klr | mll)* }
 attlist-ind &= empty
 
 ## [t]
-## Transliterumo de traduko, kiel oni uzas por japanaj lingvoj (pinjino, bopomofo, hiragano ks)
-## Se traduko havas transliterumon, ni uzos tiun por la indeksado/enordigo en literĉaptiron de la indekso.
+## Transskribo de traduko, kiel oni uzas por japanaj lingvoj (pinjino, bopomofo, hiragano ks)
+## Se traduko havas transskribon, ni uzos tiun por la indeksado/enordigo en literĉaptiron de la indekso.
 ## Pro la limigita nombro de literoj/literumaj signoj, tio ebligas ĉapitrigi la lingvoindeksojn de
-## silabaj lingvoj. Ankaŭ ni ebligas serĉadon laŭ transliterumo aldone al la ideografia skribmaniero.
+## silabaj lingvoj. Ankaŭ ni ebligas serĉadon laŭ transskribo aldone al la ideografia skribmaniero.
 t = element t { attlist-t, text* }
 attlist-t &= empty
 
