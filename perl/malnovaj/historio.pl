@@ -2,7 +2,7 @@
 
 #
 # historio.pl
-# Kreu liston de la histrio (versioj), montru malnovan version kaj montru sxangxoj
+# Kreu liston de la historio (versioj), montru malnovan version kaj montru sxangxoj
 # 2006-09-18 Wieland Pusch
 #
 

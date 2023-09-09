@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-# faras prilaboron en HTML-artikolon, kiu ne eblis
+# faras tian prilaboron en HTML-artikolo, kiu ne eblis
 # per XSL (xml2html)
 
 

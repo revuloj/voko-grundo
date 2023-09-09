@@ -1,5 +1,7 @@
 #!/usr/bin/perl
 
+# malnova: nun ekzistas voko-formiko/bin/insert-art-blobs.sh
+
 my $DB = shift @ARGV;
 my $dir = shift @ARGV;
 

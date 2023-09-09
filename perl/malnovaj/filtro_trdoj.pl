@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# enlegas fluon de derivaoj kaj konstruas
+# enlegas fluon de derivaĵoj kaj konstruas
 # bedic-vortaron el ghi
 #
 # uzo:

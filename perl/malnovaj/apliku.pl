@@ -4,6 +4,8 @@
 # voku ekz: 
 #   apliku.pl 'm/bla\./g' dos1 dos2 ... dosn
 #   apliku.pl 's/bla/blub/ig' dos1 dos2 ... dosn
+#
+# malnoviĝinta: uzu prefere 'replace_in_art.pl', kiu ankaŭ altigas la eldon-numeron!
 
 $expr = shift @ARGV;
 
