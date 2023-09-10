@@ -238,6 +238,13 @@ aperi kiel ref@cel, t.e. referencitaj de iu ajn artikolo
 </xsl:template>
 
 
+<!-- ĉiu tradukero estos listo de kvar aŭ kvin kampoj:
+  - marko de tradukita senco/derivaĵo
+  - lingvo-kodo
+  - la traduko/serĉvorto (ind, ts, trd)
+  - tuta enhavo de trd, se ĝi enhavas klr, ind aŭ mll kaj do distingiĝas de la kapvorto
+  - ĉe ekzemplo-traduko: ties ind-parto (anstataŭ kapvorto ĉe aliaj tradukoj)
+-->
 <xsl:template match="trd">
   <xsl:variable name="lng" select="ancestor-or-self::*[@lng][1]/@lng"/>
   <xsl:text>["</xsl:text>
@@ -264,7 +271,7 @@ aperi kiel ref@cel, t.e. referencitaj de iu ajn artikolo
         </xsl:call-template>
       </xsl:otherwise>
     </xsl:choose>
-    <!-- ni aldonas trd nur se ĝi enhavas klr aŭ mll kaj do distingiĝas de la kapvorto -->
+    <!-- ni aldonas trd nur se ĝi enhavas klr, ind aŭ mll kaj do distingiĝas de la kapvorto -->
     <xsl:text>","</xsl:text>
     <!-- la traduko inkl. klr..., sed sen ofc -->
     <xsl:choose>
@@ -284,6 +291,36 @@ aperi kiel ref@cel, t.e. referencitaj de iu ajn artikolo
       <xsl:apply-templates select="(ancestor::bld|ancestor::ekz)/ind"/>
     </xsl:if>
 
+  <xsl:text>"]</xsl:text>
+  <xsl:if test="following::trd">
+    <xsl:text>,
+</xsl:text>
+  </xsl:if>
+</xsl:template>
+
+<!-- ĉe tradukoj kun transskribo ni ankaŭ kreas liston por
+  tiu transskribo, tiel ke ni povas serĉi aŭ je la traduko mem aŭ je la transskribo -->
+<xsl:template match="trd[ts]">
+  <xsl:variable name="lng" select="ancestor-or-self::*[@lng][1]/@lng"/>
+  <xsl:text>["</xsl:text>
+
+    <xsl:apply-templates select="ancestor::*[@mrk][1]/@mrk"/>
+    <xsl:text>","</xsl:text>
+    <xsl:value-of select="$lng"/>
+    <xsl:text>","</xsl:text>
+    <xsl:call-template name="normalize">
+      <xsl:with-param name="str" select="ts"/>
+    </xsl:call-template>
+    <xsl:text>","</xsl:text>
+    <!-- la traduko inkl. klr..., sed sen ts, ofc -->
+    <xsl:call-template name="trd-join"/>
+    <!-- se temas pri traduko en ekzemplo aŭ bildo ni aldonu la ind-parton de la ekz-o -->
+    <!-- por tradukoj kun <ts> ni provizore esceptas bld/ekz
+    <xsl:if test="ancestor::bld|ancestor::ekz">
+      <xsl:text>","</xsl:text>
+      <xsl:apply-templates select="(ancestor::bld|ancestor::ekz)/ind"/>
+    </xsl:if>
+   -->
   <xsl:text>"]</xsl:text>
   <xsl:if test="following::trd">
     <xsl:text>,
