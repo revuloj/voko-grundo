@@ -1250,7 +1250,7 @@ export namespace redaktilo {
         () => {
           const pressed = ""+(1 - parseInt(xklvr.value));
           xklvr.value = pressed;
-          if (pressed) {
+          if (pressed == "1") {
             x.show("r:klavaro");
           } else {
             x.hide("r:klavaro");
