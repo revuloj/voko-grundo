@@ -1472,7 +1472,6 @@ http://www.thlib.org/reference/dictionaries/tibetan-dictionary/translate.php
  <l name="wo">&#x3092;&#x30f2;</l>
  <l name="n">&#x3093;&#x30f3;</l>
  <l name="vu">&#x3094;&#x30f4;</l>
-
  <!-- ignorendaj literoj
  ĉar tiu sintakso ne plu uziĝas de la algoritmo, anstataŭe ekskludu tiujn signojn en la koncernaj 
  artikoloj de la indeksenda vorto, ekz-e: '～</ind>させる</ind>' aŭ '『<ind>イリアス</ind>』'
