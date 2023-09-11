@@ -623,7 +623,7 @@ attlist-trdgrp &= attribute lng { text }
 ## kaj klarigoj, poste povos sekvi aliaj elementoj.
 # FARENDA: difinu trd engrupa (sen lng) kaj memstara, sola
 
-trd = element trd { attlist-trd, (text | klr | ind | ts | mll | ofc | baz)* }
+trd = element trd { attlist-trd, (text | klr | ind | pr | mll | ofc | baz)* }
 attlist-trd &=
   attribute lng { text }?,
   attribute fnt { text }?
@@ -637,13 +637,14 @@ attlist-trd &=
 ind = element ind { attlist-ind, (text | tld | klr | mll)* }
 attlist-ind &= empty
 
-## [ts]
-## Transskribo de traduko, kiel oni uzas por japanaj lingvoj (pinjino, bopomofo, hiragano ks)
+## [pr]
+## Prononco/transskribo, kiel oni uzas por japanaj lingvoj (pinjino, bopomofo, hiragano ks)
+## aŭ fonetikaj indikoj de nomoj.
 ## Se traduko havas transskribon, ni uzos tiun por la indeksado/enordigo en literĉaptiron de la indekso.
 ## Pro la limigita nombro de literoj/literumaj signoj, tio ebligas ĉapitrigi la lingvoindeksojn de
 ## silabaj lingvoj. Ankaŭ ni ebligas serĉadon laŭ transskribo aldone al la ideografia skribmaniero.
-ts = element ts { attlist-ts, text* }
-attlist-ts &= empty
+pr = element pr { attlist-pr, text* }
+attlist-pr &= empty
 
 ## [mll]
 ## Mallongigita traduko, por ekz. ne montri tutan frazon en la indekso oni
