@@ -310,6 +310,11 @@ reguloj por prezentado de la tradukoj
 <xsl:template match="klr[@tip='ind']"/>
    <!-- ne skribu indeksajn klarigojn tie cxi -->
 
+
+<xsl:template match="pr">
+  <span class="pr"><xsl:text>[</xsl:text><xsl:apply-templates/><xsl:text>]</xsl:text></span>
+</xsl:template>
+
 <xsl:template match="baz"/>
 <!--
   <xsl:text>/</xsl:text>

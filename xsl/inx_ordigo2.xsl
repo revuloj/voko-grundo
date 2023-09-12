@@ -367,7 +367,7 @@ class="net.sf.saxon.sort.CodepointCollator"/ -->
   r: radiko
   t1: traduko
   u: substrkeo (ind)
-  s: transskribo
+  p: prononco/transskribo
   t: indeksenda tradukvorto (el trd/ind/ts/baz)
 -->
 <xsl:template match="k|r|t1|u|s|t"><xsl:copy-of select="."/></xsl:template>

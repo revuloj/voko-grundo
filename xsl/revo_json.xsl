@@ -241,7 +241,7 @@ aperi kiel ref@cel, t.e. referencitaj de iu ajn artikolo
 <!-- ĉiu tradukero estos listo de kvar aŭ kvin kampoj:
   - marko de tradukita senco/derivaĵo
   - lingvo-kodo
-  - la traduko/serĉvorto (ind, ts, trd)
+  - la traduko/serĉvorto (ind, pr, trd)
   - tuta enhavo de trd, se ĝi enhavas klr, ind aŭ mll kaj do distingiĝas de la kapvorto
   - ĉe ekzemplo-traduko: ties ind-parto (anstataŭ kapvorto ĉe aliaj tradukoj)
 -->
@@ -254,23 +254,7 @@ aperi kiel ref@cel, t.e. referencitaj de iu ajn artikolo
     <xsl:value-of select="$lng"/>
     <xsl:text>","</xsl:text>
     <!-- la indeksenda kapvorto: ni devas ekskluzive distingi inter ind, mll kaj text...-->
-    <xsl:choose>
-      <xsl:when test="ind">
-        <xsl:call-template name="normalize">
-          <xsl:with-param name="str" select="ind"/>
-        </xsl:call-template>
-      </xsl:when>
-      <xsl:when test="mll">
-        <xsl:call-template name="normalize">
-          <xsl:with-param name="str" select="mll"/>
-        </xsl:call-template>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:call-template name="normalize">
-          <xsl:with-param name="str" select="text()"/>
-        </xsl:call-template>
-      </xsl:otherwise>
-    </xsl:choose>
+    <xsl:call-template name="trd-ind"/>
     <!-- ni aldonas trd nur se ĝi enhavas klr, ind aŭ mll kaj do distingiĝas de la kapvorto -->
     <xsl:text>","</xsl:text>
     <!-- la traduko inkl. klr..., sed sen ofc -->
@@ -298,24 +282,66 @@ aperi kiel ref@cel, t.e. referencitaj de iu ajn artikolo
   </xsl:if>
 </xsl:template>
 
-<!-- ĉe tradukoj kun transskribo ni ankaŭ kreas liston por
+<!-- ĉe tradukoj kun prononco/transskribo ni kreas du listojn por
   tiu transskribo, tiel ke ni povas serĉi aŭ je la traduko mem aŭ je la transskribo -->
-<xsl:template match="trd[ts]">
+<xsl:template match="trd[pr]">
   <xsl:variable name="lng" select="ancestor-or-self::*[@lng][1]/@lng"/>
-  <xsl:text>["</xsl:text>
-
+  <xsl:variable name="mrk">
     <xsl:apply-templates select="ancestor::*[@mrk][1]/@mrk"/>
+  </xsl:variable>
+  
+  <!-- ero por serĉi laŭ la origina skribo -->
+  <xsl:text>["</xsl:text>
+    <xsl:value-of select="$mrk"/>
+    <xsl:text>","</xsl:text>
+    <xsl:value-of select="$lng"/>
+    <xsl:text>","</xsl:text>
+    <!-- la indeksenda kapvorto: ni devas ekskluzive distingi inter ind, mll kaj text...-->
+    <xsl:call-template name="trd-ind"/>
+    <!-- ni aldonas trd nur se ĝi enhavas klr, ind aŭ mll kaj do distingiĝas de la kapvorto -->
+    <xsl:text>","</xsl:text>
+    <!-- la traduko inkl. klr..., sed sen ofc -->
+    <xsl:choose>
+      <xsl:when test="mll">
+        <xsl:apply-templates select="mll"/>
+      </xsl:when>
+      <xsl:when test="ind|klr">
+        <xsl:call-template name="trd-join"/>
+      </xsl:when>
+      <!--xsl:otherwise>
+        <xsl:text></xsl:text>
+      </xsl:otherwise-->
+    </xsl:choose>
+    <!-- se temas pri traduko en ekzemplo aŭ bildo ni aldonu la ind-parton de la ekz-o -->
+    <xsl:if test="ancestor::bld|ancestor::ekz">
+      <xsl:text>","</xsl:text>
+      <xsl:apply-templates select="(ancestor::bld|ancestor::ekz)/ind"/>
+    </xsl:if>
+
+  <xsl:text>"],</xsl:text>
+
+  <!-- ero por serĉi laŭ la prononco -->
+  <xsl:text>["</xsl:text>
+    <xsl:value-of select="$mrk"/>
     <xsl:text>","</xsl:text>
     <xsl:value-of select="$lng"/>
     <xsl:text>","</xsl:text>
     <xsl:call-template name="normalize">
-      <xsl:with-param name="str" select="ts"/>
+      <xsl:with-param name="str" select="pr"/>
     </xsl:call-template>
     <xsl:text>","</xsl:text>
-    <!-- la traduko inkl. klr..., sed sen ts, ofc -->
-    <xsl:call-template name="trd-join"/>
+    <!-- la traduko inkl. klr..., sed sen ofc -->
+    <xsl:choose>
+      <xsl:when test="mll">
+        <xsl:apply-templates select="mll"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="trd-join"/>
+      </xsl:otherwise>
+    </xsl:choose>
     <!-- se temas pri traduko en ekzemplo aŭ bildo ni aldonu la ind-parton de la ekz-o -->
-    <!-- por tradukoj kun <ts> ni provizore esceptas bld/ekz
+    <!-- por tradukoj kun <pr> ni ne metas bld/ekz en la duan eron
+      por eviti duoblaĵojn en la serĉo je ekzemploj
     <xsl:if test="ancestor::bld|ancestor::ekz">
       <xsl:text>","</xsl:text>
       <xsl:apply-templates select="(ancestor::bld|ancestor::ekz)/ind"/>
@@ -326,6 +352,26 @@ aperi kiel ref@cel, t.e. referencitaj de iu ajn artikolo
     <xsl:text>,
 </xsl:text>
   </xsl:if>
+</xsl:template>
+
+<xsl:template name="trd-ind">
+    <xsl:choose>
+      <xsl:when test="ind">
+        <xsl:call-template name="normalize">
+          <xsl:with-param name="str" select="ind"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:when test="mll">
+        <xsl:call-template name="normalize">
+          <xsl:with-param name="str" select="mll"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="normalize">
+          <xsl:with-param name="str" select="text()"/>
+        </xsl:call-template>
+      </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <xsl:template name="trd-join">

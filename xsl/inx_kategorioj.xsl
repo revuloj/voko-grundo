@@ -410,14 +410,14 @@ U.V = 2629 U.V radikoj + 141 fundamentaj (60+80+1) = 2770 (<>2768 r. !)    + 303
   </v>
 </xsl:template>
 
-<!-- traduko enhavas elementon 't' (transskribo), sub kiu ĝi indeksiĝu -->
-<xsl:template match="trd[.//ts]">
+<!-- traduko enhavas elementon 'pr' (prononco/transskribo), sub kiu ĝi indeksiĝu -->
+<xsl:template match="trd[.//pr]">
   <v>
     <xsl:attribute name="mrk">
       <xsl:value-of select="ancestor::node()[@mrk][1]/@mrk"/>
     </xsl:attribute>
     <t>
-      <xsl:value-of select="normalize-space(.//ts)"/>
+      <xsl:value-of select="normalize-space(.//pr)"/>
     </t>
     <t1>
       <xsl:apply-templates/>
@@ -456,10 +456,10 @@ U.V = 2629 U.V radikoj + 141 fundamentaj (60+80+1) = 2770 (<>2768 r. !)    + 303
 </xsl:template>
 
 <!-- transskribo aperos en rektaj krampoj (s) -->
-<xsl:template match="trd/ts">
-  <s>
+<xsl:template match="trd/pr">
+  <p>
     <xsl:apply-templates/>
-  </s>
+  </p>
 </xsl:template>
 
 <xsl:template match="mll">
