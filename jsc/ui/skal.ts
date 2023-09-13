@@ -7,7 +7,7 @@ import { UIElement } from './uielement';
 import { UIStil } from './uistil';
 
 export class Skal extends UIElement {
-    //valoroj: any;
+    public valoroj: Array<number>;
 
     /*
     public opcioj: {
@@ -49,6 +49,13 @@ export class Skal extends UIElement {
             };
             n++;
         });
+
+        this.valoroj = this.opcioj.valoroj;
+
+        // registrita ago
+        if (this.opcioj.kreo instanceof Function) {
+            this.opcioj.kreo();
+        }
     }
 
     komencuMovon(event) {
@@ -66,6 +73,11 @@ export class Skal extends UIElement {
             manilo.classList.remove("ui-state-active");
             manilo.onpointermove = null;
             manilo.releasePointerCapture(event.pointerId);
+
+            // registrita ago
+            if (this.opcioj.postmovo instanceof Function) {
+                this.opcioj.postmovo(event,this);
+            }
         }
     }
       
@@ -76,25 +88,33 @@ export class Skal extends UIElement {
         const manilo = event.currentTarget;
         if (manilo instanceof HTMLElement) {
             const mx = event.clientX - this.element.offsetLeft;
-            const val = this._valoro_x(mx);
+            const no = Array.from(this.element.children).indexOf(manilo);
+            const val = this._valoro_x(mx,no);
             const p = this._pozicio(val);
             manilo.textContent = val.toFixed(0); // momente ni supozas entjerojn kun paŝoj je 1
             const mp = this._plarĝo(manilo.offsetWidth);
             manilo.style.left = `${p - mp/2}%`;
             //console.debug(`mx: ${mx} val: ${val} proc: ${p}`);
+
+            // memoru la aktualan valoron
+            this.valoroj[no] = val;
         }
     }
 
     /**
      * Redonas la valoron respondan al la x-pozicio mezurita de maldekstro
+     * respektante minimuman kaj maksimuman limojn kaj evitante transŝovon
+     * de najbaraj maniloj
      */
-    _valoro_x(mx: number): number {
+    _valoro_x(mx: number, no: number): number {
         const larĝo = this.element.offsetWidth;
         const min = this.opcioj.min||0;
         const max = this.opcioj.max||100;
+        const vmin = no>0? this.valoroj[no-1] : min;
+        const vmax = no<this.valoroj.length-1? this.valoroj[no+1] : max;
         // KOREKTU: se ni vokas tro frue offsetWith / getBoundingClientRect().width redonas 0
         const val = min + mx/larĝo*(max-min);
-        return Math.min(Math.max(val,min),max);
+        return Math.min(Math.max(val,vmin),vmax);
     }
 
     /**
