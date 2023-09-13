@@ -311,7 +311,7 @@ reguloj por prezentado de la tradukoj
    <!-- ne skribu indeksajn klarigojn tie cxi -->
 
 
-<xsl:template match="pr">
+<xsl:template match="pr" mode="tradukoj">
   <span class="pr"><xsl:text>[</xsl:text><xsl:apply-templates/><xsl:text>]</xsl:text></span>
 </xsl:template>
 
