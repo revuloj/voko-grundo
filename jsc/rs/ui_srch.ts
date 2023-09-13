@@ -452,7 +452,7 @@ export function verkoPeriodo() {
     const periodilo = DOM.e("#s_elektitaj_periodilo");
 
     function adaptuVerkliston(de,ghis) {
-        DOM.idoj("#sercho_verklisto div")?.forEach((e) => {
+        DOM.idoj("#sercho_verklisto")?.forEach((e) => {
             if (e.id != "vl_chiuj_") {
                 const jar = +(e?.getAttribute('data-jar')||0);
                 DOM.kaŝu(e, jar < de || jar > ghis); // ni kaŝas, se la argumento estas vera
@@ -464,28 +464,28 @@ export function verkoPeriodo() {
         const min = periodilo.getAttribute("data-min")||1887;
         const max = periodilo.getAttribute("data-max")||2050;
         const val = periodilo.getAttribute("data-val");
-        const values = val?.split('-').map((x)=>+x); // "min-max" kiel du-nombra listo
+        const valoroj = val?.split('-').map((x)=>+x); // "min-max" kiel du-nombra listo
 
         new Skal(periodilo, {
             range: true,
             min: +min,
             max: +max,
-            valoroj: values, 
+            valoroj: valoroj, 
             kreo: function() {
-                if (values?.length == 2) {
-                    const de = values[0];
-                    const ghis = values[1];
+                if (valoroj?.length == 2) {
+                    const de = valoroj[0];
+                    const ghis = valoroj[1];
                     DOM.al_t("#periodilo_manilo_1",""+de);
                     DOM.al_t("#periodilo_manilo_2",""+ghis);       
                     adaptuVerkliston(de,ghis);    
                 }
             },
-            movo: function(event, ui) {
+            postmovo: function(event: Event, ui: Skal) {
                 // aktualigu la montratan periodon
-                const de = ui.values[0];
-                const ghis = ui.values[1];
-                DOM.al_t("#periodilo_manilo_1",de);
-                DOM.al_t("#periodilo_manilo_2",ghis);       
+                const de = ui.valoroj[0].toFixed(0);
+                const ghis = ui.valoroj[1].toFixed(0);
+                //DOM.al_t("#periodilo_manilo_1",""+de);
+                //DOM.al_t("#periodilo_manilo_2",""+ghis);       
 
                 // aktualigu la videblon de verkoj
                 adaptuVerkliston(de,ghis);
@@ -504,7 +504,7 @@ function verkinformo() {
     const periodilo = DOM.e("#s_elektitaj_periodilo");
 
     if (periodilo instanceof HTMLElement) {
-        const periodo = Skal.skal(periodilo)?.opcioj["valoroj"].join(' - ');
+        const periodo = Skal.skal(periodilo)?.valoroj.map((v) => v.toFixed(0)).join(' - ');
         let info = ' ' + periodo;
         
         // titoloj; subpremu, se verkoj ankoraŭ ne ŝargitaj kaj do 

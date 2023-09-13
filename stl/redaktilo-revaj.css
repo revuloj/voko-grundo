@@ -924,6 +924,7 @@ ul.ui-menu {
     border: 1px solid var(--main-brd-clr);
     background-color: var(--main-bgr-clr);
     border-radius: 5px;
+    cursor: grab;
 }
 
 .periodilo {
