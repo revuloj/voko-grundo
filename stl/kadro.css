@@ -389,6 +389,12 @@ nav a:active {
     vertical-align: text-top;*/
 }
 
+#navigado .enhavo *[lang='zh'] u {
+    font-size: 83%; /* latinliteran transliterumon remetu al 100%, t.e. 100/120
+    /*line-height: 120%;
+    vertical-align: text-top;*/
+}
+
 #navigado .enhavo details a[href*='lx_la_'] {
     border-bottom: 1px dotted var(--nav-brd-clr);
 }
