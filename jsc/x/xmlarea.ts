@@ -101,6 +101,7 @@ export class Xmlarea {
    * tiu .id estos poste la elektita, se ĝi aldone havas .ln, .el tiuj povus esti
    * uzataj por retrovi subtekston, kies .id ŝanĝiĝis, ekz-e pro aldono/ŝanĝo de mrk...
    */
+  /*
   sync(select?: SId) {
     if (this.elekto) {
       console.debug("<<< sinkronigo <<<");
@@ -154,16 +155,19 @@ export class Xmlarea {
       this.synced = true;
     }
   };
+  */
 
 
   /**
    * Redonas la tutan XML-tekston post eventuala sinkronigo kun la aktuala redakto
    * @returns la tuta sinkronigita XML-teksto
    */
+  /*
   syncedXml(): string {
     if (! this.synced) this.sync(this.elekto); 
     return this.xmlstruct.xmlteksto;
   };
+  */
 
   /**
    * Redonas la tutan XML-tekston post eventuala sinkronigo kaj iom
@@ -192,6 +196,7 @@ export class Xmlarea {
    * Laŭbezone sekurigas la nune redaktatan parton...
    * @param id - la identigilo de la subteksto
    */
+  /*
   changeSubtext(id: string, sync=true) {
     if (id) {
       console.debug("<<< ŝanĝu subtekston "+id+" <<<");
@@ -199,7 +204,7 @@ export class Xmlarea {
       // ni unue sekurigu la aktuale redaktatan parton...
       if (sync) this.sync({id:id}); // ni transdonas ankaŭ la elektotan id por navigi tien en la elekto-listo
       
-      /* ni trovu la celatan subtekston per ĝia id... */
+      //// ni trovu la celatan subtekston per ĝia id... 
 
       // apriore, por la kazo, ke ni ne trovos la celatan, ekz-e ĉar marko aŭ enhavo snc-aldono...) ŝanĝiĝis,
       // ni antaŭelektas al la unuan (art)
@@ -225,6 +230,7 @@ export class Xmlarea {
       if (this.onselectsub) this.onselectsub(this.elekto);
     }
   };
+  */
 
   /**
    * Elektas la parton identigeblan per 'mrk' por redaktado.
@@ -244,6 +250,7 @@ export class Xmlarea {
    * @param len - se donita, tiom da signoj ĉe la indikita poizico estos markitaj,
    *                  se ne donita unu signo estos elektita
    */
+  /*
   goto(line_pos: string, len:number = 1) {
     //const re_line = this.re_stru._line;
     
@@ -256,13 +263,7 @@ export class Xmlarea {
           pos = xml.indexOf('\n',pos)+1;
           lin++;
         }
-        /*
-        var lines = this.element.val().split('\n');
-        var pos = 0;
-        
-        for (var i=0; i<line; i++) {
-            pos += lines[i].length+1;
-        }*/
+
         return pos;
       };
 
@@ -280,6 +281,7 @@ export class Xmlarea {
     this.select(pos,0); // rulu al la pozicio
     this.select(pos,len); // nur nun marku <len> signojn por pli bona videbleco
   };
+  */
 
   /**
    * Redonas la aktualan kapvorton, se ene de drv t.e. ties kapvorton, alie la kapvorton de la unua drv
@@ -505,6 +507,7 @@ export class Xmlarea {
    * Redonas la aktualan pozicion de la kursoro kiel linio kaj loko ene de la linio 
    * @returns objekto {{line: number, pos: number}}
    */
+  /*
   position() {
     const loff = this.elekto? this.elekto.ln : 0;
 
@@ -531,12 +534,14 @@ export class Xmlarea {
     } else 
       throw "Malnovaj retumiloj kiel IE ne plu subtenataj!"
   };
+  */
 
 
   /**
    * Redonas pozicion de kursoro kiel n-ro de signo
    * @returns - la numero de la signo, kie staras la kursoro
    */
+  /*
   positionNo(): number {
       const txtarea = this.txtarea;
       let pos = 0;
@@ -545,12 +550,14 @@ export class Xmlarea {
       } else 
         throw "Malnovaj retumiloj kiel IE ne plu subtenataj!"
   };
+  */
 
   /**
    * Elektas tekstoparton en la redaktata teksto
    * @param pos - la pozicio ekde kie elekti
    * @param len - la nombro de elektendaj signoj
    */
+  /*
   select(pos: number, len: number = 0) {
     const txtarea = this.txtarea;
 
@@ -571,6 +578,7 @@ export class Xmlarea {
     const last_line = get_line_pos(text.length-1,text).line;
     this.scrollPos(txtarea.scrollHeight * scroll_to_line / last_line);  
   };
+  */
 
   /**
    * Legas aŭ anstataŭigas la momente elektitan tekston en la redaktata teksto
@@ -578,6 +586,7 @@ export class Xmlarea {
    * @param p_kursoro - se negativa tiom da signoj ni moviĝas antaŭen antaŭ enmeti la tekston, se pozitiva, tiom da signoj ni movas antaŭen la kursoron post enmeto (ekz-e tekstenŝovo)
    * @returns la momente elektita teksto, se ne estas donita enmetenda teksto
    */
+  /*
   selection(insertion?: string, p_kursoro: number = 0): string {
     //var txtarea = document.getElementById('r:xmltxt');
     const txtarea = this.txtarea;
@@ -613,7 +622,7 @@ export class Xmlarea {
       return txtarea.value.substring(startPos, endPos); 
     }
   }
-  
+  */
 
 
   /**
@@ -622,6 +631,7 @@ export class Xmlarea {
    * @param ind - la nombro de ŝovendaj spacoj
    * @returns la enŝovo de la aktuala linio (la spacsignoj en ties komenco)
    */
+  /*
   indent(ind?: number): string {
     //var txtarea = document.getElementById('r:xmltxt');
     let txtarea = this.txtarea;
@@ -642,14 +652,6 @@ export class Xmlarea {
       ind = 0;
       let linestart: number;
 
-      /*
-      if (document.selection  && document.selection.createRange) { // IE/Opera
-        var range = document.selection.createRange();
-        range.moveStart('character', - 200); 
-        selText = range.text;
-        linestart = selText.lastIndexOf("\n");
-        while (selText.charCodeAt(linestart+1+ind) == 32) {ind++;}
-      } else*/
       if (txtarea.selectionStart || txtarea.selectionStart === 0) { // Mozilla/Chrome
         startPos = txtarea.selectionStart;
         linestart = txtarea.value.substring(0, startPos).lastIndexOf("\n");
@@ -658,29 +660,27 @@ export class Xmlarea {
       return (str_repeat(" ", ind));  
     }
   };
+  */
 
 
   /**
    * Signo antaŭ kursoro
    * @returns la signon antaŭ la kursoro
    */
+  /*
   charBefore(): string {
     //var txtarea = document.getElementById('r:xmltxt');
     var txtarea = this.txtarea;
-    /*
-    if (document.selection && document.selection.createRange) { // IE/Opera  
-      txtarea.focus();
-      var range = document.selection.createRange();
-      range.moveStart('character', - 1); 
-      return range.text;
-    } else {*/ // Mozilla/Chrome
+   // Mozilla/Chrome
     var startPos = txtarea.selectionStart;
     //txtarea.setSelectionRange(startPos-1,startPos);
     return txtarea.value.substring(startPos - 1, startPos);
     //}
   };
+  */
 
   // eltrovu la signojn antaŭ la nuna pozicio (ĝis la linikomenco)
+  /*
   charsFromLineStart(): string {
     const txtarea = this.txtarea;
     const pos = this.positionNo();
@@ -688,13 +688,14 @@ export class Xmlarea {
     let p = pos;
     while (p>0 && val[p] != '\n') p--;
     return val.substring(p+1,pos);
-  };
+  };*/
 
 
 
   /**
    * Metas la kursoron al la komenco de la redaktejo kaj fokusas ĝin
    */
+  /*
   resetCursor() { 
     const txtarea = this.txtarea;
     if (txtarea.setSelectionRange) { 
@@ -704,12 +705,9 @@ export class Xmlarea {
         txtarea.selectionEnd = 0;
     } else 
       throw "Malnovaj retumiloj kiel IE ne plu subtenataj!"
-    /*if (txtarea.createTextRange) { 
-        const range = txtarea.createTextRange();  
-        range.moveStart('character', 0); 
-        range.select(); 
-    } */
+   
     txtarea.focus();
   };
+  */
 
 }

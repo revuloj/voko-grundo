@@ -3,7 +3,8 @@
  (c) 2021-2023 ĉe Wolfram Diestel
 */
 
-import {count_char} from './util';
+import { count_char } from './util';
+import { Tekst, Tekstero } from '../ui';
 
 export interface SId {
   id: string, // unika ŝlosilo kalkulita (el mrk + evtl. tekstkomenco) por la subteksto
@@ -32,10 +33,10 @@ export type XElPos = { pos: number, end: number, elm: string };
 /**
  * Administras XML-tekston kiel strukturo de subtekstojTiel eblas reagi ekzemple plenigante liston per la trovitaj subtekstoj (art, drv, snc...) 
  */
-export class XmlStruct {
+export class XmlStruct extends Tekst {
 
-  public xmlteksto:string; // la tuta teksto
-  public strukturo:Array<Strukturero>; // la listo de subtekstoj [komenco,fino,nomo]
+  // public xmlteksto:string; // la tuta teksto
+  // public strukturo:Array<Strukturero>; // la listo de subtekstoj [komenco,fino,nomo]
   public radiko:string;
 
   private onaddsub:Function;
@@ -70,6 +71,164 @@ export class XmlStruct {
     art: "", xml: "", subart: "\u24d0",
     drv: "\u24b9", subdrv: "\u24d3", snc: "\u24c8", subsnc: "\u24e2"
   }
+
+  /**
+   * Ekstraktas strukturon de art/subart/drv/subdrv/snc/subsnc el la artikolo. 
+   * Tio estas listo de (ingigitaj) subtekstoj por ĉiu el kiuj la listo enhavos objekton 
+   * @param selected - se donita tio estas la elektita subteksto kaj estos markita en la revokfunkcio onaddsub (4-a argumento: true)
+   */
+  static structure(tekst: Tekst, selected?: string) {
+      const re_stru = XmlStruct.re_stru;
+      const xmlteksto = tekst.teksto;
+  
+      /**
+       * Ekstraktu la XML-atributon 'mrk' el la subteksto
+       * @param elm - la elemento de la subteksto (art,subart,drv,...,subsnc)
+       * @param de - la komenco de la subteksto en la tuta XML
+       * @returns la atributon 'mrk'
+       */
+      function _mrk(elm: XEl, de: number) {
+        let i_start = xmlteksto.indexOf('<',de);
+        if (i_start > -1) {
+          i_start += 1 + elm.length + 1; // de:"<elm " 
+          re_stru._mrk.lastIndex = i_start;
+          const m = re_stru._mrk.exec(xmlteksto);
+          if (m && m.index == i_start) { 
+            const mrk = m[2];
+            return (elm != 'art'? 
+              mrk.substring(mrk.indexOf('.')+1) 
+              : (mrk.slice(mrk.indexOf(':')+2,-20)) || '<nova>');
+          }  
+        }
+      }
+      // trovas la radikon de artikolo
+      function _rad(de: number, ghis: number) {
+        const art = xmlteksto.substring(de,ghis);
+        const mr = art.match(re_stru._rad);
+  
+        if (mr) {
+          const rad = mr[1]
+          .replace(/\s+/,' ')
+          .trim();  // [^] = [.\r\n]
+  
+          return rad;
+        }
+      }
+      // trovas la kapvorton de elemento
+      function _kap(elm: XEl, de: number, ghis: number) {
+        if (elm == 'drv') {
+          // find kap
+          const drv = xmlteksto.substring(de,ghis);
+          const mk = drv.match(re_stru._kap); 
+          //re_stru._kap.lastIndex = de;
+          if (mk) {
+            const kap = mk[1]
+            .replace(re_stru._var,'')
+            .replace(re_stru._ofc,'')
+            .replace(re_stru._fnt,'')
+            .replace(re_stru._tl1,'$1~')
+            .replace(re_stru._tl2,'~')
+            .replace(/\s+/,' ')
+            .replace(',',',..')
+            .trim();  // [^] = [.\r\n]
+  
+            return kap;
+          }
+        }
+      }
+      // kreas identigilon el marko resp. enhavkomenco
+      function _id(subt: SDet) {
+        const rx = /[^A-Za-z]/g;
+        const key = [123,45,67,89,102,43,69]; // enhavo ne tro gravas sed estu ne tro mallonga...
+  
+        // kondensigi signoĉenon al identigilo
+        const hash_str = (str: string) => 
+          { 
+              var c = key;
+              for(let i=0; i<str.length; i++) { 
+                  c[i%key.length] ^= str.charCodeAt(i);
+              }
+              //return c.join('.');
+              return c.map(v=>(v%36).toString(36)).join('')
+          };
+        if (subt.mrk) {
+          // se la elemento havas markon, tio estas la plej bona identigilo
+          return hash_str(subt.mrk);
+        } else {
+          // se ne, ni uzas la numeron kaj la unuajn aperantajn latinajn literojn por
+          // identigi, ja konsciante, ke tiuj povos ŝanĝiĝi, sed tiam
+          // ni rekalkulas la strukturon kaj akceptas, ke ni ne
+          // retrovas la antaŭan elekton...
+          return hash_str('_'+subt.no+'_'+xmlteksto.substring(subt.de,subt.de+120).replace(rx,''));
+        }
+      }
+      // trovas la finon de elemento 'elm'
+      function _al(elm: XEl, de: number) {
+        var fin = xmlteksto.indexOf('</'+elm, de);
+        // trovu avance >..\n?
+        re_stru._eoe.lastIndex = fin;
+        const eoe = re_stru._eoe.exec(xmlteksto);
+        if (eoe && eoe.index) fin = eoe.index + eoe[0].length;
+  
+        return fin;
+      }
+  
+      //this.strukturo = [];
+      // super.purigu();
+  
+      // la regulestrimo trovas ĉiujn art, drv, snc kaj subart, subdrv, subsnc en la XML
+      let m = re_stru._elm.exec(xmlteksto);
+  
+      // por ĉiu trovo ni ekstraktas la informojn bezonatajn por
+      // ĵongli la unuopaj pecojn en la redaktilo
+      while (m) {
+        const elm = m[1] as XEl; // la elemento (art,drv,snc...)
+        const de = m.index; // komenca signo
+        const al = _al(elm, m.index+5); // fina signo
+  
+        let subt: Tekstero = {
+          el: elm, 
+          de: de, 
+          ln: count_char(xmlteksto,'\n',0,m.index), // komenca linio
+          al: al, 
+          lc: count_char(xmlteksto,'\n',m.index,al), // lininombro
+          mrk: _mrk(elm,de), // la marko de la elemento, se estas
+          kap: _kap(elm,de,al), // la kapvorto
+          //no: this.strukturo.length,
+          dsc: "<tbd>",
+          id: "<tbd>"
+        }
+        subt.id = _id(subt); // identigilo por la peco
+        
+        // kunmetu etikedon por la peco el elementnomo kaj sufikso
+        const suff = subt.kap ? subt.kap : subt.mrk||'';
+        subt.dsc = XmlStruct.indents[subt.el] + (
+          subt.el!='art'? 
+            XmlStruct.elements[subt.el]+ (suff?' '+suff:' ('+subt.el+')') 
+            : suff);
+  
+        // ĉe la kapvorto de la artikolo ekstraktu la radikon
+        if (subt.el == 'art') this.radiko = _rad(subt.de,subt.al);
+  
+        // console.debug(subt.de + '-' + subt.al + ': ' + subt.id + ':' + subt.dsc);
+  
+        /// if (this.onaddsub) this.onaddsub(subt,this.strukturo.length,subt.id == selected);
+  
+        tekst.aldonu(subt);
+        //this.strukturo.push(subt);
+        //sel_stru.append(ht_element('option',{value: strukturo.length-1},item));
+  
+        m = re_stru._elm.exec(xmlteksto);
+      }
+  
+      // en la fino de la listo aldonu ankoraŭ elektilon por la tuta XML
+      const tuto: Tekstero = {el: "xml", de: 0, ln: 0, al: xmlteksto.length, 
+        id: "x.m.l", dsc: 'tuta xml-fonto'}; //, no: this.strukturo.length};
+      /// if (this.onaddsub) this.onaddsub(tuto,this.strukturo.length,tuto.id == selected);
+  
+      tekst.aldonu(tuto);
+      //this.strukturo.push(tuto);
+    };
   
   /**
      * 
@@ -78,13 +237,21 @@ export class XmlStruct {
    * @param onAddSub - Revokfunkcio, vokata dum analizo de la strukturo ĉiam, kiam troviĝas subteksto. 
    */
   constructor(xml: string, onAddSub?: Function) {
-    this.xmlteksto = xml; // la tuta teksto
-    this.strukturo = []; // la listo de subtekstoj [komenco,fino,nomo]
+    super(null, {
+      strukturo: XmlStruct.structure,
+      post_aldono: onAddSub
+    });
+
+    this.teksto = xml;
+    // this.xmlteksto = xml; // la tuta teksto
+
+    //this.strukturo = []; // la listo de subtekstoj [komenco,fino,nomo]
+
     this.radiko = '';
-    this.onaddsub = onAddSub;
+    //this.onaddsub = onAddSub;
 
     // analizu la strukturon
-    this.structure();
+    //this.structure();
 }
 
 
@@ -92,170 +259,21 @@ export class XmlStruct {
    * Metas la kompletan XML-tekston laŭ la argumento 'xml' kaj aktualigas la strukturon el ĝi
    * @param xml 
    */
+  /*
   setText(xml: string) {
     this.xmlteksto = xml;  
     this.structure();      
-  };
+  };*/
 
 
-  /**
-   * Ekstraktas strukturon de art/subart/drv/subdrv/snc/subsnc el la artikolo. 
-   * Tio estas listo de (ingigitaj) subtekstoj por ĉiu el kiuj la listo enhavos objekton 
-   * @param selected - se donita tio estas la elektita subteksto kaj estos markita en la revokfunkcio onaddsub (4-a argumento: true)
-   */
-  structure(selected?: string) {
-    const re_stru = XmlStruct.re_stru;
-    const xmlteksto = this.xmlteksto;
 
-    /**
-     * Ekstraktu la XML-atributon 'mrk' el la subteksto
-     * @param elm - la elemento de la subteksto (art,subart,drv,...,subsnc)
-     * @param de - la komenco de la subteksto en la tuta XML
-     * @returns la atributon 'mrk'
-     */
-    function _mrk(elm: XEl, de: number) {
-      let i_start = xmlteksto.indexOf('<',de);
-      if (i_start > -1) {
-        i_start += 1 + elm.length + 1; // de:"<elm " 
-        re_stru._mrk.lastIndex = i_start;
-        const m = re_stru._mrk.exec(xmlteksto);
-        if (m && m.index == i_start) { 
-          const mrk = m[2];
-          return (elm != 'art'? 
-            mrk.substring(mrk.indexOf('.')+1) 
-            : (mrk.slice(mrk.indexOf(':')+2,-20)) || '<nova>');
-        }  
-      }
-    }
-    // trovas la radikon de artikolo
-    function _rad(de: number, ghis: number) {
-      const art = xmlteksto.substring(de,ghis);
-      const mr = art.match(re_stru._rad);
-
-      if (mr) {
-        const rad = mr[1]
-        .replace(/\s+/,' ')
-        .trim();  // [^] = [.\r\n]
-
-        return rad;
-      }
-    }
-    // trovas la kapvorton de elemento
-    function _kap(elm: XEl, de: number, ghis: number) {
-      if (elm == 'drv') {
-        // find kap
-        const drv = xmlteksto.substring(de,ghis);
-        const mk = drv.match(re_stru._kap); 
-        //re_stru._kap.lastIndex = de;
-        if (mk) {
-          const kap = mk[1]
-          .replace(re_stru._var,'')
-          .replace(re_stru._ofc,'')
-          .replace(re_stru._fnt,'')
-          .replace(re_stru._tl1,'$1~')
-          .replace(re_stru._tl2,'~')
-          .replace(/\s+/,' ')
-          .replace(',',',..')
-          .trim();  // [^] = [.\r\n]
-
-          return kap;
-        }
-      }
-    }
-    // kreas identigilon el marko resp. enhavkomenco
-    function _id(subt: SDet) {
-      const rx = /[^A-Za-z]/g;
-      const key = [123,45,67,89,102,43,69]; // enhavo ne tro gravas sed estu ne tro mallonga...
-
-      // kondensigi signoĉenon al identigilo
-      const hash_str = (str: string) => 
-        { 
-            var c = key;
-            for(let i=0; i<str.length; i++) { 
-                c[i%key.length] ^= str.charCodeAt(i);
-            }
-            //return c.join('.');
-            return c.map(v=>(v%36).toString(36)).join('')
-        };
-      if (subt.mrk) {
-        // se la elemento havas markon, tio estas la plej bona identigilo
-        return hash_str(subt.mrk);
-      } else {
-        // se ne, ni uzas la numeron kaj la unuajn aperantajn latinajn literojn por
-        // identigi, ja konsciante, ke tiuj povos ŝanĝiĝi, sed tiam
-        // ni rekalkulas la strukturon kaj akceptas, ke ni ne
-        // retrovas la antaŭan elekton...
-        return hash_str('_'+subt.no+'_'+xmlteksto.substring(subt.de,subt.de+120).replace(rx,''));
-      }
-    }
-    // trovas la finon de elemento 'elm'
-    function _al(elm: XEl, de: number) {
-      var fin = xmlteksto.indexOf('</'+elm, de);
-      // trovu avance >..\n?
-      re_stru._eoe.lastIndex = fin;
-      const eoe = re_stru._eoe.exec(xmlteksto);
-      if (eoe && eoe.index) fin = eoe.index + eoe[0].length;
-
-      return fin;
-    }
-
-    this.strukturo = [];
-    // la regulestrimo trovas ĉiujn art, drv, snc kaj subart, subdrv, subsnc en la XML
-    let m = re_stru._elm.exec(xmlteksto);
-
-    // por ĉiu trovo ni ekstraktas la informojn bezonatajn por
-    // ĵongli la unuopaj pecojn en la redaktilo
-    while (m) {
-      const elm = m[1] as XEl; // la elemento (art,drv,snc...)
-      const de = m.index; // komenca signo
-      const al = _al(elm, m.index+5); // fina signo
-
-      let subt: Strukturero = {
-        el: elm, 
-        de: de, 
-        ln: count_char(xmlteksto,'\n',0,m.index), // komenca linio
-        al: al, 
-        lc: count_char(xmlteksto,'\n',m.index,al), // lininombro
-        mrk: _mrk(elm,de), // la marko de la elemento, se estas
-        kap: _kap(elm,de,al), // la kapvorto
-        no: this.strukturo.length,
-        dsc: "<tbd>",
-        id: "<tbd>"
-      }
-      subt.id = _id(subt); // identigilo por la peco
-      
-      // kunmetu etikedon por la peco el elementnomo kaj sufikso
-      const suff = subt.kap ? subt.kap : subt.mrk||'';
-      subt.dsc = XmlStruct.indents[subt.el] + (
-        subt.el!='art'? 
-          XmlStruct.elements[subt.el]+ (suff?' '+suff:' ('+subt.el+')') 
-          : suff);
-
-      // ĉe la kapvorto de la artikolo ekstraktu la radikon
-      if (subt.el == 'art') this.radiko = _rad(subt.de,subt.al);
-
-      // console.debug(subt.de + '-' + subt.al + ': ' + subt.id + ':' + subt.dsc);
-
-      if (this.onaddsub) this.onaddsub(subt,this.strukturo.length,subt.id == selected);
-      this.strukturo.push(subt);
-      //sel_stru.append(ht_element('option',{value: strukturo.length-1},item));
-
-      m = re_stru._elm.exec(xmlteksto);
-    }
-
-    // en la fino de la listo aldonu ankoraŭ elektilon por la tuta XML
-    const tuto: Strukturero = {el: "xml", de: 0, ln: 0, al: xmlteksto.length, 
-      id: "x.m.l", dsc: 'tuta xml-fonto', no: this.strukturo.length};
-    if (this.onaddsub) this.onaddsub(tuto,this.strukturo.length,tuto.id == selected);
-    this.strukturo.push(tuto);
-  };
 
   /**
    * Redonas dosieronomon trovante ĝin en art-mrk aŭ drv-mrk
    * @returns La dosiernomon ekstraktitan el la trovita mrk-atributo
    */
   art_drv_mrk(): string {
-    var match = this.xmlteksto.match(XmlStruct.re_stru._dos);
+    var match = this.teksto.match(XmlStruct.re_stru._dos);
     if (match) return (match[1]? match[1] : match[2]);
   };
 
@@ -265,13 +283,16 @@ export class XmlStruct {
    * @param xml - la nova subteksto
    * @param select - se donita, la strukturelemento kun tiu .id estos poste la elektita
    */
-  replaceSubtext(sd: SId, xml: string, select?: string) {   
+  replaceSubtext(sd: SId, xml: string, select?: string) {
+      super.anstataŭigu(sd,xml);
+      /*
       const elekto = this.getStructById(sd.id);
 
       this.xmlteksto = 
         (this.xmlteksto.substring(0, elekto.de) 
         + xml
         + this.xmlteksto.substring(elekto.al));
+        */
       // rekalkulu la strukturon pro ŝovitaj pozicioj...
       this.structure(select);
   };
@@ -281,6 +302,7 @@ export class XmlStruct {
    * Ĝi atentas, ke rekte post tiu povas okazi sub-subtekstoj,
    * ekzemple enmetante derivaĵon oni devas ignori ties sencojn.
    */
+  /*
   insertAfterId(s_id: string, xml: string) {
     // trovu la subtekston laŭ mrk
     const s = this.getStructById(s_id);
@@ -290,18 +312,19 @@ export class XmlStruct {
       this.xmlteksto.substring(0,s.al) 
       + "\n"+ xml 
       + this.xmlteksto.substring(s.al));
-  }
+  }*/
 
   /**
    * Trovu la informojn de subteksto 'id' en la strukturlisto 
    * @param id 
    * @returns la detalojn kiel objekto
    */
+  /*
   getStructById(id: string): Strukturero {
     for (let s of this.strukturo) {
       if (s.id == id) return s;
     }
-  };
+  };*/
 
   /**
    * Trovas la subtekston kun 'mrk' en la strukturlisto kaj redonas ties informojn
@@ -324,7 +347,7 @@ export class XmlStruct {
    * @returns la informoj pri la subteksto kiel objekto
    */
   findStruct(sd: SId): Strukturero {
-    let s = this.getStructById(sd.id);
+    let s = super.subtekst_info(sd.id);
 
     if(s) { return s; }
     else if (sd.el && sd.ln) {
@@ -342,10 +365,12 @@ export class XmlStruct {
    * @param sd - objekto kun .id kaj eventuala pliaj informoj .ln, .el por identigi la subtekston
    * @returns la konernan XML-tekston
    */
+  /*
   getSubtext(sd: SId): string {
     const s = this.getStructById(sd.id);
     if (s) return this.xmlteksto.slice(s.de,s.al);
   };
+  */
 
 
   /**
@@ -353,6 +378,7 @@ export class XmlStruct {
    * @param sd - objekto kun .id kaj eventuale pliaj informoj .ln, .el por identigi la subtekston
    * @returns la detalojn de la parenco kiel objekto
    */
+  /*
   getParent(sd: SId): Strukturero {
     const s = this.getStructById(sd.id);
     // parenco venas antaŭ la nuna kaj enhavas ĝin (subteksto al..de)
@@ -360,7 +386,7 @@ export class XmlStruct {
       const p = this.strukturo[n];
       if (p.de < s.de && p.al > s.al ) return p;  
     }
-  };
+  };*/
 
   /**
    * Trovas la plej proksiman parencon de la aktuale elektita subteksto, kiu havas XML-atributon 'mrk'
@@ -372,10 +398,10 @@ export class XmlStruct {
     if (elekto.mrk) {
       return elekto;
     } else {
-      var p = this.getParent(sd);
+      var p = super.patro(sd);
       while (p && p.no > 0) { // ni ne redonos art@mrk (0-a elemento)
         if (p.mrk) return p;
-        p = this.getParent(p);
+        p = super.patro(p);
       }
     }
   };
@@ -407,17 +433,17 @@ export class XmlStruct {
       }
 
     const rad = this.radiko;
-    const elekto = this.getStructById(sd.id);
+    const elekto = super.subtekst_info(sd.id);
     
     if (elekto.el != 'art' && elekto.id != "x.m.l") {
 
       if (elekto.kap) {
         return kap(elekto);
       } else {
-        var p = this.getParent(elekto);
+        var p = super.patro(elekto);
         while (p && p.no > 0) { // ni ne redonos art@mrk (0-a elemento)
           if (p.kap) return kap(p);
-          p = this.getParent(p);
+          p = super.patro(p);
         }
       }
 
