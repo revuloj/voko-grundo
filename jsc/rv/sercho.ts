@@ -115,11 +115,16 @@ export class Sercho {
             const t_l = Object.entries(t_grouped)
                 .filter( ([lng,list]) => { return lng != '<_sen_>'; } )
                 .reduce( (obj,[lng,list]) => {
+                    // ĉenigu ĉiujn tradukojn de unu lingvo, se estas trd (lasta kampo)
+                    // uzu tiun, ĉar ĝi estas pli longa ol ind, enhavante klarigojn ks.
+                    const ulist = new Set();
+                    list.forEach((e: Trovero) => ulist.add(e[TRD]||e[IND]));
+                    // uzante Set ni krome forigas duoblaĵojn, kiuj ekz-e okazas en
+                    // aziaj lingvoj pro aldonitaj/serĉeblaj prononcaj transskriboj
                     obj[lng] = 
                         // ĉenigu ĉiujn tradukojn de unu lingvo, se estas trd (lasta kampo)
                         // uzu tiun, ĉar ĝi estas pli longa ol ind, enhavante klarigojn ks.
-                        list.map((e: Trovero) => e[TRD]||e[IND]) 
-                        .join(', ');
+                        Array.from(ulist.values()).join(', ');
                     return obj;
                 }, {} as StrObj );    
             return {
