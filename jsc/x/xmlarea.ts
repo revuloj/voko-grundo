@@ -36,8 +36,8 @@ export class Xmlarea {
  */  
   constructor(ta_id: string, onAddSub?: Function, onSelectSub?: Function) {
     this.txtarea = document.getElementById(ta_id) as HTMLInputElement;
-    this.txtarea.addEventListener("input",() => { this.setUnsynced(); });
-    this.txtarea.addEventListener("change",() => { this.setUnsynced(); });
+    /// this.txtarea.addEventListener("input",() => { this.setUnsynced(); });
+    /// this.txtarea.addEventListener("change",() => { this.setUnsynced(); });
 
     //this.structure_selection = document.getElementById(struc_sel);
     this.xmlstruct = new XmlStruct('',onAddSub); // la tuta teksto
@@ -46,7 +46,7 @@ export class Xmlarea {
     this.elekto = undefined; // aktuale redaktata subteksto
     this.onaddsub = onAddSub;
     this.onselectsub = onSelectSub;
-    this.synced = true;
+    /// this.synced = true;
     this.ar_in_sync = false; // por scii, ĉu la lasta antaŭrigardo estas aktuala...
   }
 
@@ -59,8 +59,8 @@ export class Xmlarea {
   setText(xml: string) {
     this.xmlstruct = new XmlStruct(xml,this.onaddsub);  
     // elektu la unuan (art)
-    this.elekto = this.xmlstruct.strukturo[0];
-    this.txtarea.value = this.xmlstruct.getSubtext(this.elekto);
+    // this.elekto = this.xmlstruct.strukturo[0];
+    // this.txtarea.value = this.xmlstruct.getSubtext(this.elekto);
     this.ar_in_sync = false;
     this.resetCursor();   
   };
@@ -481,6 +481,7 @@ export class Xmlarea {
    * @param pos - se donita rulas al tiu y-koordinato, se mankas redonu la aktualan
    * @returns la aktuala y-koordinato
    */
+  /*
   scrollPos(pos?: number): number {
     var txtarea = this.txtarea;
     if (typeof pos == "number") {
@@ -497,11 +498,11 @@ export class Xmlarea {
         return txtarea.scrollTop;
       else if (document.documentElement && document.documentElement.scrollTop)
         return document.documentElement.scrollTop;
-      else /*if (document.body)*/
+      else 
         return document.body.scrollTop;
     }
   };
-
+*/
 
   /**
    * Redonas la aktualan pozicion de la kursoro kiel linio kaj loko ene de la linio 

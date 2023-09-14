@@ -38,8 +38,43 @@ export class Tekst extends UIElement {
     private _partoj: Array<Tekstero>;
     private _teksto: string;
     public sinkrona: boolean;
+    public aktiva: Tekstero;
 
     static aprioraj = { };
+
+    /**
+     * Helpfunkcio ripetas unu signon n fojojn
+     * @param rStr 
+     * @param rNum 
+     * @returns 
+     */
+    static sxn(rStr: string, rNum: number): string {
+        var nStr="";
+        for (var x=1; x<=rNum; x++) {
+            nStr+=rStr;
+        }
+        return nStr;
+    }
+
+    
+    /**
+     * Kalkulas el la signoindekso la linion kaj la pozicion ene de la linio
+     * @param inx - la pozicio en la teksto (sen konsideri liniojn)
+     * @param text - la koncerna teksto
+     * @returns la pozicion kiel objekto {{line: number, pos: number}}
+     */
+    static lin_poz(inx: number, text: string): TPozicio {
+        let linioj = 0;
+        let last_poz = 0;
+        for (let i=0; i<inx; i++) { 
+            if (text[i] == '\n') {
+                linioj++;
+                last_poz = i;
+            }
+        }
+        const poz = (linioj == 0)? inx : (inx-last_poz-1);
+        return({lin: linioj, poz: poz}); // evtl. ni bezonus adicii la unuan linion de la subteksto
+    }
 
     static kreu(spec: string, opcioj?: any) {
         document.querySelectorAll(spec).forEach((e) => {
@@ -69,18 +104,50 @@ export class Tekst extends UIElement {
     set teksto(teksto: string) {
         this._teksto = teksto;
         this.strukturo();
+
+        // elektu la unuan (art)
+        this.aktiva = this._partoj[0];
+
+        const txtarea = this.element;
+        if (txtarea instanceof HTMLTextAreaElement)
+            txtarea.value = this.subteksto(this.aktiva);
     }
 
 
     /**
-     * Redonas la tutan XML-tekston post eventuala sinkronigo kun la aktuala redakto
+     * Redonas la tutan tekston post eventuala sinkronigo kun la aktuala redakto
      * @returns la tuta sinkronigita teksto
      */
     get teksto(): string {
-        if (! this.sinkrona) this.sinkronigu(this.elekto); 
+        if (! this.sinkrona) this.sinkronigu(this.aktiva); 
         return this.teksto;
     };
+
+    konservu(ŝlosilo: string, info: any) {
+        window.localStorage.setItem(ŝlosilo,
+            JSON.stringify({
+            'xml': this.teksto,
+            'nom': nom.value
+            //'red': nova/redakti...
+            })
+        );
+    };
+
   
+    /**
+     * Restarigas XML-tekston kaj la artikolnomon el loka retumila memoro.
+     * @memberof redaktilo
+     * @inner
+     */
+    relegu(ŝlosilo) {
+        const str = window.localStorage.getItem(ŝlosilo);
+        const art = (str? JSON.parse(str) : null);
+        if (art) {
+            this.text = art.xml; // document.getElementById("r:xmltxt").value = art.xml;
+            //  document.getElementById("...").value = art.red;
+            nom.value = art.nom;
+        }
+    };
 
     /**
      * Aktualigas la tekstbufron per la redaktata subteksto, ankaŭ aktualigas la struktur-liston
@@ -89,16 +156,16 @@ export class Tekst extends UIElement {
      * uzataj por retrovi subtekston, kies .id ŝanĝiĝis, ekz-e pro aldono/ŝanĝo
      */
     sinkronigu(select?: TId) {
-        if (this.elekto) {
+        if (this.aktiva) {
             console.debug("<<< sinkronigo <<<");
             // try {
             //   console.debug(new Error().stack.split("\n")[2]);
             // } catch(e) { };
 
-            const old_s = this.elekto;    
+            const old_s = this.aktiva;    
             const nstru = this._partoj.length;
 
-            if (!select) select = this.elekto;
+            if (!select) select = this.aktiva;
 
             // unue ni legas la aktuale redaktatan subtekston kaj enŝovas en la kompletan
             // tio ankaŭ rekreas la strukturon de subtekstoj!
@@ -106,7 +173,7 @@ export class Tekst extends UIElement {
             // komenton, ni devas evit duobliĝon per aktualigo ankaŭ de la montrata subteksto
             const teksto =  this.element.value;
             const ln = teksto.length;
-            this.anstataŭigu(this.elekto,teksto,select.id);
+            this.anstataŭigu(this.aktiva,teksto,select.id);
 
             // nun retrovu la elektendan subtekston en la rekreita strukturo
 
@@ -114,30 +181,30 @@ export class Tekst extends UIElement {
             let tbs = this.subtekst_info(select.id);
 
             if (tbs) {
-                this.elekto = tbs;
+                this.aktiva = tbs;
             // se ni ne trovis la subtekston per sia id, sed ĝi estas la
             // sama, kiun ni ĵus redaktis, eble la marko ŝanĝiĝis
             // aŭ aldoniĝis snc/drv, ni provu trovi do per .ln kaj .el
             } else if (select.id == old_s.id) {
-                tbs = this.xmlstruct.findStruct(select);
-                if (tbs) this.elekto = tbs;
+                tbs = this.trovu_subtekst_info(select);
+                if (tbs) this.aktiva = tbs;
             };
             
             // se tute ne retrovita, ni elektas la unuan subtekston (art)
             if (!tbs) {
-                this.elekto = this._partoj[0]; 
+                this.aktiva = this._partoj[0]; 
             }
 
             // se ni transiris al alia subteksto, aŭ aldoniĝis io post ĝi, aŭ eĉ tuta strukturero, 
             // ni devos ankoraŭ montri la novelektitan/ŝanĝitan subtekston en Textarea
-            if (old_s.id != this.elekto.id 
-                || old_s.ln != this.elekto.ln
-                || ln != (this.elekto.al - this.elekto.de)
-                || old_s.el != this.elekto.el
+            if (old_s.id != this.aktiva.id 
+                || old_s.ln != this.aktiva.ln
+                || ln != (this.aktiva.al - this.aktiva.de)
+                || old_s.el != this.aktiva.el
 
                 || nstru != this._partoj.length) {
                 // nun ni montras la celatan XML-parton por redaktado
-                this.element.value = this.subteksto(this.elekto);
+                this.element.value = this.subteksto(this.aktiva);
             }
 
             this.sinkrona = true;
@@ -172,13 +239,13 @@ export class Tekst extends UIElement {
 
             // apriore, por la kazo, ke ni ne trovos la celatan, ekz-e ĉar marko aŭ enhavo snc-aldono...) ŝanĝiĝis,
             // ni antaŭelektas al la unuan (art)
-            this.elekto = this._partoj[0]; 
+            this.aktiva = this._partoj[0]; 
                 // ni montro simple la unua subtekston, t.e. la artikolon
             
             // nun serĉu...
             const tbs = this.subtekst_info(id);
             if (tbs) {
-                this.elekto = tbs;
+                this.aktiva = tbs;
             }
 
             // komparu kun SYNC...
@@ -186,12 +253,12 @@ export class Tekst extends UIElement {
             //  +"("+(this.xml_elekto.al-this.xml_elekto.de)+")");
 
             // nun ni montras la celatan XML-parton por redaktado
-            this.element.value = this.subteksto(this.elekto);
+            this.element.value = this.subteksto(this.aktiva);
             // iru al la komenco!
             this.kursoro_supren();
-            this.scrollPos(0);
+            this.rulpozicio = 0;
 
-            if (this.onselectsub) this.onselectsub(this.elekto);
+            if (this.onselectsub) this.onselectsub(this.aktiva);
         }
     };
 
@@ -224,6 +291,24 @@ export class Tekst extends UIElement {
         return this._partoj.find((e) => e.id == id);
     }
 
+    /**
+     * Trovas la informon de subteksto: aŭ identigante ĝin per sia .id aŭ
+     * per sama elemento kaj komenco devianta maksimume je unu linio
+     * @param sd 
+     * @returns la informoj pri la subteksto kiel objekto
+     */
+    trovu_subtekst_info(sd: Tekstero): Tekstero {
+        let s = this.subtekst_info(sd.id);
+
+        if(s) { return s; }
+            else if (sd.el && sd.ln) {
+            for (s of this._partoj) {
+                if ( ( s.el == sd.el )  && ( Math.abs(s.ln-sd.ln) <= 1 ) ) {
+                return s;
+                }
+            }
+        }
+    }
 
     /**
      * Trovas subtekston en la strukturlisto
@@ -256,6 +341,22 @@ export class Tekst extends UIElement {
     };
 
 
+    /**
+     * Redonas la informojn pri la lasta subteksto, kiu enhavas linion
+     * @param line - la koncerna linio
+     * @returns - la serĉataj detaloj, undefined - se neniu enhavas la linion
+     */
+    lasta_kun_linio(line: number): Tekstero {
+        for (let n = this._partoj.length-2; n>=0; n--) {
+        const s = this._partoj[n];
+            if (s.ln <= line && s.ln+s.lc >= line) {
+                return s;
+            }
+        } 
+
+        // ankoraŭ ne trovita? do redonu XML-tuta...
+        return this._partoj[this._partoj.length-1]
+    }
 
    /* Anstataŭigas donitan subtekston per nova
     * @param sd - la anstataŭigenda subteksto
@@ -291,6 +392,41 @@ export class Tekst extends UIElement {
             + this.teksto.substring(s.al);
     }
 
+    /**
+     * Redonas aŭ metas la aktualan y-koordinaton de la videbla parto de this.xmlarea
+     * @param pos - se donita rulas al tiu y-koordinato, se mankas redonu la aktualan
+     * @returns la aktuala y-koordinato
+     */
+    set rulpozicio(pos: number) {
+        const txtarea = this.element;
+        if (txtarea instanceof HTMLTextAreaElement) {
+            // set scroll pos
+            if (typeof txtarea.scrollTop == "number")  // Mozilla & Co
+                txtarea.scrollTop = pos;
+            else if (document.documentElement && document.documentElement.scrollTop)
+                document.documentElement.scrollTop = pos;
+            else /* if (document.body) */
+                document.body.scrollTop = pos;
+        }
+    };
+
+
+    /**
+     * Redonas la aktualan y-koordinaton de la videbla parto de this.xmlarea
+     * @returns la aktuala y-koordinato
+     */
+    get rulpozicio(): number|undefined {
+        var txtarea = this.element;
+        if (txtarea instanceof HTMLTextAreaElement) {
+            if (txtarea.scrollTop)  // Mozilla
+                return txtarea.scrollTop;
+            else if (document.documentElement && document.documentElement.scrollTop)
+                return document.documentElement.scrollTop;
+            else /*if (document.body)*/
+                return document.body.scrollTop;
+        }
+    };
+    
 
     /**
      * Iras al pozicio indikita per "<line>:[<lpos>]"
@@ -321,18 +457,18 @@ export class Tekst extends UIElement {
         };
 
         const p = line_pos.split(":");
-        const line = +p[0] || 1;
+        const linio = +p[0] || 1;
         const lpos = +p[1] || 1;
 
-        if (! this.sinkrona) this.sinkronigu(this.elekto); 
-        const sub = this.getLastStructWithLine(line);
+        if (! this.sinkrona) this.sinkronigu(this.aktiva); 
+        const sub = this.lasta_kun_linio(linio);
 
-        const xml = this.subteksto(sub);
-        const pos = pos_of_line(xml,line-sub.ln-1) + ( lpos>0 ? lpos-1 : 0 );
+        const teksto = this.subteksto(sub);
+        const pos = pos_of_line(teksto,linio-sub.ln-1) + ( lpos>0 ? lpos-1 : 0 );
 
         this.ekredaktu(sub.id,true);
-        this.select(pos,0); // rulu al la pozicio
-        this.select(pos,len); // nur nun marku <len> signojn por pli bona videbleco
+        this.elektu(pos,0); // rulu al la pozicio
+        this.elektu(pos,len); // nur nun marku <len> signojn por pli bona videbleco
     };
 
 
@@ -341,28 +477,12 @@ export class Tekst extends UIElement {
      * @returns objekto {{lin: number, poz: number}}
      */
     pozicio() {
-        const loff = this.elekto? this.elekto.ln : 0;
-
-        // kalkulu el la signoindekso la linion kaj la pozicion ene de la linio
-        function get_line_pos(inx: number, text: string): TPozicio {
-            var lines = 0;
-            var last_pos = 0;
-            for (let i=0; i<inx; i++) { 
-                if (text[i] == '\n') {
-                    lines++;
-                    last_pos = i;
-                }
-            }
-            pos = (lines == 0)? inx : (inx-last_pos-1);
-            return({ lin: loff+lines, poz: pos });
-        }
-
-        //...
-        let pos: number;
-        let txtarea: HTMLInputElement = this.element;
-        if('selectionStart' in txtarea) {
-            pos = txtarea.selectionStart;
-            return get_line_pos(pos, txtarea.value);
+        const txtarea = this.element;
+        if (txtarea instanceof HTMLTextAreaElement) {
+            const loff = this.aktiva? this.aktiva.ln : 0;
+            const lp = Tekst.lin_poz(txtarea.selectionStart||0,txtarea.value);
+            lp.lin += loff;
+            return lp;
         } else 
             throw "Malnovaj retumiloj kiel IE ne plu subtenataj!"
     };
@@ -372,13 +492,11 @@ export class Tekst extends UIElement {
      * Redonas pozicion de kursoro kiel n-ro de signo
      * @returns - la numero de la signo, kie staras la kursoro
      */
-    signo(): number {
+    signo(): number|undefined {
         const txtarea = this.element;
-        let pos = 0;
-        if('selectionStart' in txtarea) {
+        if (txtarea instanceof HTMLTextAreaElement) {
             return txtarea.selectionStart;
-        } else 
-        throw "Malnovaj retumiloj kiel IE ne plu subtenataj!"
+        }
     };
 
 
@@ -387,26 +505,20 @@ export class Tekst extends UIElement {
      * @param poz - la pozicio ekde kie elekti
      * @param ln - la nombro de elektendaj signoj
      */
-    elektu(pos: number, len: number = 0) {
+    elektu(poz: number, len: number = 0) {
         const txtarea = this.element;
 
-        // ne plu bezonata por aktualaj retumiloj
-        // if (document.selection && document.selection.createRange) { // IE/Opera
-        //  range = document.selection.createRange();
-        //  range.setStart(...);
-        //  range.setEnd(...);
-        //  range.select();   
-        //} else {
-        txtarea.selectionStart = pos;
-        txtarea.selectionEnd = pos + len;
-        //}
+        if (txtarea instanceof HTMLTextAreaElement) {
+            txtarea.selectionStart = poz;
+            txtarea.selectionEnd = poz + len;
 
-        // necesas ruli al la ĝusta linio ankoraŭ, por ke ĝi estu videbla
-        const text = txtarea.value;
-        const scroll_to_line = Math.max(get_line_pos(poz,text).line - 5, 0);
-        const last_line = get_line_pos(text.length-1,text).line;
-        this.scrollPos(txtarea.scrollHeight * scroll_to_line / last_line);  
-    };
+            // necesas ruli al la ĝusta linio ankoraŭ, por ke ĝi estu videbla
+            const text = txtarea.value;
+            const scroll_to_line = Math.max(Tekst.lin_poz(poz,text).lin - 5, 0);
+            const last_lin = Tekst.lin_poz(text.length-1,text).lin;
+            this.rulpozicio = txtarea.scrollHeight * scroll_to_line / last_lin;  
+        };
+    }
 
 
     /**
@@ -415,87 +527,121 @@ export class Tekst extends UIElement {
      * @param p_kursoro - se negativa tiom da signoj ni moviĝas antaŭen antaŭ enmeti la tekston, se pozitiva, tiom da signoj ni movas antaŭen la kursoron post enmeto (ekz-e tekstenŝovo)
      * @returns la momente elektita teksto, se ne estas donita enmetenda teksto
      */
-    set elekto(insertion: string, p_kursoro: number = 0): string {
-        //var txtarea = document.getElementById('r:xmltxt');
-        const txtarea = this.txtarea;
-        let startPos: number;
-        txtarea.focus();
+    elektenmeto(insertion: string, p_kursoro: number = 0) {
+        const txtarea = this.element;
+        if (txtarea instanceof HTMLTextAreaElement) {
+            txtarea.focus();
 
-        // enmetu tekston ĉe la markita loko
-        startPos = txtarea.selectionStart;
-        if (p_kursoro < 0) startPos += p_kursoro; // -1: anstataŭigo kun x-klavo forigu la antaŭan literon!
-        txtarea.value = 
-            txtarea.value.substring(0, startPos) +
-            insertion +
-            txtarea.value.substring(txtarea.selectionEnd, txtarea.value.length);
-        if (p_kursoro > 0) { // ni antaŭe havis > -1, sed tio ne funkciis por enŝovoj per spacoj
-            // movu la kursoron al startPost+p_kursoro, por
-            // ekz-e transsalti tekstenŝovon post enmetita snc/ekz/ref
-            // vd. redaktilo.insert_xml
-            txtarea.selectionStart = startPos + p_kursoro; 
-            txtarea.selectionEnd = txtarea.selectionStart;
-        } else {
-            // movu la kursoron post la aldonita teksto
-            txtarea.selectionStart = startPos + insertion.length;
-            txtarea.selectionEnd = txtarea.selectionStart;
+            // enmetu tekston ĉe la markita loko
+            let startPos = txtarea.selectionStart;
+            if (p_kursoro < 0) startPos += p_kursoro; // -1: anstataŭigo kun x-klavo forigu la antaŭan literon!
+            txtarea.value = 
+                txtarea.value.substring(0, startPos) +
+                insertion +
+                txtarea.value.substring(txtarea.selectionEnd, txtarea.value.length);
+            if (p_kursoro > 0) { // ni antaŭe havis > -1, sed tio ne funkciis por enŝovoj per spacoj
+                // movu la kursoron al startPost+p_kursoro, por
+                // ekz-e transsalti tekstenŝovon post enmetita snc/ekz/ref
+                // vd. redaktilo.insert_xml
+                txtarea.selectionStart = startPos + p_kursoro; 
+                txtarea.selectionEnd = txtarea.selectionStart;
+            } else {
+                // movu la kursoron post la aldonita teksto
+                txtarea.selectionStart = startPos + insertion.length;
+                txtarea.selectionEnd = txtarea.selectionStart;
+            }
+
+            // ni ŝangis la tekston, sed la evento "input" ne en ciu retumilo lanciĝas
+            // se la klavaro ne estas tuŝita...:
+            this.sinkrona = false;
         }
-
-        // ni ŝangis la tekston, sed la evento "input" ne en ciu retumilo lanciĝas
-        // se la klavaro ne estas tuŝita...:
-        this.sinkrona = false;
     }
 
     /**
-     * Redoas la momente elktitan tekston
+     * Redonas la momente elektitan tekston
      */
-    get elekto(): string {
-        const txtarea = this.element
-        startPos = txtarea.selectionStart;
-        var endPos = txtarea.selectionEnd;
-        return txtara.value.substring(startPos, endPos);         
+    get elekto(): string|undefined {
+        const txtarea = this.element;
+        if (txtarea instanceof HTMLTextAreaElement) {
+            const startPos = txtarea.selectionStart;
+            const endPos = txtarea.selectionEnd;
+            return txtarea.value.substring(startPos, endPos);         
+        }
     }
 
 
     /**
-     * Ŝovas la markitan tekston 'indent' signojn dekstren aŭ maldekstren
-     * sen argumento 'indent' ĝi eltrovas la enŝovon en la aktuala linio
+     * Ŝovas la markitan tekston 'ind' signojn dekstren aŭ maldekstren
      * @param ind - la nombro de ŝovendaj spacoj
+     */
+    set enŝovo(ind: number) {
+        const txtarea = this.element;
+        if (txtarea instanceof HTMLTextAreaElement) {
+            // legu la nunan enŝovon
+            const i_ = this.enŝovo?.length || 0;
+            const blankoj = Tekst.sxn(" ", Math.abs(
+                // ŝovu nur ±1 (±2/2) ĉe momente nepara enŝovo!
+                (i_ % 2 == 1)? ind/2 : ind)
+            );
+
+            // enŝovu
+            txtarea.focus();
+
+            // sekurigu nunan rulpozicion
+            const textScroll = txtarea.scrollTop;
+            
+            // legu nunan elekton
+            let startPos = txtarea.selectionStart;
+            if (startPos > 0) startPos--;
+            let endPos = txtarea.selectionEnd;
+            if (endPos > 0) endPos--;
+             
+            const selText = txtarea.value.substring(startPos, endPos);
+ 
+            if (selText=="") {
+                alert("Marku kion vi volas en-/elŝovi.");
+            } else {
+                let nt; // var por nova teksto
+                if (ind > 0)
+                    nt = selText.replace(/\n/g, "\n"+blankoj);
+                else if (ind < 0) {
+                    const re = new RegExp("\n"+blankoj,"g")            
+                    nt = selText.replace(re, "\n");
+                }
+ 
+                txtarea.value = 
+                    txtarea.value.substring(0, startPos)
+                    + nt
+                    + txtarea.value.substring(endPos, txtarea.value.length);
+ 
+                txtarea.selectionStart = startPos+1;
+                txtarea.selectionEnd = startPos + nt.length+1;
+ 
+                // restarigu rul-pozicion
+                txtarea.scrollTop = textScroll;
+            }
+
+            // ni ŝangis la tekston, sed la evento "input" ne en ĉiu retumilo lanciĝas
+            // se la klavaro ne estas tuŝita...:
+            this.sinkrona = false;
+        }
+    }
+
+    /**
+     * Redonas la enŝovon en la aktuala linio
      * @returns la enŝovo de la aktuala linio (la spacsignoj en ties komenco)
      */
-    enŝovo(ind?: number): string {
-        //var txtarea = document.getElementById('r:xmltxt');
-        let txtarea = this.element;
-        let selText: string;
-        let startPos: number;
+    get enŝovo(): string|undefined {
 
-        if (typeof ind == "number") { // enŝovu
-        txtarea.focus();
-        // uzu get_indent / indent el tekstiloj
-        const i_ = get_indent(txtarea).length;
-        if (i_ % 2 == 1) ind = ind/2; // ŝovu nur ±1 (±2/2) ĉe momente nepara enŝovo!
-        indent(txtarea,ind);
-        // ni ŝangis la tekston, sed la evento "input" ne en ciu retumilo lanciĝas
-        // se la klavaro ne estas tuŝita...:
-        this.sinkrona = false;
+        const txtarea = this.element;
+        if (txtarea instanceof HTMLTextAreaElement) {
+            const startPos = txtarea.selectionStart;
+            const linestart = txtarea.value.substring(0, startPos).lastIndexOf("\n");
 
-        } else { // eltrovu la nunan enŝovon
-        ind = 0;
-        let linestart: number;
-
-        /*
-        if (document.selection  && document.selection.createRange) { // IE/Opera
-            var range = document.selection.createRange();
-            range.moveStart('character', - 200); 
-            selText = range.text;
-            linestart = selText.lastIndexOf("\n");
-            while (selText.charCodeAt(linestart+1+ind) == 32) {ind++;}
-        } else*/
-        if (txtarea.selectionStart || txtarea.selectionStart === 0) { // Mozilla/Chrome
-            startPos = txtarea.selectionStart;
-            linestart = txtarea.value.substring(0, startPos).lastIndexOf("\n");
+            // eltrovu la nunan enŝovon
+            let ind = 0;
             while (txtarea.value.substring(0, startPos).charCodeAt(linestart+1+ind) == 32) {ind++;}
-        }
-        return (str_repeat(" ", ind));  
+            return (Tekst.sxn(" ", ind));  
         }
     };
 
@@ -504,32 +650,27 @@ export class Tekst extends UIElement {
      * Signo antaŭ kursoro
      * @returns la signon antaŭ la kursoro
      */
-    signo_antaŭ(): string {
-        //var txtarea = document.getElementById('r:xmltxt');
-        var txtarea = this.element;
-        /*
-        if (document.selection && document.selection.createRange) { // IE/Opera  
-        txtarea.focus();
-        var range = document.selection.createRange();
-        range.moveStart('character', - 1); 
-        return range.text;
-        } else {*/ // Mozilla/Chrome
-        var startPos = txtarea.selectionStart;
-        //txtarea.setSelectionRange(startPos-1,startPos);
-        return txtarea.value.substring(startPos - 1, startPos);
-        //}
+    signo_antaŭ(): string|undefined {
+        const txtarea = this.element;
+        if (txtarea instanceof HTMLTextAreaElement) {
+            const startPos = txtarea.selectionStart;
+            //txtarea.setSelectionRange(startPos-1,startPos);
+            return txtarea.value.substring(startPos - 1, startPos);
+        }
     };
 
     /**
-     * Eltrovu la signojn antaŭ la nuna pozicio (ĝis la linikomenco)
+     * Eltrovu la signojn antaŭ la nuna pozicio (ek de la linikomenco)
      */
-    linisignoj_antaŭ(): string {
+    linisignoj_antaŭ(): string|undefined {
         const txtarea = this.element;
-        const pos = this.positionNo();
-        const val = txtarea.value;
-        let p = pos;
-        while (p>0 && val[p] != '\n') p--;
-        return val.substring(p+1,pos);
+        if (txtarea instanceof HTMLTextAreaElement) {
+            const poz = this.signo()||0;
+            const val = txtarea.value;
+            let p = poz;
+            while (p>0 && val[p] != '\n') p--;
+            return val.substring(p+1,poz);
+        }
     };
 
 
@@ -538,14 +679,13 @@ export class Tekst extends UIElement {
      */
     kursoro_supren() { 
         const txtarea = this.element;
-        if (txtarea.setSelectionRange) { 
-            txtarea.focus(); 
-            //txtarea.setSelectionRange(0, 0); // problemo en Chrome?
-            txtarea.selectionStart = 0;
-            txtarea.selectionEnd = 0;
-        } else 
-        throw "Malnovaj retumiloj kiel IE ne plu subtenataj!"
-        txtarea.focus();
+        if (txtarea instanceof HTMLTextAreaElement) { 
+            //txtarea.focus(); 
+            txtarea.setSelectionRange(0, 0); // problemo en Chrome?
+            //txtarea.selectionStart = 0;
+            //txtarea.selectionEnd = 0;
+            txtarea.focus();
+        }
     };
 
 }

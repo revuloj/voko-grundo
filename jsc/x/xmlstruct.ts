@@ -346,7 +346,8 @@ export class XmlStruct extends Tekst {
    * @param sd 
    * @returns la informoj pri la subteksto kiel objekto
    */
-  findStruct(sd: SId): Strukturero {
+  /*
+  findSubtextId(sd: SId): Strukturero {
     let s = super.subtekst_info(sd.id);
 
     if(s) { return s; }
@@ -357,7 +358,7 @@ export class XmlStruct extends Tekst {
         }
       }
     }
-  }
+  }*/
 
 
   /**
@@ -461,6 +462,7 @@ export class XmlStruct extends Tekst {
    * @param line - la koncerna linio
    * @returns - la serĉataj detaloj, undefined - se neniu enhavas la linion
    */
+  /*
   getLastStructWithLine(line: number): Strukturero {
     for (let n = this.strukturo.length-2; n>=0; n--) {
       const s = this.strukturo[n];
@@ -471,7 +473,7 @@ export class XmlStruct extends Tekst {
 
     // ankoraŭ ne trovita? do redonu XML-tuta...
     return this.strukturo[this.strukturo.length-1]
-  }
+  }*/
 
 
   /**
