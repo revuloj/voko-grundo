@@ -4,40 +4,42 @@
 */
 
 import { count_char } from './util';
-import { Tekst, Tekstero } from '../ui';
-
+import { Tekst, TParto } from '../ui';
+/*
 export interface SId {
   id: string, // unika ŝlosilo kalkulita (el mrk + evtl. tekstkomenco) por la subteksto
   el?: string, // la elemento (art, subart, drv, ...subsnc)
   ln?: number // la komenca linio ene de la tuta XML
-}
+}*/
 
 type XEl = "xml"|"art"|"subart"|"drv"|"subdrv"|"snc"|"subsnc";
 
-interface SDet {
+export interface SDet extends TParto {
+  /*
   el: XEl, // la elemento (art, subart, drv, ...subsnc)
+  no: number, // la numero de la subteksto en la listo
   de: number, // la indekso de la komenca signo subteksta en la tuta XML
   al: number, // la indekso de la lasta signo subteksta en la tuta XML
   ln: number, // la komenca linio ene de la tuta XML
   lc?: number, // la nombro de linioj (ĉu ni havu ĉiam, momente ne por XML-tuto...!?)
+  */
   mrk?: string, // la XML-atributo mrk, se la elemento ĝin havas
   kap?: string, // la kapvorto, se la elemento ĝin havas
-  no: number, // la numero de la subteksto en la listo
   dsc: string // konciza pris
 }
 
-export type Strukturero = SId & SDet;
+// export type Strukturero = SId & SDet;
 
 export type XElPos = { pos: number, end: number, elm: string };
 
 /**
  * Administras XML-tekston kiel strukturo de subtekstojTiel eblas reagi ekzemple plenigante liston per la trovitaj subtekstoj (art, drv, snc...) 
  */
-export class XmlStruct extends Tekst {
+export class XmlStrukt extends Tekst {
 
   // public xmlteksto:string; // la tuta teksto
   // public strukturo:Array<Strukturero>; // la listo de subtekstoj [komenco,fino,nomo]
-  public radiko:string;
+  //public radiko:string;
 
   private onaddsub:Function;
 
@@ -55,8 +57,7 @@ export class XmlStruct extends Tekst {
     _ind: /<ind>([^]*)<\/ind>/g,
     _fnt: /<fnt>[^]*<\/fnt>/g,
     _tl1: /<tld\s+lit="(.)"[^>]*>/g,
-    _tl2: /<tld[^>]*>/g,
-    _tagend: /[>\s]/
+    _tl2: /<tld[^>]*>/g
   };
 
   // enŝovoj por montri la elementojn laŭ tipo en hieraĥio
@@ -75,10 +76,10 @@ export class XmlStruct extends Tekst {
   /**
    * Ekstraktas strukturon de art/subart/drv/subdrv/snc/subsnc el la artikolo. 
    * Tio estas listo de (ingigitaj) subtekstoj por ĉiu el kiuj la listo enhavos objekton 
-   * @param selected - se donita tio estas la elektita subteksto kaj estos markita en la revokfunkcio onaddsub (4-a argumento: true)
+   * @param elektenda - se donita tio estas la elektita subteksto kaj estos markita en la revokfunkcio onaddsub (4-a argumento: true)
    */
-  static structure(tekst: Tekst, selected?: string) {
-      const re_stru = XmlStruct.re_stru;
+  static struktur_analizo(tekst: Tekst, elektenda?: string) {
+      const re_stru = XmlStrukt.re_stru;
       const xmlteksto = tekst.teksto;
   
       /**
@@ -102,6 +103,7 @@ export class XmlStruct extends Tekst {
         }
       }
       // trovas la radikon de artikolo
+      /*
       function _rad(de: number, ghis: number) {
         const art = xmlteksto.substring(de,ghis);
         const mr = art.match(re_stru._rad);
@@ -114,6 +116,7 @@ export class XmlStruct extends Tekst {
           return rad;
         }
       }
+      */
       // trovas la kapvorton de elemento
       function _kap(elm: XEl, de: number, ghis: number) {
         if (elm == 'drv') {
@@ -186,7 +189,7 @@ export class XmlStruct extends Tekst {
         const de = m.index; // komenca signo
         const al = _al(elm, m.index+5); // fina signo
   
-        let subt: Tekstero = {
+        let subt: SDet = {
           el: elm, 
           de: de, 
           ln: count_char(xmlteksto,'\n',0,m.index), // komenca linio
@@ -202,13 +205,13 @@ export class XmlStruct extends Tekst {
         
         // kunmetu etikedon por la peco el elementnomo kaj sufikso
         const suff = subt.kap ? subt.kap : subt.mrk||'';
-        subt.dsc = XmlStruct.indents[subt.el] + (
+        subt.dsc = XmlStrukt.indents[subt.el] + (
           subt.el!='art'? 
-            XmlStruct.elements[subt.el]+ (suff?' '+suff:' ('+subt.el+')') 
+            XmlStrukt.elements[subt.el]+ (suff?' '+suff:' ('+subt.el+')') 
             : suff);
   
         // ĉe la kapvorto de la artikolo ekstraktu la radikon
-        if (subt.el == 'art') this.radiko = _rad(subt.de,subt.al);
+        //if (subt.el == 'art') this.radiko = _rad(subt.de,subt.al);
   
         // console.debug(subt.de + '-' + subt.al + ': ' + subt.id + ':' + subt.dsc);
   
@@ -222,13 +225,39 @@ export class XmlStruct extends Tekst {
       }
   
       // en la fino de la listo aldonu ankoraŭ elektilon por la tuta XML
-      const tuto: Tekstero = {el: "xml", de: 0, ln: 0, al: xmlteksto.length, 
+      const tuto: SDet = {el: "xml", de: 0, ln: 0, al: xmlteksto.length, 
         id: "x.m.l", dsc: 'tuta xml-fonto'}; //, no: this.strukturo.length};
       /// if (this.onaddsub) this.onaddsub(tuto,this.strukturo.length,tuto.id == selected);
   
       tekst.aldonu(tuto);
       //this.strukturo.push(tuto);
     };
+
+    /**
+     * Trovas la radikon de artikolo
+     * @param tekst 
+     */
+    static radiko(tekst: Tekst): string|undefined {
+      const mr = tekst.teksto.match(XmlStrukt.re_stru._rad);
+
+      if (mr) {
+        const rad = mr[1]
+        .replace(/\s+/,' ')
+        .trim();  // [^] = [.\r\n]
+
+        return rad;
+      }
+    }
+
+
+  /**
+   * Redonas dosieronomon trovante ĝin en art-mrk aŭ drv-mrk
+   * @returns La dosiernomon ekstraktitan el la trovita mrk-atributo
+   */
+  static art_drv_mrk(tekst: Tekst): string|undefined {
+    var match = tekst.teksto.match(XmlStrukt.re_stru._dos);
+    if (match) return (match[1]? match[1] : match[2]);
+  };
   
   /**
      * 
@@ -236,9 +265,10 @@ export class XmlStruct extends Tekst {
    * @param xml - la XML-teksto
    * @param onAddSub - Revokfunkcio, vokata dum analizo de la strukturo ĉiam, kiam troviĝas subteksto. 
    */
+  /*
   constructor(xml: string, onAddSub?: Function) {
     super(null, {
-      strukturo: XmlStruct.structure,
+      strukturo: XmlStrukt.struktur_analizo,
       post_aldono: onAddSub
     });
 
@@ -247,12 +277,12 @@ export class XmlStruct extends Tekst {
 
     //this.strukturo = []; // la listo de subtekstoj [komenco,fino,nomo]
 
-    this.radiko = '';
+    //this.radiko = '';
     //this.onaddsub = onAddSub;
 
     // analizu la strukturon
     //this.structure();
-}
+}*/
 
 
   /**
@@ -268,14 +298,6 @@ export class XmlStruct extends Tekst {
 
 
 
-  /**
-   * Redonas dosieronomon trovante ĝin en art-mrk aŭ drv-mrk
-   * @returns La dosiernomon ekstraktitan el la trovita mrk-atributo
-   */
-  art_drv_mrk(): string {
-    var match = this.teksto.match(XmlStruct.re_stru._dos);
-    if (match) return (match[1]? match[1] : match[2]);
-  };
 
   /**
    * Anstataŭigas donitan subtekston per nova, ankaŭ aktualigas la struktur-liston
@@ -283,19 +305,19 @@ export class XmlStruct extends Tekst {
    * @param xml - la nova subteksto
    * @param select - se donita, la strukturelemento kun tiu .id estos poste la elektita
    */
-  replaceSubtext(sd: SId, xml: string, select?: string) {
-      super.anstataŭigu(sd,xml);
-      /*
-      const elekto = this.getStructById(sd.id);
-
-      this.xmlteksto = 
-        (this.xmlteksto.substring(0, elekto.de) 
-        + xml
-        + this.xmlteksto.substring(elekto.al));
-        */
-      // rekalkulu la strukturon pro ŝovitaj pozicioj...
-      this.structure(select);
-  };
+///  replaceSubtext(sd: SId, xml: string, select?: string) {
+///      super.anstataŭigu(sd,xml);
+///      /*
+///      const elekto = this.getStructById(sd.id);
+///
+///      this.xmlteksto = 
+///        (this.xmlteksto.substring(0, elekto.de) 
+///        + xml
+///        + this.xmlteksto.substring(elekto.al));
+///        */
+///      // rekalkulu la strukturon pro ŝovitaj pozicioj...
+///      this.structure(select);
+///  };
 
   /**
    * Enŝovas novan subtekston post la subtekston kun 's_id'
@@ -330,15 +352,16 @@ export class XmlStruct extends Tekst {
    * Trovas la subtekston kun 'mrk' en la strukturlisto kaj redonas ties informojn
    * @param mrk 
    */
+  /*
   getStructByMrk(mrk: string): Strukturero {
     const p = mrk.indexOf('.');
     if (p) {
       const ms = mrk.slice(p+1);
-      for (let s of this.strukturo) {
+      for (let s of this.struktur_analizo) {
         if (s.mrk == ms) return s;
       }  
     }
-  }
+  }*/
 
   /**
    * Trovas la informon de subteksto: aŭ identigante ĝin per sia .id aŭ
@@ -394,18 +417,19 @@ export class XmlStruct extends Tekst {
    * @param sd - objekto kun .id por identigi la subtekston
    * @returns la detalojn de la parenco kiel objekto
    */
-  getClosestWithMrk(sd: SId): Strukturero {
-    const elekto = this.getStructById(sd.id);
-    if (elekto.mrk) {
-      return elekto;
+  /*
+  static getClosestWithMrk(tekst: Tekst): Strukturero {
+    const aktiva = tekst.aktiva;
+    if (aktiva.mrk) {
+      return aktiva;
     } else {
-      var p = super.patro(sd);
+      var p = tekst.patro(sd);
       while (p && p.no > 0) { // ni ne redonos art@mrk (0-a elemento)
         if (p.mrk) return p;
-        p = super.patro(p);
+        p = tekst.patro(p);
       }
     }
-  };
+  };*/
 
 
   /**
@@ -413,11 +437,13 @@ export class XmlStruct extends Tekst {
    * @param sd - objekto kun .id por identigi la subtekston
    * @returns la XML-atributon 'mrk'
    */
-  getMrk(sd: SId): string {
+  /*
+  static getMrk(tekst: Tekst): string {
+    const sd = tekst.aktiva;
     const c = this.getClosestWithMrk(sd);
     if (c) return c.mrk;
     return '';
-  };
+  };*/
 
 
   /**
@@ -426,22 +452,23 @@ export class XmlStruct extends Tekst {
    * @param sd - objekto kun .id por identigi la subtekston
    * @returns la kapvorton, tildo estas anstataŭigita per la radiko, variaĵoj post komo forbalaita
    */
+  /*
   getClosestKap(sd: SId): string {
       function kap(e: Strukturero) {
         return e.kap
           .replace('~',rad)
-          .replace(/,.*/,'');
+          .replace(/,*./,'');
       }
 
     const rad = this.radiko;
-    const elekto = super.subtekst_info(sd.id);
+    const aktiva = super.subtekst_info(sd.id);
     
-    if (elekto.el != 'art' && elekto.id != "x.m.l") {
+    if (aktiva.el != 'art' && aktiva.id != "x.m.l") {
 
-      if (elekto.kap) {
-        return kap(elekto);
+      if (aktiva.kap) {
+        return kap(aktiva);
       } else {
-        var p = super.patro(elekto);
+        var p = super.patro(aktiva);
         while (p && p.no > 0) { // ni ne redonos art@mrk (0-a elemento)
           if (p.kap) return kap(p);
           p = super.patro(p);
@@ -449,13 +476,13 @@ export class XmlStruct extends Tekst {
       }
 
     } else { // prenu kapvorton de unua drv
-      for (let s of this.strukturo) {
+      for (let s of this.struktur_analizo) {
         if (s.el == 'drv') {
           return (kap(s));
         }
       }
     }
-  };
+  };*/
 
   /**
    * Redonas la informojn pri la lasta subteksto, kiu enhavas linion
@@ -475,57 +502,5 @@ export class XmlStruct extends Tekst {
     return this.strukturo[this.strukturo.length-1]
   }*/
 
-
-  /**
-   * Trovas la elemento-komencon (end=false) aŭ finon (end=true) en la XML-teksto.
-   * La serĉo okazas de la fino!
-   * @param elements - listo de interesantaj elementoj
-   * @param end - true: ni serĉas elementofinon (&lt;/drv), false: ni serĉas komencon (&lt;drv)
-   * @param stop_no_match - se 'true', ni haltas ĉe la unua elemento, kiu ne estas en la listo
-   * @param xml - la XML-teksto en kiu ni serĉas
-   * @param from - la finpozicio de kiu ni serĉas en alantaŭa direkto, se ne donita serĉe komenciĝas ĉe la fino
-   * @returns objekton kun kampoj pos, end, elm
-   */
-  travel_tag_bw(elements: Array<string>, end: boolean, stop_no_match: boolean,
-    xml: string, from?: number): XElPos
-  {    
-    const re_te = XmlStruct.re_stru._tagend;
-    const mark = end? '</' : '<';
-
-    // se mankas la lasta argumento, uzu aprioran...
-    /*
-    if (!xml) {
-      xml = this.txtarea.value;
-    }
-    */
-    if (from == undefined) {
-      from = xml.length;
-    }
-
-      // kontrolu ĉu la trovita elemento estas en la listo
-      // de interesantaj elementoj
-      function match(p: number) {
-        for (let e of elements) {
-          if ( xml.substring(p,p+e.length) == e 
-            && xml.substring(p+e.length,p+e.length+1).match(re_te) ) return e;
-        }
-      }
-
-    // trovu krampon < aŭ </
-    var pos = xml.lastIndexOf(mark,from-mark.length);
-
-    while (pos > -1 ) {
-      const element = match(pos+mark.length);
-      if (element) {
-        const end = xml.indexOf('>',pos);
-        // redonu la trovitan elementon
-        return {pos: pos, end: end, elm: element};
-      } else {
-        if (stop_no_match) return;
-      }
-      // trovu sekvan krampon < aŭ </
-      pos = xml.lastIndexOf(mark,pos-1);
-    }
-  };
 
 }

@@ -25,8 +25,8 @@ export class UIElement {
      * @param target
      * @param source
      */
-    static fandu(target, source) {
-        function isObject(item) {
+    static fandu(target: any, source: any) {
+        function isObject(item: any) {
             return (item && typeof item === 'object' && !Array.isArray(item));
         };
 

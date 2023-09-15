@@ -360,7 +360,7 @@ export function regulEsprimo(event) {
         // enmetu radikon, se ankoraŭ malplena
         if (event.target.open && ! $("#re_radiko").val()) {
             const xmlarea = Artikolo.xmlarea("#xml_text");
-            $("#re_radiko").val(xmlarea.getRadiko());
+            $("#re_radiko").val(xmlarea.radiko);
         }
     }*/
 

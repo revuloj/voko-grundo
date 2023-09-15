@@ -72,7 +72,7 @@ export default function() {
     klv = DOM.e("#krei_butonoj");
     if (klv) {
         new x.XKlavaro("#krei_butonoj","krei_dlg","#krei_dif",
-            () => Artikolo.xmlarea("#xml_text").getRadiko(), 
+            () => Artikolo.xmlarea("#xml_text").radiko, 
             function(event,ui) {
                 if (ui.cmd == "blankigo") {
                     DOM.malplenigu("#krei_dlg input");
@@ -324,7 +324,7 @@ export default function() {
     klv = DOM.e("#ekzemplo_butonoj");
     if (klv) {
         new x.XKlavaro("#ekzemplo_butonoj","#ekzemplo_dlg","#xml_text",
-            () => Artikolo.xmlarea("#xml_text").getRadiko(), 
+            () => Artikolo.xmlarea("#xml_text").radiko, 
             function(event,ui) {
                 if (ui.cmd == "blankigo") {
                     DOM.malplenigu("#ekzemplo_dlg input");
@@ -389,7 +389,7 @@ export default function() {
     klv = DOM.e("#bildo_butonoj");
     if (klv) {
         new x.XKlavaro("#bildo_butonoj","#bildo_dlg","#bildo_frazo",
-            () => Artikolo.xmlarea("#xml_text").getRadiko(), 
+            () => Artikolo.xmlarea("#xml_text").radiko, 
             function(event,ui) {
                 if (ui.cmd == "blankigo") {
                     DOM.malplenigu("#bildo_frazo");
@@ -423,7 +423,7 @@ export default function() {
     klv = DOM.e("#derivajho_butonoj");
     if (klv) {
         new x.XKlavaro("#derivajho_butonoj","#derivajho_dlg","#derivajho_dif",
-            () => Artikolo.xmlarea("#xml_text").getRadiko(), 
+            () => Artikolo.xmlarea("#xml_text").radiko, 
             function(event,ui) {
                 if (ui.cmd == "blankigo") {
                     DOM.malplenigu("#derivajho_dlg input");
@@ -456,7 +456,7 @@ export default function() {
     klv = DOM.e("#senco_butonoj");
     if (klv) {
         new x.XKlavaro("#senco_butonoj","#senco_dlg","#senco_dif",
-            () => Artikolo.xmlarea("#xml_text").getRadiko(), 
+            () => Artikolo.xmlarea("#xml_text").radiko, 
             function(event,ui) {
                 if (ui.cmd == "blankigo") {
                     DOM.malplenigu("#senco_dlg input");
@@ -504,7 +504,7 @@ export default function() {
     klv = DOM.e("#traduko_butonoj");
     if (klv) {
         new x.XKlavaro("#traduko_butonoj","#traduko_dlg",null,
-            () => Artikolo.xmlarea("#xml_text").getRadiko(), 
+            () => Artikolo.xmlarea("#xml_text").radiko, 
             undefined,
             function() { trd_input_shanghita(this.celo()) })
         .elemento_klavoj(klv);
@@ -526,7 +526,7 @@ export default function() {
         }
     });
     new x.XKlavaro("#sxablono_butonoj","#sxablono_dlg",'',         
-        () => Artikolo.xmlarea("#xml_text").getRadiko(), 
+        () => Artikolo.xmlarea("#xml_text").radiko, 
         undefined, undefined);
     /*
     $( "#sxablono_butonoj").Klavaro({
@@ -695,7 +695,7 @@ function download_art(dosiero,err_to,dlg_id,do_close=true) {
                 const art = Artikolo.artikolo("#xml_text");
                 const xmlarea = Artikolo.xmlarea("#xml_text");
                 art?.load(dosiero,data);
-                DOM.al_v("#re_radiko",xmlarea?.getRadiko()||'');
+                DOM.al_v("#re_radiko",xmlarea?.radiko||'');
                 // $("#collapse_outline").accordion("option","active",0);
                 DOM.kaŝu(err_to);
                 Slipar.montru("#tabs",0);

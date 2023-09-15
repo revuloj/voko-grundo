@@ -9,7 +9,7 @@
 import * as u from '../u';
 import * as x from '../x';
 
-import { Xmlarea, RevoListoj } from '../x';
+import { XmlRedakt, RevoListoj } from '../x';
 import { ht_element } from '../u';
 import { DOM, Slipar, Buton, Elektil, List, Valid } from '../ui';
 
@@ -105,7 +105,7 @@ export default function() {
             */
             DOM.al_t("#rigardo","");
         },
-        xmlarea: new Xmlarea("xml_text",
+        xmlarea: new XmlRedakt("xml_text",
             function(subt,index,selected) { // reago je aldono de nova subteksto: aldonu en la listo art_strukturo
                 const sel_stru = document.getElementById("art_strukturo");
                 if (sel_stru) {
@@ -199,7 +199,7 @@ export default function() {
     let klv = DOM.e("#dock_klavaro");
     if (klv) {
       const xklv = new x.XKlavaro(klv,null,"#xml_text",
-      () => Artikolo.xmlarea("#xml_text").getRadiko(),
+      () => Artikolo.xmlarea("#xml_text").radiko,
       (event: Event, ui) => { 
             // PLIBONIGU: tion ni povas ankaŭ meti en xklavaro.js!
             if (ui.cmd == 'indiko') {
@@ -280,7 +280,7 @@ export default function() {
     DOM.reago("#sercho_det_regexes","toggle",() => {
         if (! DOM.v("#re_radiko")) {
             const xmlarea = Artikolo.xmlarea("#xml_text");
-            const rad = xmlarea?.getRadiko() || '';
+            const rad = xmlarea?.radiko || '';
             DOM.al_v("#re_radiko",rad);
         }
     });
@@ -434,7 +434,7 @@ export function antaŭ_slipŝanĝo(ui) {
         const xmlarea = Artikolo.xmlarea("#xml_text");
         if (xmlarea) {
             const elektita = xmlarea.selection();
-            const radiko = xmlarea.getRadiko();
+            const radiko = xmlarea.radiko;
            
             var sercho = x.replaceTld(radiko,elektita)
                .replace(/<[^>]+>/g,'')
@@ -682,7 +682,7 @@ function plenigu_elekto_indikoj() {
         
         // @ts-ignore
         const xklavaro = new x.XKlavaro(klvr, null, xmltxt,
-            () => xmlarea.getRadiko(),
+            () => xmlarea.radiko,
             (event: Event, cmd) => { 
                 // KOREKTU: ...
                 if (cmd.cmd == 'indiko') {

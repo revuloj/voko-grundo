@@ -3,7 +3,8 @@
 (c) 2023 Wolfram Diestel
 */
 
-import {XmlStruct, XElPos} from './xmlstruct';
+import { XmlStrukt, XElPos } from './xmlstrukt';
+import { Tekst } from '../ui';
 
 /* FARENDA:
  - ebligu administradon de ĉiuj tradukoj de redaktata teksto en XmlTrad, senŝargigante la tradukdialgon de administrado 
@@ -26,7 +27,7 @@ export type XPlace = XElPos & {
  * @constructor
  */
 export class XmlTrad {
-  private xmlstruct: XmlStruct;
+  //private xmlstruct: XmlStrukt;
 
   // tradukoj de unu substrukturo/subteksto sed de pluraj lingvoj
   // la atributnomoj en 'tradukoj' estas la lingvoj, kaj la valoroj listoj de tradukoj en tiu lingvo
@@ -41,11 +42,12 @@ export class XmlTrad {
     _tr1: /<trd\s*>([^]*?)<\/trd\s*>/g,
     _ofc: /<ofc>[^]*<\/ofc>/g,
     _klr: /<klr[^>]*>[^]*<\/klr>/g,
-    _ind: /<ind>([^]*)<\/ind>/g
+    _ind: /<ind>([^]*)<\/ind>/g,
+    _tagend: /[>\s]/
   };  
 
-  constructor() {
-    this.xmlstruct = null;
+  constructor(private tekst: Tekst) {
+    //this.xmlstruct = null;
     // la atributnomoj en 'tradukoj' estas la lingvoj kaj la vaolroj listoj de tradukoj en tiu lingvo
     this.tradukoj = {}; // tradukoj de unu substrukturo/subteksto sed de pluraj lingvoj
     this.tradukoj_strukt = {}; // laŭ lingvo estas objektoj por ĉiu strukturero de xmlstruct
@@ -105,8 +107,8 @@ shanghitaj(s_id: string) {
  * kaj maplenigante la tradukobjektojn
  * @param xmlstruct 
  */
-preparu(xmlstruct: XmlStruct) {
-    this.xmlstruct = xmlstruct;
+preparu(xmlstruct: XmlStrukt) {
+    // this.xmlstruct = xmlstruct;
     this.tradukoj = {};
     this.tradukoj_strukt = {};
     this.shanghoj_strukt = {};
@@ -122,13 +124,13 @@ preparu(xmlstruct: XmlStruct) {
  collectXml(xml: string, shallow: boolean=false, normalize: boolean=false) {
     const re = XmlTrad.re_stru;
     const find_stag = (elm: string, xml: string, from: number) => 
-      this.xmlstruct.travel_tag_bw([elm],false,false,xml,from);  
+      this.tra_elementoj_retro([elm],false,false,xml,from);  
   
     let find_etag: Function, spos = xml.length;
     if (shallow) {
       // expect
       find_etag = (elist:Array<string>, xml: string, from: number) => 
-        this.xmlstruct.travel_tag_bw(elist,true,true,xml,from);
+        this.tra_elementoj_retro(elist,true,true,xml,from);
       // ĉar ni ne ignoras aliajn elementojn ol trd/trgrp ni unue devas aliri
       // la kadran elementon
       const kadr = find_etag(['drv','subdrv','snc','subsnc'],xml,xml.length);
@@ -140,7 +142,7 @@ preparu(xmlstruct: XmlStruct) {
     } else {
       // find
       find_etag = (elist: Array<string>, xml: string, from: number) => 
-        this.xmlstruct.travel_tag_bw(elist,true,false,xml,from); 
+        this.tra_elementoj_retro(elist,true,false,xml,from); 
       spos = xml.length;
     }
   
@@ -198,17 +200,17 @@ preparu(xmlstruct: XmlStruct) {
  collectTrdAllStruct(lng: Lingvo) {
     this.tradukoj_strukt[lng] = {}; // se jam ekzistas, tamen malplenigu! 
   
-    for (let s of this.xmlstruct.strukturo) {
+    this.tekst.subtekst_apliku((s) => {
       if (['drv','subdrv','snc','subsnc'].indexOf(s.el) > -1) {
         // PLIBONIGU: ni unue kolektas en {<lng>: [trdj]} kaj poste kopias
         // eble estonte ni povos eviti la kopiadon
         this.tradukoj = {};
   
-        const xml = this.xmlstruct.getSubtext(s);
+        const xml = this.tekst.subteksto(s);
         this.collectXml(xml,true,false); // xml, malprofunde, ne normigu
         this.tradukoj_strukt[lng][s.id] = this.tradukoj[lng];  
       }
-    }
+    });
   
     //return this.tradukoj_strukt[lng];
   };
@@ -225,10 +227,10 @@ preparu(xmlstruct: XmlStruct) {
  */
  findTrdPlace(xml: string, lng: Lingvo): XPlace {
     const expect_etag = (elist: Array<string>, xml: string, from?: number) => 
-      this.xmlstruct.travel_tag_bw(elist,true,true,xml,from);
+      this.tra_elementoj_retro(elist,true,true,xml,from);
     //expect_stag = (elist,xml,from) => this.travel_tag_bw (elist,false,true,xml,from);
     const find_stag = (elist: Array<string>, xml: string, from?: number) => 
-      this.xmlstruct.travel_tag_bw(elist,false,false,xml,from);
+      this.tra_elementoj_retro(elist,false,false,xml,from);
   
     // trovu unue la pozicion de la fina elemento de la nuna strukturo
     let p: XElPos = expect_etag(['snc','subsnc','drv','subdrv','art','subart'],xml);
@@ -290,6 +292,60 @@ preparu(xmlstruct: XmlStruct) {
       // ni ĝis nun ne trovis tradukojn, ĉe aŭ post kiu enmeti, do enmetu ĉe la lasta trovita pozicio
       const pos = (t.pos>-1? t.pos : p.pos);
       return {pos: pos, end: pos, elm: lelm};
+    }
+  };
+
+
+
+  /**
+   * Trovas la elemento-komencon (end=false) aŭ finon (end=true) en la XML-teksto.
+   * La serĉo okazas de la fino!
+   * @param elements - listo de interesantaj elementoj
+   * @param end - true: ni serĉas elementofinon (&lt;/drv), false: ni serĉas komencon (&lt;drv)
+   * @param stop_no_match - se 'true', ni haltas ĉe la unua elemento, kiu ne estas en la listo
+   * @param xml - la XML-teksto en kiu ni serĉas
+   * @param from - la finpozicio de kiu ni serĉas en alantaŭa direkto, se ne donita serĉe komenciĝas ĉe la fino
+   * @returns objekton kun kampoj pos, end, elm
+   */
+  tra_elementoj_retro(elements: Array<string>, end: boolean, stop_no_match: boolean,
+    xml: string, from?: number): XElPos
+  {    
+    const re_te = XmlTrad.re_stru._tagend;
+    const mark = end? '</' : '<';
+
+    // se mankas la lasta argumento, uzu aprioran...
+    /*
+    if (!xml) {
+      xml = this.txtarea.value;
+    }
+    */
+    if (from == undefined) {
+      from = xml.length;
+    }
+
+      // kontrolu ĉu la trovita elemento estas en la listo
+      // de interesantaj elementoj
+      function match(p: number) {
+        for (let e of elements) {
+          if ( xml.substring(p,p+e.length) == e 
+            && xml.substring(p+e.length,p+e.length+1).match(re_te) ) return e;
+        }
+      }
+
+    // trovu krampon < aŭ </
+    var pos = xml.lastIndexOf(mark,from-mark.length);
+
+    while (pos > -1 ) {
+      const element = match(pos+mark.length);
+      if (element) {
+        const end = xml.indexOf('>',pos);
+        // redonu la trovitan elementon
+        return {pos: pos, end: end, elm: element};
+      } else {
+        if (stop_no_match) return;
+      }
+      // trovu sekvan krampon < aŭ </
+      pos = xml.lastIndexOf(mark,pos-1);
     }
   };
 

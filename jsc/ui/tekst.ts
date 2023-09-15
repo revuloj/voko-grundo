@@ -15,14 +15,15 @@ export interface TId {
     id: string
 };
 
-export interface Tekstero { 
+export interface TParto { 
     id: string, // unika identigilo de la tekstero, ĝi ne dependu de la pozicio de la tekstero en
                 // la teksto tiel, ke ĝi ne perdas validecon ĉe ŝovo de la tekstero.
-    no: number, // la numero de la subteksto en la listo (subteksteroj enordiĝas, t.e 1.a ricevos numeron 2)
+    no?: number, // la numero de la subteksto en la listo (subteksteroj enordiĝas, t.e 1.a ricevos numeron 2)
     de: number, // komenca signo de la tekstero, rilate al la tuta teksto
     al: number, // fina signo de la tekstero, rilate al la tuta teksto (do longeo estas de-al)
     ln: number, // la komenca linio ene de la tuta teksto
-    lc?: number // la nombro de linioj
+    lc?: number, // la nombro de linioj
+    el: string // la speco de la parto, ĉe XML-teksto ni uzas strukturigajn elementon (art, subart, drv, ...subsnc)
 };
 
 /**
@@ -35,12 +36,15 @@ export interface Tekstero {
  */
 export class Tekst extends UIElement {
     static kmp_eo = new Intl.Collator('eo').compare;
-    private _partoj: Array<Tekstero>;
+    protected _partoj: Array<TParto>;
     private _teksto: string;
     public sinkrona: boolean;
-    public aktiva: Tekstero;
+    public aktiva: TParto;
 
-    static aprioraj = { };
+    static aprioraj = {
+        analizo: null, //(Tekst,TParto)=>void, // analizas la strukturon de la teksto kaj aldonas partojn per aldono()
+        post_aldono: null //(TParto)=>void // reago post aldono de tekstparto
+    };
 
     /**
      * Helpfunkcio ripetas unu signon n fojojn
@@ -88,8 +92,8 @@ export class Tekst extends UIElement {
         if (e instanceof Tekst) return e;
     }
 
-    constructor(element: HTMLElement|string, opcioj?: any, aprioraj = Tekst.aprioraj) {
-        super(element, opcioj, aprioraj);
+    constructor(element: HTMLElement|string, opcioj?: any) {
+        super(element, opcioj, Tekst.aprioraj);
     
         this._teksto = '';
         this._partoj = [];
@@ -103,7 +107,7 @@ export class Tekst extends UIElement {
      */
     set teksto(teksto: string) {
         this._teksto = teksto;
-        this.strukturo();
+        this.struktur_analizo();
 
         // elektu la unuan (art)
         this.aktiva = this._partoj[0];
@@ -123,39 +127,65 @@ export class Tekst extends UIElement {
         return this.teksto;
     };
 
-    konservu(ŝlosilo: string, info: any) {
+    /**
+     * Redonas la momente redaktatan tekston (textarea.value)
+     */
+    get redakt_teksto(): string|null {
+        const ta = this.element;
+        if (ta instanceof HTMLTextAreaElement)
+            return ta.ariaValueMax;
+        else
+            return null;
+    }
+
+    /**
+     * Metas tekston en la redaktokampon
+     */
+    set redakt_teksto(teksto: string) {
+        const ta = this.element;
+        if (ta instanceof HTMLTextAreaElement) {
+            ta.value = teksto;
+            this.sinkrona = false;
+        }
+    }
+
+    /**
+     * Konservas la tekston sub ŝlosilo en loka retumila memoro. Sed ne rekte
+     * sed kiel objekto, kies ŝablonon kaj atributon ni ricevas kiel argumenton.
+     * Tiel per la objekto oni povas transdoni pliajn kosnervendajn atributojn
+     * @param ŝlosilo 
+     * @param obj 
+     * @param atr 
+     */
+    konservu(ŝlosilo: string, obj: any, atr: string) {
+        obj[atr] = this.teksto;
         window.localStorage.setItem(ŝlosilo,
-            JSON.stringify({
-            'xml': this.teksto,
-            'nom': nom.value
-            //'red': nova/redakti...
-            })
+            JSON.stringify(obj)
         );
     };
 
   
     /**
-     * Restarigas XML-tekston kaj la artikolnomon el loka retumila memoro.
+     * Restarigas tekston kaj konkonservitajn atributojn el loka retumila memoro.
      * @memberof redaktilo
      * @inner
      */
-    relegu(ŝlosilo) {
+    relegu(ŝlosilo: string, atr: string): any {
         const str = window.localStorage.getItem(ŝlosilo);
-        const art = (str? JSON.parse(str) : null);
-        if (art) {
-            this.text = art.xml; // document.getElementById("r:xmltxt").value = art.xml;
-            //  document.getElementById("...").value = art.red;
-            nom.value = art.nom;
+        const obj = (str? JSON.parse(str) : null);
+        if (obj) {
+            this.teksto = obj[atr];
+            return obj;
         }
     };
 
     /**
      * Aktualigas la tekstbufron per la redaktata subteksto, ankaŭ aktualigas la struktur-liston
-     * @param select - se donita, la strukturelemento kun 
+     * @param elektenda - se donita, la strukturelemento kun 
      * tiu .id estos poste la elektita, se ĝi aldone havas .ln, .el tiuj povus esti
      * uzataj por retrovi subtekston, kies .id ŝanĝiĝis, ekz-e pro aldono/ŝanĝo
      */
-    sinkronigu(select?: TId) {
+    sinkronigu(elektenda?: TId) {
         if (this.aktiva) {
             console.debug("<<< sinkronigo <<<");
             // try {
@@ -165,28 +195,28 @@ export class Tekst extends UIElement {
             const old_s = this.aktiva;    
             const nstru = this._partoj.length;
 
-            if (!select) select = this.aktiva;
+            if (!elektenda) elektenda = this.aktiva;
 
             // unue ni legas la aktuale redaktatan subtekston kaj enŝovas en la kompletan
             // tio ankaŭ rekreas la strukturon de subtekstoj!
             // ni memoras la longecon de la nova subteksto, ĉar se ĝi entenas pli ol la ĉefan elementon, ekz-e finan
-            // komenton, ni devas evit duobliĝon per aktualigo ankaŭ de la montrata subteksto
-            const teksto =  this.element.value;
+            // komenton, ni devas eviti duobliĝon per aktualigo ankaŭ de la montrata subteksto
+            const teksto =  this.redakt_teksto||'';
             const ln = teksto.length;
-            this.anstataŭigu(this.aktiva,teksto,select.id);
+            this.anstataŭigu(this.aktiva.id,teksto,elektenda.id);
 
             // nun retrovu la elektendan subtekston en la rekreita strukturo
 
             // trovu laŭ id (tbs = to be selected)
-            let tbs = this.subtekst_info(select.id);
+            let tbs = this.subtekst_info(elektenda.id);
 
             if (tbs) {
                 this.aktiva = tbs;
             // se ni ne trovis la subtekston per sia id, sed ĝi estas la
-            // sama, kiun ni ĵus redaktis, eble la marko ŝanĝiĝis
-            // aŭ aldoniĝis snc/drv, ni provu trovi do per .ln kaj .el
-            } else if (select.id == old_s.id) {
-                tbs = this.trovu_subtekst_info(select);
+            // sama, kiun ni ĵus redaktis, eble la id ŝanĝis
+            // se ĝi kreiĝas el enhavo, ni provu trovi do per .ln kaj .el
+            } else if (elektenda.id == old_s.id) {
+                tbs = this.retrovu_subtekst_info(elektenda as TParto);
                 if (tbs) this.aktiva = tbs;
             };
             
@@ -204,7 +234,7 @@ export class Tekst extends UIElement {
 
                 || nstru != this._partoj.length) {
                 // nun ni montras la celatan XML-parton por redaktado
-                this.element.value = this.subteksto(this.aktiva);
+                this.redakt_teksto = this.subteksto(this.aktiva);
             }
 
             this.sinkrona = true;
@@ -216,10 +246,10 @@ export class Tekst extends UIElement {
      * kreigu tion devas fari la uzanta objekto, kiu tiucele transdonu en opcioj
      * funkcion strukturo()
      */
-    strukturo() {
+    struktur_analizo(elektenda?: string) {
         this._partoj = [];
-        if (this.opcioj.strukturo instanceof Function)
-            this.opcioj.strukturo(this);
+        if (this.opcioj.analizo instanceof Function)
+            this.opcioj.analizo(this,elektenda);
     }
 
 
@@ -253,12 +283,13 @@ export class Tekst extends UIElement {
             //  +"("+(this.xml_elekto.al-this.xml_elekto.de)+")");
 
             // nun ni montras la celatan XML-parton por redaktado
-            this.element.value = this.subteksto(this.aktiva);
+            this.redakt_teksto = this.subteksto(this.aktiva);
+            this.sinkrona = true; // ni nur metis la tekston sen ekredakti!
+
             // iru al la komenco!
             this.kursoro_supren();
             this.rulpozicio = 0;
 
-            if (this.onselectsub) this.onselectsub(this.aktiva);
         }
     };
 
@@ -266,7 +297,7 @@ export class Tekst extends UIElement {
      * Aldonas teksteron al la fino de la parto-listo. Ni aŭtomate metas/aktualigas ĝian numeron
      * @param ero  aldona objekto kun la atributoj de la strukturero
      */
-    aldonu(ero: Tekstero) {
+    aldonu(ero: TParto) {
         ero.no = this._partoj.length;
         this._partoj.push(ero);
 
@@ -283,23 +314,45 @@ export class Tekst extends UIElement {
     }
 
     /**
+     * Aplikas donitan funkcion al ĉiuj subtekstoj unu post la alia
+     */
+    subtekst_apliku(proc: (t: TParto)=>void) {
+        this._partoj.forEach(proc);
+    }
+
+    /**
      * 
      * @param id Redonas la informojn pri subteksto, identigitan per sia id
      * @returns 
      */
-    subtekst_info(id: string): Tekstero|undefined {
+    subtekst_info(id: string): TParto|undefined {
         return this._partoj.find((e) => e.id == id);
     }
 
     /**
-     * Trovas la informon de subteksto: aŭ identigante ĝin per sia .id aŭ
-     * per sama elemento kaj komenco devianta maksimume je unu linio
+     * Trovas subteksto per donita komparfunkio
+     * @param komparo 
+     */
+    trovu_subtekst_info(komparo: (val: TParto)=>boolean): TParto|undefined {
+        return this._partoj.find(komparo);
+    }
+
+    /**
+     * Trovas la informon de subteksto laŭ simileco kun donita: 
+     * aŭ identigante ĝin per sia .id aŭ
+     * per sama speco (el) kaj komenco devianta maksimume je unu linio
      * @param sd 
      * @returns la informoj pri la subteksto kiel objekto
      */
-    trovu_subtekst_info(sd: Tekstero): Tekstero {
+    retrovu_subtekst_info(sd: TParto): TParto|undefined {
         let s = this.subtekst_info(sd.id);
+        if(s) { return s; }
 
+        else if (sd.el && sd.ln)
+            return this.trovu_subtekst_info(
+                (t) => ( t.el == sd.el )  && ( Math.abs(t.ln-sd.ln) <= 1 )
+            );
+/*
         if(s) { return s; }
             else if (sd.el && sd.ln) {
             for (s of this._partoj) {
@@ -308,6 +361,7 @@ export class Tekst extends UIElement {
                 }
             }
         }
+        */
     }
 
     /**
@@ -328,7 +382,7 @@ export class Tekst extends UIElement {
      * @param sd - objekto kun .id kaj eventuale pliaj informoj .ln, .el por identigi la subtekston
      * @returns la detalojn de la patro kiel objekto
      */
-    patro(sd: TId): Tekstero|undefined {
+    patro(sd: TId): TParto|undefined {
         const s = this.subtekst_info(sd.id);
 
         // patro venas antaŭ la nuna kaj enhavas ĝin (subteksto al..de)
@@ -340,16 +394,34 @@ export class Tekst extends UIElement {
         } else throw "Nevalida tekstero '"+sd.id+"'";
     };
 
+    /**
+     * Trovas la plej proksiman parton (mem aŭ praulo) de la aktuale elektita subteksto, 
+     * kiu havas difinitan kaj nemalplenan atributon (iuj atributoj povas aldonitaj al Tekstero)
+     * @returns la detalojn de la trovita subteksto
+     */
+    subteksto_havanta(atributo: string): TParto|undefined {
+        const akt = this.aktiva;
+        if ((akt as any)[atributo]) {
+            return akt;
+        } else {
+            var p = this.patro(akt);
+            while (p && p.no && p.no >= 0) { 
+                if ((p as any)[atributo]) return p;
+                p = this.patro(p);
+            }
+        }
+    };
+
 
     /**
      * Redonas la informojn pri la lasta subteksto, kiu enhavas linion
      * @param line - la koncerna linio
      * @returns - la serĉataj detaloj, undefined - se neniu enhavas la linion
      */
-    lasta_kun_linio(line: number): Tekstero {
+    lasta_kun_linio(line: number): TParto {
         for (let n = this._partoj.length-2; n>=0; n--) {
         const s = this._partoj[n];
-            if (s.ln <= line && s.ln+s.lc >= line) {
+            if (s.ln <= line && s.lc && s.ln+s.lc >= line) {
                 return s;
             }
         } 
@@ -359,20 +431,23 @@ export class Tekst extends UIElement {
     }
 
    /* Anstataŭigas donitan subtekston per nova
-    * @param sd - la anstataŭigenda subteksto
+    * @param s_id - la anstataŭigenda subteksto
     * @param xml - la nova subteksto
     * @param select - se donita, la strukturelemento kun tiu .id estos poste la elektita
     */
-    anstataŭigu(sd: Tekstero, teksto: string) {   
-       const elekto = this.subtekst_info(sd.id);
+    anstataŭigu(s_id: string, teksto: string, elektenda?: string) {   
+       const elekto = this.subtekst_info(s_id);
  
        if (elekto) {
         this.teksto = 
             (this.teksto.substring(0,elekto.de) 
             + teksto
             + this.teksto.substring(elekto.al));
+
+        // renovigu la strukturon
+        this.struktur_analizo(elektenda);
        } else
-        throw "Nevalida tekstero '"+sd.id+"'";
+        throw "Nevalida tekstero '"+s_id+"'";
     };
 
     /**
@@ -382,7 +457,7 @@ export class Tekst extends UIElement {
     */
     enŝovu_post(s_id: string, xml: string) {
         // trovu la subtekston laŭ mrk
-        const s = this.subteksto(s_id);
+        const s = this.subtekst_info(s_id);
         if (!s) throw "Subteksto kun id "+s_id+" ne trovita!"
 
         // enŝovu la novan subtekston post tiu, uzante la pozicion s.al
@@ -476,7 +551,7 @@ export class Tekst extends UIElement {
      * Redonas la aktualan pozicion de la kursoro kiel linio kaj loko ene de la linio 
      * @returns objekto {{lin: number, poz: number}}
      */
-    pozicio() {
+    get pozicio() {
         const txtarea = this.element;
         if (txtarea instanceof HTMLTextAreaElement) {
             const loff = this.aktiva? this.aktiva.ln : 0;

@@ -5,22 +5,25 @@
 
 import {str_repeat, type LinePos} from './util';
 import {indent,get_indent,get_line_pos} from './tekstiloj';
-import {XmlStruct, Strukturero, SId} from './xmlstruct';
-import {XmlTrad, TList, Lingvo, XPlace} from './xmltrad';
+import { XmlStrukt, SDet } from './xmlstrukt';
+import { XmlTrad, TList, Lingvo, XPlace } from './xmltrad';
+import { Tekst } from '../ui';
 
 /**
  * Administras la redaktatan tekston tiel, ke eblas redakti nur parton de ĝi, t.e. unuopan derivaĵon, sencon ktp.
  */
-export class Xmlarea {
-  public xmlstruct: XmlStruct; // la tuta teksto
-  public elekto: Strukturero; // aktuale redaktata subteksto
+export class XmlRedakt extends Tekst {
+  public radiko: string;
 
-  public txtarea: HTMLInputElement; // la <textarea> kun la momente redaktata teksto
+  public xmlstruct: XmlStrukt; // la tuta teksto
+  //public aktiva: Strukturero; // aktuale redaktata subteksto
+
+  //public txtarea: HTMLInputElement; // la <textarea> kun la momente redaktata teksto
   public xmltrad: XmlTrad; // por redaktado de tradukoj
   private onaddsub: Function;
   private onselectsub: Function;
-  private synced: boolean; // por scii, ĉu ni devos konservi la videblan (redaktatan) tekstparton
-  public ar_in_sync: boolean; // por scii, ĉu la lasta antaŭrigardo estas aktuala
+  //private synced: boolean; // por scii, ĉu ni devos konservi la videblan (redaktatan) tekstparton
+  public antaŭrigardo_sinkrona: boolean; // por scii, ĉu la lasta antaŭrigardo estas aktuala
 
   // bezonataj regulesprimoj
   private static re_xml = {
@@ -31,23 +34,30 @@ export class Xmlarea {
 
 /**
  * @param ta_id - La HTML-Id de la koncerna textarea-elemento en la HTML-paĝo
- * @param onAddSub - Revokfunkcio, vokata dum analizo de la strukturo ĉiam, kiam troviĝas subteksto.  Tiel eblas reagi ekzemple plenigante liston per la trovitaj subtekstoj (art, drv, snc...)
+ * @param post_aldono - Revokfunkcio, vokata dum analizo de la strukturo ĉiam, kiam troviĝas subteksto.  Tiel eblas reagi ekzemple plenigante liston per la trovitaj subtekstoj (art, drv, snc...)
  * @param onSelectSub - Revokfunkcio, vokata dum interne kaŭzia elekto de alia subteksto. Ekz-e aldono de nova <drv> 
  */  
-  constructor(ta_id: string, onAddSub?: Function, onSelectSub?: Function) {
-    this.txtarea = document.getElementById(ta_id) as HTMLInputElement;
-    /// this.txtarea.addEventListener("input",() => { this.setUnsynced(); });
-    /// this.txtarea.addEventListener("change",() => { this.setUnsynced(); });
+  constructor(ta_id: string, post_aldono?: Function, onSelectSub?: Function) {
+    super(ta_id,{
+      analizo: XmlStrukt.struktur_analizo,
+      post_aldono: post_aldono
+    })
+    /* this.txtarea = document.getElementById(ta_id) as HTMLInputElement;
+     this.txtarea.addEventListener("input",() => { this.setUnsynced(); });
+     this.txtarea.addEventListener("change",() => { this.setUnsynced(); });
+    */
 
     //this.structure_selection = document.getElementById(struc_sel);
-    this.xmlstruct = new XmlStruct('',onAddSub); // la tuta teksto
-    this.xmltrad = new XmlTrad(); // por redaktado de tradukoj
+    //this.xmlstruct = new XmlStrukt('',post_aldono); // la tuta teksto
+    this.xmltrad = new XmlTrad(this); // por redaktado de tradukoj
 
-    this.elekto = undefined; // aktuale redaktata subteksto
-    this.onaddsub = onAddSub;
+    /*
+    this.aktiva = undefined; // aktuale redaktata subteksto
+    this.onaddsub = post_aldono;
+    */
     this.onselectsub = onSelectSub;
     /// this.synced = true;
-    this.ar_in_sync = false; // por scii, ĉu la lasta antaŭrigardo estas aktuala...
+    this.antaŭrigardo_sinkrona = false; // por scii, ĉu la lasta antaŭrigardo estas aktuala...
   }
 
 
@@ -57,41 +67,49 @@ export class Xmlarea {
    * @param xml 
    */
   setText(xml: string) {
-    this.xmlstruct = new XmlStruct(xml,this.onaddsub);  
+    this.xmlstruct = new XmlStrukt(xml,this.onaddsub);  
+
+    this.radiko = XmlStrukt.radiko(this);
     // elektu la unuan (art)
     // this.elekto = this.xmlstruct.strukturo[0];
     // this.txtarea.value = this.xmlstruct.getSubtext(this.elekto);
-    this.ar_in_sync = false;
-    this.resetCursor();   
+    this.antaŭrigardo_sinkrona = false;
+    this.kursoro_supren();   
   };
 
   /**
    * La radiko de la kapvorto, kiel eltrovita dum strukturanalizo.
    * @returns Redonas la radikon de la artikolo (t.e. la kapvorto sen finaĵo)
    */
+  /*
   getRadiko(): string {
     return this.xmlstruct.radiko;
   };
+  */
 
   /**
    * Redonas la dosiernomon ekstraktitan el mrk-atributo de art- aŭ drv-elemento
    * @returns la dosiernomo
    */
-  getDosiero(): string {
-    return this.xmlstruct.art_drv_mrk();
+  get dosiero(): string|undefined {
+    return XmlStrukt.art_drv_mrk(this);
   };
 
   /**
    * Saltas al la aktuala derivaĵo (laŭ mrk) en la antaŭrigardo (#...)
    */
   saltu() {
-    const mrk = this.xmlstruct.getMrk(this.elekto);
-    if (mrk != '' && mrk.indexOf(',v') == -1) {
-      window.location.hash = this.getDosiero()+'.'+mrk;
-    } else {
-      window.location.hash = '';
-      // tio lasas malplenan '#', se ni volus forigi tion ankaŭ ni povus uzi
-      // history.pushState("", document.title, window.location.pathname);
+    // const mrk = this.xmlstruct.getMrk(this);
+    const mrkhava = this.subteksto_havanta('mrk') as SDet;
+    if (mrkhava && mrkhava.el != 'art') {
+      const mrk = mrkhava.mrk;
+      if (mrk && mrk.indexOf(',v') == -1) {
+        window.location.hash = this.dosiero+'.'+mrk;
+      } else {
+        window.location.hash = '';
+        // tio lasas malplenan '#', se ni volus forigi tion ankaŭ ni povus uzi
+        // history.pushState("", document.title, window.location.pathname);
+      }
     }
   }; 
 
@@ -174,10 +192,9 @@ export class Xmlarea {
    * da normaligo, forigi troajn malplenajn liniojn kaj spacsignojn en linifinoj...
    */
   normalizedXml(): string {
-    const xml = this.syncedXml();
-    return (xml
-      .replace(Xmlarea.re_xml.finspacoj,"\n")
-      .replace(Xmlarea.re_xml.trolinioj,"\n\n"));
+    return (this.teksto
+      .replace(XmlRedakt.re_xml.finspacoj,"\n")
+      .replace(XmlRedakt.re_xml.trolinioj,"\n\n"));
   }
 
 
@@ -186,8 +203,8 @@ export class Xmlarea {
    * resp. rekrei antaŭrigardon
    */
   setUnsynced() {
-    this.synced = false;
-    this.ar_in_sync = false;
+    this.sinkrona = false;
+    this.antaŭrigardo_sinkrona = false;
   }
 
 
@@ -238,9 +255,19 @@ export class Xmlarea {
    * @param mrk 
    * @param sync 
    */
-  changeSubtextMrk(mrk: string, sync=true) {
-    const s = this.xmlstruct.getStructByMrk(mrk);
-    if (s) this.changeSubtext(s.id,sync);
+  ekredaktu_subtekst_mrk(mrk: string, sync=true) {
+    /// const s = this.xmlstruct.getStructByMrk(mrk);
+
+    // forigu prefikson de mrk kaj poste serĉu la koncernan subtekston
+    const p = mrk.indexOf('.');
+    if (p) {
+      const ms = mrk.slice(p+1);
+      const s = this.trovu_subtekst_info((t) => (t as SDet).mrk == ms);
+      if (s) {
+        this.ekredaktu(s.id,sync);
+        if (this.onselectsub) this.onselectsub(this.aktiva);
+      }
+    }
   }
 
 
@@ -288,9 +315,27 @@ export class Xmlarea {
    * en la artikolo
    * @returns la kapvorton, tildo estas anstataŭigita per la radiko, variaĵoj post komo forbalaita
    */
-  getCurrentKap(): string {
-    return this.xmlstruct.getClosestKap(this.elekto)
-  }
+  get aktuala_kap(): string|undefined {
+    //return this.xmlstruct.getClosestKap(this.aktiva)
+    const rad = this.radiko;
+
+    function kap(e: SDet) {
+      return (e.kap||'')
+        .replace('~',rad)
+        .replace(/[,.*]/,'');
+    }
+
+    const kaphava = this.subteksto_havanta('kap') as SDet;
+    if (kaphava.el != 'art' && kaphava.id != "x.m.l") {
+        return kap(kaphava);
+    } else { // prenu kapvorton de unua drv
+      for (let s of this._partoj) {
+        if (s["el"] == 'drv') {
+          return (kap(<SDet>s));
+        }
+      }
+    }
+  };
 
 
   /**
@@ -308,7 +353,7 @@ export class Xmlarea {
    */
   collectTrd(xml: string, shallow: boolean=false, normalize: boolean=false) {
     if (!xml) {
-      xml = this.txtarea.value;
+      xml = this.redakt_teksto||'';
       // KOREKTU: fakte ni nun kolektas en {<lng>: [trdj]}
       // do ĝuste estus this.tradukoj = {} aŭ this.tradukoj[lng] = [] !?
     }
@@ -322,19 +367,19 @@ export class Xmlarea {
    * La rezulto estos poste en la listo xmltrad.tradukoj[lng]
    */
   collectTrdAll() {
-    let xml = this.txtarea.value;
-    
+    let xml = this.redakt_teksto;
+  
     // kolektu unue la tradukojn profunde en la aktuala subteksto
     this.xmltrad.preparu(this.xmlstruct);
     this.xmltrad.collectXml(xml,false,true); // profunde, normigu
 
     // se temas pri subdrv, snc, subsnc ni kolektu ankaŭ de la parencoj,
     // ĉar ekz-e la traduko de drv validas ankaŭ por ĉiu ena snc...
-    let p = this.xmlstruct.getParent(this.elekto);
-    while ( ['snc','subdrv','drv'].indexOf(p.el)>-1 ) {
-      xml = this.xmlstruct.getSubtext(p);
+    let p = this.patro(this.aktiva);
+    while ( ['snc','subdrv','drv'].indexOf(p["el"])>-1 ) {
+      xml = this.subteksto(p);
       this.xmltrad.collectXml(xml,true,true); // malprofunde, normigu
-      p = this.xmlstruct.getParent(p);
+      p = this.patro(p);
     }
   };
 
@@ -348,15 +393,16 @@ export class Xmlarea {
    */
   addTrd(lng: Lingvo, trd: string) {
     //if (! this.synced) this.sync(this.elekto); 
-    const xml = this.txtarea.value;
+
+    const xml = this.redakt_teksto;
 
     const place = this.xmltrad.findTrdPlace(xml,lng); // this.getCurrentLastTrd(lng);
     if (place) {
       // se jam estas .trd, ni anstataŭigu ĝin per la etendita trdgrp...,
       // alie ni enmetos novan trd (len=0)
       const len = place.trd? place.trd.length : 0;
-      this.select(place.pos, len);
-      const ind = this.indent();
+      this.elektu(place.pos, len);
+      const ind = this.enŝovo;
 
       // jam estas trdgrp?
       if (place.grp) {
@@ -366,7 +412,7 @@ export class Xmlarea {
           + ind + '  <trd>' + trd +'</trd>'
           + place.trd.substring(pos+1);
         console.debug(' --> '+nov);
-        this.selection(nov);
+        this.elektenmeto(nov);
       } else if (place.trd) {
         // ni havas ĝis nun nur unu trd, kaj devas krei trdgrp nun
         const nov = 
@@ -375,14 +421,14 @@ export class Xmlarea {
           + ind + '  <trd>' + trd + '</trd>\n'
           + ind + '</trdgrp>';
         console.debug(' --> '+nov);
-        this.selection(nov);
+        this.elektenmeto(nov);
       } else {
         // antaŭ elementoj (sub)drv/snc ni aldonas du spacojn...
         const iplus = place.elm[0] == 's' || place.elm[0] == 'd' ? '  ' : '';
         // ankoraŭ neniu traduko, aldonu la unuan nun
         const nov = iplus + '<trd lng="' + lng +'">' + trd + '</trd>\n' + ind;
         console.debug(' --> '+nov);
-        this.selection(nov);
+        this.elektenmeto(nov);
       }
     }
   };
@@ -394,8 +440,8 @@ export class Xmlarea {
    * @param trdj - listo de novaj tradukoj
    */
   replaceTrd(id: string, lng: Lingvo, trdj: TList) {
-    if (! this.synced) this.sync(this.elekto); 
-    let xml = this.xmlstruct.getSubtext({id:id});
+    if (! this.sinkrona) this.sinkronigu(this.aktiva); 
+    let xml = this.subteksto({id:id});
 
     function _indent_at(pos: number): string {
       let ls = xml.lastIndexOf('\n',pos);
@@ -467,11 +513,14 @@ export class Xmlarea {
         // PLIBONIGU: ni ĉiufoje rekalkulas la strukturon post tio,
         // do se ni aldonas tradukojn en pluraj sekcioj ni haltigu
         // la aktualigadon ĝis la lasta...
-        this.xmlstruct.replaceSubtext({id:id},xml,this.elekto.id);
+        /*
+        this.xmlstruct.replaceSubtext({id:id},xml,this.aktiva.id);
+        */
+        this.anstataŭigu(id,xml,this.aktiva.id)
         // aktualigu ankaŭ txtarea, ĉar eble ni aldonis en tiu tradukojn
         // PLIBONIGU: pli bone faru tion nur se montriĝas ĉirkaŭa subteksto
         // aŭ fine, post aldoni ĉiujn tradukojn...
-        this.txtarea.value = this.xmlstruct.getSubtext(this.elekto);
+        this.redakt_teksto = this.subteksto(this.aktiva);
       //}
     }
   };

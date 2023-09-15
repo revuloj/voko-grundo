@@ -6,7 +6,7 @@
 
 
 import * as x from '../x';
-import { Xmlarea } from '../x';
+//import { XmlRedakt } from '../x';
 import { UIElement, DOM } from '../ui';
 
 import { preferoj } from '../a/preferoj';
@@ -68,7 +68,7 @@ export class Artikolo extends UIElement {
 
     /*
     public opcioj: {
-        xmlarea: Xmlarea,
+        xmlarea: XmlRedakt,
         dosiero: string,
         reĝimo: 'redakto'|'aldono', // ĉe novaj artikoloj 'aldono'   
         poziciŝanĝo: Function, // evento
@@ -325,7 +325,7 @@ export class Artikolo extends UIElement {
     radiko() {
         //return this._radiko;
         const xmlarea = this.opcioj.xmlarea;
-        return xmlarea.getRadiko(); 
+        return xmlarea.radiko; 
     };
 
     // redonas aŭ anstataŭigas la elektitan tekston
