@@ -7,6 +7,8 @@ import { DOM } from './dom';
 import { UIElement } from './uielement';
 import { UIStil } from './uistil';
 
+type MenuOpcioj = { eroj?: string, reago?: Function };
+
 class Menuer extends UIElement {
     static menuo(element: HTMLElement|string) {
         const menuer = UIElement.obj(element);
@@ -16,12 +18,16 @@ class Menuer extends UIElement {
     constructor(element: HTMLElement|string, public menuo: Menu) {
         super(element,{});
         // aldonu klakreagon
-        this.element.addEventListener("click",this._click);
+        this.element.addEventListener("click",this._click.bind(this.element));
     };
 
-    _click(event) {
-        const menuo = Menuer.menuo(event.currentTarget);
-        if (menuo) menuo.elekto(event,event.currentTarget);
+    _click(event: Event) {
+        const trg = event.currentTarget;
+
+        if (trg instanceof HTMLElement) {
+            const menuo = Menuer.menuo(trg);
+            if (menuo) menuo.elekto(event,trg);    
+        }
     };
 }
 
@@ -40,7 +46,7 @@ class Submenu extends Menuer {
         super(element,menuo);
         this.montru(false); // kaŝu komence
         // aldonu klakreagon
-        this.element.addEventListener("click",this._click);
+        this.element.addEventListener("click",this._click.bind(this.element));
     };
 
     montru(montru = true) {
@@ -61,31 +67,34 @@ class Submenu extends Menuer {
         }
     }
 
-    _click(event) {
-
+    _click(event: Event) {
         const m_el = event.currentTarget;
-        const subm = Submenu.submenuo(m_el);
-        const menuo = Menuer.menuo(m_el)
+        const trg = event.target;
 
-        console.debug("submenuo: "+m_el.textContent);
+        if (m_el instanceof HTMLElement && trg instanceof HTMLElement) {
+            const subm = Submenu.submenuo(m_el);
+            const menuo = Menuer.menuo(m_el)
 
-        const sublst = Submenu.sublisto(m_el);
-        if (subm && menuo && sublst instanceof HTMLElement) {
-            // se menuero en la submenuo estis klakita, reagu per
-            // la ago registrita ĉe la menuo
-            if (sublst.contains(event.target)) {
-                const li = event.target.closest("li");
-                if (li) menuo.elekto(event,li);
+            console.debug("submenuo: "+m_el.textContent);
+
+            const sublst = Submenu.sublisto(m_el);
+            if (subm && menuo && sublst instanceof HTMLElement) {
+                // se menuero en la submenuo estis klakita, reagu per
+                // la ago registrita ĉe la menuo
+                if (sublst.contains(trg)) {
+                    const li = trg.closest("li");
+                    if (li) menuo.elekto(event,li);
+                }
+
+                // malfermu, se fermita; fermu, se malfermiata
+                const kaŝita = DOM.kaŝita(sublst);
+
+                // evtl. fermu ĉiujn aliajn
+                if (menuo) menuo.fermu_submenuojn();
+
+                // montru ĉi-tiun, se antaŭe estis kaŝita
+                if (kaŝita) subm.montru(true);
             }
-
-            // malfermu, se fermita; fermu, se malfermiata
-            const kaŝita = DOM.kaŝita(sublst);
-
-            // evtl. fermu ĉiujn aliajn
-            if (menuo) menuo.fermu_submenuojn();
-
-            // montru ĉi-tiun, se antaŭe estis kaŝita
-            if (kaŝita) subm.montru(true);
         }
     }
 }    
@@ -94,7 +103,7 @@ class Submenu extends Menuer {
 export class Menu extends UIElement {
     //valoroj: any;
 
-    static aprioraj = {
+    static aprioraj: MenuOpcioj = {
         eroj: ":scope>li",
         reago: undefined
     }
@@ -142,9 +151,9 @@ export class Menu extends UIElement {
         });
     }
 
-    _klavpremo(event) {
+    _klavpremo(event: KeyboardEvent) {
         const el = event.target;
-        const subm = Submenu.submenuo(el);
+        const subm = Submenu.submenuo(el as HTMLElement);
 
         function iru(el: Element|null, malsupren: boolean) {
             let mi = el;
@@ -182,7 +191,7 @@ export class Menu extends UIElement {
         }
     }
 
-    elekto(event,menuero_elm) {
+    elekto(event: Event, menuero_elm: HTMLElement) {
         this.opcioj.reago
             .call(this,event,{menuero: menuero_elm});
     }

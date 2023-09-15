@@ -6,10 +6,12 @@
 import { DOM } from './dom';
 import { UIElement } from './uielement';
 
-export class Propon extends UIElement {
-    private temp;
+type ProponOpcioj = { sufikso: string, source?: Function, select?: Function }
 
-    static aprioraj = { 
+export class Propon extends UIElement {
+    //private temp;
+
+    static aprioraj: ProponOpcioj = { 
         /* ĉar datalist ne sendas eventon, kiam ni elektas ion, ni
         bezonas iel distingi entajpitajn vortojn de elektitaj, resp. certigi
         ke elektante listeron, tiu distingiĝu de la entajpita vorto, por kaŭzi
@@ -32,7 +34,7 @@ export class Propon extends UIElement {
 
         if (this.element instanceof HTMLInputElement) {
             this.element.setAttribute("autocomplete","off");
-            this.element.addEventListener("input",this._input.bind(this));
+            this.element.addEventListener("input",this._input.bind(this.element));
         }
 
         // se ni ricevis la proponliston kiel areo, ni tuj plenigas la elementon "datalist"
@@ -97,7 +99,7 @@ export class Propon extends UIElement {
         }
     }
 
-    _input(event) {
+    _input(event: Event) {
         // Unue kontrolu, ĉu la uzanto elektis eron el datalist.
         // La retumiloj iom diverse ebligas distingi de normala entajpo.
         // Vd. ankaŭ diskuton en:

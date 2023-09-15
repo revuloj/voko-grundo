@@ -7,11 +7,12 @@ import { DOM } from './dom';
 import { UIElement } from './uielement';
 import { UIStil } from './uistil';
 
+type SliparOpcioj = { aktiva: number, poste?: Function, antaŭe?: Function };
 
 export class Slipar extends UIElement {
     //valoroj: any;
 
-    static aprioraj = { 
+    static aprioraj: SliparOpcioj = { 
         aktiva: 0,
         poste: undefined,
         antaŭe: undefined
@@ -48,7 +49,7 @@ export class Slipar extends UIElement {
         });
     }
 
-    _videbleco(langeto) {
+    _videbleco(langeto: HTMLElement) {
         const sl0 = this.slipo(langeto);
         this.langetoj()?.forEach((l) => {
             const sl = this.slipo(l);
@@ -61,14 +62,14 @@ export class Slipar extends UIElement {
         });
     }
 
-    _lslip_id(langeto) {
+    _lslip_id(langeto: HTMLElement) {
         const href = langeto.querySelector("a[href]")?.getAttribute("href");
         if (href) {
             return href.split('#')[1];  
         }
     }
 
-    _lelekto(langeto) {
+    _lelekto(langeto: HTMLLIElement) {
         const lgoj = this.langetoj();
         if (lgoj) {
             const n = Array.from(lgoj).indexOf(langeto);

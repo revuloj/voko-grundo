@@ -26,6 +26,12 @@ export interface TParto {
     el: string // la speco de la parto, ĉe XML-teksto ni uzas strukturigajn elementon (art, subart, drv, ...subsnc)
 };
 
+
+type TekstOpcioj = {
+    analizo?: (tekst: Tekst, t: TParto)=>void, // analizas la strukturon de la teksto kaj aldonas partojn per aldono()
+    post_aldono?: (t: TParto)=>void // reago post aldono de tekstparto
+};
+
 /**
  * Klaso por trakti strukturitan tekston, aparte por redakti ties unuopan parton
  * aparte. Ne necesas, ke la partoj sekvas unu la aliajn, eblas ankaŭ ingigitaj subtekstoj,
@@ -41,9 +47,9 @@ export class Tekst extends UIElement {
     public sinkrona: boolean;
     public aktiva: TParto;
 
-    static aprioraj = {
-        analizo: null, //(Tekst,TParto)=>void, // analizas la strukturon de la teksto kaj aldonas partojn per aldono()
-        post_aldono: null //(TParto)=>void // reago post aldono de tekstparto
+    static aprioraj: TekstOpcioj = {
+        analizo: undefined, // analizas la strukturon de la teksto kaj aldonas partojn per aldono()
+        post_aldono: undefined // reago post aldono de tekstparto
     };
 
     /**

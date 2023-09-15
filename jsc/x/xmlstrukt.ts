@@ -205,9 +205,9 @@ export class XmlStrukt extends Tekst {
         
         // kunmetu etikedon por la peco el elementnomo kaj sufikso
         const suff = subt.kap ? subt.kap : subt.mrk||'';
-        subt.dsc = XmlStrukt.indents[subt.el] + (
+        subt.dsc = XmlStrukt.indents[subt.el as XEl] + (
           subt.el!='art'? 
-            XmlStrukt.elements[subt.el]+ (suff?' '+suff:' ('+subt.el+')') 
+            XmlStrukt.elements[subt.el as XEl]+ (suff?' '+suff:' ('+subt.el+')') 
             : suff);
   
         // ĉe la kapvorto de la artikolo ekstraktu la radikon

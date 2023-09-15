@@ -7,16 +7,22 @@ import { DOM, HTMLCheckControlElement } from './dom';
 import { UIElement } from './uielement';
 import { UIStil } from './uistil';
 
+type DialogOpcioj = { kampoj: any, butonoj?: any, malfermu?: Function, 
+    valorŝanĝo?: Function // evento lanĉita, post voko de "valoroj" kun novaj valoroj 
+};
+
+type ButonEcoj = { id?: string, text: string, click: Function };
+
 export class Dialog extends UIElement {
     //valoroj: any;
     start_pos: {x: number, y: number};
     start_offs: {x: number, y: number};
 
-    static aprioraj = {
+    static aprioraj: DialogOpcioj = {
         kampoj: {},
         butonoj: undefined,
         malfermu: undefined,        
-        valorŝanĝo: null // evento lanĉita, post voko de "valoroj" kun novaj valoroj
+        valorŝanĝo: undefined // evento lanĉita, post voko de "valoroj" kun novaj valoroj
     };
 
     static dialog(element: HTMLDialogElement|string) {
@@ -83,8 +89,10 @@ export class Dialog extends UIElement {
             } else 
                 for (let [text, click] of Object.entries(this.opcioj.butonoj)) {
                 //kial ne funkcias? if (reago instanceof EventListener) {
-                    const btn = this.butono({text: text, click: click})
-                    butonujo.append(btn);    
+                    if (click instanceof Function) {
+                        const btn = this.butono({text: text, click: click})
+                        butonujo.append(btn);        
+                    }
                 //}
             }
             this.element.append(butonujo);
@@ -96,7 +104,7 @@ export class Dialog extends UIElement {
     /**
      * Kreas unuopan butonon laŭ donitaj ecoj
      */
-    butono(ecoj): Element {
+    butono(ecoj: ButonEcoj): Element {
         // ĉu ni uzu klason Buton el ./buton.ts?
         const btn = document.createElement("button");
         btn.textContent = ecoj.text;
@@ -138,7 +146,7 @@ export class Dialog extends UIElement {
            (this.element as HTMLDialogElement).close();
     }
 
-    tab_enfermo(evento) {
+    tab_enfermo(evento: KeyboardEvent) {
         if (evento.keyCode === 9) { // TAB
             const fokuseblaj = this.element.querySelectorAll("input,button,textarea,selection");
             if (fokuseblaj.length) {
@@ -211,7 +219,7 @@ export class Dialog extends UIElement {
 
     valoroj(): any {
         // elprenu valorojn el la dialogkampoj kaj redonu
-        let valj = {};
+        let valj: any = {};
         for (let [nomo,kampo] of Object.entries(this.opcioj.kampoj)) {
             const k = DOM.i(kampo as string);
             if (k) {
@@ -245,7 +253,7 @@ export class Dialog extends UIElement {
         this._trigger("valorŝanĝo");        
     };
 
-    komencuMovon(event) {
+    komencuMovon(event: PointerEvent) {
         const h = event.currentTarget;
         //console.debug("mtrg:"+event.target.tagName);
 
@@ -253,7 +261,9 @@ export class Dialog extends UIElement {
             this.start_pos = {x: event.clientX, y: event.clientY};
             this.start_offs = {x: this.element.offsetLeft, y: this.element.offsetTop};
             // ŝanĝu aprioran margin (auto) al fiksa
+            // @ts-ignore
             this.element.style["margin-top"] = this.element.offsetTop+"px";
+            // @ts-ignore
             this.element.style["margin-left"] = this.element.offsetLeft+"px";
             this.element.style.cursor = "move";
 
@@ -264,7 +274,7 @@ export class Dialog extends UIElement {
         }
     }
       
-    finuMovon(event) {
+    finuMovon(event: PointerEvent) {
         const h = event.currentTarget;
         if (h instanceof HTMLElement) {
             //h.classList.remove("ui-state-active");
@@ -285,7 +295,9 @@ export class Dialog extends UIElement {
             // const my = event.movementY;
             const mx = event.clientX - this.start_pos.x;
             const my = event.clientY - this.start_pos.y;
+            // @ts-ignore
             this.element.style["margin-top"] = Math.max(0, this.start_offs.y + my)+"px";
+            // @ts-ignore
             this.element.style["margin-left"] = Math.max(0, this.start_offs.x + mx)+"px";
         }
     }

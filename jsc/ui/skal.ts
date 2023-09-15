@@ -58,7 +58,7 @@ export class Skal extends UIElement {
         }
     }
 
-    komencuMovon(event) {
+    komencuMovon(event: PointerEvent) {
         const manilo = event.currentTarget;
         if (manilo instanceof HTMLElement) {
             manilo.classList.add("ui-state-active");
@@ -67,7 +67,7 @@ export class Skal extends UIElement {
         }
     }
       
-    finuMovon(event) {
+    finuMovon(event: PointerEvent) {
         const manilo = event.currentTarget;
         if (manilo instanceof HTMLElement) {
             manilo.classList.remove("ui-state-active");
@@ -130,7 +130,7 @@ export class Skal extends UIElement {
     /**
      * Redonas la larĝo de io (manilo) en procentoj de la skallarĝo
      */
-    _plarĝo(lx) {
+    _plarĝo(lx: number) {
         const larĝo = this.element.offsetWidth;
         return lx*100/larĝo;
     }
