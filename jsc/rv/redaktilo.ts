@@ -285,6 +285,7 @@ export namespace redaktilo {
    * @inner
    * @param {Event} event 
    */
+  /*
   function tab_bsp(event: KeyboardEvent) {
     const keycode = event.keyCode || event.which; 
 
@@ -329,7 +330,7 @@ export namespace redaktilo {
         }
       }
     }
-  }
+  }*/
 
   /**
    * Enmetas XML-tekston per aplikata ŝablono.
@@ -1302,8 +1303,8 @@ export namespace redaktilo {
     // klav-premoj en XML-redaktilo
     document.getElementById("r:xmltxt")
       .addEventListener("keypress",klavo);
-    document.getElementById("r:xmltxt")
-      .addEventListener("keydown",tab_bsp);
+    /// document.getElementById("r:xmltxt")
+    ///   .addEventListener("keydown",tab_bsp);
 
     document.getElementById("r:xmltxt")
       //.addEventListener("selectionchange",show_pos); // movado de kursoro, ne kaŭzas input-eventon...!

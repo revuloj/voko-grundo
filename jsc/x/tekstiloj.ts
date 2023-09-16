@@ -448,7 +448,7 @@ export function linirompo(str: string, indent: number=0, linirompo: number=80) {
 }
 
 /**
- * Redonas la spacojn (enŝovon) en la komenco de la markita liniode Textarea
+ * Redonas la spacojn (enŝovon) en la komenco de la markita linio de Textarea
  * @param txtarea 
  * @param shift - se donita, ŝoviĝu tiom da signoj antaŭ eltrovi (ekz-e shift=-1)
  * @returns la linikomencaj spacoj

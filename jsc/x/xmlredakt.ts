@@ -29,7 +29,29 @@ export class XmlRedakt extends Tekst {
   private static re_xml = {
     finspacoj: /[ \t]+\n/g,
     trolinioj: /\n\n\n+/g
-  };                        
+  };
+  
+  private static re_txt = {
+    _tl0: new RegExp('<tld\\s*\\/>','g'),
+    _tld: new RegExp('<tld\\s+lit="([^"]+)"\\s*/>','g'),
+    _comment: new RegExp('\\s*<!--[^]*?-->[ \\t]*','g'),
+    _trdgrp: new RegExp('\\s*<trdgrp[^>]*>[^]*?</trdgrp\\s*>[ \\t]*','g'),
+    _trd: new RegExp('\\s*<trd[^>]*>[^]*?</trd\\s*>[ \\t]*','g'),
+    _fnt: new RegExp('\\s*<fnt[^>]*>[^]*?</fnt\\s*>[ \\t]*','g'),
+    _ofc: new RegExp('\\s*<ofc[^>]*>[^]*?</ofc\\s*>[ \\t]*','g'),
+    _gra: new RegExp('\\s*<gra[^>]*>[^]*?</gra\\s*>[ \\t]*','g'),
+    _uzo: new RegExp('\\s*<uzo[^>]*>[^]*?</uzo\\s*>[ \\t]*','g'),
+    _mlg: new RegExp('\\s*<mlg[^>]*>[^]*?</mlg\\s*>[ \\t]*','g'),
+    _frm: new RegExp('<frm[^>]*>[^]*?</frm\\s*>','g'),
+    _adm: new RegExp('\\s*<adm[^>]*>[^]*?</adm\\s*>[ ,\t]*','g'),
+    _aut: new RegExp('\\s*<aut[^>]*>[^]*?</aut\\s*>[ ,\t]*','g'),
+    _xmltag: new RegExp('<[^>]+>','g'),
+    _lineno: new RegExp('^(?:\\[\\d+\\])+(?=\\[\\d+\\])','mg'),
+    _nom: new RegExp('<nom[^>]*>[^]*?</nom\\s*>','g'),
+    _nac: new RegExp('<nac[^>]*>[^]*?</nac\\s*>','g'),
+    _esc: new RegExp('<esc[^>]*>[^]*?</esc\\s*>','g')
+  };
+
   
 
 /**
@@ -37,8 +59,8 @@ export class XmlRedakt extends Tekst {
  * @param post_aldono - Revokfunkcio, vokata dum analizo de la strukturo ĉiam, kiam troviĝas subteksto.  Tiel eblas reagi ekzemple plenigante liston per la trovitaj subtekstoj (art, drv, snc...)
  * @param onSelectSub - Revokfunkcio, vokata dum interne kaŭzia elekto de alia subteksto. Ekz-e aldono de nova <drv> 
  */  
-  constructor(ta_id: string, post_aldono?: Function, onSelectSub?: Function) {
-    super(ta_id,{
+  constructor(textarea: HTMLElement|string, post_aldono?: Function, onSelectSub?: Function) {
+    super(textarea,{
       analizo: XmlStrukt.struktur_analizo,
       post_aldono: post_aldono
     })
@@ -759,5 +781,82 @@ export class XmlRedakt extends Tekst {
     txtarea.focus();
   };
   */
+
+
+  /**
+   * Forigas XML-strukturon lasante nur la nudan tekston
+   * krome aldonas lininumeron en la formo [n] komence
+   * de ĉiu linio
+   */
+  plain_text(line_numbers=false) {
+      //var radiko = this._radiko;
+      const rx = XmlRedakt.re_txt;
+
+      const xmlarea = this.opcioj.xmlarea;
+      const radiko = xmlarea.getRadiko();
+      var t = (xmlarea.syncedXml() //this.element.val()
+          .replace(rx._tl0,radiko)
+          .replace(rx._tld,'$1'+radiko.slice(1)));
+
+      // line numbers?
+      if (line_numbers) {
+          const lines = t.split('\n');
+          t = '';
+          let n = 1;
+          for (let i = 0; i<lines.length; i++) {
+              t += "[" + n + "]" + lines[i] + '\n';
+              n++;
+          }
+      }
+          // forigu komentojn
+      t = t.replace(rx._comment,'')
+          // forigu traukojn
+          .replace(rx._trdgrp,'')
+          .replace(rx._trd,'')
+          // forigu fnt-indikojn
+          .replace(rx._fnt,'')
+          .replace(rx._ofc,'')
+          // forigu gra, uzo, mlg, frm
+          .replace(rx._gra,'')
+          .replace(rx._uzo,'')
+          .replace(rx._mlg,'')
+          .replace(rx._frm,'')
+          // forigu adm, aut (rim)
+          .replace(rx._adm,'')
+          .replace(rx._aut,'')
+          // forigu nom, nac, esc
+          .replace(rx._nom,'')
+          .replace(rx._nac,'')
+          .replace(rx._esc,'')
+          // forigu ceterajn xml-elementojn
+          .replace(rx._xmltag,'');
+  
+      // forigu pluroblajn lini-numerojn post forigo de elementoj
+      if (line_numbers) {
+          t = t.replace(rx._lineno,'');
+      }
+      return t;
+  };
+
+  /**
+   * Transformas la rezulton de plain_text en objekton,
+   * kies ŝlosiloj estas la lininumeroj kaj kies
+   * valoroj estas la nudaj tekst-linioj
+   * (bezonata por vortkontrolo/analizo)
+   */
+  lines_as_dict() {
+      var lines = this.plain_text(true).split('\n');
+      var result: any = {};
+      for (let i=0; i<lines.length; i++) {
+          var line = lines[i];
+          var d = line.indexOf(']');
+          var no = line.slice(1,d);
+          var text = line.slice(d+1);
+          if (text.trim().length > 1) {
+              result[no] = text;
+          }
+      }
+      return result;
+  };
 
 }

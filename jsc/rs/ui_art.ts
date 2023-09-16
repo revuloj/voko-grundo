@@ -6,15 +6,15 @@
 
 
 import * as x from '../x';
-//import { XmlRedakt } from '../x';
-import { UIElement, DOM } from '../ui';
+import { XmlRedakt } from '../x';
+import { DOM } from '../ui';
 
 import { preferoj } from '../a/preferoj';
 import { XMLArtikolo } from './sxabloniloj';
 
 console.debug("Instalante la artikolfunkciojn...");
 
-export class Artikolo extends UIElement {
+export class Artikolo extends XmlRedakt {
 
     static regex_mrk = {
         _rad: new RegExp('<rad>([^<]+)</rad>',''),
@@ -39,26 +39,27 @@ export class Artikolo extends UIElement {
         _tl2: new RegExp('<tld[^>]*>','g')
     };
 
-    static regex_txt = {
-        _tl0: new RegExp('<tld\\s*\\/>','g'),
-        _tld: new RegExp('<tld\\s+lit="([^"]+)"\\s*/>','g'),
-        _comment: new RegExp('\\s*<!--[^]*?-->[ \\t]*','g'),
-        _trdgrp: new RegExp('\\s*<trdgrp[^>]*>[^]*?</trdgrp\\s*>[ \\t]*','g'),
-        _trd: new RegExp('\\s*<trd[^>]*>[^]*?</trd\\s*>[ \\t]*','g'),
-        _fnt: new RegExp('\\s*<fnt[^>]*>[^]*?</fnt\\s*>[ \\t]*','g'),
-        _ofc: new RegExp('\\s*<ofc[^>]*>[^]*?</ofc\\s*>[ \\t]*','g'),
-        _gra: new RegExp('\\s*<gra[^>]*>[^]*?</gra\\s*>[ \\t]*','g'),
-        _uzo: new RegExp('\\s*<uzo[^>]*>[^]*?</uzo\\s*>[ \\t]*','g'),
-        _mlg: new RegExp('\\s*<mlg[^>]*>[^]*?</mlg\\s*>[ \\t]*','g'),
-        _frm: new RegExp('<frm[^>]*>[^]*?</frm\\s*>','g'),
-        _adm: new RegExp('\\s*<adm[^>]*>[^]*?</adm\\s*>[ ,\t]*','g'),
-        _aut: new RegExp('\\s*<aut[^>]*>[^]*?</aut\\s*>[ ,\t]*','g'),
-        _xmltag: new RegExp('<[^>]+>','g'),
-        _lineno: new RegExp('^(?:\\[\\d+\\])+(?=\\[\\d+\\])','mg'),
-        _nom: new RegExp('<nom[^>]*>[^]*?</nom\\s*>','g'),
-        _nac: new RegExp('<nac[^>]*>[^]*?</nac\\s*>','g'),
-        _esc: new RegExp('<esc[^>]*>[^]*?</esc\\s*>','g')
-    };
+    
+///    static regex_txt = {
+///        _tl0: new RegExp('<tld\\s*\\/>','g'),
+///        _tld: new RegExp('<tld\\s+lit="([^"]+)"\\s*/>','g'),
+///        _comment: new RegExp('\\s*<!--[^]*?-->[ \\t]*','g'),
+///        _trdgrp: new RegExp('\\s*<trdgrp[^>]*>[^]*?</trdgrp\\s*>[ \\t]*','g'),
+///        _trd: new RegExp('\\s*<trd[^>]*>[^]*?</trd\\s*>[ \\t]*','g'),
+///        _fnt: new RegExp('\\s*<fnt[^>]*>[^]*?</fnt\\s*>[ \\t]*','g'),
+///        _ofc: new RegExp('\\s*<ofc[^>]*>[^]*?</ofc\\s*>[ \\t]*','g'),
+///        _gra: new RegExp('\\s*<gra[^>]*>[^]*?</gra\\s*>[ \\t]*','g'),
+///        _uzo: new RegExp('\\s*<uzo[^>]*>[^]*?</uzo\\s*>[ \\t]*','g'),
+///        _mlg: new RegExp('\\s*<mlg[^>]*>[^]*?</mlg\\s*>[ \\t]*','g'),
+///        _frm: new RegExp('<frm[^>]*>[^]*?</frm\\s*>','g'),
+///        _adm: new RegExp('\\s*<adm[^>]*>[^]*?</adm\\s*>[ ,\t]*','g'),
+///        _aut: new RegExp('\\s*<aut[^>]*>[^]*?</aut\\s*>[ ,\t]*','g'),
+///        _xmltag: new RegExp('<[^>]+>','g'),
+///        _lineno: new RegExp('^(?:\\[\\d+\\])+(?=\\[\\d+\\])','mg'),
+///        _nom: new RegExp('<nom[^>]*>[^]*?</nom\\s*>','g'),
+///        _nac: new RegExp('<nac[^>]*>[^]*?</nac\\s*>','g'),
+///        _esc: new RegExp('<esc[^>]*>[^]*?</esc\\s*>','g')
+///    };
 
     static regex_xml = {
         _spc: new RegExp('\\s+/>','g'),
@@ -76,7 +77,7 @@ export class Artikolo extends UIElement {
     };
     */
 
-    static aprioraj = {
+    static art_aprioraj = {
         //xmlarea: undefined, // 'undefined' ne superŝargiĝos en UIElement.fandu, ĉu ni ŝanĝu tie?
         dosiero: '',
         reĝimo: 'redakto', 
@@ -84,55 +85,65 @@ export class Artikolo extends UIElement {
         tekstŝanĝo: null 
     }
 
-    _change_count = 0
+    /// _change_count = 0
 
     static artikolo(element: HTMLElement|string) {        
         let a = super.obj(element);
         if (a instanceof Artikolo) return a;
     };
 
+    /*
     static xmlarea(element: HTMLElement|string) { 
         const art = Artikolo.artikolo(element);
         if (art) return art.opcioj.xmlarea;
-    }
+    }*/
 
     constructor(element: HTMLElement|string, opcioj: any) {
-        super(element, opcioj, Artikolo.aprioraj);
+        super(element, opcioj, Artikolo.art_aprioraj);
 
         this.restore();
-        this._change_count = 0;
+        /// this._change_count = 0;
 
         this._on({
             dragover: this._dragOver,
             drop: this._drop,
             keydown: this._keydown, // traktu TAB por enŝovoj
             //keypress: this._keypress, // traktu linirompon
-            keyup: this._keyup, // traktu tekstŝanĝojn
-            focus: function(event) { this._trigger("poziciŝanĝo",event,null); }, 
-            click: function(event) { this._trigger("poziciŝanĝo",event,null); }, 
-            change: this._change        
+            /// keyup: this._keyup, // traktu tekstŝanĝojn
+            /// focus: function(event) { this._trigger("poziciŝanĝo",event,null); }, 
+            /// click: function(event) { this._trigger("poziciŝanĝo",event,null); }, 
+            /// change: this._change        
         }); // dum musalŝovo
     };
 
     backup() {
-        const xmlarea = this.opcioj.xmlarea;
+        /// const xmlarea = this.opcioj.xmlarea;
+        this.konservu("red_artikolo",{
+            'nom': this.opcioj.dosiero,
+            'red': this.opcioj.reĝimo
+            }, "xml");
+            /*
         const xml = xmlarea.syncedXml();
         window.localStorage.setItem("red_artikolo",JSON.stringify({
             'xml': xml, //this.element.val(), 
             'nom': this.opcioj.dosiero,
             'red': this.opcioj.reĝimo
-        }));
+        }));*/
     };
 
     // restarigi el loka krozil-memoro
     restore() {
+        /*
         var str = window.localStorage.getItem("red_artikolo");
         var art = (str? JSON.parse(str) : null);
-        const xmlarea = this.opcioj.xmlarea;
+        */
+        /// const xmlarea = this.opcioj.xmlarea;
 
-        if (xmlarea && art && art.xml) {
-            //this.element.val(art.xml);
-            xmlarea.setText(art.xml);
+        const art = this.relegu("red_artikolo","xml");
+
+        if (art && art.xml) {
+            /// xmlarea.setText(art.xml);
+
             this.opcioj.reĝimo = art.red;
             // ni povus alternaitve demandi xmlarea.getDosiero(), 
             // se ni certas, ke enestas mrk
@@ -147,9 +158,9 @@ export class Artikolo extends UIElement {
     nova(art) {
         const nova_art = new XMLArtikolo(art).xml();
         //this.element.val();
-        const xmlarea = this.opcioj.xmlarea;
-        xmlarea.setText(nova_art);
-        this._change_count = 0;
+        /// const xmlarea = this.opcioj.xmlarea;
+        this.teksto = nova_art;
+        /// this._change_count = 0;
 
         // notu, ke temas pri nova artikolo (aldono),
         // tion ni bezonas scii ĉe forsendo poste
@@ -159,15 +170,15 @@ export class Artikolo extends UIElement {
 
     // aktualigu artikolon el data
     load(dosiero,data) {
-        const xmlarea = this.opcioj.xmlarea;
-        xmlarea.setText(data);
+        /// const xmlarea = this.opcioj.xmlarea;
+        this.teksto = data;
 
         //var e = this.element;
         //e.val(data);
         
         //this.element.change();
         this._trigger("change");
-        this._change_count = 0;
+        /// this._change_count = 0;
         this.opcioj["reĝimo"] = 'redakto';
         this.opcioj["dosiero"] = dosiero;
     };
@@ -176,27 +187,29 @@ export class Artikolo extends UIElement {
     /* PLIBONIGU: ĉu ni plu bezonas insert(), aŭ ĉu ni lasu
     rekte voki al uzantaj funkcioj xmlarea.selection...?
     */
-    insert(xmlstr,sync=false) {
+    insert(xmlstr, sync=false) {
         const e = this.element;
         //e.insert(xmlstr);
-        const xmlarea = this.opcioj.xmlarea;
-        xmlarea.selection(xmlstr);
+        /// const xmlarea = this.opcioj.xmlarea;
+        this.elektenmeto(xmlstr);
+        
+        /// xmlarea.selection(xmlstr);
         // se postulate, tuj sinkronigu, eventuale rekreante la strukturon
-        if (sync) xmlarea.sync();
+        if (sync) this.sinkronigu();
         //e.change();
         this._trigger("change");
     };
 
+    /*
     // enŝovu novan tekston post elemento s_id
     insert_post(xmlstr,s_id) {
-        const e = this.element;
-        //e.insert(xmlstr);
-        const xmlarea = this.opcioj.xmlarea;
-        xmlarea.xmlstruct.insertAfterId(s_id,xmlstr);
+        /// const xmlarea = this.opcioj.xmlarea;
+        /// xmlarea.xmlstruct.insertAfterId(s_id,xmlstr);
+        this.enŝovu_post(s_id,xmlstr);
 
         //e.change();
         this._trigger("change");
-    };
+    };*/
 
     _dragOver(event) {
         event.stopPropagation();
@@ -206,8 +219,9 @@ export class Artikolo extends UIElement {
 
     // legu artikolon el muse alŝovita teksto
     _drop(event) {
-        var el = this.element; //$(event.target);
-        var art = this;
+        const el = this.element; //$(event.target);
+        const art = this;
+
         event.stopPropagation();
         event.preventDefault();
         var file = event.originalEvent.dataTransfer.files[0]; // first of Array of all files
@@ -217,8 +231,8 @@ export class Artikolo extends UIElement {
                 // when finished reading file data.
                 const xml: string = ev.target?.result as string;
                 // el.val(xml);
-                const xmlarea = art.opcioj.xmlarea;
-                xmlarea.setText(xml);
+                /// const xmlarea = art.opcioj.xmlarea;
+                art.teksto = xml;
                 art.opcioj.reĝimo = 'redakto';
             };
             // start reading the file data.
@@ -226,11 +240,17 @@ export class Artikolo extends UIElement {
         }       
     };
 
+    /**
+     * PLIBONIGU: tion povus fari la klaso XmlRedakt mem, ĉu?
+     * 
+     */
     _keydown(event) {
         const keycode = event.keyCode || event.which;
-        const xmlarea = this.opcioj.xmlarea; 
    
         // traktu TAB por ŝovi dekstren aŭ maldekstren plurajn liniojn
+        // nun en  klaso ui.Tekst
+        /*
+        const xmlarea = this.opcioj.xmlarea; 
         if (keycode == 9) {  // TAB
            event.preventDefault(); 
 
@@ -271,7 +291,8 @@ export class Artikolo extends UIElement {
                     xmlarea.selection('');
                 }    
             }
-        } else if (keycode == 93 || keycode == 77 && event.ctrlKey) {
+        } else */
+        if (keycode == 93 || keycode == 77 && event.ctrlKey) {
             const menu = DOM.e("#kontroli_menu_item");
             if (menu instanceof HTMLElement) {
                 event.preventDefault();
@@ -280,12 +301,12 @@ export class Artikolo extends UIElement {
         }
     };
 
-
+/*
     _keyup(event) {
         this._trigger("poziciŝanĝo",event,{});
         
         var keycode = event.keyCode || event.which; 
-        // klavoj, kiuj efektive ŝanĝas la tekston notu tian ŝangon...
+        // klavoj, kiuj efektive ŝanĝas la tekston: notu tian ŝangon...
         if ( keycode < 16 
             || keycode == 32 
             || (keycode > 40 && keycode < 91) 
@@ -298,8 +319,9 @@ export class Artikolo extends UIElement {
             // alternative ni povas fari nur if(!this._change_count)this._change_count=1;
             if (0 == this._change_count % 20) this.backup();        
         }
-    };
+    };*/
 
+    /*
     _change(event) {
         this._trigger("poziciŝanĝo",event,{});
         this._trigger("tekstŝanĝo",event,{});
@@ -308,26 +330,23 @@ export class Artikolo extends UIElement {
         this._change_count++; 
         if (0 == this._change_count % 20) this.backup();        
         
-        /* tie ni uzas eventon "input" rekte en xmlarea mem
-        verŝajne ni devos la suprajn liniojn "tekstŝanĝo" pp ankaŭ
-        pendigi al "input" anst. "change"!
-        const xmlarea = this.opcioj.xmlarea;
-        xmlarea.setUnsynced();
-        */
         
     };
 
     change_count() {
         return this._change_count;
     };
+    */
 
+    /*
     // redonas la radikon de la artikolo
     radiko() {
         //return this._radiko;
         const xmlarea = this.opcioj.xmlarea;
         return xmlarea.radiko; 
-    };
+    };*/
 
+    /*
     // redonas aŭ anstataŭigas la elektitan tekston
     elekto(insertion?,elektita?) {
         const xmlarea = this.opcioj.xmlarea;
@@ -342,28 +361,25 @@ export class Artikolo extends UIElement {
             else
                 console.warn("Ne estas la teksto '" + elektita +"' ĉe la elektita loko! Do ĝi ne estas anstatŭigata.");
         }
-    };
+    };*/
 
+    /*
     // eltrovu la enŝovon de la linio antaŭ la nuna pozicio
     current_indent(shift = 0) {
         const xmlarea = this.opcioj.xmlarea;
         const pos = xmlarea.positionNo();
         var text = (this.element as HTMLInputElement).value;
         return x.enshovo_antaua_linio(text,pos + shift);
-    };
+    };*/
 
+    /*
     // eltrovu la signon antaŭ la nuna pozicio
     char_before_pos() {
         const xmlarea = this.opcioj.xmlarea;
         return xmlarea.charBefore();
-        /*
-        var el = this.element;
-        var pos = el.getCursorPosition();
-        if (pos > 0)
-            return this.element.val()[pos-1];
-            */
-    };
+    };*/
 
+    /*
     // eltrovu la signojn antaŭ la nuna pozicio (ĝis la linikomenco)
     chars_before_pos() {
         //var el = this.element;
@@ -375,20 +391,21 @@ export class Artikolo extends UIElement {
         var p = pos;
         while (p > 0 && val[p] != '\n') p--;
         return val.substring(p+1,pos);
-    };
+    };*/
 
+    /*
     // redonu dosieronomon trovante ĝin en art-mrk aŭ drv-mrk
     art_drv_mrk() {
         const xmlarea = this.opcioj.xmlarea;
         return xmlarea.getDosiero();
-    };
+    };*/
 
     // eltrovas la markojn (mrk=) de derivaĵoj, la korespondajn kapvortojn kaj liniojn
     // PLIBONIGU: ni povus preni tion supozeble nun rekte el la xmlarea-strukturo
     // kontrolu, kie ni fakte uzas drv_markoj...
     drv_markoj() {
-        const xmlarea = this.opcioj.xmlarea;
-        var xmlStr = xmlarea.syncedXml(); //this.element.val();
+        /// const xmlarea = this.opcioj.xmlarea;
+        var xmlStr = this.teksto; //this.element.val();
         var drvoj: Array<any> = [], pos = 0, line = 0;
 
         if (xmlStr) {
@@ -404,7 +421,7 @@ export class Artikolo extends UIElement {
                 var match = d.match(rx._mrk); 
                 if (match) {
                     const mrk = match[1];
-                    var dpos = match.index;
+                    const dpos = match.index;
                     // count lines till <cnt
                     var lmatch2 = d.slice(0,dpos).match(rx._lbr);
                     var dline = lmatch2? lmatch2.length : 0;
@@ -433,8 +450,8 @@ export class Artikolo extends UIElement {
     // eltrovas ĉiujn markojn (mrk=) de derivaĵoj, sencoj ktp.
     // PLIBONIGU: elprenu el xmlarea anstatataŭe
     markoj() {
-        const xmlarea = this.opcioj.xmlarea;
-        var xmlStr = xmlarea.syncedXml(); //this.element.val();
+        /// const xmlarea = this.opcioj.xmlarea;
+        var xmlStr = this.teksto; //this.element.val();
         var mrkoj = {};
 
         if (xmlStr) {
@@ -451,8 +468,8 @@ export class Artikolo extends UIElement {
     
     // PLIBONIGU: ŝovu tiun funkcion al xmlarea
     snc_sen_mrk() {
-        const xmlarea = this.opcioj.xmlarea;
-        var xmlStr = xmlarea.syncedXml(); //this.element.val();
+        /// const xmlarea = this.opcioj.xmlarea;
+        var xmlStr = this.teksto; //this.element.val();
         var sncoj = {};
 
         if (xmlStr) {
@@ -471,8 +488,8 @@ export class Artikolo extends UIElement {
     // PLIBONIGU: ŝovu tiun funkcion al x/xmlarea.ts
     // klarigoj el tri punktoj kie mankas []
     klr_ppp() {
-        const xmlarea = this.opcioj.xmlarea;
-        var xmlStr = xmlarea.syncedXml(); //this.element.val();
+        /// const xmlarea = this.opcioj.xmlarea;
+        var xmlStr = this.teksto; //this.element.val();
         var klroj = {};
 
         if (xmlStr) {
@@ -488,12 +505,13 @@ export class Artikolo extends UIElement {
 
     // elprenas la tradukojn de certa lingvo el XML-artikolo
     // PLIBONIGU: uzu xmlarea por tiu funkcio!
-    tradukoj(lng) {
+    /*
+    collectAllTrd2(lng) {
         const rx = Artikolo.regex_xml;
-        const xmlarea = this.opcioj.xmlarea;
+        /// const xmlarea = this.opcioj.xmlarea;
 
         let tradukoj: Array<any> = [];        
-        let xml = xmlarea.syncedXml() //this.element.val();
+        let xml = this.teksto //this.element.val();
             .replace(rx._ent,'?'); // entities cannot be resolved...       
         let artikolo: Element|null;
 
@@ -549,21 +567,21 @@ export class Artikolo extends UIElement {
         }
 
         return tradukoj;
-    };
+    };*/
 
     enmetu_tradukojn() {
-        const xmlarea = this.opcioj.xmlarea;
-        const xmltrad = xmlarea.xmltrad;
+        /// const xmlarea = this.opcioj.xmlarea;
+        const xmltrad = this.xmltrad;
 
-        for (let s of xmlarea.xmlstruct.strukturo) {
+        this.subtekst_apliku((s) => {
             const s_t = xmltrad.shanghitaj(s.id);
             for (let lng of Object.keys(s_t)) {
                 const trd = s_t[lng];
-                xmlarea.replaceTrd(s.id,lng,trd);
+                this.replaceTrd(s.id,lng,trd);
             }
-        }
+        });
 
-        xmlarea.setUnsynced(); // normale tio devus okazi per evento "change",
+        this.sinkrona = false; // normale tio devus okazi per evento "change",
                  // set foriginte jquery, tio ne plu funkcias kiel antaŭe, ĉar
                  // _trigger ne kreas realan retumilan eventon, sed nur reagon laŭ opcioj.
         
@@ -574,90 +592,18 @@ export class Artikolo extends UIElement {
     drv_before_cursor() {
         //var line_pos = this.element.getCursorLinePos();
 
-        const xmlarea = this.opcioj.xmlarea;
-        const line_pos = xmlarea.position();
+        /// const xmlarea = this.opcioj.xmlarea;
+        const line_pos = this.pozicio;
 
         const drvoj = this.drv_markoj();
         for(let i=drvoj.length-1; i>=0; i--) {
             const drv = drvoj[i];
-            if (drv.line < line_pos.line) {
+            if (drv.line < line_pos.lin) {
                 return drv;
             }
         }
         // aliokaze redonu la unuan
         return drvoj[0];  // kaŭzas eraron, se troviĝis neniu!
-    };
-
-    // forigas XML-strukturon lasante nur la nudan tekston
-    // krome aldonas lininumeron en la formo [n] komence
-    // de ĉiu linio
-    plain_text(line_numbers=false) {
-        //var radiko = this._radiko;
-        const rx = Artikolo.regex_txt;
-
-        const xmlarea = this.opcioj.xmlarea;
-        const radiko = xmlarea.getRadiko();
-        var t = (xmlarea.syncedXml() //this.element.val()
-            .replace(rx._tl0,radiko)
-            .replace(rx._tld,'$1'+radiko.slice(1)));
-
-        // line numbers?
-        if (line_numbers) {
-            const lines = t.split('\n');
-            t = '';
-            let n = 1;
-            for (let i = 0; i<lines.length; i++) {
-                t += "[" + n + "]" + lines[i] + '\n';
-                n++;
-            }
-        }
-            // forigu komentojn
-        t = t.replace(rx._comment,'')
-            // forigu traukojn
-            .replace(rx._trdgrp,'')
-            .replace(rx._trd,'')
-            // forigu fnt-indikojn
-            .replace(rx._fnt,'')
-            .replace(rx._ofc,'')
-            // forigu gra, uzo, mlg, frm
-            .replace(rx._gra,'')
-            .replace(rx._uzo,'')
-            .replace(rx._mlg,'')
-            .replace(rx._frm,'')
-            // forigu adm, aut (rim)
-            .replace(rx._adm,'')
-            .replace(rx._aut,'')
-            // forigu nom, nac, esc
-            .replace(rx._nom,'')
-            .replace(rx._nac,'')
-            .replace(rx._esc,'')
-            // forigu ceterajn xml-elementojn
-            .replace(rx._xmltag,'');
-    
-        // forigu pluroblajn lini-numerojn post forigo de elementoj
-        if (line_numbers) {
-            t = t.replace(rx._lineno,'');
-        }
-        return t;
-    };
-
-    // transformas la rezulton de plain_text en objekton,
-    // kies ŝlosiloj estas la lininumeroj kaj kies
-    // valoroj estas la nudaj tekst-linioj
-    // (bezonata por vortkontrolo/analizo)
-    lines_as_dict() {
-        var lines = this.plain_text(true).split('\n');
-        var result = {};
-        for (let i=0; i<lines.length; i++) {
-            var line = lines[i];
-            var d = line.indexOf(']');
-            var no = line.slice(1,d);
-            var text = line.slice(d+1);
-            if (text.trim().length > 1) {
-                result[no] = text;
-            }
-        }
-        return result;
     };
 
 }

@@ -59,7 +59,7 @@ export default function() {
         malfermu: function() {
             // ĉar tiu change_count ankaŭ sen vera ŝanĝo altiĝas, 
             // ni permesu ĝis 2 lastajn ŝanĝojn sen averti
-            const cc = Artikolo.artikolo("#xml_text")?.change_count();
+            const cc = Artikolo.artikolo("#xml_text")?.ŝanĝnombro;
             if ( cc && cc > 2 ) {
                 DOM.al_html("#krei_error","Averto: ankoraŭ ne senditaj ŝanĝoj en la nuna artikolo perdiĝos kreante novan.")
                 DOM.kaŝu("#krei_error",false);
@@ -72,7 +72,7 @@ export default function() {
     klv = DOM.e("#krei_butonoj");
     if (klv) {
         new x.XKlavaro("#krei_butonoj","krei_dlg","#krei_dif",
-            () => Artikolo.xmlarea("#xml_text").radiko, 
+            () => Artikolo.artikolo("#xml_text").radiko, 
             function(event,ui) {
                 if (ui.cmd == "blankigo") {
                     DOM.malplenigu("#krei_dlg input");
@@ -105,7 +105,7 @@ export default function() {
         malfermu: function() {
             // ĉar tiu change_count ankaŭ sen vera ŝanĝo altiĝas, 
             // ni permesu ĝis 2 lastajn ŝanĝojn sen averti
-            const cc = Artikolo.artikolo("#xml_text")?.change_count() || 0; 
+            const cc = Artikolo.artikolo("#xml_text")?.ŝanĝnombro || 0; 
             if (DOM.v("#xml_text") && cc > 2) {
                 DOM.al_html("#shargi_error","Averto: ankoraŭ ne senditaj ŝanĝoj en la nuna artikolo perdiĝos kreante novan.")
                 DOM.kaŝu("#shargi_error",false);
@@ -253,7 +253,7 @@ export default function() {
             DOM.kaŝu("#referenco_error");
             this.faldu(false); // necesas, se la dialogo estis fermita en faldita stato...
             // se io estas elektita, jam serĉu
-            var sel = Artikolo.xmlarea("#xml_text")?.selection();
+            var sel = Artikolo.artikolo("#xml_text")?.elekto;
             if (sel) {
                 DOM.al_v("#referenco_celo",'');
                 DOM.al_v("#referenco_enhavo",'');
@@ -324,7 +324,7 @@ export default function() {
     klv = DOM.e("#ekzemplo_butonoj");
     if (klv) {
         new x.XKlavaro("#ekzemplo_butonoj","#ekzemplo_dlg","#xml_text",
-            () => Artikolo.xmlarea("#xml_text").radiko, 
+            () => Artikolo.artikolo("#xml_text")?.radiko, 
             function(event,ui) {
                 if (ui.cmd == "blankigo") {
                     DOM.malplenigu("#ekzemplo_dlg input");
@@ -389,7 +389,7 @@ export default function() {
     klv = DOM.e("#bildo_butonoj");
     if (klv) {
         new x.XKlavaro("#bildo_butonoj","#bildo_dlg","#bildo_frazo",
-            () => Artikolo.xmlarea("#xml_text").radiko, 
+            () => Artikolo.artikolo("#xml_text")?.radiko, 
             function(event,ui) {
                 if (ui.cmd == "blankigo") {
                     DOM.malplenigu("#bildo_frazo");
@@ -423,7 +423,7 @@ export default function() {
     klv = DOM.e("#derivajho_butonoj");
     if (klv) {
         new x.XKlavaro("#derivajho_butonoj","#derivajho_dlg","#derivajho_dif",
-            () => Artikolo.xmlarea("#xml_text").radiko, 
+            () => Artikolo.artikolo("#xml_text")?.radiko, 
             function(event,ui) {
                 if (ui.cmd == "blankigo") {
                     DOM.malplenigu("#derivajho_dlg input");
@@ -456,7 +456,7 @@ export default function() {
     klv = DOM.e("#senco_butonoj");
     if (klv) {
         new x.XKlavaro("#senco_butonoj","#senco_dlg","#senco_dif",
-            () => Artikolo.xmlarea("#xml_text").radiko, 
+            () => Artikolo.artikolo("#xml_text")?.radiko, 
             function(event,ui) {
                 if (ui.cmd == "blankigo") {
                     DOM.malplenigu("#senco_dlg input");
@@ -504,7 +504,7 @@ export default function() {
     klv = DOM.e("#traduko_butonoj");
     if (klv) {
         new x.XKlavaro("#traduko_butonoj","#traduko_dlg",null,
-            () => Artikolo.xmlarea("#xml_text").radiko, 
+            () => Artikolo.artikolo("#xml_text").radiko, 
             undefined,
             function() { trd_input_shanghita(this.celo()) })
         .elemento_klavoj(klv);
@@ -526,7 +526,7 @@ export default function() {
         }
     });
     new x.XKlavaro("#sxablono_butonoj","#sxablono_dlg",'',         
-        () => Artikolo.xmlarea("#xml_text").radiko, 
+        () => Artikolo.artikolo("#xml_text").radiko, 
         undefined, undefined);
     /*
     $( "#sxablono_butonoj").Klavaro({
@@ -693,7 +693,7 @@ function download_art(dosiero,err_to,dlg_id,do_close=true) {
         function(data) {   
             if (data.slice(0,5) == '<?xml') {
                 const art = Artikolo.artikolo("#xml_text");
-                const xmlarea = Artikolo.xmlarea("#xml_text");
+                const xmlarea = Artikolo.artikolo("#xml_text");
                 art?.load(dosiero,data);
                 DOM.al_v("#re_radiko",xmlarea?.radiko||'');
                 // $("#collapse_outline").accordion("option","active",0);
@@ -751,14 +751,14 @@ function sendi_artikolon_servile(event) {
     
     // aldono (t.e. nova artikolo) aŭ redakto (t.e. ŝanĝo)
     const reĝimo = Artikolo.artikolo("#xml_text")?.opcioj["reĝimo"];
-    const art_mrk = Artikolo.xmlarea("#xml_text")?.getDosiero();
+    const art_mrk = Artikolo.artikolo("#xml_text")?.dosiero;
 
     // ĉe novaj artikoloj komento entenas la dosiernomon
     if (! Valid.valida("#sendiservile_komento")) return;
 
     const komento = DOM.v("#sendiservile_komento") || '';
     const dosiero = (reĝimo == 'aldono')? komento : art_mrk; //$("#xml_text").Artikolo("art_drv_mrk"); 
-    const xmlarea = Artikolo.xmlarea("#xml_text");
+    const xmlarea = Artikolo.artikolo("#xml_text");
 
     if (xmlarea) {
 
@@ -774,9 +774,9 @@ function sendi_artikolon_servile(event) {
                 const art = Artikolo.artikolo("#xml_text");
                 if (art) {
                     const dosiero = art.opcioj["dosiero"];
-                    art._change_count = 0;    
+                    /// art._change_count = 0;    
                     
-                    const url=data.html_url;
+                    const url = data.html_url;
                     const msg = "<b>'" + dosiero  + "'</b> sendita. " +
                     (metodo == 'api'
                     ? "Kelkajn tagojn vi trovas vian redakton <a target='_new' href='"+url+"'>tie ĉi ĉe Github</a> kaj sub 'Lastaj...'."
@@ -1057,14 +1057,14 @@ function bildo_larĝecoj(lrg,chk) {
 
 function plenigu_derivajxojn() {
     let drv_list = '';
-    const xmlarea = Artikolo.xmlarea("#xml_text");
+    const xmlarea = Artikolo.artikolo("#xml_text");
 
-    if (xmlarea) for (let ero of xmlarea.xmlstruct.strukturo) {
+    if (xmlarea) xmlarea.subtekst_apliku((ero) => {
         if (ero.el == 'drv') {
-            const drv = ero.dsc.split(' ').slice(2).join(' ') || ero.dsc;
+            const drv = (ero as any).dsc.split(' ').slice(2).join(' ') || (ero as any).dsc;
             drv_list += '<option value="'+ero.id+'">' + drv + '</option>';
         }
-    }
+    });
     DOM.ej("#derivajho_listo option+option").forEach((o) => o.remove());
     DOM.e("#derivajho_listo")?.insertAdjacentHTML("beforeend",drv_list);
 }
@@ -1073,16 +1073,16 @@ function derivajho_enmeti(event) {
     event.preventDefault();
     DOM.kaŝu("#derivajho_error");
 
-    const xmlarea = Artikolo.xmlarea("#xml_text");    
+    const xmlarea = Artikolo.artikolo("#xml_text");    
         if (xmlarea) {
         // sinkronigu unue por certe ne perdi antaŭe faritajn ŝanĝojn
-        xmlarea.sync();
+        xmlarea.sinkronigu();
         
         let values = Dialog.valoroj("#derivajho_dlg");
         //values.mrk = xmlArtDrvMrk($("#xml_text").val()); 
         const indent = 2;
         values.dif = x.linirompo(values.dif,indent);
-        values.mrk = xmlarea.getDosiero(); 
+        values.mrk = xmlarea.dosiero; 
 
         const drv = new XMLDerivaĵo(values);
         const art = Artikolo.artikolo("#xml_text");
@@ -1092,13 +1092,13 @@ function derivajho_enmeti(event) {
                 art.insert(drv.xml(),true);
             } else {
                 // enŝovu post donita drv 
-                art.insert_post(drv.xml(),values.loko);
+                art.enŝovu_post(drv.xml(),values.loko);
             }
         }
         
         // ekredaktu la novan derivaĵon
         const mrk = drv.drv.mrk;    
-        const s_id = xmlarea.changeSubtextMrk(mrk,false); // false: ne denove sinkronigu, 
+        const s_id = xmlarea.ekredaktu(mrk,false); // false: ne denove sinkronigu, 
                 // kio povus perdigi ĵus aldonitan drv!
     }
 
@@ -1203,13 +1203,13 @@ function traduko_dlg_preparo() {
 
 // aldonu la traduk-lingojn de la ŝargita artikolo al la traduko-dialogo (lingvo-elekto)
 function traduko_dlg_art_lingvoj() {
-    const xmlarea = Artikolo.xmlarea("#xml_text");
+    const xmlarea = Artikolo.artikolo("#xml_text");
     const trd_art = new List("#traduko_artikolaj");
 
     if (xmlarea && trd_art) {
         DOM.malplenigu("#traduko_artikolaj");
 
-        const xml = xmlarea.syncedXml() || '';
+        const xml = xmlarea.teksto || '';
         const traduk_lingvoj = x.traduk_lingvoj(xml);
 
         if (traduk_lingvoj) {
@@ -1309,7 +1309,7 @@ function traduko_dlg_plenigu_trd(lng,lingvo_nomo) {
     // ni kunfandas tiujn el la artikolo, kaj tiujn, kiuj jam estas
     // aldonitaj aŭ ŝanĝitaj en la dialogo
     // var trdoj = $("#xml_text").Artikolo("tradukoj",lng); 
-    const xmlarea = Artikolo.xmlarea("#xml_text");
+    const xmlarea = Artikolo.artikolo("#xml_text");
     if (xmlarea) {
         const xmltrad = xmlarea.xmltrad;
         xmltrad.preparu(xmlarea.xmlstruct);
@@ -1329,9 +1329,9 @@ function traduko_dlg_plenigu_trd(lng,lingvo_nomo) {
         // kiu transprentas la administradon kaj aktualigadon...
         // ŝangojn oni devus skribi tiam nur se oni ŝanĝas lingvon aŭ enmetas tradukojn
         // en la dialogon ĝin fermante...
-        for (let s of xmlarea.xmlstruct.strukturo) {
+        xmlarea.subtekst_apliku((s) => {
             if (['drv','subdrv','snc','subsnc'].indexOf(s.el) > -1) {
-                const parts = s.dsc.split(':');
+                const parts = (s as any).dsc.split(':');
                 let dsc = parts[1] || parts[0];
                 if (s.el == 'snc' || s.el == 'subsnc' && parts[1]) {
                     const p = dsc.indexOf('.');
@@ -1362,7 +1362,7 @@ function traduko_dlg_plenigu_trd(lng,lingvo_nomo) {
                 tableCnt += '<td>' + traduko_add_btn(s.id) + '</td>';
                 tableCnt += '</tr>';
             } // if drv..subsnc
-        } // for s...
+        }); // for s...
     //} // if trdj
 
         DOM.al_t("#traduko_lingvo",lingvo_nomo +" ["+lng+"]");
@@ -1415,7 +1415,7 @@ function trd_input_shanghita(element) {
     const sid = element.id.split(':')[1];
     const lng = DOM.datum("#traduko_dlg","lng");
 
-    const xmlarea = Artikolo.xmlarea("#xml_text");
+    const xmlarea = Artikolo.artikolo("#xml_text");
     const xmltrad = xmlarea?.xmltrad;   
 
     // prenu ĉiujn tradukojn kun tiu marko, ne nur la ĵus ŝanĝitane

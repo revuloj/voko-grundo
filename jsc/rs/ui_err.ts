@@ -99,8 +99,8 @@ export class Erarolisto extends List {
             const line_pos = el.closest("li")?.getAttribute("value");
             if (line_pos) {
                 const artikolo = Artikolo.artikolo("#xml_text");
-                const xmlarea = Artikolo.xmlarea("#xml_text");
-                xmlarea?.goto(line_pos);
+                const xmlarea = Artikolo.artikolo("#xml_text");
+                xmlarea?.iru_al(line_pos);
                 // okazigu eventon poziciŝanĝo ĉe Artikolo...
                 const ps: any = artikolo?.opcioj.poziciŝanĝo;
                 if (ps instanceof Function) ps();         
@@ -111,8 +111,8 @@ export class Erarolisto extends List {
 };
 
 export function xmlkontrolo() {
-    const xmlarea = Artikolo.xmlarea("#xml_text");
-    const xml_text = xmlarea?.syncedXml(); //$("#xml_text").val();
+    const xmlarea = Artikolo.artikolo("#xml_text");
+    const xml_text = xmlarea?.teksto; //$("#xml_text").val();
 
   
     if (! xml_text ) {
@@ -157,10 +157,10 @@ export function xmlkontrolo() {
 
 export function mrkkontrolo() {
     const art = Artikolo.artikolo("#xml_text");
-    const xmlarea = Artikolo.xmlarea("#xml_text");
+    const xmlarea = Artikolo.artikolo("#xml_text");
 
     if (art && xmlarea) {
-        const xml = xmlarea.syncedXml(); //$("#xml_text").val();
+        const xml = xmlarea.teksto; //$("#xml_text").val();
 
         var mrkoj = art.markoj();
         for (let mrk in mrkoj) {
@@ -206,9 +206,9 @@ export function mrkkontrolo() {
 
 export function klrkontrolo() {
     const art = Artikolo.artikolo("#xml_text");
-    const xmlarea = Artikolo.xmlarea("#xml_text");
+    const xmlarea = Artikolo.artikolo("#xml_text");
     if (art && xmlarea) {
-        const xml = xmlarea.syncedXml(); //$("#xml_text").val();
+        const xml = xmlarea.teksto; //$("#xml_text").val();
         const klroj = art.klr_ppp();
     
         if (klroj) {

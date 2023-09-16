@@ -170,11 +170,11 @@ export default function() {
             if (span.classList.contains('snc_mrk')) {
                 //const art = $("#xml_text");
                 xmlarea.goto(span.parentElement.getAttribute("value"),4);
-                artikolo.elekto("<snc mrk=\"" + a.textContent + "\"","<snc");
+                artikolo.elektanstataŭigo("<snc mrk=\"" + a.textContent + "\"","<snc");
                 span.parentElement.remove();
             } else if (span.classList.contains('klr_ppp')) {
                 xmlarea.goto(span.parentElement.getAttribute("value"),14);
-                artikolo.elekto(a.textContent,"<klr>...</klr>");
+                artikolo.elektanstataŭigo(a.textContent,"<klr>...</klr>");
                 span.parentElement.remove();
             } else {
                 surmetita_dialogo("static/anaklar.html","klarigo_teksto", "klarigo_" + span.getAttribute("data-takso"));
@@ -199,7 +199,7 @@ export default function() {
     let klv = DOM.e("#dock_klavaro");
     if (klv) {
       const xklv = new x.XKlavaro(klv,null,"#xml_text",
-      () => Artikolo.xmlarea("#xml_text").radiko,
+      () => Artikolo.artikolo("#xml_text").radiko,
       (event: Event, ui) => { 
             // PLIBONIGU: tion ni povas ankaŭ meti en xklavaro.js!
             if (ui.cmd == 'indiko') {
@@ -236,7 +236,7 @@ export default function() {
             }
         },*/
         function(event,ui) {
-            const xmlarea = Artikolo.xmlarea("#xml_text");
+            const xmlarea = Artikolo.artikolo("#xml_text");
             xmlarea?.setUnsynced();
         }
       );
@@ -279,7 +279,7 @@ export default function() {
 
     DOM.reago("#sercho_det_regexes","toggle",() => {
         if (! DOM.v("#re_radiko")) {
-            const xmlarea = Artikolo.xmlarea("#xml_text");
+            const xmlarea = Artikolo.artikolo("#xml_text");
             const rad = xmlarea?.radiko || '';
             DOM.al_v("#re_radiko",rad);
         }
@@ -431,9 +431,9 @@ export function antaŭ_slipŝanĝo(ui) {
         var elektita = art.Artikolo("elekto");
         var radiko = art.Artikolo("radiko");
         */
-        const xmlarea = Artikolo.xmlarea("#xml_text");
+        const xmlarea = Artikolo.artikolo("#xml_text");
         if (xmlarea) {
-            const elektita = xmlarea.selection();
+            const elektita = xmlarea.elekto;
             const radiko = xmlarea.radiko;
            
             var sercho = x.replaceTld(radiko,elektita)
@@ -508,11 +508,11 @@ export function nova_slipo(ui) {
  * Montras la antaŭrigardon de la artikolo
  */
 function antaurigardo() {
-    const xmlarea = Artikolo.xmlarea("#xml_text");
+    const xmlarea = Artikolo.artikolo("#xml_text");
     const ahtml = DOM.html("#rigardo");
 
     /* teorie ni povos ŝapri remeti antaŭrigardon, se nenio
-    intertempe ŝanĝiĝis (xmlarea.ar_in_sync...), sed estas malfacile fidinde
+    intertempe ŝanĝiĝis (xmlarea.antaŭrigardo_sinkrona...), sed estas malfacile fidinde
     eltrovi tion pro kio en antaŭaj eldonoj ni havis manan refreŝbutonon...
     'sync' ja okazas ekz-e ĉe kontrolo kaj tradukado sen ke la antaŭrigardo estas
     refreŝigata. Do ni aldonu flagon ankoraŭ en xmlarea, kiu memoras, ĉu ni
@@ -520,12 +520,12 @@ function antaurigardo() {
     */
     if (xmlarea) {
 
-        if (ahtml && xmlarea.ar_in_sync) {
+        if (ahtml && xmlarea.antaŭrigardo_sinkrona) {
             xmlarea.saltu();
             return;
         }
 
-        const xml_text = xmlarea.syncedXml(); //$("#xml_text").val();
+        const xml_text = xmlarea.teksto; //$("#xml_text").val();
         
         if (! xml_text) {
             // PLIBONIGU: eble aldone testu: xml.startsWith("<?xml")
@@ -551,7 +551,7 @@ function antaurigardo() {
                         rig.textContent = '';
                         rig.append(article,footer as Node);    
                     }
-                    xmlarea.ar_in_sync = true;
+                    xmlarea.antaŭrigardo_sinkrona = true;
                     xmlarea.saltu();
     
                     // refaru matematikajn formulojn, se estas
@@ -672,7 +672,7 @@ function plenigu_elekto_indikoj() {
 
     const klvr = DOM.e("#elekto_indikoj");
     const xmltxt = DOM.e("#xml_text");
-    const xmlarea = Artikolo.xmlarea("#xml_text");
+    const xmlarea = Artikolo.artikolo("#xml_text");
 
     // PLIBONIGU: enkonduku apartajn elementojn span...
     const klv_fak = klvr;
@@ -742,8 +742,8 @@ function indikon_enmeti(event) {
         
         if (enmetu) {
             //$("#xml_text").insert(enmetu);
-            const xmlarea = Artikolo.xmlarea("#xml_text");
-            if (xmlarea) xmlarea.selection(enmetu);
+            const xmlarea = Artikolo.artikolo("#xml_text");
+            if (xmlarea) xmlarea.elektenmeto(enmetu);
         }
     }
 }

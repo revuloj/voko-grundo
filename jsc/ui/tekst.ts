@@ -30,6 +30,9 @@ export interface TParto {
 type TekstOpcioj = {
     analizo?: (tekst: Tekst, t: TParto)=>void, // analizas la strukturon de la teksto kaj aldonas partojn per aldono()
     post_aldono?: (t: TParto)=>void // reago post aldono de tekstparto
+    tekstŝanĝo?: (e: Event)=>void,
+    poziciŝanĝo?: (e: Event)=>void,
+    fonkonservo: number // aŭtomata fona konservo post tiom da ŝanĝoj; <=0: neniam
 };
 
 /**
@@ -44,10 +47,12 @@ export class Tekst extends UIElement {
     static kmp_eo = new Intl.Collator('eo').compare;
     protected _partoj: Array<TParto>;
     private _teksto: string;
-    public sinkrona: boolean;
+    public sinkrona: boolean; // ĉu la momente redakta subteksto estas sinkrona kun la tuta
+    protected _ŝanĝnombro: number; // nombro de tekstŝanĝoj, post certa nombro da ŝanĝoj ni povas aŭtomate konservi
     public aktiva: TParto;
 
     static aprioraj: TekstOpcioj = {
+        fonkonservo: 20,
         analizo: undefined, // analizas la strukturon de la teksto kaj aldonas partojn per aldono()
         post_aldono: undefined // reago post aldono de tekstparto
     };
@@ -66,6 +71,15 @@ export class Tekst extends UIElement {
         return nStr;
     }
 
+    /** Kontrolas ĉu teksto konsistas nur el spacsignoj
+     * @param spacoj - la teksto
+     * @returns true, se la teksto enhavas nur spacojn
+     */
+    static nur_spacoj(spacoj: string): boolean {
+        var p = 0;
+        while (spacoj[p] == ' ' && p<spacoj.length) p++;
+        return p == spacoj.length;
+    }
     
     /**
      * Kalkulas el la signoindekso la linion kaj la pozicion ene de la linio
@@ -106,6 +120,16 @@ export class Tekst extends UIElement {
 
         this.element.addEventListener("input",() => { this.sinkrona = false; });
         this.element.addEventListener("change",() => { this.sinkrona = false; });
+
+        this.element.addEventListener("focus", (event) => { this._trigger("poziciŝanĝo",event,null); }); 
+        this.element.addEventListener("click", (event) => { this._trigger("poziciŝanĝo",event,null); }); 
+
+        // trakto de TAB kaj retro-klavoj por enŝovoj de po 2 signoj
+        this.element.addEventListener("keydown",this._tab_retro);
+        this.element.addEventListener("keyup",this._klavlevo);
+
+        // registru ŝanĝojn
+        this.element.addEventListener("change",this._ŝanĝo);
     }
 
     /**
@@ -121,8 +145,16 @@ export class Tekst extends UIElement {
         const txtarea = this.element;
         if (txtarea instanceof HTMLTextAreaElement)
             txtarea.value = this.subteksto(this.aktiva);
+
+        this._ŝanĝnombro = 0;
     }
 
+    /**
+     * Redonas la nmbron de ŝanĝoj faritaj per redaktoj de la teksto
+     */
+    get ŝanĝnombro() {
+        return this._ŝanĝnombro;
+    }
 
     /**
      * Redonas la tutan tekston post eventuala sinkronigo kun la aktuala redakto
@@ -184,6 +216,8 @@ export class Tekst extends UIElement {
             return obj;
         }
     };
+
+    
 
     /**
      * Aktualigas la tekstbufron per la redaktata subteksto, ankaŭ aktualigas la struktur-liston
@@ -639,6 +673,25 @@ export class Tekst extends UIElement {
     }
 
     /**
+     * Anstataŭigas la elektitan tekston, se ĝi egalas al la dua argumento (se donita)
+     * @param insertion 
+     * @param elektita 
+     * @returns 
+     */
+    elektanstataŭigo(insertion: string, elektita?: string) {
+        const txtarea = this.element;
+
+        if (txtarea instanceof HTMLTextAreaElement 
+            // kontrolu, ĉu elektita teksto kongruas kun parametro <elektita> 
+            && (elektita == this.elekto || !elektita)) {
+                    // enŝovu la tekston anstataŭ la elektita 
+
+                this.elektenmeto(insertion);
+            } else
+                console.warn("Ne estas la teksto '" + elektita +"' ĉe la elektita loko! Do ĝi ne estas anstatŭigata.");        
+    };
+
+    /**
      * Redonas la momente elektitan tekston
      */
     get elekto(): string|undefined {
@@ -726,6 +779,21 @@ export class Tekst extends UIElement {
         }
     };
 
+    /**
+     * Redonas la spacojn (enŝovon) en la komenco de la markita linio 
+     * @param shift - ŝoviĝu tiom da signoj antaŭ eltrovi (ekz-e shift=-1)
+     * @returns la linikomencaj spacoj
+     */
+    enŝovo_antaŭ(shift: number = 0): string|undefined {
+        const txtarea = this.element;
+        if (txtarea instanceof HTMLTextAreaElement) {
+            let indent = 0;
+            const startPos = txtarea.selectionStart+shift;
+            const linestart = txtarea.value.substring(0, startPos).lastIndexOf("\n");
+            while (txtarea.value.substring(0, startPos).charCodeAt(linestart+1+indent) == 32) {indent++;}
+            return (Tekst.sxn(" ", indent));
+        }
+    };
 
     /**
      * Signo antaŭ kursoro
@@ -768,5 +836,99 @@ export class Tekst extends UIElement {
             txtarea.focus();
         }
     };
+
+    /**
+     * Altigas la nombron de ŝanĝoj kaj eventuala fonkonservas la tekston
+     */
+    _ŝanĝ_kremento() {
+        this.sinkrona = false;
+        this._ŝanĝnombro++; 
+
+        if (this.opcioj.fonkonservo > 0 
+            && 0 == this._ŝanĝnombro % this.opcioj.fonkonservo) 
+            this.backup();   
+    }
+
+
+    /**
+     * Traktas la TAB- kaj la RETRO-klavojn. La TAB-klavo servas por ŝovi 
+     * plurlinian markitaĵon dekstren aŭ maldekstren (je 2 spacoj) kaj la
+     * RETRO-klavo en la komenco de linio forigas po 2 spacojn.
+     * @memberof redaktilo
+     * @inner
+     * @param {Event} event 
+     */
+    _tab_retro(event: KeyboardEvent) {
+        const keycode = event.keyCode || event.which; 
+
+        // traktu TAB por ŝovi dekstren aŭ maldekstren plurajn liniojn
+        if (keycode == 9) {  // TAB
+            event.preventDefault(); 
+
+            const elekto = this.elekto||'';
+
+            // se pluraj linioj estas elektitaj
+            if (elekto.indexOf('\n') > -1) {
+                // enŝovo
+                if (event.shiftKey == false)
+                    this.enŝovo = 2;
+                else
+                    this.enŝovo = -2;
+            
+            // elekto nur ene de unu linio
+            } else if ( !elekto ) {
+                // traktu enŝovojn linikomence...
+                const before = this.signo_antaŭ();
+                if (before == '\n') {
+                    const indent = this.enŝovo_antaŭ(-1) || '  ';
+                    this.elektenmeto(indent); 
+                } else if (before == ' ') {
+                    const indent = '  ';
+                    // aldonu du spacojn
+                    this.elektenmeto(indent);
+                }
+            }
+
+        } else if (keycode == 8) { // BACKSPACE
+            if (! this.elekto) { // aparta trakto nur se nenio estas elektita!
+                const spacoj = this.linisignoj_antaŭ();
+                if (spacoj && spacoj.length > 0 && Tekst.nur_spacoj(spacoj) && 0 == spacoj.length % 2) { 
+                    // forigu du anstataŭ nur unu spacon
+                    event.preventDefault(); 
+
+                    const pos = this.signo();
+                    if (pos) {
+                        this.elektu(pos-2,2); //selectRange(xmlarea.txtarea,pos-2, pos);
+                        this.elektenmeto('');     
+                    }
+                }
+            }
+        }
+    }
+
+
+    _klavlevo(event: KeyboardEvent) {
+        this._trigger("poziciŝanĝo",event,{});
+        
+        var keycode = event.keyCode || event.which; 
+        // klavoj, kiuj efektive ŝanĝas la tekston: notu tian ŝangon...
+        if ( keycode < 16 
+            || keycode == 32 
+            || (keycode > 40 && keycode < 91) 
+            || (keycode > 93 && keycode < 111) 
+            || keycode > 145 ) {
+
+            this._trigger("tekstŝanĝo",event,{});
+            this._ŝanĝ_kremento();
+        }
+    };
+
+    _ŝanĝo(event: Event) {
+        this._trigger("poziciŝanĝo",event,{});
+        this._trigger("tekstŝanĝo",event,{});
+
+        this._ŝanĝ_kremento();       
+    };
+
 
 }
