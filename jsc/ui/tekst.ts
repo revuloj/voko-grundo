@@ -151,7 +151,7 @@ export class Tekst extends UIElement {
      */
     get teksto(): string {
         if (! this.sinkrona) this.sinkronigu(this.aktiva); 
-        return this.teksto;
+        return this._teksto;
     };
 
     /**
@@ -185,7 +185,7 @@ export class Tekst extends UIElement {
      * @param atr 
      */
     konservu(ŝlosilo: string, obj: any, atr: string) {
-        obj[atr] = this.teksto;
+        obj[atr] = this.teksto; // uzas get teksto() por unue sinkronigi
         window.localStorage.setItem(ŝlosilo,
             JSON.stringify(obj)
         );
@@ -201,7 +201,7 @@ export class Tekst extends UIElement {
         const str = window.localStorage.getItem(ŝlosilo);
         const obj = (str? JSON.parse(str) : null);
         if (obj) {
-            this.teksto = obj[atr];
+            this.teksto = obj[atr]; // uzas set teksto() kiu aktualigas la strukturon
             return obj;
         }
     };
@@ -400,7 +400,7 @@ export class Tekst extends UIElement {
      */
     subteksto(sd: TId): string {
         const s = this.subtekst_info(sd.id);
-        if (s) return this.teksto.slice(s.de,s.al);
+        if (s) return this._teksto.slice(s.de,s.al);
         else throw "Nevalida tekstero '"+sd.id+"'";
     };
 
@@ -468,10 +468,10 @@ export class Tekst extends UIElement {
        const elekto = this.subtekst_info(s_id);
  
        if (elekto) {
-        this.teksto = 
-            (this.teksto.substring(0,elekto.de) 
+        this._teksto = 
+            (this._teksto.substring(0,elekto.de) 
             + teksto
-            + this.teksto.substring(elekto.al));
+            + this._teksto.substring(elekto.al));
 
         // renovigu la strukturon
         this.struktur_analizo(elektenda);
@@ -490,10 +490,10 @@ export class Tekst extends UIElement {
         if (!s) throw "Subteksto kun id "+s_id+" ne trovita!"
 
         // enŝovu la novan subtekston post tiu, uzante la pozicion s.al
-        this.teksto = 
-            this.teksto.substring(0,s.al) 
+        this._teksto = 
+            this._teksto.substring(0,s.al) 
             + "\n"+ xml 
-            + this.teksto.substring(s.al);
+            + this._teksto.substring(s.al);
     }
 
     /**
