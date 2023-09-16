@@ -105,22 +105,20 @@ export default function() {
             */
             DOM.al_t("#rigardo","");
         },
-        xmlarea: new XmlRedakt("xml_text",
-            function(subt,index,selected) { // reago je aldono de nova subteksto: aldonu en la listo art_strukturo
-                const sel_stru = document.getElementById("art_strukturo");
-                if (sel_stru) {
-                    if (index == 0) sel_stru.textContent = ''; // malplenigu la liston ĉe aldono de unua ero...        
-                    if (selected) {
-                        sel_stru.append(ht_element('option',{value: subt.id, selected: 'selected'},subt.dsc));
-                    } else {
-                        sel_stru.append(ht_element('option',{value: subt.id},subt.dsc));
-                    }    
-                }
-            },
-            function(subt) { // reago al interna elektoŝanĝo: elektu ankaŭ en la listo art_strukturo
-                DOM.e("#art_strukturo option[value='"+subt.id+"']")?.setAttribute('selected','selected');
+        post_aldono: function(subt,index,selected) { // reago je aldono de nova subteksto: aldonu en la listo art_strukturo
+            const sel_stru = document.getElementById("art_strukturo");
+            if (sel_stru) {
+                if (index == 0) sel_stru.textContent = ''; // malplenigu la liston ĉe aldono de unua ero...        
+                if (selected) {
+                    sel_stru.append(ht_element('option',{value: subt.id, selected: 'selected'},subt.dsc));
+                } else {
+                    sel_stru.append(ht_element('option',{value: subt.id},subt.dsc));
+                }    
             }
-        )        
+        },
+        subtekst_elekto: function(subt) { // reago al interna elektoŝanĝo: elektu ankaŭ en la listo art_strukturo
+            DOM.e("#art_strukturo option[value='"+subt.id+"']")?.setAttribute('selected','selected');
+        }       
     });
     DOM.klavpremo("#xml_text",x.xpress);
     DOM.ŝanĝo("#art_strukturo", function(event) {
@@ -355,7 +353,7 @@ export default function() {
     //do_before_unload(() => {
         console.debug("sekurigante la aktualan XML-tekston...");
         const art = Artikolo.artikolo("#xml_text");
-        artikolo.backup();
+        artikolo._konservu_fone();
     });
 
 }

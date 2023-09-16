@@ -22,6 +22,9 @@ export class XmlRedakt extends Tekst {
   public xmltrad: XmlTrad; // por redaktado de tradukoj
   private onaddsub: Function;
   private onselectsub: Function;
+
+  protected _ŝanĝnombro: number; // nombro de tekstŝanĝoj, post certa nombro da ŝanĝoj ni povas aŭtomate konservi
+  private fonkonservo: number; // aŭtomata fona konservo post tiom da ŝanĝoj; <=0: neniam
   //private synced: boolean; // por scii, ĉu ni devos konservi la videblan (redaktatan) tekstparton
   public antaŭrigardo_sinkrona: boolean; // por scii, ĉu la lasta antaŭrigardo estas aktuala
 
@@ -59,7 +62,13 @@ export class XmlRedakt extends Tekst {
  * @param post_aldono - Revokfunkcio, vokata dum analizo de la strukturo ĉiam, kiam troviĝas subteksto.  Tiel eblas reagi ekzemple plenigante liston per la trovitaj subtekstoj (art, drv, snc...)
  * @param onSelectSub - Revokfunkcio, vokata dum interne kaŭzia elekto de alia subteksto. Ekz-e aldono de nova <drv> 
  */  
-  constructor(textarea: HTMLElement|string, post_aldono?: Function, onSelectSub?: Function) {
+  constructor(textarea: HTMLElement|string, 
+    post_aldono?: Function, 
+    onSelectSub?: Function,
+    poziciŝanĝo?: Function,
+    tekstŝanĝo?: Function,
+    fonkonservo = 20) 
+    {
     super(textarea,{
       analizo: XmlStrukt.struktur_analizo,
       post_aldono: post_aldono
@@ -68,6 +77,20 @@ export class XmlRedakt extends Tekst {
      this.txtarea.addEventListener("input",() => { this.setUnsynced(); });
      this.txtarea.addEventListener("change",() => { this.setUnsynced(); });
     */
+
+    // superŝargu tekstŝanĝo
+    if (tekstŝanĝo instanceof Function)
+        this.opcioj.tekstŝanĝo = (event: Event) => {
+            this._ŝanĝo(event);
+            tekstŝanĝo(event);
+        };
+    else 
+        this.opcioj.tekstŝanĝo = (event: Event) => {
+            this._ŝanĝo(event);
+        };   
+
+    this.fonkonservo = fonkonservo; 
+
 
     //this.structure_selection = document.getElementById(struc_sel);
     //this.xmlstruct = new XmlStrukt('',post_aldono); // la tuta teksto
@@ -96,7 +119,9 @@ export class XmlRedakt extends Tekst {
     // this.elekto = this.xmlstruct.strukturo[0];
     // this.txtarea.value = this.xmlstruct.getSubtext(this.elekto);
     this.antaŭrigardo_sinkrona = false;
-    this.kursoro_supren();   
+    this.kursoro_supren();  
+
+    this._ŝanĝnombro = 0;
   };
 
   /**
@@ -523,6 +548,7 @@ export class XmlRedakt extends Tekst {
       //if (nov) {
         // anstataŭigi malnovan traduko(j)n per nova(j)
         xml = xml.substring(0,place.pos) + nov + xml.substring(place.pos+len);
+        
         // se temas pri tuta forigo, restas du linirompoj, unu antaŭe unu poste
         // ni do testas ĉu post place.pos aperas \n
         // eventuale kun antaŭaj spacsignoj kaj tiam forigas ĝin,
@@ -546,6 +572,50 @@ export class XmlRedakt extends Tekst {
       //}
     }
   };
+
+
+  /**
+   * Redonas la nmbron de ŝanĝoj faritaj per redaktoj de la teksto
+   */
+  get ŝanĝnombro() {
+      return this._ŝanĝnombro;
+  }
+
+  /**
+   * Altigas la nombron de ŝanĝoj kaj eventuala fonkonservas la tekston
+   */
+  _ŝanĝ_kremento() {
+      this.sinkrona = false;
+      this._ŝanĝnombro++; 
+
+      if (this.opcioj.fonkonservo > 0 
+          && 0 == this._ŝanĝnombro % this.opcioj.fonkonservo) 
+          this._konservu_fone();   
+  }
+
+  /**
+   * Konservas la tekston por travivigi la redaktatan tekston 
+   * eventualajn kraŝojn aŭ akcidentajn fermojn de la retumilo.
+   */
+  _konservu_fone() {
+    /// const xmlarea = this.opcioj.xmlarea;
+    this.konservu("red_artikolo",{
+        'nom': this.opcioj.dosiero,
+        'red': this.opcioj.reĝimo
+        }, "xml");
+        /*
+    const xml = xmlarea.syncedXml();
+    window.localStorage.setItem("red_artikolo",JSON.stringify({
+        'xml': xml, //this.element.val(), 
+        'nom': this.opcioj.dosiero,
+        'red': this.opcioj.reĝimo
+    }));*/
+  };  
+
+  _tekstŝanĝo(event: Event) {
+      this._ŝanĝ_kremento();
+      this._trigger("tekstŝanĝo",event,{});
+  }
 
   /**
    * Redonas aŭ metas la aktualan y-koordinaton de la videbla parto de this.xmlarea

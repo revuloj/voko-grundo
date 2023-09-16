@@ -77,13 +77,14 @@ export class Artikolo extends XmlRedakt {
     };
     */
 
+    /*
     static art_aprioraj = {
         //xmlarea: undefined, // 'undefined' ne superŝargiĝos en UIElement.fandu, ĉu ni ŝanĝu tie?
         dosiero: '',
         reĝimo: 'redakto', 
         poziciŝanĝo: null, 
         tekstŝanĝo: null 
-    }
+    }*/
 
     /// _change_count = 0
 
@@ -99,7 +100,8 @@ export class Artikolo extends XmlRedakt {
     }*/
 
     constructor(element: HTMLElement|string, opcioj: any) {
-        super(element, opcioj, Artikolo.art_aprioraj);
+        super(element, opcioj.post_aldono, opcioj.subtekst_elekto,
+            opcioj.poziciŝanĝo, opcioj.tekstŝanĝo); //, Artikolo.art_aprioraj);
 
         this.restore();
         /// this._change_count = 0;
@@ -116,20 +118,6 @@ export class Artikolo extends XmlRedakt {
         }); // dum musalŝovo
     };
 
-    backup() {
-        /// const xmlarea = this.opcioj.xmlarea;
-        this.konservu("red_artikolo",{
-            'nom': this.opcioj.dosiero,
-            'red': this.opcioj.reĝimo
-            }, "xml");
-            /*
-        const xml = xmlarea.syncedXml();
-        window.localStorage.setItem("red_artikolo",JSON.stringify({
-            'xml': xml, //this.element.val(), 
-            'nom': this.opcioj.dosiero,
-            'red': this.opcioj.reĝimo
-        }));*/
-    };
 
     // restarigi el loka krozil-memoro
     restore() {

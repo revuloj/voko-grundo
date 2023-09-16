@@ -31,8 +31,7 @@ type TekstOpcioj = {
     analizo?: (tekst: Tekst, t: TParto)=>void, // analizas la strukturon de la teksto kaj aldonas partojn per aldono()
     post_aldono?: (t: TParto)=>void // reago post aldono de tekstparto
     tekstŝanĝo?: (e: Event)=>void,
-    poziciŝanĝo?: (e: Event)=>void,
-    fonkonservo: number // aŭtomata fona konservo post tiom da ŝanĝoj; <=0: neniam
+    poziciŝanĝo?: (e: Event)=>void
 };
 
 /**
@@ -48,11 +47,9 @@ export class Tekst extends UIElement {
     protected _partoj: Array<TParto>;
     private _teksto: string;
     public sinkrona: boolean; // ĉu la momente redakta subteksto estas sinkrona kun la tuta
-    protected _ŝanĝnombro: number; // nombro de tekstŝanĝoj, post certa nombro da ŝanĝoj ni povas aŭtomate konservi
     public aktiva: TParto;
 
     static aprioraj: TekstOpcioj = {
-        fonkonservo: 20,
         analizo: undefined, // analizas la strukturon de la teksto kaj aldonas partojn per aldono()
         post_aldono: undefined // reago post aldono de tekstparto
     };
@@ -114,7 +111,7 @@ export class Tekst extends UIElement {
 
     constructor(element: HTMLElement|string, opcioj?: any) {
         super(element, opcioj, Tekst.aprioraj);
-    
+
         this._teksto = '';
         this._partoj = [];
 
@@ -145,16 +142,8 @@ export class Tekst extends UIElement {
         const txtarea = this.element;
         if (txtarea instanceof HTMLTextAreaElement)
             txtarea.value = this.subteksto(this.aktiva);
-
-        this._ŝanĝnombro = 0;
     }
 
-    /**
-     * Redonas la nmbron de ŝanĝoj faritaj per redaktoj de la teksto
-     */
-    get ŝanĝnombro() {
-        return this._ŝanĝnombro;
-    }
 
     /**
      * Redonas la tutan tekston post eventuala sinkronigo kun la aktuala redakto
@@ -201,7 +190,7 @@ export class Tekst extends UIElement {
             JSON.stringify(obj)
         );
     };
-
+  
   
     /**
      * Restarigas tekston kaj konkonservitajn atributojn el loka retumila memoro.
@@ -216,7 +205,7 @@ export class Tekst extends UIElement {
             return obj;
         }
     };
-
+      
     
 
     /**
@@ -837,17 +826,7 @@ export class Tekst extends UIElement {
         }
     };
 
-    /**
-     * Altigas la nombron de ŝanĝoj kaj eventuala fonkonservas la tekston
-     */
-    _ŝanĝ_kremento() {
-        this.sinkrona = false;
-        this._ŝanĝnombro++; 
 
-        if (this.opcioj.fonkonservo > 0 
-            && 0 == this._ŝanĝnombro % this.opcioj.fonkonservo) 
-            this.backup();   
-    }
 
 
     /**
@@ -919,15 +898,14 @@ export class Tekst extends UIElement {
             || keycode > 145 ) {
 
             this._trigger("tekstŝanĝo",event,{});
-            this._ŝanĝ_kremento();
+            this.sinkrona = false;
         }
     };
 
     _ŝanĝo(event: Event) {
         this._trigger("poziciŝanĝo",event,{});
         this._trigger("tekstŝanĝo",event,{});
-
-        this._ŝanĝ_kremento();       
+        this.sinkrona = false;
     };
 
 
