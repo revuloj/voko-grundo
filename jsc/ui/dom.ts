@@ -6,6 +6,7 @@
 import { UIElement } from './uielement';
 import { UIStil } from './uistil';
 import { Valid } from './valid';
+import { Klavar } from './klavar';
 
 declare global {
     interface Element {
@@ -15,6 +16,7 @@ declare global {
     interface HTMLElement {
         _voko_ui?: UIElement;
         _voko_valid?: Array<Valid>; // testoj por validigi enkroĉitaj en DOM
+        _voko_klavar?: Klavar; // registritaj klav-reagoj
     }
 
     interface HTMLOptionElement {

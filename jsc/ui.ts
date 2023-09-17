@@ -7,6 +7,7 @@ export * from "./ui/buton";
 export * from "./ui/elektil";
 export * from "./ui/list";
 export * from "./ui/tekst";
+export * from "./ui/klavar";
 export * from "./ui/propon";
 export * from "./ui/slipar";
 export * from "./ui/skal";

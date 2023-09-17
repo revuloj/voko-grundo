@@ -121,12 +121,11 @@ export class Tekst extends UIElement {
         this.element.addEventListener("focus", (event) => { this._trigger("poziciŝanĝo",event,null); }); 
         this.element.addEventListener("click", (event) => { this._trigger("poziciŝanĝo",event,null); }); 
 
-        // trakto de TAB kaj retro-klavoj por enŝovoj de po 2 signoj
-        this.element.addEventListener("keydown",this._tab_retro);
-        this.element.addEventListener("keyup",this._klavlevo);
+        // informu pri ŝanĝoj ĉe klavlevo
+        this.element.addEventListener("keyup",this._klavlevo.bind(this));
 
         // registru ŝanĝojn
-        this.element.addEventListener("change",this._ŝanĝo);
+        this.element.addEventListener("change",this._ŝanĝo.bind(this));
     }
 
     /**
@@ -841,64 +840,6 @@ export class Tekst extends UIElement {
         }
     };
 
-
-
-
-    /**
-     * Traktas la TAB- kaj la RETRO-klavojn. La TAB-klavo servas por ŝovi 
-     * plurlinian markitaĵon dekstren aŭ maldekstren (je 2 spacoj) kaj la
-     * RETRO-klavo en la komenco de linio forigas po 2 spacojn.
-     * @memberof redaktilo
-     * @inner
-     * @param {Event} event 
-     */
-    _tab_retro(event: KeyboardEvent) {
-        const keycode = event.keyCode || event.which; 
-
-        // traktu TAB por ŝovi dekstren aŭ maldekstren plurajn liniojn
-        if (keycode == 9) {  // TAB
-            event.preventDefault(); 
-
-            const elekto = this.elekto||'';
-
-            // se pluraj linioj estas elektitaj
-            if (elekto.indexOf('\n') > -1) {
-                // enŝovo
-                if (event.shiftKey == false)
-                    this.enŝovo = 2;
-                else
-                    this.enŝovo = -2;
-            
-            // elekto nur ene de unu linio
-            } else if ( !elekto ) {
-                // traktu enŝovojn linikomence...
-                const before = this.signo_antaŭ();
-                if (before == '\n') {
-                    const indent = this.enŝovo_antaŭ(-1) || '  ';
-                    this.elektenmeto(indent); 
-                } else if (before == ' ') {
-                    const indent = '  ';
-                    // aldonu du spacojn
-                    this.elektenmeto(indent);
-                }
-            }
-
-        } else if (keycode == 8) { // BACKSPACE
-            if (! this.elekto) { // aparta trakto nur se nenio estas elektita!
-                const spacoj = this.linisignoj_antaŭ();
-                if (spacoj && spacoj.length > 0 && Tekst.nur_spacoj(spacoj) && 0 == spacoj.length % 2) { 
-                    // forigu du anstataŭ nur unu spacon
-                    event.preventDefault(); 
-
-                    const pos = this.signo();
-                    if (pos) {
-                        this.elektu(pos-2,2); //selectRange(xmlarea.txtarea,pos-2, pos);
-                        this.elektenmeto('');     
-                    }
-                }
-            }
-        }
-    }
 
 
     _klavlevo(event: KeyboardEvent) {

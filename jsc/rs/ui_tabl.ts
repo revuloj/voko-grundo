@@ -120,7 +120,7 @@ export default function() {
             DOM.e("#art_strukturo option[value='"+subt.id+"']")?.setAttribute('selected','selected');
         }       
     });
-    DOM.klavpremo("#xml_text",x.xpress);
+    /// tion nun faras XmlRedakt mem DOM.klavpremo("#xml_text",x.xpress);
     DOM.ŝanĝo("#art_strukturo", function(event) {
         const val = (event.target as HTMLInputElement).value;
     

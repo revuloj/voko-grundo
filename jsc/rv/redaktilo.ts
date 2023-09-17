@@ -6,6 +6,7 @@
 
 import * as u from '../u';
 import * as x from '../x';
+import { Klavar } from '../ui';
 
 import '../x/tekstiloj';
 import '../x/voko_entities';
@@ -228,7 +229,7 @@ export namespace redaktilo {
    * @memberof redaktilo
    * @param event 
    */
-
+/*
   export function klavo(event: KeyboardEvent) {
     var key = event.keyCode ? event.keyCode : event.which ? event.which : event.charCode;
     //  alert(key);
@@ -275,7 +276,7 @@ export namespace redaktilo {
         insert_xml("trd_lng");
       }
     }
-  }
+  }*/
 
   /**
    * Traktas la TAB- kaj la RETRO-klavojn. La TAB-klavo servas por ŝovi 
@@ -1264,10 +1265,22 @@ export namespace redaktilo {
           }
       });    
 
+      // XML-redakt-kesto
+      const r_xml = document.getElementById("r:xmltxt");
+      if (r_xml) {
+        xmlarea = new XmlRedakt(r_xml,on_xml_add_sub,undefined,show_pos);
+        // T-klavkombinoj permesu aldoni tradukŝablonon rapide
+        Klavar.aldonu(r_xml,"KeyT",(event) => {
+          if (event.ctrlKey || event.altKey) {
+            insert_xml("trd_lng");
+            event.preventDefault();
+          }
+        });  
+      }
 
-      xmlarea = new XmlRedakt("#r\\:xmltxt",on_xml_add_sub);
       load_xml(params); // se doniĝis ?art=xxx ni fone ŝargas tiun artikolon
 
+      // ekranbutonaro por apartaj signoj/elementoj
       const klvr = document.getElementById("r:klavaro");
       xklavaro = new XKlavaro(klvr, null, xmltxt,
         () => xmlarea.radiko,
@@ -1301,14 +1314,15 @@ export namespace redaktilo {
      *  **************/
 
     // klav-premoj en XML-redaktilo
-    document.getElementById("r:xmltxt")
-      .addEventListener("keypress",klavo);
+    /// document.getElementById("r:xmltxt")
+    ///   .addEventListener("keypress",klavo);
     /// document.getElementById("r:xmltxt")
     ///   .addEventListener("keydown",tab_bsp);
 
-    document.getElementById("r:xmltxt")
-      //.addEventListener("selectionchange",show_pos); // movado de kursoro, ne kaŭzas input-eventon...!
-      .addEventListener("keyup",show_pos); // movado de kursoro, ne kaŭzas input-eventon...!
+    // document.getElementById("r:xmltxt")
+    //   //.addEventListener("selectionchange",show_pos); // movado de kursoro, ne kaŭzas input-eventon...!
+    //   .addEventListener("keyup",show_pos); // movado de kursoro, ne kaŭzas input-eventon...!
+
     //ni difinas rekte en xmlarea:...document.getElementById("r:xmltxt")
     //  .addEventListener("input",show_pos);
     document.getElementById("r:xmltxt")

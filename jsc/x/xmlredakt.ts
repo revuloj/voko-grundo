@@ -9,7 +9,8 @@
 import * as xs from './xmlstrukt';
 import { SDet } from './xmlstrukt';
 import { XmlTrad, TList, Lingvo, XPlace } from './xmltrad';
-import { Tekst } from '../ui';
+import { Tekst, Klavar } from '../ui';
+import { cxigi } from './util';
 
 /**
  * Administras la redaktatan tekston tiel, ke eblas redakti nur parton de ĝi, t.e. unuopan derivaĵon, sencon ktp.
@@ -75,7 +76,8 @@ export class XmlRedakt extends Tekst {
     {
     super(textarea,{
       analizo: xs.struktur_analizo,
-      post_aldono: post_aldono
+      post_aldono: post_aldono,
+      tekstŝanĝo: tekstŝanĝo
     })
     /* this.txtarea = document.getElementById(ta_id) as HTMLInputElement;
      this.txtarea.addEventListener("input",() => { this.setUnsynced(); });
@@ -83,6 +85,7 @@ export class XmlRedakt extends Tekst {
     */
 
     // superŝargu tekstŝanĝo
+    /*
     if (tekstŝanĝo instanceof Function)
         this.opcioj.tekstŝanĝo = (event: Event) => {
             this._ŝanĝo(event);
@@ -92,9 +95,12 @@ export class XmlRedakt extends Tekst {
         this.opcioj.tekstŝanĝo = (event: Event) => {
             this._ŝanĝo(event);
         };   
+        */
 
     this.fonkonservo = fonkonservo; 
 
+    // registru reagojn klavojn Tab, Retro, X
+    this.klavreagoj();
 
     //this.structure_selection = document.getElementById(struc_sel);
     //this.xmlstruct = new XmlStrukt('',post_aldono); // la tuta teksto
@@ -334,6 +340,101 @@ export class XmlRedakt extends Tekst {
         if (this.onselectsub) this.onselectsub(this.aktiva);
       }
     }
+  }
+
+
+  /**
+   * registra klavreagojn
+   */
+  klavreagoj() {
+    const klv = new Klavar(this.element);
+
+    // TAB
+    klv.aldonu("Tab",(event) => {
+      event.preventDefault(); 
+
+      const elekto = this.elekto||'';
+
+      // se pluraj linioj estas elektitaj
+      if (elekto.indexOf('\n') > -1) {
+          // enŝovo
+          if (event.shiftKey == false)
+              this.enŝovo = 2;
+          else
+              this.enŝovo = -2;
+      
+      // elekto nur ene de unu linio
+      } else if ( !elekto ) {
+          // traktu enŝovojn linikomence...
+          const before = this.signo_antaŭ();
+          if (before == '\n') {
+              const indent = this.enŝovo_antaŭ(-1) || '  ';
+              this.elektenmeto(indent); 
+          } else if (before == ' ') {
+              const indent = '  ';
+              // aldonu du spacojn
+              this.elektenmeto(indent);
+          }
+      }
+    });
+
+    // RETRO
+    klv.aldonu("Backspace",(event) => {
+      if (! this.elekto) { // aparta trakto nur se nenio estas elektita!
+        const spacoj = this.linisignoj_antaŭ();
+        if (spacoj && spacoj.length > 0 && Tekst.nur_spacoj(spacoj) && 0 == spacoj.length % 2) { 
+            // forigu du anstataŭ nur unu spacon
+            event.preventDefault(); 
+
+            const pos = this.signo();
+            if (pos) {
+                this.elektu(pos-2,2); //selectRange(xmlarea.txtarea,pos-2, pos);
+                this.elektenmeto('');     
+            }
+        }
+      }
+    });
+
+    // RET: aldonu enŝovon (spacojn) komence de nova linio
+    klv.aldonu("Enter",(event) => {
+      const scrollPos = this.rulpozicio;        
+      const indent = this.enŝovo;
+      this.elektenmeto("\n"+indent);
+      if (scrollPos) this.rulpozicio = scrollPos;
+      event.preventDefault();
+    });
+
+    // X aŭ x
+    klv.aldonu("KeyX",(event) => {
+      var cx = document.getElementById("r:cx") as HTMLInputElement;
+      if (event.altKey) {	// shortcut alt-x  --> toggle cx
+        cx.value = ""+(1-parseInt(cx.value) || 0);
+        console.log("cx "+cx.value);
+        event.preventDefault();
+
+      } else if (!event.ctrlKey && !event.metaKey) {
+  
+        if (cx.value != "1") return true;
+
+        //var txtarea = document.getElementById('r:xmltxt');
+        const scrollPos = this.rulpozicio;
+        const selText = this.elekto;
+
+        if (selText != "") return true;
+
+        var before = this.signo_antaŭ()||'';
+        var nova = cxigi(before, event.keyCode);
+
+        if (nova != "") {
+          //range.text = nova;
+          this.elektenmeto(nova,-1);
+          
+          if (scrollPos) this.rulpozicio = scrollPos;
+          event.preventDefault();
+        }          
+      }
+    });
+
   }
 
 
