@@ -1312,7 +1312,7 @@ function traduko_dlg_plenigu_trd(lng,lingvo_nomo) {
     const xmlarea = Artikolo.artikolo("#xml_text");
     if (xmlarea) {
         const xmltrad = xmlarea.xmltrad;
-        xmltrad.preparu(xmlarea.xmlstruct);
+        xmltrad.preparu();
         xmltrad.collectTrdAllStruct(lng);    
         //const trd_shanghoj = $("#traduko_tradukoj").data("trd_shanghoj") || {};
 

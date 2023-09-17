@@ -406,6 +406,9 @@ export class XmlRedakt extends Tekst {
 
     // X aŭ x
     klv.aldonu("KeyX",(event) => {
+      // PLIBONIGU: tion movu al reaktilo.ts, ĉar xmlRedakt ne sciu
+      // pri la butono r:cx; aŭ aldonu ŝaltilon "boolean" tie ĉi
+      // kaj permesu interligi ĝin per butono (revokfunkcie)
       var cx = document.getElementById("r:cx") as HTMLInputElement;
       if (event.altKey) {	// shortcut alt-x  --> toggle cx
         cx.value = ""+(1-parseInt(cx.value) || 0);
