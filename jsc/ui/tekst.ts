@@ -282,8 +282,12 @@ export class Tekst extends UIElement {
 
     /**
      * Kreas novan strukturon. Ĉar ni ne scias, laŭ kiu sintakso la strukturo
-     * kreigu tion devas fari la uzanta objekto, kiu tiucele transdonu en opcioj
-     * funkcion strukturo()
+     * kreiĝu, tion devas fari la uzanta objekto, kiu tiucele transdonu en opcioj
+     * funkcion strukturo().
+     * La struktranalizo necesas kiam metitĝas la tuta teksto (set teksto)
+     * aŭ kiam subteksto ŝanĝiĝas, kutime per redakto, kiu povas aldoni aŭ forigi
+     * struktur-partojn (ekz-e aldoni/fiorig sencon). Ankaŭ la sinkronigo nerekte
+     * per voko de anstataŭigo() lanĉas novan strukturanalizon. 
      */
     struktur_analizo(elektenda?: string) {
         if (this.opcioj.analizo instanceof Function) {

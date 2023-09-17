@@ -79,7 +79,8 @@ export type XElPos = { pos: number, end: number, elm: string };
    * @param elektenda - se donita tio estas la elektita subteksto kaj estos markita en la revokfunkcio onaddsub (4-a argumento: true)
    */
   export function struktur_analizo(tekst: Tekst, elektenda?: string) {
-      const xmlteksto = tekst.teksto_sensinkronigo;
+      // sinkrohigo ofte kaŭzas strukturanalizon, do evitu ciklon legante la tekston
+      const xmlteksto = tekst.teksto_sensinkronigo; 
   
       /**
        * Ekstraktu la XML-atributon 'mrk' el la subteksto
