@@ -155,14 +155,24 @@ export class Tekst extends UIElement {
     };
 
     /**
+     * Redonas la tekston sen antaŭa sinkronigo.
+     * Por la strukturanalizo ni devas eviti, ke okazas sinkronigo
+     * por eviti ciklojn, ĉar ĝi estas vokata laŭ la ĉeno sinrkonigo -> anstataŭigo -> struktur_analizo.
+     * Ne uzu tiun ĉi funkcion por alia celo!
+     */
+    get teksto_sensinkronigo(): string {
+        return this._teksto;
+    }
+
+    /**
      * Redonas la momente redaktatan tekston (textarea.value)
      */
-    get redakt_teksto(): string|null {
+    get redakt_teksto(): string {
         const ta = this.element;
         if (ta instanceof HTMLTextAreaElement)
-            return ta.ariaValueMax;
+            return ta.value;
         else
-            return null;
+            throw "Ne povis legi la redaktitan tekston!"
     }
 
     /**
@@ -230,9 +240,9 @@ export class Tekst extends UIElement {
             // tio ankaŭ rekreas la strukturon de subtekstoj!
             // ni memoras la longecon de la nova subteksto, ĉar se ĝi entenas pli ol la ĉefan elementon, ekz-e finan
             // komenton, ni devas eviti duobliĝon per aktualigo ankaŭ de la montrata subteksto
-            const teksto =  this.redakt_teksto||'';
+            const teksto =  this.redakt_teksto;
             const ln = teksto.length;
-            this.anstataŭigu(this.aktiva.id,teksto,elektenda.id);
+            this.anstataŭigu(this.aktiva.id,teksto,elektenda.id);    
 
             // nun retrovu la elektendan subtekston en la rekreita strukturo
 
@@ -276,9 +286,10 @@ export class Tekst extends UIElement {
      * funkcion strukturo()
      */
     struktur_analizo(elektenda?: string) {
-        this._partoj = [];
-        if (this.opcioj.analizo instanceof Function)
+        if (this.opcioj.analizo instanceof Function) {
+            this._partoj = [];
             this.opcioj.analizo(this,elektenda);
+        }
     }
 
 
@@ -291,8 +302,8 @@ export class Tekst extends UIElement {
         if (id) {
             console.debug("<<< ŝanĝu subtekston "+id+" <<<");
 
-            // ni unue sekurigu la aktuale redaktatan parton...
-            if (sinkronigu) this.sinkronigu({id:id}); // ni transdonas ankaŭ la elektotan id por navigi tien en la elekto-listo
+            // ni unue laŭbezone sekurigu la aktuale redaktatan parton...
+            if (sinkronigu && !this.sinkrona) this.sinkronigu({id:id}); // ni transdonas ankaŭ la elektotan id por navigi tien en la elekto-listo
             
             /* ni trovu la celatan subtekston per ĝia id... */
 
@@ -459,7 +470,7 @@ export class Tekst extends UIElement {
         return this._partoj[this._partoj.length-1]
     }
 
-   /* Anstataŭigas donitan subtekston per nova
+   /* Anstataŭigas donitan subtekston per nova (redaktita) tekstparto
     * @param s_id - la anstataŭigenda subteksto
     * @param xml - la nova subteksto
     * @param select - se donita, la strukturelemento kun tiu .id estos poste la elektita

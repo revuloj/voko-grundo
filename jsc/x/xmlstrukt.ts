@@ -35,22 +35,22 @@ export type XElPos = { pos: number, end: number, elm: string };
 /**
  * Administras XML-tekston kiel strukturo de subtekstojTiel eblas reagi ekzemple plenigante liston per la trovitaj subtekstoj (art, drv, snc...) 
  */
-export class XmlStrukt extends Tekst {
+/// export class XmlStrukt {
 
   // public xmlteksto:string; // la tuta teksto
   // public strukturo:Array<Strukturero>; // la listo de subtekstoj [komenco,fino,nomo]
   //public radiko:string;
 
-  private onaddsub:Function;
+  /// private onaddsub:Function;
 
   // regulesprimoj bezonataj por analizi la XML-strukturon
-  private static re_stru = {
+  const re_stru = {
     _elm: /[ \t]*<((?:sub)?(?:art|drv|snc))[>\s]/g,
     _eoe: />[ \t]*\n?/g,
     _mrk: /(?:\s*ref\s*=\s*['"][^>"']*['"])?\s*mrk\s*=\s*(['"])([^>"']*?)\1/g,
     _kap: /<kap>([^]*)<\/kap>/,
-    _rad: /<rad>([^<]+)<\/rad>/,
-    _dos: /<art\s+mrk="\$Id:\s+([^\.]+)\.xml|<drv\s+mrk="([^\.]+)\./,
+    /// _rad: /<rad>([^<]+)<\/rad>/,
+    /// _dos: /<art\s+mrk="\$Id:\s+([^\.]+)\.xml|<drv\s+mrk="([^\.]+)\./,
     _var: /<var>[^]*<\/var>/g,
     _ofc: /<ofc>[^]*<\/ofc>/g,
     _klr: /<klr[^>]*>[^]*<\/klr>/g,
@@ -61,14 +61,14 @@ export class XmlStrukt extends Tekst {
   };
 
   // enŝovoj por montri la elementojn laŭ tipo en hieraĥio
-  private static indents: {[el in XEl]: string} = {
+  const indents: {[el in XEl]: string} = {
     xml: "", art: "", subart: "\u25b8\u00a0", drv: "\u2014 ", subdrv: "\u00a0\u2014 ", 
     snc: "\u00a0\u00a0\u00a0\u22ef ", subsnc: "\u00a0\u00a0\u00a0\u22ef\u22ef "
   };
 
 
   // signoj por koncize reprezenti la elementojn en elekto-listo
-  private static elements: {[el in XEl]: string}  = {
+  const elements: {[el in XEl]: string}  = {
     art: "", xml: "", subart: "\u24d0",
     drv: "\u24b9", subdrv: "\u24d3", snc: "\u24c8", subsnc: "\u24e2"
   }
@@ -78,9 +78,8 @@ export class XmlStrukt extends Tekst {
    * Tio estas listo de (ingigitaj) subtekstoj por ĉiu el kiuj la listo enhavos objekton 
    * @param elektenda - se donita tio estas la elektita subteksto kaj estos markita en la revokfunkcio onaddsub (4-a argumento: true)
    */
-  static struktur_analizo(tekst: Tekst, elektenda?: string) {
-      const re_stru = XmlStrukt.re_stru;
-      const xmlteksto = tekst.teksto;
+  export function struktur_analizo(tekst: Tekst, elektenda?: string) {
+      const xmlteksto = tekst.teksto_sensinkronigo;
   
       /**
        * Ekstraktu la XML-atributon 'mrk' el la subteksto
@@ -205,9 +204,9 @@ export class XmlStrukt extends Tekst {
         
         // kunmetu etikedon por la peco el elementnomo kaj sufikso
         const suff = subt.kap ? subt.kap : subt.mrk||'';
-        subt.dsc = XmlStrukt.indents[subt.el as XEl] + (
+        subt.dsc = indents[subt.el as XEl] + (
           subt.el!='art'? 
-            XmlStrukt.elements[subt.el as XEl]+ (suff?' '+suff:' ('+subt.el+')') 
+            elements[subt.el as XEl]+ (suff?' '+suff:' ('+subt.el+')') 
             : suff);
   
         // ĉe la kapvorto de la artikolo ekstraktu la radikon
@@ -237,8 +236,9 @@ export class XmlStrukt extends Tekst {
      * Trovas la radikon de artikolo
      * @param tekst 
      */
-    static radiko(tekst: Tekst): string|undefined {
-      const mr = tekst.teksto.match(XmlStrukt.re_stru._rad);
+    /*
+    export function radiko(tekst: Tekst): string|undefined {
+      const mr = tekst.teksto.match(re_stru._rad);
 
       if (mr) {
         const rad = mr[1]
@@ -247,17 +247,19 @@ export class XmlStrukt extends Tekst {
 
         return rad;
       }
-    }
+    }*/
 
 
   /**
    * Redonas dosieronomon trovante ĝin en art-mrk aŭ drv-mrk
    * @returns La dosiernomon ekstraktitan el la trovita mrk-atributo
    */
-  static art_drv_mrk(tekst: Tekst): string|undefined {
-    var match = tekst.teksto.match(XmlStrukt.re_stru._dos);
+  /*
+  export function art_drv_mrk(tekst: Tekst): string|undefined {
+    var match = tekst.teksto.match(re_stru._dos);
     if (match) return (match[1]? match[1] : match[2]);
   };
+  */
   
   /**
      * 
@@ -503,4 +505,4 @@ export class XmlStrukt extends Tekst {
   }*/
 
 
-}
+/// }

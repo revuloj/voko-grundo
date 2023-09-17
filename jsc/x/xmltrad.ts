@@ -3,7 +3,7 @@
 (c) 2023 Wolfram Diestel
 */
 
-import { XmlStrukt, XElPos } from './xmlstrukt';
+import { XElPos } from './xmlstrukt';
 import { Tekst } from '../ui';
 
 /* FARENDA:
@@ -107,7 +107,7 @@ shanghitaj(s_id: string) {
  * kaj maplenigante la tradukobjektojn
  * @param xmlstruct 
  */
-preparu(xmlstruct: XmlStrukt) {
+preparu() {
     // this.xmlstruct = xmlstruct;
     this.tradukoj = {};
     this.tradukoj_strukt = {};

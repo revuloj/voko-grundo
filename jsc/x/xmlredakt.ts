@@ -3,9 +3,11 @@
 (c) 2021-2023 ĉe Wolfram Diestel
 */
 
-import {str_repeat, type LinePos} from './util';
-import {indent,get_indent,get_line_pos} from './tekstiloj';
-import { XmlStrukt, SDet } from './xmlstrukt';
+/// import {str_repeat, type LinePos} from './util';
+/// import {indent,get_indent,get_line_pos} from './tekstiloj';
+// import { XmlStrukt, SDet } from './xmlstrukt';
+import * as xs from './xmlstrukt';
+import { SDet } from './xmlstrukt';
 import { XmlTrad, TList, Lingvo, XPlace } from './xmltrad';
 import { Tekst } from '../ui';
 
@@ -15,7 +17,7 @@ import { Tekst } from '../ui';
 export class XmlRedakt extends Tekst {
   public radiko: string;
 
-  public xmlstruct: XmlStrukt; // la tuta teksto
+  /// public xmlstruct: XmlStrukt; // la tuta teksto
   //public aktiva: Strukturero; // aktuale redaktata subteksto
 
   //public txtarea: HTMLInputElement; // la <textarea> kun la momente redaktata teksto
@@ -31,7 +33,9 @@ export class XmlRedakt extends Tekst {
   // bezonataj regulesprimoj
   private static re_xml = {
     finspacoj: /[ \t]+\n/g,
-    trolinioj: /\n\n\n+/g
+    trolinioj: /\n\n\n+/g,
+    _rad: /<rad>([^<]+)<\/rad>/,
+    _dos: /<art\s+mrk="\$Id:\s+([^\.]+)\.xml|<drv\s+mrk="([^\.]+)\./,
   };
   
   private static re_txt = {
@@ -70,7 +74,7 @@ export class XmlRedakt extends Tekst {
     fonkonservo = 20) 
     {
     super(textarea,{
-      analizo: XmlStrukt.struktur_analizo,
+      analizo: xs.struktur_analizo,
       post_aldono: post_aldono
     })
     /* this.txtarea = document.getElementById(ta_id) as HTMLInputElement;
@@ -112,9 +116,21 @@ export class XmlRedakt extends Tekst {
    * @param xml 
    */
   setText(xml: string) {
-    this.xmlstruct = new XmlStrukt(xml,this.onaddsub);  
+    /// this.xmlstruct = new XmlStrukt(xml,this.onaddsub);  
+    function trovu_radikon(): string|undefined {
+      const mr = xml.match(XmlRedakt.re_xml._rad);
 
-    this.radiko = XmlStrukt.radiko(this);
+      if (mr) {
+        const rad = mr[1]
+        .replace(/\s+/,' ')
+        .trim();  // [^] = [.\r\n]
+    
+        return rad;
+      }  
+    }
+    
+    this.radiko = trovu_radikon(); /// xs.radiko(this);
+    this.teksto = xml;
     // elektu la unuan (art)
     // this.elekto = this.xmlstruct.strukturo[0];
     // this.txtarea.value = this.xmlstruct.getSubtext(this.elekto);
@@ -123,6 +139,7 @@ export class XmlRedakt extends Tekst {
 
     this._ŝanĝnombro = 0;
   };
+
 
   /**
    * La radiko de la kapvorto, kiel eltrovita dum strukturanalizo.
@@ -139,7 +156,9 @@ export class XmlRedakt extends Tekst {
    * @returns la dosiernomo
    */
   get dosiero(): string|undefined {
-    return XmlStrukt.art_drv_mrk(this);
+    /// return xs.art_drv_mrk(this);
+    var match = this.teksto.match(XmlRedakt.re_xml._dos);
+    if (match) return (match[1]? match[1] : match[2]);
   };
 
   /**
@@ -417,7 +436,7 @@ export class XmlRedakt extends Tekst {
     let xml = this.redakt_teksto;
   
     // kolektu unue la tradukojn profunde en la aktuala subteksto
-    this.xmltrad.preparu(this.xmlstruct);
+    this.xmltrad.preparu();
     this.xmltrad.collectXml(xml,false,true); // profunde, normigu
 
     // se temas pri subdrv, snc, subsnc ni kolektu ankaŭ de la parencoj,

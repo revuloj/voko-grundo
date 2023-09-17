@@ -1265,7 +1265,7 @@ export namespace redaktilo {
       });    
 
 
-      xmlarea = new XmlRedakt("r:xmltxt",on_xml_add_sub);
+      xmlarea = new XmlRedakt("#r\\:xmltxt",on_xml_add_sub);
       load_xml(params); // se doniĝis ?art=xxx ni fone ŝargas tiun artikolon
 
       const klvr = document.getElementById("r:klavaro");
