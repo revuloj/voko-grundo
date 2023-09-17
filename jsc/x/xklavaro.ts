@@ -64,6 +64,33 @@ export class XKlavaro {
     public lasta_fokuso?: string;
     public klavoj: string;
 
+    static signoj: u.StrObj = {
+        "\u2015": "longa streko",
+        "\u2013": "mezlonga streko",
+        "\u00b7": "mezpunkto", 
+        "\u2AFD": "versrompo",
+        "\xa0": "spaco nerompebla",
+        "\u202f": "spaceto nerompebla"
+    }
+
+    static elementoj: u.StrObj = {
+        ctl: "citilo-elemento",
+        mis: "misstilo-elemento",
+        nom: "nomo (ne-e-a)",
+        nac: "nacilingva vorto",
+        esc: "escepta vorto",
+        ind: "indeksero",   
+        var: "variaĵo de kapvorto",
+        frm: "formulo"                    
+    };
+
+    static krampoj: u.StrObj = {
+        "()": "rondaj krampoj",
+        "[]": "rektaj krampoj",
+        '„“': "citiloj",
+        "‚‘": "simplaj citiloj"
+    }
+
 
     /**
      * Kreas XML-ekran-klavaron. La klavaro efikas ene de kadra dialogo. Fokusŝanĝoj pri enhavataj input- kaj textarea-elementoj
@@ -138,33 +165,26 @@ export class XKlavaro {
             let klv = klavoj[i];
             // unuopa signo -> simbolo-klavo
             if (klv.length == 1) {
+                const title = XKlavaro.signoj[klv]||'';
                 switch (klv) {
                     case '\xa0':
-                        html += '<div class="klv" data-btn="&nbsp;" title="spaco nerompebla">]&nbsp;[</div>';
+                        html += `<div class="klv" data-btn="&nbsp;" title="${title}">]&nbsp;[</div>`;
                         break;
                     case '\u202f':
-                        html += '<div class="klv" data-btn="&#x202f;" title="spaceto nerompebla">][</div>';
+                        html += `<div class="klv" data-btn="&#x202f;" title="${title}">][</div>`;
                         break;
                     default:
-                        html += '<div class="klv" data-btn="' + klv + '">' + klv + '</div>';
+                        html += `<div class="klv" data-btn="${klv}" title="${title}">${klv}</div>`;
                 } 
             // duopa signo -> enkrampiga
             } else if (klv.length == 2) {
-                html += '<div class="klv elm_btn" data-cmd="'+klv+'">' + klv[0] + '&hellip;' + klv[1] +'</div>';
+                const title = XKlavaro.krampoj[klv];
+                html += `<div class="klv elm_btn" data-cmd="${klv}" title="${title}">${klv[0]}&hellip;${klv[1]}</div>`;
             // pli longaj estas elemento-butonoj k.s.
             } else {
-                const elmj: {[s in string]: string} = {
-                    ctl: "citilo-elemento",
-                    mis: "misstilo-elemento",
-                    nom: "nomo (ne-e-a)",
-                    nac: "nacilingva vorto",
-                    esc: "escepta vorto",
-                    ind: "indeksero",   
-                    var: "variaĵo de kapvorto",
-                    frm: "formulo"                    
-                };
-                if (klv in elmj) {
-                    html += '<div class="klv elm_btn" data-cmd="' + klv + '" title="' + elmj[klv] + '">' + klv + '</div>';
+                if (klv in XKlavaro.elementoj) {
+                    const title = XKlavaro.elementoj[klv]
+                    html += `<div class="klv elm_btn" data-cmd="${klv}" title="${title}">${klv}</div>`;
                 } else {
                     switch (klv) {
                         /*
