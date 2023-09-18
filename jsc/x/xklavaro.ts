@@ -6,7 +6,8 @@
 //import '../u/ht_util';
 import * as u from '../u';
 import {indent,get_indent,kameligo,minuskligo,get_line_pos} from './tekstiloj';
-import {Xlist} from './xlisto';
+import { Xlist } from './xlisto';
+import { Klavar } from '../ui';
 
 /*
 ctl: citilo-elemento
@@ -32,6 +33,9 @@ type Reghimpremo = (e: Event, r: {cmd: Reghimo}) => void;
 
 console.debug("Instalante la klavarfunkciojn...");
 
+/**
+ * @deprecated
+ */
 export function xpress(event: KeyboardEvent) {
     const key = event.key;
     const trg = event.target;
@@ -39,6 +43,72 @@ export function xpress(event: KeyboardEvent) {
         && (key == 'x' || key == 'X')) {   // X or x
         const res = xklavo(trg,key);
         if (!res) event.preventDefault();
+    }
+}
+
+/**
+ * Ebligas ŝanĝi la tajpmetodon por elemento al x-metodo, t.e. 
+ * aŭtaomta traduko de cx -> ĉ, ĉx -> cx, ... ux -> ŭ, ŭx -> ux
+ * Do unu "x" malantaŭ konverna litero transformas al supersigna litero.
+ * Duobla "xx" malfaras tion aldonante normalan "x" post al litero.
+ * La donita xbutono estas buton-elemento per kiu oni povas ŝalti inter
+ * normala tajpado kaj x-tajpado por supersignoj.
+ */
+export class XTajpo {
+    public elementoj: Array<HTMLInputElement|HTMLTextAreaElement>;
+    public xbutono: HTMLInputElement|HTMLButtonElement;
+    public aktiva: HTMLElement;
+
+    constructor (
+        elementoj: Array<HTMLInputElement|HTMLTextAreaElement|string>, 
+        xbutono: HTMLInputElement|HTMLButtonElement|string) {
+
+            // pli bone uzu WeakSet, ĉar elementoj povas malaperi!
+        this.elementoj = [];
+
+        elementoj.forEach((e) => {
+            this.aldonu(e);
+        });
+
+        const xbtn = (typeof xbutono == "string")? document.getElementById(xbutono) : xbutono;
+        if (xbtn instanceof HTMLInputElement || xbtn instanceof HTMLButtonElement)
+            this.xbutono = xbtn;
+
+
+        this.xbutono.addEventListener("click",this.xŝalto.bind(this));
+    }
+    
+    aldonu(element: HTMLInputElement|HTMLTextAreaElement|string) {
+        const el = (typeof element == "string")? document.getElementById(element) : element;
+        if (el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement) {
+            this.elementoj.push(el);
+            Klavar.aldonu(el,"KeyX",this.xreago.bind(this));
+        } else
+            throw "Ne valida elementtipo "+el?.id;
+    }
+
+    xŝalto(event: Event) {
+        const btn = event.target;
+        if (btn instanceof HTMLInputElement || btn instanceof HTMLButtonElement) {
+            event.preventDefault();
+            btn.value = ""+(1 - parseInt(btn.value));
+
+            // saltu al la enigkampo por tuj ektajpi
+            if (this.aktiva) this.aktiva.focus();
+        }
+    }
+
+    xreago(event: KeyboardEvent) {
+        const el = event.currentTarget;  
+        if (el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement) {
+            if (event.altKey) {	// Alt-x  --> ŝanĝu tajpmetodon cx <-> ĉ
+                this.xbutono.value = ""+(1-parseInt(this.xbutono.value) || 0);
+                event.preventDefault();
+            } else if (this.xbutono.value == "1" && ! event.ctrlKey && ! event.metaKey) {
+                const res = xklavo(el,event.key);
+                if (!res) event.preventDefault();
+            }
+        }
     }
 }
 
@@ -553,7 +623,7 @@ export class XKlavaro {
 }
 
 
-function xklavo(el: HTMLInputElement|HTMLTextAreaElement, key: string) {
+function xklavo(el: HTMLInputElement|HTMLTextAreaElement, key: string): boolean {
 
     const cx1: any = {
         s: '\u015D',

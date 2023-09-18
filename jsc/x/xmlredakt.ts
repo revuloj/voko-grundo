@@ -404,7 +404,8 @@ export class XmlRedakt extends Tekst {
       event.preventDefault();
     });
 
-    // X aŭ x
+    // X aŭ x --- uzu xklavar/XTajpo!
+    /*
     klv.aldonu("KeyX",(event) => {
       // PLIBONIGU: tion movu al reaktilo.ts, ĉar xmlRedakt ne sciu
       // pri la butono r:cx; aŭ aldonu ŝaltilon "boolean" tie ĉi
@@ -436,7 +437,7 @@ export class XmlRedakt extends Tekst {
           event.preventDefault();
         }          
       }
-    });
+    });*/
 
   }
 

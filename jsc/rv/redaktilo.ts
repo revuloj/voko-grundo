@@ -418,7 +418,7 @@ export namespace redaktilo {
    */
   export function store_preferences() {
     var prefs: {[key: string]: any} = {};
-    for (var key of ['r:redaktanto','r:trdlng','r:klrtip','r:reftip','r:sxangxo','r:cx','r:xklvr']) {
+    for (var key of ['r:redaktanto','r:trdlng','r:klrtip','r:reftip','r:sxangxo','r:xklvr']) {
       const el = document.getElementById(key) as HTMLInputElement;
       if (el) prefs[key] = el.value;
     }
@@ -466,10 +466,10 @@ export namespace redaktilo {
   function restore_preferences_xml() {
     const str = window.localStorage.getItem("redaktilo_preferoj");
     const prefs = (str? JSON.parse(str) : {});
-    const cx = document.getElementById('r:cx') as HTMLInputElement;
+    /// const cx = document.getElementById('r:cx') as HTMLInputElement;
     const xklvr = document.getElementById('r:xklvr') as HTMLInputElement;
-    cx.value = prefs['r:cx'] || 0;
-    if (prefs['r:cx']) {
+    /// cx.value = prefs['r:cx'] || 0;
+    if (prefs['r:xklvr']) {
       xklvr.value = "1";
       x.show("r:klavaro");
     } else {
@@ -1248,12 +1248,15 @@ export namespace redaktilo {
       sf(0, 0, 1);
       //if (!xmlarea) 
 
-      // ŝanĝu tekston al nurlege
+      // ŝanĝu tekston al lege/skribe
       const xmltxt = document.getElementById("r:xmltxt") as HTMLInputElement;
       xmltxt.removeAttribute("readonly");
 
-      const xklvr = document.getElementById("r:xklvr") as HTMLInputElement;
+      // x-tajpilo
+      new x.XTajpo(["r:xmltxt"],"x:cx");
 
+      // ŝaltilo por la ekranklavaro (kun butonoj por apartaj signoj, elementoj, fakoj ktp.)
+      const xklvr = document.getElementById("r:xklvr") as HTMLInputElement;
       xklvr.addEventListener("click",
         () => {
           const pressed = ""+(1 - parseInt(xklvr.value));
@@ -1266,17 +1269,20 @@ export namespace redaktilo {
       });    
 
       // XML-redakt-kesto
+      xmlarea = new XmlRedakt("#r\\:xmltxt",on_xml_add_sub,undefined,show_pos);
+/*
       const r_xml = document.getElementById("r:xmltxt");
       if (r_xml) {
         xmlarea = new XmlRedakt(r_xml,on_xml_add_sub,undefined,show_pos);
         // T-klavkombinoj permesu aldoni tradukŝablonon rapide
-        Klavar.aldonu(r_xml,"KeyT",(event) => {
-          if (event.ctrlKey || event.altKey) {
-            insert_xml("trd_lng");
-            event.preventDefault();
-          }
-        });  
-      }
+        // ne necesa, dum ni havas atributon 'accesskey' ĉe la redaktbutonoj
+        // Klavar.aldonu(r_xml,"KeyT",(event) => {
+        //   if (event.ctrlKey || event.altKey) {
+        //     event.preventDefault();
+        //     insert_xml("trd_lng");
+        //   }
+        // });  
+      }*/
 
       load_xml(params); // se doniĝis ?art=xxx ni fone ŝargas tiun artikolon
 
@@ -1334,13 +1340,14 @@ export namespace redaktilo {
     document.getElementById('r:art_strukturo')
       .addEventListener("change",struktur_elekto);
 
+      /*
     document.getElementById("r:cx")
       .addEventListener("click",function(event) {
         event.preventDefault();
         var cx = event.currentTarget as HTMLInputElement;
         cx.value = ""+(1 - parseInt(cx.value)) || "0"; 
         document.getElementById('r:xmltxt').focus();
-    });
+    });*/
 
   }
 

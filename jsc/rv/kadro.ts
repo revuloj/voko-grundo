@@ -310,12 +310,14 @@ x.when_doc_ready(function() {
         onclick("x:rigardo_btn",()=>{ t_main.transiro("red_rigardo"); });
         //t_main.je("x:rigardo_btn","click","red_rigardo");
 
+        new x.XTajpo(["x:q"],"x:cx");
+        /*
         onclick("x:cx", (event: Event) => { 
             var cx = <HTMLInputElement>event.currentTarget;
             cx.value = ""+(1 - parseInt(cx.value)); 
             const xq = document.getElementById('x:q'); 
             if (xq) xq.focus();
-        });
+        });*/
 
         
         let query = document.getElementById("x:q");
@@ -331,8 +333,10 @@ x.when_doc_ready(function() {
             //t_nav.je("x:q","keydown","serĉo");
 
             //var query = document.getElementById("x:q");
+            /*
             query.addEventListener("keyup",function(event) {
                 const trg = event.target as HTMLInputElement;
+                
                 const xcx = document.getElementById("x:cx") as HTMLInputElement;
                 //console.debug("which: "+event.which+" code:"+event.code + " key: "+ event.key);
                 if (event.key == "x" || event.key == "Shift") { // x-klavo
@@ -353,7 +357,7 @@ x.when_doc_ready(function() {
                             trg.value = s1;    
                     }
                 }
-            });
+            });*/
         }
         
         document.body 
