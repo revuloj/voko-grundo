@@ -33,6 +33,8 @@ declare global {
 const revo_url = 'https://' + u.agordo.revo_url; //reta-vortaro.de';
 
 export const revo_listoj = new RevoListoj('../voko');
+export var xtajpo; 
+
 
 //var sercho_focused_button = null;
 //var change_count = 0;
@@ -120,6 +122,9 @@ export default function() {
             DOM.e("#art_strukturo option[value='"+subt.id+"']")?.setAttribute('selected','selected');
         }       
     });
+    // aktivigu x-tajpadon
+    xtajpo = new x.XTajpo(['xml_text']);
+
     /// tion nun faras XmlRedakt mem DOM.klavpremo("#xml_text",x.xpress);
     DOM.ŝanĝo("#art_strukturo", function(event) {
         const val = (event.target as HTMLInputElement).value;
@@ -314,8 +319,11 @@ export default function() {
         );
         xklv.elemento_klavoj(klv);
     }
-    DOM.klavpremo("#sercho_sercho",x.xpress);
-    DOM.klavpremo("#re_radiko",x.xpress);
+    /// DOM.klavpremo("#sercho_sercho",x.xpress);
+    /// DOM.klavpremo("#re_radiko",x.xpress);
+
+    xtajpo.aldonu("sercho_sercho");
+    xtajpo.aldonu("re_radiko");
 
     new List("#sercho_trovoj","dt,li,.bildstriero");
     /*

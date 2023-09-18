@@ -35,7 +35,7 @@ console.debug("Instalante la klavarfunkciojn...");
 
 /**
  * @deprecated
- */
+
 export function xpress(event: KeyboardEvent) {
     const key = event.key;
     const trg = event.target;
@@ -44,7 +44,7 @@ export function xpress(event: KeyboardEvent) {
         const res = xklavo(trg,key);
         if (!res) event.preventDefault();
     }
-}
+}*/
 
 /**
  * Ebligas ŝanĝi la tajpmetodon por elemento al x-metodo, t.e. 
@@ -61,7 +61,7 @@ export class XTajpo {
 
     constructor (
         elementoj: Array<HTMLInputElement|HTMLTextAreaElement|string>, 
-        xbutono: HTMLInputElement|HTMLButtonElement|string) {
+        xbutono?: HTMLInputElement|HTMLButtonElement|string) {
 
             // pli bone uzu WeakSet, ĉar elementoj povas malaperi!
         this.elementoj = [];
@@ -73,12 +73,13 @@ export class XTajpo {
         // unua donita estu la aktiva ĝis evtl. plia aldono aŭ ŝanĝo
         this.aktiva = this.elementoj[0];
 
-        const xbtn = (typeof xbutono == "string")? document.getElementById(xbutono) : xbutono;
-        if (xbtn instanceof HTMLInputElement || xbtn instanceof HTMLButtonElement)
-            this.xbutono = xbtn;
-
-
-        this.xbutono.addEventListener("click",this.xŝalto.bind(this));
+        if (xbutono) {
+            const xbtn = (typeof xbutono == "string")? document.getElementById(xbutono) : xbutono;
+            if (xbtn instanceof HTMLInputElement || xbtn instanceof HTMLButtonElement)
+                this.xbutono = xbtn;
+    
+            this.xbutono.addEventListener("click",this.xŝalto.bind(this));
+        }
     }
     
     aldonu(element: HTMLInputElement|HTMLTextAreaElement|string) {
@@ -106,9 +107,13 @@ export class XTajpo {
         const el = event.currentTarget;  
         if (el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement) {
             if (event.altKey) {	// Alt-x  --> ŝanĝu tajpmetodon cx <-> ĉ
+
                 this.xbutono.value = ""+(1-parseInt(this.xbutono.value) || 0);
                 event.preventDefault();
-            } else if (this.xbutono.value == "1" && ! event.ctrlKey && ! event.metaKey) {
+
+            } else if ((!this.xbutono || this.xbutono.value == "1") 
+                && ! event.ctrlKey && ! event.metaKey) {
+
                 const res = xklavo(el,event.key);
                 if (!res) event.preventDefault();
             }

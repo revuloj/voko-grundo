@@ -9,13 +9,13 @@
 import * as u from '../u';
 import * as x from '../x';
 
-import { xpress } from '../x';
+/// import { xpress } from '../x';
 import { DOM, Dialog, Menu, Grup, Slipar, Buton, Elektil, List, Propon, Valid, Eraro } from '../ui';
 
 import * as sbl from './sxablonoj';
 import { Artikolo } from './ui_art';
 import { Erarolisto } from './ui_err';
-import { revo_listoj } from './ui_tabl';
+import { revo_listoj, xtajpo } from './ui_tabl';
 
 import { XMLReferenco, XMLReferencGrupo, XMLRimarko, XMLEkzemplo, 
          XMLFonto, XMLSenco, XMLDerivaĵo, XMLBildo, SncŜablono } from './sxabloniloj';
@@ -25,7 +25,6 @@ import { show_error_status } from './ui_err.js';
 
 type NovaArt = { dos: string, rad: string, fin: string, dif: string };
 //type ShargArt = { dosiero: string };
-
 
 /**
  * Preparas ĉiujn dialogojn
@@ -82,8 +81,11 @@ export default function() {
             undefined) // postenmeto
         .elemento_klavoj(klv);
     };
-    DOM.klavpremo("#krei_rad",xpress);
-    DOM.klavpremo("#krei_dif",xpress);
+    /// DOM.klavpremo("#krei_rad",xpress);
+    /// DOM.klavpremo("#krei_dif",xpress);
+
+    xtajpo.aldonu("krei_rad");
+    xtajpo.aldonu("krei_dif");
 
     //>>>>>>>> dialogo: Artikolon ŝargi
     new Dialog("#shargi_dlg", {
@@ -116,7 +118,8 @@ export default function() {
             DOM.elektu("#shargi_sercho");
         }
     });
-    DOM.klavpremo("#shargi_sercho",xpress);
+    /// DOM.klavpremo("#shargi_sercho",xpress);
+    xtajpo.aldonu("shargi_sercho");
     new Propon("#shargi_sercho", {
         source: shargo_dlg_serĉo,
         select: function(event,ui) { 
@@ -263,9 +266,13 @@ export default function() {
             }
         }
     }); 
-    DOM.klavpremo("#referenco_listo",xpress);
-    DOM.klavpremo("#referenco_sercho",xpress);
-    DOM.klavpremo("#referenco_enhavo",xpress);
+    /// DOM.klavpremo("#referenco_listo",xpress);
+    /// DOM.klavpremo("#referenco_sercho",xpress);
+    /// DOM.klavpremo("#referenco_enhavo",xpress);
+
+    xtajpo.aldonu("referenco_listo");
+    xtajpo.aldonu("referenco_sercho");
+    xtajpo.aldonu("referenco_enhavo");
 
     Valid.aldonu("#referenco_sercho", {
         err_to: "#referenco_error",
@@ -341,11 +348,17 @@ export default function() {
         if (url) DOM.al_v("#ekzemplo_url",x.amp_url(url));
     });
 
-    DOM.klavpremo("#ekzemplo_frazo",xpress);
-    DOM.klavpremo("#ekzemplo_bib",xpress);
-    DOM.klavpremo("#ekzemplo_vrk",xpress);
-    DOM.klavpremo("#ekzemplo_aut",xpress);
-    DOM.klavpremo("#ekzemplo_lok",xpress);
+    /// DOM.klavpremo("#ekzemplo_frazo",xpress);
+    /// DOM.klavpremo("#ekzemplo_bib",xpress);
+    /// DOM.klavpremo("#ekzemplo_vrk",xpress);
+    /// DOM.klavpremo("#ekzemplo_aut",xpress);
+    /// DOM.klavpremo("#ekzemplo_lok",xpress);
+
+    xtajpo.aldonu("ekzemplo_frazo");
+    xtajpo.aldonu("ekzemplo_bib");
+    xtajpo.aldonu("ekzemplo_vrk");
+    xtajpo.aldonu("ekzemplo_aut");
+    xtajpo.aldonu("ekzemplo_lok");
     
     //>>>>>>>> dialogo: Enmeti bildon
     new Dialog("#bildo_dlg", { 
@@ -399,7 +412,8 @@ export default function() {
             undefined)
         .elemento_klavoj(klv);
     }
-    DOM.klavpremo("#bildo_frazo",xpress);
+    /// DOM.klavpremo("#bildo_frazo",xpress);
+    xtajpo.aldonu("bildo_frazo");
 
     ///>>>>>>>> dialogo: Enmeti derivaĵon
     new Dialog("#derivajho_dlg", {
@@ -433,8 +447,11 @@ export default function() {
             undefined)
         .elemento_klavoj(klv);
     }
-    DOM.klavpremo("#derivajho_kap",xpress);
-    DOM.klavpremo("#derivajho_dif",xpress);
+    /// DOM.klavpremo("#derivajho_kap",xpress);
+    /// DOM.klavpremo("#derivajho_dif",xpress);
+
+    xtajpo.aldonu("derivajho_kap");
+    xtajpo.aldonu("derivajho_dif");
 
     //>>>>>>>> dialogo: Enmeti sencon
     new Dialog("#senco_dlg", {
@@ -466,7 +483,8 @@ export default function() {
             undefined)
         .elemento_klavoj(klv);
     }
-    DOM.klavpremo("#senco_dif",xpress);
+    /// DOM.klavpremo("#senco_dif",xpress);
+    xtajpo.aldonu("senco_dif");
 
     //>>>>>>>> dialogo: Enmeti tradukojn
     traduko_dlg_preparo();
@@ -579,7 +597,8 @@ export default function() {
             undefined)
         .elemento_klavoj(klv);
     }
-    DOM.klavpremo("#rimarko_rim",xpress);
+    /// DOM.klavpremo("#rimarko_rim",xpress);
+    xtajpo.aldonu("rimarko_rim");
 
     //>>>>>>>> eraro-dialogo
     new Dialog("#error_dlg", {
@@ -1499,7 +1518,8 @@ function kiam_elektis_sxablonon(event) {
     //$("#sxablono_xml input[type='checkbox']").click(sxablono_checkbox_click);
     DOM.klak("#sxablono_xml b.sxbl",sxablono_strike_click);
     DOM.klak("#sxablono_xml span.sxbl",sxablono_span_click);
-    DOM.klavpremo("#sxablono_xml input",xpress);
+    ///DOM.klavpremo("#sxablono_xml input",xpress);
+    document.querySelectorAll("#sxablono_xml input").forEach((i) => xtajpo.aldonu(<HTMLInputElement>i));
 }
 
 function sxablono_button_click(event) {
