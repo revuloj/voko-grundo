@@ -14,6 +14,9 @@ import { XMLArtikolo } from './sxabloniloj';
 
 console.debug("Instalante la artikolfunkciojn...");
 
+// PLIBONIGU: laŭeble ŝovu ĉiujn restintojn funkciojn al XmlRedakt
+// kaj forigu la klason Artikolo poste
+
 export class Artikolo extends XmlRedakt {
 
     /*
@@ -64,11 +67,12 @@ export class Artikolo extends XmlRedakt {
 ///        _esc: new RegExp('<esc[^>]*>[^]*?</esc\\s*>','g')
 ///    };
 
+/*
     static regex_xml = {
         _spc: new RegExp('\\s+/>','g'),
         _amp: new RegExp('&amp;','g'),
         _ent: new RegExp('&([a-zA-Z0-9_]+);','g')
-    };
+    };*/
 
     /*
     public opcioj: {
@@ -110,9 +114,9 @@ export class Artikolo extends XmlRedakt {
         /// this._change_count = 0;
 
         this._on({
-            dragover: this._dragOver,
-            drop: this._drop,
-            keydown: this._keydown, // traktu TAB por enŝovoj
+            /// dragover: this._dragOver,
+            /// drop: this._drop,
+            keydown: this._keydown // traktu TAB por enŝovoj
             //keypress: this._keypress, // traktu linirompon
             /// keyup: this._keyup, // traktu tekstŝanĝojn
             /// focus: function(event) { this._trigger("poziciŝanĝo",event,null); }, 
@@ -162,7 +166,8 @@ export class Artikolo extends XmlRedakt {
     // aktualigu artikolon el data
     load(dosiero,data) {
         /// const xmlarea = this.opcioj.xmlarea;
-        this.teksto = data;
+        ///this.teksto = data;
+        this.setText(data);
 
         //var e = this.element;
         //e.val(data);
@@ -202,6 +207,7 @@ export class Artikolo extends XmlRedakt {
         this._trigger("change");
     };*/
 
+    /*
     _dragOver(event) {
         event.stopPropagation();
         event.preventDefault();
@@ -230,6 +236,7 @@ export class Artikolo extends XmlRedakt {
             reader.readAsText(file); 
         }       
     };
+    */
 
     /**
      * PLIBONIGU: tion povus fari la klaso XmlRedakt mem, ĉu?
@@ -562,6 +569,7 @@ export class Artikolo extends XmlRedakt {
         return tradukoj;
     };*/
 
+    /*
     enmetu_tradukojn() {
         /// const xmlarea = this.opcioj.xmlarea;
         const xmltrad = this.xmltrad;
@@ -580,7 +588,7 @@ export class Artikolo extends XmlRedakt {
         
         //this.element.change();
         this._trigger("change");
-    };
+    };*/
 /*
     drv_before_cursor() {
         //var line_pos = this.element.getCursorLinePos();

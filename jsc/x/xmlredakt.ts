@@ -124,6 +124,12 @@ export class XmlRedakt extends Tekst {
     // registru reagojn klavojn Tab, Retro, X
     this.klavreagoj();
 
+    // permesi alŝovon de XML-teksto el dosiero
+    this._on({
+      dragover: this._dragOver,
+      drop: this._drop
+    });
+
     //this.structure_selection = document.getElementById(struc_sel);
     //this.xmlstruct = new XmlStrukt('',post_aldono); // la tuta teksto
     this.xmltrad = new XmlTrad(this); // por redaktado de tradukoj
@@ -178,6 +184,36 @@ export class XmlRedakt extends Tekst {
     return this.xmlstruct.radiko;
   };
   */
+
+
+  _dragOver(event) {
+    event.stopPropagation();
+    event.preventDefault();
+    event.originalEvent.dataTransfer.dropEffect = 'copy';
+  };
+
+  // legu artikolon el muse alŝovita teksto
+  _drop(event) {
+      const el = this.element; //$(event.target);
+      const art = this;
+
+      event.stopPropagation();
+      event.preventDefault();
+      var file = event.originalEvent.dataTransfer.files[0]; // first of Array of all files
+      if ( file && file.type.match(/.xml/) ) {
+          var reader = new FileReader();
+          reader.onload = function(ev) { 
+              // when finished reading file data.
+              const xml: string = ev.target?.result as string;
+              // el.val(xml);
+              /// const xmlarea = art.opcioj.xmlarea;
+              art.teksto = xml;
+              art.opcioj.reĝimo = 'redakto';
+          };
+          // start reading the file data.
+          reader.readAsText(file); 
+      }       
+  };
 
   /**
    * Redonas la dosiernomon ekstraktitan el mrk-atributo de art- aŭ drv-elemento
@@ -544,7 +580,7 @@ export class XmlRedakt extends Tekst {
    * @param shallow - true: ni serĉas nur en la unua strukturnivelo, false: ni serĉas
    * @param normalize - true: ni forigas ofc, klr, ind el la traduko, false: ni ne tuŝas ĝian strukturon
    */
-  collectTrd(xml: string, shallow: boolean=false, normalize: boolean=false) {
+  kolektu_tradukojn_xml(xml: string, shallow: boolean=false, normalize: boolean=false) {
     if (!xml) {
       xml = this.redakt_teksto||'';
       // KOREKTU: fakte ni nun kolektas en {<lng>: [trdj]}
@@ -559,7 +595,7 @@ export class XmlRedakt extends Tekst {
    * Kolektas ĉiujn tradukojn en la aktuale redaktata XML-subteksto.
    * La rezulto estos poste en la listo xmltrad.tradukoj[lng]
    */
-  collectTrdAll() {
+  kolektu_ciujn_tradukojn() {
     let xml = this.redakt_teksto;
   
     // kolektu unue la tradukojn profunde en la aktuala subteksto
@@ -584,7 +620,7 @@ export class XmlRedakt extends Tekst {
    * @param lng - la lingvokodo
    * @param trd - la aldonenda traduko
    */
-  addTrd(lng: Lingvo, trd: string) {
+  aldonu_trad_lng(lng: Lingvo, trd: string) {
     //if (! this.synced) this.sync(this.elekto); 
 
     const xml = this.redakt_teksto;
@@ -632,7 +668,7 @@ export class XmlRedakt extends Tekst {
    * @param lng - la lingvo
    * @param trdj - listo de novaj tradukoj
    */
-  replaceTrd(id: string, lng: Lingvo, trdj: TList) {
+  anstataŭigu_trad_lng(id: string, lng: Lingvo, trdj: TList) {
     if (! this.sinkrona) this.sinkronigu(this.aktiva); 
     let xml = this.subteksto({id:id});
 
@@ -719,6 +755,25 @@ export class XmlRedakt extends Tekst {
     }
   };
 
+  enmetu_tradukojn() {
+    /// const xmlarea = this.opcioj.xmlarea;
+    const xmltrad = this.xmltrad;
+
+    this.subtekst_apliku((s) => {
+        const s_t = xmltrad.shanghitaj(s.id);
+        for (let lng of Object.keys(s_t)) {
+            const trd = s_t[lng];
+            this.anstataŭigu_trad_lng(s.id,lng,trd);
+        }
+    });
+
+    this.sinkrona = false; // normale tio devus okazi per evento "change",
+             // set foriginte jquery, tio ne plu funkcias kiel antaŭe, ĉar
+             // _trigger ne kreas realan retumilan eventon, sed nur reagon laŭ opcioj.
+    
+    //this.element.change();
+    this._trigger("change");
+  };
 
   /**
    * Redonas la nmbron de ŝanĝoj faritaj per redaktoj de la teksto

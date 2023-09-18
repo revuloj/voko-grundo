@@ -1097,7 +1097,7 @@ export namespace redaktilo {
 
   /**
    * Reagas al ekstraktado de la XML-strukturo: ĉiam kiam troviĝas subteksto ni
-   * ricevas en ci tiu revokfunkcio la koncernajn informojn kaj povas aldoni listeron
+   * ricevas en ĉi tiu revokfunkcio la koncernajn informojn kaj povas aldoni listeron
    * en la elekto de subtekstoj, kiu troviĝas super la XML-redaktilo.
    * @memberof redaktilo
    * @inner
