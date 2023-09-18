@@ -186,20 +186,20 @@ export class XmlRedakt extends Tekst {
   */
 
 
-  _dragOver(event) {
+  _dragOver(event: DragEvent) {
     event.stopPropagation();
     event.preventDefault();
-    event.originalEvent.dataTransfer.dropEffect = 'copy';
+    event./*originalEvent.*/dataTransfer.dropEffect = 'copy';
   };
 
   // legu artikolon el muse alŝovita teksto
-  _drop(event) {
+  _drop(event: DragEvent) {
       const el = this.element; //$(event.target);
       const art = this;
 
       event.stopPropagation();
       event.preventDefault();
-      var file = event.originalEvent.dataTransfer.files[0]; // first of Array of all files
+      var file = event./*originalEvent.*/dataTransfer?.files[0]; // first of Array of all files
       if ( file && file.type.match(/.xml/) ) {
           var reader = new FileReader();
           reader.onload = function(ev) { 
@@ -595,7 +595,7 @@ export class XmlRedakt extends Tekst {
    * Kolektas ĉiujn tradukojn en la aktuale redaktata XML-subteksto.
    * La rezulto estos poste en la listo xmltrad.tradukoj[lng]
    */
-  kolektu_ciujn_tradukojn() {
+  kolektu_ĉiujn_tradukojn() {
     let xml = this.redakt_teksto;
   
     // kolektu unue la tradukojn profunde en la aktuala subteksto
@@ -1122,7 +1122,7 @@ export class XmlRedakt extends Tekst {
   markoj() {
       /// const xmlarea = this.opcioj.xmlarea;
       var xmlStr = this.teksto; //this.element.val();
-      var mrkoj = {};
+      var mrkoj: any = {};
 
       if (xmlStr) {
           const rx = XmlRedakt.re_mrk;
@@ -1143,7 +1143,7 @@ export class XmlRedakt extends Tekst {
   snc_sen_mrk() {
       /// const xmlarea = this.opcioj.xmlarea;
       var xmlStr = this.teksto; //this.element.val();
-      var sncoj = {};
+      var sncoj: any = {};
 
       if (xmlStr) {
           const rx = XmlRedakt.re_mrk;
@@ -1164,7 +1164,7 @@ export class XmlRedakt extends Tekst {
   klr_ppp() {
       /// const xmlarea = this.opcioj.xmlarea;
       var xmlStr = this.teksto; //this.element.val();
-      var klroj = {};
+      var klroj: any = {};
 
       if (xmlStr) {
           const rx = XmlRedakt.re_klr;

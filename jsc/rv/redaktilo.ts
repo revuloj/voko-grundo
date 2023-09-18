@@ -1547,7 +1547,7 @@ export namespace redaktilo {
                         const sp = trg.previousSibling;
                         const lng = dd.getAttribute('lang');
                         console.log('aldonu ['+lng+'] '+sp.textContent);
-                        xmlarea.addTrd(lng,sp.textContent);
+                        xmlarea.aldonu_trad_lng(lng,sp.textContent);
 
                         // montru per hoketo, ke ni nun havas la tradukon en XML
                         const li = trg.closest('li');
@@ -1607,7 +1607,7 @@ export namespace redaktilo {
         if (noto) noto.remove();
 
         // eltrovu kiujn tradukojn ni havas en la aktuala teksto
-        xmlarea.collectTrdAll();
+        xmlarea.kolektu_ĉiujn_tradukojn();
 
         elekto.querySelectorAll('dd').forEach( (dd) => {
           const lng = dd.getAttribute('lang');
