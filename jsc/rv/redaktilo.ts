@@ -1240,7 +1240,7 @@ export namespace redaktilo {
    * @memberof redaktilo
    * @param {string} params - HTTP-parametroj, el kiu ni ekstraktas la parametron 'art' por sargi la XML-fonton
    */
-  export function preparu_red(params: string) {
+  export function preparu_red(params: string, xtajpo: x.XTajpo) {
 
     // enlegu bezonaĵojn (listojn, XML-artikolon, preferojn)
     if (document.getElementById("r:xmltxt")) {
@@ -1253,7 +1253,7 @@ export namespace redaktilo {
       xmltxt.removeAttribute("readonly");
 
       // x-tajpilo
-      new x.XTajpo(["r:xmltxt"],"x:cx");
+      xtajpo.aldonu("r:xmltxt");
 
       // ŝaltilo por la ekranklavaro (kun butonoj por apartaj signoj, elementoj, fakoj ktp.)
       const xklvr = document.getElementById("r:xklvr") as HTMLInputElement;

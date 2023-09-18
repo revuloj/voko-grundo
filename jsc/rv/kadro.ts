@@ -42,6 +42,7 @@ const t_main = new Transiroj("main","start",["titolo","artikolo","red_xml","red_
 export const t_red  = new Transiroj("red","ne_redaktante",["ne_redaktante","redaktante","tradukante","sendita"]);
 
 const revo_listoj = new RevoListoj();
+let xtajpo: x.XTajpo;
  
 
 /**
@@ -310,7 +311,7 @@ x.when_doc_ready(function() {
         onclick("x:rigardo_btn",()=>{ t_main.transiro("red_rigardo"); });
         //t_main.je("x:rigardo_btn","click","red_rigardo");
 
-        new x.XTajpo(["x:q"],"x:cx");
+        xtajpo = new x.XTajpo(["x:q"],"x:cx");
         /*
         onclick("x:cx", (event: Event) => { 
             var cx = <HTMLInputElement>event.currentTarget;
@@ -678,7 +679,7 @@ function load_page(trg: string, url: string, push_state: boolean=true, whenLoade
             // transdonu la listojn al la redaktilo por poste kontrolado
             // de stiloj kaj fakoj en la XML-artikolo
             redaktilo.revo_listoj = revo_listoj;
-            redaktilo.preparu_red(params); // redaktilo-paĝo
+            redaktilo.preparu_red(params, xtajpo); // redaktilo-paĝo
             
         } else {
             // laŭbezone ankoraŭ iru al loka marko

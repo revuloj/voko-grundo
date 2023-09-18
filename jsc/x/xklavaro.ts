@@ -70,6 +70,9 @@ export class XTajpo {
             this.aldonu(e);
         });
 
+        // unua donita estu la aktiva ĝis evtl. plia aldono aŭ ŝanĝo
+        this.aktiva = this.elementoj[0];
+
         const xbtn = (typeof xbutono == "string")? document.getElementById(xbutono) : xbutono;
         if (xbtn instanceof HTMLInputElement || xbtn instanceof HTMLButtonElement)
             this.xbutono = xbtn;
@@ -83,6 +86,7 @@ export class XTajpo {
         if (el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement) {
             this.elementoj.push(el);
             Klavar.aldonu(el,"KeyX",this.xreago.bind(this));
+            this.aktiva = el;
         } else
             throw "Ne valida elementtipo "+el?.id;
     }
@@ -93,7 +97,7 @@ export class XTajpo {
             event.preventDefault();
             btn.value = ""+(1 - parseInt(btn.value));
 
-            // saltu al la enigkampo por tuj ektajpi
+            // saltu al la aktiva enigkampo por tuj ektajpi
             if (this.aktiva) this.aktiva.focus();
         }
     }
