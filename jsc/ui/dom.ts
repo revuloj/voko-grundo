@@ -13,11 +13,12 @@ declare global {
         _voko_datumo: any; // iuj datumoj alkroĉitaj al DOM-elemento
     }
 
+    /*
     interface HTMLElement {
         _voko_ui?: UIElement;
         _voko_valid?: Array<Valid>; // testoj por validigi enkroĉitaj en DOM
         _voko_klavar?: Klavar; // registritaj klav-reagoj
-    }
+    }*/
 
     interface HTMLOptionElement {
         _voko_propono?: any; // iu objekto, kiun ni provizas kun proponoj el datalist/option-elemento

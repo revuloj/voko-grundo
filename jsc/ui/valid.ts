@@ -8,27 +8,33 @@ import { Eraro } from './erar';
 
 
 export class Valid {
+    // tenas la ligojn inter la koncernaj HTML-elementoj kaj la Valid-objektoj
+    static registro = new WeakMap();
 
     static aldonu(e: HTMLElement|string, opcioj: any) {
         const el = (typeof e === "string")? document.querySelector(e) : e;
 
         if (el instanceof HTMLElement) {
             const val = new Valid(el,opcioj);
-            if (el._voko_valid) 
-                el._voko_valid.push(val)
-            else
-                el._voko_valid = [val];
+            // if (el._voko_valid) 
+            //     el._voko_valid.push(val)
+            // else
+            //     el._voko_valid = [val];
+            if ( Valid.registro.has(el) )
+                Valid.registro.get(el).push(val)
+            else 
+                Valid.registro.set(el,[val]);
         }  
     }
 
     static valida(e: HTMLElement|string) {
         const el = (typeof e === "string")? document.querySelector(e) : e;
 
-        if (el instanceof HTMLElement && el._voko_valid) {
+        if (el instanceof HTMLElement && Valid.registro.has(el)) { //el._voko_valid) {
             //return el._valid();
             let _valida_ = true;
 
-            const validigoj: Array<Valid> = el._voko_valid;
+            const validigoj: Array<Valid> = Valid.registro.get(el); /// el._voko_valid;
 
             validigoj.forEach((v) => {
                 if (! v.check()) _valida_ = false;
