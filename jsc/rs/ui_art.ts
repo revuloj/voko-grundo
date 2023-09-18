@@ -16,18 +16,21 @@ console.debug("Instalante la artikolfunkciojn...");
 
 export class Artikolo extends XmlRedakt {
 
+    /*
     static regex_mrk = {
         _rad: new RegExp('<rad>([^<]+)</rad>',''),
         _dos: new RegExp('<art\\s+mrk="\\$Id:\\s+([^\\.]+)\\.xml|<drv\\s+mrk="([^\\.]+)\\.',''),
         _mrk: new RegExp('\\smrk\\s*=\\s*"([^"]+)"','g'),
         _snc: new RegExp('<snc\\s*>\\s*(?:<[^>]+>\\s*){1,2}([^\\s\\.,;:?!()]+)','g')
     };
+    */
 
-
+/*
     static regex_klr = {
         _klr: new RegExp('<klr>\\.{3}</klr>','g')
     };
-
+    */
+/*
     static regex_drv = {
         _lbr: new RegExp('\n','g'),
         _mrk: new RegExp('<drv\\s+mrk\\s*=\\s*"([^"]+)"', ''),
@@ -37,7 +40,7 @@ export class Artikolo extends XmlRedakt {
         _fnt: new RegExp('<fnt>[^]*</fnt>','g'),
         _tl1: new RegExp('<tld\\s+lit="(.)"[^>]*>','g'),
         _tl2: new RegExp('<tld[^>]*>','g')
-    };
+    };*/
 
     
 ///    static regex_txt = {
@@ -388,6 +391,7 @@ export class Artikolo extends XmlRedakt {
         return xmlarea.getDosiero();
     };*/
 
+    /*
     // eltrovas la markojn (mrk=) de derivaĵoj, la korespondajn kapvortojn kaj liniojn
     // PLIBONIGU: ni povus preni tion supozeble nun rekte el la xmlarea-strukturo
     // kontrolu, kie ni fakte uzas drv_markoj...
@@ -490,6 +494,7 @@ export class Artikolo extends XmlRedakt {
         }
         return klroj;
     };
+    */
 
     // elprenas la tradukojn de certa lingvo el XML-artikolo
     // PLIBONIGU: uzu xmlarea por tiu funkcio!
@@ -576,7 +581,7 @@ export class Artikolo extends XmlRedakt {
         //this.element.change();
         this._trigger("change");
     };
-
+/*
     drv_before_cursor() {
         //var line_pos = this.element.getCursorLinePos();
 
@@ -592,6 +597,6 @@ export class Artikolo extends XmlRedakt {
         }
         // aliokaze redonu la unuan
         return drvoj[0];  // kaŭzas eraron, se troviĝis neniu!
-    };
+    };*/
 
 }

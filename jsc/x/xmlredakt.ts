@@ -60,6 +60,28 @@ export class XmlRedakt extends Tekst {
     _esc: new RegExp('<esc[^>]*>[^]*?</esc\\s*>','g')
   };
 
+  static re_drv = {
+    _lbr: new RegExp('\n','g'),
+    _mrk: new RegExp('<drv\\s+mrk\\s*=\\s*"([^"]+)"', ''),
+    _kap: new RegExp('<drv[^>]+>\\s*<kap>([^]*)</kap>', ''),
+    _var: new RegExp('<var>[^]*</var>','g'),
+    _ofc: new RegExp('<ofc>[^]*</ofc>','g'),
+    _fnt: new RegExp('<fnt>[^]*</fnt>','g'),
+    _tl1: new RegExp('<tld\\s+lit="(.)"[^>]*>','g'),
+    _tl2: new RegExp('<tld[^>]*>','g')
+  };
+
+  static re_mrk = {
+    _rad: new RegExp('<rad>([^<]+)</rad>',''),
+    _dos: new RegExp('<art\\s+mrk="\\$Id:\\s+([^\\.]+)\\.xml|<drv\\s+mrk="([^\\.]+)\\.',''),
+    _mrk: new RegExp('\\smrk\\s*=\\s*"([^"]+)"','g'),
+    _snc: new RegExp('<snc\\s*>\\s*(?:<[^>]+>\\s*){1,2}([^\\s\\.,;:?!()]+)','g')
+  };
+
+  static re_klr = {
+    _klr: new RegExp('<klr>\\.{3}</klr>','g')
+  };
+
   
 
 /**
@@ -975,6 +997,130 @@ export class XmlRedakt extends Tekst {
     txtarea.focus();
   };
   */
+
+  drv_before_cursor() {
+    //var line_pos = this.element.getCursorLinePos();
+
+    /// const xmlarea = this.opcioj.xmlarea;
+    const line_pos = this.pozicio;
+
+    const drvoj = this.drv_markoj();
+    for(let i=drvoj.length-1; i>=0; i--) {
+        const drv = drvoj[i];
+        if (drv.line < line_pos.lin) {
+            return drv;
+        }
+    }
+    // aliokaze redonu la unuan
+    return drvoj[0];  // kaŭzas eraron, se troviĝis neniu!
+  };
+
+  /**
+   * Eltrovas la markojn (mrk=) de derivaĵoj, la korespondajn kapvortojn kaj liniojn.
+   * Ni uzas por kontrolo de markoj (rs/ui_err) kaj enmeto de sencoj (rs/ui_dlg -> drv_before_cursor)
+   */
+  drv_markoj() {
+    /// const xmlarea = this.opcioj.xmlarea;
+    var xmlStr = this.teksto; //this.element.val();
+    var drvoj: Array<any> = [], pos = 0, line = 0;
+
+    if (xmlStr) {
+        var drv = xmlStr.split('</drv>');
+        var rx = XmlRedakt.re_drv;
+        
+        for (var i=0; i<drv.length; i++) {
+            var d = drv[i];
+            // kiom da linioj aldoniĝas?
+            var lmatch = d.match(rx._lbr);
+            var lcnt = lmatch? lmatch.length : 0;
+            // find mrk
+            var match = d.match(rx._mrk); 
+            if (match) {
+                const mrk = match[1];
+                const dpos = match.index;
+                // count lines till <cnt
+                var lmatch2 = d.slice(0,dpos).match(rx._lbr);
+                var dline = lmatch2? lmatch2.length : 0;
+                // find kap
+                match = d.match(rx._kap); 
+                if (match) {
+                    const kap = match[1]
+                    .replace(rx._var,'')
+                    .replace(rx._ofc,'')
+                    .replace(rx._fnt,'')
+                    .replace(rx._tl1,'$1~')
+                    .replace(rx._tl2,'~')
+                    .replace(',',',..')
+                    .trim();  // [^] = [.\r\n]
+
+                    drvoj.push({line: line+dline, pos: pos+dpos, mrk: mrk, kap: kap});
+                }
+            }
+            line += lcnt;
+            pos += d.length + '</drv>'.length;
+        }
+    }
+    return drvoj;
+  };
+
+  // eltrovas ĉiujn markojn (mrk=) de derivaĵoj, sencoj ktp.
+  markoj() {
+      /// const xmlarea = this.opcioj.xmlarea;
+      var xmlStr = this.teksto; //this.element.val();
+      var mrkoj = {};
+
+      if (xmlStr) {
+          const rx = XmlRedakt.re_mrk;
+          let m;
+          while ((m = rx._mrk.exec(xmlStr)) !== null) {
+              //var matches = xmlStr.match(rx._mrk);
+              let m1 = m[1];
+              if (mrkoj[m1]) mrkoj[m1] = m.index; else mrkoj[m1] = 1;
+          }
+      }
+      return mrkoj;
+  }; 
+  
+  /**
+   * Sencoj sen atributo mrk
+   * @returns 
+   */
+  snc_sen_mrk() {
+      /// const xmlarea = this.opcioj.xmlarea;
+      var xmlStr = this.teksto; //this.element.val();
+      var sncoj = {};
+
+      if (xmlStr) {
+          const rx = XmlRedakt.re_mrk;
+          let m;
+          while ((m = rx._snc.exec(xmlStr)) !== null) {
+              var mrk = m[1]; // la unua vorto post <snc>... 
+              // se dua estas majusklo ni supozas mallongigon, aliokaze ni minuskligas
+              if (mrk.length>1 && mrk[1].toLowerCase() == mrk[1]) mrk = mrk.toLowerCase();
+              sncoj[m.index] = mrk;
+          }
+      }
+      return sncoj;
+  };
+
+  /**
+   * Klarigoj el tri punktoj kie mankas []
+   */
+  klr_ppp() {
+      /// const xmlarea = this.opcioj.xmlarea;
+      var xmlStr = this.teksto; //this.element.val();
+      var klroj = {};
+
+      if (xmlStr) {
+          const rx = XmlRedakt.re_klr;
+          let m;
+          while ((m = rx._klr.exec(xmlStr)) !== null) {
+              var klr = m[1];
+              klroj[m.index] = klr;
+          }
+      }
+      return klroj;
+  };
 
 
   /**
