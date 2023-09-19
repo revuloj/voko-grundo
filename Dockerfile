@@ -34,13 +34,21 @@ RUN bin/mp2png_svg.sh
 
 # staĝo 2: nodejs: kompilu CSS kaj JS
 
-FROM ubuntu:focal as builder
+FROM ubuntu:jammy as builder
+ARG NODE_MAJOR=20
 
 # vd: https://github.com/nodesource/distributions
 # rxp, jre kaj saxonb ni bezonas nur por testoj (xml-test.sh)
-RUN apt-get update && apt-get install -y curl xsltproc rxp default-jre libsaxonb-java \
- && curl -sL https://deb.nodesource.com/setup_20.x | bash -E - \
- && apt-get install -y nodejs
+RUN apt-get update && apt-get install -y \
+ ca-certificates gnupg curl xsltproc rxp default-jre libsaxonb-java \
+ && mkdir -p /etc/apt/keyrings \
+ && curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | \
+    gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg \
+ && echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] \
+   https://deb.nodesource.com/node_${NODE_MAJOR}.x nodistro main" | \
+   tee /etc/apt/sources.list.d/nodesource.list \
+ && apt update && apt-get install -y nodejs
+
 WORKDIR /usr/app
 COPY ./ /usr/app
 COPY --from=metapost /build/ /usr/app/build/
