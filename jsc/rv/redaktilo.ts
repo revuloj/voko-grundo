@@ -19,9 +19,6 @@ import {preferoj} from '../a/preferoj';
 import {t_red, start_wait, stop_wait} from './kadro';
 import {Sercho, Lingvo} from './sercho';
 
-// vd. https://mariusschulz.com/blog/declaring-global-variables-in-typescript
-// alternative oni povus uzi alnoton ty-ignore ne la malsupraj linioj kiuj uzas MathJax
-const MathJax = (window as any).MathJax;
 
 /**
  * La nomspaco 'redaktilo' kunigas ĉiujn variablojn kaj funkciojn bezonataj

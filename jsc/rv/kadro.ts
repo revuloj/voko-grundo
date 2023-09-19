@@ -31,11 +31,6 @@ type Submeto = { state: SubmetoStato, fname: string, desc: string, time: string,
 type Bibliogr = { bib: string, aut?: string, trd?: string, tit?: string, url?: string, ald?: string, eld?: string };
 
 
-// vd. https://mariusschulz.com/blog/declaring-global-variables-in-typescript
-// alternative oni povus uzi alnoton ty-ignore ne la malsupraj linioj kiuj uzas MathJax
-const MathJax = (window as any).MathJax;
-
-
 // statoj kaj transiroj - ni uzas tri diversajn statomaŝinojn por la tri paĝoj navigilo, ĉefpago kaj redaktilo
 const t_nav  = new Transiroj("nav","start",["ĉefindekso","subindekso","serĉo","redaktilo"]);
 const t_main = new Transiroj("main","start",["titolo","artikolo","red_xml","red_rigardo"]);
