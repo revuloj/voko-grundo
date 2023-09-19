@@ -6,6 +6,14 @@
 export type StrObj = { [key: string]: string};
 export type BoolObj = { [key: string]: boolean};
 
+
+// vd. https://mariusschulz.com/blog/declaring-global-variables-in-typescript
+// alternative oni povus uzi alnoton ty-ignore en la malsupraj linioj kiuj uzas MathJax
+/// tio ne funkcias: const MathJax = (window as any).MathJax;
+declare global {
+  const MathJax: any; 
+}
+
 export namespace agordo {
 
 // rigardataj kiel konstantoj:

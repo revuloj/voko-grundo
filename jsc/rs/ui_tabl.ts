@@ -23,12 +23,6 @@ import { show_xhr_error } from './ui_dlg';
 import { vortokontrolo, xmlkontrolo, klrkontrolo, surmetita_dialogo } from './ui_err.js';
 import { vikiSerĉo, citaĵoSerĉo, regulEsprimo, verkoListo, verkoPeriodo, verkElekto, retoSerĉo, bildoSerĉo } from './ui_srch.js';
 
-// vd. https://mariusschulz.com/blog/declaring-global-variables-in-typescript
-// alternative oni povus uzi alnoton ty-ignore ne la malsupraj linioj kiuj uzas MathJax
-//const MathJax = (window as any).MathJax;
-declare global {
-    const MathJax: any; 
-}
 
 const revo_url = 'https://' + u.agordo.revo_url; //reta-vortaro.de';
 
