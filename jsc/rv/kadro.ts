@@ -960,44 +960,52 @@ function adaptu_paghon(root_el: Element, url: string) {
  * @param {*} event 
  * @returns se estas elŝuto (XML) laŭ atributo 'download' ni ne navigas sed tuj revenas.
  */
-function navigate_link(event: any) {
-    var el = event.target.closest("a");
+function navigate_link(event: Event) {
+    const trg = event.target;
+    if (trg instanceof HTMLElement) {
+        const el = trg.closest("a");
 
-    if (el && el.getAttribute("download")) return; // tion traktu la retumilo mem!
-
-    var href = el? el.getAttribute("href") : null;
-
-    if (el && href) {
-        href = el.getAttribute("href");
-        var target = ref_target(el);
+        if (el && el.getAttribute("download")) return; // tion traktu la retumilo mem!
     
-        if (href && target && target != "int") {
-            event.preventDefault();
-            // ekstera paĝo
-            if (target == "ext") {
-                window.open(href);
-
-            // redaktilo
-            } else if (target == "red") {
-                redaktu(href);
-
-            // paĝo en la ĉefa parto (main)
-            } else if (target == "main") {
-                load_page(target,normalize_href(target,href));
-                /*
-                $('#s_artikolo').load(href, //+' body>*'                            
-                    preparu_art
-                );   
-                */  
-            // paĝo en la naviga parto (nav)
-            } else if (target == "nav") {                   
-                load_page(target,normalize_href(target,href));
-                /*
-                $('#navigado').load(href+' table');
-                */
+        var href = el? el.getAttribute("href") : null;
+    
+        if (el && href) {
+            href = el.getAttribute("href");
+            var target = ref_target(el);
+        
+            if (href && target && target != "int") {
+                event.preventDefault();
+                // ekstera paĝo
+                if (target == "ext") {
+                    window.open(href);
+    
+                // redaktilo
+                } else if (target == "red") {
+                    redaktu(href);
+    
+                // paĝo en la ĉefa parto (main)
+                } else if (target == "main") {
+                    load_page(target,normalize_href(target,href));
+                    /*
+                    $('#s_artikolo').load(href, //+' body>*'                            
+                        preparu_art
+                    );   
+                    */  
+                // paĝo en la naviga parto (nav)
+                } else if (target == "nav") {
+                        // bibliografion ni legas fone el JSON, ne HTML                         
+                    if (href.indexOf("/bibliogr.")>-1) bibliogr("");
+                    else
+                        // ĉiuj aliaj pagoj estas HTML-dosieroj
+                        load_page(target,normalize_href(target,href));
+                    /*
+                    $('#navigado').load(href+' table');
+                    */
+                }
             }
         }
     }
+
 }   
 
 /**
@@ -1369,6 +1377,12 @@ function bibliogr(bib: string, sort_by?: BibOrd) {
             const enh = document.querySelector(".enhavo");
             if (enh) {
                 enh.textContent= '';
+
+                // ni ne plu legas el HTML, do manipulu table@id tie ĉi
+                const tbl = enh.closest("table");
+                if (tbl) tbl.id = "x:bibliogr";
+
+                // kreu difinliston kun la bibliograferoj
                 const dl = u.ht_element('dl');
 
                 if (json) {

@@ -1023,7 +1023,7 @@ export namespace redaktilo {
       shg.value = art; shg.setAttribute("readonly","readonly");
       /* jshint ignore:start */
       //ta.value = 
-      xmlarea.setText(
+      xmlarea.teksto =
           '<?xml version="1.0"?>\n'
         + '<!DOCTYPE vortaro SYSTEM "../dtd/vokoxml.dtd">\n'
         + '<vortaro>\n'
@@ -1046,7 +1046,7 @@ export namespace redaktilo {
         + '  <trd lng=""></trd>\n'
         + '</drv>\n'
         + '</art>\n'
-        + '</vortaro>\n');
+        + '</vortaro>\n';
       /* jshint ignore:end */
     }
 
@@ -1082,8 +1082,8 @@ export namespace redaktilo {
       function(data: string) {
           // Sukceso!
           const xmlteksto = replace_entities(data);
-          (document.getElementById("r:art") as HTMLInputElement).value = art;
-          xmlarea.setText(xmlteksto);
+          if (art) (document.getElementById("r:art") as HTMLInputElement).value = art;
+          xmlarea.teksto = xmlteksto;
         });
     } else {
       // se ne estas donita artikolo kiel parametro, ni provu legi
@@ -1100,16 +1100,19 @@ export namespace redaktilo {
    * @inner
    * @param subt - la informoj pri la subteksto
    * @param index - la nombro de la subteksto (0-art, 1..n-1 - drv/snc..., n - tuta XML)
-   * @param selected - true: temas pri la aktive redaktata subteksto, ni elektu gin en la listo
+   * @param kiel_aktiva - true: temas pri la aktive redaktata subteksto, ni elektu gin en la listo
    */
-  function on_xml_add_sub(subt: SDet, index: number, selected: boolean) {
+  function post_aldono(subt: SDet, index: number, kiel_aktiva: boolean) {
     const sel_stru = document.getElementById("r:art_strukturo");
-    if (index == 0) sel_stru.textContent = ''; // malplenigu la liston ĉe aldono de unua ero...
+    if (sel_stru) {
+      if (index == 0) sel_stru.textContent = ''; // malplenigu la liston ĉe aldono de unua ero...
 
-    if (selected) {
-      sel_stru.append(u.ht_element('option',{value: subt.id, class: subt.el, selected: 'selected'},subt.dsc));
-    } else {
-      sel_stru.append(u.ht_element('option',{value: subt.id, class: subt.el},subt.dsc));
+      if (kiel_aktiva) {
+        sel_stru.append(u.ht_element('option',{value: subt.id, class: subt.el, selected: 'selected'},subt.dsc));
+      } else {
+        sel_stru.append(u.ht_element('option',{value: subt.id, class: subt.el},subt.dsc));
+      }
+  
     }
   }
 
@@ -1266,7 +1269,7 @@ export namespace redaktilo {
       });    
 
       // XML-redakt-kesto
-      xmlarea = new XmlRedakt("#r\\:xmltxt",on_xml_add_sub,undefined,show_pos);
+      xmlarea = new XmlRedakt("#r\\:xmltxt",post_aldono,undefined,show_pos);
 /*
       const r_xml = document.getElementById("r:xmltxt");
       if (r_xml) {
