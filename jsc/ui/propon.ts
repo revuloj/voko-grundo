@@ -34,7 +34,7 @@ export class Propon extends UIElement {
 
         if (this.element instanceof HTMLInputElement) {
             this.element.setAttribute("autocomplete","off");
-            this.element.addEventListener("input",this._input.bind(this.element));
+            this.element.addEventListener("input",this._input.bind(this));
         }
 
         // se ni ricevis la proponliston kiel areo, ni tuj plenigas la elementon "datalist"
