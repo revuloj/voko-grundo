@@ -131,7 +131,7 @@ export class Tekst extends UIElement {
     /**
      * Metas la tutan tekston, poste renovigas la strukturinformojn.
      */
-    set teksto(teksto: string) {
+    public set teksto(teksto: string) {
         this._teksto = teksto;
         this.struktur_analizo();
 
@@ -148,7 +148,7 @@ export class Tekst extends UIElement {
      * Redonas la tutan tekston post eventuala sinkronigo kun la aktuala redakto
      * @returns la tuta sinkronigita teksto
      */
-    get teksto(): string {
+    public get teksto(): string {
         if (! this.sinkrona) this.sinkronigu(this.aktiva); 
         return this._teksto;
     };
@@ -340,13 +340,14 @@ export class Tekst extends UIElement {
      * Aldonas teksteron al la fino de la parto-listo. Ni aŭtomate metas/aktualigas ĝian numeron
      * @param ero  aldona objekto kun la atributoj de la strukturero
      */
-    aldonu(ero: TParto) {
+    aldonu(ero: TParto, kiel_aktiva = false) {
         ero.no = this._partoj.length;
         this._partoj.push(ero);
+        if (kiel_aktiva) this.aktiva = ero;
 
         // evtl. reago al aldono
         if (this.opcioj.post_aldono instanceof Function)
-            this.opcioj.post_aldono(ero);
+            this.opcioj.post_aldono(ero, ero.no, kiel_aktiva);
     }
 
     /**
