@@ -5,6 +5,7 @@
 import * as u from '../u';
 import {agordo as g} from '../u';
 import * as x from '../x';
+import * as s from './shargo';
 
 import {artikolo} from '../a/artikolo';
 import {preferoj} from '../a/preferoj';
@@ -12,10 +13,15 @@ import {preferoj} from '../a/preferoj';
 import {Transiroj} from '../u/transiroj';
 import {RevoListoj} from '../x/xlisto';
 
-import {Sercho, Lingvo, TrovEo, TrovTrd} from './sercho';
+import {sercho} from './sercho';
 import {redaktilo} from './redaktilo';
 
-type BibOrd = "bib"|"aut"|"tit";
+// moduloj kun funkcioj por unuopaj paĝoj
+import { plena, ktp, mx_trd, eo } from './p_plena';
+import { titolo } from './p_titolo';
+import { bibliogr } from './p_bibliogr';
+import { eraroj } from './p_eraroj';
+
 
 // keydown / keyup mankas apriore en difinoj de TypeScript...!
 declare global {
@@ -25,11 +31,6 @@ declare global {
     }
 }
   
-
-type SubmetoStato = "nov" | "trakt" | "erar" | "arkiv";
-type Submeto = { state: SubmetoStato, fname: string, desc: string, time: string, result: string };
-type Bibliogr = { bib: string, aut?: string, trd?: string, tit?: string, url?: string, ald?: string, eld?: string };
-
 
 // statoj kaj transiroj - ni uzas tri diversajn statomaŝinojn por la tri paĝoj navigilo, ĉefpago kaj redaktilo
 const t_nav  = new Transiroj("nav","start",["ĉefindekso","subindekso","serĉo","redaktilo"]);
@@ -153,7 +154,7 @@ x.when_doc_ready(function() {
 
     t_main.alvene("titolo",()=>{ 
        x.hide("x:titol_btn");
-       nombroj();
+       titolo.nombroj();
     });
 
     t_main.forire("titolo",()=>{ 
@@ -254,7 +255,7 @@ x.when_doc_ready(function() {
                 // tamen aperu bona! Tial la ĉenigo!
                 load_page("nav",g.inx_eo_url,true,()=>{
                     load_page("main",g.titolo_url,true,
-                        ()=>serchu_q(srch || "tohuvabohuo"));
+                        ()=>sercho.serchu_q(srch || "tohuvabohuo"));
                 });
             } else {
                 // anstataŭe ŝargu tiujn du el ĉefa indeks-paĝo
@@ -282,7 +283,7 @@ x.when_doc_ready(function() {
 
         //onclick("x:nav_srch_btn",(event)=>{ serchu(event) })
         onclick("x:nav_srch_btn", (event: Event) => { 
-            serchu(event);
+            sercho.serchu(event);
             // transiro aŭ lanĉu la serĉon aŭ evtl. sekvu ĝin...
         });
         //t_nav.je("x:nav_srch_btn","click","serĉo");
@@ -321,7 +322,7 @@ x.when_doc_ready(function() {
             
             query.addEventListener("keydown", function(event) {
                 if (event.key == "Enter") {  
-                    serchu(event);
+                    sercho.serchu(event);
                     // t_nav.transiro("serĉo")...
                 }
             });
@@ -365,7 +366,7 @@ x.when_doc_ready(function() {
             .addEventListener('popstate', navigate_history);    
 
         // tio vokiĝas, i.a. kiam la uzanto reŝargas la paĝon aŭ fermas la redaktilon.
-        x.do_before_unload(aktualigilo);
+        x.do_before_unload(s.aktualigilo);
 
         // kondiĉe, ke serĉo-parametro (q) estis donita en URL ni tuj serĉos
         // ĉu ni bezonos ankoraŭ originan staton "start" anstataŭ tuj "ĉefindekso"?
@@ -374,18 +375,6 @@ x.when_doc_ready(function() {
 
     }
 });
-
-/**
- * Por ebligi ŝargi freŝajn paĝojn ni altigas la version, kiu
- * estas alpendigata al GET, tiel evitante ricevi paĝojn el la loka bufro.
- */
-function aktualigilo() {
-    const akt = window.localStorage.getItem("aktualigilo");
-    const akt1 = (((akt && parseInt(akt,10)) || 0) + 1) % 30000; // +1, sed rekomencu ĉe 0 post 29999
-    // Se ni uzus sessionStorage ni post remalfermo de la retumilo denove
-    // ricevus pli malnovajn paĝ-versiojn, do ni uzas localStorage por memori la versi-numeron.
-    window.localStorage.setItem("aktualigilo",akt1.toString());
-}
 
 /**
  * Faldas-malfaldas la navigan panelon (tiu kun la indeksoj, serĉo...)
@@ -538,38 +527,6 @@ function normalize_href(target: "main"|"nav", href: string) {
     }
 }   
 
-/**
- * Kiam ni fone ŝargas ion ni montras tion per turniĝanta revo-fiŝo
- * (la serĉbutono)
- */
-export function start_wait() {
-    var s_btn = document.getElementById('x:revo_icon');
-    if (s_btn) s_btn.classList.add('revo_icon_run');
-    s_btn = document.getElementById('w:revo_icon');
-    if (s_btn) s_btn.classList.add('revo_icon_run');
-}
-
-/**
- * Post sukcesa fona ŝargo ni haltigas la turnigon de la revo-fiŝo
- * Noto: Se ni fonŝarĝas plurajn aferojn samtempe, la unua preta haltigas
- * la turniĝon. Se ni volus haltigi nur post la lasta, ni devus registri
- * ĉiun ekŝarĝon kaj kontroli, kiam la lasta revenis.
- */
-export function stop_wait() {
-    var s_btn = document.getElementById('x:revo_icon');
-    if (s_btn) s_btn.classList.remove('revo_icon_run');
-    s_btn = document.getElementById('w:revo_icon');
-    if (s_btn) s_btn.classList.remove('revo_icon_run');
-}
-
-/**
- * Se mankas paĝo petata ni montros nian apartan 404-paĝon
- * @param {*} request 
- */
-function load_error(request: any) {
-    if (request.status == 404 && request.responseURL.indexOf('404')<0) // evitu ciklon se 404.html mankas!
-        load_page("main",g.http_404_url);
-}
 
 /**
  * Ŝargas paĝon
@@ -579,7 +536,9 @@ function load_error(request: any) {
  * @param {Function} whenLoaded - ago, farenda post fonŝargo de la paĝo
  */
 function load_page(trg: string, url: string, push_state: boolean=true, whenLoaded?: Function) {
-    function update_hash() {
+
+    // traktas saltojn ene de paĝo / al certa loko en paĝo
+    function interna_salto() {
         let hash: string;
         if (url.indexOf('#') > -1) {
             hash = <string>url.split('#').pop();
@@ -639,16 +598,16 @@ function load_page(trg: string, url: string, push_state: boolean=true, whenLoade
                     t_red.transiro("ne_redaktante");
             });
         } else if (filename.startsWith("_plena")) {
-            viaj_submetoj();
-        } else if (filename == "bibliogr") {
-            bibliogr(<string>url.split('#').pop());
+            plena.viaj_submetoj();
+        /*} else if (filename == "bibliogr") {
+            bibliogr.ŝargo(<string>url.split('#').pop());*/
         } else if (filename == "eraroj") {
-            mrk_eraroj();
+            eraroj.mrk_eraroj();
         }
         index_spread();
 
         // laŭbezone ankoraŭ iru al loka marko
-        update_hash();
+        interna_salto();
     }
 
     function load_page_main(doc: Document, main: Element) {
@@ -678,7 +637,7 @@ function load_page(trg: string, url: string, push_state: boolean=true, whenLoade
             
         } else {
             // laŭbezone ankoraŭ iru al loka marko
-            update_hash();
+            interna_salto();
 
             const fn = x.getUrlFileName(url);
             const art = fn.substring(0,fn.lastIndexOf('.')); 
@@ -777,11 +736,21 @@ function load_page(trg: string, url: string, push_state: boolean=true, whenLoade
             // faru, kion poste faru donita kiel argumento
             if (whenLoaded) whenLoaded();
     },  
-    start_wait,
-    stop_wait,
+    s.start_wait,
+    s.stop_wait,
     load_error
     );
 }
+
+
+/**
+ * Se mankas paĝo petata ni montros nian apartan 404-paĝon
+ * @param {*} request 
+ */
+function load_error(request: any) {
+    if (request.status == 404 && request.responseURL.indexOf('404')<0) // evitu ciklon se 404.html mankas!
+        load_page("main",g.http_404_url);
+ }
 
 
 /**
@@ -800,147 +769,27 @@ function adaptu_paghon(root_el: Element, url: string) {
     const filename = url.split('/').pop();
     if (!filename) return;
 
-    // index Esperanto. Atentu! Ni nun uzas _plena. (vd. malsupre)
-    if ( filename.startsWith('_eo.') ) {
-        root_el.querySelectorAll(".kls_nom").forEach((n) => {
-            if (n.tagName != "SUMMARY") {
-                n.classList.add("maletendita");
-
-                n.addEventListener("click", function(event) {
-                    const trg = event.target;
-                    if (trg instanceof Element)
-                        (trg as Element).classList.toggle("maletendita");
-                });   
-            }
-        });
+    if ( filename.startsWith('_plena.') ) {
+        plena.adaptoj(root_el);
     }
-    // index "ktp.
+    else if ( filename && filename.startsWith('titolo') ) {
+        titolo.adapto(root_el);
+    } 
+    else if ( filename.startsWith('_eo.') ) {
+        // index Esperanto. Atentu! Por la elirpunkto de navigado 
+        // ni nun uzas _plena. (vd. malsupre)
+        eo.adapto(root_el);
+    }
     else if ( filename.startsWith('_ktp.') ) {
-        // hazarda artikolo
-        const hazarda = root_el.querySelector("p[id='x:Iu_ajn_artikolo'] a") ||
-                        root_el.querySelector("a[href*='hazarda_art.pl'");
-        if (hazarda) hazarda.addEventListener("click", function(event) {
-            event.preventDefault();
-            hazarda_art();
-            event.stopPropagation(); // ne voku navigate_link!
-        });       
-    }
-    else if ( filename.startsWith('_plena.') ) {
-        // hazarda artikolo
-        const hazarda = root_el.querySelector("p[id='x:Iu_ajn_artikolo'] a") ||
-                        root_el.querySelector("a[href*='hazarda_art.pl'");
-        if (hazarda) hazarda.addEventListener("click", function(event) {
-            event.preventDefault();
-            hazarda_art();
-            event.stopPropagation(); // ne voku navigate_link!
-        });
-        // en la lingva indekso metu preferatajn lingvojn supren
-        const lingvoj = root_el.querySelector("a[href*='lx_la_']")?.closest('details');
-        if (lingvoj) {
-            const p = lingvoj.querySelector('p');
-            var jam: string[] = [];
-            for (let l of preferoj.languages()) {
-                let l_ = l.split(/-/)[0];
-                if (jam.indexOf(l_)<0) { // evitu duoblaĵojn!
-                    let a = lingvoj.querySelector("a[href*='lx_"+l_+"_']");
-                    if (a && p) p.prepend(a.cloneNode(true));
-                    jam.push(l_);
-                }
-            }    
-        }
+        ktp.adapto(root_el);
     }
     else if ( filename.startsWith('mx_trd.') ) {
-        root_el.querySelectorAll("a[href^='?']").forEach((a) => {
-            var href = a.getAttribute("href");
-            a.setAttribute("href",g.mx_trd_url+href);
-        });
-        root_el.querySelectorAll("a[target='_blank']").forEach((a) => {
-            a.removeAttribute("target");
-        });
+        mx_trd.adapto(root_el);
     }
     else if ( filename.startsWith('tz_') ) {
+        // paĝoj de la tezaŭro (ĉu ni havas ankoraŭ?)
         root_el.querySelector("tr")?.classList.add("menuo");
     }
-    // serĉilo en titol- kaj serĉo-paĝoj
-    else if ( filename && filename.startsWith('titolo') ) {
-        // hazarda artikolo
-        const hazarda = root_el.querySelector("a[id='w:hazarda']");
-        if (hazarda) hazarda.addEventListener("click", function(event) {
-            event.preventDefault();
-            hazarda_art();
-        });
-
-        // adaptu serĉilon
-        const s_form = root_el.querySelector("form[name='f']");
-        const query = s_form?.querySelector("input[name='q']");
-
-        if (s_form && query) {
-            
-            const cx = s_form.querySelector("button.cx");
-            
-            //var submit = s_form.querySelector("input[type='submit']");
-            //s_form.removeAttribute("action");
-            //submit.addEventListener("click",serchu);
-            
-            query.addEventListener("keydown", function(event: KeyboardEvent) {
-                if (event.key == "Enter") {  
-                    serchu(event);
-                }
-            });
-            query.addEventListener("keyup",function(event: KeyboardEvent) {
-                const trg = event.target as HTMLInputElement;
-                const wcx = document.getElementById("w:cx") as HTMLInputElement;
-                if (event.key == "x" || event.key == "Shift") { // x-klavo 
-                    if (wcx.value == "1") {
-                        var s = trg.value;
-                        var s1 = x.ascii_eo(s);
-                        if (s != s1)
-                            trg.value = s1;
-                    }
-                }
-                // keycode fix for older Android Chrome 
-                else if ((event.keyCode == 0 || event.keyCode == 229) && wcx.value == "1") {
-                    const s = trg.value;
-                    const key = s.charAt(s.length-1);
-                    //alert("Android dbg: "+event.keyCode+ "s: "+s+" kcd: "+kCd);
-                    if (key == "x" || key == "X") {
-                        const s1 = x.ascii_eo(s);
-                        if (s != s1)
-                            trg.value = s1;    
-                    }
-                }
-            });
-
-            if (cx) cx.addEventListener("click", function(event) {
-                event.preventDefault();
-                const cx = event.target as HTMLInputElement;
-                cx.value = ""+(1-parseInt(cx.value)); 
-                document.getElementById('w:q')?.focus();
-            });
-
-            s_form.querySelector("button[value='revo']")
-                ?.addEventListener("click", function(event) {
-                    event.preventDefault();
-                    serchu(event);
-                });
-
-            s_form.querySelector("button[value='ecosia']")
-                ?.addEventListener("click", function(event) {
-                    event.preventDefault();
-                    const wq = document.getElementById('w:q') as HTMLInputElement;
-                    location.href = 'https://www.ecosia.org/search?q='
-                        + encodeURIComponent(wq.value + ' site:reta-vortaro.de');
-                });
-
-            s_form.querySelector("button[value='anaso']")
-                ?.addEventListener("click", function(event) {
-                    event.preventDefault();
-                    const wq = document.getElementById('w:q') as HTMLInputElement;
-                    location.href = 'https://duckduckgo.com?q='
-                        + encodeURIComponent(wq.value + ' site:reta-vortaro.de');
-            });
-        }
-    } 
 }
 
 
@@ -994,7 +843,7 @@ function navigate_link(event: Event) {
                 // paĝo en la naviga parto (nav)
                 } else if (target == "nav") {
                         // bibliografion ni legas fone el JSON, ne HTML                         
-                    if (href.indexOf("/bibliogr.")>-1) bibliogr("");
+                    if (href.indexOf("/bibliogr.")>-1) bibliogr.ŝargo(<string>href.split('#').pop());
                     else
                         // ĉiuj aliaj pagoj estas HTML-dosieroj
                         load_page(target,normalize_href(target,href));
@@ -1026,417 +875,6 @@ function navigate_history(event: any) {
     }
 }            
 
-/**
- * La uzanto volas serĉi ion...
- * @param {*} event 
- */
-function serchu(event: any) {
-    event.preventDefault();
-    var serch_in = event.target.closest("form")
-        .querySelector('input[name=q]');
-    var esprimo = serch_in.value;
-    if (esprimo) {
-        // evitu ŝanĝi .search, ĉar tio refreŝigas la paĝon nevolite: 
-        // location.search = "?q="+encodeURIComponent(esprimo);
-        history.pushState(history.state,'',location.origin+location.pathname+"?q="+encodeURIComponent(esprimo));
-        serchu_q(esprimo);
-    }
-}
-
-/**
- * Serĉas per la transdonita serĉesprimo.
- * @param esprimo 
- */
-function serchu_q(esprimo: string) {
-    function nav_enh() {
-        const nav = document.getElementById("navigado");
-        return nav?.querySelector(".enhavo");
-    }
-
-    function sercho_start() {
-        start_wait();
-        const inx_enh = nav_enh();
-        if (inx_enh) {
-            inx_enh.textContent = '';
-            inx_enh.insertAdjacentHTML("afterbegin",
-            "<span id='x:serchante' class='animated-nav-font'>serĉante...</span>");
-        }
-    }
-
-    function sercho_halt() {
-        stop_wait();
-        const s = document.getElementById("x:serchante");
-        if (s) s.remove();
-    }
-
-    const srch = new Sercho();
-    srch.serchu(esprimo, function() {
-
-        function findings(lng: Lingvo) {
-
-            var div = u.ht_elements([
-                ["div",{},
-                    [["h1",{}, revo_listoj.lingvoj.codes[lng]||lng ]]
-                ]
-            ])[0] as Element;
-            var dl = u.ht_element("dl");
-
-            const trvj = srch.trovoj(lng);
-            // console.log(trvj);
-
-            var atr = {};
-            for (let n=0; n<trvj.length; n++) {
-                let t = trvj[n];
-
-                if (n+1 > g.sercho_videblaj && trvj.length > g.sercho_videblaj+1) {
-                    // enmetu +nn antaŭ la unua kaŝita elemento
-                    if (n - g.sercho_videblaj == 1) {
-                        const pli = u.ht_pli(trvj.length - g.sercho_videblaj);
-                        if (pli) dl.append(...pli);
-                    }                        
-                    atr = {class: "kasxita"};
-                }
-
-                const dt = u.ht_element("dt",atr);
-
-                if ( lng == 'eo' ) {
-                    // tradukojn oni momente ne povas ne povas rekte alsalti,
-                    // do ni provizore uzas t.eo.mrk anst. t[l].mrk
-                    const a = u.ht_element("a",{target: "precipa", href: (t as TrovEo).h}, t.v);
-                    dt.append(a);
-                } else {
-                    const s = u.ht_element("span",{lang: lng}, t.v);
-                    dt.append(s);
-                }
-
-                // dum redakto ni aldonas transprenan butonon por kreado de referencoj
-                if ( lng == 'eo' && t_red.stato == "redaktante") {
-                    const ref_btn = u.ht_element("button",{
-                        class: "icon_btn r_vid", 
-                        value: (t as TrovEo).h.split('#')[1], // mrk
-                        title:"transprenu kiel referenco"
-                    });
-                    dt.append(ref_btn);
-                }                            
-
-                const dd = u.ht_element("dd",atr);
-
-                if ( lng == 'eo' ) {
-                    // trovitaj tradukoj de tiu e-a vorto
-                    for ( let [l,trd] of Object.entries(t.t) ) { // ni trairu ĉiujn lingvojn....
-                        // tradukojn oni momente ne povas rekte alsalti,
-                        // do ni (provizore?) uzas href (el drv-mrk) 
-                        const a = u.ht_elements([
-                                ["a",{target: "precipa", href: (t as TrovEo).h},
-                                    [["code",{}, l + ":"],["span",{lang: l}, trd]]
-                                ],["br"]
-                            ]);    
-                        if (a) dd.append(...a);
-                    } // for lng,trd ...
-                } else {
-                    // trovitaj esperantaj tradukoj de tiu nacilingva vorto
-                    for (let e of (t as TrovTrd).t) {
-                        const a = u.ht_elements([
-                            ["a",{target: "precipa", href: e.h},
-                                e.k
-                            ],["br"]
-                        ]);    
-                        if (a) dd.append(...a);
-                    } // for e
-                }
-                dl.append(dt,dd);
-            }
-            div.append(dl);
-
-            // atentigo pri limo
-            //if (lng.max == lng.trovoj.length) {
-            //    const noto = ht_element("p",{class: "kasxita"},"noto: por trovi ankoraŭ pli, bv. precizigu la serĉon!");
-            //    div.append(noto);
-            //}
-            return div;
-        } // ...findings
-
-        function nofindings() {
-            return u.ht_elements([
-                ["p",{},
-                    [["strong",{},"Nenio troviĝis!"]]
-                ]
-            ])[0];
-        } // ...nofindings
-
-        function serch_lng() {
-            const div = u.ht_elements([["div",{class:"s_lng"},
-                [
-                    ["span",{class: "llbl"},"serĉlingvoj: "],
-                    ["span",{class: "llst"}, srch.s_lng.join(', ')]
-                ]
-            ]]);
-            return div[0];
-        }
-
-        index_spread();
-        const nav = document.getElementById("navigado");
-        const inx_enh = nav?.querySelector(".enhavo");
-        const trovoj = u.ht_element("div",{id: "x:trovoj"},"");
-
-        // serĉlingvoj
-        if ( srch.s_lng ) {
-            trovoj.append(serch_lng());
-        }
-
-        // se nenio troviĝis...
-        if ( srch.malplena() ) {
-            trovoj.append(nofindings());
-
-        // se troviĝis ekzakte unu kaj ni ne redaktas, iru tuj al tiu paĝo
-        } else if ( srch.sola() && t_red.stato != "redaktante" ) {
-            const href = srch.unua()?.href;
-            if (href) load_page("main",href);
-        }
-
-        if ( !srch.malplena() ) {
-            trovoj.append(findings('eo'));
-            for (let lng of srch.lingvoj()) {
-                trovoj.append(findings(lng));
-            }    
-
-            // aldonu la reagon por ref-enmetaj butonoj
-            if (t_red.stato == "redaktante") {
-                trovoj.querySelectorAll("button.r_vid").forEach((btn) => {
-                    btn.addEventListener("click", (event) => {                         
-                        const trg = event.target as HTMLInputElement;
-                        // kiun ref-mrk ni uzu - depende de kiu butono premita
-                        const refmrk = trg.value;
-                        const refstr = trg.previousSibling?.textContent;
-                        // revenu de trovlisto al redakto-menuo
-                        if (refmrk && refstr) load_page("nav",g.redaktmenu_url,true,
-                            () => redaktilo.load_ref(refmrk,refstr));        
-                    });
-                });
-            }
-        }
-
-        // montru butonon por reveni al ĉefa indekso
-        //index_home_btn(trovoj.children[0]);
-        //show("x:nav_start_btn");
-        t_nav.transiro("serĉo");
-
-        if (inx_enh) {
-            inx_enh.textContent = "";
-            //inx_enh.append(...s_form,trovoj);
-            inx_enh.append(trovoj);    
-        }
-        // forigu ankaŭ eventualan "viaj submetoj", ĝi estu nur en ĉefindekso por
-        // eviti konfuzojn
-        if (nav) {
-            const subm = nav.querySelector("#submetoj");
-            if (subm) nav.removeChild(subm);    
-        }
-    },
-    sercho_start,
-    sercho_halt 
-    );
-
-}
-
-/**
- * Montras arbitran artikolon. Ni elserĉas hazardan kapvorton en la datumbazo
- * kaj montras la artikolon kaj la kapvorton en de tiu artikolo.
- */
-function hazarda_art() {
-
-    u.HTTPRequest('POST', g.sercho_url, {sercxata: "!iu ajn!"},
-        function(data: string) {
-            // sukceso!
-            var json = 
-                /** @type { {hazarda: Array<string>} } */
-                (JSON.parse(data));
-            const mrk = json.hazarda[0];
-            const href = g.art_prefix + mrk.split('.')[0] + '.html#' + mrk;
-            if (href) load_page("main",href);
-        }, 
-        start_wait,
-        stop_wait 
-    );
-}
-
-
-/**
- * Ricevas la nombrojn de kapvortoj kaj tradukoj kaj prezentas ilin en la titolpaĝo.
- */
-function nombroj() {
-
-    u.HTTPRequest('POST', g.nombroj_url, { x: "0" }, // sen parametroj POST ne funkcius, sed GET eble ne estus aktuala!
-        function(data: string) {
-            // sukceso!
-            var json = 
-                /** @type { {trd: Array, kap: Array} } */
-                (JSON.parse(data));
-            console.log(json);
-            const n = document.getElementById('t:nombroj');
-            if (n && json) {
-                // {"trd":[412630],"kap":[31291]}
-                const trd = json.trd[0];
-                const kap = json.kap[0];
-                n.prepend('Ni nun provizas '+kap+' kapvortojn kun '+trd+' tradukoj. ');
-            }
-        }, 
-        start_wait,
-        stop_wait 
-    );
-}
-
-/**
- * Pridemandas erarojn pri mrk-atributoj de la servilo kaj prezentas ilin en
- * la eraropaĝo.
- */
-function mrk_eraroj() {
-    u.HTTPRequest('POST', g.mrk_eraro_url, { x: "1" }, // ni sendu ion per POST por ĉiam havi aktualan liston
-        function(data: string) {
-            var json = 
-                /** @type { {drv: Array<Array>, snc: Array<Array>, hom: Array<Array>} } */
-                (JSON.parse(data));
-            const listo = document.getElementById("mrk_sintakso");
-            if (listo) {
-                listo.textContent= '';
-
-                const sum = u.ht_element("summary",{},"Nekongruaj markoj / referencoj");
-                listo.append(sum);
-                // tri- kaj plipartaj drv@mrk
-                if (json.drv && json.drv.length) {
-                    const e1 = u.ht_element("p",{},"Markoj de derivaĵoj havu nur du partojn, t.e. "
-                    + "enhavu nur unu punkton:");
-                    const ul = u.ht_element("ul");
-                    listo.append(e1,ul);
-    
-                    for (let m of json.drv) {
-                        let li = u.ht_elements([
-                            ['li',{},
-                                [['a',{href: x.art_href(m[0]), target: 'precipa'}, m[1]+' ['+m[0]+']']]
-                            ]
-                        ]);
-                        if (li) ul.append(...li);
-                    }
-                }
-                // mrk nekongruaj kun drv@mrk
-                if (json.snc && json.snc.length) {
-                    const e2 = u.ht_element("p",{},"Markoj de sencoj, rimarkoj ktp. kongruu kun la "
-                        + "marko de la enhavanta derivaĵo, ĝia prefikso estu la sama:");
-                    const ul = u.ht_element("ul");
-                    listo.append(e2,ul);
-                    for (let m of json.snc) {
-                        let li = u.ht_elements([
-                            ['li',{},
-                                [['a',{href: x.art_href(m[0]), target: 'precipa'}, m[1]+' ['+m[0]+']']]
-                            ]
-                        ]);
-                        if (li) ul.append(...li);
-                    }
-                }
-                // homonimoj sen ref-hom
-                if (json.hom && json.hom.length) {
-                    const e2 = u.ht_element("p",{},"Homonimoj, kiuj ne havas referencon de la tipo 'hom' aŭ duoblaj derivaĵoj:");
-                    const ul = u.ht_element("ul");
-                    listo.append(e2,ul);
-                    for (let m of json.hom) {
-                        let li = u.ht_elements([
-                            ['li',{},[
-                                ['a',{href: x.art_href(m[1]), target: 'precipa'}, m[0]],' [',
-                                ['a',{href: x.art_href(m[1]), target: 'precipa'}, 'de '+m[1]],' ',
-                                ['a',{href: x.art_href(m[2]), target: 'precipa'}, 'al '+m[2]],']'
-                            ]]
-                        ]);
-                        if (li) ul.append(...li);
-                    }
-                }
-            }
-
-        },
-        start_wait,
-        stop_wait 
-    );    
-}
-
-
-/**
- * Pridemandas la bibliografion kiel JSON de la servilo kaj prezentas ĝin kiel HTML
- * @param bib kodo de bibliografero, al kiu ni saltu post ŝargo
- * @param sort_by se donita, ni ordigos la bibliografion laŭ tiu kampo (bib,aut,tit)
- */
-function bibliogr(bib: string, sort_by?: BibOrd) {
-    u.HTTPRequest('POST', g.bib_json_url, {x: "1"}, // ni sendu ion per POST por ĉiam havi aktualan liston
-        function(data: string) {
-            var json = (JSON.parse(data) as Array<Bibliogr>);
-
-            if (sort_by) {
-                const cmp = new Intl.Collator('eo');
-                // @ts-ignore
-                json.sort( (a: Bibliogr, b: Bibliogr) => cmp.compare(a[sort_by],b[sort_by]) );
-            }
-
-            const enh = document.querySelector(".enhavo");
-            if (enh) {
-                enh.textContent= '';
-
-                // ni ne plu legas el HTML, do manipulu table@id tie ĉi
-                const tbl = enh.closest("table");
-                if (tbl) tbl.id = "x:bibliogr";
-
-                // kreu difinliston kun la bibliograferoj
-                const dl = u.ht_element('dl');
-
-                if (json) {
-                    for (const bib of json) {          
-                        // dt: la mallongigo evtl. kun href/url      
-                        const dt = u.ht_element('dt',{id: bib.bib});
-                        if (bib.url) {
-                            const a = u.ht_elements([
-                                ['a',{href: bib.url, target: '_new'},
-                                    [['b',{},bib.bib]]
-                                ]
-                            ]);
-                            if (a) dt.append(...a);                  
-                        } else {
-                            dt.append(u.ht_element('b',{},bib.bib));
-                        }
-                        // dd: la detaloj: autoro, titolo ktp.
-                        const dd = u.ht_element('dd');
-                        if (bib.aut) dd.append(bib.aut,u.ht_br());
-                        if (bib.trd) dd.append('trad. ',bib.trd,u.ht_br());
-                        dd.append(u.ht_element('b',{},bib.tit),u.ht_br());
-                        if (bib.ald) dd.append("(",bib.ald,")",u.ht_br());
-                        if (bib.eld) dd.append(bib.eld,u.ht_br());
-                        dl.append(dt,dd);
-                    } // for
-                }; // if json
-                const h1 = u.ht_element('h1',{},'bibliografio');
-                enh.append(h1,dl);
-                h1.insertAdjacentHTML('afterend',
-                    `<span id="bibliogr_ordo">ordo laŭ: `
-                    + `${!sort_by || sort_by=="bib"?"<u>kodo</u>":"<a href='#bib'>kodo</a>"} `
-                    + `| ${sort_by=="aut"?"<u>aŭtoro</u>":"<a href='#aut'>aŭtoro</a>"} `
-                    + `| ${sort_by=="tit"?"<u>titolo</u>":"<a href='#tit'>titolo</a>"}</span>`);
-
-                // reago al ordo-ŝanĝo
-                const ordo = document.getElementById("bibliogr_ordo");
-                ordo?.addEventListener("click",(event)=> {
-                    const a = (event.target as HTMLElement).closest("a");
-                    if (a) {
-                        const lau = a.getAttribute("href")?.substring(1) || "bib";
-                        // reŝargu bibliogration kun nova ordo
-                        bibliogr(bib,lau as BibOrd);
-                    }
-                })
-
-                // rulu al la ĝusta bib-ero
-                const ero = document.getElementById(bib);
-                ero?.scrollIntoView();
-            }
-        },
-        start_wait,
-        stop_wait 
-    );    
-}
 
 
 /**
@@ -1451,83 +889,4 @@ function redaktu(href: string) {
     load_page("nav",g.redaktmenu_url);
 }
 
-/**
- * Pridemandas la submetitajn redaktojn kaj ties statojn
- * de la aktuala redaktanto (laŭ ties donita retadreso)
- * kaj prezentas ilin en la indekspaĝo.
- */
-function viaj_submetoj() {
-    if (redaktilo.get_preference("r:redaktanto")) {
-        console.debug("+viaj submetoj");
-        const nv = document.getElementById("navigado");
-        const ds = u.ht_elements([
-            ["details",{id: "submetoj"},
-                [
-                    ["summary",{},[
-                        ["strong",{},"viaj submetoj"]
-                    ]],'...'
-                ]
-            ]
-        ]);
-        if (ds && nv) nv.append(...ds);
-        ds[0].addEventListener("toggle", function(event) {
-            const trg = event.target as Element;
-            if (trg.hasAttribute("open")) {
-                redaktilo.submetoj_stato(montru_submeto_staton,start_wait,stop_wait);
-                aktualigilo(); // altigu aktualigilon por eventuale vidi la redaktitan artikolon
-                                // anstataŭ la bufritan!
-            }
-        });
-    }    
-}
-
-/**
- * Montras la staton de submetoj
- * @param sj - la informoj pri la submetoj de la redaktanto
- */
-function montru_submeto_staton(sj: Array<Submeto>) {
-    const stat = {
-        'nov': '\u23f2\ufe0e', 'trakt': '\u23f2\ufe0e', 
-        'erar': '\u26a0\ufe0e', 'arkiv': '\u2713\ufe0e'};
-
-    function decode_result(r: string) {
-        function b64DecodeUnicode(str: string) {
-            // Going backwards: from bytestream, to percent-encoding, to original string.
-            return decodeURIComponent(atob(str).split('').map(function(c) {
-                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-            }).join(''));
-        }
-        if (r) {
-            return ("["+b64DecodeUnicode(r.split(':').slice(-1)[0])+"]")
-                .replace('[m ','[');
-        } else {
-            return '';
-        }
-    }
-
-    const ds = document.getElementById("submetoj");
-
-    if (sj && ds) {
-        // forigu antaŭajn...
-        ds.querySelectorAll("details").forEach( (ch) => ds.removeChild(ch) );
-        
-        // enŝovu novan staton....
-        for (let s of sj) {
-            const info = u.ht_elements([
-                ["details",{},[
-                    ["summary",{},[
-                        ["span",{class:'s_stato'},(stat[s.state]||'--')],
-                        " ",s.time.slice(0,16)," ",
-                        ["a",{href: '/revo/art/'+s.fname+'.html', target: 'precipa'},s.fname]                        
-                    ]],
-                    ["div",{},[
-                        ["i",{},s.desc],["br",{},''],
-                        decode_result(s.result)    
-                    ]]
-                ]]
-            ]);
-            if (info) ds.append(...info);
-        }
-    }
-}   
 

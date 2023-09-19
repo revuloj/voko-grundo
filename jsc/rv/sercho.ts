@@ -7,6 +7,9 @@ import * as u from '../u';
 import {type StrObj} from '../u';
 import {agordo as g} from '../u/global';
 import * as x from '../x';
+import * as s from './shargo';
+
+import {redaktilo} from './redaktilo';
 import {preferoj} from '../a/preferoj';
 
 // sendu vorton al la serĉ-CGI kaj redonu la rezultojn grupigite kaj porciumite
@@ -37,8 +40,226 @@ export type TrovVorto = TrovEo | TrovTrd;
 // kaj lingvo (LNG=2) por nacilingvoj
 type TrovGrupoj = { [key: string]: Array<Trovero> };
 
+
+
+export namespace sercho {
+
+    /**
+     * La uzanto volas serĉi ion...
+     * @param {*} event 
+     */
+    export function serchu(event: any) {
+        event.preventDefault();
+        var serch_in = event.target.closest("form")
+            .querySelector('input[name=q]');
+        var esprimo = serch_in.value;
+        if (esprimo) {
+            // evitu ŝanĝi .search, ĉar tio refreŝigas la paĝon nevolite: 
+            // location.search = "?q="+encodeURIComponent(esprimo);
+            history.pushState(history.state,'',location.origin+location.pathname+"?q="+encodeURIComponent(esprimo));
+            serchu_q(esprimo);
+        }
+    }
+
+    /**
+     * Serĉas per la transdonita serĉesprimo.
+     * @param esprimo 
+     */
+    export function serchu_q(esprimo: string) {
+        function nav_enh() {
+            const nav = document.getElementById("navigado");
+            return nav?.querySelector(".enhavo");
+        }
+
+        function sercho_start() {
+            s.start_wait();
+            const inx_enh = nav_enh();
+            if (inx_enh) {
+                inx_enh.textContent = '';
+                inx_enh.insertAdjacentHTML("afterbegin",
+                "<span id='x:serchante' class='animated-nav-font'>serĉante...</span>");
+            }
+        }
+
+        function sercho_halt() {
+            s.stop_wait();
+            const srch = document.getElementById("x:serchante");
+            if (srch) srch.remove();
+        }
+
+        const srch = new Sercho();
+        srch.serchu(esprimo, function() {
+
+            function findings(lng: Lingvo) {
+
+                var div = u.ht_elements([
+                    ["div",{},
+                        [["h1",{}, revo_listoj.lingvoj.codes[lng]||lng ]]
+                    ]
+                ])[0] as Element;
+                var dl = u.ht_element("dl");
+
+                const trvj = srch.trovoj(lng);
+                // console.log(trvj);
+
+                var atr = {};
+                for (let n=0; n<trvj.length; n++) {
+                    let t = trvj[n];
+
+                    if (n+1 > g.sercho_videblaj && trvj.length > g.sercho_videblaj+1) {
+                        // enmetu +nn antaŭ la unua kaŝita elemento
+                        if (n - g.sercho_videblaj == 1) {
+                            const pli = u.ht_pli(trvj.length - g.sercho_videblaj);
+                            if (pli) dl.append(...pli);
+                        }                        
+                        atr = {class: "kasxita"};
+                    }
+
+                    const dt = u.ht_element("dt",atr);
+
+                    if ( lng == 'eo' ) {
+                        // tradukojn oni momente ne povas ne povas rekte alsalti,
+                        // do ni provizore uzas t.eo.mrk anst. t[l].mrk
+                        const a = u.ht_element("a",{target: "precipa", href: (t as TrovEo).h}, t.v);
+                        dt.append(a);
+                    } else {
+                        const s = u.ht_element("span",{lang: lng}, t.v);
+                        dt.append(s);
+                    }
+
+                    // dum redakto ni aldonas transprenan butonon por kreado de referencoj
+                    if ( lng == 'eo' && t_red.stato == "redaktante") {
+                        const ref_btn = u.ht_element("button",{
+                            class: "icon_btn r_vid", 
+                            value: (t as TrovEo).h.split('#')[1], // mrk
+                            title:"transprenu kiel referenco"
+                        });
+                        dt.append(ref_btn);
+                    }                            
+
+                    const dd = u.ht_element("dd",atr);
+
+                    if ( lng == 'eo' ) {
+                        // trovitaj tradukoj de tiu e-a vorto
+                        for ( let [l,trd] of Object.entries(t.t) ) { // ni trairu ĉiujn lingvojn....
+                            // tradukojn oni momente ne povas rekte alsalti,
+                            // do ni (provizore?) uzas href (el drv-mrk) 
+                            const a = u.ht_elements([
+                                    ["a",{target: "precipa", href: (t as TrovEo).h},
+                                        [["code",{}, l + ":"],["span",{lang: l}, trd]]
+                                    ],["br"]
+                                ]);    
+                            if (a) dd.append(...a);
+                        } // for lng,trd ...
+                    } else {
+                        // trovitaj esperantaj tradukoj de tiu nacilingva vorto
+                        for (let e of (t as TrovTrd).t) {
+                            const a = u.ht_elements([
+                                ["a",{target: "precipa", href: e.h},
+                                    e.k
+                                ],["br"]
+                            ]);    
+                            if (a) dd.append(...a);
+                        } // for e
+                    }
+                    dl.append(dt,dd);
+                }
+                div.append(dl);
+
+                // atentigo pri limo
+                //if (lng.max == lng.trovoj.length) {
+                //    const noto = ht_element("p",{class: "kasxita"},"noto: por trovi ankoraŭ pli, bv. precizigu la serĉon!");
+                //    div.append(noto);
+                //}
+                return div;
+            } // ...findings
+
+            function nofindings() {
+                return u.ht_elements([
+                    ["p",{},
+                        [["strong",{},"Nenio troviĝis!"]]
+                    ]
+                ])[0];
+            } // ...nofindings
+
+            function serch_lng() {
+                const div = u.ht_elements([["div",{class:"s_lng"},
+                    [
+                        ["span",{class: "llbl"},"serĉlingvoj: "],
+                        ["span",{class: "llst"}, srch.s_lng.join(', ')]
+                    ]
+                ]]);
+                return div[0];
+            }
+
+            index_spread();
+            const nav = document.getElementById("navigado");
+            const inx_enh = nav?.querySelector(".enhavo");
+            const trovoj = u.ht_element("div",{id: "x:trovoj"},"");
+
+            // serĉlingvoj
+            if ( srch.s_lng ) {
+                trovoj.append(serch_lng());
+            }
+
+            // se nenio troviĝis...
+            if ( srch.malplena() ) {
+                trovoj.append(nofindings());
+
+            // se troviĝis ekzakte unu kaj ni ne redaktas, iru tuj al tiu paĝo
+            } else if ( srch.sola() && t_red.stato != "redaktante" ) {
+                const href = srch.unua()?.href;
+                if (href) load_page("main",href);
+            }
+
+            if ( !srch.malplena() ) {
+                trovoj.append(findings('eo'));
+                for (let lng of srch.lingvoj()) {
+                    trovoj.append(findings(lng));
+                }    
+
+                // aldonu la reagon por ref-enmetaj butonoj
+                if (t_red.stato == "redaktante") {
+                    trovoj.querySelectorAll("button.r_vid").forEach((btn) => {
+                        btn.addEventListener("click", (event) => {                         
+                            const trg = event.target as HTMLInputElement;
+                            // kiun ref-mrk ni uzu - depende de kiu butono premita
+                            const refmrk = trg.value;
+                            const refstr = trg.previousSibling?.textContent;
+                            // revenu de trovlisto al redakto-menuo
+                            if (refmrk && refstr) load_page("nav",g.redaktmenu_url,true,
+                                () => redaktilo.load_ref(refmrk,refstr));        
+                        });
+                    });
+                }
+            }
+
+            // montru butonon por reveni al ĉefa indekso
+            //index_home_btn(trovoj.children[0]);
+            //show("x:nav_start_btn");
+            t_nav.transiro("serĉo");
+
+            if (inx_enh) {
+                inx_enh.textContent = "";
+                //inx_enh.append(...s_form,trovoj);
+                inx_enh.append(trovoj);    
+            }
+            // forigu ankaŭ eventualan "viaj submetoj", ĝi estu nur en ĉefindekso por
+            // eviti konfuzojn
+            if (nav) {
+                const subm = nav.querySelector("#submetoj");
+                if (subm) nav.removeChild(subm);    
+            }
+        },
+        sercho_start,
+        sercho_halt 
+        );
+    }
+}
+
 /**
- * Kreas novan serĉon. Ĝi helpas aliri la esperantajn kaj nacilingvajn trovojn post farita serĉo.
+ * Klaso por krei novan serĉon. 
+ * Ĝi helpas aliri la esperantajn kaj nacilingvajn trovojn post farita serĉo.
  */
 export class Sercho {
 
@@ -140,7 +361,7 @@ export class Sercho {
      * PLIBONIGU: la diversa strukturo de eo / aliaj konfuzas la tipkontrolon de TypeScript
      * do pli bone laŭeble apartigu la funkciojn por 'eo' kaj por aliaj lingvoj
      */
-    trovoj(lng: string): TrovVorto[] {
+    trovoj(lng: string): TrovVorto[]|undefined {
 
         // strukturas unu e-an trovon kun unika kap-mrk
         function trovo_eo(kap: string, mrk: string, trdj: string[]): TrovVorto {
@@ -231,7 +452,7 @@ export class Sercho {
      * Redonas, en kiuj lingvoj (krom eo) ni trovis ion
      * @returns - listo de nacilingvoj
      */
-    lingvoj(): Lingvo[] {
+    lingvoj(): Lingvo[]|undefined {
         if (this.trd) return ( Object.keys(this.trd) );
     };
 
