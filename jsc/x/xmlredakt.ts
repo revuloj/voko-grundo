@@ -24,7 +24,7 @@ export class XmlRedakt extends Tekst {
   //public txtarea: HTMLInputElement; // la <textarea> kun la momente redaktata teksto
   public xmltrad: XmlTrad; // por redaktado de tradukoj
   private onaddsub: Function;
-  private onselectsub: Function;
+  private post_subtekst_elekto: Function;
 
   protected _ŝanĝnombro: number; // nombro de tekstŝanĝoj, post certa nombro da ŝanĝoj ni povas aŭtomate konservi
   private fonkonservo: number; // aŭtomata fona konservo post tiom da ŝanĝoj; <=0: neniam
@@ -87,13 +87,13 @@ export class XmlRedakt extends Tekst {
 /**
  * @param ta_id - La HTML-Id de la koncerna textarea-elemento en la HTML-paĝo
  * @param post_aldono - Revokfunkcio, vokata dum analizo de la strukturo ĉiam, kiam troviĝas subteksto.  Tiel eblas reagi ekzemple plenigante liston per la trovitaj subtekstoj (art, drv, snc...)
- * @param onSelectSub - Revokfunkcio, vokata dum interne kaŭzia elekto de alia subteksto. Ekz-e aldono de nova <drv> 
+ * @param post_subtekst_elekto - Revokfunkcio, vokata dum interne kaŭzia elekto de alia subteksto. Ekz-e aldono de nova <drv> 
  */  
   constructor(textarea: HTMLElement|string, 
-    post_aldono?: Function, 
-    onSelectSub?: Function,
-    poziciŝanĝo?: Function,
-    tekstŝanĝo?: Function,
+    post_aldono?: (s: SDet, index: number, kiel_aktiva: boolean) => void, 
+    post_subtekst_elekto?: (s: SDet) => void,
+    poziciŝanĝo?: (e: Event) => void,
+    tekstŝanĝo?: (e: Event) => void,
     fonkonservo = 20) 
     {
     super(textarea,{
@@ -138,18 +138,29 @@ export class XmlRedakt extends Tekst {
     this.aktiva = undefined; // aktuale redaktata subteksto
     this.onaddsub = post_aldono;
     */
-    this.onselectsub = onSelectSub;
+    this.post_subtekst_elekto = post_subtekst_elekto;
     /// this.synced = true;
     this.antaŭrigardo_sinkrona = false; // por scii, ĉu la lasta antaŭrigardo estas aktuala...
   }
 
 
+  /**
+   * Redonas kompletan XML-tekston post eventuala sikronigo
+   */
+  get teksto(): string {
+    /// super set/get ne funkcias en ES5 kun TypeScript:
+    /// return super.teksto;
+    // ni helpas nin provizore per rekta akiro de 'get teksto' el la prototipo de Tekst:
+    const super_teksto = Object.getOwnPropertyDescriptors(Tekst.prototype).teksto.get;
+    if (super_teksto) return super_teksto.call(this);
+    else throw "Grava programeraro. Ni ne povas ricevi tekston en XmlRedakt!";
+  }
 
   /**
    * Metas la kompletan XML-tekston laŭ la argumento 'xml' kaj aktualigas la strukturon el ĝi
    * @param xml 
    */
-  setText(xml: string) {
+  set teksto(xml: string) {
     /// this.xmlstruct = new XmlStrukt(xml,this.onaddsub);  
     function trovu_radikon(): string|undefined {
       const mr = xml.match(XmlRedakt.re_xml._rad);
@@ -163,8 +174,14 @@ export class XmlRedakt extends Tekst {
       }  
     }
     
-    this.radiko = trovu_radikon(); /// xs.radiko(this);
-    this.teksto = xml;
+    /// super set/get ne funkcias en ES5 kun TypeScript:
+    /// super.teksto = xml;
+    // ni helpas nin provizore per rekta akiro de 'set teksto' el la prototipo de Tekst:
+    const super_teksto = Object.getOwnPropertyDescriptors(Tekst.prototype).teksto.set;
+    if (super_teksto) super_teksto.call(this,xml);
+    else throw "Grava programeraro. Ni ne povas meti tekston en XmlRedakt!";
+
+    this.radiko = trovu_radikon()||''; /// xs.radiko(this);
     // elektu la unuan (art)
     // this.elekto = this.xmlstruct.strukturo[0];
     // this.txtarea.value = this.xmlstruct.getSubtext(this.elekto);
@@ -395,7 +412,7 @@ export class XmlRedakt extends Tekst {
       const s = this.trovu_subtekst_info((t) => (t as SDet).mrk == ms);
       if (s) {
         this.ekredaktu(s.id,sync);
-        if (this.onselectsub) this.onselectsub(this.aktiva);
+        if (this.post_subtekst_elekto) this.post_subtekst_elekto(this.aktiva);
       }
     }
   }

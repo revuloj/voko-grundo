@@ -167,7 +167,7 @@ export class Artikolo extends XmlRedakt {
     load(dosiero,data) {
         /// const xmlarea = this.opcioj.xmlarea;
         ///this.teksto = data;
-        this.setText(data);
+        this.teksto = data;
 
         //var e = this.element;
         //e.val(data);
