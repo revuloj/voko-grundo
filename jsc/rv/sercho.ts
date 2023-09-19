@@ -65,12 +65,48 @@ export class Sercho {
     {
         const self = this;
 
+        // la esprimo enhavas jokersignojn (%_)
+        function ĵokeroj(e: string) {
+            return ( esprimo.indexOf('%') >= 0 
+                || esprimo.indexOf('_') >= 0 );
+        }
+
+        // la esprimo enhavas signojn regulesprimajn
+        function regesp(e: string) {
+            return esprimo.match(e_regex);
+        }
+
+        // la esprimo komenciĝas per silabsignoj
+        // ĉina, japana, korea k.a.
+        // Mi ne scias, ĉu ni tiel kaptas ĉiujn,
+        // evtl. do aldonu areaojn laŭbezone
+        // kp. https://unicode-explorer.com/blocks
+        function silab(e: string) {
+            const u1 = e.codePointAt(0)||0;
+            return (
+                   u1 >= 0x3100 && u1 <= 0xa6ff
+                || u1 >= 0xac00 && u1 <= 0xdbff
+                || u1 >= 0xf900 && u1 <= 0xfaff
+               || u1 >= 0x20000 && u1 <= 0x2faff
+               || u1 >= 0x30000 && u1 <= 0x313ff
+            );
+        }
+/*
         if ( esprimo.indexOf('%') < 0 
             && esprimo.indexOf('_') < 0 
             && esprimo.length >= 3
             && ! esprimo.match(e_regex) ) {
-            esprimo += '%'; // serĉu laŭ vortkomenco, se ne jam enestas jokeroj, kaj
+            esprimo += '%'; // serĉu laŭ vortkomenco, se ne jam enestas ĵokeroj, kaj
             // almenaŭ 3 literoj
+        } */    
+
+        // serĉu laŭ vortkomenco, se ne jam enestas ĵokeroj/regulesprimo, kaj
+        // almenaŭ 3 literoj aŭ unu silabo
+        if (
+            !ĵokeroj(esprimo) && !regesp(esprimo) && 
+            (esprimo.length >= 3 || silab(esprimo)) ) 
+        {
+                esprimo += '%'; 
         }        
 
         u.HTTPRequestFull('POST', g.sercho_url, 
