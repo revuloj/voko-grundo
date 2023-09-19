@@ -26,7 +26,7 @@ kaj stiloj (em,ctl,sup...)
   <i class="ekz"><xsl:apply-templates/></i>
 </xsl:template>
 
-<xsl:template match="ekz/tld|ind/tld">
+<xsl:template match="ekz//tld|ind/tld">
   <xsl:variable name="rad">
     <xsl:choose>
       <xsl:when test="@var">
