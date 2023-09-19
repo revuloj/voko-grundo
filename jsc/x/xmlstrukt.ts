@@ -217,7 +217,7 @@ export type XElPos = { pos: number, end: number, elm: string };
   
         /// if (this.onaddsub) this.onaddsub(subt,this.strukturo.length,subt.id == selected);
   
-        tekst.aldonu(subt);
+        tekst.aldonu(subt, subt.id == elektenda);
         //this.strukturo.push(subt);
         //sel_stru.append(ht_element('option',{value: strukturo.length-1},item));
   
@@ -229,7 +229,7 @@ export type XElPos = { pos: number, end: number, elm: string };
         id: "x.m.l", dsc: 'tuta xml-fonto'}; //, no: this.strukturo.length};
       /// if (this.onaddsub) this.onaddsub(tuto,this.strukturo.length,tuto.id == selected);
   
-      tekst.aldonu(tuto);
+      tekst.aldonu(tuto, tuto.id == elektenda);
       //this.strukturo.push(tuto);
     };
 

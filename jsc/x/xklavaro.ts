@@ -34,7 +34,7 @@ type Reghimpremo = (e: Event, r: {cmd: Reghimo}) => void;
 console.debug("Instalante la klavarfunkciojn...");
 
 /**
- * @deprecated
+ * @ deprecated
 
 export function xpress(event: KeyboardEvent) {
     const key = event.key;
