@@ -1,4 +1,7 @@
 /**
+ * (c) 2020 - 2023 ĉe Wolfram Diestel
+ * laŭ GPL 2.0
+ * 
  * Helfunkcioj por la eraropaĝo.
  */
 

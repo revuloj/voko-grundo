@@ -5,9 +5,7 @@
  */
 
 //x/ <reference types="@types/jqueryui/index.d.ts" />
-import { when_doc_ready } from '../x';
-
-import { Musnot } from '../ui';
+import { DOM, Musnot } from '../ui';
 
 import menu_init from './ui_menu.js';
 import dlg_init from './ui_dlg.js';
@@ -22,7 +20,7 @@ import tabl_init from './ui_tabl.js';
 // var preflng='en';
 
 
-when_doc_ready(function () {
+DOM.dok_post_lego(function () {
     console.debug("Instalante la enirfunkcion...");
        
     // prepari la redaktilo-aranĝon

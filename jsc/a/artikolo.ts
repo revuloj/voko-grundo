@@ -4,7 +4,7 @@
 
 import * as x from '../x';
 import * as u from '../u';
-//import '../u/ht_util';
+import {DOM} from '../ui';
 
 import {preferoj} from './preferoj';
 
@@ -835,7 +835,7 @@ export namespace artikolo {
      * @memberof artikolo
      * @inner
      */
-    x.when_doc_ready(function() {
+    DOM.dok_post_lego(function() {
         console.log("artikolo.when_doc_ready...:" + location.href);
         const fn = x.getUrlFileName(location.href);
         const art = fn.substring(0,fn.lastIndexOf('.')); 

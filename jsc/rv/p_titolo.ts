@@ -1,3 +1,8 @@
+/* 
+ (c) 2020 - 2023 ĉe Wolfram Diestel
+ laŭ GPL 2.0
+*/
+
 import * as u from '../u';
 import {agordo as g} from '../u';
 import * as x from '../x';
@@ -12,7 +17,7 @@ export namespace titolo {
         const hazarda = root_el.querySelector("a[id='w:hazarda']");
         if (hazarda) hazarda.addEventListener("click", function(event) {
             event.preventDefault();
-            s.hazarda_art();
+            sercho.hazarda_art();
         });
 
         // adaptu serĉilon

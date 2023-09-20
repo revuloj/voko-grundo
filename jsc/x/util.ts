@@ -116,7 +116,7 @@ export function fix_art_href(root_el: Element) {
  * @param tip - la referenctipo
  * @returns la CSS-klasnomo
  */
-export function ref_tip_class(tip: string): string {
+export function ref_tip_class(tip: string): string|undefined {
   return {
     dif: "r_dif", difino: "r_dif", 
     sin: "r_sin", ant: "r_ant",
@@ -135,7 +135,7 @@ export function ref_tip_class(tip: string): string {
  * @param tip - la referenctipo
  * @returns la HTML-ALT-atributo
  */
-export function ref_tip_alt(tip: string): string {
+export function ref_tip_alt(tip: string): string|undefined {
   return {
     dif: "=", difino: "=", 
     sin: "SIN:", ant: "ANT:",
@@ -154,7 +154,7 @@ export function ref_tip_alt(tip: string): string {
  * @param tip - la referenctipo
  * @returns la HTML-TITLE-atributo
  */
-export function ref_tip_title(tip: string): string {
+export function ref_tip_title(tip: string): string|undefined {
   return {
     dif: "difino ĉe", difino: "difino ĉe", 
     sin: "sinonimo", ant: "antonimo",
@@ -174,26 +174,26 @@ export function ref_tip_title(tip: string): string {
  * @param root_el 
  */
 export function fix_img_svg(root_el: Element) {
-  let src: string;
 
   for (var i of Array.from(root_el.getElementsByTagName("img"))) {
-    src = i.getAttribute("src");
-    //if (src.startsWith("..")) i.setAttribute("src",src.substring(1));
+    const src = i.getAttribute("src");
 
-    // aldonu klason por rerencoj
-    if ( src.endsWith('.gif') && !i.classList.length ) {
+    // aldonu klason por referencoj
+    if ( src && src.endsWith('.gif') && !i.classList.length ) {
       // referencilo
-      src = i.getAttribute("src");
-      if (src) {
-        const nom = src.split('/').pop().split('.')[0];
-        if (nom) i.classList.add("ref",ref_tip_class(nom));
-      }                    
+      i.classList.add("ref");
+      const nom = src.split('/').pop()?.split('.')[0];
+      if (nom) {
+        const ref_tip = ref_tip_class(nom);
+        if (ref_tip) i.classList.add(ref_tip);
+      }
     }                    
   }
 }
 
 /**
  * Videbligas HTML-elementon forigante CSS-klason 'kasxita'.
+ * @deprecated uzu DOM.malkaŝu kun #id
  * @param id - la 'id'-atributo de la elemento
  * @param cls - CSS-klaso, se alia ol 'kasxita'
  */
@@ -205,6 +205,7 @@ export function show(id: string,cls: string='kasxita') {
 
 /**
  * Kaŝas HTML-elementon aldonante CSS-klason 'kasxita'.
+ * @deprecated uzu DOM.kaŝu kun #id
  * @param id - la 'id'-atributo de la elemento
  * @param cls - CSS-klaso, se alia ol 'kasxita'
  */
@@ -216,6 +217,7 @@ export function hide(id: string,cls: string='kasxita') {
 
 /**
  * Ŝanĝas videblecon de HTML-elemento aldonante aŭ forigante CSS-klason 'kasxita'.
+ * @deprecated uzu DOM.malkaŝu+DOM.kaŝita kun #id (?) 
  * @param id - la 'id'-atributo de la elemento
  * @param cls - CSS-klaso, se alia ol 'kasxita'
  */
@@ -227,6 +229,7 @@ export function toggle(id: string,cls: string='kasxita') {
 
 /**
  * Malaktivigas HTML-elementon metante atributon 'disabled'.
+ * @deprecated uzu DOM.malaktivigu kun #id
  * @param id - la 'id'-atributo de la elemento
  */
 export function disable(id: string) {
@@ -237,12 +240,13 @@ export function disable(id: string) {
 
 /**
  * Aktivigas HTML-elementon forigante atributon 'disabled'.
+ * @deprecated uzu DOM.aktivigu kun #id
  * @param id - la 'id'-atributo de la elemento
  */
 export function enable(id: string) {
   const el = document.getElementById(id);
   if (el) el.removeAttribute("disabled");
-  else console.warn("disable: elemento "+id+" ne troviĝis.");
+  else console.warn("enable: elemento "+id+" ne troviĝis.");
 }
 
 /**
@@ -251,18 +255,6 @@ export function enable(id: string) {
  */
 export function helpo_pagho(url: string) {
     window.open(g.help_base_url+url);
-}
-
-/**
- * Preparas paĝon post kiam ĝi estas ŝargita
- * @param onready_fn 
- */
-export function when_doc_ready(onready_fn: EventListener) {
-    if (document.readyState != 'loading'){
-      onready_fn(new Event('DOMContentLoaded'));
-    } else {
-      document.addEventListener('DOMContentLoaded', onready_fn);
-    }
 }
 
 
@@ -316,16 +308,18 @@ export function getHashParts(): StrObj {
  * @param params - la signoĉeno de parametroj, se manks location.search estas uzata
  * @returns la valoro de la petata parametro
  */
-export function getParamValue(param: string, params: string=undefined): string|null {
+export function getParamValue(param: string, params?: string): string|null {
   // ĉu ni vere bezonos tion? parametroj estas afero de la servilo,
   // sed ni povas kaŝi ilin ankaŭ post #, vd. supre getHashParts
-    let result = null,
-        tmp = [],
+    let result: string|null = null,
+        tmp: string[] = [],
         parstr = params || location.search.slice(1);
-        parstr.split("&").forEach(function (item) {
-          tmp = item.split("=");
-          if (tmp[0] === param) result = (tmp[1]? decodeURIComponent(tmp[1]) : '');
-        });
+
+    parstr.split("&").forEach(function (item) {
+      tmp = item.split("=");
+      if (tmp[0] === param) result = (tmp[1]? decodeURIComponent(tmp[1]) : '');
+    });
+    
     return result;
 }
 

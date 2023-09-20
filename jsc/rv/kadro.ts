@@ -6,12 +6,11 @@ import * as u from '../u';
 import {agordo as g} from '../u';
 import * as x from '../x';
 import * as s from './shargo';
+import {DOM} from '../ui';
 
+import {t_nav,t_red,t_main,stato_difinoj} from './stato';
 import {artikolo} from '../a/artikolo';
 import {preferoj} from '../a/preferoj';
-
-import {Transiroj} from '../u/transiroj';
-import {RevoListoj} from '../x/xlisto';
 
 import {sercho} from './sercho';
 import {redaktilo} from './redaktilo';
@@ -31,32 +30,11 @@ declare global {
     }
 }
   
-
-// statoj kaj transiroj - ni uzas tri diversajn statomaŝinojn por la tri paĝoj navigilo, ĉefpago kaj redaktilo
-const t_nav  = new Transiroj("nav","start",["ĉefindekso","subindekso","serĉo","redaktilo"]);
-const t_main = new Transiroj("main","start",["titolo","artikolo","red_xml","red_rigardo"]);
-export const t_red  = new Transiroj("red","ne_redaktante",["ne_redaktante","redaktante","tradukante","sendita"]);
-
-const revo_listoj = new RevoListoj();
+// x-tajpado (cx->ĉ...)
 let xtajpo: x.XTajpo;
- 
 
-/**
- * Helpofunkcio, por instali klak-reagojn
- * @param id - la id-atributo de HTML-elemento
- * @param reaction - la reago al la klak-evento
- */
-function onclick(id: string, reaction: Function) {
-    var nb = document.getElementById(id);
-    if (nb) {
-        nb.addEventListener("click", function(event) {
-            event.preventDefault();
-            if (g.debug) console.debug("clicked: "+id);
-            reaction(event);
-            //event.stopPropagation();
-        });
-    }
-}
+// referencu la malsupran ŝargo-funkcion en shargo.ts
+s.diffn_ŝargu_paĝon(ŝargu_paĝon);
 
 
 /*
@@ -64,25 +42,10 @@ function onclick(id: string, reaction: Function) {
 */
 
 /**
- * Eblas doni en la Revo-URL por rekta aliro artikolon/derivaĵon/sencon ekzemple per #hund.0o.dombesto
- * Tion ni transformas al /revo/art/hund.html#hund.0o.dombesto por ebligi navigi tien.
- * @param hash - la valoro de loka URL-marko, ekz-e #hund.0o.dombesto
- */
-function hash2art(hash: string) {
-    if (hash) {
-        const art = hash.substring(1).split('.')[0];
-        if (art)
-            return (
-                g.art_prefix + art + '.html' + hash
-            );
-    }
-}
-
-/**
  * Enira funkcio vokata post ŝarĝo de la kadra paĝo. Ĝi 
  * finpreparas la paĝon: evento-reagoj...
  */
-x.when_doc_ready(function() { 
+DOM.dok_post_lego(function() { 
 
     // dom_console();
     console.log("kadro.when_doc_ready...");
@@ -106,125 +69,8 @@ x.when_doc_ready(function() {
     // preferataj lingvoj
     preferoj.restore();
 
-    //// PLIBONIGU: provizore limigu Transiroj-n al memorado de la momenta stato
-    //// kaj adapto de videbleco / stato de butonoj, sed rezignu pri tro komplikaj
-    //// agoj kiel ŝargi paĝojn ktp. (?)
-
-    t_nav.alvene("ĉefindekso",()=>{ 
-        if (t_main.stato != "titolo") 
-            x.show("x:titol_btn");
-        x.hide("x:nav_start_btn");
-        // viaj_submetoj(); -- ĉe renovigado tio venus tro frue kaj reforiĝus....
-    });
-
-    t_nav.forire("ĉefindekso",()=>{ 
-        x.hide("x:titol_btn");
-        x.show("x:nav_start_btn");
-    });
-
-    t_nav.alvene("redaktilo", ()=>{ 
-        // metu buton-surskribon Rezignu kaj malaktivigu la aliajn du
-        if (t_red.stato == "redaktante") {
-                // ĉe sendita ne jam montru, sed eble tio eĉ en povus okazi?
-            const rzg = document.getElementById("r:rezignu");
-            if (rzg) rzg.textContent = "Rezignu"; 
-            x.enable("r:kontrolu"); 
-            x.enable("r:konservu");
-
-            // se ni revenas al redaktado post portempa forlaso
-            // ni devos adapti la butonon laŭ t_main
-            // ĉar ĝi ne ŝanĝiĝas kaj do ne mem kaŭzas la adapton
-            if (t_main.stato == "red_xml") {
-                x.hide("x:redakt_btn");
-                x.show("x:rigardo_btn");
-            } else if (t_main.stato == "red_rigardo") {
-                x.show("x:redakt_btn");
-                x.hide("x:rigardo_btn");
-            }
-        }
-    });
-
-    t_nav.forire("redaktilo",()=>{ 
-        x.hide("x:rigardo_btn");
-        // se ni ankoraŭ redaktas, ni bezonas butonon por reveni al la redaktilo!
-        if (t_red.stato == "redaktante") {
-            x.show("x:redakt_btn");
-        }
-    });
-
-    t_main.alvene("titolo",()=>{ 
-       x.hide("x:titol_btn");
-       titolo.nombroj();
-    });
-
-    t_main.forire("titolo",()=>{ 
-        if (t_nav.stato == "ĉefindekso") 
-            x.show("x:titol_btn");
-    });
-
-    // difinu agojn por transiroj al cel-statoj
-    //t_main.alvene("titolo",()=>{ load_page("main",titolo_url) });
-    t_main.alvene("red_xml",()=>{ 
-        t_red.transiro("redaktante"); // transiro al ne_redaktante okazas ĉe sendo aŭ rezigno!
-        x.show("r:tab_txmltxt",'collapsed');
-        x.show("x:rigardo_btn"); 
-        x.hide("x:redakt_btn"); 
-        /***
-         * se ne videbla...?:
-            load_page("nav",redaktmenu_url);
-            index_spread();
-         */    
-    });
-    t_main.forire("red_xml",()=>{ 
-        x.hide("r:tab_txmltxt",'collapsed');
-        x.hide("x:rigardo_btn"); 
-        // tiu servos por reveni al la redaktilo
-        // ĝis ni definitive finis redaktadon!
-        if (t_red.stato == "redaktante") 
-            x.show("x:redakt_btn"); 
-    });
-    t_main.alvene("red_rigardo",()=>{ 
-        x.show("r:tab_trigardo",'collapsed');
-        x.show("x:redakt_btn"); 
-        redaktilo.rantaurigardo();
-    });
-    t_main.forire("red_rigardo",()=>{ 
-        x.hide("r:tab_trigardo",'collapsed');
-    });
-
-    t_red.forire("redaktante",()=>{
-        // memoru enhavon de kelkaj kampoj de la redaktilo
-        redaktilo.store_preferences();
-
-        x.hide("x:redakt_btn");
-        x.hide("x:rigardo_btn");
-    });
-
-    /*
-    t_red.alvene("tradukante",()=>{
-        show("r:tab_tradukoj",'collapsed');
-        // tion ni faru verŝajne pli bone en forire("redaktante"), ĉu?
-        // hide("r:tab_txmltxt",'collapsed');
-    });
-    */
-
-    t_red.alvene("ne_redaktante",()=>{
-        // ni devos fari tion en "alvene", ĉar
-        // load_page kontrolas t_red.stato por scii ĉu montri "x:redakt_btn"
-        load_page("main",g.titolo_url); // ĉu pli bone la ĵus redaktatan artikolon - sed povus konfuzi pro malapero de ŝangoj?
-        load_page("nav",g.inx_eo_url);
-    });
-
-    t_red.alvene("sendita",()=>{
-        // ŝanĝu tekston al nurlege
-        const xt = document.getElementById("r:xmltxt");
-        if (xt) xt.setAttribute("readonly","readonly");
-        // ŝanĝu buton-surskribon Rezignu->Finu kaj aktivigu la aliajn du 
-        const rzg = document.getElementById("r:rezignu");
-        if (rzg) rzg.textContent = "Finu"; 
-        x.disable("r:kontrolu"); 
-        x.disable("r:konservu"); 
-    });
+    // difinu la stato-transirojn
+    stato_difinoj();
     
 
     // ni ne kreas la kadron, se ni estas en (la malnova) "frameset"
@@ -242,9 +88,9 @@ x.when_doc_ready(function() {
     
             if (art) {
                 // se post # troviĝas artikolnomo, ni rekte iru al tiu artikolo
-                const art_url = hash2art(art);
-                if (art_url) load_page("main",art_url);   
-                load_page("nav",g.inx_eo_url);   
+                const art_url = s.hash2art(art);
+                if (art_url) ŝargu_paĝon("main",art_url);   
+                ŝargu_paĝon("nav",g.inx_eo_url);   
             } else if (red) {
                 // se parametro r estas donita, ni ekredaktos la donitan artikolon...
                 redaktu(window.location.href);
@@ -253,58 +99,58 @@ x.when_doc_ready(function() {
                 // ni devas certigi, ke la naviga kaj titolpaĝo antaŭ la
                 // serĉo ŝargiĝu, por ke depende de la rezulto la vortaro 
                 // tamen aperu bona! Tial la ĉenigo!
-                load_page("nav",g.inx_eo_url,true,()=>{
-                    load_page("main",g.titolo_url,true,
+                ŝargu_paĝon("nav",g.inx_eo_url,true,()=>{
+                    ŝargu_paĝon("main",g.titolo_url,true,
                         ()=>sercho.serchu_q(srch || "tohuvabohuo"));
                 });
             } else {
                 // anstataŭe ŝargu tiujn du el ĉefa indeks-paĝo
-                load_page("main",g.titolo_url);
-                load_page("nav",g.inx_eo_url);   
+                ŝargu_paĝon("main",g.titolo_url);
+                ŝargu_paĝon("nav",g.inx_eo_url);   
             }
         }
 
-        onclick("x:nav_montru_btn",index_spread);
-        onclick("x:nav_kashu_btn",index_collapse);
+        DOM.klak_halt("#x\\:nav_montru_btn",s.malfaldu_nav);
+        DOM.klak_halt("#x\\:nav_kashu_btn",s.faldu_nav);
 
-        //onclick("x:nav_start_btn",()=>{ load_page("nav",inx_eo_url) });
+        //onclick("x:nav_start_btn",()=>{ ŝargu_paĝon("nav",inx_eo_url) });
         //t_nav.je("x:nav_start_btn","click","ĉefindekso");
-        onclick("x:nav_start_btn",()=>{ 
-            load_page("nav",g.inx_eo_url);
+        DOM.klak_halt("#x\\:nav_start_btn",()=>{ 
+            ŝargu_paĝon("nav",g.inx_eo_url);
             //t_nav.transiro("ĉefindekso") 
         });
 
-        //onclick("x:titol_btn",()=>{ load_page("main",titolo_url) });
-        onclick("x:titol_btn", () => { 
-            load_page("main",g.titolo_url);
+        //onclick("x:titol_btn",()=>{ ŝargu_paĝon("main",titolo_url) });
+        DOM.klak_halt("#x\\:titol_btn", () => { 
+            ŝargu_paĝon("main",g.titolo_url);
             //t_main.transiro("titolo") 
         });
         //t_main.je("x:titol_btn","click","titolo")
 
         //onclick("x:nav_srch_btn",(event)=>{ serchu(event) })
-        onclick("x:nav_srch_btn", (event: Event) => { 
+        DOM.klak_halt("#x\\:nav_srch_btn", (event: Event) => { 
             sercho.serchu(event);
             // transiro aŭ lanĉu la serĉon aŭ evtl. sekvu ĝin...
         });
         //t_nav.je("x:nav_srch_btn","click","serĉo");
 
-        onclick("x:redakt_btn", () => { 
+        DOM.klak_halt("#x\\:redakt_btn", () => { 
             if (t_nav.stato != "redaktilo")
-                load_page("nav",g.redaktmenu_url);
+                ŝargu_paĝon("nav",g.redaktmenu_url);
 
             // ni bezonas eble relegi la redaktilan kadron kaj
             // fine de tio relegi la artikolon!...
             if (t_main.stato != "red_xml" && t_main.stato != "red_rigardo")
-                load_page("main",g.redaktilo_url);
+                ŝargu_paĝon("main",g.redaktilo_url);
 
             // metu staton "red_xml" se ni venos de red_rigardo,
-            // aliokaze ni faros tion en load_page - tie ĉi estus tro frue tiuokaze
+            // aliokaze ni faros tion en ŝargu_paĝon - tie ĉi estus tro frue tiuokaze
             if (t_main.stato == "red_rigardo")
                 t_main.transiro("red_xml");
         });
         //t_main.je("x:redakt_btn","click","red_xml");
 
-        onclick("x:rigardo_btn",()=>{ t_main.transiro("red_rigardo"); });
+        DOM.klak_halt("#x\\:rigardo_btn",()=>{ t_main.transiro("red_rigardo"); });
         //t_main.je("x:rigardo_btn","click","red_rigardo");
 
         xtajpo = new x.XTajpo(["x:q"],"x:cx");
@@ -376,38 +222,6 @@ x.when_doc_ready(function() {
     }
 });
 
-/**
- * Faldas-malfaldas la navigan panelon (tiu kun la indeksoj, serĉo...)
- */
-function index_toggle() {
-    const nav = document.getElementById("navigado");
-    if (nav) nav.classList.toggle("eble_kasxita");
-    x.toggle("x:nav_kashu_btn");
-    x.toggle("x:nav_montru_btn");
-    //document.querySelector("main").classList.toggle("kasxita");
-}
-
-/**
- * Malfaldas la navigan panelon
- */
-function index_spread() {
-    const nav = document.getElementById("navigado");
-    if (nav) nav.classList.remove("eble_kasxita");
-    x.show("x:nav_kashu_btn");
-    x.hide("x:nav_montru_btn");
-}
-
-/**
- * Faldas la navigan panelon. Tiel estas pli da spaco por la artikolo
- * aŭ redaktado.
- */
-function index_collapse() {
-    const nav = document.getElementById("navigado");
-    if (nav) nav.classList.add("eble_kasxita");
-    x.show("x:nav_montru_btn");
-    x.hide("x:nav_kashu_btn");
-}
-
 
 /**
  * Se la artikolo ŝargiĝis aparte de la kadro ni aldonos la kadron.
@@ -425,7 +239,7 @@ function enkadrigu() {
         main.append(...Array.from(document.body.children));
         document.body.appendChild(main);
     } else {
-        load_page("main",g.titolo_url);
+        ŝargu_paĝon("main",g.titolo_url);
     }
 
     // preparu la navigo-parton de la paĝo
@@ -440,25 +254,12 @@ function enkadrigu() {
     if (history.state && history.state.nav) {
         console.log(history.state);
         // ni bezonas unue revo-1b.js:
-        load_page("nav",history.state.nav,false);
+        ŝargu_paĝon("nav",history.state.nav,false);
     } else {
-        load_page("nav",g.inx_eo_url);
+        ŝargu_paĝon("nav",g.inx_eo_url);
     }
 }
 
-/**
- * vd. https://wiki.selfhtml.org/wiki/HTML/Tutorials/Navigation/Dropdown-Men%C3%BC
- */
-function nav_toggle() {
-    const menu = document.getElementById("navigado");
-    if (menu) {
-        if (menu.style.display == "") {
-            menu.style.display = "block";
-        } else {
-            menu.style.display = "";
-        }    
-    }
-}
 
 /** 
  * Helpfunkcio por navigado. Navigante laŭ a@href ni devas distingi plurajn kazojn:
@@ -535,31 +336,10 @@ function normalize_href(target: "main"|"nav", href: string) {
  * @param {boolean} push_state - true: memoru la petitan paĝon en la hisotrio, tiel ni povos poste reiri
  * @param {Function} whenLoaded - ago, farenda post fonŝargo de la paĝo
  */
-function load_page(trg: string, url: string, push_state: boolean=true, whenLoaded?: Function) {
+function ŝargu_paĝon(trg: string, url: string, push_state: boolean=true, whenLoaded?: Function) {
 
-    // traktas saltojn ene de paĝo / al certa loko en paĝo
-    function interna_salto() {
-        let hash: string;
-        if (url.indexOf('#') > -1) {
-            hash = <string>url.split('#').pop();
-        } else {
-            hash = '';
-        }
-        // evitu, ĉar tio konfuzas la historion:... window.location.hash = hash;
-        if (hash) {
-            const h = document.getElementById(hash); 
-            if (h) {
-                h.scrollIntoView();
-                history.replaceState(history.state,'',
-                location.origin+location.pathname+"#"+encodeURIComponent(hash));
-            }
-        } else {
-            history.replaceState(history.state,'',
-                location.origin+location.pathname);
-        }
-    }
 
-    function load_page_nav(doc: Document, nav: Element) {
+    function ŝargu_nav(doc: Document, nav: Element) {
         nav.textContent= '';
         let filename: string = '';
 
@@ -590,7 +370,7 @@ function load_page(trg: string, url: string, push_state: boolean=true, whenLoade
         if (table) nav.append(table);
 
         if (filename && filename.startsWith("redaktmenu")) {
-            redaktilo.preparu_menu(); // redaktilo-paĝo
+            redaktilo.preparu_menuon(); // redaktilo-paĝo
             
             // butono por rezigni
             const rzg = document.getElementById("r:rezignu");
@@ -604,13 +384,13 @@ function load_page(trg: string, url: string, push_state: boolean=true, whenLoade
         } else if (filename == "eraroj") {
             eraroj.mrk_eraroj();
         }
-        index_spread();
+        s.malfaldu_nav();
 
         // laŭbezone ankoraŭ iru al loka marko
-        interna_salto();
+        s.interna_salto(url, history);
     }
 
-    function load_page_main(doc: Document, main: Element) {
+    function ŝargu_main(doc: Document, main: Element) {
         var body = doc.body;
         try {
             adaptu_paghon(body,url);
@@ -632,12 +412,12 @@ function load_page(trg: string, url: string, push_state: boolean=true, whenLoade
 
             // transdonu la listojn al la redaktilo por poste kontrolado
             // de stiloj kaj fakoj en la XML-artikolo
-            redaktilo.revo_listoj = revo_listoj;
-            redaktilo.preparu_red(params, xtajpo); // redaktilo-paĝo
+            // redaktilo.revo_listoj = revo_listoj;
+            redaktilo.preparu_redaktilon(params, xtajpo); // redaktilo-paĝo
             
         } else {
             // laŭbezone ankoraŭ iru al loka marko
-            interna_salto();
+            s.interna_salto(url,history);
 
             const fn = x.getUrlFileName(url);
             const art = fn.substring(0,fn.lastIndexOf('.')); 
@@ -681,7 +461,7 @@ function load_page(trg: string, url: string, push_state: boolean=true, whenLoade
         }
         //if (url == titolo_url) hide("x:titol_btn"); 
         //else if ( document.getElementById("x:_plena") ) show("x:titol_btn");
-        index_collapse();
+        s.faldu_nav();
     }
 
     u.HTTPRequest('GET', url, {},
@@ -696,8 +476,8 @@ function load_page(trg: string, url: string, push_state: boolean=true, whenLoade
             var hstate=history.state || {};
 
             if (nav && trg == "nav") {
-                // PLIBONIGU: difinu load_page_nav kiel ago de transiro
-                load_page_nav(doc,nav);
+                // PLIBONIGU: difinu ŝærgu_nav kiel ago de transiro
+                ŝargu_nav(doc,nav);
 
                 if (url == g.redaktmenu_url)
                     t_nav.transiro("redaktilo"); 
@@ -714,8 +494,8 @@ function load_page(trg: string, url: string, push_state: boolean=true, whenLoade
                    (t_main.stato == "red_xml" || t_main.stato == "red_rigardo"))
                     redaktilo.store_art();
 
-                // PLIBONIGU: difinu load_page_main kiel ago de transiro(?()
-                load_page_main(doc,main);
+                // PLIBONIGU: difinu ŝargu_main kiel ago de transiro(?()
+                ŝargu_main(doc,main);
                 if (url == g.titolo_url)
                     t_main.transiro("titolo"); 
                 else if (url.startsWith(g.redaktilo_url))
@@ -749,7 +529,7 @@ function load_page(trg: string, url: string, push_state: boolean=true, whenLoade
  */
 function load_error(request: any) {
     if (request.status == 404 && request.responseURL.indexOf('404')<0) // evitu ciklon se 404.html mankas!
-        load_page("main",g.http_404_url);
+        ŝargu_paĝon("main",g.http_404_url);
  }
 
 
@@ -834,7 +614,7 @@ function navigate_link(event: Event) {
     
                 // paĝo en la ĉefa parto (main)
                 } else if (target == "main") {
-                    load_page(target,normalize_href(target,href));
+                    ŝargu_paĝon(target,normalize_href(target,href));
                     /*
                     $('#s_artikolo').load(href, //+' body>*'                            
                         preparu_art
@@ -842,11 +622,16 @@ function navigate_link(event: Event) {
                     */  
                 // paĝo en la naviga parto (nav)
                 } else if (target == "nav") {
-                        // bibliografion ni legas fone el JSON, ne HTML                         
-                    if (href.indexOf("/bibliogr.")>-1) bibliogr.ŝargo(<string>href.split('#').pop());
-                    else
+                        // bibliografion ni legas fone el JSON, ne HTML 
+                        // PLIBONIGU: ĝis sidas malbone tie ĉi, ni havu apartan rimedon en ŝargu_paĝon por fona JSON-lego
+                        // ekz-e surbaze de la finaĵo .json ni povus trakti tion aparte                      
+                    if (href.indexOf("/bibliogr.")>-1) {
+                        bibliogr.ŝargo(<string>href.split('#').pop());
+                        t_nav.transiro("subindekso"); 
+                    } else {
                         // ĉiuj aliaj pagoj estas HTML-dosieroj
-                        load_page(target,normalize_href(target,href));
+                        ŝargu_paĝon(target,normalize_href(target,href));
+                    }
                     /*
                     $('#navigado').load(href+' table');
                     */
@@ -870,8 +655,8 @@ function navigate_history(event: any) {
     if (state) {
         console.debug("revenu el:"+JSON.stringify(history.state));
         console.debug("<===== al:"+JSON.stringify(state));
-        if (state.nav) load_page("nav",state.nav,false);
-        if (state.main) load_page("main",state.main,false);    
+        if (state.nav) ŝargu_paĝon("nav",state.nav,false);
+        if (state.main) ŝargu_paĝon("main",state.main,false);    
     }
 }            
 
@@ -885,8 +670,8 @@ function redaktu(href: string) {
     const params = href.split('?')[1];
     //const art = getParamValue("art",params);
     
-    load_page("main",g.redaktilo_url+'?'+params);
-    load_page("nav",g.redaktmenu_url);
+    ŝargu_paĝon("main",g.redaktilo_url+'?'+params);
+    ŝargu_paĝon("nav",g.redaktmenu_url);
 }
 
 

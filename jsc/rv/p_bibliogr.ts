@@ -1,3 +1,8 @@
+/* 
+ (c) 2020 - 2023 ĉe Wolfram Diestel
+ laŭ GPL 2.0
+*/
+
 import * as u from '../u';
 import {agordo as g} from '../u';
 import * as s from './shargo';

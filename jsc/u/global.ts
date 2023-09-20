@@ -43,6 +43,9 @@ export namespace agordo {
   export const help_base_url = 'https://revuloj.github.io/temoj/';
   export const help_regulesp = 'sercho#ser%C4%89i-per-regulesprimoj';
 
+  export const uwn_url = 'http://www.lexvo.org/uwn/';
+
+
 // en Cetonio: '../voko/lingvoj.xml'
 
     // export const hazarda_url = "/cgi-bin/hazarda_art.pl";

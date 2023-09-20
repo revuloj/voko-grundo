@@ -1,8 +1,15 @@
+/* 
+ (c) 2020 - 2023 ĉe Wolfram Diestel
+ laŭ GPL 2.0
+*/
+
 import * as u from '../u';
 import {agordo as g} from '../u';
 import * as s from './shargo';
-import {redaktilo} from './redaktilo';
+import {sercho} from './sercho';
+import {submetoj_stato} from './redk_submeto';
 import {preferoj} from '../a/preferoj';
+import {get_preference} from './redk_pref';
 
 type SubmetoStato = "nov" | "trakt" | "erar" | "arkiv";
 type Submeto = { state: SubmetoStato, fname: string, desc: string, time: string, result: string };
@@ -34,7 +41,7 @@ export namespace ktp {
                         root_el.querySelector("a[href*='hazarda_art.pl'");
         if (hazarda) hazarda.addEventListener("click", function(event) {
             event.preventDefault();
-            s.hazarda_art();
+            sercho.hazarda_art();
             event.stopPropagation(); // ne voku navigate_link!
         });       
     }
@@ -60,7 +67,7 @@ export namespace plena {
                         root_el.querySelector("a[href*='hazarda_art.pl'");
         if (hazarda) hazarda.addEventListener("click", function(event) {
             event.preventDefault();
-            s.hazarda_art();
+            sercho.hazarda_art();
             event.stopPropagation(); // ne voku navigate_link!
         });
         // en la lingva indekso metu preferatajn lingvojn supren
@@ -85,7 +92,7 @@ export namespace plena {
      * kaj prezentas ilin en la indekspaĝo.
      */
     export function viaj_submetoj() {
-        if (redaktilo.get_preference("r:redaktanto")) {
+        if (get_preference("r:redaktanto")) {
             console.debug("+viaj submetoj");
             const nv = document.getElementById("navigado");
             const ds = u.ht_elements([
@@ -101,7 +108,7 @@ export namespace plena {
             ds[0].addEventListener("toggle", function(event) {
                 const trg = event.target as Element;
                 if (trg.hasAttribute("open")) {
-                    redaktilo.submetoj_stato(montru_submeto_staton,s.start_wait,s.stop_wait);
+                    submetoj_stato(montru_submeto_staton,s.start_wait,s.stop_wait);
                     s.aktualigilo(); // altigu aktualigilon por eventuale vidi la redaktitan artikolon
                                     // anstataŭ la bufritan!
                 }

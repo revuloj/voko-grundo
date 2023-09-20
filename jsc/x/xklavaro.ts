@@ -235,7 +235,7 @@ export class XKlavaro {
      * @param klvrElm - elemento en kiun aranĝi la fakoklavojn
      * @param klavstr - klavaro-specifo kiel teksto
      */
-    elemento_klavoj(klvrElm: Element, klavstr?: string) {
+    elemento_klavoj(klvrElm: Element, klavstr?: string|null) {
         let html='';
         const klavoj = (klavstr?klavstr:this.klavoj)
             .trim().split(/[ \n\r\t\f\v]+/);

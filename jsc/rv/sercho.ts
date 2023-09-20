@@ -9,6 +9,7 @@ import {agordo as g} from '../u/global';
 import * as x from '../x';
 import * as s from './shargo';
 
+import {t_nav,t_red} from './stato';
 import {redaktilo} from './redaktilo';
 import {preferoj} from '../a/preferoj';
 
@@ -44,6 +45,28 @@ type TrovGrupoj = { [key: string]: Array<Trovero> };
 
 export namespace sercho {
 
+
+    /**
+     * Montras arbitran artikolon. Ni elserĉas hazardan kapvorton en la datumbazo
+     * kaj montras la artikolon kaj la kapvorton en de tiu artikolo.
+     */
+    export function hazarda_art() {
+
+        u.HTTPRequest('POST', g.sercho_url, {sercxata: "!iu ajn!"},
+            function(data: string) {
+                // sukceso!
+                var json = 
+                    /** @type { {hazarda: Array<string>} } */
+                    (JSON.parse(data));
+                const mrk = json.hazarda[0];
+                const href = g.art_prefix + mrk.split('.')[0] + '.html#' + mrk;
+                if (href) s.ŝargu_paĝon("main",href);
+            }, 
+            s.start_wait,
+            s.stop_wait 
+        );
+    }
+
     /**
      * La uzanto volas serĉi ion...
      * @param {*} event 
@@ -60,6 +83,7 @@ export namespace sercho {
             serchu_q(esprimo);
         }
     }
+
 
     /**
      * Serĉas per la transdonita serĉesprimo.
@@ -94,7 +118,7 @@ export namespace sercho {
 
                 var div = u.ht_elements([
                     ["div",{},
-                        [["h1",{}, revo_listoj.lingvoj.codes[lng]||lng ]]
+                        [["h1",{}, s.revo_listoj.lingvoj.codes[lng]||lng ]]
                     ]
                 ])[0] as Element;
                 var dl = u.ht_element("dl");
@@ -102,8 +126,8 @@ export namespace sercho {
                 const trvj = srch.trovoj(lng);
                 // console.log(trvj);
 
-                var atr = {};
-                for (let n=0; n<trvj.length; n++) {
+                let atr = {};
+                if (trvj) for (let n=0; n<trvj.length; n++) {
                     let t = trvj[n];
 
                     if (n+1 > g.sercho_videblaj && trvj.length > g.sercho_videblaj+1) {
@@ -192,7 +216,7 @@ export namespace sercho {
                 return div[0];
             }
 
-            index_spread();
+            s.malfaldu_nav();
             const nav = document.getElementById("navigado");
             const inx_enh = nav?.querySelector(".enhavo");
             const trovoj = u.ht_element("div",{id: "x:trovoj"},"");
@@ -209,7 +233,7 @@ export namespace sercho {
             // se troviĝis ekzakte unu kaj ni ne redaktas, iru tuj al tiu paĝo
             } else if ( srch.sola() && t_red.stato != "redaktante" ) {
                 const href = srch.unua()?.href;
-                if (href) load_page("main",href);
+                if (href) s.ŝargu_paĝon("main",href);
             }
 
             if ( !srch.malplena() ) {
@@ -227,8 +251,8 @@ export namespace sercho {
                             const refmrk = trg.value;
                             const refstr = trg.previousSibling?.textContent;
                             // revenu de trovlisto al redakto-menuo
-                            if (refmrk && refstr) load_page("nav",g.redaktmenu_url,true,
-                                () => redaktilo.load_ref(refmrk,refstr));        
+                            if (refmrk && refstr) s.ŝargu_paĝon("nav",g.redaktmenu_url,true,
+                                () => redaktilo.notu_ref(refmrk,refstr));        
                         });
                     });
                 }
@@ -407,7 +431,7 @@ export class Sercho {
         }
 
         // komenco de .trovoj()...
-        var trvj = [];
+        var trvj: TrovVorto[] = [];
         if (lng == 'eo') {
             // ni jam grupigis laŭ kapvortoj, sed
             // la liston de trovoj/tradukoj por la sama kapvorto
@@ -452,8 +476,9 @@ export class Sercho {
      * Redonas, en kiuj lingvoj (krom eo) ni trovis ion
      * @returns - listo de nacilingvoj
      */
-    lingvoj(): Lingvo[]|undefined {
+    lingvoj(): Lingvo[] {
         if (this.trd) return ( Object.keys(this.trd) );
+        return [];
     };
 
     /**

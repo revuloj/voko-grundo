@@ -169,6 +169,15 @@ export function HTTPRequest(method: string, url: string, params: Parametroj,
     onStart, onFinish, onError);
 }
 
+  /**
+   * Utilfunkcio por forigi elementon, kondiĉe ke gi ekzistas.
+   * Se ĝi ne ekzistas okazas nenio (do neniu escepto!)
+   * @memberof redaktilo
+   * @inner
+   * @param {Element} element 
+   */
+export function ht_remove(element: Element|null) { if (element) element.remove(); }
+
 /**
  * Metas plurajn HTML-atributojn samtempe
  * @param el - la HTML-elemento

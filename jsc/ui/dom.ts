@@ -168,9 +168,23 @@ export class DOM {
         }
     }
 
+    /**
+     * Instalas reagon al evento
+     */
     static reago(e: EventTarget|string, evento: string, reago: EventListenerOrEventListenerObject) {
         const el = (typeof e === "string")? DOM.e(e) : e;
         if (el) el.addEventListener(evento, reago);
+    }
+
+    /**
+     * Instalas reagon al evento, sed haltigas la pluan evento-traktadon kadre de la reago 
+     */
+    static reago_halt(e: EventTarget|string, evento: string, reago: EventListener) {
+        const el = (typeof e === "string")? DOM.e(e) : e;
+        if (el) el.addEventListener(evento, (ev: Event) => {
+            ev.preventDefault();
+            reago(ev);
+        });
     }
 
     /**
@@ -204,8 +218,26 @@ export class DOM {
         }
     }
 
+    static dok_post_lego(se_preta: EventListener) {
+        if (document.readyState != 'loading') {
+            se_preta(new Event('DOMContentLoaded'));
+        } else {
+            document.addEventListener('DOMContentLoaded', se_preta);
+        }
+    }
+
+    /**
+     * Instalas reagon al klako/tuŝo de elemento
+     */
     static klak(e: EventTarget|string, reago: EventListenerOrEventListenerObject) {
         DOM.reago(e,"click",reago);
+    };
+
+    /**
+     * Instalas reagon al klako/tuŝo de elemento, haltigante pluan traktadon de la evento kadre de la reago
+     */
+    static klak_halt(e: EventTarget|string, reago: EventListener) {
+        DOM.reago_halt(e,"click",reago);
     };
 
     static klavpremo(e: EventTarget|string, reago: EventListenerOrEventListenerObject) {
@@ -229,6 +261,18 @@ export class DOM {
         if (el) el.remove();
     }
 
+    static aktivigu(e: Element|string) {
+        const el = (typeof e === "string")? DOM.e(e) : e;
+        if (el) el.removeAttribute("disabled");
+        else console.warn("aktivigu: elemento "+e+" ne troviĝis.");
+    }
+
+    static malaktivigu(e: Element|string) {
+        const el = (typeof e === "string")? DOM.e(e) : e;
+        if (el) el.setAttribute("disabled","disabled");
+        else console.warn("malaktivigu: elemento "+e+" ne troviĝis.");
+    }
+
     static kaŝu(e: Element|string, kaŝita=true) {
         const el = (typeof e === "string")? DOM.e(e) : e;
         if (el) {
@@ -236,6 +280,17 @@ export class DOM {
                 el.classList.add(UIStil.kaŝita);
             else
                 el.classList.remove(UIStil.kaŝita);
+        }
+    }
+
+    // pro legebleco ni aldonas la inversan funkcion al kaŝu
+    static malkaŝu(e: Element|string, videbla=true) {
+        const el = (typeof e === "string")? DOM.e(e) : e;
+        if (el) {
+            if (videbla)
+                el.classList.remove(UIStil.kaŝita);
+            else
+                el.classList.add(UIStil.kaŝita);
         }
     }
 
