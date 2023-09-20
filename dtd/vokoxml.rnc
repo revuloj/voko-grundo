@@ -705,6 +705,11 @@ attlist-tld &=
 
 ## [klr]
 ## Klarigo pri vorto, difino, ekzemplo ktp.
+## Klarigoj en tradukoj povas esti provizitaj per atributo <em>tip</em>
+## Ĉe tip='ind' la klarigo aperas en la indekso, sed ne en la artikolo.
+## Ĉe tip='amb' ĝi ankaŭ aperas en la artikolo.
+## Sen la atributo, aktuale ĝi aperas en la serĉrezultoj kaj artikolo, sed
+## ne en la lingvo-indekso (eble ni ŝanĝos tion estonte)
 klr =
   element klr {
     attlist-klr,
