@@ -315,7 +315,7 @@ reguloj por prezentado de la tradukoj
   <span class="pr"><xsl:text>[</xsl:text><xsl:apply-templates/><xsl:text>]</xsl:text></span>
 </xsl:template>
 
-<xsl:template match="baz"/>
+<xsl:template match="baz" mode="tradukoj"/>
 <!--
   <xsl:text>/</xsl:text>
   <xsl:apply-templates/>
