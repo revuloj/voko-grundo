@@ -34,7 +34,7 @@ declare global {
 let xtajpo: x.XTajpo;
 
 // referencu la malsupran ŝargo-funkcion en shargo.ts
-s.diffn_ŝargu_paĝon(ŝargu_paĝon);
+s.diffn_ŝargu_paĝon(ŝargu_paĝon_html);
 
 
 /*
@@ -67,7 +67,7 @@ DOM.dok_post_lego(function() {
     }
 
     // preferataj lingvoj
-    preferoj.restore();
+    preferoj.relegu();
 
     // difinu la stato-transirojn
     stato_difinoj();
@@ -89,8 +89,8 @@ DOM.dok_post_lego(function() {
             if (art) {
                 // se post # troviĝas artikolnomo, ni rekte iru al tiu artikolo
                 const art_url = s.hash2art(art);
-                if (art_url) ŝargu_paĝon("main",art_url);   
-                ŝargu_paĝon("nav",g.inx_eo_url);   
+                if (art_url) ŝargu_paĝon_html("main",art_url);   
+                ŝargu_paĝon_html("nav",g.inx_eo_url);   
             } else if (red) {
                 // se parametro r estas donita, ni ekredaktos la donitan artikolon...
                 redaktu(window.location.href);
@@ -99,14 +99,14 @@ DOM.dok_post_lego(function() {
                 // ni devas certigi, ke la naviga kaj titolpaĝo antaŭ la
                 // serĉo ŝargiĝu, por ke depende de la rezulto la vortaro 
                 // tamen aperu bona! Tial la ĉenigo!
-                ŝargu_paĝon("nav",g.inx_eo_url,true,()=>{
-                    ŝargu_paĝon("main",g.titolo_url,true,
+                ŝargu_paĝon_html("nav",g.inx_eo_url,true,()=>{
+                    ŝargu_paĝon_html("main",g.titolo_url,true,
                         ()=>sercho.serchu_q(srch || "tohuvabohuo"));
                 });
             } else {
                 // anstataŭe ŝargu tiujn du el ĉefa indeks-paĝo
-                ŝargu_paĝon("main",g.titolo_url);
-                ŝargu_paĝon("nav",g.inx_eo_url);   
+                ŝargu_paĝon_html("main",g.titolo_url);
+                ŝargu_paĝon_html("nav",g.inx_eo_url);   
             }
         }
 
@@ -116,13 +116,13 @@ DOM.dok_post_lego(function() {
         //onclick("x:nav_start_btn",()=>{ ŝargu_paĝon("nav",inx_eo_url) });
         //t_nav.je("x:nav_start_btn","click","ĉefindekso");
         DOM.klak_halt("#x\\:nav_start_btn",()=>{ 
-            ŝargu_paĝon("nav",g.inx_eo_url);
+            ŝargu_paĝon_html("nav",g.inx_eo_url);
             //t_nav.transiro("ĉefindekso") 
         });
 
         //onclick("x:titol_btn",()=>{ ŝargu_paĝon("main",titolo_url) });
         DOM.klak_halt("#x\\:titol_btn", () => { 
-            ŝargu_paĝon("main",g.titolo_url);
+            ŝargu_paĝon_html("main",g.titolo_url);
             //t_main.transiro("titolo") 
         });
         //t_main.je("x:titol_btn","click","titolo")
@@ -136,12 +136,12 @@ DOM.dok_post_lego(function() {
 
         DOM.klak_halt("#x\\:redakt_btn", () => { 
             if (t_nav.stato != "redaktilo")
-                ŝargu_paĝon("nav",g.redaktmenu_url);
+                ŝargu_paĝon_html("nav",g.redaktmenu_url);
 
             // ni bezonas eble relegi la redaktilan kadron kaj
             // fine de tio relegi la artikolon!...
             if (t_main.stato != "red_xml" && t_main.stato != "red_rigardo")
-                ŝargu_paĝon("main",g.redaktilo_url);
+                ŝargu_paĝon_html("main",g.redaktilo_url);
 
             // metu staton "red_xml" se ni venos de red_rigardo,
             // aliokaze ni faros tion en ŝargu_paĝon - tie ĉi estus tro frue tiuokaze
@@ -239,7 +239,7 @@ function enkadrigu() {
         main.append(...Array.from(document.body.children));
         document.body.appendChild(main);
     } else {
-        ŝargu_paĝon("main",g.titolo_url);
+        ŝargu_paĝon_html("main",g.titolo_url);
     }
 
     // preparu la navigo-parton de la paĝo
@@ -254,9 +254,9 @@ function enkadrigu() {
     if (history.state && history.state.nav) {
         console.log(history.state);
         // ni bezonas unue revo-1b.js:
-        ŝargu_paĝon("nav",history.state.nav,false);
+        ŝargu_paĝon_html("nav",history.state.nav,false);
     } else {
-        ŝargu_paĝon("nav",g.inx_eo_url);
+        ŝargu_paĝon_html("nav",g.inx_eo_url);
     }
 }
 
@@ -328,78 +328,79 @@ function normalize_href(target: "main"|"nav", href: string) {
     }
 }   
 
-
 /**
- * Ŝargas paĝon
- * @param {string} trg - la panelo (subpaĝo nav aŭ main) en kiu aperu la püetita paĝo
- * @param {string} url - la URL de la petita paĝo
- * @param {boolean} push_state - true: memoru la petitan paĝon en la hisotrio, tiel ni povos poste reiri
- * @param {Function} whenLoaded - ago, farenda post fonŝargo de la paĝo
+ * Helpfunkcio por ŝargu_paĝon. Enŝovas la enhavon de ŝargita
+ * dokumento en la navigan panelon.
  */
-function ŝargu_paĝon(trg: string, url: string, push_state: boolean=true, whenLoaded?: Function) {
+function enigu_dok_nav(url: string, doc: Document, nav: Element) {
+    nav.textContent= '';
+    let filename: string = '';
 
-
-    function ŝargu_nav(doc: Document, nav: Element) {
-        nav.textContent= '';
-        let filename: string = '';
-
-        const table = doc.querySelector("table"); 
-        if (table)
-            try {
-                const file = url.split('/').pop()
-                filename = file? file.split('.')[0]: '';
-                table.id = "x:"+filename;
-                adaptu_paghon(table,url);    
-
-                // forigu menuon kaj "colspan" 
-                const menu = table.querySelector("tr.menuo");
-                if (menu) menu.remove();
-                else if (!url.startsWith("redak")) {
-                    // provizora solvo, ĉar class="menuo" mankas ankoraŭ en kelkaj dosieroj
-                    const fona = table.querySelector("td.fona");
-                    const tr_menu = fona? fona.parentElement: null;
-                    if (tr_menu) tr_menu.remove();
-                }
-                const enh = table.querySelector(".enhavo");
-                if (enh) enh.removeAttribute("colspan");
-
-            } catch(error) {
-                console.error(error);
-            }
-
-        if (table) nav.append(table);
-
-        if (filename && filename.startsWith("redaktmenu")) {
-            redaktilo.preparu_menuon(); // redaktilo-paĝo
-            
-            // butono por rezigni
-            const rzg = document.getElementById("r:rezignu");
-            if (rzg) rzg.addEventListener("click",function() {
-                    t_red.transiro("ne_redaktante");
-            });
-        } else if (filename.startsWith("_plena")) {
-            plena.viaj_submetoj();
-        /*} else if (filename == "bibliogr") {
-            bibliogr.ŝargo(<string>url.split('#').pop());*/
-        } else if (filename == "eraroj") {
-            eraroj.mrk_eraroj();
-        }
-        s.malfaldu_nav();
-
-        // laŭbezone ankoraŭ iru al loka marko
-        s.interna_salto(url, history);
-    }
-
-    function ŝargu_main(doc: Document, main: Element) {
-        var body = doc.body;
+    const table = doc.querySelector("table"); 
+    if (table)
         try {
-            adaptu_paghon(body,url);
+            const file = url.split('/').pop()
+            filename = file? file.split('.')[0]: '';
+            table.id = "x:"+filename;
+            adaptu_paghon(table,url);    
+
+            // forigu menuon kaj "colspan" 
+            const menu = table.querySelector("tr.menuo");
+            if (menu) menu.remove();
+            else if (!url.startsWith("redak")) {
+                // provizora solvo, ĉar class="menuo" mankas ankoraŭ en kelkaj dosieroj
+                const fona = table.querySelector("td.fona");
+                const tr_menu = fona? fona.parentElement: null;
+                if (tr_menu) tr_menu.remove();
+            }
+            const enh = table.querySelector(".enhavo");
+            if (enh) enh.removeAttribute("colspan");
+
         } catch(error) {
             console.error(error);
         }
-        main.textContent = '';
-        main.append(...Array.from(body.children));
-        main.setAttribute("id","w:"+url);
+
+    if (table) nav.append(table);
+
+    if (filename && filename.startsWith("redaktmenu")) {
+        redaktilo.preparu_menuon(); // redaktilo-paĝo
+        
+        // butono por rezigni
+        const rzg = document.getElementById("r:rezignu");
+        if (rzg) rzg.addEventListener("click",function() {
+                t_red.transiro("ne_redaktante");
+        });
+    } else if (filename.startsWith("_plena")) {
+        plena.viaj_submetoj();
+    /*} else if (filename == "bibliogr") {
+        bibliogr.ŝargo(<string>url.split('#').pop());*/
+    } else if (filename == "eraroj") {
+        eraroj.mrk_eraroj();
+    }
+    s.malfaldu_nav();
+
+    // laŭbezone ankoraŭ iru al loka marko
+    s.interna_salto(url, history);
+}
+
+
+/**
+ * Helpfunkcio por ŝargu_paĝon. Enŝovas la enhavon de ŝargita
+ * dokumento en la ĉefan panelon.
+ */
+function ŝargu_main(url: string, doc: Document, main: Element) {
+    var body = doc.body;
+    try {
+        adaptu_paghon(body,url);
+    } catch(error) {
+        console.error(error);
+    }
+    const article = main.querySelector("article");
+    if (article) {       
+        article.textContent = '';
+        article.append(...Array.from(body.children));
+        article.setAttribute("id","w:"+url);
+        
         let filename = url.split('/').pop();
 
         if (filename && filename.startsWith("redaktilo")) {
@@ -459,10 +460,20 @@ function ŝargu_paĝon(trg: string, url: string, push_state: boolean=true, whenL
                 }
             }                    
         }
-        //if (url == titolo_url) hide("x:titol_btn"); 
-        //else if ( document.getElementById("x:_plena") ) show("x:titol_btn");
-        s.faldu_nav();
     }
+    //if (url == titolo_url) hide("x:titol_btn"); 
+    //else if ( document.getElementById("x:_plena") ) show("x:titol_btn");
+    s.faldu_nav();
+}
+
+/**
+ * Fone ŝargas HTML-paĝon kaj enigas aŭ en la naviagan aŭ la ĉefan panelon
+ * @param {string} trg - la panelo (subpaĝo nav aŭ main) en kiu aperu la petita paĝo
+ * @param {string} url - la URL de la petita paĝo
+ * @param {boolean} push_state - true: memoru la petitan paĝon en la historio, tiel ni povos poste reiri
+ * @param {Function} whenLoaded - ago, farenda post fonŝargo de la paĝo
+ */
+function ŝargu_paĝon_html(trg: string, url: string, push_state: boolean=true, whenLoaded?: Function) {
 
     u.HTTPRequest('GET', url, {},
         function(data: string) {
@@ -477,7 +488,7 @@ function ŝargu_paĝon(trg: string, url: string, push_state: boolean=true, whenL
 
             if (nav && trg == "nav") {
                 // PLIBONIGU: difinu ŝærgu_nav kiel ago de transiro
-                ŝargu_nav(doc,nav);
+                enigu_dok_nav(url,doc,nav);
 
                 if (url == g.redaktmenu_url)
                     t_nav.transiro("redaktilo"); 
@@ -495,7 +506,7 @@ function ŝargu_paĝon(trg: string, url: string, push_state: boolean=true, whenL
                     redaktilo.store_art();
 
                 // PLIBONIGU: difinu ŝargu_main kiel ago de transiro(?()
-                ŝargu_main(doc,main);
+                ŝargu_main(url,doc,main);
                 if (url == g.titolo_url)
                     t_main.transiro("titolo"); 
                 else if (url.startsWith(g.redaktilo_url))
@@ -524,12 +535,54 @@ function ŝargu_paĝon(trg: string, url: string, push_state: boolean=true, whenL
 
 
 /**
+ * Fone ŝargas JSON-dosieron kaj enigas la enhavon aŭ en la naviagan aŭ la ĉefan panelon
+ * @param {string} trg - la panelo (subpaĝo nav aŭ main) en kiu aperu la petita paĝo
+ * @param {string} url - la URL de la petita paĝo
+ * @param {boolean} push_state - true: memoru la petitan paĝon en la historio, tiel ni povos poste reiri
+ * @param {Function} whenLoaded - ago, farenda post fonŝargo de la paĝo
+ */
+function ŝargu_paĝon_json(trg: string, url: string, push_state: boolean=true, whenLoaded?: Function) {
+
+    if (url.indexOf("/bibliogr.") > -1) {
+        s.malfaldu_nav(); // se ni ne faras unue la alsalto ne funkcias. Eble ni tion ŝovu al bibliogr.ŝargo?
+
+        const hash = <string>url.split('#')[1];
+        bibliogr.ŝargo(hash,"bib",function() {
+            // elprenu la historio-staton
+            var hstate = history.state || {};
+
+            t_nav.transiro("subindekso");
+
+            hstate.nav = url;
+
+            // aktualigu la historion
+            if (push_state) {
+                console.debug("transiru el:"+JSON.stringify(history.state));
+                console.debug("=======> al:"+JSON.stringify(hstate));
+                // provizore ne ŝanĝu la URL de la paĝo
+                history.pushState(hstate,'');
+            }
+
+            // laŭbezone ankoraŭ iru al loka marko
+            s.interna_salto(url, history);
+            
+            // faru, kion poste faru donita kiel argumento
+            if (whenLoaded) whenLoaded();
+        })
+    } else {
+        throw "Por tiu URL ne estas difinita ŝargoprocedo: "+url;
+    }
+
+}
+
+
+/**
  * Se mankas paĝo petata ni montros nian apartan 404-paĝon
  * @param {*} request 
  */
 function load_error(request: any) {
     if (request.status == 404 && request.responseURL.indexOf('404')<0) // evitu ciklon se 404.html mankas!
-        ŝargu_paĝon("main",g.http_404_url);
+        ŝargu_paĝon_html("main",g.http_404_url);
  }
 
 
@@ -614,7 +667,7 @@ function navigate_link(event: Event) {
     
                 // paĝo en la ĉefa parto (main)
                 } else if (target == "main") {
-                    ŝargu_paĝon(target,normalize_href(target,href));
+                    ŝargu_paĝon_html(target,normalize_href(target,href));
                     /*
                     $('#s_artikolo').load(href, //+' body>*'                            
                         preparu_art
@@ -623,14 +676,11 @@ function navigate_link(event: Event) {
                 // paĝo en la naviga parto (nav)
                 } else if (target == "nav") {
                         // bibliografion ni legas fone el JSON, ne HTML 
-                        // PLIBONIGU: ĝis sidas malbone tie ĉi, ni havu apartan rimedon en ŝargu_paĝon por fona JSON-lego
-                        // ekz-e surbaze de la finaĵo .json ni povus trakti tion aparte                      
                     if (href.indexOf("/bibliogr.")>-1) {
-                        bibliogr.ŝargo(<string>href.split('#').pop());
-                        t_nav.transiro("subindekso"); 
+                        ŝargu_paĝon_json("nav",href); // href povas finiĝi je .html, sed ni ŝanĝos poste.
                     } else {
                         // ĉiuj aliaj pagoj estas HTML-dosieroj
-                        ŝargu_paĝon(target,normalize_href(target,href));
+                        ŝargu_paĝon_html(target,normalize_href(target,href));
                     }
                     /*
                     $('#navigado').load(href+' table');
@@ -655,8 +705,8 @@ function navigate_history(event: any) {
     if (state) {
         console.debug("revenu el:"+JSON.stringify(history.state));
         console.debug("<===== al:"+JSON.stringify(state));
-        if (state.nav) ŝargu_paĝon("nav",state.nav,false);
-        if (state.main) ŝargu_paĝon("main",state.main,false);    
+        if (state.nav) ŝargu_paĝon_html("nav",state.nav,false);
+        if (state.main) ŝargu_paĝon_html("main",state.main,false);    
     }
 }            
 
@@ -670,8 +720,8 @@ function redaktu(href: string) {
     const params = href.split('?')[1];
     //const art = getParamValue("art",params);
     
-    ŝargu_paĝon("main",g.redaktilo_url+'?'+params);
-    ŝargu_paĝon("nav",g.redaktmenu_url);
+    ŝargu_paĝon_html("main",g.redaktilo_url+'?'+params);
+    ŝargu_paĝon_html("nav",g.redaktmenu_url);
 }
 
 

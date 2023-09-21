@@ -651,7 +651,7 @@ export class XmlRedakt extends Tekst {
       const ind = this.enŝovo;
 
       // jam estas trdgrp?
-      if (place.grp) {
+      if (place.grp && place.trd) {
         // aldonu novan tradukon antaŭ '</trdgrp'
         const pos = place.trd.indexOf('</trdgrp');
         const nov = place.trd.substring(0,pos) + ',\n'

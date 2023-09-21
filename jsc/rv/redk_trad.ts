@@ -91,7 +91,7 @@ export function trad_uwn(event: Event, xmlarea: x.XmlRedakt) {
                         // ne montru e-ajn tradukojn en la listo (ili estas jam en summary)
                         // komence kaŝu ĉiujn krom la preferataj lingvoj
                         var cls: string[] = [];
-                        if (preferoj.languages().indexOf(lng) < 0) {
+                        if (preferoj.lingvoj().indexOf(lng) < 0) {
                           cls.push('kasxita');
                           nkasxitaj++;
                         }

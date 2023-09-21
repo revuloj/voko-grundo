@@ -209,12 +209,12 @@ export namespace sercho {
             function serch_lng() {
                 const div = u.ht_elements([["div",{class:"s_lng"},
                     [
-                        ["span",{class: "llbl"},"serĉlingvoj: "],
+                        ["a",{id: "x:serch_lingvoj", href: "#", class: "llbl"},"serĉlingvoj: "],
                         ["span",{class: "llst"}, srch.s_lng.join(', ')]
                     ]
                 ]]);
                 return div[0];
-            }
+            };
 
             s.malfaldu_nav();
             const nav = document.getElementById("navigado");
@@ -266,7 +266,11 @@ export namespace sercho {
             if (inx_enh) {
                 inx_enh.textContent = "";
                 //inx_enh.append(...s_form,trovoj);
-                inx_enh.append(trovoj);    
+                inx_enh.append(trovoj); 
+
+                // permesu adapti serĉlingvojn
+                const sl = document.getElementById("x:serch_lingvoj");
+                if (sl) sl.addEventListener("click",() => preferoj.dialog());
             }
             // forigu ankaŭ eventualan "viaj submetoj", ĝi estu nur en ĉefindekso por
             // eviti konfuzojn
@@ -355,7 +359,7 @@ export class Sercho {
         }        
 
         u.HTTPRequestFull('POST', g.sercho_url, 
-            {"Accept-Language": preferoj.languages().join(',')},
+            {"Accept-Language": preferoj.lingvoj().join(',')},
             {sercxata: esprimo},
             function(data: string) {
                 const json = JSON.parse(data);

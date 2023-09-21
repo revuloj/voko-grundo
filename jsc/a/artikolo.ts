@@ -312,7 +312,7 @@ export namespace artikolo {
             if (id_lng) {
                 if ( id_lng == "eo") {
                     eo = id;
-                } else if ( id_lng != serch_lng && preferoj.languages().indexOf(id_lng) < 0 ) {
+                } else if ( id_lng != serch_lng && preferoj.lingvoj().indexOf(id_lng) < 0 ) {
                     eo.classList.add("kasxita");
                     id.classList.add("kasxita");
                     maletenditaj += 1;
@@ -337,7 +337,7 @@ export namespace artikolo {
             element.append(...pli);
 
             const _MS_PER_DAY = 1000 * 60 * 60 * 24;
-            if ( Math.round((Date.now() - preferoj.date()) / _MS_PER_DAY) < 1 ) {
+            if ( Math.round((Date.now() - preferoj.dato()) / _MS_PER_DAY) < 1 ) {
                 var pref = u.ht_elements([
                     ["DT",{class: "pref"},
                         [["A",{lang: "eo", href: "#", class: "pref"}, "preferoj..."]]

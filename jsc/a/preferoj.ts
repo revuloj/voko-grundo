@@ -26,9 +26,9 @@ type Seanco = {
  */
 export namespace preferoj {  
     
-    var lingvoj: string[] = [];
+    var _lingvoj: string[] = [];
     export var seanco: Seanco = {};
-    var dato = Date.now();
+    var _dato = Date.now();
     
     /**
      * Ŝargas la lingvo-liston de la servilo, dividas ilin en 
@@ -37,7 +37,7 @@ export namespace preferoj {
      * @memberof preferoj
      * @inner
      */
-    function load_pref_lng() {
+    function legu_pref_lng() {
         u.HTTPRequest('GET', g.lingvoj_xml, {},
         function(data: string) {
             // Success!
@@ -51,24 +51,24 @@ export namespace preferoj {
             const selection = ichecked.value.split('_');
             
             // kolekti la lingvojn unue, ni bezonos ordigi ilin...
-            let _lingvoj: { [ascii: string]: LngSpec } = {};
+            let _lngvj: { [ascii: string]: LngSpec } = {};
             for (let e of Array.from(doc.getElementsByTagName("lingvo"))) {
                 const c: Attr = e.attributes.getNamedItem('kodo'); // jshint ignore:line
                 if (c.value != "eo") {
                     const ascii = x.eo_ascii(e.textContent);
-                    _lingvoj[ascii] = {lc: c.value, ln: e.textContent};
+                    _lngvj[ascii] = {lc: c.value, ln: e.textContent};
                 }
             }
 
-            for (var l of Object.keys(_lingvoj).sort()) {    
-                var lc = _lingvoj[l].lc;
-                var ln = _lingvoj[l].ln;
+            for (var l of Object.keys(_lngvj).sort()) {    
+                var lc = _lngvj[l].lc;
+                var ln = _lngvj[l].ln;
                 var li = document.createElement("LI");
                 li.setAttribute("data-lng",lc);
                 li.setAttribute("data-la",l);
                 li.appendChild(document.createTextNode(ln));
 
-                if ( lingvoj.indexOf(lc) < 0 ) {
+                if ( _lingvoj.indexOf(lc) < 0 ) {
                     li.setAttribute("title","aldonu");
                     if (ln[0] < selection[0] || ln[0] > selection[1]) 
                         li.classList.add("kasxita");
@@ -83,8 +83,8 @@ export namespace preferoj {
                 }
             }
         
-            alist.addEventListener("click",aldonuLingvon);
-            plist.addEventListener("click",foriguLingvon);
+            alist.addEventListener("click",aldonu_lingvon);
+            plist.addEventListener("click",forigu_lingvon);
         });     
     }
 
@@ -94,7 +94,7 @@ export namespace preferoj {
      * @memberof preferoj
      * @inner
      */
-    function change_pref_lng() {
+    function ŝanĝu_pref_lng() {
         const checked = document.getElementById("preferoj") 
             .querySelector('input[name="pref_lingvoj"]:checked') as HTMLInputElement;
         const selection = checked.value.split('_');
@@ -115,15 +115,15 @@ export namespace preferoj {
      * @inner
      * @param {Event} event 
      */
-    function aldonuLingvon(event: Event) {
+    function aldonu_lingvon(event: Event) {
         var el = event.target as Element; 
 
         if (el.tagName == "LI") {
             var lng = el.getAttribute("data-lng");
             if (lng) {
                 //console.log("+"+lng);
-                lingvoj.push(lng);
-                dato = Date.now();
+                _lingvoj.push(lng);
+                _dato = Date.now();
             }
             //el.parentElement.removeChild(el);
             document.getElementById("pref_lng").appendChild(el.cloneNode(true));
@@ -137,7 +137,7 @@ export namespace preferoj {
      * @inner
      * @param {Event} event 
      */
-    function foriguLingvon(event: Event) {
+    function forigu_lingvon(event: Event) {
         var el = event.target as Element; 
 
         if (el.tagName == "LI") {
@@ -145,8 +145,8 @@ export namespace preferoj {
             if (lng) {
                 //console.log("-"+lng);
                 // forigu elo la areo pref_lng
-                var i = lingvoj.indexOf(lng);
-                lingvoj.splice(i, 1);
+                var i = _lingvoj.indexOf(lng);
+                _lingvoj.splice(i, 1);
             }
             el.parentElement.removeChild(el);
             const ela = document.getElementById("alia_lng").querySelector("[data-lng='"+lng+"'");
@@ -157,34 +157,53 @@ export namespace preferoj {
 
     /**
      * Prezentas dialogon kun ĉiuj difinitaj lingvoj kaj la momente
-     * prefertaj por ebligi adapti tiujn.
+     * preferataj por ebligi adapti tiujn.
      * @memberof preferoj
      * @param {Function} sePreta 
      */
-    export function dialog(sePreta: Function) {
-        var pref = document.getElementById("pref_dlg");
-        var inx = [['a','b'],['c','g'],['h','j'],['k','l'],['m','o'],['p','s'],['t','z']];
-
-        if (pref) {
+    export function dialog(sePreta?: Function) {
+        const pref = document.getElementById("pref_dlg");
+        if (pref instanceof HTMLDialogElement) {
+/*            
             pref.classList.toggle("kasxita");
-            store();
+            konservu();
         // se ankoraŭ ne ekzistas, faru la fenestrojn por preferoj (lingvoj)
         } else {
+            */
+
+            const btn_preta = document.getElementById("pref_dlg_preta");
+            if (btn_preta) {
+                btn_preta.addEventListener("click", function() {
+                    //document.getElementById("pref_dlg").classList.add("kasxita");
+                    const dlg = document.getElementById("pref_dlg");
+                    if (dlg instanceof HTMLDialogElement) dlg.close();
+                    konservu();
+                    if (sePreta) sePreta();
+                });
+            }
+
+            // ni montras parton de la lingvo laŭ la elektitaj literoj de la alfabeto
+            // a..b, c..g ktp.
+            const xdiv = document.getElementById("w:ix_literoj");
+            if (xdiv) xdiv.addEventListener("click",ŝanĝu_pref_lng);
+
+            /*
             var dlg = u.ht_element("DIV",{id: "pref_dlg", class: "overlay"});
             var div = u.ht_element("DIV",{id: "preferoj", class: "preferoj"});
             //var tit = u.ht_element("H2",{title: "tiun ĉi dialogon vi povas malfermi ĉiam el la piedlinio!"},"preferoj");
             var close = <Element>u.ht_button("preta", function() {
                 document.getElementById("pref_dlg").classList.add("kasxita");
-                store();
+                konservu();
                 // adaptu la rigardon, t.e. trd-listojn
                 //preparu_maletendu_sekciojn();
                 sePreta();
             },"fermu preferojn");
             close.setAttribute("id","pref_dlg_close");
 
+            var inx = [['a','b'],['c','g'],['h','j'],['k','l'],['m','o'],['p','s'],['t','z']];
             var xopt = inx.map(i => { return {id: i.join('_'), label: i.join('..')}; });
             var xdiv = u.ht_element("DIV",{id: "w:ix_literoj", class: "tabs"});
-            add_radios(xdiv,"pref_lingvoj",null,xopt,change_pref_lng);
+            aldonu_elektilojn(xdiv,"pref_lingvoj",null,xopt,ŝanĝu_pref_lng);
             
             //div.appendChild(make_element("SPAN"));
             xdiv.appendChild(close);
@@ -202,8 +221,11 @@ export namespace preferoj {
             var art = document.getElementById(sec_art);
             var h1 = art.getElementsByTagName("H1")[0];           
             h1.appendChild(dlg);
-        
-            load_pref_lng();
+        */
+
+            legu_pref_lng();
+
+            pref.show();
         } 
     }
 
@@ -220,7 +242,8 @@ export namespace preferoj {
      * @param radios - listo de HTML-id por la opcioj
      * @param handler - reago al elekto-eventoj
      */
-    function add_radios(parent: Element, name: string, glabel: string|null,
+    /*
+    function aldonu_elektilojn(parent: Element, name: string, glabel: string|null,
         radios: Array<{ id: string, label: string }>, handler: EventListenerOrEventListenerObject) {
         if (glabel) {
             const gl = document.createElement("LABEL");
@@ -244,17 +267,17 @@ export namespace preferoj {
         if(handler) {
             parent.addEventListener("click",handler);
         }
-    }
+    }*/
 
     /**
      * Konservas valorojn de preferoj en la loka memoro de la retumilo.
      * @memberof preferoj
      */    
-    function store() {
-        if (lingvoj.length > 0) {
+    function konservu() {
+        if (_lingvoj.length > 0) {
             var prefs: { [key: string]: any} = {};
-            prefs["w:preflng"] = lingvoj;
-            prefs["w:prefdat"] = dato;
+            prefs["w:preflng"] = _lingvoj;
+            prefs["w:prefdat"] = _dato;
             window.localStorage.setItem("revo_preferoj",JSON.stringify(prefs));     
         }
     }
@@ -266,13 +289,13 @@ export namespace preferoj {
      * loka memoro de la retumilo.
      * @memberof preferoj
      */
-    export function restore() {
+    export function relegu() {
         var str = window.localStorage.getItem("revo_preferoj");            
         var prefs = (str? JSON.parse(str) : null);
 
         var nav_lng = navigator.languages || [navigator.language];
-        lingvoj = (prefs && prefs["w:preflng"])? prefs["w:preflng"] : nav_lng.slice();
-        dato = (prefs && prefs["w:prefdat"])? prefs["w:prefdat"] : Date.now();
+        _lingvoj = (prefs && prefs["w:preflng"])? prefs["w:preflng"] : nav_lng.slice();
+        _dato = (prefs && prefs["w:prefdat"])? prefs["w:prefdat"] : Date.now();
     }
 
     
@@ -282,7 +305,7 @@ export namespace preferoj {
      * @memberof preferoj
      * @inner
      */
-    function storeSession() {
+    function konservu_seancon() {
         window.sessionStorage.setItem("revo_seanco",JSON.stringify(seanco));     
     }
 
@@ -293,7 +316,7 @@ export namespace preferoj {
      * @memberof preferoj
      * @inner
      */
-    function restoreSession() {
+    function restarigu_seancon() {
         var str = window.sessionStorage.getItem("revo_seanco");            
         seanco = (str? JSON.parse(str) : null);
     }
@@ -303,8 +326,8 @@ export namespace preferoj {
      * @memberof preferoj
      * @returns la lingvolisto
      */
-    export function languages() {
-        return lingvoj;
+    export function lingvoj() {
+        return _lingvoj;
     }
 
     /**
@@ -313,18 +336,7 @@ export namespace preferoj {
      * @memberof preferoj
      * @returns la dato kiam ni metis la preferojn
      */
-    export function date() {
-        return dato;
+    export function dato() {
+        return _dato;
     }
-/*
-    // eksportu publikajn funkciojn / variablojn
-    return {
-        //store: store,
-        restore: restore,
-        dialog: dialog,
-        languages: languages,
-        date: date,
-        seanco: seanco
-    };
-    */
 };

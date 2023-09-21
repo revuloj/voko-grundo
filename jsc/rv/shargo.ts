@@ -57,11 +57,9 @@ export function aktualigilo() {
  * Traktas saltojn ene de paĝo / al certa loko en paĝo
  */
 export function interna_salto(url: string, history: History) {
-    let hash: string;
+    let hash: string|undefined;
     if (url.indexOf('#') > -1) {
         hash = <string>url.split('#').pop();
-    } else {
-        hash = '';
     }
     // evitu, ĉar tio konfuzas la historion:... window.location.hash = hash;
     if (hash) {

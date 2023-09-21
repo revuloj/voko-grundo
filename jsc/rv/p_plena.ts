@@ -75,7 +75,7 @@ export namespace plena {
         if (lingvoj) {
             const p = lingvoj.querySelector('p');
             var jam: string[] = [];
-            for (let l of preferoj.languages()) {
+            for (let l of preferoj.lingvoj()) {
                 let l_ = l.split(/-/)[0];
                 if (jam.indexOf(l_)<0) { // evitu duoblaĵojn!
                     let a = lingvoj.querySelector("a[href*='lx_"+l_+"_']");
