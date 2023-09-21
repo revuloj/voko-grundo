@@ -388,18 +388,21 @@ function enigu_dok_nav(url: string, doc: Document, nav: Element) {
  * Helpfunkcio por ŝargu_paĝon. Enŝovas la enhavon de ŝargita
  * dokumento en la ĉefan panelon.
  */
-function ŝargu_main(url: string, doc: Document, main: Element) {
-    var body = doc.body;
+function enigu_dok_main(url: string, doc: Document, main: Element) {
     try {
-        adaptu_paghon(body,url);
+        adaptu_paghon(doc.body,url);
     } catch(error) {
         console.error(error);
     }
-    const article = main.querySelector("article");
-    if (article) {       
-        article.textContent = '';
-        article.append(...Array.from(body.children));
-        article.setAttribute("id","w:"+url);
+    const art_al = main.querySelector("article");
+    const art_el = doc.querySelector("article");
+    const piedo = doc.querySelector("footer");
+
+    if (art_al && art_el) {       
+        art_al.textContent = '';
+        art_al.setAttribute("id","w:"+url);
+        art_al.append(...Array.from(art_el.children));
+        if (piedo) art_al.append(piedo);
         
         let filename = url.split('/').pop();
 
@@ -435,26 +438,7 @@ function ŝargu_main(url: string, doc: Document, main: Element) {
             
                 // vd eble https://github.com/mathjax/MathJax/issues/2385
                 // aŭ https://mariusschulz.com/blog/declaring-global-variables-in-typescript
-                if ( typeof(MathJax) != 'undefined' && MathJax.Hub) {
-
-                    /*
-                    MathJax.Hub.Register.MessageHook("Math Processing Error",function (message) {
-                        //  message[2] is the Error object that records the problem.
-                        console.error(message)
-                        });
-
-                    MathJax.Hub.Startup.signal.Interest(
-                        function (message) {console.debug("Startup: "+message)}
-                    );
-                    MathJax.Hub.signal.Interest(
-                        function (message) {
-                            console.debug("Hub: "+message)
-                            if (message[1] instanceof HTMLElement) {
-                                console.debug("  >>"+message[1].tagName+message[1].id)
-                            }
-                        }
-                    ); 
-                    */                         
+                if ( typeof(MathJax) != 'undefined' && MathJax.Hub) {               
                     MathJax.Hub.Config({showMathMenu: false, showMathMenuMSIE: false});                        
                     MathJax.Hub.Queue(["Typeset",MathJax.Hub,"s_artikolo"]);
                 }
@@ -506,7 +490,7 @@ function ŝargu_paĝon_html(trg: string, url: string, push_state: boolean=true, 
                     redaktilo.store_art();
 
                 // PLIBONIGU: difinu ŝargu_main kiel ago de transiro(?()
-                ŝargu_main(url,doc,main);
+                enigu_dok_main(url,doc,main);
                 if (url == g.titolo_url)
                     t_main.transiro("titolo"); 
                 else if (url.startsWith(g.redaktilo_url))

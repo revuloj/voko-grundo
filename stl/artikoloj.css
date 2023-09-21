@@ -11,6 +11,7 @@ BODY, ARTICLE, HEADER, FOOTER {
       /*font-family: "Utopia", "TimesNewRoman", "Liberation Serif", serif;*/
     }
 
+
 main h1, article h1 {
     color: var(--main-fnt-clr) !important;
     /*font-size: large*/

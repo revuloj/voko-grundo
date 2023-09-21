@@ -926,6 +926,12 @@ footer {
 }
 */
 
+
+article[id^='w:titolo'] {
+    padding: 0;
+    height: 100%;
+}
+
 .titolmalfono {
     position: relative;
     height: 100%;
@@ -967,24 +973,25 @@ footer {
     padding: .5em;
 }
 
-.titolpagho details {
+
+.bonvenigo details {
     margin-top: .7em;
 }
 
-.titolpagho details[open]>summary {
+.bonvenigo details[open]>summary {
     border-bottom: 2px solid var(--main-fnt-clr);
 }
 
-.titolpagho summary {
+.bonvenigo summary {
     font-weight: bold;
 }
 
-.titolpagho summary:focus {
+.bonvenigo summary:focus {
     outline-style: dotted;
     outline-width: thin;
 }
 
-.titolpagho details p {
+.bonvenigo details p {
     margin-left: 1em;
     max-width: 30em;
     border-left: 2px dotted var(--main-fnt-clr);
@@ -1006,7 +1013,7 @@ footer {
 }
 
 @media (prefers-color-scheme: light) {
-    .titolpagho details p {
+    .bonvenigo details p {
         background: rgba(190, 200, 200, 50%);
         border-radius: 3px;
         /*
