@@ -376,7 +376,6 @@ nav a:active {
     color: #222;
 }
 
-
 #navigado .enhavo u {
     text-decoration-style: dotted;
     text-decoration-thickness: 1px;
@@ -543,6 +542,7 @@ table {
     margin-top: 1em !important;
 }
 
+
       
 @media (prefers-color-scheme: dark) {
     main IMG.fak {
@@ -568,32 +568,6 @@ IMG.ref {
     box-sizing: border-box;
 }
 
-/**
-#navigado img.fak {
-    * ŝovu la origina bildon dekstren kaj
-    per la klaso de la piktogramo la SVG-vinjeto aperu kiel fon-bildo*
-    **display: block;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-    width: 1.5em;
-    padding-left: 1.5em; **
-    background: none;
-    filter: invert(1) brightness(0.85) sepia(1);
-}
-**/
-
-/***
-#navigado br {
-    display: none;
-}
-***/
-
-/*
-#navigado table tr:first {
-    position: absolut;
-    top: 0;
-}
-*/
 #navigado td.aktiva, #navigado td.fona {
     overflow: hidden;
     text-overflow: ellipsis;
@@ -611,33 +585,9 @@ IMG.ref {
     font-weight: bold;
     border-bottom: none;
 
-    /*margin-left: .2em;*/
-
-    /*
-    background-image: 
-    linear-gradient(
-        var(--nav-bgr-clr) 5%, 
-        var(--nav-act-bgr-clr) 35%,
-        var(--nav-act-bgr-clr) 70%, 
-        var(--nav-bgr-clr) 95%);
-        */
-
     text-shadow: 2px 2px 5px var(--nav-act-bgr-clr);
 }
 
-/*
-nav li {
-    list-style-type: none;
-    padding-left: 2em;
-    padding-right: 0.2em;
-    padding-top: 0.4em;
-    padding-bottom: 0.4em;
-    width: 100%;
-    letter-spacing: .09rem;
-    text-transform: uppercase;
-}
-
-*/
 
 .literoj {
     line-height: 185%;
@@ -656,26 +606,9 @@ nav li {
     padding: 0.1em 0.2em !important; 
     margin: 0 !important;
     text-decoration: none;
-    /*background-color: #cA9510;*/
     color: black;
 
-    /*
-    background-image: linear-gradient(
-        var(--nav-bgr-clr) 40%, 
-          var(--nav-act-bgr-clr) 35%,
-        var(--nav-hov-bgr-clr) 45%, 
-          var(--nav-act-bgr-clr) 70%, 
-        var(--nav-bgr-clr) 70%);
-        */
-    text-shadow: 2px 2px 5px var(--nav-act-bgr-clr);
-        
-    /*background-image: radial-gradient(ellipse closest-side at 30% 50%, #eAb530 5%, goldenrod 55%);*/
-
-    /*border-left: 3px dotted lightgoldenrodyellow;*/
-    /*border-radius: 4px;*/
-    /*border-left: 3px solid var(--button-border-color);*/
-    /*border-top: 2px solid var(--button-border-color);*/
-    /*box-shadow: 1px 1px 3px var(--button-border-color); */
+    text-shadow: 2px 2px 5px var(--nav-act-bgr-clr);  
 }
 
 .literoj a:hover {
@@ -701,20 +634,11 @@ nav li {
 }
 
 .literoj[lang='bo'] .elektita {
-    /*
-    border: 2px dotted var(--nav-act-brd-clr);
-    padding: .2em;
-    */
     border: none; 
     text-decoration: underline var(--nav-brd-clr);
 }
 
-/*
-#navigado li, #navigado li>a, #navigado p>a {
-    display: block;
-    width: 100%
-}
-*/
+
 #navigado li,
 #navigado li>a {
     display: inline-block;
@@ -724,24 +648,6 @@ nav li {
 #mrk_sintakso li>a {
     display: inline;
 }
-
-/***
-#navigado li, li>a, p>a {
-    display: block;
-    width: 100%
-}
-***/
-
-/***
-#navigado td>a {
-    display: block;
-    width: 100%
-}
-***/
-
-/*
-#nav_menu>a, li a, 
-*/ 
 
 #navigado p b {
     display: flex;
@@ -754,29 +660,25 @@ nav li {
     display: none;
 }
 
-/*
-#navigado .menuo a {
-    display: inline-block;
-    padding: 0 0.3em; 
-    margin-top: 0.3em;
-    text-decoration: none;
-    letter-spacing: -.05em;
-    color: var(--nav-fnt-clr);
-}
-*/
-
 #navigado td a, #navigado li a {
-    /*
-    padding: 0.3em; 
-    margin-top: 0.3em;*/
     text-decoration: none;
     color: var(--nav-fnt-clr);
-    /*background-image: linear-gradient(0deg, goldenrod 15%, #eAb530 50%, goldenrod 85%);*/
 }
 
 /***************************************
    Serĉrezultoj
 ****************************************/
+
+
+#x\:serch_lingvoj {
+    display: inline !important;
+    width: auto !important;
+}
+
+#x\:serch_lingvoj::before {
+    content: "\25e6\00a0";
+    color: #222;
+}
 
 #x\:trovoj dt {
     border-bottom: 1px solid var(--nav-brd-clr);
@@ -791,13 +693,6 @@ nav li {
 #x\:trovoj dd code {
     color: var(--nav-code-fnt-clr);
 }
-
-/* jam per .enhavo *[lang='bo']
-#x\:trovoj *[lang='bo'] {
-    font-size: 150%;
-    vertical-align: text-top;
-}
-*/
 
 
 /***************************************

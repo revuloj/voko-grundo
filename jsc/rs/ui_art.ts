@@ -147,7 +147,7 @@ export class Artikolo extends XmlRedakt {
         }
 
         // preferataj lingvoj
-        preferoj.restore();
+        preferoj.relegu();
     };
 
     nova(art) {
