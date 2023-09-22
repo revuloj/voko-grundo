@@ -76,7 +76,8 @@ export function stato_difinoj() {
 
     // difinu agojn por transiroj al cel-statoj
     //t_main.alvene("titolo",()=>{ ŝargu_paĝon("main",titolo_url) });
-    t_main.alvene("red_xml",()=>{ 
+    t_main.alvene("red_xml",()=>{
+        //console.trace();
         t_red.transiro("redaktante"); // transiro al ne_redaktante okazas ĉe sendo aŭ rezigno!
         x.show("r:tab_txmltxt",'collapsed');
         x.show("x:rigardo_btn"); 

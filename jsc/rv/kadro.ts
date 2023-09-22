@@ -84,12 +84,14 @@ DOM.dok_post_lego(function() {
 
             let srch = x.getParamValue("q"); if (srch === '') srch = "tohuvabohuo"; // Kajto :-)
             const red = x.getParamValue("r");
-            const art = window.location.hash;
+            const hash = window.location.hash;
     
-            if (art) {
+            if (hash) {
                 // se post # troviĝas artikolnomo, ni rekte iru al tiu artikolo
-                const art_url = s.hash2art(art);
-                if (art_url) ŝargu_paĝon_html("main",art_url);   
+                // se okazas eraro pro nevalida #... ni montru la titolpaĝon (ne 404-paĝon)
+                const art_url = s.hash2art(hash);
+                if (art_url) ŝargu_paĝon_html("main",art_url,true,undefined,
+                    g.dlg_prefix+g.titolo_url);   
                 ŝargu_paĝon_html("nav",g.inx_eo_url);   
             } else if (red) {
                 // se parametro r estas donita, ni ekredaktos la donitan artikolon...
@@ -129,7 +131,7 @@ DOM.dok_post_lego(function() {
 
         //onclick("x:nav_srch_btn",(event)=>{ serchu(event) })
         DOM.klak_halt("#x\\:nav_srch_btn", (event: Event) => { 
-            sercho.serchu(event);
+            sercho.ekserchu(event);
             // transiro aŭ lanĉu la serĉon aŭ evtl. sekvu ĝin...
         });
         //t_nav.je("x:nav_srch_btn","click","serĉo");
@@ -168,7 +170,7 @@ DOM.dok_post_lego(function() {
             
             query.addEventListener("keydown", function(event) {
                 if (event.key == "Enter") {  
-                    sercho.serchu(event);
+                    sercho.ekserchu(event);
                     // t_nav.transiro("serĉo")...
                 }
             });
@@ -400,7 +402,7 @@ function enigu_dok_main(url: string, doc: Document, main: Element) {
 
     if (art_al && art_el) {       
         art_al.textContent = '';
-        art_al.setAttribute("id","w:"+url);
+        art_al.setAttribute("id","w:"+url.split('/').pop());
         art_al.append(...Array.from(art_el.children));
         if (piedo) art_al.append(piedo);
         
@@ -457,7 +459,7 @@ function enigu_dok_main(url: string, doc: Document, main: Element) {
  * @param {boolean} push_state - true: memoru la petitan paĝon en la historio, tiel ni povos poste reiri
  * @param {Function} whenLoaded - ago, farenda post fonŝargo de la paĝo
  */
-function ŝargu_paĝon_html(trg: string, url: string, push_state: boolean=true, whenLoaded?: Function) {
+function ŝargu_paĝon_html(trg: string, url: string, push_state: boolean=true, whenLoaded?: Function, eraro_url?: string) {
 
     u.HTTPRequest('GET', url, {},
         function(data: string) {
@@ -513,7 +515,7 @@ function ŝargu_paĝon_html(trg: string, url: string, push_state: boolean=true, 
     },  
     s.start_wait,
     s.stop_wait,
-    load_error
+    (request: Request) => http_eraro(request,eraro_url)
     );
 }
 
@@ -530,8 +532,7 @@ function ŝargu_paĝon_json(trg: string, url: string, push_state: boolean=true, 
     if (url.indexOf("/bibliogr.") > -1) {
         s.malfaldu_nav(); // se ni ne faras unue la alsalto ne funkcias. Eble ni tion ŝovu al bibliogr.ŝargo?
 
-        const hash = <string>url.split('#')[1];
-        bibliogr.ŝargo(hash,"bib",function() {
+        bibliogr.ŝargo("bib",function() {
             // elprenu la historio-staton
             var hstate = history.state || {};
 
@@ -564,10 +565,10 @@ function ŝargu_paĝon_json(trg: string, url: string, push_state: boolean=true, 
  * Se mankas paĝo petata ni montros nian apartan 404-paĝon
  * @param {*} request 
  */
-function load_error(request: any) {
+function http_eraro(request: any, http_404_url = g.http_404_url) {
     if (request.status == 404 && request.responseURL.indexOf('404')<0) // evitu ciklon se 404.html mankas!
-        ŝargu_paĝon_html("main",g.http_404_url);
- }
+        ŝargu_paĝon_html("main",http_404_url);
+}
 
 
 /**

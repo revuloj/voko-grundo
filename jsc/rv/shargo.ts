@@ -59,7 +59,7 @@ export function aktualigilo() {
 export function interna_salto(url: string, history: History) {
     let hash: string|undefined;
     if (url.indexOf('#') > -1) {
-        hash = <string>url.split('#').pop();
+        hash = decodeURI(<string>url.split('#').pop());
     }
     // evitu, ĉar tio konfuzas la historion:... window.location.hash = hash;
     if (hash) {
