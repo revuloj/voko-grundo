@@ -69,7 +69,7 @@ sub process_art {
     # ŝanĝu transskribojn de aziaj lingvoj al nova elemento <pr>
     $chg += ($xml =~ s;(<trd\s+lng="(?:ja|zh|hi)">.*?)\[<ind>(.*?)</ind>\]</trd>;$1<pr>$2</pr></trd>;sg);
     # tildon ni ne inkluzivas en prononco
-    $chg += ($xml =~ s;(<trd(?:\s+lng="ja")?>.*?)\[(?:&#xFF5E\;|～)<ind>(.*?)</ind>\]</trd>;$1<pr>$2</pr></trd>;sg); 
+    $chg += ($xml =~ s;(<trd(?:\s+lng="ja")?>)(&#xFF5E\;|～)(.*?)\[(?:&#xFF5E\;|～)<ind>(.*?)</ind>\]</trd>;$1$2<ind>$3</ind><pr>$4</pr></trd>;sg); 
 
     while (my $m = ($xml =~ s;(<trdgrp\s+lng="(?:ja|zh|hi)">.*?)\[<ind>(.*?)</ind>\]</trd>;$1<pr>$2</pr></trd>;scg)) {
         $chg += $m;
