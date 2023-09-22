@@ -821,11 +821,18 @@ footer {
 }
 */
 
-
 article[id^='w:titolo'] {
     padding: 0;
     height: 100%;
 }
+
+article[id^='w:redaktilo'] {
+    padding: 0;
+    height: 100%;
+    scrollbar-width: none;
+    overflow: hidden;
+}
+
 
 .titolmalfono {
     position: relative;
