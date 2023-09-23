@@ -97,7 +97,9 @@ export namespace redaktilo {
    */
   export function store_art() {
     const nom = document.getElementById("r:art") as HTMLInputElement;
-    xmlarea.konservu("red_artikolo",{nom: nom.value},'xml');
+
+    if(xmlarea && nom)
+      xmlarea.konservu("red_artikolo",{nom: nom.value},'xml');
     /*
     window.localStorage.setItem("red_artikolo",
       JSON.stringify({
