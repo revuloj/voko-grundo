@@ -1204,11 +1204,11 @@ export class XmlRedakt extends Tekst {
       //var radiko = this._radiko;
       const rx = XmlRedakt.re_txt;
 
-      const xmlarea = this.opcioj.xmlarea;
-      const radiko = xmlarea.getRadiko();
-      var t = (xmlarea.syncedXml() //this.element.val()
-          .replace(rx._tl0,radiko)
-          .replace(rx._tld,'$1'+radiko.slice(1)));
+      /// const xmlarea = this.opcioj.xmlarea;
+      /// const radiko = xmlarea.getRadiko();
+      var t = (this.teksto 
+          .replace(rx._tl0,this.radiko)
+          .replace(rx._tld,'$1'+this.radiko.slice(1)));
 
       // line numbers?
       if (line_numbers) {
