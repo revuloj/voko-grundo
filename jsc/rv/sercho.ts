@@ -71,11 +71,11 @@ export namespace sercho {
      * La uzanto volas serĉi ion...
      * @param {*} event 
      */
-    export function serchu(event: any) {
+    export function ekserchu(event: any) {
         event.preventDefault();
         var serch_in = event.target.closest("form")
             .querySelector('input[name=q]');
-        var esprimo = serch_in.value;
+        var esprimo = serch_in.value||"malpleno";
         if (esprimo) {
             // evitu ŝanĝi .search, ĉar tio refreŝigas la paĝon nevolite: 
             // location.search = "?q="+encodeURIComponent(esprimo);
@@ -110,6 +110,38 @@ export namespace sercho {
             const srch = document.getElementById("x:serchante");
             if (srch) srch.remove();
         }
+
+        // se la uzanto tajpis nur unuopan signon, sed ne literon, ni serĉu
+        // konvenan vorton
+        function nur_unu(s: string): string {
+            const s_nomo: StrObj = {
+                "%": "procento", "_": "substreko",
+                ".": "punkto", ",": "komo", ";": "punktokomo", ":": "dupunkto",
+                "?": "demando", "!": "ekkrio", '"': "citilo", "'": "apostrofo", "*": "steleto",
+                " ": "spacsigno", "&": "kaj", "|": "aŭ", "/": "oblikvo", "\\": "deklivo",
+                "0": "nul", "1": "unu", "2": "du", "3": "tri", "4": "kvar",
+                "5": "kvin", "6": "ses", "7": "sep", "8": "ok", "9": "naŭ",
+                "§": "paragrafo", "$": "dolaro", "(": "ronda krampo", ")": "ronda krampo",
+                "[": "rekta krampo", "]": "rekta krampo", "{": "kuniga krampo",
+                "}": "kuniga krampo", "=": "egalsigno", "<": "malpli", ">": "pli",
+                "@": "heliko", "+": "plus", "-": "minus", "~": "tildo", "^": "ĉapelo",
+                "°": "grado", "`": "akcento"             
+            }
+            if (s.length == 1 && (s.codePointAt(0)||0<128) && ! /[a-zA-Z]/.test(s)) {
+                return s_nomo[s]||"signo";
+            } else {
+                return s;
+            }
+        }
+
+        function mieneto(esprimo: string): boolean {
+            return (esprimo.length==2 || esprimo.length==3) 
+                && /^[:;8Xx][-<>o=]?[\)\(\/\[\]PD><]$/.test(esprimo)
+        }
+
+        // aparte traktu unuopajn signojn
+        if (esprimo.length == 1) esprimo = nur_unu(esprimo);
+        if (mieneto(esprimo)) esprimo = "mieneto";
 
         const srch = new Sercho();
         srch.serchu(esprimo, function() {

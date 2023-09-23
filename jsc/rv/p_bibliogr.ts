@@ -14,10 +14,9 @@ export namespace bibliogr {
 
     /**
      * Pridemandas la bibliografion kiel JSON de la servilo kaj prezentas ĝin kiel HTML
-     * @param bibliografiero kodo de bibliografiero, al kiu ni saltu post ŝargo
      * @param sort_by se donita, ni ordigos la bibliografion laŭ tiu kampo (bib,aut,tit)
      */
-    export function ŝargo(bibliografiero?: string, sort_by?: BibOrd, post_ŝargo?: Function) {
+    export function ŝargo(sort_by?: BibOrd, post_ŝargo?: Function) {
         u.HTTPRequest('POST', g.bib_json_url, {x: "1"}, // ni sendu ion per POST por ĉiam havi aktualan liston
             function(data: string) {
                 var json = (JSON.parse(data) as Array<Bibliogr>);
@@ -79,7 +78,7 @@ export namespace bibliogr {
                             const lau = a.getAttribute("href")?.substring(1) || "bib";
 
                             // reŝargu bibliogration kun nova ordo
-                            ŝargo(bibliografiero,lau as BibOrd);
+                            ŝargo(lau as BibOrd);
                         }
                     })
 

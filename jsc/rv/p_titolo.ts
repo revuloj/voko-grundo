@@ -34,7 +34,7 @@ export namespace titolo {
             
             query.addEventListener("keydown", function(event: KeyboardEvent) {
                 if (event.key == "Enter") {  
-                    sercho.serchu(event);
+                    sercho.ekserchu(event);
                 }
             });
             query.addEventListener("keyup",function(event: KeyboardEvent) {
@@ -71,7 +71,7 @@ export namespace titolo {
             s_form.querySelector("button[value='revo']")
                 ?.addEventListener("click", function(event) {
                     event.preventDefault();
-                    sercho.serchu(event);
+                    sercho.ekserchu(event);
                 });
 
             s_form.querySelector("button[value='ecosia']")

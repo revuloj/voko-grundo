@@ -120,9 +120,11 @@
 }
 
 .kklvbtn {
-    margin: 0;
+    margin: 1px 0 2px 0 !important;
+    height: 94%;
     /*margin-right: .1em;*/
     padding: .18em;
+    border-radius: 2px; 
     color: black !important;
     font-weight: normal !important;
     /*box-shadow: none !important;*/
