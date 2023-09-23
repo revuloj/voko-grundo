@@ -440,7 +440,7 @@ export namespace artikolo {
     }
 
     /**
-     * Aldonas butonojn por kasi kaj malkasi sekciojn
+     * Aldonas butonojn por kasi kaj malkaŝi sekciojn
      * @memberof artikolo
      * @inner
      * @param artikolo - la dosiernomo de la artikolo
@@ -448,7 +448,7 @@ export namespace artikolo {
     function kashu_malkashu_butonoj(artikolo: string) {
         // aldonu kasho/malkasho-butonojn  
         //var art = document.getElementById(sec_art);
-        var art = document.getElementsByTagName("article")[0];
+        var art = document.getElementById("s_artikolo").parentElement; /// document.getElementsByTagName("article")[0];
 
         var div=u.ht_element("DIV",{id: "tez_btn"});
         div.appendChild(u.ht_icon_button("i_tez", () => {tezauro(artikolo);}, "montru la tezaŭron"));
