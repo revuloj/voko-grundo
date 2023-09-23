@@ -127,8 +127,8 @@ export default function() {
         // do ni poste rekreos ĝin kaj devos ankaŭ marki la elektitan laŭ _item_
         const art = Artikolo.artikolo("#xml_text");
         if (art) {
-            const xmlarea = art.opcioj.xmlarea;
-            xmlarea.changeSubtext(val,true);
+            // const xmlarea = art.opcioj.xmlarea;
+            art.ekredaktu(val,true);
             // okazigu eventon poziciŝanĝo ĉe Artikolo...
             const ps = art.opcioj.poziciŝanĝo; 
             if (ps) (ps as Function)();

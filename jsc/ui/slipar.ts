@@ -45,7 +45,7 @@ export class Slipar extends UIElement {
 
         this.langetoj()?.forEach((l) => {   
             // kreu reagon
-            l.addEventListener("click",() => this._lelekto.call(this,l));
+            l.addEventListener("click",(event: PointerEvent) => this._lelekto.call(this,event,l));
         });
     }
 
@@ -69,7 +69,8 @@ export class Slipar extends UIElement {
         }
     }
 
-    _lelekto(langeto: HTMLLIElement) {
+    _lelekto(event: PointerEvent, langeto: HTMLLIElement) {
+        event.preventDefault();
         const lgoj = this.langetoj();
         if (lgoj) {
             const n = Array.from(lgoj).indexOf(langeto);

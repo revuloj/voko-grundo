@@ -293,8 +293,10 @@ export function getHashParts(): StrObj {
     let r: StrObj = {};
     for (const p of h.split('&')) {
         if (p.indexOf('=') < 0) {
+          // ne estas egalsigno, ni interpretas la parametron kiel marko
           r["mrk"] = p;
         } else {
+          // ŝlosilo=valoro
           const v = p.split('=');
           r[v[0]] = v[1];
         }

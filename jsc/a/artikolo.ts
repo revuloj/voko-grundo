@@ -115,12 +115,17 @@ export namespace artikolo {
      * @inner
      */
     function preparu_kashu_sekciojn() {
-        var d = document.getElementsByClassName("kasxebla");
+        const d = document.getElementsByClassName("kasxebla");
 
         // derivaĵo aŭ alia elemento celita kaj do montrenda
-        var h = x.getHashParts().mrk; 
-        var trg = h? document.getElementById(h) : null;
-        var d_vid = trg? trg.closest("section.drv, section.fontoj").firstElementChild.id : null;
+        let d_vid: string;
+        const h = x.getHashParts().mrk; 
+        if (h) {
+            const trg = document.getElementById(h);
+            if (trg) {
+                d_vid = trg.closest("section.drv, section.fontoj")?.firstElementChild.id;    
+            }
+        }
 
         var multaj = d.length > js_sojlo;
         var first = true;
@@ -149,9 +154,10 @@ export namespace artikolo {
                 h2.classList.add("kashilo");
                 // ni kaŝas derivaĵon sub la sekvaj kondiĉoj:
                 // 1. estas multaj derivaĵoj en la artikolo (vd. js_sojlo)
+                // kaj unu el:
                 // 2a. ne temas pri derivaĵo, al kiu ni celis rekte (per marko #, povas esti drv, snc, ekz, fnt)
                 // 2b. aŭ ĝi ne estas la unua derivaĵo en la artikolo, kondiĉe ke ni ne celas al specifa derivaĵo 
-                if ( multaj && (h && h2.id != d_vid) || (!h && !first) ) { 
+                if ( multaj && (d_vid && h2.id != d_vid) || (!d_vid && !first) ) { 
                     // \u25be
                     h2.appendChild(u.ht_icon_button("i_mkash",
                         null,"malkaŝu derivaĵon"));
