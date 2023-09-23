@@ -354,7 +354,7 @@ export function rkonservo(xmlarea: XmlRedakt) {
         // enmetu la artikolan HTML je la antaŭrigardo
         if (rigardo) {
           rigardo.textContent = '';
-          rigardo.append(article);  
+          rigardo.append(article); 
         }
 
         // ekipu ĝin per faldiloj ktp., se ne estas 'aldono' ni transdonos
