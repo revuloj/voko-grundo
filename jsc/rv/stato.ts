@@ -88,7 +88,7 @@ export function stato_difinoj() {
          */    
     });
     t_main.forire("red_xml",()=>{ 
-        DOM.e("r:tab_txmltxt")?.classList.add('collapsed');
+        DOM.e("#r\\:tab_txmltxt")?.classList.add('collapsed');
         DOM.kaŝu("#x\\:rigardo_btn"); 
         // tiu servos por reveni al la redaktilo
         // ĝis ni definitive finis redaktadon!
@@ -96,7 +96,7 @@ export function stato_difinoj() {
             DOM.malkaŝu("#x\\:redakt_btn"); 
     });
     t_main.alvene("red_rigardo",()=>{ 
-        const rigardo = DOM.e("#r\\tab_rigardo");
+        const rigardo = DOM.e("#r\\:tab_trigardo");
         if (rigardo) {
             rigardo.classList.remove("collapsed");
             rigardo.parentElement?.classList.add("rigardo");
@@ -105,7 +105,7 @@ export function stato_difinoj() {
         submeto.rantaurigardo();
     });
     t_main.forire("red_rigardo",()=>{ 
-        const rigardo = DOM.e("#r\\tab_rigardo");
+        const rigardo = DOM.e("#r\\:tab_trigardo");
         if (rigardo) {
             rigardo.classList.add("collapsed");
             rigardo.parentElement?.classList.remove("rigardo");

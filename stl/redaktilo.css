@@ -52,6 +52,7 @@
     flex-grow: 1;
     flex-shrink: 1;
     /*max-height: 0%; */
+    overflow-y: hidden; /* ŝajne gravas por ke ne 1-piksela linio malsupre kaj ŝovilo deksre */
 
     margin: 0;
     /*margin-bottom: .3em;*/
@@ -61,7 +62,7 @@
 }
 
 #r\:tabulo.rigardo {
-    overflow: auto; /* ŝajne grava por ke la ŝovilo aperu */
+    overflow-y: auto; /* ŝajne grava por ke la ŝovilo aperu */
 }
 
 #r\:navigado {    

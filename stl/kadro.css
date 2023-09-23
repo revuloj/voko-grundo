@@ -827,6 +827,11 @@ article[id^='w:titolo'] {
     height: 100%;
 }
 
+article[id^='w:redaktilo'] {
+    padding: 0;
+    height: 100%;
+}
+
 .titolmalfono {
     position: relative;
     height: 100%;

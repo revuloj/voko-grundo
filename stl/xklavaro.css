@@ -127,7 +127,8 @@
     font-weight: normal !important;
     /*box-shadow: none !important;*/
 
-    box-sizing: border-box;   
+    box-sizing: border-box;
+    border-radius: 2px;
     /*height: 100%;*/
 }
 .kklvbtn[value='1'] {

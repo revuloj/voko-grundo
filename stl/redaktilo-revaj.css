@@ -286,20 +286,14 @@ input[type='checkbox'] {
     padding: .18em;
     border-radius: 4px;
 }
+/*
 .kklvbtn {
-    /*
-    background-color: silver;
-    border-radius: 4px;
-    padding: .18em;
-    margin: 2px;
-    */
     border: 1px solid var(--btn-brd-clr);
 
     margin: 1px 0px 2px 0px;
     padding: .18em;
     color: black !important;
     font-weight: normal !important;
-    /*box-shadow: none !important;*/
 
     box-sizing: border-box;   
     height: 96%;
@@ -309,7 +303,7 @@ input[type='checkbox'] {
 }
 .kklvbtn[value='0'] {
     background-color: var(--btn-dis-bgr-clr) !important;
-}
+}*/
 
 fieldset {
     border: 1px solid var(--main-brd-clr); /*#327e04;*/
