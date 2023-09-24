@@ -11,5 +11,5 @@
       "rootDir": ".",
       "outDir": "../../build/ts/",
     },
-    "include": ["jsc/u.ts", "jsc/x.ts", "jsc/a/*", "jsc/rv/*"]
+    "include": ["jsc/u.ts", "jsc/ui/*", "jsc/x.ts", "jsc/a/*", "jsc/rv/*"]
 }
