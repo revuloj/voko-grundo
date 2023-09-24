@@ -3,9 +3,10 @@
 (c) 2023 Wolfram Diestel
 */
 
+import { quoteattr } from './kodado';
 import { XElPos } from './xmlstrukt';
 import { XmlRedakt } from './xmlredakt';
-import { DOM, Tekst, Dialog, Tabel, ListRedakt } from '../ui';
+import { DOM, Tekst, Dialog, DialogOpcioj, Tabel, ListRedakt } from '../ui';
 
 /* FARENDA:
  - ebligu administradon de ĉiuj tradukoj de redaktata teksto en XmlTrad, senŝargigante la tradukdialgon de administrado 
@@ -23,9 +24,9 @@ export type XPlace = XElPos & {
   grp?: string, trd?: string, itr?: string
 }
 
-type TradukDialogOpcioj = { 
+type TradukDialogOpcioj = DialogOpcioj & { 
   xmlarea: XmlRedakt,
-  trd_tabelo: HTMLElement|string
+  trd_tabelo: HTMLElement|string,
 };
 
 
@@ -419,7 +420,7 @@ export class TradukDialog extends Dialog {
         // aldonu novan linion al la tabelo        
         /// tableCnt += '<tr class="tr_' + s.el + '"><td>' + dsc + '</td><td>';
         this.tabelo.aldonu([dsc,`<div id="trd:${s.id}"/>`,
-          `<button formaction="#trd:${s.id}" title="Aldonu"><b>+</b></button>`]);
+          `<button formaction="#trd:${s.id}" title="Aldonu"><b>+</b></button>`],[s.el]);
 
         // difinu la mezan ĉelon de la linio kiel redaktebla listo
         const tlst = new ListRedakt(`#trd\\:${s.id}`,{});
@@ -433,7 +434,7 @@ export class TradukDialog extends Dialog {
         if ( trd && trd.length ) {
           trd.forEach((t) => {
             const id = `trd:${s.id}:${n++}`;
-            tlst.aldonu(`<input id="${id}" name="${id}" type="text" size="30" value="${t}"/>`);
+            tlst.aldonu(`<input id="${id}" name="${id}" type="text" size="30" value="${quoteattr(t)}"/>`);
           });
             /*
             for (let j=0; j<trd.length; j++) {

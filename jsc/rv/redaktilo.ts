@@ -506,7 +506,12 @@ export namespace redaktilo {
     // dialogoj
     new TradukDialog("#r\\:traduko_dlg",{
       xmlarea: xmlarea,
-      trd_tabelo: "#traduko_table"
+      trd_tabelo: "#traduko_table",
+      kampoj: {}, 
+      butonoj: {   
+        "Enmeti la tradukojn": function(ev: Event) { console.log(ev+"tradukojn_enmeti(event);") },
+        "\u2718": function() { this.fermu(); }
+      },      
     });
 
       /*

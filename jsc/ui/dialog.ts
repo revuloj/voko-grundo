@@ -7,7 +7,7 @@ import { DOM, HTMLCheckControlElement } from './dom';
 import { UIElement } from './uielement';
 import { UIStil } from './uistil';
 
-type DialogOpcioj = { kampoj: any, butonoj?: any, malfermu?: Function, 
+export type DialogOpcioj = { kampoj: any, butonoj?: any, malfermu?: Function, 
     valorŝanĝo?: Function // evento lanĉita, post voko de "valoroj" kun novaj valoroj 
 };
 

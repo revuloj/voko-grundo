@@ -58,8 +58,9 @@ export class Tabel extends UIElement {
      * @param eroj la vektoro de elementoj aŭ ties HTML-teksto, kiun ni aldonas malsupre al la tabelo
      * @param kapo temas pri la kaplinio de la tabelo - ni uzas <th> anstataŭ <td>
      */
-    aldonu(eroj: Array<HTMLElement|string>, kapo = false) {
+    aldonu(eroj: Array<HTMLElement|string>, klasoj: string[], kapo = false) {
         const tr = document.createElement("tr");
+        if (klasoj) tr.classList.add(...klasoj);
         eroj.forEach((e) => {
             const td = document.createElement(kapo?"th":"td");
             if (e instanceof HTMLElement)
