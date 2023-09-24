@@ -40,7 +40,6 @@ export class Dialog extends UIElement {
         if (d instanceof Dialog) d.fermu();
     }
 
-
     static malfermu(element: HTMLDialogElement|string) {
         let d = super.obj(element);
         if (d instanceof Dialog) d.malfermu();

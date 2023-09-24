@@ -6,6 +6,8 @@ export * from "./ui/dialog";
 export * from "./ui/buton";
 export * from "./ui/elektil";
 export * from "./ui/list";
+export * from "./ui/listredakt";
+export * from "./ui/tabel";
 export * from "./ui/tekst";
 export * from "./ui/klavar";
 export * from "./ui/propon";

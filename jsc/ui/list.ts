@@ -33,7 +33,7 @@ export class List extends UIElement {
         super(element, opcioj, aprioraj);
     
         // listerojn ni povas aktivigi per alklako
-        // la aperon de alklakita listero vi povas infuli per
+        // la aperon de alklakita listero vi povas influi per
         // la CSS de la klaso UIStil.aktiva
         this.element.addEventListener("click", (event) => {
             const trg = event.target;
