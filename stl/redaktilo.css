@@ -215,6 +215,52 @@
     font-weight: bold;
 }
 
+
+dialog table {
+    border-collapse: collapse;
+    border: 1px solid #e3a345;
+    margin-left: 1em;
+    margin-right: 1em;
+    /*height: 900px;*/
+    /*border-radius: 4px;*/
+}
+
+dialog table td {
+    border: 1px solid #e3a345;
+    /*border-radius: 4px;*/
+    padding: 0.2em;
+    vertical-align: top
+}
+
+#traduko_dlg {
+    width: fit-content;
+    padding-left: 0;   
+}
+
+
+#traduko_tabelo {
+    display: flex; /*inline-block;*/
+    flex-direction: column;
+    -webkit-flex-direction: column;
+    vertical-align: top;
+    flex: 1;
+    -webkit-flex: 1;
+
+    border: 0px solid blue;
+    border-bottom: 1px dotted var(--input-brd-clr);
+}
+
+#traduko_tabelo tr.drv {
+    background-color: var(--main-ac3-bgr-clr);
+}
+
+#traduko_tabelo button {
+    height: 1.6em; 
+    margin: 0;
+    padding: .1em .6em;
+}
+
+
 .collapsed {
     display: none !important;
     /*position: absolute;
