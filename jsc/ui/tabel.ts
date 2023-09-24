@@ -70,9 +70,9 @@ export class Tabel extends UIElement {
         });
         // se la tabelo havas thead/tbody ni enŝovas la novan linion tie,
         // aliokaze en la fino de <table>
-        let t1 = kapo? this.element.querySelector("thead") : this.element.querySelector("tbody");
+        let t1: HTMLElement|HTMLTableElement|HTMLTableSectionElement|null = kapo? this.element.querySelector("thead") : this.element.querySelector("tbody");
         if (!t1) t1 = this.element;
-        t1.append(tr);
+        if (t1) t1.append(tr);
     }
 
 }
