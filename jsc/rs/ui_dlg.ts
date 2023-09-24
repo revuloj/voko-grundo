@@ -1232,7 +1232,7 @@ function traduko_dlg_art_lingvoj() {
         const traduk_lingvoj = x.traduk_lingvoj(xml);
 
         if (traduk_lingvoj) {
-            // ŝargu, se ne jam ŝargita kaj trakuru la lingvolston
+            // ŝargu, se ne jam ŝargita kaj trakuru la lingvoliston
             revo_listoj.lingvoj.load(()=>Menu.refreŝigu("#traduko_menuo"),
                 (kodo,nomo) => {
                     if (kodo in traduk_lingvoj) {
@@ -1332,19 +1332,15 @@ function traduko_dlg_plenigu_trd(lng,lingvo_nomo) {
     if (xmlarea) {
         const xmltrad = xmlarea.xmltrad;
         xmltrad.preparu();
-        xmltrad.collectTrdAllStruct(lng);    
+        xmltrad.kolektu_tute_malprofunde(lng);    
         //const trd_shanghoj = $("#traduko_tradukoj").data("trd_shanghoj") || {};
 
         let tableCnt = '';
 
         //if (trdoj) {
 
-        // PLIBONIGU: estas neelegante tie pridemandi
-        // .xmlstruct - pli bone xmlarea jam redonu la pretan
-        // bezonatan strukturon por tradukprezento!
-        //
-        // Krom la uzo de semantikaj id-atributoj ne estas tro eleganta
-        // pli bone kreu propran tradukoj-objekton kun insert, update ktp
+        // La uzo de semantikaj id-atributoj ne estas tro eleganta.
+        // Pli bone kreu propran tradukoj-objekton kun insert, update ktp
         // kiu transprentas la administradon kaj aktualigadon...
         // ŝangojn oni devus skribi tiam nur se oni ŝanĝas lingvon aŭ enmetas tradukojn
         // en la dialogon ĝin fermante...
@@ -1359,7 +1355,7 @@ function traduko_dlg_plenigu_trd(lng,lingvo_nomo) {
                 if (s.el == 'drv') dsc = '<b>'+dsc+'</b>';
                 tableCnt += '<tr class="tr_' + s.el + '"><td>' + dsc + '</td><td>';
             
-                const trd = xmltrad.getStruct(lng,s.id);
+                const trd = xmltrad.trd_subteksto(lng,s.id);
                 /*
                 try {
                     // preferu jam ŝanĝitajn tradukojn

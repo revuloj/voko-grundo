@@ -4,7 +4,8 @@
 */
 
 import { XElPos } from './xmlstrukt';
-import { Tekst } from '../ui';
+import { XmlRedakt } from './xmlredakt';
+import { DOM, Tekst, Dialog, Tabel, ListRedakt } from '../ui';
 
 /* FARENDA:
  - ebligu administradon de ĉiuj tradukoj de redaktata teksto en XmlTrad, senŝargigante la tradukdialgon de administrado 
@@ -21,6 +22,12 @@ type Tradukoj = { [s_id: string]: TList } // tradukoj de iu lingvo kaj iu strukt
 export type XPlace = XElPos & {
   grp?: string, trd?: string, itr?: string
 }
+
+type TradukDialogOpcioj = { 
+  xmlarea: XmlRedakt,
+  trd_tabelo: HTMLElement|string
+};
+
 
 /**
  * Helpas ekstrakti kaj remeti la tradukojn de la redaktata teksto
@@ -57,7 +64,7 @@ export class XmlTrad {
 /**
  * Redonas tradukliston de tradukoj de unu strukturero en unu lingvo
  */
-getStruct(lng: Lingvo, s_id: string) {
+trd_subteksto(lng: Lingvo, s_id: string) {
     let trd: TList;
 
     try {
@@ -121,7 +128,7 @@ preparu() {
  * @param shallow - true: ni serĉas nur en la unua strukturnivelo, false: ni serĉas profunde tra la tuta arba strukturo
  * @param normalize - true: ni forigas ofc, klr, ind el la traduko, false: ni ne tuŝas ĝian strukturon
  */
- collectXml(xml: string, shallow: boolean=false, normalize: boolean=false) {
+ kolektu_xml(xml: string, shallow: boolean=false, normalize: boolean=false) {
     const re = XmlTrad.re_stru;
     const find_stag = (elm: string, xml: string, from: number) => 
       this.tra_elementoj_retro([elm],false,false,xml,from);  
@@ -197,7 +204,7 @@ preparu() {
  * dum la tradukoj de enhavataj 'snc' aperas por la sekvaj snc-subtekstoj
  * @param lng - la lingvo por kiu kolekti tradukojn
  */
- collectTrdAllStruct(lng: Lingvo) {
+ kolektu_tute_malprofunde(lng: Lingvo) {
     this.tradukoj_strukt[lng] = {}; // se jam ekzistas, tamen malplenigu! 
   
     this.tekst.subtekst_apliku((s) => {
@@ -207,7 +214,7 @@ preparu() {
         this.tradukoj = {};
   
         const xml = this.tekst.subteksto(s);
-        this.collectXml(xml,true,false); // xml, malprofunde, ne normigu
+        this.kolektu_xml(xml,true,false); // xml, malprofunde, ne normigu
         this.tradukoj_strukt[lng][s.id] = this.tradukoj[lng];  
       }
     });
@@ -225,7 +232,7 @@ preparu() {
  *       Se jam troviĝas traduko tie krome redoniĝas kampoj grp: 'grp' aŭ '', trd: - la kompleta traduko aŭ grupo, 
  *       itr: la kompleta enhavo de la traduko aŭ tradukgrupo
  */
- findTrdPlace(xml: string, lng: Lingvo): XPlace {
+ trovu_trd_lokon(xml: string, lng: Lingvo): XPlace {
     const expect_etag = (elist: Array<string>, xml: string, from?: number) => 
       this.tra_elementoj_retro(elist,true,true,xml,from);
     //expect_stag = (elist,xml,from) => this.travel_tag_bw (elist,false,true,xml,from);
@@ -348,5 +355,200 @@ preparu() {
       pos = xml.lastIndexOf(mark,pos-1);
     }
   };
+
+}
+
+
+/**
+ * Servas la tradukdialogon, permesante provizi al ĝi ĉiujn lingvojn kaj tradukojn.
+ * Registrante ĉiujn ŝanĝojn kaj fine aktualigante la tradukojn en la artikolo.
+ */
+export class TradukDialog extends Dialog {
+
+  private xmlarea: XmlRedakt;
+  private tabelo: Tabel;
+
+  /*
+  static aprioraj: TradukDialogOpcioj = {
+      xmlarea: undefined
+  };*/
+
+
+  static dialog(element: HTMLDialogElement|string) {
+    let d = super.obj(element);
+    if (d instanceof TradukDialog) return d;
+  }
+
+  constructor(element: HTMLDialogElement|string, opcioj: TradukDialogOpcioj) {
+    super(element,{});
+    this.xmlarea = opcioj.xmlarea;
+    this.tabelo = new Tabel(opcioj.trd_tabelo);
+  }
+
+  plenigu(lng: string, lingvo_nomo: string) {
+    // forigu antauajn eventojn por ne multobligi ilin...
+    DOM.malreago("#traduko_tradukoj","click");
+    DOM.malreago("#traduko_tradukoj","change");
+    
+    // ĉar la tradukdialogo montras samtempe ĉiam nur tradukojn de unu lingvo
+    // ni kunfandas tiujn el la artikolo, kaj tiujn, kiuj jam estas
+    // aldonitaj aŭ ŝanĝitaj en la dialogo
+    const xmltrad = this.xmlarea.xmltrad;
+    xmltrad.preparu(); // malplenigu de ĉiaj tradukoj, se restis de antaŭa voko...
+    xmltrad.kolektu_tute_malprofunde(lng);    
+
+    // >>> Trakuru la subtekstojn...
+
+    // PLIBONIGU: La uzo de semantikaj id-atributoj ne estas tro eleganta.
+    // Pli bone kreu propran tradukoj-objekton kun insert, update ktp
+    // kiu transprentas la administradon kaj aktualigadon...
+    // ŝangojn oni devus skribi tiam nur se oni ŝanĝas lingvon aŭ enmetas tradukojn
+    // en la dialogon ĝin fermante...
+    this.xmlarea.subtekst_apliku((s) => {
+      // trakuru la XML-subtekstoj (sub)drv, (sub)snc 
+      if (['drv','subdrv','snc','subsnc'].indexOf(s.el) > -1) {
+        // ekstraktu la priskribon por nomi la koncernan struktureron
+        const parts = (s as any).dsc.split(':');
+        let dsc = parts[1] || parts[0];
+        if (s.el == 'snc' || s.el == 'subsnc' && parts[1]) {
+            const p = dsc.indexOf('.');
+            if (p>-1) dsc = dsc.slice(p);
+        }
+        if (s.el == 'drv') dsc = '<b>'+dsc+'</b>';
+
+        // aldonu novan linion al la tabelo        
+        /// tableCnt += '<tr class="tr_' + s.el + '"><td>' + dsc + '</td><td>';
+        this.tabelo.aldonu([dsc,`<div id="trd:${s.id}"/>`,
+          `<button formaction="#trd:${s.id}" title="Aldonu"><b>+</b></button>`]);
+
+        // difinu la mezan ĉelon de la linio kiel redaktebla listo
+        const tlst = new ListRedakt(`#trd\\:${s.id}`,{});
+    
+        // elkribru la tradukojn de la subteksto
+        const trd = xmltrad.trd_subteksto(lng,s.id);
+        
+        // se estas tradukoj aldonu la tradukojn al la listo
+        // se ne aldonu nur malplenan kampon        
+        let n = 0;
+        if ( trd && trd.length ) {
+          trd.forEach((t) => {
+            const id = `trd:${s.id}:${n++}`;
+            tlst.aldonu(`<input id="${id}" name="${id}" type="text" size="30" value="${t}"/>`);
+          });
+            /*
+            for (let j=0; j<trd.length; j++) {
+                tableCnt += this.traduko_input_field(s.id,j,x.quoteattr(trd[j]));
+                tableCnt += "<br/>";
+            }*/
+        } else {
+          const id = `trd:${s.id}:${n}`;
+          tlst.aldonu(`<input id="${id}" name="${id}" type="text" size="30" value=""/>`);
+        /*
+            tableCnt += this.traduko_input_field(s.id,0,'') + '<br/>';  
+          */
+        }
+        /*
+        tableCnt += '</td>';
+        tableCnt += '<td>' + this.traduko_add_btn(s.id) + '</td>';
+        tableCnt += '</tr>';
+        */
+      }
+    }); // subtekst apliku
+
+    /*... poste
+    DOM.al_t("#traduko_lingvo",lingvo_nomo +" ["+lng+"]");
+    DOM.al_datum("#traduko_dlg","lng",lng);
+    DOM.al_t("#traduko_tradukoj",'');
+
+    // enigu traduko-kampojn
+    DOM.al_html("#traduko_tradukoj",tableCnt);
+
+    // aldonu reagon por +-butonoj
+    document.querySelectorAll("#traduko_tradukoj button").forEach((b) => {
+        b.addEventListener("click", (event) => {
+            const trg = event.currentTarget;
+            if (trg instanceof HTMLElement) {
+                const i_ref = trg.getAttribute("formaction")?.substring(1)+":0";
+                const first_input_of_mrk = document.getElementById(i_ref);
+                if (first_input_of_mrk) {
+                    const last_input_of_mrk = first_input_of_mrk?.parentElement
+                        ?.querySelector("input:last-of-type");
+
+                    if (last_input_of_mrk) {
+                        const parts = last_input_of_mrk.id.split(':');
+                        const next_id = parts[0] + ':' + parts[1] + ':' + (parseInt(parts[2]) + 1);
+                        last_input_of_mrk.insertAdjacentHTML("afterend",'<br/><input id="' + next_id 
+                            + '" type="text" name="' + next_id + '" size="30" value=""/>');
+
+                        // reago al ŝanĝo de enhavo
+                        const aldonita = document.getElementById(next_id);
+                        if (aldonita) {
+                            DOM.reago(aldonita, "change", this.trd_shanghita);
+                        }
+                    }
+
+                } // else: estu ĉiam almenaŭ unu eĉ se malplena kampo....
+            }
+        });
+    });         
+    
+    // rimarku ĉiujn ŝanĝojn de unuopaj elementoj
+    DOM.ido_reago("#traduko_tradukoj","change","input", trd_shanghita);
+    //DOM.ido_reago("#traduko_tabelo","blur","input",traduko_memoru_fokuson.bind(xklv));
+    */
+  }
+
+/* poste
+  trd_input_shanghita(element) {
+    const sid = element.id.split(':')[1];
+    const lng = DOM.datum("#traduko_dlg","lng");
+
+    const xmltrad = this.xmlarea.xmltrad;   
+
+    // prenu ĉiujn tradukojn kun tiu marko, ne nur la ĵus ŝanĝitane
+    DOM.ej("#traduko_tradukoj input[id^='trd\\:" + sid + "\\:']").forEach( (e) => {
+        var nro = e.id.split(':')[2];
+        xmltrad?.putStruct(sid,lng,+nro,(e as HTMLInputElement).value);                               
+    });
+  }
+  */
+
+  /*
+  traduko_input_field(mrk,nro,trd) {
+    var id = "trd:" + mrk + ':' + nro; //.replace(/\./g,'\\\\.') + '_' + nro;
+    return '<input id="' + id + '" type="text" name="' + id + '" size="30" value="' + trd + '"/>';
+  }*/
+
+  /* 
+  traduko_add_btn(mrk) {
+    const id = mrk; //.replace(/\./g,'\\\\.');
+    return `<button formaction="#trd:${id}" class="ui-button ui-widget ui-corner-all" title="Aldonu"><b>+</b></button>`;
+  }*/
+
+  /* poste...
+  shanghu_trd_lingvon(event,ui) {
+    var id = ui.menuero.id;
+    if (id && id.slice(0,4) == "trd_") {
+        var lng= id.split('_')[2];
+        var lingvo_nomo = ui.menuero.textContent;
+        //alert($("#traduko_lingvoj").val())
+        traduko_dlg_plenigu_trd(lng,lingvo_nomo);
+    }
+    DOM.al_datum("#traduko_dlg","last-focus",'');
+  }
+
+  // enmetu ŝanĝitajn kaj aldonitajn tradukojn en la XML-artikolon
+  tradukojn_enmeti(event) {
+    // prenu la shanghitajn tradukojn
+    //var trd_shanghoj = $("#traduko_tradukoj").data("trd_shanghoj"); 
+    const art = Artikolo.artikolo("#xml_text");
+    const trd_dlg = Dialog.dialog("#traduko_dlg")
+    try {
+        art?.enmetu_tradukojn(); //,trd_shanghoj);
+        trd_dlg?.fermu();
+    } catch (e) {
+        Eraro.al("#traduko_error",e.toString());
+    }
+  }*/
 
 }

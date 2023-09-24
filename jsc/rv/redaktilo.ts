@@ -5,12 +5,13 @@
 
 import * as u from '../u';
 import * as x from '../x';
-import {DOM} from '../ui';
+import {DOM, Dialog} from '../ui';
 
 import '../x/tekstiloj';
 import '../x/voko_entities';
 import {SDet} from '../x/xmlstrukt';
 import {XmlRedakt} from '../x/xmlredakt';
+import {TradukDialog} from '../x/xmltrad';
 import {XKlavaro} from '../x/xklavaro';
 
 import {insert_xml, xml_nova} from './redk_shabl';
@@ -189,7 +190,22 @@ export namespace redaktilo {
       xmlarea.teksto = xml_nova(art);
     }
 
+    /**
+     * Plenigas kaj montras la traduk-dialogon
+     */
+    function traduk_dialogo() {
+      /*
+      const dlg = document.getElementById("r:traduko_dlg");
+      if (dlg instanceof HTMLDialogElement) {
+        dlg.show();
+      }*/
 
+      const dlg = TradukDialog.dialog("#r\\:traduko_dlg");
+      if (dlg) {
+        dlg.plenigu('de','germana');
+        dlg.malfermu();
+      }
+    }
   
   /**
    * Ŝargas XML-artikolon por redaktado de la servilo
@@ -404,9 +420,9 @@ export namespace redaktilo {
           const pressed = ""+(1 - parseInt(xklvr.value));
           xklvr.value = pressed;
           if (pressed == "1") {
-            x.show("r:klavaro");
+            DOM.malkaŝu("#r\\:klavaro");
           } else {
-            x.hide("r:klavaro");
+            DOM.kaŝu("#r\\:klavaro");
           }
       });    
 
@@ -436,17 +452,17 @@ export namespace redaktilo {
         (event: Event, cmd) => { 
           // PLIBONIGU: tion ni povas ankaŭ meti en xklavaro.js!
           if (cmd.cmd == 'indiko') {
-            x.hide("r:klv_fak");
-            x.show("r:klv_ind");
-            x.hide("r:klv_elm");
+            DOM.kaŝu("#r\\:klv_fak");
+            DOM.malkaŝu("#r\\:klv_ind");
+            DOM.kaŝu("#r\\:klv_elm");
           } else if (cmd.cmd == 'fako') {
-            x.hide("r:klv_ind");
-            x.show("r:klv_fak");
-            x.hide("r:klv_elm");
+            DOM.kaŝu("#r\\:klv_ind");
+            DOM.malkaŝu("#r\\:klv_fak");
+            DOM.kaŝu("#r\\:klv_elm");
           } else if (cmd.cmd == 'klavaro') {
-            x.hide("r:klv_fak");
-            x.show("r:klv_elm");
-            x.hide("r:klv_ind");
+            DOM.kaŝu("#r\\:klv_fak");
+            DOM.malkaŝu("#r\\:klv_elm");
+            DOM.kaŝu("#r\\:klv_ind");
           }
         },
         () => xmlarea.setUnsynced())
@@ -486,6 +502,12 @@ export namespace redaktilo {
     // strukturlisto
     document.getElementById('r:art_strukturo')
       ?.addEventListener("change",struktur_elekto);
+
+    // dialogoj
+    new TradukDialog("#r\\:traduko_dlg",{
+      xmlarea: xmlarea,
+      trd_tabelo: "#traduko_table"
+    });
 
       /*
     document.getElementById("r:cx")
@@ -565,6 +587,9 @@ export namespace redaktilo {
 
       if (b.id == "r:create_new_art") { // [kreu]
         b.addEventListener("click", kreu_novan);
+
+      } else if (b.id == "r:trd_dlg") { // traduko-dialogo
+        b.addEventListener("click",traduk_dialogo);
 
       } else if (b.id == "r:trd_sercho") { // traduko-serĉo
         b.addEventListener("click", (event) => trad.trad_uwn(event,xmlarea));

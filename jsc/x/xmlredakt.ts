@@ -604,7 +604,7 @@ export class XmlRedakt extends Tekst {
       // do ĝuste estus this.tradukoj = {} aŭ this.tradukoj[lng] = [] !?
     }
 
-    this.xmltrad.collectXml(xml,shallow,normalize);
+    this.xmltrad.kolektu_xml(xml,shallow,normalize);
   };
 
 
@@ -617,14 +617,14 @@ export class XmlRedakt extends Tekst {
   
     // kolektu unue la tradukojn profunde en la aktuala subteksto
     this.xmltrad.preparu();
-    this.xmltrad.collectXml(xml,false,true); // profunde, normigu
+    this.xmltrad.kolektu_xml(xml,false,true); // profunde, normigu
 
     // se temas pri subdrv, snc, subsnc ni kolektu ankaŭ de la parencoj,
     // ĉar ekz-e la traduko de drv validas ankaŭ por ĉiu ena snc...
     let p = this.patro(this.aktiva);
     while ( ['snc','subdrv','drv'].indexOf(p["el"])>-1 ) {
       xml = this.subteksto(p);
-      this.xmltrad.collectXml(xml,true,true); // malprofunde, normigu
+      this.xmltrad.kolektu_xml(xml,true,true); // malprofunde, normigu
       p = this.patro(p);
     }
   };
@@ -642,7 +642,7 @@ export class XmlRedakt extends Tekst {
 
     const xml = this.redakt_teksto;
 
-    const place = this.xmltrad.findTrdPlace(xml,lng); // this.getCurrentLastTrd(lng);
+    const place = this.xmltrad.trovu_trd_lokon(xml,lng); // this.getCurrentLastTrd(lng);
     if (place) {
       // se jam estas .trd, ni anstataŭigu ĝin per la etendita trdgrp...,
       // alie ni enmetos novan trd (len=0)
@@ -713,7 +713,7 @@ export class XmlRedakt extends Tekst {
       }
     }
 
-    const place: XPlace = this.xmltrad.findTrdPlace(xml,lng); // this.getCurrentLastTrd(lng);
+    const place: XPlace = this.xmltrad.trovu_trd_lokon(xml,lng); // this.getCurrentLastTrd(lng);
     if (place) {
       const len = place.trd? place.trd.length : 0;
       //this.select(place.pos, len);
