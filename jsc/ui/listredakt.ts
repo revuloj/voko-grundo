@@ -4,7 +4,8 @@
  */
 
 import { UIElement } from './uielement';
-import { UIStil } from './uistil';
+import { DOM } from './dom';
+/// import { UIStil } from './uistil';
 
 /**
  * Klaso por provizi redakteblan liston. T.e. kies listeroj estas enig-elementoj (<input>).
@@ -15,16 +16,38 @@ export class ListRedakt extends UIElement {
     static aprioraj = {
     };
 
-    static kreu(spec: string, opcioj?: any) {
+    /**
+     * Kreas unu aŭ plurajn listojn por ĉiuj elementoj laŭ specifo
+     * @param spec CSS-elektilo specifanta la koncernajn elementojn
+     * @param opcioj la opcioj de la kreenda(j) listo(j)
+     */
+    static kreu(spec: string, opcioj?: any): void {
         document.querySelectorAll(spec).forEach((e) => {
             if (e instanceof HTMLElement)
                 new ListRedakt(e,opcioj);
         });
     }
 
-    static list(element: HTMLElement|string) {
+    /**
+     * Redonas ListRedakt-objekton apartenantan al la donia elemento
+     * @param element la elemento aŭ ties CSS-elektilo
+     */
+    static list(element: HTMLElement|string): ListRedakt|undefined {
         const e = super.obj(element);
         if (e instanceof ListRedakt) return e;
+    }
+
+    /**
+     * Redonas ListRedakt-objekton, kies listero estas donita,
+     * supozante ke ĝi estas tiel HTML-id-elemento. Aliokaze nenio redoniĝas
+     */
+    static list_kun_ero(ero: HTMLElement|string): ListRedakt|undefined {
+        const el = (typeof ero === "string")?
+            document.querySelector(ero) as HTMLElement : ero;
+        if (el) {
+            const patro = el.parentElement;
+            if (patro) return ListRedakt.list(patro);
+        }
     }
 
     constructor(element: HTMLElement|string, opcioj?: any, aprioraj = ListRedakt.aprioraj) {
@@ -61,6 +84,24 @@ export class ListRedakt extends UIElement {
             this.element.append(html);
         else
             this.element.insertAdjacentHTML("beforeend",html);
+    }
+
+    /**
+     * Redonas la nombron de listeroj (supozante ke tiu estas egala al la nombro de HTML-id-elementoj)
+     */
+    nombro() {
+        return this.element.childElementCount;
+    }
+
+    /**
+     * Redonas la liston de valoroj, supozante ke temas pri HTML-lementoj kiuj havas econ 'value'
+     */
+    valoroj(): string[] {
+        const vj: string[] = [];
+        Array.from(this.element.children).forEach((c) => {
+            if (DOM.isFormElement(c)) vj.push(c.value||'');
+        })
+        return vj;
     }
 
 }

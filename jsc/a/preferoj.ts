@@ -154,6 +154,13 @@ export namespace preferoj {
         }
     }
 
+    export function dlg_konservo(sePreta?: Function) {
+        //document.getElementById("pref_dlg").classList.add("kasxita");
+        const dlg = document.getElementById("pref_dlg");
+        if (dlg instanceof HTMLDialogElement) dlg.close();
+        konservu();
+        if (sePreta) sePreta();
+    }
 
     /**
      * Prezentas dialogon kun ĉiuj difinitaj lingvoj kaj la momente
@@ -174,11 +181,13 @@ export namespace preferoj {
             const btn_preta = document.getElementById("pref_dlg_preta");
             if (btn_preta) {
                 btn_preta.addEventListener("click", function() {
-                    //document.getElementById("pref_dlg").classList.add("kasxita");
+                    dlg_konservo(sePreta);
+                    /*
                     const dlg = document.getElementById("pref_dlg");
                     if (dlg instanceof HTMLDialogElement) dlg.close();
                     konservu();
                     if (sePreta) sePreta();
+                    */
                 });
             }
 

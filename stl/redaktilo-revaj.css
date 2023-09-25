@@ -982,7 +982,7 @@ nav {
 
 .dlg_tabelo {
     border-collapse: collapse;
-    border: 1px solid #e3a345;
+    border: 1px solid var(--ovr2-brd-clr);
     margin-left: 1em;
     margin-right: 1em;
     /*height: 900px;*/
@@ -990,7 +990,7 @@ nav {
 }
 
 .dlg_tabelo td {
-    border: 1px solid #e3a345;
+    border: 1px solid var(--ovr2-brd-clr);
     /*border-radius: 4px;*/
     padding: 0.2em;
     vertical-align: top

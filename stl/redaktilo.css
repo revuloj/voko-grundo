@@ -218,7 +218,7 @@
 
 dialog table {
     border-collapse: collapse;
-    border: 1px solid #e3a345;
+    border: 1px solid var(--ovr2-brd-clr);
     margin-left: 1em;
     margin-right: 1em;
     /*height: 900px;*/
@@ -226,7 +226,7 @@ dialog table {
 }
 
 dialog table td {
-    border: 1px solid #e3a345;
+    border: 1px solid var(--ovr2-brd-clr);
     /*border-radius: 4px;*/
     padding: 0.2em;
     vertical-align: top
@@ -237,6 +237,12 @@ dialog table td {
     padding-left: 0;   
 }
 
+/* limigu altecon de tabelo ene de dialogo */
+.dlg_tab_div {
+    overflow-y: auto;
+    overflow-x: visible;
+    max-height: 30ex;
+}
 
 #traduko_tabelo {
     display: flex; /*inline-block;*/
@@ -252,6 +258,7 @@ dialog table td {
 
 #traduko_tabelo tr.drv {
     background-color: var(--main-ac3-bgr-clr);
+    border-top: 3px solid var(--ovr2-brd-clr);
 }
 
 #traduko_tabelo button {

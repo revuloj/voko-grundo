@@ -205,7 +205,7 @@ export namespace artikolo {
      * @memberof artikolo
      * @inner
      */
-    function preparu_maletendu_sekciojn() {
+    export function preparu_maletendu_sekciojn() {
         var d = document.getElementsByClassName("etendebla");
     //    var sojlo = 3+2; // ekde tri drv + trd + fnt, au du drv kaj adm
     // if (d.length > sojlo) { // ĝis tri derivaĵoj (+tradukoj, fontoj), ne kaŝu la alineojn

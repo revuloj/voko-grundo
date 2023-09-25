@@ -48,9 +48,11 @@
     /* redaktilo */
     --pos-bgr-clr: gray;
 
+    /* supermetitaj elementoj, t.e. dialogoj k.a. */
     --ovr-bgr-clr: #F5F5D5;
     --ovr-brd-clr: green;
     --ovr-shd-clr: gray;
+    --ovr2-brd-clr: #e3a345; /** internaj randoj, ekz-e de tabeloj */
 
     --a-fnt-clr: darkblue;
  

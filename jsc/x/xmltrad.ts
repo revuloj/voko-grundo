@@ -17,6 +17,10 @@ import { DOM, Tekst, Dialog, DialogOpcioj, Tabel, ListRedakt } from '../ui';
 
 export type Lingvo = string;
 // type sId = string; // la valoro de SId (vd. xmlstruct)
+
+// PLIBONIGU: la strukturo estas iom profunda kaj tial la kodo iom
+// malfacile legiĝas. Pli bone uzu unu, du klasojn kun konvenaj metodo-nomoj
+// por administri la tradukojn
 export type TList = Array<string>;
 type Tradukoj = { [s_id: string]: TList } // tradukoj de iu lingvo kaj iu strukturero
 
@@ -85,7 +89,7 @@ trd_subteksto(lng: Lingvo, s_id: string) {
  * @param no - la pozicio de la tradukoj en tiu strukturo kaj lingvo
  * @param trd - la tradukteksto
  */
-putStruct(s_id: string, lng: Lingvo, no: number, trd: string) {
+adaptu_trd_subteksto(s_id: string, lng: Lingvo, no: number, trd: string) {
     // PLIBONIGU: verŝajne estas pli efike meti aldonojn kaj ŝanĝojn 
     // al Xmlarea.tradukoj nun anstataŭ en aparta dlg-alpendo trd_shanghoj...
     if (! this.shanghoj_strukt[lng]) this.shanghoj_strukt[lng] = {};
@@ -381,7 +385,7 @@ export class TradukDialog extends Dialog {
   }
 
   constructor(element: HTMLDialogElement|string, opcioj: TradukDialogOpcioj) {
-    super(element,{});
+    super(element,opcioj);
     this.xmlarea = opcioj.xmlarea;
     this.tabelo = new Tabel(opcioj.trd_tabelo);
   }
@@ -390,13 +394,18 @@ export class TradukDialog extends Dialog {
     // forigu antauajn eventojn por ne multobligi ilin...
     DOM.malreago("#traduko_tradukoj","click");
     DOM.malreago("#traduko_tradukoj","change");
+
+    // montru la lingvon en la tabel-titolo
+    DOM.al_t("#traduko_lingvo",`${lingvo_nomo} [${lng}]`);
     
     // ĉar la tradukdialogo montras samtempe ĉiam nur tradukojn de unu lingvo
     // ni kunfandas tiujn el la artikolo, kaj tiujn, kiuj jam estas
     // aldonitaj aŭ ŝanĝitaj en la dialogo
     const xmltrad = this.xmlarea.xmltrad;
     xmltrad.preparu(); // malplenigu de ĉiaj tradukoj, se restis de antaŭa voko...
-    xmltrad.kolektu_tute_malprofunde(lng);    
+    xmltrad.kolektu_tute_malprofunde(lng);
+
+    this.tabelo.malplenigu();
 
     // >>> Trakuru la subtekstojn...
 
@@ -411,11 +420,15 @@ export class TradukDialog extends Dialog {
         // ekstraktu la priskribon por nomi la koncernan struktureron
         const parts = (s as any).dsc.split(':');
         let dsc = parts[1] || parts[0];
+        // koncizigu la priskribon forigante prefiksan parton
         if (s.el == 'snc' || s.el == 'subsnc' && parts[1]) {
             const p = dsc.indexOf('.');
             if (p>-1) dsc = dsc.slice(p);
+        } else if (s.el == 'drv' || s.el == 'subdrv') {
+          const p = dsc.indexOf(' ');
+          if (p>-1) dsc = dsc.slice(p);
+          dsc = '<b>'+dsc+'</b>';
         }
-        if (s.el == 'drv') dsc = '<b>'+dsc+'</b>';
 
         // aldonu novan linion al la tabelo        
         /// tableCnt += '<tr class="tr_' + s.el + '"><td>' + dsc + '</td><td>';
@@ -425,11 +438,11 @@ export class TradukDialog extends Dialog {
         // difinu la mezan ĉelon de la linio kiel redaktebla listo
         const tlst = new ListRedakt(`#trd\\:${s.id}`,{});
     
-        // elkribru la tradukojn de la subteksto
+        // prenu la tradukojn de la subteksto
         const trd = xmltrad.trd_subteksto(lng,s.id);
         
-        // se estas tradukoj aldonu la tradukojn al la listo
-        // se ne aldonu nur malplenan kampon        
+        // se estas tradukoj, aldonu la tradukojn al la listo;
+        // se ne, aldonu nur malplenan kampon        
         let n = 0;
         if ( trd && trd.length ) {
           trd.forEach((t) => {
@@ -455,6 +468,30 @@ export class TradukDialog extends Dialog {
         */
       }
     }); // subtekst apliku
+
+
+    // funkciigu la +-butonojn por aldoni po malplenan kampon
+    DOM.ido_reago("#traduko_tradukoj","click","button",(event)=> {
+      const trg = event.currentTarget;
+      if (trg instanceof HTMLButtonElement) {
+        const lrid = trg.getAttribute("formaction")?.substring(1);
+        if (lrid) {
+          const lrel = document.getElementById(lrid);
+          if (lrel) {
+            const lr = ListRedakt.list(lrel);
+            if (lr) {
+              const id = `${lrid}:${lr.nombro}`;
+              lr.aldonu(`<input id="${id}" name="${id}" type="text" size="30" value=""/>`)
+            }
+          }
+        }
+      }
+    });
+
+        
+    // rimarku ĉiujn ŝanĝojn de unuopaj elementoj
+    DOM.ido_reago("#traduko_tradukoj","change","input", this.trd_input_shanghita);
+
 
     /*... poste
     DOM.al_t("#traduko_lingvo",lingvo_nomo +" ["+lng+"]");
@@ -499,20 +536,30 @@ export class TradukDialog extends Dialog {
     */
   }
 
-/* poste
-  trd_input_shanghita(element) {
-    const sid = element.id.split(':')[1];
-    const lng = DOM.datum("#traduko_dlg","lng");
+  trd_input_shanghita(event: Event) {
+    const trg = event.target;
+    if (trg instanceof HTMLElement) {
+      // kiu listo enhavas tiun ĉi eron
+      const lr = ListRedakt.list_kun_ero(trg);
 
-    const xmltrad = this.xmlarea.xmltrad;   
+      if (lr) {
+        // la @id-atributo estas de la formo trd:<subtekst-id>
+        const s_id = lr.element.id.split(':').pop();
+        const lng = DOM.datum("#traduko_dlg","lng");
 
-    // prenu ĉiujn tradukojn kun tiu marko, ne nur la ĵus ŝanĝitane
-    DOM.ej("#traduko_tradukoj input[id^='trd\\:" + sid + "\\:']").forEach( (e) => {
-        var nro = e.id.split(':')[2];
-        xmltrad?.putStruct(sid,lng,+nro,(e as HTMLInputElement).value);                               
-    });
+        // trovu la koncernan traduk-liston kaj anstataŭigu ĝin per
+        // la aktuala el la dialogo
+        const xmltrad = this.xmlarea.xmltrad;
+
+        if (s_id && lng) {
+          lr.valoroj().forEach((val,nro) => {
+            // PLIBONIGU: pli simple tuj transdonu la tutan liston anstataŭ eron post ero
+            xmltrad.adaptu_trd_subteksto(s_id,lng,nro,val);
+          });
+        }
+      }
+    }
   }
-  */
 
   /*
   traduko_input_field(mrk,nro,trd) {
@@ -526,7 +573,7 @@ export class TradukDialog extends Dialog {
     return `<button formaction="#trd:${id}" class="ui-button ui-widget ui-corner-all" title="Aldonu"><b>+</b></button>`;
   }*/
 
-  /* poste...
+  /* 
   shanghu_trd_lingvon(event,ui) {
     var id = ui.menuero.id;
     if (id && id.slice(0,4) == "trd_") {
@@ -536,12 +583,12 @@ export class TradukDialog extends Dialog {
         traduko_dlg_plenigu_trd(lng,lingvo_nomo);
     }
     DOM.al_datum("#traduko_dlg","last-focus",'');
-  }
+  }*/
 
+/* poste...
   // enmetu ŝanĝitajn kaj aldonitajn tradukojn en la XML-artikolon
   tradukojn_enmeti(event) {
     // prenu la shanghitajn tradukojn
-    //var trd_shanghoj = $("#traduko_tradukoj").data("trd_shanghoj"); 
     const art = Artikolo.artikolo("#xml_text");
     const trd_dlg = Dialog.dialog("#traduko_dlg")
     try {

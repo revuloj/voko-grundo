@@ -54,6 +54,16 @@ export class Tabel extends UIElement {
     }
 
     /**
+     * Malplenigas la tabelon
+     * @param kapo - se 'true' ni forigas ankaŭ liniojn kun kapelemento (<th>)
+     */
+    malplenigu(kapo = false) {
+        this.element.querySelectorAll("tr").forEach((tr) => {
+            if (kapo || tr.querySelector('td')) tr.remove();
+        })
+    }
+
+    /**
      * Aldonas linion.
      * @param eroj la vektoro de elementoj aŭ ties HTML-teksto, kiun ni aldonas malsupre al la tabelo
      * @param kapo temas pri la kaplinio de la tabelo - ni uzas <th> anstataŭ <td>

@@ -77,6 +77,7 @@ export class Dialog extends UIElement {
             h.onpointerdown = this.komencuMovon.bind(this);
             h.onpointerup = this.finuMovon.bind(this);
         }
+        
         // aldonu butonojn
         const bopc = this.opcioj.butonoj;
         if (bopc) {

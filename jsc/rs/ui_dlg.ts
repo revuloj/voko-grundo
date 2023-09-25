@@ -1436,7 +1436,7 @@ function trd_input_shanghita(element) {
     // prenu ĉiujn tradukojn kun tiu marko, ne nur la ĵus ŝanĝitane
     DOM.ej("#traduko_tradukoj input[id^='trd\\:" + sid + "\\:']").forEach( (e) => {
         var nro = e.id.split(':')[2];
-        xmltrad?.putStruct(sid,lng,+nro,(e as HTMLInputElement).value);                               
+        xmltrad?.adaptu_trd_subteksto(sid,lng,+nro,(e as HTMLInputElement).value);                               
     });
 }
 

@@ -6,7 +6,7 @@ import * as u from '../u';
 import {agordo as g} from '../u';
 import * as x from '../x';
 import * as s from './shargo';
-import {DOM} from '../ui';
+import {DOM, Dialog} from '../ui';
 
 import {t_nav,t_red,t_main,stato_difinoj} from './stato';
 import {artikolo} from '../a/artikolo';
@@ -47,8 +47,12 @@ s.diffn_ŝargu_paĝon(ŝargu_paĝon_html);
  */
 DOM.dok_post_lego(function() { 
 
-    // dom_console();
-    console.log("kadro.when_doc_ready...");
+    // en aparatoj, kie ni ne havas programistan kromfenestron (iOS, Android...)
+    // ni tiel povas krei fenestreton kun la eraromesaĝoj. Normale ni ne kreas gin!
+    /// if (g.debug) dom_console();
+
+    // ek...
+    console.log("kadro.dok_post_lego...");
 
     // sendu erarojn al aside#console - ŝaltu supre debug=true!
     if (g.debug) {
@@ -66,12 +70,25 @@ DOM.dok_post_lego(function() {
         });  
     }
 
-    // preferataj lingvoj
-    preferoj.relegu();
+
+    //##################### transiroj / statoj
 
     // difinu la stato-transirojn
     stato_difinoj();
+
+
+    //##################### dialogoj
+
+    // legu prefertajn lingvojn kaj kreu dialogon por agordi ilin
+    preferoj.relegu();
+    new Dialog("#pref_dlg",{});
+    /*
+        butonoj: {
+            "Preta": preferoj.dlg_konservo(artikolo.preparu_maletendu_sekciojn)
+        }
+    });*/
     
+    //##################### kadro kaj reagoj de elementoj
 
     // ni ne kreas la kadron, se ni estas en (la malnova) "frameset"
     const malnova = top && top.frames.length;
