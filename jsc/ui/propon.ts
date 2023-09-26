@@ -11,6 +11,9 @@ type ProponOpcioj = { sufikso: string, source?: Function, select?: Function }
 export class Propon extends UIElement {
     //private temp;
 
+    // Konservejo por aldonaj datumoj, alkroĉeblaj ĉe la unuopaj proponoj
+    static datumoj = new WeakMap();
+
     static aprioraj: ProponOpcioj = { 
         /* ĉar datalist ne sendas eventon, kiam ni elektas ion, ni
         bezonas iel distingi entajpitajn vortojn de elektitaj, resp. certigi
@@ -27,7 +30,6 @@ export class Propon extends UIElement {
         const e = super.obj(element);
         if (e instanceof Propon) return e;
     }
-
 
     constructor(element: HTMLInputElement|string, opcioj?: any) {
         super(element, opcioj, Propon.aprioraj);
@@ -122,7 +124,7 @@ export class Propon extends UIElement {
                         return (o.value == val)
                     });
                     if (opt_elektita) {
-                        const alkroĉita = opt_elektita._voko_propono;
+                        const alkroĉita = Propon.datumoj.get(opt_elektita);
                         // kion ni faru per la rezulto, prefere la uzanto de Propon provizu
                         // reagon al kiu ni sendu tion, kaj ĝi decidu mem pri kion fari!
                         elekt_reago("elektita",alkroĉita);
@@ -146,7 +148,7 @@ export class Propon extends UIElement {
                 const val = e.value;
                 const opt = document.createElement("option");
                 opt.setAttribute("value",val+suff);
-                opt._voko_propono = e;
+                Propon.datumoj.set(opt,e);
                 datalist.append(opt);
             });
         } 

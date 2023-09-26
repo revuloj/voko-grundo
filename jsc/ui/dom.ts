@@ -8,22 +8,6 @@ import { UIStil } from './uistil';
 import { Valid } from './valid';
 import { Klavar } from './klavar';
 
-declare global {
-    interface Element {
-        _voko_datumo: any; // iuj datumoj alkroĉitaj al DOM-elemento
-    }
-
-    /*
-    interface HTMLElement {
-        _voko_ui?: UIElement;
-        _voko_valid?: Array<Valid>; // testoj por validigi enkroĉitaj en DOM
-        _voko_klavar?: Klavar; // registritaj klav-reagoj
-    }*/
-
-    interface HTMLOptionElement {
-        _voko_propono?: any; // iu objekto, kiun ni provizas kun proponoj el datalist/option-elemento
-    }
-}
 
 //HTMLInputElement|HTMLTextAreaElement|HTMLSelectElement|HTMLButtonElement;
 export interface HTMLFormControlElement extends HTMLElement {
@@ -141,19 +125,18 @@ export class DOM {
     /**
      * Redonas datumojn alligitajn al elemento (ev. identigebla per elektilo)
      */
-    static datum(e: Element|string, nomo: string): any {
+    static datum(e: HTMLElement|string, nomo: string): any {
         const el = (typeof e === "string")? DOM.e(e) : e;
-        if (el) return el._voko_datumo[nomo];
+        if (el instanceof HTMLElement) return el.dataset[nomo];
     }
 
     /**
      * Ligas datumojn al elemento (ev. identigebla per elektilo)
      */
-    static al_datum(e: Element|string, nomo: string, datumo: any) {
+    static al_datum(e: HTMLElement|string, nomo: string, datumo: any) {
         const el = (typeof e === "string")? DOM.e(e) : e;
-        if (el) {
-            if (! el._voko_datumo) el._voko_datumo = {};
-            el._voko_datumo[nomo] = datumo;
+        if (el instanceof HTMLElement) {
+            el.dataset[nomo] = datumo;
         }
     }
 
