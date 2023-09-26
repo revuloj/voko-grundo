@@ -203,6 +203,7 @@ export namespace redaktilo {
       const dlg = TradukDialog.dialog("#r\\:traduko_dlg");
       if (dlg) {
         const lnomo = revo_listoj.lingvoj.codes[lng];
+        dlg.xmlarea = xmlarea;
         dlg.plenigu(lng,lnomo);
         dlg.malfermu();
       }
@@ -504,19 +505,11 @@ export namespace redaktilo {
     document.getElementById('r:art_strukturo')
       ?.addEventListener("change",struktur_elekto);
 
-    // traduk-dialogo
-    // PLIBONIGU: fakte la HTML de la dialogo estas difinita centre en revo/dlg/index...
-    // do sufiĉus unufoje deklari ĝin. Sed en kadro.ts ni ne povas jam aliri xmlarea
-    // aŭ ni same difiniu tiun ĉi centre en kadro.ts
-    new TradukDialog("#r\\:traduko_dlg",{
-      xmlarea: xmlarea,
-      trd_tabelo: "#traduko_table",
-      kampoj: {}, 
-      butonoj: {   
-        "Enmeti la tradukojn": function(ev: Event) { console.log(ev+"tradukojn_enmeti(event);") },
-        "\u2718": function() { this.fermu(); }
-      },      
-    });
+    // traduk-dialogo bezonas xmlarea
+    const tdlg = TradukDialog.dialog("#r\\:traduko_dlg");
+    if (tdlg) tdlg.xmlarea = xmlarea;
+
+
 
       /*
     document.getElementById("r:cx")

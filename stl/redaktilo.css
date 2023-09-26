@@ -267,6 +267,10 @@ dialog table td {
     padding: .1em .6em;
 }
 
+#traduko_butonoj {
+    min-height: initial;
+}
+
 
 .collapsed {
     display: none !important;

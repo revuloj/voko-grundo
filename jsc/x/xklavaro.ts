@@ -31,6 +31,10 @@ type KlavSpec = "ctl" | "mis" | "nom" | "nac" | "esc" | "ind" | "var" | "frm"
 type Reghimo = "indiko" | "fako" | "klavaro" | "sercho" | "blankigo" | null;
 type Reghimpremo = (e: Event, r: {cmd: Reghimo}) => void;
 
+type KiuRadiko = () => string;
+type Komando = {cmd: Reghimo|string};
+type PostEnmeto = (event: Event, cmd?: Komando) => void;
+
 console.debug("Instalante la klavarfunkciojn...");
 
 /**
@@ -136,6 +140,11 @@ export class XTajpo {
     },
     */
 
+// PLIBONIGU: prefere ni havu du klasojn aŭ almenaŭ du diversajn constructor-signaturojn:
+// 1. por XMLRedakt-kampo
+// 2. por dialogo
+// Alternative ni povus uzi TS overload aŭ paki la parametrojn en opcio-objektojn.
+
 export class XKlavaro {
     public klavaro: Element | null;
     public dialogo: Element | null;
@@ -187,9 +196,9 @@ export class XKlavaro {
         klavaro: Element|string, 
         dialogo: Element|string|null, 
         apriora_kampo: HTMLInputElement|string, 
-        public kiuradiko?: Function, 
+        public kiuradiko?: KiuRadiko, 
         public reĝimpremo?: Reghimpremo, 
-        public postenmeto?: Function) 
+        public postenmeto?: PostEnmeto) 
     {
         this.klavaro = (typeof klavaro === "string")? document.querySelector(klavaro) : klavaro;
         this.dialogo = (typeof dialogo === "string")? document.querySelector(dialogo) : dialogo;
@@ -429,99 +438,108 @@ export class XKlavaro {
         event.stopPropagation();
         const trg = event.target as Element;
         const btn = trg.closest(".klv");
-        const text = btn.getAttribute("data-btn");
-        const cmd = btn.getAttribute("data-cmd");
-        const element = this.klavaro;
 
-        // MANKAS ankoraŭ...
-        const radiko =  this.kiuradiko? this.kiuradiko() : '';
+        if (btn) {
+            const text = btn.getAttribute("data-btn");
+            const cmd = btn.getAttribute("data-cmd");
+            /// const element = this.klavaro;
 
-        if (btn.classList.contains("reghim_btn")) {
-            this.reĝimpremo(event,{cmd: cmd as Reghimo});
+            // MANKAS ankoraŭ...
+            const radiko =  this.kiuradiko? this.kiuradiko() : '';
 
-        } else if (btn.classList.contains("stl")) {
-            const stl = btn.getAttribute("data-stl");
-            this.enmeto('<uzo tip="stl">' + stl + '</uzo>');
-            if (this.postenmeto) this.postenmeto(event);
+            if (btn.classList.contains("reghim_btn")) {
+                if (this.reĝimpremo) this.reĝimpremo(event,{cmd: cmd as Reghimo});
 
-        } else if (btn.classList.contains("fak")) {
-            const fak = btn.getAttribute("data-fak");
-            this.enmeto('<uzo tip="fak">' + fak + '</uzo>');
-            if (this.postenmeto) this.postenmeto(event);
+            } else if (btn.classList.contains("stl")) {
+                const stl = btn.getAttribute("data-stl");
+                this.enmeto('<uzo tip="stl">' + stl + '</uzo>');
+                if (this.postenmeto) this.postenmeto(event);
 
-        } else if (btn.classList.contains("ofc")) {
-            const ofc = btn.getAttribute("data-ofc");
-            this.enmeto('<ofc>' + ofc + '</ofc>');
-            if (this.postenmeto) this.postenmeto(event);
+            } else if (btn.classList.contains("fak")) {
+                const fak = btn.getAttribute("data-fak");
+                this.enmeto('<uzo tip="fak">' + fak + '</uzo>');
+                if (this.postenmeto) this.postenmeto(event);
 
-        } else if (btn.classList.contains("gra")) {
-            const vspec = btn.getAttribute("data-vspec");
-            this.enmeto('<gra><vspec>' + vspec + '</vspec></gra>');
-            if (this.postenmeto) this.postenmeto(event);
+            } else if (btn.classList.contains("ofc")) {
+                const ofc = btn.getAttribute("data-ofc");
+                this.enmeto('<ofc>' + ofc + '</ofc>');
+                if (this.postenmeto) this.postenmeto(event);
 
-        } else if (btn.classList.contains("tab_btn")) {
-            // butonoj por en-/elŝovo
-            const val = btn.getAttribute("value");
-            if (val) {
-                let n = parseInt(val.substring(0,2),10);
-                if (n) {
-                    const ta = this.celo();
-                    const i_ = get_indent(ta).length;
-                    if (i_ % 2 == 1) n = n/2; // ŝovu nur unu (±2/2) ĉe momente nepara enŝovo!
-                    indent(ta,n);
-                    if (this.postenmeto) this.postenmeto(event);
+            } else if (btn.classList.contains("gra")) {
+                const vspec = btn.getAttribute("data-vspec");
+                this.enmeto('<gra><vspec>' + vspec + '</vspec></gra>');
+                if (this.postenmeto) this.postenmeto(event);
+
+            } else if (btn.classList.contains("tab_btn")) {
+                // butonoj por en-/elŝovo
+                const val = btn.getAttribute("value");
+                if (val) {
+                    let n = parseInt(val.substring(0,2),10);
+                    if (n) {
+                        const ta = this.celo();
+                        const i_ = get_indent(ta).length;
+                        if (i_ % 2 == 1) n = n/2; // ŝovu nur unu (±2/2) ĉe momente nepara enŝovo!
+                        indent(ta,n);
+                        if (this.postenmeto) this.postenmeto(event);
+                    }
                 }
-            }
 
-        } else if (cmd == "tld") { // anstataŭigo de tildo
-            const elektita = this.elekto(); 
-            if (elektita == "~" || elektita == "") {
-                this.enmeto("<tld/>");
+            } else if (cmd == "tld") { // anstataŭigo de tildo
+                const elektita = this.elekto(); 
+                if (elektita == "~" || elektita == "") {
+                    this.enmeto("<tld/>");
+                } else {
+                    //var radiko = xmlGetRad($("#xml_text").val());
+                    // traktu ankaŭ majusklan / minusklan formon de la radiko
+                    let first = radiko.charAt(0);
+                    first = (first == first.toUpperCase() ? first.toLowerCase() : first.toUpperCase());
+                    const radiko2 = first + radiko.slice(1);
+                            
+                    if ( radiko ) {
+                        const newtext = elektita.replace(radiko,'<tld/>').replace(radiko2,'<tld lit="'+first+'"/>');
+                        this.enmeto(newtext); 
+                    }
+                }
+
+                if (this.postenmeto) this.postenmeto(event,{cmd: cmd});
+
+            // traduko
+            } else if (cmd == "trd") {
+                const sel = this.elekto();
+                // PLIBONIGU: principe povus interesti alilingva traduko
+                // do pli bone uzu regulesprimon, krome ni ankaŭ povus rigardi en antau_elekto()
+                if (sel) {
+                    const enm = this.post_elekto().indexOf("</trdgrp")>-1
+                    ? '<trd>' + sel + '</trd>' 
+                    : '<trd lng="">' + sel + '</trd>';
+                    this.enmeto(enm);
+                    if (this.postenmeto) this.postenmeto(event,{cmd: cmd});
+                }
+
+            // majusklaj komencliteroj de vortoj
+            } else if (cmd == "kamelo") {
+                const sel = this.elekto();
+                //var rad = sel.includes('<tld')? xmlGetRad($("#xml_text").val()) : '';
+                if (sel) {
+                    const rad = sel.includes('<tld')? radiko : '';
+                    this.enmeto(kameligo(sel,rad));    
+                    if (this.postenmeto) this.postenmeto(event,{cmd: cmd});    
+                }
+
+            // minuskligo
+            } else if (cmd == "minuskloj") {
+                const sel = this.elekto();
+                this.enmeto(minuskligo(sel,radiko));
+                if (this.postenmeto) this.postenmeto(event,{cmd: cmd});
+
+            // aliajn kazojn traktu per _ekran_klavo...
             } else {
-                //var radiko = xmlGetRad($("#xml_text").val());
-                // traktu ankaŭ majusklan / minusklan formon de la radiko
-                let first = radiko.charAt(0);
-                first = (first == first.toUpperCase() ? first.toLowerCase() : first.toUpperCase());
-                const radiko2 = first + radiko.slice(1);
-                        
-                if ( radiko ) {
-                    const newtext = elektita.replace(radiko,'<tld/>').replace(radiko2,'<tld lit="'+first+'"/>');
-                    this.enmeto(newtext); 
-                }
+                const sel = this.elekto();
+                const enm = text 
+                    || (cmd? this.ekran_klavo(cmd,sel) : '');
+                if (enm) this.enmeto(enm);
+                if (this.postenmeto) this.postenmeto(event,{cmd: cmd});
             }
-
-            if (this.postenmeto) this.postenmeto(event,{cmd: cmd});
-
-        // traduko
-        } else if (cmd == "trd") {
-            const sel = this.elekto();
-            // PLIBONIGU: principe povus interesti alilingva traduko
-            // do pli bone uzu regulesprimon, krome ni ankaŭ povus rigardi en antau_elekto()
-            const enm = this.post_elekto().indexOf("</trdgrp")>-1
-                ? '<trd>' + sel + '</trd>' 
-                : '<trd lng="">' + sel + '</trd>';
-            this.enmeto(enm);
-            if (this.postenmeto) this.postenmeto(event,{cmd: cmd});
-
-        // majusklaj komencliteroj de vortoj
-        } else if (cmd == "kamelo") {
-            const sel = this.elekto();
-            //var rad = sel.includes('<tld')? xmlGetRad($("#xml_text").val()) : '';
-            const rad = sel.includes('<tld')? radiko : '';
-            this.enmeto(kameligo(sel,rad));    
-            if (this.postenmeto) this.postenmeto(event,{cmd: cmd});
-
-        // minuskligo
-        } else if (cmd == "minuskloj") {
-            const sel = this.elekto();
-            this.enmeto(minuskligo(sel,radiko));
-            if (this.postenmeto) this.postenmeto(event,{cmd: cmd});
-
-        // aliajn kazojn traktu per _ekran_klavo...
-        } else {
-            const sel = this.elekto();
-            this.enmeto(this.ekran_klavo(text,cmd,sel));
-            if (this.postenmeto) this.postenmeto(event,{cmd: cmd});
         }
     };
 
@@ -534,20 +552,24 @@ export class XKlavaro {
      * @param sel - la teksto elektita en la redaktata kampo
      * @returns 
      */
-    ekran_klavo(text: string, cmd: string, sel: string) {
+    ekran_klavo(cmd: string, sel?: string): string {
         let s_ = '';
         // simbol-klavo redonu la tekston
-        if (text) {
-            return text;
+        // if (text) {
+        //     return text;
         // citiloj
-        } else if (cmd == "\u201e\u201c" || cmd =="\u201a\u2018" || cmd == "\u29da\u29db") {
+        //} else 
+        if (cmd == "\u201e\u201c" || cmd =="\u201a\u2018" || cmd == "\u29da\u29db") {
             s_ = sel || "\u2026";
             return (cmd[0] + s_ + cmd[1]);
         // klarigoj en krampoj
         } else if (cmd == "[]" || cmd == "()") {
             s_ = sel || "\u2026";
-            return ('<klr>' + ( sel[0] != cmd[0]? cmd[0]:"" ) 
-                            + s_ + ( sel[sel.length-1] != cmd[1]? cmd[1]:"" ) +  '</klr>');
+            return ('<klr>' 
+                // krampon ks ni ne aldonas, se ĝi jam estas parto de la elektita teksto
+                + ( sel && sel[0] != cmd[0]? cmd[0]:"" ) 
+                + s_ + ( sel && sel[sel.length-1] != cmd[1]? cmd[1]:"" ) 
+                + '</klr>');
         // variaĵo
         } else if (cmd == "var"){
             s_ = sel || "\u2026";
@@ -563,7 +585,7 @@ export class XKlavaro {
      * Redonas la elektitan tekston de la lasta tekstelemento (input,textarea) kiu havis la fokuson
      * @returns la elektitan tekston
      */
-    elekto(): string {
+    elekto(): string|undefined {
         const element = this.celo();
         /*
         if ('selection' in document) {
@@ -574,7 +596,8 @@ export class XKlavaro {
         }
         else if ('selectionStart' in el) { */
             // other, e.g. Webkit based
-            return element.value.substring(element.selectionStart, element.selectionEnd);
+            if (element)
+                return element.value.substring(element.selectionStart||0, element.selectionEnd||0);
             /*
         } else {
             console.error("selection (preni markitan tekston) ne subtenita por tiu krozilo");
@@ -583,16 +606,15 @@ export class XKlavaro {
 
     antau_elekto(): string {
         const element = this.celo();
+        const start = element.selectionStart||0;
         return element.value.substring(
-            Math.max(0,element.selectionStart-20),
-            element.selectionStart);
+            Math.max(0,start-20), start);
     }
 
     post_elekto(): string {
         const element = this.celo();
-        return element.value.substring(
-            element.selectionEnd,
-            element.selectionEnd+20);
+        const end = element.selectionEnd||0;
+        return element.value.substring(end,end+20);
     }
         
     /**
@@ -613,7 +635,7 @@ export class XKlavaro {
         } else if (element.selectionStart || element.selectionStart === 0) {
             // Firefox and Webkit based
             const startPos = element.selectionStart;
-            const endPos = element.selectionEnd;
+            const endPos = element.selectionEnd||startPos;
             const scrollTop = element.scrollTop;
             element.value = element.value.substring(0, startPos)
             + val

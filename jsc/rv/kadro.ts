@@ -87,6 +87,42 @@ DOM.dok_post_lego(function() {
             "Preta": preferoj.dlg_konservo(artikolo.preparu_maletendu_sekciojn)
         }
     });*/
+
+    // la traduko-dialogo 
+
+    const t_dlg = new x.TradukDialog("#r\\:traduko_dlg", {
+        trd_tabelo: "#traduko_table",
+        kampoj: {}, 
+        butonoj: {   
+          "Enmeti la tradukojn": function(ev: Event) { 
+            try {
+              this.xmlarea.enmetu_tradukojn();
+              this.fermu();
+            } catch (e) {
+              DOM.al_t("#traduko_error",e.toString());
+            }
+          },
+          "\u2718": function() { this.fermu(); }
+        },      
+    });
+ 
+
+    const klvr = document.getElementById("traduko_butonoj");
+    if (klvr) {
+      const xklv = new x.XKlavaro(klvr, "traduko_dlg", "", undefined, undefined,
+        (event: Event) =>  t_dlg.trd_input_shanghita(event));
+      xklv.elemento_klavoj(klvr);
+
+      // por scii kie klavoj ind/klr efiku
+      DOM.reago("#traduko_tabelo","focusout",(event: Event) => {
+        //DOM.al_datum("#traduko_dlg","last-focus",this.id);
+        const trg = event.target;
+        if (DOM.isFormElement(trg)) {
+          // this estu la klavaro...
+          xklv.lasta_fokuso = trg.id;
+        }
+      });
+    }
     
     //##################### kadro kaj reagoj de elementoj
 
