@@ -349,7 +349,7 @@ export class XmlRedakt extends Tekst {
    * Malvalidigas la sinkron-flagon por signi, ke venontfoje necesas sinkronigo de Xml 
    * resp. rekrei antaŭrigardon
    */
-  setUnsynced() {
+  malsinkrona() {
     this.sinkrona = false;
     this.antaŭrigardo_sinkrona = false;
   }

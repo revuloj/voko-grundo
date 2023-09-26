@@ -70,16 +70,15 @@ export default function() {
 
     klv = DOM.e("#krei_butonoj");
     if (klv) {
-        new x.XKlavaro("#krei_butonoj","krei_dlg","#krei_dif",
-            () => Artikolo.artikolo("#xml_text").radiko, 
+        new x.XFormularKlavaro("#krei_butonoj","krei_dlg",
+            // reĝimpremo: blankigo
             function(event,ui) {
                 if (ui.cmd == "blankigo") {
                     DOM.malplenigu("#krei_dlg input");
                     DOM.malplenigu("#krei_dif");
                 }
-            },
-            undefined) // postenmeto
-        .elemento_klavoj(klv);
+            }) // neniu postenmeto
+        .elemento_klavoj();
     };
     /// DOM.klavpremo("#krei_rad",xpress);
     /// DOM.klavpremo("#krei_dif",xpress);
@@ -330,7 +329,7 @@ export default function() {
 
     klv = DOM.e("#ekzemplo_butonoj");
     if (klv) {
-        new x.XKlavaro("#ekzemplo_butonoj","#ekzemplo_dlg","#xml_text",
+        new x.XKlavaro("#ekzemplo_butonoj","ekzemplo_dlg",
             () => Artikolo.artikolo("#xml_text")?.radiko, 
             function(event,ui) {
                 if (ui.cmd == "blankigo") {

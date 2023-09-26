@@ -3,9 +3,14 @@
  * laŭ GPL 2.0
  */
 
+/**
+ * Ebligas registri klavojn de fizika klavaro, kiujn ni traktas aparte en keydown-eventoj (klavprem-eventoj).
+ * Tiel ni ekzemple povas registri traktilojn por TAB- kaj RETRO-klavoj por ĝuste respekti enŝovojn per spacsignoj,
+ * la T-klavon ĉe XML-redaktilo, kiu, se aldone Ktrl- aŭ Alt-klavo estas premita aldonas traduk-elementon k.a.
+ */
 
 export class Klavar {
-    // tenas la ligojn inter la kocnernaj HTML-elementoj kaj la Klavar-objektoj
+    // tenas la ligojn inter la koncernaj HTML-elementoj kaj la Klavar-objektoj
     static registro = new WeakMap();
 
     // ĉu uzi WeakMap anstataŭ el._voko_klavar?

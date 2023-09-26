@@ -12,7 +12,6 @@ import '../x/voko_entities';
 import {SDet} from '../x/xmlstrukt';
 import {XmlRedakt} from '../x/xmlredakt';
 import {TradukDialog} from '../x/xmltrad';
-import {XKlavaro} from '../x/xklavaro';
 
 import {insert_xml, xml_nova} from './redk_shabl';
 import {restore_preferences,restore_preferences_xml} from './redk_pref';
@@ -30,7 +29,7 @@ import {revo_listoj} from './shargo';
 export namespace redaktilo {
 
   let xmlarea: XmlRedakt;  
-  let xklavaro: XKlavaro;
+  let xklavaro: x.XRedaktKlavaro;
 
   const tez_url = '/revo/tez/';
   const xml_url = '/revo/xml/';
@@ -449,8 +448,8 @@ export namespace redaktilo {
 
       // ekranbutonaro por apartaj signoj/elementoj
       const klvr = document.getElementById("r:klavaro");
-      if (klvr) xklavaro = new XKlavaro(klvr, null, xmltxt,
-        () => xmlarea.radiko,
+      if (klvr) xklavaro = new x.XRedaktKlavaro(klvr, xmlarea, 
+        // reĝimpremo
         (event: Event, cmd) => { 
           // PLIBONIGU: tion ni povas ankaŭ meti en xklavaro.js!
           if (cmd.cmd == 'indiko') {
@@ -467,16 +466,17 @@ export namespace redaktilo {
             DOM.kaŝu("#r\\:klv_ind");
           }
         },
-        () => xmlarea.setUnsynced())
+        // postenmeto
+        () => xmlarea.malsinkrona())
     }
     const klv_ind = document.getElementById("r:klv_ind");
-    if (klv_ind) xklavaro.indiko_klavoj(klv_ind, revo_listoj.stiloj);
+    if (klv_ind) xklavaro.indiko_klavoj(revo_listoj.stiloj, klv_ind);
 
     const klv_fak = document.getElementById("r:klv_fak");
-    if (klv_fak) xklavaro.fako_klavoj(klv_fak, revo_listoj.fakoj);
+    if (klv_fak) xklavaro.fako_klavoj(revo_listoj.fakoj, klv_fak);
 
     const klv_elm = document.getElementById("r:klv_elm");
-    if (klv_elm) xklavaro.elemento_klavoj(klv_elm, klv_elm.textContent);
+    if (klv_elm) xklavaro.elemento_klavoj(klv_elm.textContent, klv_elm);
 
     submeto.redakto('redakto'); // gravas post antaŭa aldono!
 
@@ -507,9 +507,19 @@ export namespace redaktilo {
 
     // traduk-dialogo bezonas xmlarea
     const tdlg = TradukDialog.dialog("#r\\:traduko_dlg");
-    if (tdlg) tdlg.xmlarea = xmlarea;
+    if (tdlg) {
+      tdlg.xmlarea = xmlarea;
 
-
+      // ĉu ni jam kreis XKlavaron en la traduko-dialogo?
+      let xklv = x.XKlavaro2.klavaro("#traduko_butonoj");
+      if (!xklv) {
+        // ne? do kreu nun
+        xklv = new x.XFormularKlavaro("#traduko_butonoj", "traduko_tabelo", (event: Event) => {
+          tdlg.trd_input_shanghita(event);
+        });
+        xklv.elemento_klavoj();
+      }
+    }
 
       /*
     document.getElementById("r:cx")

@@ -5,9 +5,10 @@
 
 //import '../u/ht_util';
 import * as u from '../u';
-import {indent,get_indent,kameligo,minuskligo,get_line_pos} from './tekstiloj';
+import { kameligo, minuskligo} from './tekstiloj';
 import { Xlist } from './xlisto';
-import { Klavar } from '../ui';
+import { XmlRedakt } from './xmlredakt';
+import { DOM, UIElement, Klavar } from '../ui';
 
 /*
 ctl: citilo-elemento
@@ -145,13 +146,25 @@ export class XTajpo {
 // 2. por dialogo
 // Alternative ni povus uzi TS overload aŭ paki la parametrojn en opcio-objektojn.
 
-export class XKlavaro {
-    public klavaro: Element | null;
-    public dialogo: Element | null;
-    public apriora_kampo: HTMLInputElement | null;
-    public lasta_fokuso?: string;
-    public klavoj: string;
+/**
+ * Klaso por regi aldonajn butonarojn por redaktado (indikoj, fakoj, stiloj, elementoj, aliaj simboloj)
+ */
+export class XKlavaro2 extends UIElement {
+    /**
+     * Influejo estas la HTML-elemento en kies kadro la butonaro efikas, t.e. formularo kun la kampoj aŭ unuopa kampo, 
+     * en kiuj okazas la redaktoj. Ordinare ili mem estas ekster tiu influejo.
+     */
+    static influejoj = new WeakMap();
 
+
+    static klavaro(element: HTMLElement|string) {
+        let k = super.obj(element);
+        if (k instanceof XKlavaro2) return k;
+    }
+
+    /**
+     * Signoj kun ties helpotekstoj
+     */
     static signoj: u.StrObj = {
         "\u2015": "longa streko",
         "\u2013": "mezlonga streko",
@@ -161,6 +174,9 @@ export class XKlavaro {
         "\u202f": "spaceto nerompebla"
     }
 
+    /**
+     * XML-Elementoklavoj kun ties helpotekstoj
+     */
     static elementoj: u.StrObj = {
         ctl: "citilo-elemento",
         mis: "misstilo-elemento",
@@ -172,6 +188,9 @@ export class XKlavaro {
         frm: "formulo"                    
     };
 
+    /**
+     * Diversaj krampoj / klarigelementoj kun ties helpotekstoj.
+     */
     static krampoj: u.StrObj = {
         "()": "rondaj krampoj",
         "[]": "rektaj krampoj",
@@ -179,61 +198,36 @@ export class XKlavaro {
         "‚‘": "simplaj citiloj"
     }
 
+    public celo: HTMLInputElement|HTMLTextAreaElement;
+    private klavoj: string;
 
     /**
-     * Kreas XML-ekran-klavaron. La klavaro efikas ene de kadra dialogo. Fokusŝanĝoj pri enhavataj input- kaj textarea-elementoj
-     * estas memorataj. Se la lasta fokuso ne kuŝis en tia tekst-elemento la klavoj efikas al la donita apriora elemento.
-     * la HTML-enhavo de klavaro povas esti plej simple io kiel 'ĉ ĝ ĥ ĵ ŝ ŭ'...
-     * @constructor
-     * @param klavaro - la elemento enhavante la klavaron kiel HTML-elementoj
-     * @param dialogo - la kadra dialogo (kadra HTML-elemento) en kiu efiku la klavaro, forlasebla se vi havas nur 'apriora_kampo'
-     * @param apriora_kampo - la apriora teksto-elementon (input/textarea), al kiu efiku la klavoj
-     * @param kiuradiko - revokfunkcio, vokata por eltrovi la radikon de la artikolo
-     * @param reĝimpremo - revokfunkcio, vokata kiam reĝimklavo estas premata
-     * @param postenmeto - revokfunkcio, vokata post kiam tekstenmeta klavo estis premita
-     */    
-    constructor(
-        klavaro: Element|string, 
-        dialogo: Element|string|null, 
-        apriora_kampo: HTMLInputElement|string, 
-        public kiuradiko?: KiuRadiko, 
+     * 
+     * @param klavaro la HTML-Elemento, kiu enhavas la klavaron aŭ ties HTML-id
+     * @param celo  la cel-kampo en kiu ni redaktas
+     * @param reĝimpremo reago, kiam okazas reĝimŝanĝo, t.e. se reĝim-klavo estas premita, kutime montrante aliajn klavojn (fakoj->stiloj ks)
+     * @param postenmeto reago, kiu okazu post redakto en celo
+     */
+    constructor(klavaro: HTMLElement|string, 
+        celo: HTMLInputElement|HTMLTextAreaElement|string, 
         public reĝimpremo?: Reghimpremo, 
         public postenmeto?: PostEnmeto) 
     {
-        this.klavaro = (typeof klavaro === "string")? document.querySelector(klavaro) : klavaro;
-        this.dialogo = (typeof dialogo === "string")? document.querySelector(dialogo) : dialogo;
-        if (apriora_kampo) this.apriora_kampo = (typeof apriora_kampo === "string")? 
-            document.querySelector(apriora_kampo) : apriora_kampo;
+        super(klavaro,{});
 
-        this.lasta_fokuso = this.apriora_kampo?.id;
-        this.klavoj = this.klavaro?.textContent || '';
-        const self = this;
-        
-        // kreu la klavojn
-        //if (this.klavoj)
-        //    this.elemento_klavoj(this.klavoj);
+        const c = (typeof celo === "string")? document.getElementById(celo) : celo;
+        if (c instanceof HTMLInputElement || c instanceof HTMLTextAreaElement) {
+            this.celo = c;
+            XKlavaro2.influejoj.set(c,this);
+        }
+
+        this.klavoj = this.element.textContent || '';
 
         // registru klak-reagon
         // vd. https://stackoverflow.com/questions/1338599/the-value-of-this-within-the-handler-using-addeventlistener
-        this.klavaro?.addEventListener("click", (event) => this.premo(event));
-
-        // certigu, ke fokus-ŝanĝoj en la posedanto (ekz. dialogo) memoriĝas
-        if (this.dialogo) {
-            this.dialogo.addEventListener("focusout",function(event) {
-                const element = event.target;
-                if (element instanceof HTMLElement && element.id 
-                    && (element.tagName == "INPUT" || element.tagName == "TEXTAREA"))
-                    self.lasta_fokuso = element.id;
-            });            
-            /*
-            this.dialogo.querySelectorAll("textarea,input").forEach( (e) =>
-                e.addEventListener("blur", function(event) {
-                    self.lasta_fokuso = (event.target as Element).id;
-                })
-            );
-            */
-        }            
+        this.element.addEventListener("click", (event) => this.premo(event));
     }
+
 
     /**
      * Kreas elemento-klavojn laŭ teksta priskribo. Ekz-e
@@ -244,16 +238,18 @@ export class XKlavaro {
      * @param klvrElm - elemento en kiun aranĝi la fakoklavojn
      * @param klavstr - klavaro-specifo kiel teksto
      */
-    elemento_klavoj(klvrElm: Element, klavstr?: string|null) {
+    elemento_klavoj(klavstr?: string|null, sub?: HTMLElement) {
         let html='';
         const klavoj = (klavstr?klavstr:this.klavoj)
             .trim().split(/[ \n\r\t\f\v]+/);
+
+        const elm = sub? sub: this.element;
 
         for (let i=0; i<klavoj.length; i++) {
             let klv = klavoj[i];
             // unuopa signo -> simbolo-klavo
             if (klv.length == 1) {
-                const title = XKlavaro.signoj[klv]||'';
+                const title = XKlavaro2.signoj[klv]||'';
                 switch (klv) {
                     case '\xa0':
                         html += `<div class="klv" data-btn="&nbsp;" title="${title}">]&nbsp;[</div>`;
@@ -266,12 +262,12 @@ export class XKlavaro {
                 } 
             // duopa signo -> enkrampiga
             } else if (klv.length == 2) {
-                const title = XKlavaro.krampoj[klv];
+                const title = XKlavaro2.krampoj[klv];
                 html += `<div class="klv elm_btn" data-cmd="${klv}" title="${title}">${klv[0]}&hellip;${klv[1]}</div>`;
             // pli longaj estas elemento-butonoj k.s.
             } else {
-                if (klv in XKlavaro.elementoj) {
-                    const title = XKlavaro.elementoj[klv]
+                if (klv in XKlavaro2.elementoj) {
+                    const title = XKlavaro2.elementoj[klv]
                     html += `<div class="klv elm_btn" data-cmd="${klv}" title="${title}">${klv}</div>`;
                 } else {
                     switch (klv) {
@@ -338,7 +334,7 @@ export class XKlavaro {
                 }
             }
         }
-        klvrElm.innerHTML = html;
+        elm.innerHTML = html;
     }
 
 
@@ -347,10 +343,12 @@ export class XKlavaro {
      * @param klvrElm - elemento en kiun aranĝi la fakoklavojn
      * @param stlList - Xlist kun stiloj
      */
-    indiko_klavoj(klvrElm: Element, stlList: Xlist) {
+    indiko_klavoj(stlList: Xlist, sub?: HTMLElement) {
+
+        const elm = sub? sub: this.element;
     
-        this.elemento_klavoj(klvrElm,klvrElm.textContent||'');
-        const pos = klvrElm.children.length; // tie ni poste enŝovos la stilbutonojn!
+        this.elemento_klavoj(this.element.textContent||'');
+        const pos = elm.children.length; // tie ni poste enŝovos la stilbutonojn!
 
         let indikoj = "<div class='klv ofc' data-ofc='*' title='fundamenta (*)'><span>funda-<br/>menta</span></div>";
         for (var i=1; i<10; i++) {
@@ -374,7 +372,7 @@ export class XKlavaro {
         indikoj += "<div class='klv gra' data-vspec='prepoziciaĵo' title='vortspeco: prepoziciaĵo'><span>prepo- ziciaĵo</span></div>";
         indikoj += "<div class='klv gra' data-vspec='pronomo' title='vortspeco: pronomo'><span>pro- nomo</span></div>";
         
-        klvrElm.innerHTML += indikoj;
+        elm.innerHTML += indikoj;
 
         function stilKlavoHtml(kod: string, nom: string) {
             const btn = u.ht_elements([
@@ -385,7 +383,7 @@ export class XKlavaro {
                     [ ['span',{},[nom,['br'],kod]] ]
                 ]
             ]);
-            klvrElm.children[pos-1]
+            elm.children[pos-1]
                 .insertAdjacentElement('afterend', btn[0] as Element);
         }
         
@@ -397,7 +395,7 @@ export class XKlavaro {
      * @param klvrElm - elemento en kiun aranĝi la fakoklavojn
      * @param fakList - Xlist kun fakoj
      */
-    fako_klavoj(klvrElm: Element, fakList: Xlist) {
+    fako_klavoj(fakList: Xlist, sub?: HTMLElement) {
     
         function fakoKlavoHtml(kod: string, nom: string) {
             const btn = u.ht_elements([
@@ -412,23 +410,14 @@ export class XKlavaro {
                 ]
             ]);
             if (btn)
-                klvrElm.append(...btn);
+                this.element.append(...btn);
         }            
 
-        this.elemento_klavoj(klvrElm,klvrElm.textContent);
+        const elm = sub? sub: this.element;
+        this.elemento_klavoj(this.element.textContent, elm);
         fakList.load(null,fakoKlavoHtml);
     };
 
-    /**
-     * Redonas la HTML-kampon, al kiu ni tajpas
-     * @returns la kampon, kiu laste havis la fokuson aŭ la aprioran kampon
-     */
-    celo(): HTMLInputElement {
-        if (this.lasta_fokuso) {
-            return document.getElementById(this.lasta_fokuso) as HTMLInputElement;
-        } 
-        return this.apriora_kampo as HTMLInputElement;
-    };
 
     /**
      * Reago al premo de X-klavo
@@ -443,9 +432,6 @@ export class XKlavaro {
             const text = btn.getAttribute("data-btn");
             const cmd = btn.getAttribute("data-cmd");
             /// const element = this.klavaro;
-
-            // MANKAS ankoraŭ...
-            const radiko =  this.kiuradiko? this.kiuradiko() : '';
 
             if (btn.classList.contains("reghim_btn")) {
                 if (this.reĝimpremo) this.reĝimpremo(event,{cmd: cmd as Reghimo});
@@ -470,20 +456,21 @@ export class XKlavaro {
                 this.enmeto('<gra><vspec>' + vspec + '</vspec></gra>');
                 if (this.postenmeto) this.postenmeto(event);
 
+            /* ni lasos por subklaso, kie celo estas XMLRedakt
             } else if (btn.classList.contains("tab_btn")) {
                 // butonoj por en-/elŝovo
                 const val = btn.getAttribute("value");
                 if (val) {
                     let n = parseInt(val.substring(0,2),10);
-                    if (n) {
-                        const ta = this.celo();
+                    const ta = this.celo;
+
+                    if (n && ta instanceof HTMLTextAreaElement) {
                         const i_ = get_indent(ta).length;
                         if (i_ % 2 == 1) n = n/2; // ŝovu nur unu (±2/2) ĉe momente nepara enŝovo!
                         indent(ta,n);
                         if (this.postenmeto) this.postenmeto(event);
                     }
                 }
-
             } else if (cmd == "tld") { // anstataŭigo de tildo
                 const elektita = this.elekto(); 
                 if (elektita == "~" || elektita == "") {
@@ -531,7 +518,7 @@ export class XKlavaro {
                 const sel = this.elekto();
                 this.enmeto(minuskligo(sel,radiko));
                 if (this.postenmeto) this.postenmeto(event,{cmd: cmd});
-
+*/
             // aliajn kazojn traktu per _ekran_klavo...
             } else {
                 const sel = this.elekto();
@@ -541,9 +528,68 @@ export class XKlavaro {
                 if (this.postenmeto) this.postenmeto(event,{cmd: cmd});
             }
         }
+    };    
+
+
+    /**
+     * Redonas la elektitan tekston de la lasta tekstelemento (input,textarea) kiu havis la fokuson
+     * @returns la elektitan tekston
+     */
+    elekto(): string|undefined {
+        const element = this.celo;
+        /*
+        if ('selection' in document) {
+            // Internet Explorer
+            element.focus();
+            const sel = document.selection.createRange();
+            return sel.text;
+        }
+        else if ('selectionStart' in el) { */
+            // other, e.g. Webkit based
+            if (element)
+                return element.value.substring(element.selectionStart||0, element.selectionEnd||0);
+            /*
+        } else {
+            console.error("selection (preni markitan tekston) ne subtenita por tiu krozilo");
+        }*/
+    };    
+
+
+    /**
+     * Enmetas tekston ĉe la pozicio de kursoro, resp. anstataŭigas la nunan elekton per nova teksto.
+     * @param val - teksto por enmeti
+     */
+    enmeto(val: string) {
+        const element = this.celo;
+
+        // @ts-ignore
+        if (document.selection && document.selection.createRange) { // IE/Opera
+            element.focus();
+            // @ts-ignore
+            let sel = document.selection.createRange();
+            sel.text = val;
+            element.focus();
+
+        } else if (element.selectionStart || element.selectionStart === 0) {
+            // Firefox and Webkit based
+            const startPos = element.selectionStart;
+            const endPos = element.selectionEnd||startPos;
+            const scrollTop = element.scrollTop;
+            element.value = element.value.substring(0, startPos)
+            + val
+            + element.value.substring(endPos, element.value.length);
+            element.focus();
+            element.selectionStart = startPos + val.length;
+            element.selectionEnd = startPos + val.length;
+            element.scrollTop = scrollTop;
+
+        } else {
+            element.value += val;
+            element.focus();
+        }
     };
 
-        
+
     /**
      * Redonas tekston por ekranklavo, ĉe tekstklavo, tio estas la koncerna teksto
      * ĉe komando tio estas kombino de komando kaj la elekto 
@@ -581,76 +627,161 @@ export class XKlavaro {
         } 
     };
 
+}
+
+export class XRedaktKlavaro extends XKlavaro2 {
+
     /**
-     * Redonas la elektitan tekston de la lasta tekstelemento (input,textarea) kiu havis la fokuson
-     * @returns la elektitan tekston
-     */
-    elekto(): string|undefined {
-        const element = this.celo();
-        /*
-        if ('selection' in document) {
-            // Internet Explorer
-            element.focus();
-            const sel = document.selection.createRange();
-            return sel.text;
+     * Kreas XML-ekran-klavaron. La klavaro efikas ene de kadra dialogo. Fokusŝanĝoj pri enhavataj input- kaj textarea-elementoj
+     * estas memorataj. Se la lasta fokuso ne kuŝis en tia tekst-elemento la klavoj efikas al la donita apriora elemento.
+     * la HTML-enhavo de klavaro povas esti plej simple io kiel 'ĉ ĝ ĥ ĵ ŝ ŭ'...
+     * @constructor
+     * @param klavaro - la elemento enhavante la klavaron kiel HTML-elementoj
+     * @param xmlarea  la cel-kampo en kiu ni redaktas, XMLRedakt-objekto
+     * @param reĝimpremo - revokfunkcio, vokata kiam reĝimklavo estas premata
+     * @param postenmeto - revokfunkcio, vokata post kiam tekstenmeta klavo estis premita
+     */    
+    constructor(
+        klavaro: HTMLElement|string, 
+        protected xmlarea: XmlRedakt,
+        public reĝimpremo?: Reghimpremo, 
+        public postenmeto?: PostEnmeto) 
+    { 
+        super(klavaro, xmlarea.element as HTMLTextAreaElement, reĝimpremo, postenmeto);
+    }
+
+    premo(event: Event) {
+
+        event.stopPropagation();
+        const trg = event.target as Element;
+        const btn = trg.closest(".klv");
+
+        const radiko = this.xmlarea.radiko;
+        const ta = this.xmlarea.element;
+
+        if (btn) {
+            const text = btn.getAttribute("data-btn");
+            const cmd = btn.getAttribute("data-cmd");
+
+            if (btn.classList.contains("tab_btn")) {
+                // butonoj por en-/elŝovo
+                const val = btn.getAttribute("value");
+                if (val) {
+                    let n = parseInt(val.substring(0,2),10);
+                    const ta = this.celo;
+
+                    if (n && ta instanceof HTMLTextAreaElement) {
+                        const i_ = this.xmlarea.enŝovo?.length || 0;
+                        if (i_ % 2 == 1) n = n/2; // ŝovu nur unu (±2/2) ĉe momente nepara enŝovo!
+                        this.xmlarea.enŝovo = n;
+                        if (this.postenmeto) this.postenmeto(event);
+                    }
+                }
+            } else if (cmd == "tld") { // anstataŭigo de tildo
+                const elektita = this.elekto(); 
+                if (elektita == "~" || elektita == "") {
+                    this.enmeto("<tld/>");
+                } else {
+                    //var radiko = xmlGetRad($("#xml_text").val());
+                    // traktu ankaŭ majusklan / minusklan formon de la radiko
+                    let first = radiko.charAt(0);
+                    first = (first == first.toUpperCase() ? first.toLowerCase() : first.toUpperCase());
+                    const radiko2 = first + radiko.slice(1);
+                            
+                    if ( radiko ) {
+                        const newtext = elektita.replace(radiko,'<tld/>').replace(radiko2,'<tld lit="'+first+'"/>');
+                        this.enmeto(newtext); 
+                    }
+                }
+
+                if (this.postenmeto) this.postenmeto(event,{cmd: cmd});
+
+            // traduko
+            } else if (cmd == "trd") {
+                const sel = this.elekto();
+                // PLIBONIGU: principe povus interesti alilingva traduko
+                // do pli bone uzu regulesprimon, krome ni ankaŭ povus rigardi en antau_elekto()
+                if (sel) {
+                    const enm = this.post_elekto().indexOf("</trdgrp")>-1
+                    ? '<trd>' + sel + '</trd>' 
+                    : '<trd lng="">' + sel + '</trd>';
+                    this.enmeto(enm);
+                    if (this.postenmeto) this.postenmeto(event,{cmd: cmd});
+                }
+
+            // majusklaj komencliteroj de vortoj
+            } else if (cmd == "kamelo") {
+                const sel = this.elekto();
+                //var rad = sel.includes('<tld')? xmlGetRad($("#xml_text").val()) : '';
+                if (sel) {
+                    const rad = sel.includes('<tld')? radiko : '';
+                    this.enmeto(kameligo(sel,rad));    
+                    if (this.postenmeto) this.postenmeto(event,{cmd: cmd});    
+                }
+
+            // minuskligo
+            } else if (cmd == "minuskloj") {
+                const sel = this.elekto();
+                this.enmeto(minuskligo(sel,radiko));
+                if (this.postenmeto) this.postenmeto(event,{cmd: cmd});
+            } else {
+                super.premo(event);
+            }
         }
-        else if ('selectionStart' in el) { */
-            // other, e.g. Webkit based
-            if (element)
-                return element.value.substring(element.selectionStart||0, element.selectionEnd||0);
-            /*
-        } else {
-            console.error("selection (preni markitan tekston) ne subtenita por tiu krozilo");
-        }*/
-    };
+    }
 
     antau_elekto(): string {
-        const element = this.celo();
+        const element = this.celo;
         const start = element.selectionStart||0;
         return element.value.substring(
             Math.max(0,start-20), start);
     }
 
     post_elekto(): string {
-        const element = this.celo();
+        const element = this.celo;
         const end = element.selectionEnd||0;
         return element.value.substring(end,end+20);
     }
-        
+}
+
+/**
+ * Realigas XKlavaron, kies influejo estas formularo kun pluraj enigkampoj.
+ * Ĝi memoras la laste fokusitan, por scii kien efiku la klav-redaktoj
+ */
+export class XFormularKlavaro extends XKlavaro2 {
+
+    private influejo: HTMLElement|null;
+
     /**
-     * Enmetas tekston ĉe la pozicio de kursoro, resp. anstataŭigas la nunan elekton per nova teksto.
-     * @param val - teksto por enmeti
-     */
-    enmeto(val: string) {
-        const element = this.celo();
+     * Kreas XML-ekran-klavaron. La klavaro efikas ene de kadra dialogo. Fokusŝanĝoj pri enhavataj input- kaj textarea-elementoj
+     * estas memorataj. Se la lasta fokuso ne kuŝis en tia tekst-elemento la klavoj efikas al la donita apriora elemento.
+     * la HTML-enhavo de klavaro povas esti plej simple io kiel 'ĉ ĝ ĥ ĵ ŝ ŭ'...
+     * @constructor
+     * @param klavaro - la elemento enhavante la klavaron kiel HTML-elementoj
+     * @param formularo - la kadra formularo (HTML-elemento) en kiu efiku la klavaro
+     * @param postenmeto - revokfunkcio, vokata post kiam tekstenmeta klavo estis premita
+     */    
+    constructor(
+        klavaro: HTMLElement|string, 
+        formularo: HTMLElement|string, 
+        public postenmeto?: PostEnmeto) 
+    {
+        super(klavaro, '',undefined, postenmeto);
 
-        // @ts-ignore
-        if (document.selection && document.selection.createRange) { // IE/Opera
-            element.focus();
-            // @ts-ignore
-            let sel = document.selection.createRange();
-            sel.text = val;
-            element.focus();
+        this.influejo = typeof formularo === "string"? document.getElementById(formularo) : formularo;
 
-        } else if (element.selectionStart || element.selectionStart === 0) {
-            // Firefox and Webkit based
-            const startPos = element.selectionStart;
-            const endPos = element.selectionEnd||startPos;
-            const scrollTop = element.scrollTop;
-            element.value = element.value.substring(0, startPos)
-            + val
-            + element.value.substring(endPos, element.value.length);
-            element.focus();
-            element.selectionStart = startPos + val.length;
-            element.selectionEnd = startPos + val.length;
-            element.scrollTop = scrollTop;
+        if (this.influejo) {
+            XKlavaro2.influejoj.set(this.influejo, this)
 
-        } else {
-            element.value += val;
-            element.focus();
+            // por scii kie klavoj ind/klr efiku
+            DOM.reago(this.influejo,"focusout",(event: Event) => {
+                const trg = event.target;
+                if (trg instanceof HTMLInputElement || trg instanceof HTMLTextAreaElement) {
+                    this.celo = trg;
+                }
+            });             
         }
-    };
-
+    }
 }
 
 
