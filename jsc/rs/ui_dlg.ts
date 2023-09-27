@@ -199,7 +199,7 @@ export default function() {
     DOM.klak("#lastaj_rigardu",
         function(event) {
             event.preventDefault();
-            if (event.target instanceof Element) {
+            if (event.target instanceof HTMLElement) {
                 const url = DOM.datum(event.target,"url");
                 window.open(url);    
             }
@@ -323,22 +323,25 @@ export default function() {
         malfermu: function() {
             DOM.kaŝu("#ekzemplo_error");
             this.faldu(false); // necesas, se la dialogo estis fermita en faldita stato...
+            // difinu tildo-tekston
+            x.XKlavaro.tildo("#ekzemplo_butonoj", Artikolo.artikolo("#xml_text")?.radiko||'');
         }
     });  
     ekzemplo_dlg_preparo();
 
     klv = DOM.e("#ekzemplo_butonoj");
     if (klv) {
-        new x.XKlavaro("#ekzemplo_butonoj","ekzemplo_dlg",
-            () => Artikolo.artikolo("#xml_text")?.radiko, 
+        new x.XFormularKlavaro("#ekzemplo_butonoj","ekzemplo_dlg",
+            // reĝimpremo
             function(event,ui) {
                 if (ui.cmd == "blankigo") {
                     DOM.malplenigu("#ekzemplo_dlg input");
                     DOM.malplenigu("#ekzemplo_frazo");
                 }
             },
+            // postenmeto
             undefined)
-        .elemento_klavoj(klv);
+        .elemento_klavoj();
     }
 
     DOM.klak("#ekzemplo_amp",(ev) => {
@@ -378,6 +381,9 @@ export default function() {
             DOM.kaŝu("#bildo_error");
             this.faldu(false); // necesas, se la dialogo estis fermita en faldita stato...
 
+            // difinu tildo-tekston
+            x.XKlavaro.tildo("#bildo_butonoj", Artikolo.artikolo("#xml_text")?.radiko||'');
+
             if (parseFloat(DOM.v("#bildo_fmt")||'') > 1) {
                 bildo_larĝecoj([640,320],640); // eble ankaŭ 800?
             } else {
@@ -400,16 +406,17 @@ export default function() {
 
     klv = DOM.e("#bildo_butonoj");
     if (klv) {
-        new x.XKlavaro("#bildo_butonoj","#bildo_dlg","#bildo_frazo",
-            () => Artikolo.artikolo("#xml_text")?.radiko, 
+        new x.XFormularKlavaro("#bildo_butonoj","#bildo_dlg",
+            // reĝimpremo
             function(event,ui) {
                 if (ui.cmd == "blankigo") {
                     DOM.malplenigu("#bildo_frazo");
                     DOM.malplenigu("#bildo_dlg input[type!='radio']");
                 }
             },
+            // postenmeto
             undefined)
-        .elemento_klavoj(klv);
+        .elemento_klavoj();
     }
     /// DOM.klavpremo("#bildo_frazo",xpress);
     xtajpo.aldonu("bildo_frazo");
@@ -430,21 +437,25 @@ export default function() {
             plenigu_derivajxojn();
             DOM.kaŝu("#derivajho_error");
             this.faldu(false); // necesas, se la dialogo estis fermita en faldita stato...
+
+            // difinu tildo-tekston
+            x.XKlavaro.tildo("#derivajho_butonoj", Artikolo.artikolo("#xml_text")?.radiko||'');            
         }
     });
 
     klv = DOM.e("#derivajho_butonoj");
     if (klv) {
-        new x.XKlavaro("#derivajho_butonoj","#derivajho_dlg","#derivajho_dif",
-            () => Artikolo.artikolo("#xml_text")?.radiko, 
+        new x.XFormularKlavaro("#derivajho_butonoj","#derivajho_dlg", 
+            // reĝimpremo
             function(event,ui) {
                 if (ui.cmd == "blankigo") {
                     DOM.malplenigu("#derivajho_dlg input");
                     DOM.malplenigu("#derivajho_dif");
                 }
             },
+            // postenmeto
             undefined)
-        .elemento_klavoj(klv);
+        .elemento_klavoj();
     }
     /// DOM.klavpremo("#derivajho_kap",xpress);
     /// DOM.klavpremo("#derivajho_dif",xpress);
@@ -466,21 +477,25 @@ export default function() {
         malfermu: function() {
             DOM.kaŝu("#senco_error");
             this.faldu(false); // necesas, se la dialogo estis fermita en faldita stato...
+
+            // difinu tildo-tekston
+            x.XKlavaro.tildo("#senco_butonoj", Artikolo.artikolo("#xml_text")?.radiko||'');            
         }
     });
 
     klv = DOM.e("#senco_butonoj");
     if (klv) {
-        new x.XKlavaro("#senco_butonoj","#senco_dlg","#senco_dif",
-            () => Artikolo.artikolo("#xml_text")?.radiko, 
+        new x.XFormularKlavaro("#senco_butonoj","#senco_dlg", 
+            // reĝimpremo
             function(event,ui) {
                 if (ui.cmd == "blankigo") {
                     DOM.malplenigu("#senco_dlg input");
                     DOM.malplenigu("#senco_dif");
                 }
             },
+            // postenmeto
             undefined)
-        .elemento_klavoj(klv);
+        .elemento_klavoj();
     }
     /// DOM.klavpremo("#senco_dif",xpress);
     xtajpo.aldonu("senco_dif");
@@ -498,6 +513,10 @@ export default function() {
             //$("#traduko_tradukoj").data("trd_shanghoj",{});
             traduko_dlg_art_lingvoj();
             Menu.refreŝigu("#traduko_menuo");
+
+            // difinu tildo-tekston
+            x.XKlavaro.tildo("#traduko_butonoj", Artikolo.artikolo("#xml_text")?.radiko||'');
+
             // jam difinita en ui_kreo... var preflng = pref_lngoj? pref_lngoj[0] : 'en'; // globala variablo
             const preflng = u.agordo.preflng;
             traduko_dlg_plenigu_trd(preflng,DOM.t("#trd_pref_"+preflng));
@@ -520,11 +539,10 @@ export default function() {
 
     klv = DOM.e("#traduko_butonoj");
     if (klv) {
-        new x.XKlavaro("#traduko_butonoj","#traduko_dlg",null,
-            () => Artikolo.artikolo("#xml_text").radiko, 
-            undefined,
+        new x.XFormularKlavaro("#traduko_butonoj","#traduko_dlg",
+            // postenmeto
             function() { trd_input_shanghita(this.celo()) })
-        .elemento_klavoj(klv);
+        .elemento_klavoj();
         //DOM.ido_reago("#traduko_tabelo","blur","input",traduko_memoru_fokuson.bind(xklv));
         //DOM.ido_reago("#traduko_butonoj","click","div",traduko_butono_premo.bind(xklv));
     }
@@ -540,11 +558,12 @@ export default function() {
         malfermu: function() {
             DOM.kaŝu("#sxablono_error");
             this.faldu(false); // necesas, se la dialogo estis fermita en faldita stato...
+
+            // difinu tildo-tekston
+            x.XKlavaro.tildo("#sxablono_butonoj", Artikolo.artikolo("#xml_text")?.radiko||'');            
         }
     });
-    new x.XKlavaro("#sxablono_butonoj","#sxablono_dlg",'',         
-        () => Artikolo.artikolo("#xml_text").radiko, 
-        undefined, undefined);
+    new x.XFormularKlavaro("#sxablono_butonoj","sxablono_dlg");
     /*
     $( "#sxablono_butonoj").Klavaro({
         artikolo: $("#xml_text"),
@@ -580,21 +599,24 @@ export default function() {
         malfermu: function() {
             DOM.kaŝu("#rimarko_error");
             this.faldu(false); // necesas, se la dialogo estis fermita en faldita stato...
+            // difinu tildo-tekston
+            x.XKlavaro.tildo("#rimarko_butonoj", Artikolo.artikolo("#xml_text")?.radiko||'');
         }
     });
 
     klv = DOM.e("#rimarko_butonoj");
     if (klv) {
-        new x.XKlavaro("#rimarko_butonoj","#riarko_dlg","#rimarko_rim",
-            undefined,
+        new x.XFormularKlavaro("#rimarko_butonoj","riarko_dlg",
+            // reĝimpremo
             function(event,ui) {
                 if (ui.cmd == "blankigo") {
                     DOM.malplenigu("#rimarko_dlg input");
                     DOM.malplenigu("#rimarko_rim");
                 }
             },
+            // postenmeto
             undefined)
-        .elemento_klavoj(klv);
+        .elemento_klavoj();
     }
     /// DOM.klavpremo("#rimarko_rim",xpress);
     xtajpo.aldonu("rimarko_rim");
@@ -881,7 +903,7 @@ function referenco_dlg_preparu() {
 
 function referenco_listo_elekto(event,ui) {
     // forigu sufikson de la listonomo
-    const lst = DOM.v("#referenco_listo").trim();
+    const lst = DOM.v("#referenco_listo")?.trim()||'';
     DOM.al_v("#referenco_listo",lst);
     if (ui.mrk) {
         DOM.al_v("#referenco_sercho",'');
@@ -975,6 +997,11 @@ function referenco_enmeti(event) {
 }
 
 function ekzemplo_dlg_preparo() {
+    function trim(e: Element, kampo: string): string {
+        const v = e.querySelector(kampo)?.textContent||'';
+        return v.trim();
+    }
+
     //$("body").css("cursor", "progress");
     u.HTTPRequest('get','../voko/biblist.xml',{},
             function(data) {  
@@ -983,11 +1010,12 @@ function ekzemplo_dlg_preparo() {
                         (e: Element) => {
                             //console.log(this + " "+i+" "+e);
                             //console.debug($(this).children("bib").text() +  ": " + $(this).children("text").text());
+                            const bib = trim(e,"bib")
+
                             return {
-                                bib: e.querySelector("bib")?.textContent.trim(),
-                                value: e.querySelector("bib")?.textContent.trim() + ": " 
-                                    + e.querySelector("text")?.textContent.trim(),
-                                url: e.querySelector("url")?.textContent.trim()
+                                bib: bib,
+                                value: bib + ": " + trim(e, "text"),
+                                url: trim(e,"url")
                             };
                         }),
                 });

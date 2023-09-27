@@ -25,7 +25,8 @@ export interface SDet extends TParto {
   */
   mrk?: string, // la XML-atributo mrk, se la elemento ĝin havas
   kap?: string, // la kapvorto, se la elemento ĝin havas
-  dsc: string // konciza pris
+  mlg: string, // konciza priskribo
+  dsc: string // konciza priskribo prefiksata de hierakia elementindiko
 }
 
 // export type Strukturero = SId & SDet;
@@ -198,6 +199,7 @@ export type XElPos = { pos: number, end: number, elm: string };
           mrk: _mrk(elm,de), // la marko de la elemento, se estas
           kap: _kap(elm,de,al), // la kapvorto
           //no: this.strukturo.length,
+          mlg: "<tbd>",
           dsc: "<tbd>",
           id: "<tbd>"
         }
@@ -205,9 +207,10 @@ export type XElPos = { pos: number, end: number, elm: string };
         
         // kunmetu etikedon por la peco el elementnomo kaj sufikso
         const suff = subt.kap ? subt.kap : subt.mrk||'';
+        subt.mlg = suff? suff : '('+subt.el+')';
         subt.dsc = indents[subt.el as XEl] + (
           subt.el!='art'? 
-            elements[subt.el as XEl]+ (suff?' '+suff:' ('+subt.el+')') 
+            elements[subt.el as XEl] + ' ' + subt.mlg 
             : suff);
   
         // ĉe la kapvorto de la artikolo ekstraktu la radikon
@@ -226,7 +229,7 @@ export type XElPos = { pos: number, end: number, elm: string };
   
       // en la fino de la listo aldonu ankoraŭ elektilon por la tuta XML
       const tuto: SDet = {el: "xml", de: 0, ln: 0, al: xmlteksto.length, 
-        id: "x.m.l", dsc: 'tuta xml-fonto'}; //, no: this.strukturo.length};
+        id: "x.m.l", mlg: 'tuta', dsc: 'tuta xml-fonto'}; //, no: this.strukturo.length};
       /// if (this.onaddsub) this.onaddsub(tuto,this.strukturo.length,tuto.id == selected);
   
       tekst.aldonu(tuto, tuto.id == elektenda);

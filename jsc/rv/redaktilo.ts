@@ -506,17 +506,29 @@ export namespace redaktilo {
       ?.addEventListener("change",struktur_elekto);
 
     // traduk-dialogo bezonas xmlarea
-    const tdlg = TradukDialog.dialog("#r\\:traduko_dlg");
-    if (tdlg) {
-      tdlg.xmlarea = xmlarea;
+    const trd_dlg = TradukDialog.dialog("#r\\:traduko_dlg");
+    if (trd_dlg) {
+      trd_dlg.xmlarea = xmlarea;
 
       // ĉu ni jam kreis XKlavaron en la traduko-dialogo?
-      let xklv = x.XKlavaro2.klavaro("#traduko_butonoj");
+      let xklv = x.XKlavaro.klavaro("#traduko_butonoj");
       if (!xklv) {
         // ne? do kreu nun
-        xklv = new x.XFormularKlavaro("#traduko_butonoj", "traduko_tabelo", (event: Event) => {
-          tdlg.trd_input_shanghita(event);
-        });
+        xklv = new x.XFormularKlavaro("#traduko_butonoj", "traduko_tabelo", 
+          // reĝimŝanĝo
+          undefined,
+          // postenmeto
+          (event) => {
+            // PLIBOINIGU: evt-e postenmeto povus transdoni
+            // la celon en la dua aŭ tria parametro, sed
+            // momente ni bezonas malpaki la celon nur en kelkaj lokoj...
+            const k = x.XKlavaro.klavaro("#traduko_butonoj");
+            if (k) {
+              trd_dlg.trd_input_shanghita(event,k.celo);
+            }
+          });
+
+        // kreu la klavojn
         xklv.elemento_klavoj();
       }
     }

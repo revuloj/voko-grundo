@@ -4,7 +4,7 @@
 */
 
 import { quoteattr } from './kodado';
-import { XElPos } from './xmlstrukt';
+import { XElPos, SDet } from './xmlstrukt';
 import { XmlRedakt } from './xmlredakt';
 import { DOM, Tekst, Dialog, DialogOpcioj, Tabel, ListRedakt } from '../ui';
 
@@ -418,16 +418,14 @@ export class TradukDialog extends Dialog {
     this.xmlarea.subtekst_apliku((s) => {
       // trakuru la XML-subtekstoj (sub)drv, (sub)snc 
       if (['drv','subdrv','snc','subsnc'].indexOf(s.el) > -1) {
-        // ekstraktu la priskribon por nomi la koncernan struktureron
-        const parts = (s as any).dsc.split(':');
-        let dsc = parts[1] || parts[0];
+        // ekstraktu la priskribon por nomi la koncernan struktureron        
+        let dsc = (s as SDet).mlg;
         // koncizigu la priskribon forigante prefiksan parton
-        if (s.el == 'snc' || s.el == 'subsnc' && parts[1]) {
-            const p = dsc.indexOf('.');
-            if (p>-1) dsc = dsc.slice(p);
-        } else if (s.el == 'drv' || s.el == 'subdrv') {
-          const p = dsc.indexOf(' ');
+        if (s.el == 'snc' || s.el == 'subsnc') {
+          const p = dsc.indexOf('.');
           if (p>-1) dsc = dsc.slice(p);
+          dsc = '\u00a0'+dsc;
+        } else if (s.el == 'drv' || s.el == 'subdrv') {
           dsc = '<b>'+dsc+'</b>';
         }
 
@@ -495,11 +493,17 @@ export class TradukDialog extends Dialog {
  
   }
 
-  trd_input_shanghita(event: Event) {
-    const trg = event.target;
-    if (DOM.isFormElement(trg)) {
+  /**
+   * Kiam kampo ŝangiĝas ĉu per redakto ĉu per enigo de XKlavaro, ni
+   * registras, ke la tradukoj de la koncerna senco/derivaĵo bezonos adapton.
+   * @param event la evento, kiu ekestis pro la ŝanĝo
+   * @param kampo la kampo, kiu estas ŝanĝita, se ne donita ni uzu event.target
+   */
+  trd_input_shanghita(event: Event, kampo?: HTMLElement) {
+    const k_el = kampo? kampo : event.target;
+    if (DOM.isFormElement(k_el)) {
       // kiu listo enhavas tiun ĉi eron
-      const lr = ListRedakt.list_kun_ero(trg);
+      const lr = ListRedakt.list_kun_ero(k_el);
 
       if (lr) {
         // la @id-atributo estas de la formo trd:<subtekst-id>

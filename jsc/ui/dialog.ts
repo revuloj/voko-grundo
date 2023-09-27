@@ -56,7 +56,7 @@ export class Dialog extends UIElement {
         // evtl. kaŝu
         if (this.element.tagName != "DIALOG") DOM.kaŝu(this.element);
 
-        // la komenca enigkampo povas markiĝis per tabindex=1, sed ni
+        // la komenca enigkampo povas markiĝi per tabindex=1, sed ni
         // nun forigas tiun atributon por ne konfuzi la enfermo-algoritmon
         this.unua = this.element.querySelector("[tabindex='1']");
         if (this.unua) {

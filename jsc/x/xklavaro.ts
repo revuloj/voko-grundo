@@ -149,7 +149,7 @@ export class XTajpo {
 /**
  * Klaso por regi aldonajn butonarojn por redaktado (indikoj, fakoj, stiloj, elementoj, aliaj simboloj)
  */
-export class XKlavaro2 extends UIElement {
+export class XKlavaro extends UIElement {
     /**
      * Influejo estas la HTML-elemento en kies kadro la butonaro efikas, t.e. formularo kun la kampoj aŭ unuopa kampo, 
      * en kiuj okazas la redaktoj. Ordinare ili mem estas ekster tiu influejo.
@@ -157,9 +157,20 @@ export class XKlavaro2 extends UIElement {
     static influejoj = new WeakMap();
 
 
+    /**
+     * Retrovas la klavaron ligita al HTML-elemento
+     */
     static klavaro(element: HTMLElement|string) {
-        let k = super.obj(element);
-        if (k instanceof XKlavaro2) return k;
+        const k = super.obj(element);
+        if (k instanceof XKlavaro) return k;
+    }
+
+    /**
+     * Difinas la tekston por tildoj ĉe la klavaro ligita al HTML-elemento
+     */
+    static tildo(element: HTMLElement|string, teksto: string) {
+        const k = XKlavaro.klavaro(element);
+        if (k) k.tildo = teksto;
     }
 
     /**
@@ -200,6 +211,7 @@ export class XKlavaro2 extends UIElement {
 
     public celo: HTMLInputElement|HTMLTextAreaElement;
     private klavoj: string;
+    public tildo: string; // per kiu teksto (radiko) ni anstataŭigu tildojn
 
     /**
      * 
@@ -218,7 +230,7 @@ export class XKlavaro2 extends UIElement {
         const c = (typeof celo === "string")? document.getElementById(celo) : celo;
         if (c instanceof HTMLInputElement || c instanceof HTMLTextAreaElement) {
             this.celo = c;
-            XKlavaro2.influejoj.set(c,this);
+            XKlavaro.influejoj.set(c,this);
         }
 
         this.klavoj = this.element.textContent || '';
@@ -249,7 +261,7 @@ export class XKlavaro2 extends UIElement {
             let klv = klavoj[i];
             // unuopa signo -> simbolo-klavo
             if (klv.length == 1) {
-                const title = XKlavaro2.signoj[klv]||'';
+                const title = XKlavaro.signoj[klv]||'';
                 switch (klv) {
                     case '\xa0':
                         html += `<div class="klv" data-btn="&nbsp;" title="${title}">]&nbsp;[</div>`;
@@ -262,12 +274,12 @@ export class XKlavaro2 extends UIElement {
                 } 
             // duopa signo -> enkrampiga
             } else if (klv.length == 2) {
-                const title = XKlavaro2.krampoj[klv];
+                const title = XKlavaro.krampoj[klv];
                 html += `<div class="klv elm_btn" data-cmd="${klv}" title="${title}">${klv[0]}&hellip;${klv[1]}</div>`;
             // pli longaj estas elemento-butonoj k.s.
             } else {
-                if (klv in XKlavaro2.elementoj) {
-                    const title = XKlavaro2.elementoj[klv]
+                if (klv in XKlavaro.elementoj) {
+                    const title = XKlavaro.elementoj[klv]
                     html += `<div class="klv elm_btn" data-cmd="${klv}" title="${title}">${klv}</div>`;
                 } else {
                     switch (klv) {
@@ -347,7 +359,7 @@ export class XKlavaro2 extends UIElement {
 
         const elm = sub? sub: this.element;
     
-        this.elemento_klavoj(this.element.textContent||'');
+        this.elemento_klavoj(elm.textContent||'',elm);
         const pos = elm.children.length; // tie ni poste enŝovos la stilbutonojn!
 
         let indikoj = "<div class='klv ofc' data-ofc='*' title='fundamenta (*)'><span>funda-<br/>menta</span></div>";
@@ -383,7 +395,7 @@ export class XKlavaro2 extends UIElement {
                     [ ['span',{},[nom,['br'],kod]] ]
                 ]
             ]);
-            elm.children[pos-1]
+            elm.children[pos?pos-1:0]
                 .insertAdjacentElement('afterend', btn[0] as Element);
         }
         
@@ -397,6 +409,8 @@ export class XKlavaro2 extends UIElement {
      */
     fako_klavoj(fakList: Xlist, sub?: HTMLElement) {
     
+        const elm = sub? sub: this.element;
+
         function fakoKlavoHtml(kod: string, nom: string) {
             const btn = u.ht_elements([
                 ['div',{
@@ -410,11 +424,10 @@ export class XKlavaro2 extends UIElement {
                 ]
             ]);
             if (btn)
-                this.element.append(...btn);
+                elm.append(...btn);
         }            
 
-        const elm = sub? sub: this.element;
-        this.elemento_klavoj(this.element.textContent, elm);
+        this.elemento_klavoj(elm.textContent, elm);
         fakList.load(null,fakoKlavoHtml);
     };
 
@@ -629,7 +642,7 @@ export class XKlavaro2 extends UIElement {
 
 }
 
-export class XRedaktKlavaro extends XKlavaro2 {
+export class XRedaktKlavaro extends XKlavaro {
 
     /**
      * Kreas XML-ekran-klavaron. La klavaro efikas ene de kadra dialogo. Fokusŝanĝoj pri enhavataj input- kaj textarea-elementoj
@@ -678,7 +691,7 @@ export class XRedaktKlavaro extends XKlavaro2 {
                     }
                 }
             } else if (cmd == "tld") { // anstataŭigo de tildo
-                const elektita = this.elekto(); 
+                const elektita = this.elekto()||''; 
                 if (elektita == "~" || elektita == "") {
                     this.enmeto("<tld/>");
                 } else {
@@ -722,8 +735,10 @@ export class XRedaktKlavaro extends XKlavaro2 {
             // minuskligo
             } else if (cmd == "minuskloj") {
                 const sel = this.elekto();
-                this.enmeto(minuskligo(sel,radiko));
-                if (this.postenmeto) this.postenmeto(event,{cmd: cmd});
+                if (sel) {
+                    this.enmeto(minuskligo(sel,radiko));
+                    if (this.postenmeto) this.postenmeto(event,{cmd: cmd});
+                }
             } else {
                 super.premo(event);
             }
@@ -748,7 +763,7 @@ export class XRedaktKlavaro extends XKlavaro2 {
  * Realigas XKlavaron, kies influejo estas formularo kun pluraj enigkampoj.
  * Ĝi memoras la laste fokusitan, por scii kien efiku la klav-redaktoj
  */
-export class XFormularKlavaro extends XKlavaro2 {
+export class XFormularKlavaro extends XKlavaro {
 
     private influejo: HTMLElement|null;
 
@@ -764,14 +779,22 @@ export class XFormularKlavaro extends XKlavaro2 {
     constructor(
         klavaro: HTMLElement|string, 
         formularo: HTMLElement|string, 
+        public reĝimpremo?: Reghimpremo,
         public postenmeto?: PostEnmeto) 
     {
-        super(klavaro, '',undefined, postenmeto);
+        super(klavaro, '', reĝimpremo, postenmeto);
 
         this.influejo = typeof formularo === "string"? document.getElementById(formularo) : formularo;
 
         if (this.influejo) {
-            XKlavaro2.influejoj.set(this.influejo, this)
+            XKlavaro.influejoj.set(this.influejo, this);
+
+            // celon ni komenci difinu aŭ per kampo kun tabindex=1 aŭ
+            // la unuan en la influejo
+            const unua = this.influejo.querySelector("[tabindex='1']")
+                || this.element.querySelector("input,textarea");            
+            if (unua instanceof HTMLInputElement
+                || unua instanceof HTMLTextAreaElement) this.celo = unua;
 
             // por scii kie klavoj ind/klr efiku
             DOM.reago(this.influejo,"focusout",(event: Event) => {

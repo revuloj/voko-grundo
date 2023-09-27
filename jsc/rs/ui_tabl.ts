@@ -193,11 +193,12 @@ export default function() {
     });
 
     // ekrana klavaro
-    let klv = DOM.e("#dock_klavaro");
-    if (klv) {
-      const xklv = new x.XKlavaro(klv,null,"#xml_text",
-      () => Artikolo.artikolo("#xml_text").radiko,
-      (event: Event, ui) => { 
+    const klv = DOM.e("#dock_klavaro");
+    const art = Artikolo.artikolo("#xml_text")
+    if (klv instanceof HTMLElement && art) {
+      const xklv = new x.XRedaktKlavaro(klv, art,
+        // reĝimpremo
+        (event: Event, ui) => { 
             // PLIBONIGU: tion ni povas ankaŭ meti en xklavaro.js!
             if (ui.cmd == 'indiko') {
               x.hide("r:klv_fak");
@@ -212,35 +213,17 @@ export default function() {
               x.show("r:klv_elm");
               x.hide("r:klv_ind");
             }
-          },
-/*
-        function(event,ui) {
-            switch (ui.cmd) {
-                
-                case "fermu":
-                    $("#dock_klavaro").hide();
-                    //this.element.hide();
-                    //$("#kromklavaro").show(); // butono por reaperigi ĝin poste
-                    break;
-                    
-                case "indiko":
-                    montri_indikojn();
-                    break;
-                case "sercho":
-                    // iru al paĝo serĉo...
-                    const slip = Slipar.montru("#tabs",2);
-                    break;
-            }
-        },*/
+        },
+        // postenmeto
         function(event,ui) {
             const xmlarea = Artikolo.artikolo("#xml_text");
-            xmlarea?.setUnsynced();
+            xmlarea?.malsinkrona();
         }
       );
-      xklv.indiko_klavoj(DOM.e("#r\\:klv_ind"), revo_listoj.stiloj);
-      xklv.fako_klavoj(DOM.e("#r\\:klv_fak"), revo_listoj.fakoj);
+      xklv.indiko_klavoj(revo_listoj.stiloj,<HTMLElement>DOM.e("#r\\:klv_ind"));
+      xklv.fako_klavoj(revo_listoj.fakoj,<HTMLElement>DOM.e("#r\\:klv_fak"), );
       const klv_elm = DOM.e("#r\\:klv_elm");
-      if (klv_elm) xklv.elemento_klavoj(klv_elm,klv_elm.textContent);
+      if (klv_elm) xklv.elemento_klavoj(klv_elm.textContent);
     }
     
 
@@ -299,20 +282,18 @@ export default function() {
     );*/
     DOM.ido_reago("#regexes","click","input",regulEsprimo);
     DOM.reago("#re_radiko","input",regulEsprimo);
-
-    klv = DOM.e("#sercho_malplenigo");
-    if (klv) {
-        const xklv = new x.XKlavaro("#sercho_malplenigo","#sercho_kampo","#sercho_sercho",
-            ()=>'',
-            function(event,ui) {
-                if (ui.cmd == "blankigo") {
-                    DOM.al_v("#sercho_sercho","");
-                }
-            },
-            undefined
-        );
-        xklv.elemento_klavoj(klv);
-    }
+    const xklv = new x.XFormularKlavaro("#sercho_malplenigo","#sercho_kampo",
+        // reĝimpremo
+        function(event,ui) {
+            if (ui.cmd == "blankigo") {
+                DOM.al_v("#sercho_sercho","");
+            }
+        },
+        // postenmeto
+        undefined
+    );
+    xklv.elemento_klavoj();
+    
     /// DOM.klavpremo("#sercho_sercho",x.xpress);
     /// DOM.klavpremo("#re_radiko",x.xpress);
 
@@ -433,10 +414,10 @@ export function antaŭ_slipŝanĝo(ui) {
         */
         const xmlarea = Artikolo.artikolo("#xml_text");
         if (xmlarea) {
-            const elektita = xmlarea.elekto;
+            const elektita = xmlarea.elekto||'';
             const radiko = xmlarea.radiko;
            
-            var sercho = x.replaceTld(radiko,elektita)
+            var sercho = x.replaceTld(radiko, elektita)
                .replace(/<[^>]+>/g,'')
                .replace(/\s\s+/g,' ');
             if ( sercho.length > 0 ) {
@@ -671,39 +652,40 @@ function plenigu_elekto_indikoj() {
     //$("body").css("cursor", "progress");
 
     const klvr = DOM.e("#elekto_indikoj");
-    const xmltxt = DOM.e("#xml_text");
+    // const xmltxt = DOM.e("#xml_text");
     const xmlarea = Artikolo.artikolo("#xml_text");
 
-    // PLIBONIGU: enkonduku apartajn elementojn span...
-    const klv_fak = klvr;
-    const klv_ind = klvr;
 
-    if (klvr && xmlarea) {
+    if (klvr instanceof HTMLElement && xmlarea) {
+        // PLIBONIGU: enkonduku apartajn elementojn span...
+        const klv_fak = klvr;
+        const klv_ind = klvr;
         
         // @ts-ignore
-        const xklavaro = new x.XKlavaro(klvr, null, xmltxt,
-            () => xmlarea.radiko,
+        const xklavaro = new x.XRedaktKlavaro(klvr, xmlarea,
+            // reĝimŝanĝo
             (event: Event, cmd) => { 
                 // KOREKTU: ...
                 if (cmd.cmd == 'indiko') {
-                x.hide("r:klv_fak");
-                x.show("r:klv_ind");
-                x.hide("r:klv_elm");
+                DOM.kaŝu("#r\\:klv_fak");
+                DOM.malkaŝu("#r\\:klv_ind");
+                DOM.kaŝu("#r\\:klv_elm");
                 } else if (cmd.cmd == 'fako') {
-                x.hide("r:klv_ind");
-                x.show("r:klv_fak");
-                x.hide("r:klv_elm");
+                DOM.kaŝu("#r\\:klv_ind");
+                DOM.malkaŝu("#r\\:klv_fak");
+                DOM.kaŝu("#r\\:klv_elm");
                 } else if (cmd.cmd == 'klavaro') {
-                x.hide("r:klv_fak");
-                x.show("r:klv_elm");
-                x.hide("r:klv_ind");
+                DOM.kaŝu("#r\\:klv_fak");
+                DOM.malkaŝu("#r\\:klv_elm");
+                DOM.kaŝu("#r\\:klv_ind");
                 }
             },
-            () => xmlarea.setUnsynced()
+            // postenmeto
+            () => xmlarea.malsinkrona()
         );
 
-        if (klv_fak) xklavaro.fako_klavoj(klv_fak, revo_listoj.fakoj);
-        if (klv_ind) xklavaro.indiko_klavoj(klv_ind, revo_listoj.stiloj);
+        if (klv_fak) xklavaro.fako_klavoj(revo_listoj.fakoj,klv_fak);
+        if (klv_ind) xklavaro.indiko_klavoj(revo_listoj.stiloj,klv_ind);
     }
 }
 
