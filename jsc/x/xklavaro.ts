@@ -32,7 +32,6 @@ type KlavSpec = "ctl" | "mis" | "nom" | "nac" | "esc" | "ind" | "var" | "frm"
 type Reghimo = "indiko" | "fako" | "klavaro" | "sercho" | "blankigo" | null;
 type Reghimpremo = (e: Event, r: {cmd: Reghimo}) => void;
 
-type KiuRadiko = () => string;
 type Komando = {cmd: Reghimo|string};
 type PostEnmeto = (event: Event, cmd?: Komando) => void;
 
@@ -469,6 +468,44 @@ export class XKlavaro extends UIElement {
                 this.enmeto('<gra><vspec>' + vspec + '</vspec></gra>');
                 if (this.postenmeto) this.postenmeto(event);
 
+            } else if (cmd == "tld") { // anstataŭigo de tildo
+                const elektita = this.elekto()||""; 
+                if (elektita == "~" || elektita == "") {
+                    this.enmeto("<tld/>");
+                } else {
+                    //var radiko = xmlGetRad($("#xml_text").val());
+                    // traktu ankaŭ majusklan / minusklan formon de la radiko
+                    let first = this.tildo.charAt(0);
+                    first = (first == first.toUpperCase() ? first.toLowerCase() : first.toUpperCase());
+                    const tld2 = first + this.tildo.slice(1);
+                            
+                    if ( this.tildo ) {
+                        const newtext = elektita.replace(this.tildo,'<tld/>').replace(tld2,'<tld lit="'+first+'"/>');
+                        this.enmeto(newtext); 
+                    }
+                }
+
+                if (this.postenmeto) this.postenmeto(event,{cmd: cmd});
+
+
+            // majusklaj komencliteroj de vortoj
+            } else if (cmd == "kamelo") {
+                const sel = this.elekto();
+                //var rad = sel.includes('<tld')? xmlGetRad($("#xml_text").val()) : '';
+                if (sel) {
+                    const rad = sel.includes('<tld')? this.tildo : '';
+                    this.enmeto(kameligo(sel,rad));    
+                    if (this.postenmeto) this.postenmeto(event,{cmd: cmd});    
+                }
+
+            // minuskligo
+            } else if (cmd == "minuskloj") {
+                const sel = this.elekto();
+                if (sel) {
+                    this.enmeto(minuskligo(sel,this.tildo));
+                    if (this.postenmeto) this.postenmeto(event,{cmd: cmd});    
+                }
+
             /* ni lasos por subklaso, kie celo estas XMLRedakt
             } else if (btn.classList.contains("tab_btn")) {
                 // butonoj por en-/elŝovo
@@ -484,24 +521,7 @@ export class XKlavaro extends UIElement {
                         if (this.postenmeto) this.postenmeto(event);
                     }
                 }
-            } else if (cmd == "tld") { // anstataŭigo de tildo
-                const elektita = this.elekto(); 
-                if (elektita == "~" || elektita == "") {
-                    this.enmeto("<tld/>");
-                } else {
-                    //var radiko = xmlGetRad($("#xml_text").val());
-                    // traktu ankaŭ majusklan / minusklan formon de la radiko
-                    let first = radiko.charAt(0);
-                    first = (first == first.toUpperCase() ? first.toLowerCase() : first.toUpperCase());
-                    const radiko2 = first + radiko.slice(1);
-                            
-                    if ( radiko ) {
-                        const newtext = elektita.replace(radiko,'<tld/>').replace(radiko2,'<tld lit="'+first+'"/>');
-                        this.enmeto(newtext); 
-                    }
-                }
 
-                if (this.postenmeto) this.postenmeto(event,{cmd: cmd});
 
             // traduko
             } else if (cmd == "trd") {
@@ -516,21 +536,6 @@ export class XKlavaro extends UIElement {
                     if (this.postenmeto) this.postenmeto(event,{cmd: cmd});
                 }
 
-            // majusklaj komencliteroj de vortoj
-            } else if (cmd == "kamelo") {
-                const sel = this.elekto();
-                //var rad = sel.includes('<tld')? xmlGetRad($("#xml_text").val()) : '';
-                if (sel) {
-                    const rad = sel.includes('<tld')? radiko : '';
-                    this.enmeto(kameligo(sel,rad));    
-                    if (this.postenmeto) this.postenmeto(event,{cmd: cmd});    
-                }
-
-            // minuskligo
-            } else if (cmd == "minuskloj") {
-                const sel = this.elekto();
-                this.enmeto(minuskligo(sel,radiko));
-                if (this.postenmeto) this.postenmeto(event,{cmd: cmd});
 */
             // aliajn kazojn traktu per _ekran_klavo...
             } else {
@@ -626,8 +631,8 @@ export class XKlavaro extends UIElement {
             s_ = sel || "\u2026";
             return ('<klr>' 
                 // krampon ks ni ne aldonas, se ĝi jam estas parto de la elektita teksto
-                + ( sel && sel[0] != cmd[0]? cmd[0]:"" ) 
-                + s_ + ( sel && sel[sel.length-1] != cmd[1]? cmd[1]:"" ) 
+                + ( sel && sel[0] != cmd[0]? "" : cmd[0] ) 
+                + s_ + ( sel && sel[sel.length-1] != cmd[1]? "" : cmd[1] ) 
                 + '</klr>');
         // variaĵo
         } else if (cmd == "var"){
@@ -669,8 +674,7 @@ export class XRedaktKlavaro extends XKlavaro {
         const trg = event.target as Element;
         const btn = trg.closest(".klv");
 
-        const radiko = this.xmlarea.radiko;
-        const ta = this.xmlarea.element;
+        this.tildo = this.xmlarea.radiko;
 
         if (btn) {
             const text = btn.getAttribute("data-btn");
@@ -690,24 +694,6 @@ export class XRedaktKlavaro extends XKlavaro {
                         if (this.postenmeto) this.postenmeto(event);
                     }
                 }
-            } else if (cmd == "tld") { // anstataŭigo de tildo
-                const elektita = this.elekto()||''; 
-                if (elektita == "~" || elektita == "") {
-                    this.enmeto("<tld/>");
-                } else {
-                    //var radiko = xmlGetRad($("#xml_text").val());
-                    // traktu ankaŭ majusklan / minusklan formon de la radiko
-                    let first = radiko.charAt(0);
-                    first = (first == first.toUpperCase() ? first.toLowerCase() : first.toUpperCase());
-                    const radiko2 = first + radiko.slice(1);
-                            
-                    if ( radiko ) {
-                        const newtext = elektita.replace(radiko,'<tld/>').replace(radiko2,'<tld lit="'+first+'"/>');
-                        this.enmeto(newtext); 
-                    }
-                }
-
-                if (this.postenmeto) this.postenmeto(event,{cmd: cmd});
 
             // traduko
             } else if (cmd == "trd") {
@@ -722,23 +708,6 @@ export class XRedaktKlavaro extends XKlavaro {
                     if (this.postenmeto) this.postenmeto(event,{cmd: cmd});
                 }
 
-            // majusklaj komencliteroj de vortoj
-            } else if (cmd == "kamelo") {
-                const sel = this.elekto();
-                //var rad = sel.includes('<tld')? xmlGetRad($("#xml_text").val()) : '';
-                if (sel) {
-                    const rad = sel.includes('<tld')? radiko : '';
-                    this.enmeto(kameligo(sel,rad));    
-                    if (this.postenmeto) this.postenmeto(event,{cmd: cmd});    
-                }
-
-            // minuskligo
-            } else if (cmd == "minuskloj") {
-                const sel = this.elekto();
-                if (sel) {
-                    this.enmeto(minuskligo(sel,radiko));
-                    if (this.postenmeto) this.postenmeto(event,{cmd: cmd});
-                }
             } else {
                 super.premo(event);
             }
