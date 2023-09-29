@@ -792,7 +792,7 @@ export class XFormularKlavaro extends XKlavaro {
             // celon ni komenci difinu aŭ per kampo kun tabindex=1 aŭ
             // la unuan en la influejo
             const unua = this.influejo.querySelector("[tabindex='1']")
-                || this.element.querySelector("input,textarea");            
+                || this.influejo.querySelector("input,textarea");            
             if (unua instanceof HTMLInputElement
                 || unua instanceof HTMLTextAreaElement) this.celo = unua;
 
@@ -803,6 +803,8 @@ export class XFormularKlavaro extends XKlavaro {
                     this.celo = trg;
                 }
             });             
+        } else {
+            throw "Influejo de la klavaro ne troviĝis";
         }
     }
 }

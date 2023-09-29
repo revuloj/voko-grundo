@@ -223,7 +223,7 @@ export default function() {
       xklv.indiko_klavoj(revo_listoj.stiloj,<HTMLElement>DOM.e("#r\\:klv_ind"));
       xklv.fako_klavoj(revo_listoj.fakoj,<HTMLElement>DOM.e("#r\\:klv_fak"), );
       const klv_elm = DOM.e("#r\\:klv_elm");
-      if (klv_elm) xklv.elemento_klavoj(klv_elm.textContent);
+      if (klv_elm instanceof HTMLElement) xklv.elemento_klavoj(klv_elm.textContent,klv_elm);
     }
     
 
@@ -282,17 +282,14 @@ export default function() {
     );*/
     DOM.ido_reago("#regexes","click","input",regulEsprimo);
     DOM.reago("#re_radiko","input",regulEsprimo);
-    const xklv = new x.XFormularKlavaro("#sercho_malplenigo","#sercho_kampo",
+    new x.XFormularKlavaro("#sercho_malplenigo","serch_kampo",
         // reĝimpremo
         function(event,ui) {
             if (ui.cmd == "blankigo") {
                 DOM.al_v("#sercho_sercho","");
             }
-        },
-        // postenmeto
-        undefined
-    );
-    xklv.elemento_klavoj();
+        } // neniu postenmeto
+    ).elemento_klavoj();
     
     /// DOM.klavpremo("#sercho_sercho",x.xpress);
     /// DOM.klavpremo("#re_radiko",x.xpress);

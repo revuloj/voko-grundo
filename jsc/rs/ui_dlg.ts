@@ -338,10 +338,8 @@ export default function() {
                     DOM.malplenigu("#ekzemplo_dlg input");
                     DOM.malplenigu("#ekzemplo_frazo");
                 }
-            },
-            // postenmeto
-            undefined)
-        .elemento_klavoj();
+            } // neniupostenmeto
+        ).elemento_klavoj();
     }
 
     DOM.klak("#ekzemplo_amp",(ev) => {
@@ -406,17 +404,15 @@ export default function() {
 
     klv = DOM.e("#bildo_butonoj");
     if (klv) {
-        new x.XFormularKlavaro("#bildo_butonoj","#bildo_dlg",
+        new x.XFormularKlavaro("#bildo_butonoj","bildo_dlg",
             // reĝimpremo
             function(event,ui) {
                 if (ui.cmd == "blankigo") {
                     DOM.malplenigu("#bildo_frazo");
                     DOM.malplenigu("#bildo_dlg input[type!='radio']");
                 }
-            },
-            // postenmeto
-            undefined)
-        .elemento_klavoj();
+            } // neniu postenmeto
+        ).elemento_klavoj();
     }
     /// DOM.klavpremo("#bildo_frazo",xpress);
     xtajpo.aldonu("bildo_frazo");
@@ -445,17 +441,15 @@ export default function() {
 
     klv = DOM.e("#derivajho_butonoj");
     if (klv) {
-        new x.XFormularKlavaro("#derivajho_butonoj","#derivajho_dlg", 
+        new x.XFormularKlavaro("#derivajho_butonoj","derivajho_dlg", 
             // reĝimpremo
             function(event,ui) {
                 if (ui.cmd == "blankigo") {
                     DOM.malplenigu("#derivajho_dlg input");
                     DOM.malplenigu("#derivajho_dif");
                 }
-            },
-            // postenmeto
-            undefined)
-        .elemento_klavoj();
+            } // neniu postenmeto
+        ).elemento_klavoj();
     }
     /// DOM.klavpremo("#derivajho_kap",xpress);
     /// DOM.klavpremo("#derivajho_dif",xpress);
@@ -485,17 +479,15 @@ export default function() {
 
     klv = DOM.e("#senco_butonoj");
     if (klv) {
-        new x.XFormularKlavaro("#senco_butonoj","#senco_dlg", 
+        new x.XFormularKlavaro("#senco_butonoj","senco_dlg", 
             // reĝimpremo
             function(event,ui) {
                 if (ui.cmd == "blankigo") {
                     DOM.malplenigu("#senco_dlg input");
                     DOM.malplenigu("#senco_dif");
                 }
-            },
-            // postenmeto
-            undefined)
-        .elemento_klavoj();
+            } // neniu postenmeto
+        ).elemento_klavoj();
     }
     /// DOM.klavpremo("#senco_dif",xpress);
     xtajpo.aldonu("senco_dif");
@@ -539,10 +531,16 @@ export default function() {
 
     klv = DOM.e("#traduko_butonoj");
     if (klv) {
-        new x.XFormularKlavaro("#traduko_butonoj","#traduko_dlg",
+        new x.XFormularKlavaro("#traduko_butonoj","traduko_dlg",
+            undefined, // neniu reĝimŝanĝo
             // postenmeto
-            function() { trd_input_shanghita(this.celo()) })
-        .elemento_klavoj();
+            function() { 
+                const k = x.XKlavaro.klavaro("#traduko_butonoj");
+                if (k) {
+                    trd_input_shanghita(k.celo);
+                }
+            }
+        ).elemento_klavoj();
         //DOM.ido_reago("#traduko_tabelo","blur","input",traduko_memoru_fokuson.bind(xklv));
         //DOM.ido_reago("#traduko_butonoj","click","div",traduko_butono_premo.bind(xklv));
     }
@@ -563,8 +561,8 @@ export default function() {
             x.XKlavaro.tildo("#sxablono_butonoj", Artikolo.artikolo("#xml_text")?.radiko||'');            
         }
     });
-    new x.XFormularKlavaro("#sxablono_butonoj","sxablono_dlg");
     /*
+    new x.XFormularKlavaro("#sxablono_butonoj","sxablono_dlg");
     $( "#sxablono_butonoj").Klavaro({
         artikolo: $("#xml_text"),
         posedanto: "#sxablono_dlg",
@@ -606,17 +604,15 @@ export default function() {
 
     klv = DOM.e("#rimarko_butonoj");
     if (klv) {
-        new x.XFormularKlavaro("#rimarko_butonoj","riarko_dlg",
+        new x.XFormularKlavaro("#rimarko_butonoj","rimarko_dlg",
             // reĝimpremo
             function(event,ui) {
                 if (ui.cmd == "blankigo") {
                     DOM.malplenigu("#rimarko_dlg input");
                     DOM.malplenigu("#rimarko_rim");
                 }
-            },
-            // postenmeto
-            undefined)
-        .elemento_klavoj();
+            } // neniu postenmeto
+        ).elemento_klavoj();
     }
     /// DOM.klavpremo("#rimarko_rim",xpress);
     xtajpo.aldonu("rimarko_rim");
