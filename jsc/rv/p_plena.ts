@@ -100,7 +100,8 @@ export namespace plena {
                     [
                         ["summary",{},[
                             ["strong",{},"viaj submetoj"]
-                        ]],'...'
+                        ]],
+                        ["span",{},"..."]
                     ]
                 ]
             ]);
@@ -142,9 +143,9 @@ export namespace plena {
 
         const ds = document.getElementById("submetoj");
 
-        if (sj && ds) {
+        if (sj.length && ds) {
             // forigu antaŭajn...
-            ds.querySelectorAll("details").forEach( (ch) => ds.removeChild(ch) );
+            ds.querySelectorAll("details,span").forEach( (ch) => ds.removeChild(ch) );
             
             // enŝovu novan staton....
             for (let s of sj) {
