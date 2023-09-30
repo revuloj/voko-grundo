@@ -63,7 +63,7 @@ dialog .butonujo button {
 
 .ui-tabs-nav a {
     text-decoration: none;
-    color: var(--nav-fnt-clr);
+    color: var(--nav-fnt-clr) !important;
 }
 
 .ui-tabs-nav li.ui-tabs-active,
