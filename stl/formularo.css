@@ -53,6 +53,15 @@ select {
     /*font-size: 1rem;*/
 }
 
+input[type='text'],
+input[type='search'],
+select {
+    -webkit-appearance: none;
+    background-color: var(--input-bgr-clr) !important;
+    color: var(--input-fnt-clr) !important;
+    border: 2px solid var(--input-brd-clr);
+}
+
 fieldset input, #r\:tab_tkonservo input[type="text"] {
     background-color: var(--input-bgr-clr);
     color: var(--input-fnt-clr);
