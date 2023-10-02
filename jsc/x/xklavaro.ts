@@ -631,8 +631,8 @@ export class XKlavaro extends UIElement {
             s_ = sel || "\u2026";
             return ('<klr>' 
                 // krampon ks ni ne aldonas, se ĝi jam estas parto de la elektita teksto
-                + ( sel && sel[0] != cmd[0]? "" : cmd[0] ) 
-                + s_ + ( sel && sel[sel.length-1] != cmd[1]? "" : cmd[1] ) 
+                + ( sel && sel[0] == cmd[0]? "" : cmd[0] ) 
+                + s_ + ( sel && sel[sel.length-1] == cmd[1]? "" : cmd[1] ) 
                 + '</klr>');
         // variaĵo
         } else if (cmd == "var"){
