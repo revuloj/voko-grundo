@@ -784,10 +784,10 @@ export class XmlRedakt extends Tekst {
         }
     });
 
-    this.sinkrona = false; // normale tio devus okazi per evento "change",
+    this.malsinkrona();
+    //this.sinkrona = false; // normale tio devus okazi per evento "change",
              // set foriginte jquery, tio ne plu funkcias kiel antaŭe, ĉar
-             // _trigger ne kreas realan retumilan eventon, sed nur reagon laŭ opcioj.
-    
+             // _trigger ne kreas realan retumilan eventon, sed nur reagon laŭ opcioj.    
     //this.element.change();
     this._trigger("change");
   };
