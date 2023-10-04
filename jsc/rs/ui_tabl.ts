@@ -87,10 +87,10 @@ export default function() {
             */
             // tion ni uzu estonte:
             // aktualigu pozicion
-            const xmlarea = Artikolo.artikolo("#xml_text")?.opcioj.xmlarea;
+            const xmlarea = Artikolo.artikolo("#xml_text"); //?.opcioj.xmlarea;
             if (xmlarea) {
-                const pos = xmlarea.position();
-                DOM.al_t("#position",(1+pos.line)+":"+(1+pos.pos));    
+                const pos = xmlarea.pozicio;
+                DOM.al_t("#position",(1+pos.lin)+":"+(1+pos.poz));    
             }
         },
         tekstŝanĝo: function() {
@@ -163,18 +163,21 @@ export default function() {
         a_click: function(event) {
             const a = event.target;
             const span = a.parentElement;
-            const xmlarea = artikolo.opcioj.xmlarea;
-            if (span.classList.contains('snc_mrk')) {
-                //const art = $("#xml_text");
-                xmlarea.goto(span.parentElement.getAttribute("value"),4);
-                artikolo.elektanstataŭigo("<snc mrk=\"" + a.textContent + "\"","<snc");
-                span.parentElement.remove();
-            } else if (span.classList.contains('klr_ppp')) {
-                xmlarea.goto(span.parentElement.getAttribute("value"),14);
-                artikolo.elektanstataŭigo(a.textContent,"<klr>...</klr>");
-                span.parentElement.remove();
-            } else {
-                surmetita_dialogo("static/anaklar.html","klarigo_teksto", "klarigo_" + span.getAttribute("data-takso"));
+            const art = Artikolo.artikolo("#xml_text");
+            /// const xmlarea = artikolo.opcioj.xmlarea;
+            if (art) {
+                if (span.classList.contains('snc_mrk')) {
+                    //const art = $("#xml_text");
+                    art.iru_al(span.parentElement.getAttribute("value"),4);
+                    artikolo.elektanstataŭigo("<snc mrk=\"" + a.textContent + "\"","<snc");
+                    span.parentElement.remove();
+                } else if (span.classList.contains('klr_ppp')) {
+                    art.iru_al(span.parentElement.getAttribute("value"),14);
+                    artikolo.elektanstataŭigo(a.textContent,"<klr>...</klr>");
+                    span.parentElement.remove();
+                } else {
+                    surmetita_dialogo("static/anaklar.html","klarigo_teksto", "klarigo_" + span.getAttribute("data-takso"));
+                }
             }
         }
     });
