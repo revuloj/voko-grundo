@@ -153,7 +153,7 @@ akrido-xsl)
     ;;        
 manlibro)
     ## manlibro     : kompilas manlibron pri XML-skemo (Relax-NG) al formato markdown
-    echo "aktuligi RNC-manlibron..."
+    echo "aktualigi RNC-manlibron..."
     perl perl/rnc2md.pl > ../revuloj.github.io/_temoj/rnc.md
     ;;
 *)    
