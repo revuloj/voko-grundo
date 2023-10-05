@@ -18,7 +18,8 @@ class Menuer extends UIElement {
     constructor(element: HTMLElement|string, public menuo: Menu) {
         super(element,{});
         // aldonu klakreagon
-        this.element.addEventListener("click",this._click.bind(this.element));
+        DOM.malreago(element,"click"); // forigu evtl. malnovan
+        DOM.reago(element,"click",this._click.bind(this.element));
     };
 
     _click(event: Event) {
@@ -46,7 +47,8 @@ class Submenu extends Menuer {
         super(element,menuo);
         this.montru(false); // kaŝu komence
         // aldonu klakreagon
-        this.element.addEventListener("click",this._click.bind(this.element));
+        DOM.malreago(element,"click"); // forigu evtl. antaŭe registritan!
+        DOM.reago(element,"click",this._click.bind(this.element));
     };
 
     montru(montru = true) {
@@ -205,5 +207,6 @@ export class Menu extends UIElement {
 
     refreŝigu() {
         this._preparu();
+        console.debug("menu refreshigo: "+this.element.id);
     }
 }

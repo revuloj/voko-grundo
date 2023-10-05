@@ -3,11 +3,9 @@
  * laŭ GPL 2.0
  */
 
-import { UIElement } from './uielement';
 import { UIStil } from './uistil';
-import { Valid } from './valid';
-import { Klavar } from './klavar';
 
+type EventRegistro = WeakMap<EventTarget,EventListenerOrEventListenerObject>;
 
 //HTMLInputElement|HTMLTextAreaElement|HTMLSelectElement|HTMLButtonElement;
 export interface HTMLFormControlElement extends HTMLElement {
@@ -22,6 +20,9 @@ export interface HTMLCheckControlElement extends HTMLFormControlElement {
 }
 
 export class DOM {
+
+    private static event_registro: { [event: string]: EventRegistro } = {};
+
 
     static isCheckElement(obj: any): obj is HTMLCheckControlElement {
         return (obj && 'checked' in obj);
@@ -152,22 +153,40 @@ export class DOM {
     }
 
     /**
+     * Registras eventreagon ĉe elemento, tiel, ke ni poste povos forigi ĝin
+     * @param evento 
+     * @param elemento 
+     * @param reago 
+     */
+    static registru(evento: string, elemento: EventTarget, reago: EventListenerOrEventListenerObject) {
+        if (!DOM.event_registro[evento]) DOM.event_registro[evento] = new WeakMap();
+        DOM.event_registro[evento].set(elemento,reago)
+    }
+
+    /**
      * Instalas reagon al evento
      */
     static reago(e: EventTarget|string, evento: string, reago: EventListenerOrEventListenerObject) {
         const el = (typeof e === "string")? DOM.e(e) : e;
-        if (el) el.addEventListener(evento, reago);
+        if (el) {
+            el.addEventListener(evento, reago);
+            DOM.registru(evento,el,reago);
+        }
     }
 
     /**
-     * Instalas reagon al evento, sed haltigas la pluan evento-traktadon kadre de la reago 
+     * Instalas reagon al evento, sed kiu haltigas la pluan evento-traktadon kadre de la reago 
      */
     static reago_halt(e: EventTarget|string, evento: string, reago: EventListener) {
         const el = (typeof e === "string")? DOM.e(e) : e;
-        if (el) el.addEventListener(evento, (ev: Event) => {
-            ev.preventDefault();
-            reago(ev);
-        });
+        if (el) {
+            const reago_halt = (ev: Event) => {
+                ev.preventDefault();
+                reago(ev);
+            };
+            el.addEventListener(evento, reago_halt);
+            DOM.registru(evento,el,reago_halt);
+        }
     }
 
     /**
@@ -176,12 +195,13 @@ export class DOM {
     static malreago(e: EventTarget|string, evento: string) {
         const el = (typeof e === "string")? DOM.e(e) : e;
         //if (el) el.removeEventListener(evento, reago);
-        console.error("DOM.malreago ankoraŭ ne implementita!");
+        ///console.error("DOM.malreago ankoraŭ ne implementita!");
 
-        // ne ekzistas normigita maniero eltrovi registritajn evento-reagojn por forigi ilin
-        // do nencesus mem registri ilin por poste povi forigi ilin, vd.:
-        // https://www.sqlpac.com/en/documents/javascript-listing-active-event-listeners.html#listing-the-events-added-with-the-method-addeventlistener
-       
+        if (el) {
+            // ni retrovu la registritan reagon
+            const reago = DOM.event_registro[evento].get(el);
+            if (reago) document.removeEventListener(evento,reago);
+        }               
     }
 
     /**
@@ -197,6 +217,7 @@ export class DOM {
         if (el) {
             el.querySelectorAll(idspec).forEach((id) => {
                 id.addEventListener(evento, reago);
+                DOM.registru(evento,id,reago);
             });
         }
     }
