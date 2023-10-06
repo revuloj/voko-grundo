@@ -1343,7 +1343,7 @@ function sort_lng(at, bt){
 */
 
 function traduko_dlg_plenigu_trd(lng,lingvo_nomo) {
-    // forigu antauajn eventojn por ne multobligi ilin...
+    // forigu antaŭajn eventojn por ne multobligi ilin...
     DOM.malreago("#traduko_tradukoj","click");
     DOM.malreago("#traduko_tradukoj","change");
     
@@ -1486,6 +1486,10 @@ function traduko_add_btn(mrk) {
     return `<button formaction="#trd:${id}" class="ui-button ui-widget ui-corner-all" title="Aldonu"><b>+</b></button>`;
 }
 
+/**
+ * Se la traduk-lingvo ŝanĝiĝis ni devos replenigi la kampojn kun la tradukoj
+ * de la nova lingvo.
+ */
 function shanghu_trd_lingvon(event,ui) {
     var id = ui.menuero.id;
     if (id && id.slice(0,4) == "trd_") {
@@ -1494,7 +1498,7 @@ function shanghu_trd_lingvon(event,ui) {
         //alert($("#traduko_lingvoj").val())
         traduko_dlg_plenigu_trd(lng,lingvo_nomo);
     }
-    DOM.al_datum("#traduko_dlg","last-focus",'');
+    /// DOM.al_datum("#traduko_dlg","last-focus",'');
 }
 
 // enmetu ŝanĝitajn kaj aldonitajn tradukojn en la XML-artikolon

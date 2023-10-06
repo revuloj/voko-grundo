@@ -85,7 +85,11 @@ class Submenu extends Menuer {
                 // la ago registrita ĉe la menuo
                 if (sublst.contains(trg)) {
                     const li = trg.closest("li");
-                    if (li) menuo.elekto(event,li);
+                    if (li) try {
+                        menuo.elekto(event,li);
+                    } catch (exc) {
+                        console.error(exc);
+                    }
                 }
 
                 // malfermu, se fermita; fermu, se malfermiata
@@ -140,7 +144,7 @@ export class Menu extends UIElement {
             // ĉu submenuo? traktu tiun submenuon            
             const sublst = Submenu.sublisto(ero);
             if (sublst) {
-                const subm = new Submenu(ero,this);
+                new Submenu(ero,this);
 
             } else if (ero.textContent == '-') {
                 // apartigilo sen kroma funkcio
