@@ -6,7 +6,10 @@
 import { DOM } from './dom';
 import { UIElement } from './uielement';
 
-type ProponOpcioj = { sufikso: string, source?: Function, select?: Function }
+export type Term = {term: string};
+type ProponAkiro = (term: Term, revoko: Function) => void;
+type ProponElekto = (event: Event, ui: any) => void;
+type ProponOpcioj = { sufikso: string, source?: Array<any>|ProponAkiro, select?: ProponElekto }
 
 export class Propon extends UIElement {
     //private temp;

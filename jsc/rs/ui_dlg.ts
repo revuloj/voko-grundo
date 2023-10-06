@@ -10,7 +10,7 @@ import * as u from '../u';
 import * as x from '../x';
 
 /// import { xpress } from '../x';
-import { DOM, Dialog, Menu, Grup, Slipar, Buton, Elektil, List, Propon, Valid, Eraro } from '../ui';
+import { DOM, Dialog, Menu, Grup, Slipar, Buton, Elektil, List, Propon, type Term, Valid, Eraro } from '../ui';
 
 import * as sbl from './sxablonoj';
 import { Artikolo } from './ui_art';
@@ -20,7 +20,7 @@ import { revo_listoj, xtajpo } from './ui_tabl';
 import { XMLReferenco, XMLReferencGrupo, XMLRimarko, XMLEkzemplo, 
          XMLFonto, XMLSenco, XMLDerivaĵo, XMLBildo, SncŜablono } from './sxabloniloj';
 
-import { show_error_status } from './ui_err.js';
+import { montru_eraro_staton } from './ui_err.js';
 //import { xpress } from './jquery_ext';
 
 type NovaArt = { dos: string, rad: string, fin: string, dif: string };
@@ -92,7 +92,7 @@ export default function() {
             dosiero: "#shargi_dosiero"
         },
         butonoj: {
-            "Ŝargi": function(event) { 
+            "Ŝargi": function(event: Event) { 
                 event.preventDefault();
                 if (! Valid.valida("#shargi_dosiero")) return;
                 const values = Dialog.dialog("#shargi_dlg")?.valoroj();
@@ -153,7 +153,7 @@ export default function() {
                 text: "Reredakti",
                 id: "lastaj_reredakti",
                 disabled: true,
-                click: function(event) {  
+                click: function(event: Event) {  
                     event.preventDefault();
                     if (! Valid.valida("#lastaj_dosiero")) return;
                     if (DOM.datum("#lastaj_dosiero","rezulto") != "eraro") {
@@ -297,7 +297,7 @@ export default function() {
     referenco_dlg_preparu();
     new Propon( "#referenco_sercho", {
         source: referenco_dlg_serĉo,
-        select: function(event,ui) {
+        select: function(event: Event,ui: any) {
             var enhavo = ui.num == "" ? ui.kap : ui.kap + "<sncref/>";
             DOM.al_v("#referenco_celo",ui.mrk);
             DOM.al_v("#referenco_enhavo",enhavo);
@@ -371,7 +371,7 @@ export default function() {
             frazo: "#bildo_frazo"
         },
         butonoj: {   
-            "Enmeti la bildon": function(event) { bildo_enmeti(event,false); },
+            "Enmeti la bildon": function(event: Event) { bildo_enmeti(event,false); },
             "\u25f1": function() { this.refaldu(); },
             "\u2718": function() { this.fermu(); }
         },
@@ -497,7 +497,7 @@ export default function() {
     new Dialog("#traduko_dlg", {
         position: { my: "top", at: "top+10", of: window },
         butonoj: {   
-            "Enmeti la tradukojn": function(event) { tradukojn_enmeti(event); },
+            "Enmeti la tradukojn": function(event: Event) { tradukojn_enmeti(event); },
             "\u2718": function() { this.fermu(); }
         },
         malfermu: function() {
@@ -511,7 +511,7 @@ export default function() {
 
             // jam difinita en ui_kreo... var preflng = pref_lngoj? pref_lngoj[0] : 'en'; // globala variablo
             const preflng = u.agordo.preflng;
-            traduko_dlg_plenigu_trd(preflng,DOM.t("#trd_pref_"+preflng));
+            traduko_dlg_plenigu_trd(preflng,DOM.t("#trd_pref_"+preflng)||'');
             // adaptu altecon de la tabelo
             const view_h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
             const dlg = DOM.e("#traduko_dlg")?.parentElement;
@@ -639,9 +639,11 @@ export default function() {
 //* Helpfunkcioj por dialogoj 
 //*********************************************************************************************
 
+/**
+ * Serĉo en la dialogo por ŝargi artikolon por redakti
+ */
 
-
-export function shargo_dlg_serĉo(request,response) {
+export function shargo_dlg_serĉo(request: Term, response: Function) {
     DOM.al_v("#shargi_dosiero",'');
     if (! Valid.valida("#shargi_sercho")) return;
 /*    
@@ -718,7 +720,7 @@ export function show_xhr_error(xhr: XMLHttpRequest, msg_prefix="Eraro:",msg_suff
 }
 
 
-function download_art(dosiero,err_to,dlg_id,do_close=true) {
+function download_art(dosiero: string, err_to: string, dlg_id: string, do_close = true) {
     
     var fin = dosiero.slice(-4);
     if (fin == '.xml') {
@@ -751,10 +753,10 @@ function download_art(dosiero,err_to,dlg_id,do_close=true) {
     );
 }
 
-function download_url(url,dosiero,err_to,dlg_id,do_close=true) {
+function download_url(url: string, dosiero: string, err_to: string, dlg_id: string, do_close = true) {
     
     u.HTTPRequest('get', url, {}, 
-        function(data) {   
+        function(data: string) {   
             if (data.slice(0,5) == '<?xml') {
                 const art = Artikolo.artikolo("#xml_text");
                 if (art) art.load(dosiero,data);
@@ -783,57 +785,61 @@ function sendi_artikolon_servile(event: Event) {
     event.preventDefault();
     // $("#sendiservile_error").hide();
     const trg = event.target;
-    const metodo = DOM.t(event.target) == 'Submeti'? 'api' : 'email';
-    
-    // aldono (t.e. nova artikolo) aŭ redakto (t.e. ŝanĝo)
-    const reĝimo = Artikolo.artikolo("#xml_text")?.opcioj["reĝimo"];
-    const art_mrk = Artikolo.artikolo("#xml_text")?.dosiero;
+    if (trg instanceof HTMLElement) {
 
-    // ĉe novaj artikoloj komento entenas la dosiernomon
-    if (! Valid.valida("#sendiservile_komento")) return;
+        const metodo = DOM.t(trg) == 'Submeti'? 'api' : 'email';
+        
+        // aldono (t.e. nova artikolo) aŭ redakto (t.e. ŝanĝo)
+        const reĝimo = Artikolo.artikolo("#xml_text")?.opcioj["reĝimo"];
+        const art_mrk = Artikolo.artikolo("#xml_text")?.dosiero;
 
-    const komento = DOM.v("#sendiservile_komento") || '';
-    const dosiero = (reĝimo == 'aldono')? komento : art_mrk; //$("#xml_text").Artikolo("art_drv_mrk"); 
-    const xmlarea = Artikolo.artikolo("#xml_text");
+        // ĉe novaj artikoloj komento entenas la dosiernomon
+        if (! Valid.valida("#sendiservile_komento")) return;
 
-    if (xmlarea) {
+        const komento = DOM.v("#sendiservile_komento") || '';
+        const dosiero = (reĝimo == 'aldono')? komento : art_mrk; //$("#xml_text").Artikolo("art_drv_mrk"); 
+        const xmlarea = Artikolo.artikolo("#xml_text");
 
-        u.HTTPRequest('post', "revo_sendo", {
-                xml: xmlarea.normalizedXml(),
-                shangho: komento,
-                redakto: reĝimo||'',
-                metodo: metodo,
-                dosiero: dosiero||''
-            },
-            function(data: string) {   
-                // Montru sukceson...
-                const art = Artikolo.artikolo("#xml_text");
-                if (art) {
-                    const dosiero = art.opcioj["dosiero"];
-                    /// art._change_count = 0;    
-                    
-                    const url = data.html_url;
-                    const msg = "<b>'" + dosiero  + "'</b> sendita. " +
-                    (metodo == 'api'
-                    ? "Kelkajn tagojn vi trovas vian redakton <a target='_new' href='"+url+"'>tie ĉi ĉe Github</a> kaj sub 'Lastaj...'."
-                    : "Bv. kontroli ĉu vi ricevis kopion de la retpoŝto.\n(En tre esceptaj okazoj la spam-filtrilo povus bloki ĝin...)"
-                    );
-                    Erarolisto.aldonu("#dock_eraroj", {
-                        id: "art_sendita_msg",
-                        cls: "status_ok",
-                        msg: msg
-                    });
-                    //alert("Sendita. Bv. kontroli ĉu vi ricevis kopion de la retpoŝto.\n(En tre esceptaj okazoj la spam-filtrilo povus bloki ĝin...)");
-                    Dialog.fermu("#sendiservile_dlg");
-                    //$("#xml_text").val('');
-                    xmlarea.teksto = '';
-                    DOM.al_v("#shargi_dlg input","");
-                }
-            },
-            undefined,
-            undefined,
-            (xhr: XMLHttpRequest) => Eraro.http("#sendiservile_error",xhr)
-        );
+        if (xmlarea) {
+
+            u.HTTPRequest('post', "revo_sendo", {
+                    xml: xmlarea.normalizedXml(),
+                    shangho: komento,
+                    redakto: reĝimo||'',
+                    metodo: metodo,
+                    dosiero: dosiero||''
+                },
+                function(data: string) {   
+                    const json = JSON.parse(data);
+                    // Montru sukceson...
+                    const art = Artikolo.artikolo("#xml_text");
+                    if (art) {
+                        const dosiero = art.opcioj["dosiero"];
+                        /// art._change_count = 0;    
+                        
+                        const url = json.html_url;
+                        const msg = "<b>'" + dosiero  + "'</b> sendita. " +
+                        (metodo == 'api'
+                        ? "Kelkajn tagojn vi trovas vian redakton <a target='_new' href='"+url+"'>tie ĉi ĉe Github</a> kaj sub 'Lastaj...'."
+                        : "Bv. kontroli ĉu vi ricevis kopion de la retpoŝto.\n(En tre esceptaj okazoj la spam-filtrilo povus bloki ĝin...)"
+                        );
+                        Erarolisto.aldonu_eraron("#dock_eraroj", {
+                            id: "art_sendita_msg",
+                            cls: "status_ok",
+                            msg: msg
+                        });
+                        //alert("Sendita. Bv. kontroli ĉu vi ricevis kopion de la retpoŝto.\n(En tre esceptaj okazoj la spam-filtrilo povus bloki ĝin...)");
+                        Dialog.fermu("#sendiservile_dlg");
+                        //$("#xml_text").val('');
+                        xmlarea.teksto = '';
+                        DOM.al_v("#shargi_dlg input","");
+                    }
+                },
+                undefined,
+                undefined,
+                (xhr: XMLHttpRequest) => Eraro.http("#sendiservile_error",xhr)
+            );
+        }
     }
 /*
       $("body").css("cursor", "progress");
@@ -897,7 +903,7 @@ function referenco_dlg_preparu() {
     );
 }
 
-function referenco_listo_elekto(event,ui) {
+function referenco_listo_elekto(event: Event, ui: any) {
     // forigu sufikson de la listonomo
     const lst = DOM.v("#referenco_listo")?.trim()||'';
     DOM.al_v("#referenco_listo",lst);
@@ -908,7 +914,7 @@ function referenco_listo_elekto(event,ui) {
     if (ui.kap) DOM.al_v("#referenco_enhavo",ui.kap);
 }
 
-function referenco_dlg_serĉo(request,response) {
+function referenco_dlg_serĉo(request: Term, response: Function) {
     /*
       $("#referenco_error").hide();
     
@@ -923,7 +929,7 @@ function referenco_dlg_serĉo(request,response) {
       var results = Array();
     
       u.HTTPRequest('post', "revo_sercho", { sercho: sercho, lng: "eo" },
-            function(data) {
+            function(data: string) {
                 const json = JSON.parse(data);
                 // kap+num -> enhavo
                 // mrk -> celo
@@ -1023,7 +1029,7 @@ function ekzemplo_dlg_preparo() {
 }
 
 
-function ekzemplo_enmeti(event, nur_fnt) {
+function ekzemplo_enmeti(event: Event, nur_fnt: boolean) {
     event.preventDefault();
     DOM.kaŝu("#ekzemplo_error");
 
@@ -1055,7 +1061,7 @@ function ekzemplo_enmeti(event, nur_fnt) {
 }
 
 
-function bildo_enmeti(event, nur_fnt) {
+function bildo_enmeti(event: Event, nur_fnt: boolean) {
     event.preventDefault();
     DOM.kaŝu("#bildo_error");
 
@@ -1075,7 +1081,7 @@ function bildo_enmeti(event, nur_fnt) {
     Dialog.fermu("#bildo_dlg");
 }
 
-function bildo_larĝecoj(lrg,chk) {
+function bildo_larĝecoj(lrg: number[], chk: number) {
     DOM.ej("#bildo_lrg input").forEach((e) => {
         if (e instanceof HTMLInputElement) {
             e.checked = false;
@@ -1111,7 +1117,7 @@ function plenigu_derivajxojn() {
     DOM.e("#derivajho_listo")?.insertAdjacentHTML("beforeend",drv_list);
 }
 
-function derivajho_enmeti(event) {
+function derivajho_enmeti(event: Event) {
     event.preventDefault();
     DOM.kaŝu("#derivajho_error");
 
@@ -1161,7 +1167,7 @@ function senco_enmeti(event: Event) {
           // donu aprioran valoron al mrk en kazo, ke la XML ne estas valida...
           snc.drvmrk = 'XXXXXXX.YYY';
           // avertu pri la eraro
-          show_error_status(e);
+          if (e instanceof Error) montru_eraro_staton(e);
     }
     const sncxml = new XMLSenco(snc).xml();
     
@@ -1220,7 +1226,7 @@ function traduko_dlg_preparo() {
                 const trd_aliaj = DOM.e("#traduko_aliaj");
 
                 pref_lngoj.forEach(     //.sort(jsort_lng).forEach(
-                    function(lng) {
+                    function(lng: string) {
                         if (lng != 'eo') {
                             const nomo = revo_listoj.lingvoj.codes[lng];
                             const lng_html = `<li id="trd_pref_${lng}">${nomo}</li>`;
@@ -1449,7 +1455,7 @@ function trd_shanghita() {
     trd_input_shanghita(this);
 }
 
-function trd_input_shanghita(element) {
+function trd_input_shanghita(element: HTMLElement) {
     const sid = element.id.split(':')[1];
     const lng = DOM.datum("#traduko_dlg","lng");
 
@@ -1476,12 +1482,12 @@ function trd_put(mrk,lng,no,trd) {
 }
 */
 
-function traduko_input_field(mrk,nro,trd) {
+function traduko_input_field(mrk: string, nro: number, trd: string) {
     var id = "trd:" + mrk + ':' + nro; //.replace(/\./g,'\\\\.') + '_' + nro;
     return '<input id="' + id + '" type="text" name="' + id + '" size="30" value="' + trd + '"/>';
 }
 
-function traduko_add_btn(mrk) {
+function traduko_add_btn(mrk: string) {
     const id = mrk; //.replace(/\./g,'\\\\.');
     return `<button formaction="#trd:${id}" class="ui-button ui-widget ui-corner-all" title="Aldonu"><b>+</b></button>`;
 }
@@ -1502,7 +1508,7 @@ function shanghu_trd_lingvon(event: Event, ui) {
 }
 
 // enmetu ŝanĝitajn kaj aldonitajn tradukojn en la XML-artikolon
-function tradukojn_enmeti(event) {
+function tradukojn_enmeti(event: Event) {
     // prenu la shanghitajn tradukojn
     //var trd_shanghoj = $("#traduko_tradukoj").data("trd_shanghoj"); 
     const art = Artikolo.artikolo("#xml_text");
@@ -1546,62 +1552,76 @@ function kiam_elektis_sxablonon(event: Event) {
 }
 
 function sxablono_button_click(event: Event) {
-    event.preventDefault(); 
-    const text_span = event.target.closest("button").previousElementSibling; //("span");    
-    const ref_dlg = Dialog.dialog("#referenco_dlg");
-    const ekz_dlg = Dialog.dialog("#ekzemplo_dlg");
+    const trg = event.target;
 
-    if (text_span.tagName != "SPAN") throw new Error("Eraro en ŝablono: atendis SPAN!");
+    if (trg instanceof HTMLElement) {
+        event.preventDefault(); 
+        const text_span = trg.closest("button")?.previousElementSibling; //("span");    
+        const ref_dlg = Dialog.dialog("#referenco_dlg");
+        const ekz_dlg = Dialog.dialog("#ekzemplo_dlg");
 
-    if (text_span && ref_dlg) {
-        if (text_span.innerHTML.startsWith('&lt;ref')) {
-            ref_dlg.malfermu();
-            ref_dlg.opcioj["enmetu_en"] = text_span.id;
-            //referenco_dialogo(text_span[0].id);
-        } else if (text_span.innerHTML.startsWith('&lt;ekz') && ekz_dlg) {
-            ekz_dlg.opcioj["enmetu_en"] = text_span.id;
-            ekz_dlg.malfermu();
-            //ekzemplo_dialogo(text_span[0].id);
+        if (text_span && text_span.tagName != "SPAN") throw new Error("Eraro en ŝablono: atendis SPAN!");
+
+        if (text_span && ref_dlg) {
+            if (text_span.innerHTML.startsWith('&lt;ref')) {
+                ref_dlg.malfermu();
+                ref_dlg.opcioj["enmetu_en"] = text_span.id;
+                //referenco_dialogo(text_span[0].id);
+            } else if (text_span.innerHTML.startsWith('&lt;ekz') && ekz_dlg) {
+                ekz_dlg.opcioj["enmetu_en"] = text_span.id;
+                ekz_dlg.malfermu();
+                //ekzemplo_dialogo(text_span[0].id);
+            }
         }
     }
 }
 
 
 function sxablono_strike_click(event: Event) {
-    const text_line = event.target.closest("tr").querySelector("pre");
-    const style = text_line.style["text-decoration-line"];
-    text_line.style['text-decoration-line'] = (style == "none"?"line-through":"none");
-}
-
-function sxablono_span_click(event) {
-  const text_span_id = event.target.id;
-  const ref_dlg = Dialog.dialog("#referenco_dlg");
-  const ekz_dlg = Dialog.dialog("#ekzemplo_dlg");
-
- // if (text_span_id.startsWith('o_')) {
-//      var checkbox = $("#"+text_span_id).next("input[type='checkbox']");
-//      checkbox.prop('checked',function(i,val){return !val});
-//      $("#"+text_span_id).css("text-decoration-line",checkbox.prop('checked')?"none":"line-through"); 
-//  } else 
-  if (text_span_id.startsWith('r_') && ref_dlg) {
-      //referenco_dialogo(text_span_id);
-      ref_dlg.opcioj["enmetu_en"] = text_span_id;
-      ref_dlg.malfermu();
-  } else if (text_span_id.startsWith('e_') && ekz_dlg) {
-      //ekzemplo_dialogo(text_span_id);
-      ekz_dlg.opcioj["enmetu_en"] = text_span_id;
-      ekz_dlg.malfermu();
+    const trg = event.target;
+    if (trg instanceof HTMLElement) {
+        const text_line = trg.closest("tr")?.querySelector("pre");
+        if (text_line) {
+            //@ts-ignore
+            const style = text_line.style["text-decoration-line"];
+            //@ts-ignore
+            text_line.style['text-decoration-line'] = (style == "none"?"line-through":"none");    
+        }
     }
 }
 
-function sxablono_enmeti(event) {
+function sxablono_span_click(event: Event) {
+    const trg = event.target;
+    if (trg instanceof HTMLElement) {
+        const text_span_id = trg.id;
+        const ref_dlg = Dialog.dialog("#referenco_dlg");
+        const ekz_dlg = Dialog.dialog("#ekzemplo_dlg");
+
+        // if (text_span_id.startsWith('o_')) {
+        //      var checkbox = $("#"+text_span_id).next("input[type='checkbox']");
+        //      checkbox.prop('checked',function(i,val){return !val});
+        //      $("#"+text_span_id).css("text-decoration-line",checkbox.prop('checked')?"none":"line-through"); 
+        //  } else 
+        if (text_span_id.startsWith('r_') && ref_dlg) {
+            //referenco_dialogo(text_span_id);
+            ref_dlg.opcioj["enmetu_en"] = text_span_id;
+            ref_dlg.malfermu();
+        } else if (text_span_id.startsWith('e_') && ekz_dlg) {
+            //ekzemplo_dialogo(text_span_id);
+            ekz_dlg.opcioj["enmetu_en"] = text_span_id;
+            ekz_dlg.malfermu();
+        }
+    }
+}
+
+function sxablono_enmeti(event: Event) {
     //$("#xml_text").insert($("#sxablono_xml").val());
 
-    function form_text(e): string {
+    function form_text(e: Node): string {
         var all_text = '';
         e.childNodes.forEach((c) => {
             if ( c.nodeType === 3 ) {
-               all_text += this.textContent;
+               all_text += c.textContent;
             } else if ( c instanceof HTMLInputElement && c.tagName == 'INPUT' ) {
                all_text += c.value;
             } else if ( c.nodeType === 1 ) {
@@ -1615,6 +1635,8 @@ function sxablono_enmeti(event) {
     DOM.ej("#sxablono_xml pre").forEach( (pre) => {
         //var cb = $(this).children("input[type='checkbox']");
         //if (cb.length == 0 || cb.prop('checked'))
+
+        //@ts-ignore
         if ((pre as HTMLElement).style["text-decoration-line"] != "line-through") {
             text += form_text(pre) + "\n";
         }
@@ -1630,7 +1652,7 @@ function sxablono_enmeti(event) {
 function plenigu_lastaj_liston() {
     u.HTTPRequest('get',"revo_lastaj_redaktoj",{},
         function(xhr: XMLHttpRequest, data: string) {   
-            if (this.status == 302) {
+            if (xhr.status == 302) {
                 // FIXME: When session ended the OpenID redirect 302 is handled 
                 // behind the scenes and here we get openid/login with status 200
                 show_xhr_error(xhr,"Via seanco finiĝis. Bonvolu resaluti!");
@@ -1640,8 +1662,8 @@ function plenigu_lastaj_liston() {
                 // let previous = null; //{kap: '', art1: '', art2: ''};
                 
                 for (let h=0; h < json.length; h++) {
-                    var entry = json[h];
-                    var status_icon;
+                    const entry = json[h];
+                    let status_icon: string;
                     switch (entry.rezulto) {
                         case 'eraro':
                             status_icon = '&#x26a0;';
@@ -1687,32 +1709,34 @@ function plenigu_lastaj_liston() {
 function lastaj_tabelo_premo(event: Event) {
     event.preventDefault();
     const trg = event.target;
-    const id = trg.closest("tr").id;
-    const dtl = DOM.datum("#lastaj_listo","detaloj");
-    let entry = dtl.filter(function(e) { if (e.id == id) return e; });
-    if (entry) {
-        entry = entry[0];
-        DOM.al_v("#lastaj_dosiero",entry.name);
-        DOM.al_datum("#lastaj_dosiero","url",entry.xml_url);
-        DOM.al_datum("#lastaj_rigardu","url",entry.html_url);
-        DOM.al_datum("#lastaj_dosiero","rezulto",entry.rezulto);
-        if (entry.rezulto == 'eraro') {
-            Buton.aktiva("#lastaj_reredakti",true);
-        } else {
-            Buton.aktiva("#lastaj_reredakti",false);
-        }
-        DOM.al_v("#lastaj_mesagho",'');
-        if (entry.rez_url) {
-            u.HTTPRequest('get',entry.rez_url,{},
-                function(data: string) {  
-                    var rez = JSON.parse(data); 
-                    if (rez && rez.mesagho) {
-                        var msg = rez.mesagho.replace(/\|\| */g,"\n").replace('[m ','[');
-                        DOM.al_v("#lastaj_mesagho",msg);
-                    }
-                });
-        } else if (! entry.rezulto) {
-            DOM.al_v("#lastaj_mesagho",'Atendante traktadon...');
+    if (trg instanceof HTMLElement) {
+        const id = trg.closest("tr")?.id;
+        const dtl = DOM.datum("#lastaj_listo","detaloj");
+        let entry = dtl.filter(function(e: {id: string}) { if (e.id == id) return e; });
+        if (entry) {
+            entry = entry[0];
+            DOM.al_v("#lastaj_dosiero",entry.name);
+            DOM.al_datum("#lastaj_dosiero","url",entry.xml_url);
+            DOM.al_datum("#lastaj_rigardu","url",entry.html_url);
+            DOM.al_datum("#lastaj_dosiero","rezulto",entry.rezulto);
+            if (entry.rezulto == 'eraro') {
+                Buton.aktiva("#lastaj_reredakti",true);
+            } else {
+                Buton.aktiva("#lastaj_reredakti",false);
+            }
+            DOM.al_v("#lastaj_mesagho",'');
+            if (entry.rez_url) {
+                u.HTTPRequest('get',entry.rez_url,{},
+                    function(data: string) {  
+                        var rez = JSON.parse(data); 
+                        if (rez && rez.mesagho) {
+                            var msg = rez.mesagho.replace(/\|\| */g,"\n").replace('[m ','[');
+                            DOM.al_v("#lastaj_mesagho",msg);
+                        }
+                    });
+            } else if (! entry.rezulto) {
+                DOM.al_v("#lastaj_mesagho",'Atendante traktadon...');
+            }
         }
     }
 }

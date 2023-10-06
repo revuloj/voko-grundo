@@ -3,8 +3,8 @@
  * per u.agordo.xxx 
  */
 
-export type StrObj = { [key: string]: string};
-export type BoolObj = { [key: string]: boolean};
+export type StrObj = { [key: string]: string };
+export type BoolObj = { [key: string]: boolean };
 
 
 // vd. https://mariusschulz.com/blog/declaring-global-variables-in-typescript
