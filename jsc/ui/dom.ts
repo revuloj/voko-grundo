@@ -200,7 +200,7 @@ export class DOM {
         if (el) {
             // ni retrovu la registritan reagon
             const reago = DOM.event_registro[evento].get(el);
-            if (reago) document.removeEventListener(evento,reago);
+            if (reago) el.removeEventListener(evento,reago);
         }               
     }
 
