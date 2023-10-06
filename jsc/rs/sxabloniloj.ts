@@ -12,6 +12,7 @@ import * as sbl from './sxablonoj';
 /** ŝablonoj por flekseble enmeti referencojn, fontojn ktp. **/
 
 type Valoroj = { [key: string]: string };
+type Fonto = {value: string, bib: string, url: string, vkr: string, lok: string};
 
 /**
  * Bazaj funkcioj de ŝablonoj
@@ -235,7 +236,7 @@ export class XMLBildo extends XMLŜablono {
  * @param {*} bib_src
  */
 export class HTMLFonto {
-    public source: any;
+    public source: Array<Fonto>;
     private v: XMLŜablono;
     private b: XMLŜablono;
     private vt: XMLŜablono;
@@ -356,7 +357,7 @@ export class SncŜablono {
         return html;
     };
     
-    form_element(match, tipo: string, teksto:string, offset: number) {
+    form_element(match, tipo: string, teksto:string, offset: number): string|undefined {
       var id = tipo + '_' + offset;
       var iid = 'i' + id;
       switch (tipo) {

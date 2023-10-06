@@ -9,9 +9,9 @@
 import * as u from '../u';
 import * as x from '../x';
 
-import { XmlRedakt, RevoListoj } from '../x';
+import { XmlRedakt, type SDet, RevoListoj } from '../x';
 import { ht_element } from '../u';
-import { DOM, Slipar, Buton, Elektil, List, Valid } from '../ui';
+import { DOM, Slipar, type SlipSalto, Buton, Elektil, List, Valid } from '../ui';
 
 import { Erarolisto } from './ui_err';
 import { artikolo } from '../a/artikolo';
@@ -27,7 +27,7 @@ import { vikiSerĉo, citaĵoSerĉo, regulEsprimo, verkoListo, verkoPeriodo, verk
 const revo_url = 'https://' + u.agordo.revo_url; //reta-vortaro.de';
 
 export const revo_listoj = new RevoListoj('../voko');
-export var xtajpo; 
+export var xtajpo: x.XTajpo; 
 
 
 //var sercho_focused_button = null;
@@ -101,7 +101,7 @@ export default function() {
             */
             DOM.al_t("#rigardo","");
         },
-        post_aldono: function(subt,index,selected) { // reago je aldono de nova subteksto: aldonu en la listo art_strukturo
+        post_aldono: function(subt: SDet, index: number, selected: boolean) { // reago je aldono de nova subteksto: aldonu en la listo art_strukturo
             const sel_stru = document.getElementById("art_strukturo");
             if (sel_stru) {
                 if (index == 0) sel_stru.textContent = ''; // malplenigu la liston ĉe aldono de unua ero...        
@@ -112,7 +112,7 @@ export default function() {
                 }    
             }
         },
-        subtekst_elekto: function(subt) { // reago al interna elektoŝanĝo: elektu ankaŭ en la listo art_strukturo
+        subtekst_elekto: function(subt: SDet) { // reago al interna elektoŝanĝo: elektu ankaŭ en la listo art_strukturo
             DOM.e("#art_strukturo option[value='"+subt.id+"']")?.setAttribute('selected','selected');
         }       
     });
@@ -160,23 +160,28 @@ export default function() {
     // erarolistoj
     new Erarolisto("#dock_eraroj",{});
     new Erarolisto("#dock_avertoj", {
-        a_click: function(event) {
+        a_click: function(event: PointerEvent) {
             const a = event.target;
-            const span = a.parentElement;
-            const art = Artikolo.artikolo("#xml_text");
-            /// const xmlarea = artikolo.opcioj.xmlarea;
-            if (art) {
-                if (span.classList.contains('snc_mrk')) {
-                    //const art = $("#xml_text");
-                    art.iru_al(span.parentElement.getAttribute("value"),4);
-                    artikolo.elektanstataŭigo("<snc mrk=\"" + a.textContent + "\"","<snc");
-                    span.parentElement.remove();
-                } else if (span.classList.contains('klr_ppp')) {
-                    art.iru_al(span.parentElement.getAttribute("value"),14);
-                    artikolo.elektanstataŭigo(a.textContent,"<klr>...</klr>");
-                    span.parentElement.remove();
-                } else {
-                    surmetita_dialogo("static/anaklar.html","klarigo_teksto", "klarigo_" + span.getAttribute("data-takso"));
+            if (a instanceof HTMLElement) {                
+                const span = a.parentElement;
+                const art = Artikolo.artikolo("#xml_text");
+                /// const xmlarea = artikolo.opcioj.xmlarea;
+                if (art && span) {
+                    // linio en erarolisto kun propono havas strukturon li/span/a
+                    // li@value enhavas indikon linio:pozicio
+                    const lin_pos = span.parentElement?.getAttribute("value");
+                    if (span.classList.contains('snc_mrk') && lin_pos) {
+                        //const art = $("#xml_text");
+                        art.iru_al(lin_pos,4);
+                        artikolo.elektanstataŭigo("<snc mrk=\"" + a.textContent + "\"","<snc");
+                        span.parentElement?.remove();
+                    } else if (span.classList.contains('klr_ppp') && lin_pos) {
+                        art.iru_al(lin_pos,14);
+                        artikolo.elektanstataŭigo(a.textContent||'',"<klr>...</klr>");
+                        span.parentElement?.remove();
+                    } else {
+                        surmetita_dialogo("static/anaklar.html","klarigo_teksto", "klarigo_" + span.getAttribute("data-takso"));
+                    }
                 }
             }
         }
@@ -400,7 +405,7 @@ function switch_dock_klavaro_kontrolo() {
  * @param {*} event 
  * @param {*} ui 
  */
-export function antaŭ_slipŝanĝo(ui) {
+export function antaŭ_slipŝanĝo(ui: SlipSalto) {
     var old_p = ui.slipo_malnova.id;
     var new_p = ui.slipo_nova.id;
     var new_t = ui.langeto_nova.id;
@@ -448,10 +453,9 @@ export function antaŭ_slipŝanĝo(ui) {
 
 /**
  * Aktivigas alian subpaĝon
- * @param {*} event 
  * @param {*} ui - enhavas informojn pri al paĝŝanĝo (slipo_malnova, slipo_nova)
  */
-export function nova_slipo(ui) {
+export function nova_slipo(ui: SlipSalto) {
     var old_p = ui.slipo_malnova.id;
     var new_p = ui.slipo_nova.id;
     
@@ -516,7 +520,7 @@ function antaurigardo() {
         }
 
         u.HTTPRequest('post',"revo_rigardo", { xml: xml_text },
-            function(data) {   
+            function(data: string) {   
                 const parser = new DOMParser();
                 const doc = parser.parseFromString(data,"text/html");       
 
@@ -616,7 +620,7 @@ function antaurigardo() {
             () => document.body.style.cursor = 'auto',
             // FARENDA: eble metu eraron en apartan kampon 
             // anst. uzi alert..., tiam vi povas uzi $.alportu
-            function(xhr) {
+            function(xhr: XMLHttpRequest) {
                 console.error(xhr.status + " " + xhr.statusText);
                 if (xhr.status == 400) {
                     // alert("Eraro dum transformado: " + xhr.responseText);
@@ -693,6 +697,7 @@ function plenigu_elekto_indikoj() {
  * Enmetas klakitan indikon en la XML-tekston
  * @param {*} event 
  */
+/*
 function indikon_enmeti(event) {
     event.preventDefault();
     let enmetu = '';
@@ -729,7 +734,7 @@ function indikon_enmeti(event) {
         }
     }
 }
-
+*/
 
 
 

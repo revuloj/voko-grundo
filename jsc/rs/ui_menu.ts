@@ -42,12 +42,12 @@ export default function() {
 //*********************************************************************************************
 
 
-function menu_selected(event) {
+function menu_selected(event: Event) {
     const menuero = event.currentTarget;
     if (menuero instanceof Element) {
 
         const id = menuero.id;
-        let dlg;
+        let dlg: Dialog|undefined;
 
         switch (id) {
         case "nova_menu_item":

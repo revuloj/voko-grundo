@@ -24,6 +24,15 @@ type TrovValoroj = { url?: string, fmt?: number,
     aut?: string, bib?: string, vrk?: string, lok?: string, 
     prm?: string, fnt?: string, frazo?: string };
 
+type RigardOpcioj = {
+        url?: string
+    };
+
+type ButonOpcioj = {
+        data?: string,
+        enmetu?: (event: Event)=>void
+    };    
+
 //var sercho_focused_button = null;
 console.debug("Instalante la serĉfunkciojn...");
 
@@ -211,7 +220,7 @@ const afiksoj = function() {
  * Vokas la serĉon en Vikipedio kaj prezentas la rezultojn
  * @param {Event} event
  */
-export function vikiSerĉo(event) {
+export function vikiSerĉo(event: Event) {
     event.preventDefault();
 
     if (! _serĉo_preparo()) return;
@@ -224,7 +233,7 @@ export function vikiSerĉo(event) {
             sercho: esprimo,
             kie: 'vikipedio'
         }, 
-        function(data) {   
+        function(data: string) {   
             const json = JSON.parse(data);
             if (json.query && json.query.pages && s_tr) {
                 const pages = json.query.pages;
@@ -273,7 +282,7 @@ function _bib_url(source,bib) {
  * Vokas la citaĵo-serĉon kaj prezentas la trovojn en la trovo-kampo.
  * @param {Event} event
  */
-export function citaĵoSerĉo(event) {
+export function citaĵoSerĉo(event: Event) {
     event.preventDefault();
     const vlist = event.currentTarget.id == "s_klasikaj"? "klasikaj" : "elektitaj";
 
@@ -303,7 +312,7 @@ export function citaĵoSerĉo(event) {
     }
 
     u.HTTPRequest('post', 'citajho_sercho', sspec as u.StrObj,
-        function(data) {
+        function(data: string) {
             const s_tr = DOM.e("#sercho_trovoj");
             const json = JSON.parse(data);
             const bib_src = Propon.propon("#ekzemplo_bib")?.opcioj["source"];
@@ -522,7 +531,7 @@ function verkinformo() {
  * 
  * @param {Event} event
  */
-export function verkoListo(event) {
+export function verkoListo(event: Event) {
     event.preventDefault();
     const vdiv = DOM.e("#sercho_verklisto");
 
@@ -532,7 +541,7 @@ export function verkoListo(event) {
             { 
                 kiu: 'chiuj'
             }, 
-            function(data) {
+            function(data: string) {
                 const json = JSON.parse(data);
                 if (json.length && json[0].vrk) {                    
                     vdiv.insertAdjacentHTML("beforeend",'<div id="vl_chiuj_"><label for="vl__chiuj__">ĈIUJN malelekti/elekti</label>'
@@ -585,7 +594,7 @@ export function verkoListo(event) {
  * Per butono "preta" la elekto kaŝiĝas.
  * @param {Event} event
  */
-export function verkElekto(event) {
+export function verkElekto(event: Event) {
     const btn = event.target;
     const kadr = btn.parentElement;
     const val = btn.value;
@@ -630,7 +639,7 @@ export function elektitajVerkoj() {
  * Vokas la TTT-serĉon kaj prezentas la trovojn
  * @param {Event} event
  */
-export function retoSerĉo(event) {
+export function retoSerĉo(event: Event) {
     event.preventDefault();
     if (! _serĉo_preparo()) return;
 
@@ -641,7 +650,7 @@ export function retoSerĉo(event) {
             sercho: DOM.v("#sercho_sercho")||'',
             kie: 'anaso'
         }, 
-        function(data) {
+        function(data: string) {
 
             const s_tr = DOM.e("#sercho_trovoj");
             if (!s_tr) throw new Error("Mankas elemento por prezenti la trovojn!");
@@ -708,7 +717,7 @@ export function retoSerĉo(event) {
  * Vokas la bildo-serĉon (en Wikimedia) kaj prezentas la rezultojn.
  * @param {Event} event
  */
-export function bildoSerĉo(event) {
+export function bildoSerĉo(event: Event) {
     event.preventDefault();
 
     // /w/api.php?action=query&format=json&list=search&srsearch=korvo&srnamespace=0%7C-2&srlimit=20&srinfo=totalhits%7Csuggestion%7Crewrittenquery&srprop=size%7Cwordcount%7Ctimestamp%7Csnippet
@@ -723,7 +732,7 @@ export function bildoSerĉo(event) {
             sercho: DOM.v("#sercho_sercho")||'',
             kie: 'vikimedio'
         },
-        function(data) {         
+        function(data: string) {         
             const json = JSON.parse(data);
             const s_tr = DOM.e("#sercho_trovoj");
             let pageids:Array<string> = [];
@@ -808,7 +817,7 @@ function _bildo_info(pageids) {
                                 // tiu funkcio akiras informojn (titolo, aŭtoro, permesilo...) 
                                 // pri la bildo kaze de enmeto (butonpremo Enmetu) per
                                 // kaj malfermas la bildo-dialogon
-                                function(event,data) {
+                                function(event: Event, data) {
                                     if (data) {                       
                                         _bildo_info_2(data.title);
                                     }
@@ -844,7 +853,7 @@ function _bildeto_info(paghoj) {
             dosieroj: ps,
             kie: 'vikimedio'
         },
-        function(data) {   
+        function(data: string) {   
         //$("#sercho_trovoj").html('');
             //for (var d=0; d<datalist.length; d++) {          
             //    data = datalist[d];
@@ -875,14 +884,14 @@ function _bildeto_info(paghoj) {
  * Akiras aldonajn informojn pri bildo (aŭtoro/fonto, permesilo ks)
  * @param {string} dosiero
  */
-function _bildo_info_2(dosiero) {
+function _bildo_info_2(dosiero: string) {
 
     u.HTTPRequest('post', 'bildo_info_2',
         { 
             dosiero: dosiero,
             kie: 'vikimedio'
         },
-        function(data) {   
+        function(data: string) {   
         //$("#sercho_trovoj").html('');
             const json = JSON.parse(data);
         
@@ -1000,7 +1009,7 @@ class Trovo extends UIElement {
                 new RigardoBtn("#r_" + v.id, {url: v.url});
                 new EkzemploBtn("#e_" + v.id, {
                     data: v.data,
-                    enmetu: function(event,values) {
+                    enmetu: function(event: Event, values) {
                         // montru enmeto-dialogon
                         DOM.malplenigu("#ekzemplo_dlg input");
                         const dlg = Dialog.dialog("#ekzemplo_dlg");
@@ -1128,18 +1137,20 @@ class KuntekstoBtn extends UIElement {
         this.element.textContent = "Kunteksto";
 
         this._on({
-            click: function(event) {
+            click: function(event: PointerEvent) {
                 if (this.opcioj.fno) {
                     event.preventDefault();
-                    const id = event.target.id;
-                    const dd_id = id.substring(2); // fortranĉu 'k_'
+                    const trg = event.target;
+                    if (trg instanceof HTMLElement) {
+                        const id = trg.id;
+                        const dd_id = id.substring(2); // fortranĉu 'k_'
 
-                    u.HTTPRequest('post','kunteksto',
+                        u.HTTPRequest('post','kunteksto',
                             { 
                                 frazo: this.opcioj.fno,
                                 n: "2"
                             },
-                            function(data) {  
+                            function(data: string) {  
                                 const json = JSON.parse(data); 
                                 //$("#sercho_trovoj").html('');
                                 if (json.length) {
@@ -1154,7 +1165,7 @@ class KuntekstoBtn extends UIElement {
                             () => document.body.style.cursor = 'wait',
                             () => document.body.style.cursor = 'auto',
                             (xhr: XMLHttpRequest) => Eraro.http('#sercho_error',xhr));
-
+                    }
                 } else {
                     throw new Error('nedifinita fraz-n-ro');
                 }
@@ -1167,8 +1178,8 @@ class KuntekstoBtn extends UIElement {
  * Difinas jqueryui-elementon por la butono de fonto-rigardo.
  */
 class RigardoBtn extends UIElement {
-    static aprioraj = {
-        url: null
+    static aprioraj: RigardOpcioj = {
+        url: undefined
     };
 
     constructor(element: HTMLElement|string, opcioj: any) {
@@ -1180,7 +1191,7 @@ class RigardoBtn extends UIElement {
         this.element.textContent = "Rigardu";
 
         this._on({
-            click: function(event) {
+            click: function(event: PointerEvent) {
                 if (this.opcioj.url) {
                     event.preventDefault();
                     window.open(this.opcioj.url);
@@ -1198,9 +1209,9 @@ class RigardoBtn extends UIElement {
  * kiu helpas al uzanto enmeti la trovaĵon en la XML-artikolon.
  */
 class EkzemploBtn extends UIElement {
-    static aprioraj = {
-        data: null,
-        enmetu: null //event
+    static aprioraj: ButonOpcioj = {
+        data: undefined,
+        enmetu: undefined //event
     };
 
     constructor(element: HTMLElement|string, opcioj: any) {
@@ -1212,7 +1223,7 @@ class EkzemploBtn extends UIElement {
         this.element.textContent = "Enmetu";
 
         this._on({
-            click: function(event) {
+            click: function(event: PointerEvent) {
                 let valoroj: TrovValoroj = {};
                 const data = this.opcioj.data;
 
@@ -1250,9 +1261,9 @@ class EkzemploBtn extends UIElement {
  * kiu helpas al uzanto enmeti la trovaĵon en la XML-artikolon.
  */
 class BildoBtn extends UIElement {
-    static aprioraj = {
-        data: null,
-        enmetu: null //event
+    static aprioraj: ButonOpcioj = {
+        data: undefined,
+        enmetu: undefined //event
     };
 
     constructor(element: HTMLElement|string, opcioj: any) {
@@ -1264,7 +1275,7 @@ class BildoBtn extends UIElement {
         this.element.textContent = "Enmetu";
 
         this._on({
-            click: function(event) {
+            click: function(event: PointerEvent) {
                 this._trigger("enmetu",event,this.opcioj.data);
             }
         });

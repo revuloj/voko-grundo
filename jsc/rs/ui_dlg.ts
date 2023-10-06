@@ -121,7 +121,7 @@ export default function() {
     xtajpo.aldonu("shargi_sercho");
     new Propon("#shargi_sercho", {
         source: shargo_dlg_serĉo,
-        select: function(event,ui) { 
+        select: function(event: Event, ui) { 
             DOM.al_v("#shargi_dosiero",ui.art+'.xml'); 
         }   
     });
@@ -315,8 +315,8 @@ export default function() {
             lok: "#ekzemplo_lok"
         },
         butonoj: {   
-            "Enmeti la ekzemplon": function(event) { ekzemplo_enmeti(event,false); },
-            "... nur la fonton": function(event) { ekzemplo_enmeti(event,true); },
+            "Enmeti la ekzemplon": function(event: Event) { ekzemplo_enmeti(event,false); },
+            "... nur la fonton": function(event: Event) { ekzemplo_enmeti(event,true); },
             "\u25f1": function() { this.refaldu(); },
             "\u2718": function() { this.fermu(); }
         },
@@ -580,7 +580,7 @@ export default function() {
             adm: "#rimarko_adm"
         },
         butonoj: {   
-            "Enmeti la rimarkon": function(event) { 
+            "Enmeti la rimarkon": function(event: Event) { 
                 event.preventDefault();
                 const indent=2;
                 var rim = Dialog.valoroj("#rimarko_dlg");
@@ -661,8 +661,8 @@ export function shargo_dlg_serĉo(request,response) {
                 sercho: sercho,
                 lng: "eo" 
             }, 
-            function(data) {   
-                if (this.status == 302) {
+            function(xhr: XMLHttpRequest, data: string) {   
+                if (xhr.status == 302) {
                     // FIXME: When session ended the OpenID redirect 302 is handled behind the scenes and here we get openid/login with status 200
                     show_xhr_error(this,"Via seanco finiĝis. Bonvolu resaluti!");
                 } else {
@@ -706,7 +706,7 @@ export function shargo_dlg_serĉo(request,response) {
                */
 }
 
-export function show_xhr_error(xhr,msg_prefix="Eraro:",msg_suffix='') {
+export function show_xhr_error(xhr: XMLHttpRequest, msg_prefix="Eraro:",msg_suffix='') {
     const msg_infix = xhr.status + " " + xhr.statusText + 
         (xhr.responseText? " " + xhr.responseText.substring(0,100) : "");
     console.error(msg_infix);
@@ -726,7 +726,7 @@ function download_art(dosiero,err_to,dlg_id,do_close=true) {
     }
 
     u.HTTPRequest('post',"revo_artikolo", { art: dosiero },
-        function(data) {   
+        function(data: string) {   
             if (data.slice(0,5) == '<?xml') {
                 const art = Artikolo.artikolo("#xml_text");
                 const xmlarea = Artikolo.artikolo("#xml_text");
@@ -779,7 +779,7 @@ function download_url(url,dosiero,err_to,dlg_id,do_close=true) {
 }
 
 
-function sendi_artikolon_servile(event) {
+function sendi_artikolon_servile(event: Event) {
     event.preventDefault();
     // $("#sendiservile_error").hide();
     const trg = event.target;
@@ -805,7 +805,7 @@ function sendi_artikolon_servile(event) {
                 metodo: metodo,
                 dosiero: dosiero||''
             },
-            function(data) {   
+            function(data: string) {   
                 // Montru sukceson...
                 const art = Artikolo.artikolo("#xml_text");
                 if (art) {
@@ -868,7 +868,7 @@ function referenco_dlg_preparu() {
     //$("body").css("cursor", "progress");
     //$.get('../voko/klasoj.xml')
     u.HTTPRequest('get','../voko/klasoj.xml',{},
-            function(data) {  
+            function(data: string) {  
                 var seen = {}; // evitu duoblaĵojn
                 new Propon("#referenco_listo", {
                     source: Array.from(x.xml_filtro(data,"kls")).map(
@@ -954,7 +954,7 @@ function referenco_dlg_serĉo(request,response) {
 }
 
 
-function referenco_enmeti(event) {
+function referenco_enmeti(event: Event) {
     event.preventDefault();
     DOM.kaŝu("#referenco_error");
     //var refgrp = $( "#referenco_grp" ).is(':checked');
@@ -1000,7 +1000,7 @@ function ekzemplo_dlg_preparo() {
 
     //$("body").css("cursor", "progress");
     u.HTTPRequest('get','../voko/biblist.xml',{},
-            function(data) {  
+            function(data: string) {  
                 new Propon("#ekzemplo_bib", {
                     source: Array.from(x.xml_filtro(data,"vrk")).map(
                         (e: Element) => {
@@ -1147,7 +1147,7 @@ function derivajho_enmeti(event) {
     Dialog.fermu("#derivajho_dlg");
 }
 
-function senco_enmeti(event) {
+function senco_enmeti(event: Event) {
     event.preventDefault();
     DOM.kaŝu("#senco_error");
 
@@ -1188,7 +1188,7 @@ function traduko_dlg_preparo() {
         const m_p_s = new List("#traduko_chiuj_p_s");
         const m_t_z = new List("#traduko_chiuj_t_z");
 
-        revo_listoj.lingvoj.load(resolve1(true),(kodo,nomo) => {
+        revo_listoj.lingvoj.load(resolve1(true),(kodo: string, nomo: string) => {
             const komenca = nomo.charAt(0);
             const lng = u.ht_html(`<li id="trd_chiuj_${kodo}" value="${nomo}">${nomo}</li>`);
 
@@ -1213,7 +1213,7 @@ function traduko_dlg_preparo() {
     .then(() => {
         new Promise((resolve2) => {
         u.HTTPRequest('get','revo_preflng',{},
-            function(data) {
+            function(data: string) {
                 const pref_lngoj = JSON.parse(data);
                 u.agordo.preflng = pref_lngoj[0] || 'en'; // malloka variablo (ui_kreo)
                 
@@ -1257,7 +1257,7 @@ function traduko_dlg_art_lingvoj() {
         if (traduk_lingvoj) {
             // ŝargu, se ne jam ŝargita kaj trakuru la lingvoliston
             revo_listoj.lingvoj.load(()=>Menu.refreŝigu("#traduko_menuo"),
-                (kodo,nomo) => {
+                (kodo: string, nomo: string) => {
                     if (kodo in traduk_lingvoj) {
                         const lingvo = u.ht_html(`<li id="trd_art_${kodo}" value="${nomo}">${nomo}</li>`);
                         if (lingvo) trd_art.aldonu(nomo,lingvo);
@@ -1342,7 +1342,7 @@ function sort_lng(at, bt){
 }
 */
 
-function traduko_dlg_plenigu_trd(lng,lingvo_nomo) {
+function traduko_dlg_plenigu_trd(lng: string, lingvo_nomo: string) {
     // forigu antaŭajn eventojn por ne multobligi ilin...
     DOM.malreago("#traduko_tradukoj","click");
     DOM.malreago("#traduko_tradukoj","change");
@@ -1490,7 +1490,7 @@ function traduko_add_btn(mrk) {
  * Se la traduk-lingvo ŝanĝiĝis ni devos replenigi la kampojn kun la tradukoj
  * de la nova lingvo.
  */
-function shanghu_trd_lingvon(event,ui) {
+function shanghu_trd_lingvon(event: Event, ui) {
     var id = ui.menuero.id;
     if (id && id.slice(0,4) == "trd_") {
         var lng= id.split('_')[2];
@@ -1525,7 +1525,7 @@ function sxablono_dlg_preparo() {
     DOM.al_html("#sxablono_elekto",sxbl_list);
 }
 
-function kiam_elektis_sxablonon(event) {
+function kiam_elektis_sxablonon(event: Event) {
     var sxbl = DOM.v("#sxablono_elekto");
     DOM.al_t("#sxablono_xml",'');
     DOM.malreago("#sxablono_xml","keypress");
@@ -1545,7 +1545,7 @@ function kiam_elektis_sxablonon(event) {
     document.querySelectorAll("#sxablono_xml input").forEach((i) => xtajpo.aldonu(<HTMLInputElement>i));
 }
 
-function sxablono_button_click(event) {
+function sxablono_button_click(event: Event) {
     event.preventDefault(); 
     const text_span = event.target.closest("button").previousElementSibling; //("span");    
     const ref_dlg = Dialog.dialog("#referenco_dlg");
@@ -1567,7 +1567,7 @@ function sxablono_button_click(event) {
 }
 
 
-function sxablono_strike_click(event) {
+function sxablono_strike_click(event: Event) {
     const text_line = event.target.closest("tr").querySelector("pre");
     const style = text_line.style["text-decoration-line"];
     text_line.style['text-decoration-line'] = (style == "none"?"line-through":"none");
@@ -1629,11 +1629,11 @@ function sxablono_enmeti(event) {
 
 function plenigu_lastaj_liston() {
     u.HTTPRequest('get',"revo_lastaj_redaktoj",{},
-        function(data) {   
+        function(xhr: XMLHttpRequest, data: string) {   
             if (this.status == 302) {
                 // FIXME: When session ended the OpenID redirect 302 is handled 
                 // behind the scenes and here we get openid/login with status 200
-                show_xhr_error(this,"Via seanco finiĝis. Bonvolu resaluti!");
+                show_xhr_error(xhr,"Via seanco finiĝis. Bonvolu resaluti!");
             } else {
                 const json = JSON.parse(data);
                 let listo = '';
@@ -1684,7 +1684,7 @@ function plenigu_lastaj_liston() {
 }
 
 
-function lastaj_tabelo_premo(event) {
+function lastaj_tabelo_premo(event: Event) {
     event.preventDefault();
     const trg = event.target;
     const id = trg.closest("tr").id;
@@ -1704,7 +1704,7 @@ function lastaj_tabelo_premo(event) {
         DOM.al_v("#lastaj_mesagho",'');
         if (entry.rez_url) {
             u.HTTPRequest('get',entry.rez_url,{},
-                function(data) {  
+                function(data: string) {  
                     var rez = JSON.parse(data); 
                     if (rez && rez.mesagho) {
                         var msg = rez.mesagho.replace(/\|\| */g,"\n").replace('[m ','[');

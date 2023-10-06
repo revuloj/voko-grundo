@@ -287,9 +287,9 @@ function kontrolu_liniojn(lines) {
         },
         () => document.body.style.cursor = 'wait',
         () => document.body.style.cursor = 'auto',
-        function() {
-            console.error(this.status + " " + this.statusText);
-            DOM.al_html("#"+id,"Okazis erraro dum kontrolo: " + this.statusText);
+        function(xhr: XMLHttpRequest) {
+            console.error(xhr.status + " " + xhr.statusText);
+            DOM.al_html("#"+id,"Okazis erraro dum kontrolo: " + xhr.statusText);
         });
 }
 
@@ -309,11 +309,11 @@ function _ana2txt(line) {
     return {line: line, msg: txt};
 }
 
-export function surmetita_dialogo(url, root_el, loc = '') {
+export function surmetita_dialogo(url: string, root_el: string, loc = '') {
     
     u.HTTPRequest('get', url, {},
-          function(data) {   
-              if (this.status == 302) {
+          function(xhr: XMLHttpRequest, data: string) {   
+              if (xhr.status == 302) {
                   // FIXME: When session ended the OpenID redirect 302 is handled behind the scenes and here we get openid/login with status 200
                 show_xhr_error(this,"Via seanco finiĝis. Bonvolu resaluti!");
               } else {
@@ -353,13 +353,13 @@ export function surmetita_dialogo(url, root_el, loc = '') {
         },
         function() { document.body.style.cursor = 'wait' },
         function() { document.body.style.cursor = 'auto' },
-        function() {
-            console.error(this.status + " " + this.statusText);
+        function(xhr: XMLHttpRequest) {
+            console.error(xhr.status + " " + xhr.statusText);
             if (this.status == 400) {
                 DOM.al_html("#surmetita_error",'Pardonu, okazis eraro dum ŝargo de la dokumento.');
             } else {
                 var msg = "Pardonu, okazis netandita eraro: ";
-                DOM.al_html("#surmetita_error", msg + this.status + " " + this.statusText + this.responseText);
+                DOM.al_html("#surmetita_error", msg + xhr.status + " " + xhr.statusText + xhr.responseText);
             }
             DOM.kaŝu("#surmetita_error",false); 
         });

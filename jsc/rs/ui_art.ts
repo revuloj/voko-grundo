@@ -164,7 +164,7 @@ export class Artikolo extends XmlRedakt {
     };
 
     // aktualigu artikolon el data
-    load(dosiero,data) {
+    load(dosiero: string, data: string) {
         /// const xmlarea = this.opcioj.xmlarea;
         ///this.teksto = data;
         this.teksto = data;
@@ -183,7 +183,7 @@ export class Artikolo extends XmlRedakt {
     /* PLIBONIGU: ĉu ni plu bezonas insert(), aŭ ĉu ni lasu
     rekte voki al uzantaj funkcioj xmlarea.selection...?
     */
-    insert(xmlstr, sync=false) {
+    insert(xmlstr: string, sync=false) {
         const e = this.element;
         //e.insert(xmlstr);
         /// const xmlarea = this.opcioj.xmlarea;
@@ -242,7 +242,7 @@ export class Artikolo extends XmlRedakt {
      * PLIBONIGU: tion povus fari la klaso XmlRedakt mem, ĉu?
      * 
      */
-    _keydown(event) {
+    _keydown(event: Event) {
         const keycode = event.keyCode || event.which;
    
         // traktu TAB por ŝovi dekstren aŭ maldekstren plurajn liniojn
