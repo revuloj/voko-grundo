@@ -127,6 +127,7 @@ export class Artikolo extends XmlRedakt {
      * PLIBONIGU: tion povus fari la klaso XmlRedakt mem, ĉu?
      * 
      */
+    /*
     _keydown(event: KeyboardEvent) {
         const keycode = event.keyCode || event.which;
    
@@ -137,6 +138,6 @@ export class Artikolo extends XmlRedakt {
                 menu.focus();
             }
         }
-    };
+    };*/
 
 }

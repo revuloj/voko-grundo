@@ -11,7 +11,7 @@
         rimarko_dialogo, homonimo_dialogo, datumprotekto_dialogo } from './ui_dlg.js';
         */
 
-import { Menu, Dialog } from '../ui';
+import { Menu, Dialog, Klavar } from '../ui';
 
 import { kontroli_artikolon, montri_indikojn } from './ui_tabl.js';
 import { surmetita_dialogo } from './ui_err.js';
@@ -21,11 +21,27 @@ export default function() {
     console.debug("Instalante la menuon...");
 
     // menuo
-    new Menu("#menu", {
-          eroj: ":scope>li:not(.ui-widget-header)",
-          reago: menu_selected
-      });
+    const menu = new Menu("#menu", {
+        eroj: ":scope>li:not(.ui-widget-header)",
+        reago: menu_selected
+    });
         
+    // permesu eniri la menuon per Ktrl+M / Alt+M
+    Klavar.aldonu("#xml_text","KeyM",(event) => {
+        if (event.ctrlKey || event.altKey) {
+            event.preventDefault();
+            menu.element.focus();
+        }
+    });
+
+    // permesu eniri la menuon per la menu-klavo
+    Klavar.aldonu("#xml_text","ContextMenu",(event) => {
+        if (event.ctrlKey || event.altKey) {
+            event.preventDefault();
+            menu.element.focus();
+        }
+    });
+  
       // loka menuo
     /**
       $( "#local_menu" ).menu({

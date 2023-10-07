@@ -7,7 +7,9 @@ import { DOM } from './dom';
 import { UIElement } from './uielement';
 import { UIStil } from './uistil';
 
-type MenuOpcioj = { eroj?: string, reago?: Function };
+export type Menuero = {menuero: HTMLElement};
+type MenuReago = (event: Event, m_ero: Menuero) => void;
+type MenuOpcioj = { eroj?: string, reago?: MenuReago };
 
 class Menuer extends UIElement {
     static menuo(element: HTMLElement|string) {
