@@ -34,7 +34,7 @@ export default function() {
         }
     });
 
-    // permesu eniri la menuon per la menu-klavo
+    // permesu eniri la menuon per la menuklavo
     Klavar.aldonu("#xml_text","ContextMenu",(event) => {
         if (event.ctrlKey || event.altKey) {
             event.preventDefault();
