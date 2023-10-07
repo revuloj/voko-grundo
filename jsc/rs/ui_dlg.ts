@@ -10,7 +10,7 @@ import * as u from '../u';
 import * as x from '../x';
 
 /// import { xpress } from '../x';
-import { DOM, Dialog, Menu, Grup, Slipar, Buton, Elektil, List, Propon, type Term, Valid, Eraro } from '../ui';
+import { DOM, Dialog, Menu, type Menuero, Grup, Slipar, Buton, Elektil, List, Propon, type Term, Valid, Eraro } from '../ui';
 
 import * as sbl from './sxablonoj';
 import { Artikolo } from './ui_art';
@@ -24,7 +24,14 @@ import { montru_eraro_staton } from './ui_err.js';
 //import { xpress } from './jquery_ext';
 
 type NovaArt = { dos: string, rad: string, fin: string, dif: string };
+type ArtDetal = { art: string, kap: string, num: string };
 //type ShargArt = { dosiero: string };
+type Klaso = { 
+    nom: string, // RDF IRI
+    mrk: string, // URL referenco al kapvorto en Revo
+    kap: string // tiu kapvorto 
+    };
+
 
 /**
  * Preparas ĉiujn dialogojn
@@ -53,7 +60,7 @@ export default function() {
                     dlg.fermu();    
                 }
             },
-            "\u2718": function() { this.fermu(); }
+            "\u2718": function(this: Dialog) { this.fermu(); }
         },
         malfermu: function() {
             // ĉar tiu change_count ankaŭ sen vera ŝanĝo altiĝas, 
@@ -101,7 +108,7 @@ export default function() {
                 DOM.al_t("#dock_avertoj",'');
                 //this.fermu() 
             },
-            "\u2718": function() { this.fermu(); } 
+            "\u2718": function(this: Dialog) { this.fermu(); } 
         },
         malfermu: function() {
             // ĉar tiu change_count ankaŭ sen vera ŝanĝo altiĝas, 
@@ -121,7 +128,7 @@ export default function() {
     xtajpo.aldonu("shargi_sercho");
     new Propon("#shargi_sercho", {
         source: shargo_dlg_serĉo,
-        select: function(event: Event, ui) { 
+        select: function(event: Event, ui: ArtDetal) { 
             DOM.al_v("#shargi_dosiero",ui.art+'.xml'); 
         }   
     });
@@ -173,11 +180,11 @@ export default function() {
             },
             {
                 text: "\u25f1",
-                click: function() { this.refaldu(); }
+                click: function(this: Dialog) { this.refaldu(); }
             },
             {
                 text: "\u2718",
-                click: function() { this.fermu(); }
+                click: function(this: Dialog) { this.fermu(); }
             }
         ], 
         malfermu: function() {
@@ -211,7 +218,7 @@ export default function() {
         butonoj: { 
             "Submeti": sendi_artikolon_servile,
             "(Sendi)": sendi_artikolon_servile,
-            "\u2718": function() { this.fermu(); }
+            "\u2718": function(this: Dialog) { this.fermu(); }
         }, 
         malfermu: function() {
             DOM.kaŝu("#sendiservile_error");
@@ -248,8 +255,8 @@ export default function() {
         },
         butonoj: { 
             "Enmeti la referencon": referenco_enmeti,
-            "\u25f1": function() { this.refaldu() ;},
-            "\u2718": function() { this.fermu(); }
+            "\u25f1": function(this: Dialog) { this.refaldu() ;},
+            "\u2718": function(this: Dialog) { this.fermu(); }
         }, 
         malfermu: function() {
             DOM.kaŝu("#referenco_error");
@@ -317,8 +324,8 @@ export default function() {
         butonoj: {   
             "Enmeti la ekzemplon": function(event: Event) { ekzemplo_enmeti(event,false); },
             "... nur la fonton": function(event: Event) { ekzemplo_enmeti(event,true); },
-            "\u25f1": function() { this.refaldu(); },
-            "\u2718": function() { this.fermu(); }
+            "\u25f1": function(this: Dialog) { this.refaldu(); },
+            "\u2718": function(this: Dialog) { this.fermu(); }
         },
         malfermu: function() {
             DOM.kaŝu("#ekzemplo_error");
@@ -372,8 +379,8 @@ export default function() {
         },
         butonoj: {   
             "Enmeti la bildon": function(event: Event) { bildo_enmeti(event,false); },
-            "\u25f1": function() { this.refaldu(); },
-            "\u2718": function() { this.fermu(); }
+            "\u25f1": function(this: Dialog) { this.refaldu(); },
+            "\u2718": function(this: Dialog) { this.fermu(); }
         },
         malfermu: function() {
             DOM.kaŝu("#bildo_error");
@@ -426,8 +433,8 @@ export default function() {
         },
         butonoj: {   
             "Enmeti la derivaĵon": derivajho_enmeti, 
-            "\u25f1": function() { this.refaldu(); },
-            "\u2718": function() { this.fermu(); }
+            "\u25f1": function(this: Dialog) { this.refaldu(); },
+            "\u2718": function(this: Dialog) { this.fermu(); }
         },
         malfermu: function() {
             plenigu_derivajxojn();
@@ -465,8 +472,8 @@ export default function() {
         },
         butonoj: {   
             "Enmeti la sencon": senco_enmeti,
-            "\u25f1": function() { this.refaldu(); },
-            "\u2718": function() { this.fermu(); }
+            "\u25f1": function(this: Dialog) { this.refaldu(); },
+            "\u2718": function(this: Dialog) { this.fermu(); }
         },
         malfermu: function() {
             DOM.kaŝu("#senco_error");
@@ -498,7 +505,7 @@ export default function() {
         position: { my: "top", at: "top+10", of: window },
         butonoj: {   
             "Enmeti la tradukojn": function(event: Event) { tradukojn_enmeti(event); },
-            "\u2718": function() { this.fermu(); }
+            "\u2718": function(this: Dialog) { this.fermu(); }
         },
         malfermu: function() {
             DOM.kaŝu("#traduko_error");
@@ -550,12 +557,12 @@ export default function() {
     new Dialog("#sxablono_dlg", {
         butonoj: {   
             "Enmeti la tekston": sxablono_enmeti,
-            "\u25f1": function() { this.refaldu(); },
-            "\u2718": function() { this.fermu(); }
+            "\u25f1": function(this: Dialog) { this.refaldu(); },
+            "\u2718": function(this: Dialog) { this.fermu(); }
         },
         malfermu: function() {
             DOM.kaŝu("#sxablono_error");
-            this.faldu(false); // necesas, se la dialogo estis fermita en faldita stato...
+            <Dialog>this.faldu(false); // necesas, se la dialogo estis fermita en faldita stato...
 
             // difinu tildo-tekston
             x.XKlavaro.tildo("#sxablono_butonoj", Artikolo.artikolo("#xml_text")?.radiko||'');            
@@ -580,7 +587,7 @@ export default function() {
             adm: "#rimarko_adm"
         },
         butonoj: {   
-            "Enmeti la rimarkon": function(event: Event) { 
+            "Enmeti la rimarkon": function(this: Dialog, event: Event) { 
                 event.preventDefault();
                 const indent=2;
                 var rim = Dialog.valoroj("#rimarko_dlg");
@@ -588,11 +595,11 @@ export default function() {
                 rim.elm = rim.adm ? 'adm' : 'rim';                   
                 var rimstr = new XMLRimarko(rim,rim.elm).xml(indent*2);
                 Artikolo.artikolo("#xml_text")?.insert(rimstr);
-                Dialog.fermu("#rimarko_dlg");
+                // kial ni havas du "fermu"? ĉu cimo?: Dialog.fermu("#rimarko_dlg");
                 this.fermu();
             },
-            "\u25f1": function() { this.refaldu(); },
-            "\u2718": function() { this.fermu(); }
+            "\u25f1": function(this: Dialog) { this.refaldu(); },
+            "\u2718": function(this: Dialog) { this.fermu(); }
         },
         malfermu: function() {
             DOM.kaŝu("#rimarko_error");
@@ -620,8 +627,8 @@ export default function() {
     //>>>>>>>> eraro-dialogo
     new Dialog("#error_dlg", {
         butonoj: { 
-            "Resaluti": function() { location.href='../auth/logout'; },
-            "\u2718": function() { this.fermu(); }
+            "Resaluti": function() { location.href = '../auth/logout'; },
+            "\u2718": function(this: Dialog) { this.fermu(); }
         },
         malfermu: () => { DOM.kaŝu("#error_msg",false); }
     });
@@ -666,10 +673,10 @@ export function shargo_dlg_serĉo(request: Term, response: Function) {
             function(xhr: XMLHttpRequest, data: string) {   
                 if (xhr.status == 302) {
                     // FIXME: When session ended the OpenID redirect 302 is handled behind the scenes and here we get openid/login with status 200
-                    show_xhr_error(this,"Via seanco finiĝis. Bonvolu resaluti!");
+                    show_xhr_error(xhr,"Via seanco finiĝis. Bonvolu resaluti!");
                 } else {
                     const json = JSON.parse(data);
-                    json.forEach((d) => {
+                    json.forEach((d: ArtDetal) => {
                        var label = (d.num != "")? d.kap + " " + d.num : d.kap;
                        results.push({ 
                            value: label, 
@@ -874,32 +881,32 @@ function referenco_dlg_preparu() {
     //$("body").css("cursor", "progress");
     //$.get('../voko/klasoj.xml')
     u.HTTPRequest('get','../voko/klasoj.xml',{},
-            function(data: string) {  
-                var seen = {}; // evitu duoblaĵojn
-                new Propon("#referenco_listo", {
-                    source: Array.from(x.xml_filtro(data,"kls")).map(
-                        (e) => {
-                            //console.log(this + " "+i+" "+e);
-                            //console.log($(this).attr("nom"));
-                            let nom = e.getAttribute("nom")?.split('#')[1];
-                            let mrk = e.getAttribute("mrk");
-                            let kap = e.getAttribute("kap");
-                            if (nom) {                                
-                                if (seen[nom]) {
-                                    return false;
-                                } else {
-                                    seen[nom] = true;
-                                    if (mrk) mrk = mrk.split('#')[1];
-                                    return {value: nom, mrk: mrk, kap: kap};
-                                }
+        function(data: string) {  
+            var seen: u.BoolObj = {}; // evitu duoblaĵojn
+            new Propon("#referenco_listo", {
+                source: Array.from(x.xml_filtro(data,"kls")).map(
+                    (e) => {
+                        //console.log(this + " "+i+" "+e);
+                        //console.log($(this).attr("nom"));
+                        let nom = e.getAttribute("nom")?.split('#')[1];
+                        let mrk = e.getAttribute("mrk");
+                        let kap = e.getAttribute("kap");
+                        if (nom) {                                
+                            if (seen[nom]) {
+                                return false;
+                            } else {
+                                seen[nom] = true;
+                                if (mrk) mrk = mrk.split('#')[1];
+                                return {value: nom, mrk: mrk, kap: kap};
                             }
-                        }),
-                    select: referenco_listo_elekto
-                });
-            },
-            () => document.body.style.cursor = 'wait',
-            () => document.body.style.cursor = 'auto',
-            (xhr: XMLHttpRequest) => Eraro.http("#referenco_error",xhr)
+                        }
+                    }),
+                select: referenco_listo_elekto
+            });
+        },
+        () => document.body.style.cursor = 'wait',
+        () => document.body.style.cursor = 'auto',
+        (xhr: XMLHttpRequest) => Eraro.http("#referenco_error",xhr)
     );
 }
 
@@ -1451,7 +1458,7 @@ function traduko_dlg_plenigu_trd(lng: string, lingvo_nomo: string) {
     //DOM.ido_reago("#traduko_tabelo","blur","input",traduko_memoru_fokuson.bind(xklv));
 }
 
-function trd_shanghita() {
+function trd_shanghita(this: HTMLElement) {
     trd_input_shanghita(this);
 }
 
@@ -1496,7 +1503,7 @@ function traduko_add_btn(mrk: string) {
  * Se la traduk-lingvo ŝanĝiĝis ni devos replenigi la kampojn kun la tradukoj
  * de la nova lingvo.
  */
-function shanghu_trd_lingvon(event: Event, ui) {
+function shanghu_trd_lingvon(event: Event, ui: Menuero) {
     var id = ui.menuero.id;
     if (id && id.slice(0,4) == "trd_") {
         var lng= id.split('_')[2];

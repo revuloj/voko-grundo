@@ -357,7 +357,7 @@ export class SncŜablono {
         return html;
     };
     
-    form_element(match: never, tipo: string, teksto:string, offset: number): string|undefined {
+    form_element(match: string, tipo: string, teksto:string, offset: number): string|undefined {
       var id = tipo + '_' + offset;
       var iid = 'i' + id;
       switch (tipo) {

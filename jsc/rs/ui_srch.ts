@@ -666,7 +666,7 @@ export function verkoListo(event: Event) {
                     for (const v of vrkj) {
                         const id = "vl_"+v.vrk;
                         let txt = v.aut? v.aut+': ':'';
-                        txt += v.tit? v.tit : v.nom;
+                        txt += v.tit? v.tit : ''; // : v.nom; - v.nom estas malnova nun?
                         txt += v.jar? ' ('+v.jar+')' : '';
                         const cls = v.jar >= jar_de && v.jar <= jar_ghis? '' : ' class="kasxita"';
                         vdiv.insertAdjacentHTML("beforeend",'<div data-jar="' + +v.jar + '"' + cls +'><label for="'+ id + '">' 
