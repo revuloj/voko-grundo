@@ -1,0 +1,9 @@
+{
+  "entryPoints": ["jsc/rv/kadro.ts"],
+  "entryPointStrategy": "expand",
+  "out": "tsdoc",
+  "readme": "README.md",
+  "name": "Dokumentado de Typescript-kodo",
+  "tsconfig": "tsconfig-rv.json"
+}
+  

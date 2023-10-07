@@ -12,22 +12,17 @@
     },
     "devDependencies": {
         "cssmin": "latest",
-        "google-closure-compiler": "latest",
-        "jsdoc": "latest",
-        "jshint": "latest",
         "localforage": "latest",
         "typedoc": "^0.24.8"
     },
     "config": {},
-    "jshintConfig": {
-        "laxbreak": true,
-        "esversion": 6
-    },
     "scripts": {
         "env": "env",
         "lint": "jshint jsc/*/*.js",
         "build:lint": "jshint build/rsj/*-2f-min.js",
-        "doc": "jsdoc -d jsdoc jsc/*/*.js",
+        "//doc": "jsdoc -d jsdoc jsc/*/*.js",
+        "tsdoc:rv": "voko-grundo/typedoc-rv.json",
+        "tsdoc:rs": "voko-grundo/typedoc-rs.json",
         "prebuild": "mkdir -p build",
         "build:mp:loke": "bin/mp2png_svg.sh",
         "prebuild:css": "mkdir -p build/stl",
