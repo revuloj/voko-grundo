@@ -16,6 +16,17 @@ import { Tekst, Klavar } from '../ui';
  * Administras la redaktatan tekston tiel, ke eblas redakti nur parton de ĝi, t.e. unuopan derivaĵon, sencon ktp.
  */
 export class XmlRedakt extends Tekst {
+
+  /**
+   * Retrovas XmlRedakt-objekton alkroĉitan al elemento
+   * @param element la elemento aŭ ties CSS-elektilo
+   * @returns 
+   */
+  static xmlredakt(element: HTMLElement|string) {
+    let x = super.obj(element);
+    if (x instanceof XmlRedakt) return x;
+  }
+
   public radiko: string;
 
   /// public xmlstruct: XmlStrukt; // la tuta teksto

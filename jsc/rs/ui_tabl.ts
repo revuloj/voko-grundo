@@ -15,8 +15,7 @@ import { DOM, Slipar, type SlipSalto, Buton, Elektil, List, Valid } from '../ui'
 
 import { Erarolisto } from './ui_err';
 import { artikolo } from '../a/artikolo';
-
-import { Artikolo } from './ui_art';
+import { preferoj } from '../a/preferoj';
 
 //import { xpress } from './jquery_ext';
 import { show_xhr_error } from './ui_dlg';
@@ -78,30 +77,9 @@ export default function() {
 
   //### XML-redaktilo
     
-    let artikolo = new Artikolo("#xml_text", {
-        poziciŝanĝo: function() {
-            // tion ni povos forigi
-            /*
-            var line_pos = $("#xml_text").getCursorLinePos();
-            $("#edit_position").text("linio " + (line_pos.line+1) + ", " + (line_pos.pos+1));
-            */
-            // tion ni uzu estonte:
-            // aktualigu pozicion
-            const xmlarea = Artikolo.artikolo("#xml_text"); //?.opcioj.xmlarea;
-            if (xmlarea) {
-                const pos = xmlarea.pozicio;
-                DOM.al_t("#position",(1+pos.lin)+":"+(1+pos.poz));    
-            }
-        },
-        tekstŝanĝo: function() {
-            // fermu la navigilon, ĉar ĝi bezonas aktualigon, kio okazas per
-            // evento "change" nur post forlaso de la XML-tekst-areo
-            /*
-            $("#collapse_outline").accordion({active:false});
-            */
-            DOM.al_t("#rigardo","");
-        },
-        post_aldono: function(subt: SDet, index: number, selected: boolean) { // reago je aldono de nova subteksto: aldonu en la listo art_strukturo
+    const xmlredakt = new XmlRedakt("#xml_text", 
+        // post_aldono:
+        function(subt: SDet, index: number, selected: boolean) { // reago je aldono de nova subteksto: aldonu en la listo art_strukturo
             const sel_stru = document.getElementById("art_strukturo");
             if (sel_stru) {
                 if (index == 0) sel_stru.textContent = ''; // malplenigu la liston ĉe aldono de unua ero...        
@@ -111,11 +89,44 @@ export default function() {
                     sel_stru.append(ht_element('option',{value: subt.id},subt.dsc));
                 }    
             }
-        },
-        subtekst_elekto: function(subt: SDet) { // reago al interna elektoŝanĝo: elektu ankaŭ en la listo art_strukturo
+        },    
+        // subtekst_elekto: 
+        function(subt: SDet) { // reago al interna elektoŝanĝo: elektu ankaŭ en la listo art_strukturo
             DOM.e("#art_strukturo option[value='"+subt.id+"']")?.setAttribute('selected','selected');
-        }       
-    });
+        },            
+        // poziciŝanĝo: 
+        function() {
+            // aktualigu pozicion
+            const xr = XmlRedakt.xmlredakt("#xml_text");
+            if (xr) {
+                const pos = xr.pozicio;
+                DOM.al_t("#position",(1+pos.lin)+":"+(1+pos.poz));    
+            }
+        },
+        // tekstŝanĝo: 
+        function() {
+            // forviŝu ne plu validan antaŭrigardon
+            DOM.al_t("#rigardo","");
+        }
+    ); 
+
+    // restarigi el loka krozil-memoro
+    const art_xml = xmlredakt.relegu("red_artikolo","xml");
+
+    if (art_xml && art_xml.xml) {
+        /// xmlarea.setText(art.xml);
+
+        xmlredakt.opcioj.reĝimo = art_xml.red;
+        // ni povus alternaitve demandi xmlarea.getDosiero(), 
+        // se ni certas, ke enestas mrk
+        xmlredakt.opcioj.dosiero = art_xml.nom;
+        //this._setRadiko();
+    }
+
+    // preferataj lingvoj
+    preferoj.relegu();  
+
+
     // aktivigu x-tajpadon
     xtajpo = new x.XTajpo(['xml_text']);
 
@@ -125,12 +136,12 @@ export default function() {
     
         // tio renovigas la strukturon pro eblaj intertempaj snc-/drv-aldonoj ks...
         // do ni poste rekreos ĝin kaj devos ankaŭ marki la elektitan laŭ _item_
-        const art = Artikolo.artikolo("#xml_text");
-        if (art) {
+        const xr = XmlRedakt.xmlredakt("#xml_text");
+        if (xr) {
             // const xmlarea = art.opcioj.xmlarea;
-            art.ekredaktu(val,true);
+            xr.ekredaktu(val,true);
             // okazigu eventon poziciŝanĝo ĉe Artikolo...
-            const ps = art.opcioj.poziciŝanĝo; 
+            const ps = xr.opcioj.poziciŝanĝo; 
             if (ps) (ps as Function)();
         }
         //show_pos();
@@ -164,20 +175,18 @@ export default function() {
             const a = event.target;
             if (a instanceof HTMLElement) {                
                 const span = a.parentElement;
-                const art = Artikolo.artikolo("#xml_text");
-                /// const xmlarea = artikolo.opcioj.xmlarea;
-                if (art && span) {
+                const xr = XmlRedakt.xmlredakt("#xml_text");
+                if (xr && span) {
                     // linio en erarolisto kun propono havas strukturon li/span/a
                     // li@value enhavas indikon linio:pozicio
                     const lin_pos = span.parentElement?.getAttribute("value");
                     if (span.classList.contains('snc_mrk') && lin_pos) {
-                        //const art = $("#xml_text");
-                        art.iru_al(lin_pos,4);
-                        artikolo.elektanstataŭigo("<snc mrk=\"" + a.textContent + "\"","<snc");
+                        xr.iru_al(lin_pos,4);
+                        xr.elektanstataŭigo("<snc mrk=\"" + a.textContent + "\"","<snc");
                         span.parentElement?.remove();
                     } else if (span.classList.contains('klr_ppp') && lin_pos) {
-                        art.iru_al(lin_pos,14);
-                        artikolo.elektanstataŭigo(a.textContent||'',"<klr>...</klr>");
+                        xr.iru_al(lin_pos,14);
+                        xr.elektanstataŭigo(a.textContent||'',"<klr>...</klr>");
                         span.parentElement?.remove();
                     } else {
                         surmetita_dialogo("static/anaklar.html","klarigo_teksto", "klarigo_" + span.getAttribute("data-takso"));
@@ -202,9 +211,9 @@ export default function() {
 
     // ekrana klavaro
     const klv = DOM.e("#dock_klavaro");
-    const art = Artikolo.artikolo("#xml_text")
-    if (klv instanceof HTMLElement && art) {
-      const xklv = new x.XRedaktKlavaro(klv, art,
+    const xr = XmlRedakt.xmlredakt("#xml_text")
+    if (klv instanceof HTMLElement && xr) {
+      const xklv = new x.XRedaktKlavaro(klv, xr,
         // reĝimpremo
         (event: Event, ui) => { 
             // PLIBONIGU: tion ni povas ankaŭ meti en xklavaro.js!
@@ -224,8 +233,8 @@ export default function() {
         },
         // postenmeto
         function(event,ui) {
-            const xmlarea = Artikolo.artikolo("#xml_text");
-            xmlarea?.malsinkrona();
+            const xr = XmlRedakt.xmlredakt("#xml_text");
+            xr?.malsinkrona();
         }
       );
       xklv.indiko_klavoj(revo_listoj.stiloj,<HTMLElement>DOM.e("#r\\:klv_ind"));
@@ -267,8 +276,8 @@ export default function() {
 
     DOM.reago("#sercho_det_regexes","toggle",() => {
         if (! DOM.v("#re_radiko")) {
-            const xmlarea = Artikolo.artikolo("#xml_text");
-            const rad = xmlarea?.radiko || '';
+            const xr = XmlRedakt.xmlredakt("#xml_text");
+            const rad = xr?.radiko || '';
             DOM.al_v("#re_radiko",rad);
         }
     });
@@ -340,8 +349,8 @@ export default function() {
     DOM.reago(window, "unload", function() { 
     //do_before_unload(() => {
         console.debug("sekurigante la aktualan XML-tekston...");
-        const art = Artikolo.artikolo("#xml_text");
-        artikolo._konservu_fone();
+        const xr = XmlRedakt.xmlredakt("#xml_text");
+        xr?._konservu_fone();
     });
 
 }
@@ -412,15 +421,10 @@ export function antaŭ_slipŝanĝo(ui: SlipSalto) {
 
     // transirante al serĉo prenu markitan tekston kiel serĉaĵo
     if (old_p == "xml" && new_p == "sercho") {
-        /*
-        var art = $("#xml_text");
-        var elektita = art.Artikolo("elekto");
-        var radiko = art.Artikolo("radiko");
-        */
-        const xmlarea = Artikolo.artikolo("#xml_text");
-        if (xmlarea) {
-            const elektita = xmlarea.elekto||'';
-            const radiko = xmlarea.radiko;
+        const xr = XmlRedakt.xmlredakt("#xml_text");
+        if (xr) {
+            const elektita = xr.elekto||'';
+            const radiko = xr.radiko;
            
             var sercho = x.replaceTld(radiko, elektita)
                .replace(/<[^>]+>/g,'')
@@ -493,7 +497,7 @@ export function nova_slipo(ui: SlipSalto) {
  * Montras la antaŭrigardon de la artikolo
  */
 function antaurigardo() {
-    const xmlarea = Artikolo.artikolo("#xml_text");
+    const xr = XmlRedakt.xmlredakt("#xml_text");
     const ahtml = DOM.html("#rigardo");
 
     /* teorie ni povos ŝapri remeti antaŭrigardon, se nenio
@@ -503,14 +507,14 @@ function antaurigardo() {
     refreŝigata. Do ni aldonu flagon ankoraŭ en xmlarea, kiu memoras, ĉu ni
     iam kreis aktualan antaŭrigardon post la lasta efektiva ŝanĝo.
     */
-    if (xmlarea) {
+    if (xr) {
 
-        if (ahtml && xmlarea.antaŭrigardo_sinkrona) {
-            xmlarea.saltu();
+        if (ahtml && xr.antaŭrigardo_sinkrona) {
+            xr.saltu();
             return;
         }
 
-        const xml_text = xmlarea.teksto; //$("#xml_text").val();
+        const xml_text = xr.teksto; //$("#xml_text").val();
         
         if (! xml_text) {
             // PLIBONIGU: eble aldone testu: xml.startsWith("<?xml")
@@ -536,8 +540,8 @@ function antaurigardo() {
                         rig.textContent = '';
                         rig.append(article,footer as Node);    
                     }
-                    xmlarea.antaŭrigardo_sinkrona = true;
-                    xmlarea.saltu();
+                    xr.antaŭrigardo_sinkrona = true;
+                    xr.saltu();
     
                     // refaru matematikajn formulojn, se estas
                     if (typeof(MathJax) != 'undefined' && MathJax.Hub) {
@@ -657,10 +661,10 @@ function plenigu_elekto_indikoj() {
 
     const klvr = DOM.e("#elekto_indikoj");
     // const xmltxt = DOM.e("#xml_text");
-    const xmlarea = Artikolo.artikolo("#xml_text");
+    const xr = XmlRedakt.xmlredakt("#xml_text");
 
 
-    if (klvr instanceof HTMLElement && xmlarea) {
+    if (klvr instanceof HTMLElement && xr) {
         // PLIBONIGU: enkonduku apartajn elementojn span...
         const klv_fak = klvr;
         const klv_ind = klvr;
@@ -685,7 +689,7 @@ function plenigu_elekto_indikoj() {
                 }
             },
             // postenmeto
-            () => xmlarea.malsinkrona()
+            () => xr.malsinkrona()
         );
 
         if (klv_fak) xklavaro.fako_klavoj(revo_listoj.fakoj,klv_fak);
@@ -693,48 +697,6 @@ function plenigu_elekto_indikoj() {
     }
 }
 
-/**
- * Enmetas klakitan indikon en la XML-tekston
- * @param {*} event 
- */
-/*
-function indikon_enmeti(event) {
-    event.preventDefault();
-    let enmetu = '';
-
-    const el = event.target;
-    
-    const cmd = el.getAttribute("data-cmd");
-    if (cmd == "fermu") {
-      DOM.kaŝu("#elekto_indikoj",true);
-      DOM.kaŝu("#kromklavaro",false); // butono por reaperigi kromklavaron poste
-    } else if (cmd == "klavaro") {
-      montri_kromklavaron();
-    }
-    else {
-      switch (this.className) {
-        case "stl":
-            enmetu = '<uzo tip="stl">' + el.getAttribute("data-stl") + '</uzo>';
-            break;
-        case "fak":
-            enmetu = '<uzo tip="fak">' + el.getAttribute("data-fak") + '</uzo>';
-            break;
-        case "ofc":
-            enmetu = '<ofc>' + el.getAttribute("data-ofc") + '</ofc>';
-            break;
-        case "gra":
-            enmetu = '<gra><vspec>' + el.getAttribute("data-vspec") + '</vspec></gra>';
-            break;
-        }
-        
-        if (enmetu) {
-            //$("#xml_text").insert(enmetu);
-            const xmlarea = Artikolo.artikolo("#xml_text");
-            if (xmlarea) xmlarea.elektenmeto(enmetu);
-        }
-    }
-}
-*/
 
 
 

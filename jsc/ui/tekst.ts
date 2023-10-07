@@ -678,11 +678,11 @@ export class Tekst extends UIElement {
 
     /**
      * Anstataŭigas la elektitan tekston, se ĝi egalas al la dua argumento (se donita)
-     * @param insertion 
-     * @param elektita 
+     * @param enm_teksto 
+     * @param elektita por kontrolo
      * @returns 
      */
-    elektanstataŭigo(insertion: string, elektita?: string) {
+    elektanstataŭigo(enm_teksto: string, elektita?: string) {
         const txtarea = this.element;
 
         if (txtarea instanceof HTMLTextAreaElement 
@@ -690,7 +690,7 @@ export class Tekst extends UIElement {
             && (elektita == this.elekto || !elektita)) {
                     // enŝovu la tekston anstataŭ la elektita 
 
-                this.elektenmeto(insertion);
+                this.elektenmeto(enm_teksto);
             } else
                 console.warn("Ne estas la teksto '" + elektita +"' ĉe la elektita loko! Do ĝi ne estas anstatŭigata.");        
     };

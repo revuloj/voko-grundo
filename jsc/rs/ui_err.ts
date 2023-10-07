@@ -9,11 +9,10 @@
 import * as u from '../u';
 import * as x from '../x';
 import { DOM, UIElement, List, type ListOpcioj, Dialog } from '../ui';
+import { XmlRedakt } from '../x';
 
-import { Artikolo } from './ui_art';
 import { show_xhr_error } from './ui_dlg';
 import { HTMLError, type Valoroj } from './sxabloniloj';
-
 
 interface XEraro extends Partial<x.LinePos> { id?: string, cls?: string, msg: string };
 
@@ -100,12 +99,11 @@ export class Erarolisto extends List {
         const el = event.target;
         if (el instanceof HTMLElement) {
             const line_pos = el.closest("li")?.getAttribute("value");
-            if (line_pos) {
-                const artikolo = Artikolo.artikolo("#xml_text");
-                const xmlarea = Artikolo.artikolo("#xml_text");
-                xmlarea?.iru_al(line_pos);
+            const xr = XmlRedakt.xmlredakt("#xml_text");
+            if (xr && line_pos) {
+                xr.iru_al(line_pos);
                 // okazigu eventon poziciŝanĝo ĉe Artikolo...
-                const ps: any = artikolo?.opcioj.poziciŝanĝo;
+                const ps: any = xr.opcioj.poziciŝanĝo;
                 if (ps instanceof Function) ps();         
             }
         }
@@ -114,8 +112,8 @@ export class Erarolisto extends List {
 };
 
 export function xmlkontrolo() {
-    const xmlarea = Artikolo.artikolo("#xml_text");
-    const xml_text = xmlarea?.teksto; //$("#xml_text").val();
+    const xr = XmlRedakt.xmlredakt("#xml_text");
+    const xml_text = xr?.teksto; //$("#xml_text").val();
 
   
     if (! xml_text ) {
@@ -159,13 +157,12 @@ export function xmlkontrolo() {
 
 
 export function mrkkontrolo() {
-    const art = Artikolo.artikolo("#xml_text");
-    const xmlarea = Artikolo.artikolo("#xml_text");
+    const xr = XmlRedakt.xmlredakt("#xml_text");
 
-    if (art && xmlarea) {
-        const xml = xmlarea.teksto; //$("#xml_text").val();
+    if (xr) {
+        const xml = xr.teksto; //$("#xml_text").val();
 
-        var mrkoj = art.markoj();
+        var mrkoj = xr.markoj();
         for (let mrk in mrkoj) {
             if (mrkoj[mrk] > 1) {
                 //alert("" + mrkoj[mrk] + "-obla marko: "+ mrk);
@@ -177,10 +174,10 @@ export function mrkkontrolo() {
                 if (elisto) elisto.aldonu_eraron(err);
             }
         }
-        var sncoj = art.snc_sen_mrk();
+        var sncoj = xr.snc_sen_mrk();
     
         if (sncoj) {
-            var drvoj = art.drv_markoj();
+            var drvoj = xr.drv_markoj();
             var dmrk = 'xxx.0';
     
             for (let inx in sncoj) {
@@ -208,11 +205,10 @@ export function mrkkontrolo() {
 
 
 export function klrkontrolo() {
-    const art = Artikolo.artikolo("#xml_text");
-    const xmlarea = Artikolo.artikolo("#xml_text");
-    if (art && xmlarea) {
-        const xml = xmlarea.teksto; //$("#xml_text").val();
-        const klroj = art.klr_ppp();
+    const xr = XmlRedakt.xmlredakt("#xml_text");
+    if (xr) {
+        const xml = xr.teksto; //$("#xml_text").val();
+        const klroj = xr.klr_ppp();
     
         if (klroj) {
             for (let pos in klroj) {
@@ -231,8 +227,8 @@ export function klrkontrolo() {
 
 
 export function vortokontrolo() {
-    const art = Artikolo.artikolo("#xml_text");
-    const lines = art?.lines_as_dict();
+    const xr = XmlRedakt.xmlredakt("#xml_text");
+    const lines = xr?.lines_as_dict();
 
     var chunk_size = 20;
     var i = 0;
