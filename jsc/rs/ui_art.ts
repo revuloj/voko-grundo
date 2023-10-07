@@ -39,16 +39,18 @@ export class Artikolo extends XmlRedakt {
         this.restore();
         /// this._change_count = 0;
 
+        /*
         this._on({
             /// dragover: this._dragOver,
             /// drop: this._drop,
-            keydown: this._keydown // traktu TAB por enŝovoj
+            /// keydown: this._keydown // traktu TAB por enŝovoj
             //keypress: this._keypress, // traktu linirompon
             /// keyup: this._keyup, // traktu tekstŝanĝojn
             /// focus: function(event) { this._trigger("poziciŝanĝo",event,null); }, 
             /// click: function(event) { this._trigger("poziciŝanĝo",event,null); }, 
             /// change: this._change        
         }); // dum musalŝovo
+        */
     };
 
 
