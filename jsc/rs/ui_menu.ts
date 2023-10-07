@@ -23,24 +23,25 @@ export default function() {
     // menuo
     const menu = new Menu("#menu", {
         eroj: ":scope>li:not(.ui-widget-header)",
-        reago: menu_selected
+        reago: menu_selected,
+        eniro: "#kontroli_menu_item" // apriore fokusata
     });
         
     // permesu eniri la menuon per Ktrl+M / Alt+M
     Klavar.aldonu("#xml_text","KeyM",(event) => {
         if (event.ctrlKey || event.altKey) {
             event.preventDefault();
-            menu.element.focus();
+            event.stopImmediatePropagation();            
+            menu.eniru();
         }
     });
 
     // permesu eniri la menuon per la menuklavo
     Klavar.aldonu("#xml_text","ContextMenu",(event) => {
-        if (event.ctrlKey || event.altKey) {
-            event.preventDefault();
-            menu.element.focus();
-        }
-    });
+        event.preventDefault();
+        event.stopImmediatePropagation();        
+        menu.eniru();
+    });    
   
       // loka menuo
     /**

@@ -9,7 +9,7 @@ import { UIStil } from './uistil';
 
 export type Menuero = {menuero: HTMLElement};
 type MenuReago = (event: Event, m_ero: Menuero) => void;
-type MenuOpcioj = { eroj?: string, reago?: MenuReago };
+type MenuOpcioj = { eroj?: string, reago?: MenuReago, eniro?: string|HTMLElement };
 
 class Menuer extends UIElement {
     static menuo(element: HTMLElement|string) {
@@ -176,7 +176,7 @@ export class Menu extends UIElement {
             }
         }
 
-        if (el instanceof HTMLElement) {
+        if (el instanceof HTMLElement && this.element.contains(el)) {
             switch (event.key) {
                 case "ArrowDown": 
                     iru(el,true); 
@@ -197,6 +197,17 @@ export class Menu extends UIElement {
                     break;
             }
         }
+    }
+
+    eniru() {
+        let ero: HTMLElement|undefined;
+        if (this.opcioj.eniro) {
+            ero = typeof this.opcioj.eniro === "string"? this.element.querySelector(this.opcioj.eniro) : this.opcioj.eniro;
+        } else {
+            ero = this.element.querySelector(this.opcioj.eroj); // unua menuero
+        }
+
+        if (ero) ero.focus();
     }
 
     elekto(event: Event, menuero_elm: HTMLElement) {
