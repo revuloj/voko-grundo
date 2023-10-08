@@ -362,7 +362,7 @@ export class XKlavaro extends UIElement {
         const pos = elm.children.length; // tie ni poste enŝovos la stilbutonojn!
 
         let indikoj = "<div class='klv ofc' data-ofc='*' title='fundamenta (*)'><span>funda-<br/>menta</span></div>";
-        for (var i=1; i<10; i++) {
+        for (var i=1; i<11; i++) {
             indikoj += "<div class='klv ofc' data-ofc='" + i + "' title='" + i + "a oficiala aldono'><span><b>" + i + "a</b> aldono" + "</span></div>";
         }
         
