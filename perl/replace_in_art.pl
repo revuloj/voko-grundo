@@ -59,17 +59,17 @@ sub process_art {
 #    $chg += ($xml =~ s|https?://(?:www\.)?uea\.org/|&UEA;|g);
 #    $chg += ($xml =~ s|https?://(?:www\.)?tekstaro\.com/t|&Tekstaro;|g);
 
-    # korektu malĝustajn literojn en ĉina transskribo pinjina
-#    $chg += ($xml =~ s,<ind>(.*?)(?:&#x15FB;|&#5627;)(.*?)</ind>,<ind>$1ī$2</ind>,g); # ᗻ
-#    $chg += ($xml =~ s|<ind>(.*?)(?:&#x15E3;)(.*?)</ind>|<ind>$1ē$2</ind>|g); # ᗣ
-#    $chg += ($xml =~ s|<ind>(.*?)(?:&#x15D1;)(.*?)</ind>|<ind>$1ā$2</ind>|g); # ᗑ
-#    $chg += ($xml =~ s|<ind>(.*?)(?:&#x163B;)(.*?)</ind>|<ind>$1ū$2</ind>|g); # ᘻ
-#    $chg += ($xml =~ s|<ind>(.*?)(?:&#x161D;)(.*?)</ind>|<ind>$1ō$2</ind>|g); # ᘝ
+    # korektu malĝustajn literojn en ĉina/hinda transskribo pinjina
+    $chg += ($xml =~ s,<ind>(.*?)(?:&#x15FB;|&#5627;)(.*?)</ind>,<ind>$1ī$2</ind>,g); # ᗻ
+    $chg += ($xml =~ s|<ind>(.*?)(?:&#x15E3;)(.*?)</ind>|<ind>$1ē$2</ind>|g); # ᗣ
+    $chg += ($xml =~ s,<ind>(.*?)(?:&#x15D1;|&#5585;)(.*?)</ind>,<ind>$1ā$2</ind>,g); # ᗑ
+    $chg += ($xml =~ s|<ind>(.*?)(?:&#x163B;)(.*?)</ind>|<ind>$1ū$2</ind>|g); # ᘻ
+    $chg += ($xml =~ s|<ind>(.*?)(?:&#x161D;)(.*?)</ind>|<ind>$1ō$2</ind>|g); # ᘝ
 
     # ŝanĝu transskribojn de aziaj lingvoj al nova elemento <pr>
     $chg += ($xml =~ s;(<trd\s+lng="(?:ja|zh|hi)">.*?)\[<ind>(.*?)</ind>\]</trd>;$1<pr>$2</pr></trd>;sg);
     # tildon ni ne inkluzivas en prononco
-    $chg += ($xml =~ s;(<trd(?:\s+lng="ja")?>)(&#xFF5E\;|～)(.*?)\[(?:&#xFF5E\;|～)<ind>(.*?)</ind>\]</trd>;$1$2<ind>$3</ind><pr>$4</pr></trd>;sg); 
+    $chg += ($xml =~ s;(<trd(?:\s+lng="ja")?>)(&#xFF5E\;|～)(.*?)(\s*)\[(?:&#xFF5E\;|～)<ind>(.*?)</ind>\]</trd>;$1$2<ind>$3</ind>$4<pr>$5</pr></trd>;sg); 
 
     while (my $m = ($xml =~ s;(<trdgrp\s+lng="(?:ja|zh|hi)">.*?)\[<ind>(.*?)</ind>\]</trd>;$1<pr>$2</pr></trd>;scg)) {
         $chg += $m;
