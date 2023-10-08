@@ -561,6 +561,50 @@ export default function() {
     xtajpo.aldonu("senco_dif");
 
     //>>>>>>>> dialogo: Enmeti tradukojn
+
+
+    const t_dlg = new x.TradukDialog("#traduko_dlg", {
+        trd_tabelo: "#traduko_table",
+        kampoj: {}, 
+        butonoj: {   
+          "Enmeti la tradukojn": function(ev: Event) { 
+            try {
+              this.xmlarea.enmetu_tradukojn();
+              this.fermu();
+            } catch (e) {
+              DOM.al_t("#traduko_error",e.toString());
+            }
+          },
+          "\u2718": function(this: Dialog) { this.fermu(); }
+        },      
+    });
+
+    t_dlg.xmlarea = xmlredakt();
+
+    new Menu("#traduko_menuo", {
+        eroj: ":scope>li",
+        reago: shanghu_trd_lingvon
+    });  
+
+    // ŝargu preferatajn lingvojn kaj poste plenigu la tradukmenuon
+    new Promise((resolve) => {
+        u.HTTPRequest('get','revo_preflng',{},
+            function(data: string) {
+                const pref_lngoj = JSON.parse(data);
+                u.agordo.preflng = pref_lngoj[0] || 'en'; // malloka variablo            
+                resolve(pref_lngoj);
+            },
+            () => document.body.style.cursor = 'wait',
+            () => document.body.style.cursor = 'auto',
+            (xhr: XMLHttpRequest) =>  Eraro.http("#traduko_error",xhr)
+        )
+    })
+    .then((pref_lngoj) => {
+        t_dlg.lingvo_menuo("#traduko_menuo", "#traduko_aliaj", 
+            revo_listoj.lingvoj, "traduko_chiuj", pref_lngoj as string[], "traduko_pref");
+    });    
+
+    /*
     traduko_dlg_preparo();
     new Dialog("#traduko_dlg", {
         position: { my: "top", at: "top+10", of: window },
@@ -592,11 +636,9 @@ export default function() {
             }
         }
     }); 
-    new Menu("#traduko_menuo", {
-        eroj: ":scope>li",
-        reago: shanghu_trd_lingvon
-    });  
+    */
 
+    /*
     klv = DOM.e("#traduko_butonoj");
     if (klv) {
         new x.XFormularKlavaro("#traduko_butonoj","traduko_dlg",
@@ -611,7 +653,7 @@ export default function() {
         ).elemento_klavoj();
         //DOM.ido_reago("#traduko_tabelo","blur","input",traduko_memoru_fokuson.bind(xklv));
         //DOM.ido_reago("#traduko_butonoj","click","div",traduko_butono_premo.bind(xklv));
-    }
+    }*/
 
     //>>>>>>>> dialogo: Enmeti per ŝablono
     sxablono_dlg_preparo();
@@ -1204,6 +1246,7 @@ function senco_enmeti(event: Event) {
 
 
 // aldonu kompletan lingvoliston kaj preferatajn lingvojn al traduko-dialogo
+/*
 function traduko_dlg_preparo() {
 
     new Promise((resolve1) => { 
@@ -1269,7 +1312,7 @@ function traduko_dlg_preparo() {
         // estas fintraktitaj ni ankoraŭ refreŝigu la menuon
         Menu.refreŝigu("#traduko_menuo");
     });    
-}
+}*/
 
 // aldonu la traduk-lingojn de la ŝargita artikolo al la traduko-dialogo (lingvo-elekto)
 function traduko_dlg_art_lingvoj() {
@@ -1369,6 +1412,7 @@ function sort_lng(at, bt){
 }
 */
 
+/*
 function traduko_dlg_plenigu_trd(lng: string, lingvo_nomo: string) {
     // forigu antaŭajn eventojn por ne multobligi ilin...
     DOM.malreago("#traduko_tradukoj","click");
@@ -1404,14 +1448,6 @@ function traduko_dlg_plenigu_trd(lng: string, lingvo_nomo: string) {
             tableCnt += '<tr class="tr_' + s.el + '"><td>' + dsc + '</td><td>';
         
             const trd = xmltrad.trd_subteksto(lng,s.id);
-            /*
-            try {
-                // preferu jam ŝanĝitajn tradukojn
-                trd = trd_shanghoj[s.id][lng];
-            } catch (e) {
-                // se ŝanĝoj ne ekzistas prenu tiujn el la XML-artikolo
-                trd = xmltrad.getStruct(lng,s.id); //trdoj[s.id];
-            }*/
             
             if ( trd && trd.length ) {
                 for (let j=0; j<trd.length; j++) {
@@ -1495,6 +1531,7 @@ function traduko_add_btn(mrk: string) {
     const id = mrk; //.replace(/\./g,'\\\\.');
     return `<button formaction="#trd:${id}" class="ui-button ui-widget ui-corner-all" title="Aldonu"><b>+</b></button>`;
 }
+*/
 
 /**
  * Se la traduk-lingvo ŝanĝiĝis ni devos replenigi la kampojn kun la tradukoj
@@ -1502,11 +1539,13 @@ function traduko_add_btn(mrk: string) {
  */
 function shanghu_trd_lingvon(event: Event, ui: Menuero) {
     var id = ui.menuero.id;
-    if (id && id.slice(0,4) == "trd_") {
+    if (id && id.startsWith("traduko_")) {
         var lng= id.split('_')[2];
-        var lingvo_nomo = ui.menuero.textContent;
+        var lingvo_nomo = ui.menuero.textContent||'';
         //alert($("#traduko_lingvoj").val())
-        traduko_dlg_plenigu_trd(lng,lingvo_nomo);
+
+        const t_dlg = x.TradukDialog.dialog("#traduko_dlg");
+        if (t_dlg) t_dlg.plenigu(lng,lingvo_nomo);
     }
     /// DOM.al_datum("#traduko_dlg","last-focus",'');
 }

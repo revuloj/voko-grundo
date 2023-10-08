@@ -90,7 +90,8 @@ DOM.dok_post_lego(function() {
 
     // la traduko-dialogo 
 
-    const t_dlg = new x.TradukDialog("#r\\:traduko_dlg", {
+    // const t_dlg = 
+    new x.TradukDialog("#r\\:traduko_dlg", {
         trd_tabelo: "#traduko_table",
         kampoj: {}, 
         butonoj: {   
@@ -106,7 +107,6 @@ DOM.dok_post_lego(function() {
         },      
     });
  
-
     
     //##################### kadro kaj reagoj de elementoj
 

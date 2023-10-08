@@ -663,14 +663,13 @@ function plenigu_elekto_indikoj() {
     // const xmltxt = DOM.e("#xml_text");
     const xr = XmlRedakt.xmlredakt("#xml_text");
 
-
     if (klvr instanceof HTMLElement && xr) {
         // PLIBONIGU: enkonduku apartajn elementojn span...
         const klv_fak = klvr;
         const klv_ind = klvr;
         
         // @ts-ignore
-        const xklavaro = new x.XRedaktKlavaro(klvr, xmlarea,
+        const xklavaro = new x.XRedaktKlavaro(klvr, xr,
             // reĝimŝanĝo
             (event: Event, cmd) => { 
                 // KOREKTU: ...
