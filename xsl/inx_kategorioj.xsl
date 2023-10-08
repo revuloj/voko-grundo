@@ -159,6 +159,7 @@ tamen AdE nur kalkulas novajn radikojn, dum ni kalkulas ankaŭ derivaĵojn kaj r
       <ero s="rad" t="oficialaj (7a, 1958)" n="{count(//art/kap//ofc[.='7'])}/158"/>
       <ero s="rad" t="oficialaj (8a, 1974)" n="{count(//art/kap//ofc[.='8'])}/214"/>
       <ero s="rad" t="oficialaj (9a, 2007)" n="{count(//art/kap//ofc[.='9'])}/209"/>
+      <ero s="rad" t="oficialaj (10a, 2023)" n="{count(//art/kap//ofc[.='10'])}/420+832"/>
 
 <!-- lau Michel...    
     
