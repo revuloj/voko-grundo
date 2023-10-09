@@ -439,12 +439,14 @@ attlist-rad &= attribute var { text }?
 
 ## [ofc]
 ## Oficialeco de la kapvorto/derivaĵo, 
-## povas esti *, 1, ..., 9 kiel en PV, PIV
+## povas esti *, 1, ..., 9, 10, 11 
+## aŭ por kelkaj esceptoj jarnombro kiel 1953 (analoga, -end, mis-)
+## en iuj okazoj oficialeco povas esti en krampoj (analogio, koncentra)
 
 ofc = 
   element ofc { 
     attlist-ofc, 
-    xsd:string { pattern="\*|\(?[1-9]\)?|19[0-9]{2}" } 
+    xsd:string { pattern="\*|\(?[1-9]\)?|1[0-1]|19[0-9]{2}" } 
   }
 attlist-ofc &= empty
 
