@@ -126,7 +126,7 @@ export class DOM {
     /**
      * Redonas datumojn alligitajn al elemento (ev. identigebla per elektilo)
      */
-    static datum(e: HTMLElement|string, nomo: string): any {
+    static datum(e: HTMLElement|string, nomo: string): string|undefined {
         const el = (typeof e === "string")? DOM.e(e) : e;
         if (el instanceof HTMLElement) return el.dataset[nomo];
     }
@@ -134,7 +134,7 @@ export class DOM {
     /**
      * Ligas datumojn al elemento (ev. identigebla per elektilo)
      */
-    static al_datum(e: HTMLElement|string, nomo: string, datumo: any) {
+    static al_datum(e: HTMLElement|string, nomo: string, datumo: string) {
         const el = (typeof e === "string")? DOM.e(e) : e;
         if (el instanceof HTMLElement) {
             el.dataset[nomo] = datumo;
