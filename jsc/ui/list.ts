@@ -45,7 +45,7 @@ export class List extends UIElement {
 
             // malaktivigu antaŭan aktivan elementon
             const elektilo = '.'+UIStil.aktiva;
-            const aktiva = this.element.querySelector(elektilo);
+            const aktiva = this.element.querySelector(elektilo);            
             if (aktiva instanceof HTMLElement) aktiva.classList.remove(UIStil.aktiva);
 
             // aktivigu alklakitan

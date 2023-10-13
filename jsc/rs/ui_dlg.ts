@@ -263,7 +263,7 @@ export default function() {
         },
         err_to: "#lastaj_error"
     });
-    new List("#lastaj_tabelo");
+    new List("#lastaj_tabelo",{listero: "tr"});
     DOM.klak("#lastaj_tabelo",lastaj_tabelo_premo);
     DOM.klak("#lastaj_rigardu",
         function(event) {
@@ -766,10 +766,10 @@ export function shargo_dlg_serĉo(request: Term, response: Function) {
                 sercho: sercho,
                 lng: "eo" 
             }, 
-            function(xhr: XMLHttpRequest, data: string) {   
-                if (xhr.status == 302) {
+            function(this: XMLHttpRequest, data: string) {   
+                if (this.status == 302) {
                     // FIXME: When session ended the OpenID redirect 302 is handled behind the scenes and here we get openid/login with status 200
-                    show_xhr_error(xhr,"Via seanco finiĝis. Bonvolu resaluti!");
+                    show_xhr_error(this,"Via seanco finiĝis. Bonvolu resaluti!");
                 } else {
                     const json = JSON.parse(data);
                     json.forEach((d: ArtDetal) => {
@@ -1692,11 +1692,11 @@ function sxablono_enmeti(event: Event) {
 
 function plenigu_lastaj_liston() {
     u.HTTPRequest('get',"revo_lastaj_redaktoj",{},
-        function(xhr: XMLHttpRequest, data: string) {   
-            if (xhr.status == 302) {
+        function(this: XMLHttpRequest, data: string) {   
+            if (this.status == 302) {
                 // FIXME: When session ended the OpenID redirect 302 is handled 
                 // behind the scenes and here we get openid/login with status 200
-                show_xhr_error(xhr,"Via seanco finiĝis. Bonvolu resaluti!");
+                show_xhr_error(this,"Via seanco finiĝis. Bonvolu resaluti!");
             } else {
                 const json = JSON.parse(data);
                 let listo = '';

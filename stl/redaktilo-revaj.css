@@ -961,6 +961,14 @@ nav {
 }
 */
 
+#lastaj_tabelo tr:hover,
+#lastaj_tabelo tr.aktiva {
+   background-color: var(--main-ac2-bgr-clr); /*#e5e3d5;  */
+   color: var(--main-act-fnt-clr);
+   /*border: 1px solid black;*/
+}
+
+
 #ekzemplo_sercho_rezultoj {
   max-height: 15em;
   overflow: auto;  
