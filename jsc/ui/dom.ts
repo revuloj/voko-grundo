@@ -6,6 +6,7 @@
 import { UIStil } from './uistil';
 
 type EventRegistro = WeakMap<EventTarget,EventListenerOrEventListenerObject>;
+type DatumRegistro = WeakMap<Element,any>;
 
 //HTMLInputElement|HTMLTextAreaElement|HTMLSelectElement|HTMLButtonElement;
 export interface HTMLFormControlElement extends HTMLElement {
@@ -21,7 +22,14 @@ export interface HTMLCheckControlElement extends HTMLFormControlElement {
 
 export class DOM {
 
+    // ni tenas evento-reagojn kaj datumojn kun elmentoj per WeakMap
+    // por ĉiu speco de evento aŭ dataumo ni kreas apartan tian WeakMap-objekton
+    // (oni povus pripensi anstataŭe konservi po unu objekton kiu entenas ĉiujn 
+    // evento- resp. datumspecoj kiel "vortaro", tio postulus eble malpli da
+    // spaco sed pli da atento pri aldono/forigo. Momente ni nur modeste uzas
+    // tion, do spaco eble ne estas problemo.)
     private static event_registro: { [event: string]: EventRegistro } = {};
+    private static datum_registro: { [nomo: string]: DatumRegistro } = {};
 
 
     static isCheckElement(obj: any): obj is HTMLCheckControlElement {
@@ -128,7 +136,8 @@ export class DOM {
      */
     static datum(e: HTMLElement|string, nomo: string): string|undefined {
         const el = (typeof e === "string")? DOM.e(e) : e;
-        if (el instanceof HTMLElement) return el.dataset[nomo];
+        if (el instanceof HTMLElement) // el.dataset[nomo];
+            return DOM.datum_registro[nomo].get(el);
     }
 
     /**
@@ -137,7 +146,9 @@ export class DOM {
     static al_datum(e: HTMLElement|string, nomo: string, datumo: string) {
         const el = (typeof e === "string")? DOM.e(e) : e;
         if (el instanceof HTMLElement) {
-            el.dataset[nomo] = datumo;
+            //el.dataset[nomo] = datumo;
+            if (! DOM.datum_registro[nomo]) DOM.datum_registro[nomo] = new WeakMap();
+            DOM.datum_registro[nomo].set(el,datumo);
         }
     }
 
