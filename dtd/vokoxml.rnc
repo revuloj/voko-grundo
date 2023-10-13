@@ -409,12 +409,17 @@ drv-marko = xsd:ID { pattern = "([a-z0-9_]+)\.[A-Za-z_]*0[A-Za-z_0]*(\.[A-Za-z_0
 snc-marko = xsd:ID { pattern = "([a-z0-9_]+)\.[A-Za-z_]*0[A-Za-z_0]*\.[A-Za-z_0-9]+" }
 
 
-##  [_marko_]
+## [_marko_]
 ## La marko identigas 'nodon' de la vortaro, ekz. artikolon, derivaĵon, sencon aŭ rimarkon,
-##  kiun oni povas referenci de alia loko en la vortaro per la sama marko.
+## kiun oni povas referenci de alia loko en la vortaro per la sama marko.
 
 marko = xsd:ID { pattern = "([a-z0-9_]+)\.[A-Za-z0-9\._]+" }
 
+## [_prononco_]
+## La pronco povas esti donita aŭ per latinaj literoj (kun supersignoj)
+## per hiragano aŭ bopomofo
+
+prononco = xsd:string { pattern = "[\p{IsBasicLatin}\p{IsLatin-1Supplement}\p{IsLatinExtended-A}\p{IsLatinExtended-B}]+|\p{IsBopomofo}+|\p{IsHiragana}+" }
 
 ## [kap]
 ## Kapvorto okazas en du kuntekstoj -- komence de artikolo
@@ -643,7 +648,7 @@ attlist-ind &= empty
 ## Se traduko havas transskribon, ni uzos tiun por la indeksado/enordigo en literĉaptiron de la indekso.
 ## Pro la limigita nombro de literoj/literumaj signoj, tio ebligas ĉapitrigi la lingvoindeksojn de
 ## silabaj lingvoj. Ankaŭ ni ebligas serĉadon laŭ transskribo aldone al la ideografia skribmaniero.
-pr = element pr { attlist-pr, text* }
+pr = element pr { attlist-pr, prononco }
 attlist-pr &= empty
 
 ## [mll]
