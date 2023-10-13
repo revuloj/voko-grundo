@@ -11,6 +11,7 @@
 
 #default namespace = "http://steloj.de/voko"
 namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
+datatypes xsd = "http://www.w3.org/2001/XMLSchema-datatypes"
 
 ## ********************************************************
 ##           KADRA STRUKTURO DE VORTARO
@@ -419,7 +420,7 @@ marko = xsd:ID { pattern = "([a-z0-9_]+)\.[A-Za-z0-9\._]+" }
 ## La pronco povas esti donita aŭ per latinaj literoj (kun supersignoj)
 ## per hiragano aŭ bopomofo
 
-prononco = xsd:string { pattern = "[\p{IsBasicLatin}\p{IsLatin-1Supplement}\p{IsLatinExtended-A}\p{IsLatinExtended-B}]+|\p{IsBopomofo}+|\p{IsHiragana}+" }
+prononco = xsd:string { pattern = "[\p{IsBasicLatin}\p{IsLatin-1Supplement}\p{IsLatinExtended-A}\p{IsLatinExtended-B}]+|\p{IsBopomofo}+|[\p{IsHiragana}\p{IsKatakana}]+" }
 
 ## [kap]
 ## Kapvorto okazas en du kuntekstoj -- komence de artikolo
