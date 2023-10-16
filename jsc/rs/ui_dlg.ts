@@ -1134,13 +1134,13 @@ function derivajho_enmeti(event) {
                 art.insert(drv.xml(),true);
             } else {
                 // enŝovu post donita drv 
-                art.enŝovu_post(drv.xml(),values.loko);
+                art.enŝovu_post(values.loko,drv.xml());
             }
         }
         
         // ekredaktu la novan derivaĵon
         const mrk = drv.drv.mrk;    
-        const s_id = xmlarea.ekredaktu(mrk,false); // false: ne denove sinkronigu, 
+        const s_id = xmlarea.ekredaktu_subtekst_mrk(mrk,false); // false: ne denove sinkronigu, 
                 // kio povus perdigi ĵus aldonitan drv!
     }
 

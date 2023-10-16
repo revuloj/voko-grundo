@@ -509,6 +509,9 @@ export class Tekst extends UIElement {
             this._teksto.substring(0,s.al) 
             + "\n"+ xml 
             + this._teksto.substring(s.al);
+
+        // aktualigu la struktur-reprezenton
+        this.struktur_analizo();
     }
 
     /**
