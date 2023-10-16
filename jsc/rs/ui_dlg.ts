@@ -1205,13 +1205,13 @@ function derivajho_enmeti(event: Event) {
         xml_enmeto(drv.xml(),true);
     } else {
         // enŝovu post donita drv 
-        xr.enŝovu_post(drv.xml(),values.loko);
+        xr.enŝovu_post(values.loko,drv.xml());
     }
     
     // ekredaktu la novan derivaĵon
     const mrk = drv.drv.mrk;    
     /// const s_id = 
-    xr.ekredaktu(mrk,false); // false: ne denove sinkronigu, 
+    xr.ekredaktu_subtekst_mrk(mrk,false); // sinkronigu="false": ne denove sinkronigu, 
             // kio povus perdigi ĵus aldonitan drv!
 
     Dialog.fermu("#derivajho_dlg");
