@@ -35,6 +35,8 @@ csv_hande('tmp/handedict_nb.u8').
 
 csv_celo('tmp/eo_zh.csv').
 
+% expand_query(Q,Q,B,B) :- writeln('query').
+
 legu :-
     csv_mankoj(M),
     legu_csv(manko, M, [separator(0';),skip_header('#')]),
@@ -72,42 +74,48 @@ hande_redukt :-
         assertz(zhde(Zh,D))
     ).
 
-% provu trovi parojn eo - zh uzante ambaŭ vortarojn eo-de kaj zh-de
-eo_zh(Eo,Zh,De,D,Simil) :- 
+proponoj_eo(Eo,Max) :-
+    manko(Eo,Mrk,No,Ofc,De),
+    format('~w [~w,~w,~w] ~w~n',[Eo,Mrk,No,Ofc,De]),
+    proponoj_de(De,Max).
+
+proponoj_de(De,Max) :-
+    forall(
+        order_by([desc(Simil)],limit(Max,eo_zh(Mtd,De,De1,Zh,Simil))),
+        format('  ~1f~w: ~~> ~w, ~w~n',[Simil,Mtd,De1,Zh])
+    ).
+
+manko(Eo,Mrk,No,Ofc,De) :-
     manko(Mrk,Eo,No,Ofc,DeI,DeT),
     once((
         DeT \= 'NULL', DeT \= '', De = DeT
         ;
         DeI \= 'NULL', DeI \= '', De = DeI
-    )),
-    once((
-        zhde(Zh,De),
-        D = De,
-        Simil = 1
-        ;
-        zhde(Zh,De),
-        D = De,
-        Simil = 1
-        ;
-        zhde(Zh,D),
-        kmp_isub(De,D,Simil)
-        ;
-        zhde(Zh,D),
-        kmp_ngram(De,D,Simil)
     )).
 
+% provu trovi parojn eo - zh uzante ambaŭ vortarojn eo-de kaj zh-de
+eo_zh(e,De,De,Zh,1.0) :- 
+        zhde(Zh,De).
+        
+eo_zh(n,De,D1,Zh,Simil) :- 
+        zhde(Zh,D1), 
+        kmp_ngram(De,D1,Simil).
+
+eo_zh(s,De,D1,Zh,Simil) :- 
+        zhde(Zh,D1), 
+        kmp_isub(De,D1,Simil).
 
 kmp_isub(T1,T2,Simil) :-
     downcase_atom(T1,S1),
     downcase_atom(T2,S2),
     isub(S1,S2,Simil,[zero_to_one(true)]),
-    Simil > 0.5 .
+    Simil > 0.6 .
 
 kmp_ngram(T1,T2,Simil) :-
     atom_length(T1,L), L>3,
     ngrams(T1,4,NGrams),
     kmp_ngram_(NGrams,T2,Simil),
-    Simil > 0.3. %0.3 .
+    Simil > 0.6. %0.3 .
 
 kmp_ngram_(NGrams,Atom,Percentage) :-
     proper_length(NGrams,Len), Len>0,
