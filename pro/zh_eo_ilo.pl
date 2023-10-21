@@ -11,6 +11,8 @@
 
 :- dynamic manko/6, zhde/2.
 
+:- initialization(writeln('Enlegu vortarojn per ''legu.'' antaŭ serĉi iujn proponojn per ''proponoj_eo(Vorto,Max).''')).
+
 /* ricevi vortojn sen trd 'zh' kun evtl. trd 'de'
 
   SELECT r3mrk.mrk, r3kap.kap, r3mrk.num, r3ofc.dos, de.ind, de.trd FROM r3mrk 
@@ -38,13 +40,13 @@ csv_celo('tmp/eo_zh.csv').
 % expand_query(Q,Q,B,B) :- writeln('query').
 
 legu :-
-    csv_mankoj(M),
+    csv_mankoj(M), format('legante ~w...~n',M),
     legu_csv(manko, M, [separator(0';),skip_header('#')]),
 
-    csv_celo(C),
+    csv_celo(C), format('legante ~w...~n',C),
     legu_csv(celo, C, [separator(0';),skip_header('#')]),
 
-    csv_hande(H),
+    csv_hande(H), format('legante ~w...~n',H),
     legu_csv(hande, H, [separator(0'/),ignore_quotes(true),skip_header('#'),match_arity(false)]),
     hande_redukt.
     
@@ -75,14 +77,18 @@ hande_redukt :-
     ).
 
 proponoj_eo(Eo,Max) :-
-    manko(Eo,Mrk,No,Ofc,De),
-    format('~w [~w,~w,~w] ~w~n',[Eo,Mrk,No,Ofc,De]),
-    proponoj_de(De,Max).
+call_nth(manko(Eo,Mrk,No,Ofc,De),N),
+    format('~d. ~w [~w,~w,~w] ~w~n',[N,Eo,Mrk,No,Ofc,De]),
+    proponoj_de(De,Max,N).
 
-proponoj_de(De,Max) :-
+proponoj_de(De,Max,N) :-
     forall(
-        order_by([desc(Simil)],limit(Max,eo_zh(Mtd,De,De1,Zh,Simil))),
-        format('  ~1f~w: ~~> ~w, ~w~n',[Simil,Mtd,De1,Zh])
+        call_nth(
+            order_by([desc(Simil)],
+                limit(Max,
+                    eo_zh(Mtd,De,De1,Zh,Simil))),
+            N1),
+        format('~d.~d ~w~1f: ~w, ~w~n',[N,N1,Mtd,Simil,De1,Zh])
     ).
 
 manko(Eo,Mrk,No,Ofc,De) :-
