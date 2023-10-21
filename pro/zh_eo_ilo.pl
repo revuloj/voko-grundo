@@ -6,12 +6,14 @@
 % vortaron per merge_trd_xml.pl
 
 :- use_module(library(csv)).
+:- use_module(library(persistency)).
 :- use_module(library(isub)).
 
-
-:- dynamic manko/6, zhde/2.
+:- dynamic manko/6, zhde/2, celo/3, propono/5.
+:- persistent celo(eo:atom, mrk: atom, zh: atom).
 
 :- initialization(writeln('Enlegu vortarojn per ''legu.'' antaŭ serĉi iujn proponojn per ''proponoj_eo(Vorto,Max).''')).
+
 
 /* ricevi vortojn sen trd 'zh' kun evtl. trd 'de'
 
@@ -35,16 +37,20 @@ csv_mankoj('tmp/eo_zh_mank.csv').
 
 csv_hande('tmp/handedict_nb.u8').
 
-csv_celo('tmp/eo_zh.csv').
+%csv_celo('tmp/eo_zh.csv').
+db_celo('tmp/eo_zh.db').
 
 % expand_query(Q,Q,B,B) :- writeln('query').
 
 legu :-
+    db_celo(DB),
+    db_attach(DB, []),   
+
+    % csv_celo(C), format('legante ~w...~n',C),
+    % legu_csv(celo, C, [separator(0';),skip_header('#')]),
+
     csv_mankoj(M), format('legante ~w...~n',M),
     legu_csv(manko, M, [separator(0';),skip_header('#')]),
-
-    csv_celo(C), format('legante ~w...~n',C),
-    legu_csv(celo, C, [separator(0';),skip_header('#')]),
 
     csv_hande(H), format('legante ~w...~n',H),
     legu_csv(hande, H, [separator(0'/),ignore_quotes(true),skip_header('#'),match_arity(false)]),
@@ -76,19 +82,37 @@ hande_redukt :-
         assertz(zhde(Zh,D))
     ).
 
-proponoj_eo(Eo,Max) :-
-call_nth(manko(Eo,Mrk,No,Ofc,De),N),
-    format('~d. ~w [~w,~w,~w] ~w~n',[N,Eo,Mrk,No,Ofc,De]),
-    proponoj_de(De,Max,N).
+% serĉu po 20 proponojn por la unuopaj germanj tradukoj de esperanta vorto
+p(Eo) :- proponoj_eo(Eo,20).
 
-proponoj_de(De,Max,N) :-
+% memoru proponon <N>.<N1> por posta skribo al csv_celo
+s(N-N1) :- s(N,N1).
+s(N,N1) :-
+    propono(N,N1,Eo,Mrk,Zh),
+    once((
+        celo(Eo,Mrk,Zh),
+        format('jam ekzistas: ~w;~w;~w',[Eo,Mrk,Zh])
+        ;
+        assert_celo(Eo,Mrk,Zh)
+    )).
+
+proponoj_eo(Eo,Max) :-
+    call_nth(manko(Eo,Mrk,No,Ofc,De),N),
+    retractall(propono(N,_,_,_,_)),
+    format('~d. ~w [~w,~w,~w] ~w~n',[N,Eo,Mrk,No,Ofc,De]),
+    proponoj_de(De,Max,N,Eo,Mrk).
+
+proponoj_de(De,Max,N,Eo,Mrk) :-
     forall(
         call_nth(
             order_by([desc(Simil)],
                 limit(Max,
                     eo_zh(Mtd,De,De1,Zh,Simil))),
             N1),
-        format('~d.~d ~w~1f: ~w, ~w~n',[N,N1,Mtd,Simil,De1,Zh])
+        (
+            assertz(propono(N,N1,Eo,Mrk,Zh)),
+            format('~d-~d ~w~1f: ~w, ~w~n',[N,N1,Mtd,Simil,De1,Zh])
+        )
     ).
 
 manko(Eo,Mrk,No,Ofc,De) :-
@@ -127,7 +151,6 @@ kmp_ngram_(NGrams,Atom,Percentage) :-
     proper_length(NGrams,Len), Len>0,
     ngram_count(NGrams,Atom,0,Count),
     Percentage is Count / Len.   % >= 0.7    
-
 
 ngram_count([],_,C,C).
 ngram_count([NGram|More],Atom,C,Count) :-
