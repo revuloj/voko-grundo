@@ -231,7 +231,7 @@ zh_prononco(Zh, ZhPr) :-
     sub_atom(Zh,0,K1,_,Ant),
     sub_atom(Zh,K2,_,0,Post),
     zh_listo(Ant,Ant1), % forigu duoblajn metu komojn
-    atomic_list_concat([Ant1,' [',PrS,Post],ZhPr).
+    atomic_list_concat([Ant1,' [',PrS,Post],ZhPr),!.
 
 zh_listo(L,L1) :-
     atomic_list_concat(Tj,' ',L),
@@ -240,10 +240,12 @@ zh_listo(L,L1) :-
 
 zh_prononco_s([],[]).
 zh_prononco_s([S1|Rest],[SS1|RestS]) :-
-    atom_codes(S1,SD),
-    append(S,[D],SD), % silabo konsistas el askiaj literoj kaj fina cifero
-    zh_pr_silab(S,D,SS),
-    atom_codes(SS1,SS),
+    atom_chars(S1,SD),
+    append(Silab,[C],SD), % silabo konsistas el askiaj literoj kaj fina cifero
+    zh_pr_vokal(Silab,0,Paroj),
+    atom_number(C,D),
+    zh_pr_silab(Paroj,D,SS),
+    atom_chars(SS1,SS),
     zh_prononco_s(Rest,RestS).
 
 % la silabo finiĝas per cifero, kiu difinas la supersignon de la 
@@ -251,24 +253,48 @@ zh_prononco_s([S1|Rest],[SS1|RestS]) :-
 % KOREKTU: foje ne la unua vokalo ricevas la supersignon,
 % ekz-e  xià jiā, regulo:
 % ĉe pli ol unu vokalo: signo super unua vokalo a,e,o; la dua vokalo alikaze
-zh_pr_silab([],[]).
-zh_pr_silab([V|Rest],D,[VS|Rest]) :-
-    atom_codes(Va,[V]),
-    % unua litero estas vokalo => transformu
-    member(Va,[a,e,i,o,u,ü]),!,
-    number_codes(Da,[D]),
+zh_pr_silab(Paroj,D,SilabS) :-
+    % ni havas nur unu vokalon: ni metos supersignon tie
+    % aŭ ni havas pli ol unu vokalon, sed la unua estas a,e,o
+    (
+        member(2-_,Paroj), member(1-V,Paroj), member(V,[a,e,o])
+        ; \+ member(2-_,Paroj)
+    ),!,
+    select(1-V,Paroj,1-VS,ParojS),
+    zh_pr_vokal_super(V,D,VS),
+    pairs_values(ParojS,SilabS).
+
+zh_pr_silab(Paroj,D,SilabS) :-
+    % ni havas pli ol unu vokalon kaj ĝi devias de a,e,o: ni metos supersignon sur la duan
+    select(2-V,Paroj,2-VS,ParojS),
+    zh_pr_vokal_super(V,D,VS),
+    pairs_values(ParojS,SilabS).
+    
+% metu supersignon super vokalo laŭ la cifero (tono)    
+zh_pr_vokal_super(V,D,VS) :-
     once((        
-        member(Da-Va-VSa,[
+        member(D-V-VS,[
             1-a-'ā', 1-e-'ē', 1-i-'ī', 1-o-'ō', 1-u-'ū',1-u-'ǖ',
             2-a-'á', 2-e-'é', 2-i-'í', 2-o-'ó', 2-u-'ú',2-u-'ǘ',
             3-a-'ǎ', 3-e-'ě', 3-i-'ǐ', 3-o-'ǒ', 3-u-'ǔ',3-ü-'ǚ',
             4-a-'à', 4-e-'è', 4-i-'ì', 4-o-'ò', 4-u-'ù',4,-u-'ǜ'
         ])
         ;
-        Va = VSa
-    )),
-    atom_codes(VSa,[VS]).
+        V = VS % se ne estas vokalo, eble estas eraro, sed ni silente kopias
+    )).
 
-% ne estas vokalo, do konsonanto, daŭrigu...
-zh_pr_silab([K|Rest],D,[K|RestS]) :-
-    zh_pr_silab(Rest,D,RestS).
+
+% ni devas identigi la unuan kaj duan vokalon de silabo
+% por apliki la regulojn, do ni transformas la silabon al paroj
+% 0-x, 1-i, 2-a,... kie 1 kaj 2 montras la unuan kaj duan vokalon
+% kaj 0 konsonantojn kaj pliajn vokalojn
+zh_pr_vokal([],_,[]).
+zh_pr_vokal([Lit|Rest],N,[N1-Lit|Paroj]) :-
+    vokalo(Lit), N<2, !,
+    N1 is N+1,
+    zh_pr_vokal(Rest,N1,Paroj).
+
+zh_pr_vokal([Lit|Rest],N,[0-Lit|Paroj]) :-
+    zh_pr_vokal(Rest,N,Paroj).    
+
+vokalo(Lit) :- member(Lit,[a,e,i,o,u,ü]).
