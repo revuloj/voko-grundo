@@ -228,9 +228,15 @@ zh_prononco(Zh, ZhPr) :-
     % kunigu silabojn
     atomic_list_concat(SilabS,' ',PrS),
     % remetu transformitan prononcon
-    sub_atom(Zh,0,K1_,_,Ant),
+    sub_atom(Zh,0,K1,_,Ant),
     sub_atom(Zh,K2,_,0,Post),
-    atomic_list_concat([Ant,PrS,Post],ZhPr).
+    zh_listo(Ant,Ant1), % forigu duoblajn metu komojn
+    atomic_list_concat([Ant1,' [',PrS,Post],ZhPr).
+
+zh_listo(L,L1) :-
+    atomic_list_concat(Tj,' ',L),
+    setof(T,(member(T,Tj), T\= ''),T1j),
+    atomic_list_concat(T1j,',',L1).
 
 zh_prononco_s([],[]).
 zh_prononco_s([S1|Rest],[SS1|RestS]) :-
@@ -241,19 +247,22 @@ zh_prononco_s([S1|Rest],[SS1|RestS]) :-
     zh_prononco_s(Rest,RestS).
 
 % la silabo finiĝas per cifero, kiu difinas la supersignon de la 
-% unua vokalo
+% unua vokalo, vd. https://de.wikipedia.org/wiki/Pinyin
+% KOREKTU: foje ne la unua vokalo ricevas la supersignon,
+% ekz-e  xià jiā, regulo:
+% ĉe pli ol unu vokalo: signo super unua vokalo a,e,o; la dua vokalo alikaze
 zh_pr_silab([],[]).
 zh_pr_silab([V|Rest],D,[VS|Rest]) :-
     atom_codes(Va,[V]),
     % unua litero estas vokalo => transformu
-    member(Va,[a,e,i,o,u]),!,
+    member(Va,[a,e,i,o,u,ü]),!,
     number_codes(Da,[D]),
     once((        
         member(Da-Va-VSa,[
-            1-a-'ā', 1-e-'ē', 1-i-'ī', 1-o-'ō', 1-u-'ū',
-            2-a-'á', 2-e-'é', 2-i-'í', 2-o-'ó', 2-u-'ú',
-            3-a-'ǎ', 3-e-'ě', 3-i-'ǐ', 3-o-'ǒ', 3-u-'ǔ',
-            4-a-'à', 4-e-'è', 4-i-'ì', 4-o-'ò', 4-u-'ù'
+            1-a-'ā', 1-e-'ē', 1-i-'ī', 1-o-'ō', 1-u-'ū',1-u-'ǖ',
+            2-a-'á', 2-e-'é', 2-i-'í', 2-o-'ó', 2-u-'ú',2-u-'ǘ',
+            3-a-'ǎ', 3-e-'ě', 3-i-'ǐ', 3-o-'ǒ', 3-u-'ǔ',3-ü-'ǚ',
+            4-a-'à', 4-e-'è', 4-i-'ì', 4-o-'ò', 4-u-'ù',4,-u-'ǜ'
         ])
         ;
         Va = VSa
