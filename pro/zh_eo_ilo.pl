@@ -5,6 +5,10 @@
 % komparante ambaŭ listojn. Akceptitaj proponoj iras al cellisto, kiun ni poste povos ŝovi en la 
 % vortaron per merge_trd_xml.pl
 
+% FARENDA:
+% traduko de prononcoj al supersignaj vokaloj
+% adicio de zh-tradukoj, se ili validas por diversaj de-tradukoj de la sama senco
+
 :- use_module(library(csv)).
 :- use_module(library(persistency)).
 :- use_module(library(isub)).
@@ -82,8 +86,47 @@ hande_redukt :-
         assertz(zhde(Zh,D))
     ).
 
+m(Prefix) :- forall(
+    limit(20,(
+        manko(Eo,_,_,_,_),
+        sub_atom(Eo,0,_,_,Prefix),
+        mg(Eo,_))
+    ),
+    true).
+
+% elektu iun vorton, por kiu ankoraŭ mankas traduko ĉina
+% kaj informe skribu sencojn
+m(Eo,Mrk,Ofc) :-
+    manko(Eo,Mrk,_,Ofc,_),
+    \+ celo(Eo,Mrk,_),
+    format('~w;~w;~w~n',[Eo,Mrk,Ofc]).
+
+% simile, sed grupigu ĉiujn germanajn tradukojn de laŭ marko
+mg(Eo,Mrk) :-
+    manko(Eo,Mrk,_,_,_),
+    % germanaj tradukoj - listo por sama mrk
+    group_by(Mrk,De,
+        manko(Eo,Mrk,_,_,De),LDe),
+    atomic_list_concat(LDe,',',SDe),
+    % oficialeecoj - listo por sama mrk
+    group_by(Mrk,Ofc,
+        manko(Eo,Mrk,_,Ofc,_),LOfc),
+    exclude(=('NULL'),LOfc,LO_),
+    atomic_list_concat(LO_,',',SOfc),
+
+    once((
+        celo(Eo,Mrk,_), C = '+' % celtraduko jam registrita
+        ;
+        C = '-' % ankoraŭ mankas traduko zh
+    )),
+    format('~w~w: ~w;~w;~w~n',[C,Eo,Mrk,SOfc,SDe]).
+
 % serĉu po 20 proponojn por la unuopaj germanj tradukoj de esperanta vorto
 p(Eo) :- proponoj_eo(Eo,20).
+% se ni scias, ke por devia germana traduko ni trovos ĉinan tradukon...
+pde(Eo,De) :-
+    retractall(propono(1,_,_,_,_)),
+    proponoj_de(De,220,1,Eo,'').
 
 % memoru proponon <N>.<N1> por posta skribo al csv_celo
 s(N-N1) :- s(N,N1).
@@ -93,8 +136,9 @@ s(N,N1) :-
         celo(Eo,Mrk,Zh),
         format('jam ekzistas: ~w;~w;~w',[Eo,Mrk,Zh])
         ;
-        assert_celo(Eo,Mrk,Zh)
-    )).
+        assert_celo(Eo,Mrk,Zh),
+        format('aldonita: ~w;~w;~w',[Eo,Mrk,Zh])
+    )),!.
 
 proponoj_eo(Eo,Max) :-
     call_nth(manko(Eo,Mrk,No,Ofc,De),N),
@@ -167,3 +211,55 @@ ngram_count([NGram|More],Atom,C,Count) :-
 % Dishakas =Atom= en n-gramojn kun la longo =N=.
 ngrams(Atom,Len,NGrams) :- 
   setof(NGram,A^B^sub_atom(Atom,B,Len,A,NGram),NGrams).    
+
+% traduku prononcon, troviĝantan inter angulaj krampoj 
+% de ciferaj sufiksoj al supersignaj
+zh_prononco(Zh, ZhPr) :-
+    sub_atom(Zh,K1,1,_,'['),
+    sub_atom(Zh,K2,1,_,']'),
+    K2>K1, 
+    K1_ is K1 + 1,
+    KL is K2 - K1 - 1,
+    sub_atom(Zh,K1_,KL,_,Pr),
+    % apartigu silabojn
+    atomic_list_concat(Silab,' ',Pr),
+    % transformu prononcon
+    zh_prononco_s(Silab,SilabS),
+    % kunigu silabojn
+    atomic_list_concat(SilabS,' ',PrS),
+    % remetu transformitan prononcon
+    sub_atom(Zh,0,K1_,_,Ant),
+    sub_atom(Zh,K2,_,0,Post),
+    atomic_list_concat([Ant,PrS,Post],ZhPr).
+
+zh_prononco_s([],[]).
+zh_prononco_s([S1|Rest],[SS1|RestS]) :-
+    atom_codes(S1,SD),
+    append(S,[D],SD), % silabo konsistas el askiaj literoj kaj fina cifero
+    zh_pr_silab(S,D,SS),
+    atom_codes(SS1,SS),
+    zh_prononco_s(Rest,RestS).
+
+% la silabo finiĝas per cifero, kiu difinas la supersignon de la 
+% unua vokalo
+zh_pr_silab([],[]).
+zh_pr_silab([V|Rest],D,[VS|Rest]) :-
+    atom_codes(Va,[V]),
+    % unua litero estas vokalo => transformu
+    member(Va,[a,e,i,o,u]),!,
+    number_codes(Da,[D]),
+    once((        
+        member(Da-Va-VSa,[
+            1-a-'ā', 1-e-'ē', 1-i-'ī', 1-o-'ō', 1-u-'ū',
+            2-a-'á', 2-e-'é', 2-i-'í', 2-o-'ó', 2-u-'ú',
+            3-a-'ǎ', 3-e-'ě', 3-i-'ǐ', 3-o-'ǒ', 3-u-'ǔ',
+            4-a-'à', 4-e-'è', 4-i-'ì', 4-o-'ò', 4-u-'ù'
+        ])
+        ;
+        Va = VSa
+    )),
+    atom_codes(VSa,[VS]).
+
+% ne estas vokalo, do konsonanto, daŭrigu...
+zh_pr_silab([K|Rest],D,[K|RestS]) :-
+    zh_pr_silab(Rest,D,RestS).
