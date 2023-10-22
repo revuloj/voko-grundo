@@ -1,0 +1,17 @@
+created(1697912298.5823543).
+assert(celo(abako,'abak.0o.kalkulilo','算盤 算盘 [suan4 pan2] ')).
+assert(celo(abelujo,'abel.0ujo.HOR','蜂巢 蜂巢 [feng1 chao2] ')).
+assert(celo(abelisto,'abel.0isto.HOR','暗黃色 暗黄色 [an4 huang2 se4] ')).
+assert(celo(abelisto,'','養蜂家 养蜂家 [yang3 feng1 jia1] ')).
+assert(celo(abelisto,'abel.0isto.HOR','種田 种田 [zhong4 tian2] ')).
+assert(celo(abelisto,'','養蜂人 养蜂人 [yang3 feng1 ren2] ')).
+retract(celo(abelisto,'abel.0isto.HOR','暗黃色 暗黄色 [an4 huang2 se4] ')).
+retract(celo(abelisto,'','養蜂家 养蜂家 [yang3 feng1 jia1] ')).
+retractall(celo(abelisto,_,_),2).
+assert(celo(abelisto,'','養蜂家 养蜂家 [yang3 feng1 jia1] ')).
+assert(celo(abelisto,'','養蜂人 养蜂人 [yang3 feng1 ren2] ')).
+assert(celo(aboli,'abol.0i.JUR','殲 歼 [jian1] ')).
+assert(celo(aboli,'abol.0i.JUR','取消 取消 [qu3 xiao1] ')).
+assert(celo(aboli,'abol.0i.JUR','撤銷 撤销 [che4 xiao1] ')).
+assert(celo(ablacio,'ablaci.0o.GEOL','消蝕 消蚀 [xiao1 shi2] ')).
+assert(celo(absinto,'absint.0o.BOT','苦艾酒 苦艾酒 [ku3 ai4 jiu3] ')).
