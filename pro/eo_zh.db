@@ -357,3 +357,267 @@ assert(celo(aidoso,'aidos.0o.malsano','獲得性免疫缺陷綜合症,获得性�
 assert(celo(aidosulo,'aidos.0ulo.malsanulo','艾滋病病毒感染者 [ài zī bìng bìng dú gán rǎn zhě] ')).
 assert(celo(aidosulo,'aidos.0ulo.malsanulo','艾滋病感染者 [ài zī bìng gǎn rǎn zhě] ')).
 assert(celo(aidosulo,'aidos.0ulo.malsanulo','艾滋病病毒携带者,艾滋病病毒攜帶者 [ài zī bìng bìng dú xié dài zhě] ')).
+assert(celo(ajnuo,'ain.0o.ETN','愛努族,爱努族 [ài nǔ zú] ')).
+assert(celo(ajlo,'ajl.0o.bulbo','蒜粒 [suàn lì] ')).
+assert(celo(ajlo,'ajl.0o.specio','蒜 [suàn] ')).
+assert(celo(ajlo,'ajl.0o.specio','大蒜 [dà suàn] ')).
+assert(celo(ajna,'ajn.0a.MAT','一应,一應 [yī yīng] ')).
+assert(celo(ajna,'ajn.0a.MAT','任何一个人,任何一個人 [rèn hé yī gè rén] ')).
+assert(celo(ajna,'ajn.0a.MAT','任何 [rèn hé] ')).
+assert(celo(ajna,'ajn.0a.MAT','各人 [gè rén] ')).
+assert(celo(ajna,'ajn.0a.MAT','各个,各個 [gè gè] ')).
+assert(celo(ajnulo,'ajn.0ulo.FRAZ','世人 [shì rén] ')).
+assert(celo(ajnulo,'ajn.0ulo.FRAZ','大伙 [dà huǒ] ')).
+assert(celo(ajurvedo,'ajurved.0o.MED','阿育吠陀 [ā yù fèi tuó] ')).
+assert(celo('Akado','akad.A0o.HIS','阿卡德王国,阿卡德王國 [ā kǎ dé wáng guó] ')).
+assert(celo('Akado','akad.A0o.HIS','阿卡德 [ā kǎ dé] ')).
+assert(celo('Akada','akad.0a.HIS','阿卡得語,阿卡得语 [ā kǎ dé yǔ]')).
+assert(celo('Akada','akad.0a.HIS','阿卡德王朝 [ā kǎ dé wáng cháo]')).
+assert(celo(akademiano,'akadem.0ano.KOMUNE','学会会员,學會會員 [xué huì huì yuán] ')).
+assert(celo(akademiano,'akadem.0ano.KOMUNE','受过高等教育者,受過高等教育者 [shòu guò gāo děng jiào yù zhě] ')).
+assert(celo(akademiano,'akadem.0ano.KOMUNE','大学学生,大學學生 [dà xué xué sheng] ')).
+assert(celo(akademiano,'akadem.0ano.KOMUNE','大学老师,大學老師 [dà xué lǎo shī] ')).
+assert(celo(akademiano,'akadem.0ano.KOMUNE','学者,學者 [xué zhě] ')).
+assert(celo(akaĵuo,'akajxu.0o.flortigo','腰果 [yāo guǒ] ')).
+assert(celo(akaro,'akar.0o.ZOO','蜱 [pí] ')).
+assert(celo(akcelilo,'akcel.0ilo.AUT','油門,油门 [yóu mén] ')).
+assert(celo(akcelilo,'akcel.0ilo.FIZ','加速器 [jiā sù qì] ')).
+assert(celo(akcelo,'akcel.0o.FIZ','加速度 [jiā sù dù] ')).
+assert(celo(akcenti,'akcent.0i.FON','口音 [kǒu yīn] ')).
+assert(celo(akcenti,'akcent.0i.KOMUNE','最显著部分,最顯著部分 [zuì xiǎn zhù bù fen] ')).
+assert(celo(akcenti,'akcent.0i.KOMUNE','強調,强调 [qiáng diào] ')).
+assert(celo(akcenti,'akcent.0i.KOMUNE','拔高 [bá gāo] ')).
+assert(celo(akcento,'akcent.0o.FON','口音 [kǒu yīn] ')).
+assert(celo(akcento,'akcent.0o.FON','腔調,腔调 [qiāng diào] ')).
+assert(celo(akcento,'akcent.0o.FON','着重 [zhuó zhòng] ')).
+assert(celo(akcento,'akcent.0o.FON','重讀,重读 [zhòng dú] ')).
+assert(celo(akcento,'akcent.0o.FON','重音 [zhòng yīn] ')).
+assert(celo(akcenti,'akcent.0i.FON','操口音 [cāo kǒu yīn] ')).
+assert(celo(senakcenta,'akcent.sen0a.ne_akcentita','不強調,不强调 [bù qiáng diào] ')).
+assert(celo(senakcenta,'akcent.sen0a.ne_akcentita','不着重,不著重 [bù zhuó chóng] ')).
+assert(celo(akceptejo,'akcept.0ejo.TUR','入口大厅,入口大廳 [rù kǒu dà tīng] ')).
+assert(celo(akceptejo,'akcept.0ejo.TUR','休息室 [xiū xí shì] ')).
+assert(celo(akceptejo,'akcept.0ejo.TUR','传达室,傳達室 [chuán dá shì] ')).
+assert(celo(akcepti,'akcept.0i.eniri','受到 [shòu dào] ')).
+assert(celo(akcepti,'akcept.0i.ion','将就,將就 [jiāng jiù] ')).
+assert(celo(akcepti,'akcept.0i.ion','容受 [róng shòu] ')).
+assert(celo(akcepti,'akcept.0i.ion','容忍 [róng rěn] ')).
+assert(celo(akcepti,'akcept.0i.opinion','将就,將就 [jiāng jiù] ')).
+assert(celo(akcepti,'akcept.0i.ricevi','将就,將就 [jiāng jiù] ')).
+assert(celo(akcepti,'akcept.0i.trafite','容受 [róng shòu] ')).
+assert(celo(akceptisto,'akcept.0isto.TUR','接受 [jiē shòu] ')).
+assert(celo(akcepto,'akcept.0o.EKON','期票 [qī piào] ')).
+assert(celo(akcepto,'akcept.0o.ago','招待会,招待會 [zhāo dài huì] ')).
+assert(celo(malakcepti,'akcept.mal0i.KOMUNE','吐弃,吐棄 [tǔ qì] ')).
+assert(celo(malakcepti,'akcept.mal0i.KOMUNE','不受理 [bù shòu lǐ] ')).
+assert(celo(malakcepti,'akcept.mal0i.KOMUNE','一口回絕,一口回绝 [yī kǒu huí jué] ')).
+assert(celo(malakcepti,'akcept.mal0i.KOMUNE','却,卻 [què] ')).
+assert(celo(malakcepti,'akcept.mal0i.KOMUNE','姍,姗 [shān] ')).
+assert(celo(malakcepti,'akcept.mal0i.KOMUNE','嫌 [xián] ')).
+assert(celo(malakcepti,'akcept.mal0i.KOMUNE','嫌弃,嫌棄 [xián qì] ')).
+assert(celo(malakcepti,'akcept.mal0i.KOMUNE','拒 [jù] ')).
+assert(celo(malakcepti,'akcept.mal0i.KOMUNE','拒絕了,拒绝了 [jù jué liǎo] ')).
+assert(celo(malakcepti,'akcept.mal0i.KOMUNE','拚 [pàn] ')).
+assert(celo(malakcepti,'akcept.mal0i.MED','排斥 [pái chì] ')).
+assert(celo(akcidento,'akcide.0o.KOMUNE','三長兩短,三长两短 [sān cháng liǎng duǎn] ')).
+assert(celo(akcidento,'akcide.0o.KOMUNE','不幸运,不幸運 [bù xìng yùn] ')).
+assert(celo(akcidento,'akcide.0o.KOMUNE','不合适宜,不合適宜 [bù hé shì yí] ')).
+assert(celo(akcidento,'akcide.0o.KOMUNE','不幸的巧合 [bú xìng de qiǎo hé] ')).
+assert(celo(akcipitredoj,'akcipi1.0oj.ZOO','銀耳相思鳥,银耳相思鸟 [yín ěr xiāng sī niǎo] ')).
+assert(celo(akcipitredoj,'akcipi1.0oj.ZOO','鷹科,鹰科 [yīng kē] ')).
+assert(celo(akiri,'akir.0i.KOMUNE','來的易去的快,来的易去的快 [lái dì yì qù de kuài] ')).
+assert(celo(akiri,'','獲得,获得 [huò dé] ')).
+assert(celo(akiri,'','沽 [gū] ')).
+assert(celo(ĉasakiri,'akir.cxas0i.CXAS','拘 [jū] ')).
+assert(celo(ĉasakiri,'akir.cxas0i.CXAS','抢来,搶來 [qiǎng lái] ')).
+assert(celo(militakiri,'akir.milit0i.MIL','占 [zhàn] ')).
+assert(celo(militakiri,'akir.milit0i.MIL','收繳,收缴 [shōu jiǎo] ')).
+assert(celo(militakiro,'akir.milit0o.ajxo','战利品,戰利品 [zhàn lì pǐn] ')).
+assert(celo(akmeo,'akme.0o.FIG','高潮 [gāo cháo] ')).
+assert(celo(akno,'akn.0o.MED','痤疮,痤瘡 [cuó chuāng] ')).
+assert(celo(akno,'akn.0o.MED','青春痘 [qīng chūn dòu] ')).
+assert(celo(akno,'akn.0o.MED','青春豆 [qīng chūn dòu] ')).
+assert(celo(akno,'akn.0o.sxvelajxo','痘 [dòu] ')).
+assert(celo(akomodi,'akomod.0i.KOMUNE','入境問俗,入境问俗 [rù jìng wèn sú] ')).
+assert(celo(akomodi,'akomod.0i.KOMUNE','入乡随俗,入鄉隨俗 [rù xiāng suí sú] ')).
+assert(celo(akomodi,'akomod.0i.KOMUNE','因地制宜 [yīn dì zhì yí] ')).
+assert(celo(akomodiĝema,'akomod.0igxema.PSI','圆通,圓通 [yuán tōng] ')).
+assert(celo(akomodiĝema,'akomod.0igxema.PSI','善变,善變 [shàn biàn] ')).
+assert(celo(akomodiĝema,'akomod.0igxema.PSI','容易教 [róng yì jiào] ')).
+assert(celo(akomodiĝema,'akomod.0igxema.PSI','拿得起放得下 [ná de qǐ fàng de xià] ')).
+assert(celo(akomodiĝema,'akomod.0igxema.PSI','可弯曲,可彎曲 [kě wān qǔ] ')).
+assert(celo(akomodiĝema,'akomod.0igxema.PSI','可变,可變 [kě biàn] ')).
+assert(celo(akomodiĝi,'akomod.0igxi.KOMUNE','入境問俗,入境问俗 [rù jìng wèn sú] ')).
+retract(celo(akomodi,'akomod.0i.KOMUNE','入境問俗,入境问俗 [rù jìng wèn sú] ')).
+assert(celo(akompani,'akompa.0i.MUZ','伴奏 [bàn zòu] ')).
+assert(celo(akompani,'akompa.0i.kunesti','伴发,伴發 [bàn fā] ')).
+assert(celo(akompani,'akompa.0i.kunesti','伴随的,伴隨的 [bàn suí dí] ')).
+assert(celo(akordi,'akord.0i.KOMUNE','一貫地,一贯地 [yī guàn de] ')).
+assert(celo(akordi,'akord.0i.KOMUNE','內容完全一致,内容完全一致 [nèi róng wán quán yī zhì] ')).
+assert(celo(akordi,'akord.0i.KOMUNE','合乎 [hé hū] ')).
+assert(celo(akordi,'akord.0i.KOMUNE','合于,合於 [hé yú] ')).
+assert(celo(akordi,'akord.0i.KOMUNE','同度 [tóng dù] ')).
+assert(celo(akordo,'akord.0o.MUZ','和弦 [hé xián] ')).
+assert(celo(akordo,'akord.0o.samopinieco','一致 [yī zhì] ')).
+assert(celo(interakordo,'akord.inter0o.JUR','共識,共识 [gòng shì] ')).
+assert(celo(interakordo,'akord.inter0o.JUR','意見一致,意见一致 [yì jiàn yī zhì] ')).
+assert(celo(interakordo,'akord.inter0o.konveneco','共識,共识 [gòng shì] ')).
+assert(celo(interakordo,'akord.inter0o.konveneco','意見一致,意见一致 [yì jiàn yī zhì] ')).
+assert(celo(interakordo,'akord.inter0o.samopinieco','共識,共识 [gòng shì] ')).
+assert(celo(interakordo,'akord.inter0o.samopinieco','意見一致,意见一致 [yì jiàn yī zhì] ')).
+assert(celo(malakorda,'akord.mal0a.KOMUNE','不相称,不相稱 [bù xiāng chèng] ')).
+assert(celo(malakorda,'akord.mal0a.KOMUNE','不同意 [bù tóng yì] ')).
+assert(celo(malakorda,'akord.mal0a.KOMUNE','不符合 [bù fú hě] ')).
+assert(celo(malakordi,'akord.mal0i.KOMUNE','不同意 [bù tóng yì] ')).
+assert(celo(malakordo,'akord.mal0o.malsamopinieco','不統一,不统一 [bù tǒng yī] ')).
+assert(celo(malakordo,'akord.mal0o.malsamopinieco','不和諧,不和谐 [bù hé xié] ')).
+assert(celo(malakordo,'akord.mal0o.malsamopinieco','互不信任 [hù bù xìn rèn] ')).
+assert(celo(malakordo,'akord.mal0o.malsamopinieco','乖张,乖張 [guāi zhāng] ')).
+assert(celo(misakordo,'akord.mis0o.KOMUNE','不协调,不協調 [bù xié tiáo] ')).
+assert(celo(akra,'akr.0a.penetranta','暍 [hè] ')).
+assert(celo(akraĵo,'akr.0ajxo.akuta','布边,布邊 [bù biān] ')).
+assert(celo(akrigi,'akr.0igi.FIG','使尖銳化,使尖锐化 [shǐ jiān ruì huà] ')).
+assert(celo(akrigi,'akr.0igi.KOMUNE','使敏銳,使敏锐 [shǐ mǐn ruì] ')).
+assert(celo(akrigi,'akr.0igi.KOMUNE','加边框,加邊框 [jiā biān kuàng] ')).
+assert(celo(akrigilo,'akr.0igilo.KOMUNE','厎 [zhǐ] ')).
+assert(celo(akrigilo,'akr.0igilo.KOMUNE','硎 [xíng] ')).
+assert(celo(akrigilo,'akr.0igilo.KOMUNE','碬 [xiá] ')).
+assert(celo(malakra,'akr.mal0a.netrancxa','不利 [bù lì] ')).
+assert(celo(malakra,'akr.mal0a.netrancxa','不尖 [bù jiān] ')).
+assert(celo(malakriĝi,'akr.mal0igxi.KOMUNE','中化 [zhōng huà] ')).
+assert(celo(malakrigi,'akr.mal0igi.KOMUNE','中化 [zhōng huà] ')).
+retract(celo(malakriĝi,'akr.mal0igxi.KOMUNE','中化 [zhōng huà] ')).
+assert(celo(akrobataĵo,'akroba.0ajxo.FIG','武打 [wǔ dǎ] ')).
+assert(celo(akrobataĵo,'akroba.0ajxo.TEA','特技表演 [tè jì biǎo yǎn] ')).
+assert(celo(akrobataĵo,'akroba.0ajxo.TEA','武打 [wǔ dǎ] ')).
+retract(celo(akrobataĵo,'akroba.0ajxo.FIG','武打 [wǔ dǎ] ')).
+assert(celo(akrobato,'akroba.0o.TEA','杂技,雜技 [zá jì] ')).
+assert(celo(akrobato,'akroba.0o.TEA','表演特技者 [biǎo yǎn tè jì zhě] ')).
+assert(celo(akrobato,'akroba.0o.TEA','杂技演员,雜技演員 [zá jì yǎn yuán] ')).
+assert(celo(akrobato,'akroba.0o.TEA','全武行 [quán wǔ háng] ')).
+assert(celo(akropolo,'akropol.0o.ARKI','卫城,衛城 [wèi chéng] ')).
+assert(celo(akropolo,'akropol.0o.ARKI','雅典卫城,雅典衛城 [yǎ diǎn wèi chéng] ')).
+assert(celo(akso,'aks.0o.TEK','枢,樞 [chū] ')).
+assert(celo(akso,'aks.0o.TEK','枢轴,樞軸 [shū zhóu] ')).
+assert(celo(akso,'aks.0o.mezo','中心線,中心线 [zhōng xīn xiàn] ')).
+assert(celo(akso,'aks.0o.gravaorgano','支撐柱,支撑柱 [zhī cheng zhù] ')).
+assert(celo(akselo,'aksel.0o.ANA','夹肢窝,夹肢窩 [gā zhi wō] ')).
+assert(celo(aksiomo,'aksiom.0o.FIL','公理 [gōng lǐ] ')).
+assert(celo(aksiomo,'aksiom.0o.MAT','公理 [gōng lǐ] ')).
+assert(celo(aksiomo,'aksiom.0o.MAT','公理系統,公理系统 [gōng lǐ xì tǒng] ')).
+assert(celo(aksolotlo,'aksolot.0o.ZOO','墨西哥蝾螈,墨西哥蠑螈 [mò xī gē róng yuán] ')).
+assert(celo(aksono,'akson.0o.FIZL','軸突,轴突 [zhóu tú] ')).
+assert(celo(akto,'akt.0o.JUR','公文 [gōng wén] ')).
+assert(celo(aktujo,'akt.0ujo.OFI','文件夹,文件夾 [wén jiàn jiā] ')).
+assert(celo(aktujo,'akt.0ujo.OFI','卷宗 [juàn zōng] ')).
+assert(celo(aktujo,'akt.0ujo.OFI','画夹,畫夾 [huà jiā] ')).
+assert(celo(aktujo,'akt.0ujo.OFI','作品集 [zuò pǐn jí] ')).
+assert(celo(aktujo,'akt.0ujo.OFI','文件袋 [wén jiàn dài] ')).
+assert(celo(aktujo,'akt.0ujo.OFI','文件宗卷,文件宗捲 [wén jiàn zōng juǎn] ')).
+assert(celo(aktinio,'aktini.0o.ZOO','海葵 [hǎi kuí] ')).
+assert(celo(aktinio,'aktini.0o.ZOO','海葵目 [hǎi kuí mù] ')).
+assert(celo(aktiva,'aktiv.0a.agema','大力 [dà lì] ')).
+assert(celo(aktiva,'aktiv.0a.agema','奋发 [fèn fā] ')).
+assert(celo(aktivi,'aktiv.0i.KOMUNE','包干 [bāo gān] ')).
+assert(celo(aktivigi,'aktiv.0igi.KOMUNE','启用,啟用 [qǐ yòng] ')).
+assert(celo(aktivigi,'aktiv.0igi.KOMUNE','促进,促進 [cù jìn] ')).
+assert(celo(aktiveco,'aktiv.0eco.KOMUNE','活度 [huó dù] ')).
+assert(celo(aktivo,'aktiv.0o.EKON','储蓄额,儲蓄額 [chú xù é] ')).
+assert(celo(aktivulo,'aktiv.0ulo.POL','活动人士,活動人士 [huó dòng rén shì] ')).
+assert(celo(aktivulo,'aktiv.0ulo.POL','活跃分子,活躍份子 [huó yuè fèn zǐ] ')).
+assert(celo(aktivulo,'aktiv.0ulo.POL','活跃分子,活躍分子 [huó yuè fēn zǐ] ')).
+assert(celo(malaktivigi,'aktiv.mal0igi.KOMUNE','使无效,使無效 [shǐ wú xiào] ')).
+assert(celo(malaktivigi,'aktiv.mal0igi.KOMUNE','使不活动,使不活動 [shǐ bù huó dòng] ')).
+assert(celo(aktori,'aktor.0i.TEA','唱戏,唱戲 [chàng xì] ')).
+assert(celo(aktorino,'aktor.0ino.TEA','女优,女優 [nǚ yōu] ')).
+assert(celo(aktorino,'aktor.0ino.TEA','女演员,女演員 [nǚ yǎn yuán] ')).
+assert(celo(aktoro,'aktor.0o.TEA','大花面 [dà huā miàn] ')).
+assert(celo(aktoro,'','扮演者 [bàn yǎn zhě] ')).
+assert(celo(aktuala,'aktual.0a.KOMUNE','意义重大,意義重大 [yì yì zhòng dà] ')).
+assert(celo(aktuala,'aktual.0a.KOMUNE','具有高度显示意义的,具有高度顯示意義的 [jù yǒu gāo dù xiǎn shì yì yì de] ')).
+assert(celo(aktuala,'aktual.0a.SCI','切实,切實 [qiè shí] ')).
+assert(celo(aktuala,'aktual.0a.gxisdata','有新意 [yǒu xīn yì] ')).
+assert(celo(aktuala,'aktual.0a.gxisdata','合乎时代,合乎時代 [hé hū shí dài] ')).
+assert(celo(aktuala,'aktual.0a.gxisdata','恰当,恰當 [qià dàng] ')).
+assert(celo(aktuala,'aktual.0a.gxisdata','同时代,同時代 [tóng shí dài] ')).
+assert(celo(aktualigi,'aktual.0igi.gxisdatigi','使最新 [shǐ zuì xīn] ')).
+assert(celo(aktualigi,'aktual.0igi.gxisdatigi','使现代化,使現代化 [shǐ xiàn dài huà] ')).
+assert(celo(akumuli,'akumul.0i.EKON','勤俭节约,勤儉節約 [qín jiǎn jié yuē] ')).
+assert(celo(akumuli,'akumul.0i.EKON','储蓄,儲蓄 [chǔ xù] ')).
+assert(celo(akumuli,'akumul.0i.EKON','存 [cún] ')).
+assert(celo(akumuli,'akumul.0i.EKON','攒,攢 [zǎn] ')).
+assert(celo(akumuli,'akumul.0i.EKON','省 [shěng] ')).
+assert(celo(akumuli,'akumul.0i.KOMUNE','储物,儲物 [chǔ wù] ')).
+assert(celo(akupunkturo,'akupunktur.0o.MED','施以針灸,施以针灸 [shī yǐ zhēn jiǔ] ')).
+assert(celo(akupunkturo,'akupunktur.0o.MED','針刺,针刺 [zhēn cì] ')).
+assert(celo(akupunkturo,'akupunktur.0o.MED','針治,针治 [zhēn zhì] ')).
+assert(celo(akupunkturo,'akupunktur.0o.MED','針刺療法,针刺疗法 [zhēn cì liáo fǎ] ')).
+assert(celo(akurate,'akurat.0e.gxustatempe','守时,守時 [shǒu shí] ')).
+assert(celo(akurate,'akurat.0e.gxustatempe','尖 [jiān] ')).
+assert(celo(akurate,'akurat.0e.gxustatempe','剡 [yǎn] ')).
+assert(celo(akustika,'akusti.0a.MUZ','传音,傳音 [chuán yīn] ')).
+assert(celo(akuŝarto,'akusx.0arto.MED','助产术,助產術 [zhù chǎn shù] ')).
+assert(celo(akuŝi,'akusx.0i.FIZL','使生小牛 [shǐ shēng xiǎo niú] ')).
+assert(celo(akuŝi,'akusx.0i.FIZL','使生小羊 [shǐ shēng xiǎo yáng] ')).
+assert(celo(akuŝi,'akusx.0i.FIG','创新,創新 [chuàng xīn] ')).
+assert(celo(akuŝistino,'akusx.0istino.MED','助产士,助產士 [zhù chǎn shì] ')).
+assert(celo(akuŝistino,'akusx.0istino.MED','接生婆 [jiē shēng pó] ')).
+assert(celo(akuŝistino,'akusx.0istino.MED','产婆,產婆 [chǎn pó] ')).
+assert(celo(akuŝistino,'akusx.0istino.MED','接生员,接生員 [jiē shēng yuán] ')).
+assert(celo(akuta,'akut.0a.angulo','八字形 [bā zì xíng] ')).
+assert(celo(akuta,'akut.0a.malsano','急 [jí] ')).
+assert(celo(malakuta,'akut.mal0a.angulo','不尖 [bù jiān] ')).
+assert(celo(malakuta,'akut.mal0a.angulo','不利 [bù lì] ')).
+assert(celo(akuzi,'akuz.0i.JUR','劾 [hé] ')).
+assert(celo(akuzisto,'akuz.0isto.JUR','公訴人,公诉人 [gōng sù rén] ')).
+assert(celo(akuzisto,'akuz.0isto.JUR','原告 [yuán gào] ')).
+assert(celo(akuzo,'akuz.0o.JUR','公开抨击,公開抨擊 [gōng kāi pēng jī] ')).
+assert(celo(akvumi,'akv.0umi.KOMUNE','噗 [pū] ')).
+assert(celo(akvoscienco,'akv.0oscienco.SCI','水文学,水文學 [shuǐ wén xué] ')).
+assert(celo(akvoscienco,'akv.0oscienco.SCI','水文 [shuǐ wén] ')).
+assert(celo(akvi,'akv.0i.akvumi','噗 [pū] ')).
+assert(celo(akvujo,'akv.0ujo.GEOG','地面水 [dì miàn shuǐ] ')).
+assert(celo(akvujo,'akv.0ujo.GEOG','婴儿围巾,嬰兒圍巾 [yīng ér wéi jīn] ')).
+assert(celo(akvujo,'akv.0ujo.KOMUNE','塘 [táng] ')).
+assert(celo(akvujo,'akv.0ujo.KOMUNE','坦克車,坦克车 [tǎn kè chē] ')).
+assert(celo(akvujo,'akv.0ujo.KOMUNE','储藏器,儲藏器 [chǔ cáng qì] ')).
+assert(celo(akvumilo,'akv.0umilo.HOR','喷壶,噴壺 [pēn hú] ')).
+assert(celo(akvumilo,'akv.0umilo.HOR','喷水壶,噴水壺 [pēn shuǐ hú] ')).
+assert(celo(akvumilo,'akv.0umilo.HOR','洒水壶,灑水壺 [sǎ shuǐ hú] ')).
+assert(celo(akvi,'akv.0i.akvumi','鑄,铸 [zhù] ')).
+assert(celo(akvi,'akv.0i.akvumi','浇,澆 [jiāo] ')).
+assert(celo('Akvisto','akv.A0isto.AST','宝瓶座,寶缾座 [bǎo píng zuò] ')).
+assert(celo(falakvo,'akv.fal0o.GEOG','悬泉,懸泉 [xuán quán] ')).
+assert(celo(grundakvo,'akv.grund0o.GEOL','地下水 [dì xià shuǐ] ')).
+assert(celo(marakvo,'akv.mar0o.KOMUNE','海水 [hǎi shuǐ] ')).
+assert(celo(mineralakvo,'akv.mineral0o.KUI','带汽的矿泉水,帶汽的礦泉水 [dài qì de kuàng quán shuǐ] ')).
+assert(celo(rubakvo,'akv.rub0o.AKV','废水,廢水 [fèi shuǐ] ')).
+assert(celo(rubakvo,'akv.rub0o.AKV','污水 [wū shuǐ] ')).
+assert(celo(subakvigi,'akv.sub0igi.KOMUNE','下潛,下潜 [xià qián] ')).
+assert(celo(subakvigi,'akv.sub0igi.KOMUNE','使充满,使充滿 [shǐ chōng mǎn] ')).
+assert(celo(subakviĝi,'akv.sub0igxi.KOMUNE','创立者,創立者 [chuàng lì zhě] ')).
+assert(celo(subakviĝi,'akv.sub0igxi.KOMUNE','创办人,創辦人 [chuàng bàn rén] ')).
+assert(celo(superakvego,'akv.super0ego.MET','洪災,洪灾 [hóng zāi] ')).
+assert(celo(superakvego,'akv.super0ego.MET','水災,水灾 [shuǐ zāi] ')).
+assert(celo(superakvego,'akv.super0ego.MET','汛 [xùn] ')).
+assert(celo(superakvego,'akv.super0ego.MET','沆 [hàng] ')).
+assert(celo(superakvego,'akv.super0ego.MET','洪水 [hóng shuǐ] ')).
+assert(celo(superakvi,'akv.super0i.KOMUNE','使充满,使充滿 [shǐ chōng mǎn] ')).
+assert(celo(superakvi,'akv.super0i.KOMUNE','沒,没 [mò] ')).
+assert(celo(superakvi,'akv.super0i.KOMUNE','淹 [yān] ')).
+assert(celo(superakvi,'akv.super0i.KOMUNE','淹沒,淹没 [yān mò] ')).
+assert(celo(superakvo,'akv.super0o.MET','大水 [dà shuǐ] ')).
+assert(celo(superakvo,'akv.super0o.MET','水患 [shuǐ huàn] ')).
+assert(celo(superakvo,'akv.super0o.MET','水災,水灾 [shuǐ zāi] ')).
+assert(celo(superakvo,'akv.super0o.MET','沔 [miǎn] ')).
+assert(celo(superakvo,'akv.super0o.MET','洚 [jiàng] ')).
+assert(celo(superakvo,'akv.super0o.MET','津水 [jīn shuǐ] ')).
+assert(celo(superakvo,'akv.super0o.MET','洪涝,洪澇 [hóng lào] ')).
+assert(celo(traakvigi,'akv.tra0igi.AGR','噗 [pū] ')).
+assert(celo(trinkakvo,'akv.trink0o.KOMUNE','水淡 [shuǐ dàn] ')).
+assert(celo(akvamarino,'akvamarin.0o.MIN','綠玉,绿玉 [lü yù] ')).
+assert(celo(akvamarino,'akvamarin.0o.MIN','蓝玉,藍玉 [lán yù] ')).
+assert(celo(akvarelo,'akvare.0o.BELA','水彩画,水彩畫 [shuǐ cǎi huà] ')).
+assert(celo(akvarelo,'akvare.0o.KOL','水彩 [shuǐ cǎi] ')).
+assert(celo(akvarelo,'akvare.0o.KOL','水墨 [shuǐ mò] ')).
+assert(celo(akvarelo,'akvare.0o.KOL','水彩顏料,水彩颜料 [shuǐ cǎi yán liào] ')).

@@ -136,7 +136,7 @@ s(N,N1) :-
         format('aldonita: ~w;~w;~w~n',[Eo,Mrk,ZhPr])
     )),!.
 
-% forigut evtl. antaŭe memoratajn pri tiu senco
+% forigu evtl. antaŭe memoratajn pri tiu senco
 % antaŭ aldoni novan
 sf(N,N1) :-
     propono(N,N1,Eo,Mrk,Zh),
@@ -144,6 +144,19 @@ sf(N,N1) :-
     retractall_celo(Eo,Mrk,_),
     assert_celo(Eo,Mrk,ZhPr),
     format('aldonita: ~w;~w;~w~n',[Eo,Mrk,ZhPr]).
+
+% registru proponon sub certa (alia) esperanto-vorto
+seo(Eo,Mrk,N,N1) :-
+    propono(N,N1,_,_,Zh),
+    zh_prononco(Zh,ZhPr),
+    once((
+        celo(Eo,Mrk,ZhPr),
+        format('jam ekzistas: ~w;~w;~w~n',[Eo,Mrk,ZhPr])
+        ;
+        assert_celo(Eo,Mrk,ZhPr),
+        format('aldonita: ~w;~w;~w~n',[Eo,Mrk,ZhPr])
+    )),!.
+
 
 proponoj_eo(Eo,Max) :-
     call_nth(manko_grup(Eo,Mrk,Tradukita,LOfc,LDe),N),
