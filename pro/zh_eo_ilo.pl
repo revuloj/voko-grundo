@@ -9,6 +9,12 @@
 % traduko de prononcoj al supersignaj vokaloj
 % adicio de zh-tradukoj, se ili validas por diversaj de-tradukoj de la sama senco
 
+% uzo:
+% ricevi tradukproponojn por diversaj sencoj (markoj) de abidiki:
+%   p(abdiki).
+% memori la proponojn 1-1, 1-2 kaj 2-2
+%  s(1-1), s(1-2), s(2-2).
+
 :- use_module(library(csv)).
 :- use_module(library(persistency)).
 :- use_module(library(isub)).
@@ -30,7 +36,7 @@
   ORDER BY r3mrk.mrk LIMIT 200;
 */
 
-csv_mankoj('tmp/eo_zh_mank.csv').
+csv_mankoj('pro/eo_zh_mank.csv').
 
 /* HanDeDict
  vd http://www.handedict.de/chinesisch_deutsch.php?mode=dl
@@ -39,10 +45,10 @@ csv_mankoj('tmp/eo_zh_mank.csv').
  kao3 ya1 ->  kǎo yā
 */
 
-csv_hande('tmp/handedict_nb.u8').
+csv_hande('pro/handedict_nb.u8').
 
 %csv_celo('tmp/eo_zh.csv').
-db_celo('tmp/eo_zh.db').
+db_celo('pro/eo_zh.db').
 
 % expand_query(Q,Q,B,B) :- writeln('query').
 
@@ -103,61 +109,98 @@ m(Eo,Mrk,Ofc) :-
 
 % simile, sed grupigu ĉiujn germanajn tradukojn de laŭ marko
 mg(Eo,Mrk) :-
-    manko(Eo,Mrk,_,_,_),
+    manko_grup(Eo,Mrk,Tradukita,LOfc,LDe),
     % germanaj tradukoj - listo por sama mrk
-    group_by(Mrk,De,
-        manko(Eo,Mrk,_,_,De),LDe),
     atomic_list_concat(LDe,',',SDe),
-    % oficialeecoj - listo por sama mrk
-    group_by(Mrk,Ofc,
-        manko(Eo,Mrk,_,Ofc,_),LOfc),
-    exclude(=('NULL'),LOfc,LO_),
-    atomic_list_concat(LO_,',',SOfc),
-
-    once((
-        celo(Eo,Mrk,_), C = '+' % celtraduko jam registrita
-        ;
-        C = '-' % ankoraŭ mankas traduko zh
-    )),
-    format('~w~w: ~w;~w;~w~n',[C,Eo,Mrk,SOfc,SDe]).
+    atomic_list_concat(LOfc,',',SOfc),
+    trad_stat(Tradukita,TStat),
+    format('~w~w: ~w;~w;~w~n',[TStat,Eo,Mrk,SOfc,SDe]).
 
 % serĉu po 20 proponojn por la unuopaj germanj tradukoj de esperanta vorto
 p(Eo) :- proponoj_eo(Eo,20).
 % se ni scias, ke por devia germana traduko ni trovos ĉinan tradukon...
 pde(Eo,De) :-
     retractall(propono(1,_,_,_,_)),
-    proponoj_de(De,220,1,Eo,'').
+    proponoj_de([De],20,1,Eo,'').
 
 % memoru proponon <N>.<N1> por posta skribo al csv_celo
 s(N-N1) :- s(N,N1).
 s(N,N1) :-
     propono(N,N1,Eo,Mrk,Zh),
+    zh_prononco(Zh,ZhPr),
     once((
-        celo(Eo,Mrk,Zh),
-        format('jam ekzistas: ~w;~w;~w',[Eo,Mrk,Zh])
+        celo(Eo,Mrk,ZhPr),
+        format('jam ekzistas: ~w;~w;~w~n',[Eo,Mrk,ZhPr])
         ;
-        assert_celo(Eo,Mrk,Zh),
-        format('aldonita: ~w;~w;~w',[Eo,Mrk,Zh])
+        assert_celo(Eo,Mrk,ZhPr),
+        format('aldonita: ~w;~w;~w~n',[Eo,Mrk,ZhPr])
     )),!.
 
-proponoj_eo(Eo,Max) :-
-    call_nth(manko(Eo,Mrk,No,Ofc,De),N),
-    retractall(propono(N,_,_,_,_)),
-    format('~d. ~w [~w,~w,~w] ~w~n',[N,Eo,Mrk,No,Ofc,De]),
-    proponoj_de(De,Max,N,Eo,Mrk).
+% forigut evtl. antaŭe memoratajn pri tiu senco
+% antaŭ aldoni novan
+sf(N,N1) :-
+    propono(N,N1,Eo,Mrk,Zh),
+    zh_prononco(Zh,ZhPr),
+    retractall_celo(Eo,Mrk,_),
+    assert_celo(Eo,Mrk,ZhPr),
+    format('aldonita: ~w;~w;~w~n',[Eo,Mrk,ZhPr]).
 
-proponoj_de(De,Max,N,Eo,Mrk) :-
+proponoj_eo(Eo,Max) :-
+    call_nth(manko_grup(Eo,Mrk,Tradukita,LOfc,LDe),N),
+    retractall(propono(N,_,_,_,_)),
+    atomic_list_concat(LDe,',',SDe),
+    atomic_list_concat(LOfc,',',SOfc),    
+    trad_stat(Tradukita,TStat),    
+    format('~d~w ~w [~w] (~w) ~w~n',[N,TStat,Eo,Mrk,SOfc,SDe]),
+    proponoj_de(LDe,Max,N,Eo,Mrk).
+
+proponoj_de(LstDe,Max,N,Eo,Mrk) :-
+    Max2 is Max * 2,
     forall(
         call_nth(
-            order_by([desc(Simil)],
-                limit(Max,
-                    eo_zh(Mtd,De,De1,Zh,Simil))),
-            N1),
+            order_by([desc(Poentoj)], limit(Max,(
+                % serĉu ĉinajn tradukojn por ĉiuj unuopaj germanaj tradukoj
+                % kaj grupigu laŭ la ĉian traduko
+                group_by(Zh,Simil-De1,(
+                    member(De,LstDe),
+                    limit(Max2,de_zh(_,De,De1,Zh,Simil))
+                ), Rezultoj),
+                % ni nun adicias la similecojn al poentoj, se ĉina traduko troviĝas plurfoje
+                foldl(trdkunigo,Rezultoj,0-'',Poentoj-DeTrdj)
+        ))),
+            N1), 
         (
+            % N-N1 servas por poste identigi unuopan traduk-proponon, ni memoras ilin tiucele
             assertz(propono(N,N1,Eo,Mrk,Zh)),
-            format('~d-~d ~w~1f: ~w, ~w~n',[N,N1,Mtd,Simil,De1,Zh])
+            format('~d-~d (~1f): ~w, ~w~n',[N,N1,Poentoj,DeTrdj,Zh])
         )
     ).
+
+trdkunigo(P1-T1,P2-T2,P-T) :- 
+    P is P1+P2, 
+    once((
+        T2 = '', T=T1
+        ;
+        atomic_list_concat([T1,T2],',',T)
+    )). 
+
+manko_grup(Eo,Mrk,Tradukita,OfcLst,DeLst) :-
+    distinct(Mrk,manko(Eo,Mrk,_,_,_)),
+    once((
+        celo(Eo,Mrk,_), Tradukita = true % celtraduko jam registrita
+        ;
+        Tradukita = false % ankoraŭ mankas traduko zh
+    )),    
+    % germanaj tradukoj - listo por sama mrk
+    group_by(Mrk,De,
+        manko(Eo,Mrk,_,_,De),DeLst),
+    % oficialeecoj - listo por sama mrk
+    group_by(Mrk,Ofc,
+        manko(Eo,Mrk,_,Ofc,_),LOfc),
+    exclude(=('NULL'),LOfc,OfcLst).
+
+trad_stat(Tradukita,TStat) :- member(Tradukita-TStat,[true-'+',false-'-']).
+
 
 manko(Eo,Mrk,No,Ofc,De) :-
     manko(Mrk,Eo,No,Ofc,DeI,DeT),
@@ -168,14 +211,14 @@ manko(Eo,Mrk,No,Ofc,De) :-
     )).
 
 % provu trovi parojn eo - zh uzante ambaŭ vortarojn eo-de kaj zh-de
-eo_zh(e,De,De,Zh,1.0) :- 
+de_zh(e,De,De,Zh,1.0) :- 
         zhde(Zh,De).
         
-eo_zh(n,De,D1,Zh,Simil) :- 
+de_zh(n,De,D1,Zh,Simil) :- 
         zhde(Zh,D1), 
         kmp_ngram(De,D1,Simil).
 
-eo_zh(s,De,D1,Zh,Simil) :- 
+de_zh(s,De,D1,Zh,Simil) :- 
         zhde(Zh,D1), 
         kmp_isub(De,D1,Simil).
 
