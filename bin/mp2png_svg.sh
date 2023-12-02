@@ -13,7 +13,7 @@ files=$*
 if [[ -z "$files" ]]; then
     files=(${srcdir}/???.mp ${srcdir}/????.mp ${srcdir}/[ir]_*.mp)
 else
-    echo "Por konverti certajn dosierojn doni ilin kiel absolute kun prefikso, ekz: $(pwd)/i_*.mp"
+    echo "Por konverti certajn dosierojn donu ilin absolute kun prefikso, ekz: $(pwd)/i_*.mp"
 fi
 
 echo "FILES: ${files[@]}"
