@@ -127,8 +127,8 @@ export namespace sercho {
                 "@": "heliko", "+": "plus", "-": "minus", "~": "tildo", "^": "ĉapelo",
                 "°": "grado", "`": "akcento"             
             }
-            if (s.length == 1 && (s.codePointAt(0)||0<128) && ! /[a-zA-Z]/.test(s)) {
-                return s_nomo[s]||"signo";
+            if (s.length == 1) {
+                return s_nomo[s]||s;
             } else {
                 return s;
             }
