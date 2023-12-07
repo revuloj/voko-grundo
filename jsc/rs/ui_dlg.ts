@@ -761,7 +761,7 @@ export function shargo_dlg_serĉo(request: Term, response: Function) {
     
   //    $("body").css("cursor", "progress");
       //$.post(
-        u.HTTPRequest('post',"revo_sercho", 
+      u.HTTPRequest('post',"revo_sercho", 
             { 
                 sercho: sercho,
                 lng: "eo" 
@@ -772,8 +772,9 @@ export function shargo_dlg_serĉo(request: Term, response: Function) {
                     show_xhr_error(this,"Via seanco finiĝis. Bonvolu resaluti!");
                 } else {
                     const json = JSON.parse(data);
-                    json.forEach((d: ArtDetal) => {
+                    json.forEach((d: ArtDetal) => {                       
                        var label = (d.num != "")? d.kap + " " + d.num : d.kap;
+                       label += " [" + d.art + "]";
                        results.push({ 
                            value: label, 
                            art: d.art
@@ -1009,7 +1010,9 @@ function referenco_dlg_serĉo(request: Term, response: Function) {
                     
                    // ĉe pluraj sencoj aldonu numeron kaj lastan parton de mrk por pli bone distingi
                    if (d.num) {                        
-                      label += " " + d.num + " [" + d.mrk.split('.').slice(2) + "]";
+                        label += " " + d.num + " [." + d.mrk.split('.').slice(2) + "]";
+                   } else {
+                        label += " " + " [" + d.art + "]";
                    }
                    results[i] = { 
                        value: label, 

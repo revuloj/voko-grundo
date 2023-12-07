@@ -1,6 +1,8 @@
 /*
   (c) 2019-2023 ĉe Wolfram Diestel
   laŭ GPL 2.0
+
+  Provizas Revo-listojn lingvoj, fakoj, stiloj
 */
 
 import * as u from '../u';

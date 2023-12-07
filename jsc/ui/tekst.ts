@@ -1,6 +1,9 @@
 /**
  * (c) 2023 ĉe Wolfram Diestel
  * laŭ GPL 2.0
+ * 
+ * Provizas ĝeneralajn funkciojn por redaktado de strukturita (plurparta) teksto 
+ * sed sen specifaĵoj de XML/Revo-artikoloj
  */
 
 import { UIElement } from './uielement';

@@ -1,6 +1,9 @@
 /**
  * (c) 2023 ĉe Wolfram Diestel
  * laŭ GPL 2.0
+ * 
+ * Provizas proponlistojn, filtritaj laŭ la donita de uzanto serĉesprimo (vortkomenco)
+ * kaj el kiuj uzanto povas elserĉi unuopan eron.
  */
 
 import { DOM } from './dom';
