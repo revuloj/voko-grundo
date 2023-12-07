@@ -1,7 +1,10 @@
 
 /* 
-(c) 2021-2023 ĉe Wolfram Diestel
-*/
+ * (c) 2021-2023 ĉe Wolfram Diestel
+ *
+ * Provizas metodojn por redakti la XML-dokumenton de Revo-artikolo, inkl. kontrolo,
+ * navigado al eraraj linioj ks
+ */
 
 /// import {str_repeat, type LinePos} from './util';
 /// import {indent,get_indent,get_line_pos} from './tekstiloj';
@@ -406,6 +409,22 @@ export class XmlRedakt extends Tekst {
     }
   };
   */
+
+
+  /**
+   * Iras al pozicio indikita per "<line>:[<lpos>]"
+   * kaj informas la elektilon, ke eble la subteksto ŝanĝiĝis
+   * @param line_pos - linio kaj eventuala pozicio en la linio kiel teksto
+   * @param len - se donita, tiom da signoj ĉe la indikita poizico estos markitaj,
+   *                  se ne donita unu signo estos elektita
+   */
+  iru_al(line_pos: string, len:number = 1) {
+    const akt = this.aktiva.id;
+    super.iru_al(line_pos,len);
+
+    if (akt != this.aktiva.id && this.post_subtekst_elekto)
+      this.post_subtekst_elekto(this.aktiva);
+  }
 
   /**
    * Elektas la parton identigeblan per 'mrk' por redaktado.
