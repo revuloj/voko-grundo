@@ -194,6 +194,8 @@ export class XKlavaro extends UIElement {
         nac: "nacilingva vorto",
         esc: "escepta vorto",
         ind: "indeksero",   
+        pr:  "prononco",   
+        baz: "bazformo",   
         var: "variaĵo de kapvorto",
         frm: "formulo"                    
     };
@@ -271,8 +273,8 @@ export class XKlavaro extends UIElement {
                     default:
                         html += `<div class="klv" data-btn="${klv}" title="${title}">${klv}</div>`;
                 } 
-            // duopa signo -> enkrampiga
-            } else if (klv.length == 2) {
+            // enkrampigaj signoj
+            } else if (XKlavaro.krampoj[klv]) {
                 const title = XKlavaro.krampoj[klv];
                 html += `<div class="klv elm_btn" data-cmd="${klv}" title="${title}">${klv[0]}&hellip;${klv[1]}</div>`;
             // pli longaj estas elemento-butonoj k.s.

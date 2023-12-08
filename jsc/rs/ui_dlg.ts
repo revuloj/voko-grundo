@@ -8,6 +8,7 @@
 
 import * as u from '../u';
 import * as x from '../x';
+import { preferoj } from '../a/preferoj';
 
 /// import { xpress } from '../x';
 import { DOM, Dialog, Menu, type Menuero, Grup, Slipar, Buton, Elektil, List, Propon, type Term, Valid, Eraro } from '../ui';
@@ -625,7 +626,8 @@ export default function() {
     })
     .then((pref_lngoj) => {
         t_dlg.lingvo_menuo("#traduko_menuo", "#traduko_aliaj", 
-            revo_listoj.lingvoj, "traduko_chiuj", pref_lngoj as string[], "traduko_pref");
+            revo_listoj.lingvoj, "traduko_chiuj", preferoj.lingvoj(), //pref_lngoj as string[], 
+            "traduko_pref");
     });    
 
     /*

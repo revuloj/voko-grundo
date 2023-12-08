@@ -26,7 +26,9 @@ type Seanco = {
  */
 export namespace preferoj {  
     
+    // la listo de la preferataj lingvoj
     var _lingvoj: string[] = [];
+    
     export var seanco: Seanco = {};
     var _dato = Date.now();
     
@@ -49,11 +51,13 @@ export namespace preferoj {
             plist.textContent = '';
             alist.textContent = '';
 
+            // ni montras ĉiam nur parton de la lingvolisto
+            // laŭ alfabeto - kiu literintervalo do estas elektita?
             const ichecked = document.getElementById("preferoj")
                 .querySelector('input[name="pref_lingvoj"]:checked') as HTMLInputElement;
             const selection = ichecked.value.split('_');
             
-            // kolekti la lingvojn unue, ni bezonos ordigi ilin...
+            // ni kolektu la lingvojn unue, ĉar ni bezonos ordigi ilin...
             let _lngvj: { [ascii: string]: LngSpec } = {};
             for (let e of Array.from(doc.getElementsByTagName("lingvo"))) {
                 const c: Attr = e.attributes.getNamedItem('kodo'); // jshint ignore:line
@@ -63,20 +67,24 @@ export namespace preferoj {
                 }
             }
 
+            // nun ni trakutras ordigitan lingvoliston
             for (var l of Object.keys(_lngvj).sort()) {    
-                var lc = _lngvj[l].lc;
-                var ln = _lngvj[l].ln;
+                var lc = _lngvj[l].lc; // lingvokodo
+                var ln = _lngvj[l].ln; // lingvonomo
                 var li = document.createElement("LI");
                 li.setAttribute("data-lng",lc);
                 li.setAttribute("data-la",l);
                 li.appendChild(document.createTextNode(ln));
 
+                // preferoj._lingvoj enhavas preferatajn lingvojn,
+                // ĉiujn aliajn ni listigas por povi alelekti ilin
                 if ( _lingvoj.indexOf(lc) < 0 ) {
                     li.setAttribute("title","aldonu");
                     if (ln[0] < selection[0] || ln[0] > selection[1]) 
                         li.classList.add("kasxita");
                     alist.appendChild(li);
                 } else {
+                    // preferatajn lingvojn ni montras aparte
                     li.setAttribute("title","forigu");
                     plist.appendChild(li);
 

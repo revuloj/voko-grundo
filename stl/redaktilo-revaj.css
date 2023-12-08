@@ -1029,6 +1029,7 @@ nav {
     height: 100%
 }
 
+
 #traduko_tabelo {
     display: flex; /*inline-block;*/
     flex-direction: column;
@@ -1077,6 +1078,7 @@ nav {
 
 #traduko_aliaj {
     border: none;
+    border-top: 1px dotted var(--nav-brd-clr) !important;
 }
 
 #traduko_artikolaj {
