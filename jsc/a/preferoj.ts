@@ -21,7 +21,7 @@ type Seanco = {
 
 /**
  * La nomspaco 'preferoj' enhavas funkciojn kaj variablojn por
- * konservi, legi, ŝangi la preferojn de la uzanto.
+ * konservi, legi, ŝanĝi la preferojn de la uzanto.
  * @namespace preferoj
  */
 export namespace preferoj {  
@@ -33,7 +33,7 @@ export namespace preferoj {
     /**
      * Ŝargas la lingvo-liston de la servilo, dividas ilin en 
      * preferataj kaj aliaj kaj preparas la prezenton kiel
-     * listoj en la prefero-adapata dialogo
+     * listojn en la prefero-adapata dialogo
      * @memberof preferoj
      * @inner
      */
@@ -45,6 +45,9 @@ export namespace preferoj {
             const doc = parser.parseFromString(data,"text/xml");
             const plist = document.getElementById("pref_lng");
             const alist = document.getElementById("alia_lng");
+            // malplenigu la listojn antaŭ evtl. replenigo
+            plist.textContent = '';
+            alist.textContent = '';
 
             const ichecked = document.getElementById("preferoj")
                 .querySelector('input[name="pref_lingvoj"]:checked') as HTMLInputElement;
