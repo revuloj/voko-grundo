@@ -117,7 +117,7 @@ export namespace sercho {
             const s_nomo: StrObj = {
                 "%": "procento", "_": "substreko",
                 ".": "punkto", ",": "komo", ";": "punktokomo", ":": "dupunkto",
-                "?": "demando", "!": "ekkrio", '"': "citilo", "'": "apostrofo", "*": "steleto",
+                "?": "demando", "!": "krisigno", '"': "citilo", "'": "apostrofo", "*": "steleto",
                 " ": "spacsigno", "&": "kaj", "|": "aŭ", "/": "oblikvo", "\\": "deklivo",
                 "0": "nul", "1": "unu", "2": "du", "3": "tri", "4": "kvar",
                 "5": "kvin", "6": "ses", "7": "sep", "8": "ok", "9": "naŭ",
@@ -125,7 +125,7 @@ export namespace sercho {
                 "[": "rekta krampo", "]": "rekta krampo", "{": "kuniga krampo",
                 "}": "kuniga krampo", "=": "egalsigno", "<": "malpli", ">": "pli",
                 "@": "heliko", "+": "plus", "-": "minus", "~": "tildo", "^": "ĉapelo",
-                "°": "grado", "`": "akcento"             
+                "°": "grado", "`": "akcento", "q": "kuo", "w": "vuo", "x": "ikso", "y": "ipsilono"
             }
             if (s.length == 1) {
                 return s_nomo[s]||s;
