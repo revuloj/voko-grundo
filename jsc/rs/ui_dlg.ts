@@ -774,7 +774,7 @@ export function shargo_dlg_serĉo(request: Term, response: Function) {
                     const json = JSON.parse(data);
                     json.forEach((d: ArtDetal) => {                       
                        var label = (d.num != "")? d.kap + " " + d.num : d.kap;
-                       label += " [" + d.art + "]";
+                       // label += " [" + d.art + "]";
                        results.push({ 
                            value: label, 
                            art: d.art
@@ -784,6 +784,16 @@ export function shargo_dlg_serĉo(request: Term, response: Function) {
                 // se estas nur unu rezulto ni tuj plenigas la dosiernomon
                 if (results.length == 1) {
                     DOM.al_v("#shargi_dosiero",results[0].art);
+                } else {
+                    // ni grupigas kaj filtras la rezultojn por eventuale trovi homonimojn
+                    const grupe = x.group_by("value",results);
+                    // ĉe pluroblaj ni aldonas la artikolnomon por distingi homnimojn
+                    results.forEach((v,i) => {
+                        const g = grupe[v.value];
+                        if (g && g.length>=2) {
+                            results[i].value += " ["+v.art+"]";
+                        }
+                    })
                 }
                 // redonu la liston por montrado
                 response(results);
@@ -1011,15 +1021,28 @@ function referenco_dlg_serĉo(request: Term, response: Function) {
                    // ĉe pluraj sencoj aldonu numeron kaj lastan parton de mrk por pli bone distingi
                    if (d.num) {                        
                         label += " " + d.num + " [." + d.mrk.split('.').slice(2) + "]";
-                   } else {
-                        label += " " + " [" + d.art + "]";
-                   }
+                   } 
+                   // else {
+                   //      label += " " + " [" + d.art + "]";
+                   // }
                    results[i] = { 
                        value: label, 
                        mrk: d.mrk, 
                        kap: d.kap, 
                        num: d.num };
                 }
+
+                // ni grupigas kaj filtras la rezultojn por eventuale trovi homonimojn
+                const grupe = x.group_by("value",results);
+                // ĉe pluroblaj ni aldonas la artikolnomon por distingi homnimojn
+                results.forEach((v,i) => {
+                    const g = grupe[v.value];
+                    if (g && g.length>=2) {
+                        const art = v.mrk.split('.')[0];
+                        results[i].value += " ["+art+"]";
+                    }
+                })
+
                 response(results);
             },
             () => document.body.style.cursor = 'wait',
