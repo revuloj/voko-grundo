@@ -566,6 +566,30 @@ export default function() {
     const t_dlg = new x.TradukDialog("#traduko_dlg", {
         trd_tabelo: "#traduko_table",
         kampoj: {}, 
+        malfermu: function(this: x.TradukDialog) {
+            DOM.kaŝu("#traduko_error");
+            //$("#traduko_tradukoj").data("trd_shanghoj",{});
+            //traduko_dlg_art_lingvoj();
+            Menu.refreŝigu("#traduko_menuo");
+
+            // difinu tildo-tekston
+            //x.XKlavaro.tildo("#traduko_butonoj", radiko());
+
+            // jam difinita en ui_kreo... var preflng = pref_lngoj? pref_lngoj[0] : 'en'; // globala variablo
+            const preflng = u.agordo.preflng;
+            this.plenigu(preflng,DOM.t("#traduko_pref_"+preflng)||'');
+            // adaptu altecon de la tabelo
+            /*
+            const view_h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+            const dlg = DOM.e("#traduko_dlg")?.parentElement;
+            if (dlg) {
+                const tbar_h = +(dlg.querySelector("h2") as HTMLElement).style.height|| 0;
+                const pane_h = +(dlg.querySelector("form") as HTMLElement).style.height|| 0;
+                const tab_h = (view_h * 0.80) - tbar_h - pane_h;
+                const tab_div = DOM.e(".dlg_tab_div") as HTMLElement;
+                tab_div.style.height = ""+tab_h;            
+            }*/
+        },        
         butonoj: {   
           "Enmeti la tradukojn": function(ev: Event) { 
             try {
@@ -654,6 +678,30 @@ export default function() {
         //DOM.ido_reago("#traduko_tabelo","blur","input",traduko_memoru_fokuson.bind(xklv));
         //DOM.ido_reago("#traduko_butonoj","click","div",traduko_butono_premo.bind(xklv));
     }*/
+
+
+      // ĉu ni jam kreis XKlavaron en la traduko-dialogo?
+      // let xklv = x.XKlavaro.klavaro("#traduko_butonoj");
+      // if (!xklv) {
+        // ne? do kreu nun
+    const xklv = new x.XFormularKlavaro("#traduko_butonoj", "traduko_tabelo", 
+        // reĝimŝanĝo
+        undefined,
+        // postenmeto
+        (event) => {
+            // PLIBOINIGU: evt-e postenmeto povus transdoni
+            // la celon en la dua aŭ tria parametro, sed
+            // momente ni bezonas malpaki la celon nur en kelkaj lokoj...
+            const k = x.XKlavaro.klavaro("#traduko_butonoj");
+            if (k) {
+                t_dlg.trd_input_shanghita(event,k.celo);
+            }
+        });
+
+    // kreu la klavojn
+    xklv.elemento_klavoj();
+    //  }
+    //}    
 
     //>>>>>>>> dialogo: Enmeti per ŝablono
     sxablono_dlg_preparo();
@@ -1340,7 +1388,7 @@ function traduko_dlg_preparo() {
     });    
 }*/
 
-// aldonu la traduk-lingojn de la ŝargita artikolo al la traduko-dialogo (lingvo-elekto)
+// aldonu la traduk-lingvojn de la ŝargita artikolo al la traduko-dialogo (lingvo-elekto)
 function traduko_dlg_art_lingvoj() {
     const trd_art = new List("#traduko_artikolaj");
 

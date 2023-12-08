@@ -1046,6 +1046,12 @@ nav {
     border-bottom: 1px dotted var(--input-brd-clr);
 }
 
+#traduko_tabelo td div {
+    display: flex; /*inline-block;*/
+    flex-direction: column;
+    -webkit-flex-direction: column;
+}
+
 #traduko_tabelo button {
     margin: 0;
     padding: .1em .6em;
