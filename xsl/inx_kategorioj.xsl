@@ -3,7 +3,11 @@
 
 
 <!-- (c) 2006-2023 ĉe Wolfram Diestel
-     licenco GPL 2.0
+    laŭ permesilo GPL 2.0
+
+    Transformreguloj uzataj por kreado de indeksoj. La transformoj aplikiĝas en Formiko laŭ la ordo:
+    inx_eltiro -> inx_kategorioj -> inx_ordigo2 -> inx_html
+
 -->
 
 <xsl:param name="verbose" select="false"/>
@@ -420,6 +424,7 @@ U.V = 2629 U.V radikoj + 141 fundamentaj (60+80+1) = 2770 (<>2768 r. !)    + 303
     <t>
       <xsl:value-of select="normalize-space(.//pr)"/>
     </t>
+    <p/> <!-- marko 'prononco': ni ordigas laŭ <t>, sed ne grupigas -->
     <t1>
       <xsl:apply-templates/>
     </t1>
@@ -429,6 +434,7 @@ U.V = 2629 U.V radikoj + 141 fundamentaj (60+80+1) = 2770 (<>2768 r. !)    + 303
     </k>
   </v>
 </xsl:template>
+
 
 <!-- traduko enhavas elementon 'baz' (bazformo), sub kiu ĝi indeksiĝu -->
 <xsl:template match="trd[.//baz]">

@@ -11,6 +11,10 @@
 
 <!-- (c) 2006-2021 ĉe Wolfram Diestel
      laŭ pemesilo GPL 2.0
+
+    Transformreguloj uzataj por kreado de indeksoj. La transformoj aplikiĝas en Formiko laŭ la ordo:
+    inx_eltiro -> inx_kategorioj -> inx_ordigo2 -> inx_html
+
 -->
 
 <xsl:param name="verbose" select="'false'"/>
