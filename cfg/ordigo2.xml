@@ -2917,14 +2917,41 @@ http://vietunicode.sourceforge.net/charset/v3.htm -->
  <l name="z">&#x007A;&#x005A;</l>
 </lingvo>
 
+
+<!-- ĉina (Pinjino) -->
+
+<!-- mi ne certas ĉu la subordigo de la vokalaj pronocoj kaj orde u...ü estas 
+ĝustaj/konvenaj por la ĉina lingvo !? -->
+<lingvo lng="zh">
+ <l name="a">a,ā,á,ǎ,à,A,Ā,Á,Ǎ,À</l>
+ <l name="b">b,B</l>
+ <l name="c">c,C</l>
+ <l name="d">d,D</l>
+ <l name="e">e,ē,é,ě,è,E,Ē,É,Ě,È</l>
+ <l name="f">f,F</l>
+ <l name="g">g,G</l>
+ <l name="h">h,H</l>
+ <l name="i">i,ī,í,ǐ,ì,I,Ī,Í,Ǐ,Ì</l>
+ <l name="j">j,J</l>
+ <l name="k">k,K</l>
+ <l name="l">l,L</l>
+ <l name="m">m,M</l>
+ <l name="n">n,N</l>
+ <l name="o">o,ō,ó,ǒ,ò,O,Ō,Ó,Ǒ,Ò</l>
+ <l name="p">p,P</l>
+ <l name="q">q,Q</l>
+ <l name="r">r,R</l>
+ <l name="s">s,S,ß</l>
+ <l name="t">t,T</l>
+ <l name="u">u,ū,ú,ǔ,ù,ǖ,ǘ,ǚ,ǜ,U,Ū,Ú,Ǔ,Ù,Ǖ,Ǘ,Ǚ,Ǜ</l>
+ <l name="v">v,V</l>
+ <l name="w">w,W</l>
+ <l name="x">x,X</l>
+ <l name="y">y,Y</l>
+ <l name="z">z,Z</l>
+</lingvo>
+
 <!-- jida -->
 <lingvo lng="yi" kiel="he"/>
 
 </ordigo>
-
-
-
-
-
-
-
