@@ -813,8 +813,8 @@
 
   <xsl:choose>
 
-    <!-- se key('trd-oj') enhavas nur unu tian eron aŭ enhavas prononcelementon, tiam montru kiel "t: k" -->
-    <xsl:when test="count(key('trd-oj',$key))=1 or p">
+    <!-- se key('trd-oj') enhavas nur unu tian eron, tiam montru kiel "t: k" -->
+    <xsl:when test="count(key('trd-oj',$key))=1">
 
       <xsl:choose>
         <xsl:when test="t1">
@@ -846,6 +846,40 @@
 
     </xsl:when>
 
+    <!-- se key('trd-oj') enhavas prononcelementon, tiam montru kiel "t1: k, k..." -->
+    <xsl:when test="p and count(.|key('trd-oj',$key)[1])=1"> <!-- unua traduko sub indekso t -->
+
+      <xsl:for-each-group group-by="t1" select="key('trd-oj',$key)[t1]">
+        <xsl:sort lang="eo" select="k"/> 
+        <span lang="{$lng}"><xsl:apply-templates select="t1"/></span><xsl:text>: </xsl:text>
+
+        <xsl:for-each select="key('trd-oj',$key)[t1 = current()/t1]">
+        
+          <a target="precipa">
+            <xsl:if test="$trd-rtl">
+              <xsl:attribute name="dir">ltr</xsl:attribute>
+            </xsl:if>
+            <xsl:attribute name="href">
+              <xsl:choose>
+                <xsl:when test="contains(@mrk,'.')">
+                  <xsl:value-of select="concat($art_url,
+                    substring-before(@mrk,'.'),'.html#',@mrk)"/> 
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:value-of select="concat($art_url,@mrk,'.html')"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </xsl:attribute>
+            <xsl:apply-templates select="k"/>
+          </a>
+          <xsl:if test="not(position()=last())"><xsl:text>, </xsl:text></xsl:if>
+
+        </xsl:for-each>
+        <br/>
+      </xsl:for-each-group>
+
+    </xsl:when>
+
     <!-- aliokaze montru kiel "t: k, k, ...; t1: k; t1: k; ... " au simile --> 
     <xsl:when test="count(.|key('trd-oj',$key)[1])=1"> <!-- unua traduko sub indekso t -->
 
@@ -853,7 +887,7 @@
      
       <xsl:for-each select="key('trd-oj',$key)[not(t1)]">
         <xsl:sort lang="eo" select="k"/> 
-     
+                   <!-- evitu duoble montri kapvortojn testante la sekvan k,t -->
         <xsl:if test="not(following-sibling::v[k=current()/k and t=current()/t and not(t1)])">
           <a target="precipa">
             <xsl:if test="$trd-rtl">
