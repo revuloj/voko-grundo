@@ -1301,7 +1301,7 @@ http://www.thlib.org/reference/dictionaries/tibetan-dictionary/translate.php
 </lingvo>
 
 <!-- hinda -->
-<lingvo lng="hi" kiel="ne"/>
+<lingvo lng="hi" kiel="sa"/>
 
 
 <!-- hungara -->
@@ -1995,7 +1995,7 @@ http://www.cjvlang.com/Writing/writmongol/tradmononsite.html -->
 <lingvo lng="mn" kiel="ru"/>
 
 <!-- marata -->
-<lingvo lng="mr" kiel="ne">
+<lingvo lng="mr" kiel="sa">
 <!-- अ आ इ ई उ ऊ ऋ ऌ ऍ ए ऐ ऑ ओ औ क ख ग घ ङ च छ ज झ ञ ट ठ ड ढ ण त थ द ध न प फ ब भ म य र ऱ ल व श ष स ह ळ ऴ क्ष ज्ञ -->
 </lingvo>
 
@@ -2040,58 +2040,7 @@ https://download.mimer.com/pub/developer/charts/MyanmarCollation.pdf -->
 
 <!-- nepala -->
 <!-- vd. https://de.wikipedia.org/wiki/Sanskrit -->
-<lingvo lng="ne">
- <l name="om">ॐ</l>
- <l name="a">अ,a,A</l> 
- <l name="aa">आ,ā,Ā</l> 
- <l name="i">इ,i,I</l> 
- <l name="ii">ई,ī,Ī</l> 
- <l name="u">उ,u,U</l> 
- <l name="uu">ऊ,ū,Ū</l> 
- <l name="ri">ऋ,ṛ,Ṛ</l> 
- <l name="li">ऌ,ḷ,Ḷ</l> 
- <l name="ex">ऍ</l> 
- <l name="e">ए,e,ē,E,Ē</l> 
- <l name="ai">ऐ</l>  <!-- lat: ai -->
- <l name="ox">ऑ</l> 
- <l name="o">ओ,ō,O</l> 
- <l name="au">औ</l> <!-- lat: au -->
- <l name="k">क,k,K</l> 
- <l name="kh">ख</l> <!-- lat: kh -->
- <l name="g">ग,g,G</l> 
- <l name="gh">घ</l> <!-- lat: gh -->
- <l name="nn">ङ,ṅ,Ṅ</l> 
- <l name="c">च,c,C</l> 
- <l name="ch">छ</l> <!-- lat: ch -->
- <l name="j">ज,j,J</l> 
- <l name="jh">झ</l> <!-- lat: jh -->
- <l name="ng">ञ,ñ,Ñ</l> 
- <l name="T">ट,ṭ,Ṭ</l> 
- <l name="Th">ठ</l> <!-- lat: ṭh -->
- <l name="D">ड,ḍ,Ḍ</l> 
- <l name="Dh">ढ</l> <!-- lat: ḍh -->
- <l name="N">ण,ṇ,Ṇ</l> 
- <l name="t">त,t,T</l> 
- <l name="th">थ</l> <!-- lat: th -->
- <l name="d">द,d,D</l> 
- <l name="dh">ध</l> <!-- lat: dh -->
- <l name="n">न,n,N</l> 
- <l name="p">प,p,P</l> 
- <l name="ph">फ</l> <!-- lat: ph -->
- <l name="b">ब,b,B</l> 
- <l name="bh">भ</l> <!-- lat: bh -->
- <l name="m">म,m,M</l> 
- <l name="y">य,y,Y</l> 
- <l name="r">र,r,R</l> 
- <l name="l">ल,l,L</l> 
- <l name="L">ळ</l> <!-- lat: ?? -->
- <l name="v">व,v,V</l> 
- <l name="ss">श,ś,Ś</l> 
- <l name="S">ष,ṣ,Ṣ</l> 
- <l name="s">स,s,S</l>
- <l name="h">ह,h,H</l> 
- <l name="x">ऽ</l> <!-- lat: ḥ? -->
-</lingvo>
+<lingvo lng="ne" kiel="sa"/>
 
 <!-- norvega -->
 <lingvo lng="no">
@@ -2415,6 +2364,73 @@ https://de.wikipedia.org/wiki/Paschtunische_Schrift
  <l name="ja">&#x044f;&#x042f;</l>
 </lingvo>
 
+<!-- sanskrita / Devanagaro -->
+<!-- vd. 
+  https://de.wikipedia.org/wiki/Sanskrit 
+  https://de.wikipedia.org/wiki/Devanagari
+
+Problemo estas, ke ni ne povas ordigi varilongajn litergrupojn sub literĉapitro,
+sed la latinliteraj transskriboj havas duliteraĵojn: ai, ch k.a.
+Momente ni ĉirkaŭlaboras tion aldonante substrekon, sed tiel por ĉiu 
+tia vorto ni devas postuli prononcon, aliokaze ĝi enordiĝas sub "?" en la indekso.
+
+Kroma problemo estas ke ni ne povas havi plurajn minus-atributojn.
+Ni bezonos tion por "a" -> "ai", "au" - necesas respekti tian eblecon en XSL
+
+(Alternative ni povus ordigi "silabe" kiel en la tibeta.)
+-->
+<lingvo lng="sa">
+ <l name="om" n="2">_ॐomOm</l>
+ <l name="a" minus="ai">अaA</l>  <!-- aldonenda: minus="au" -->
+ <l name="aa">आāĀ</l> 
+ <l name="i">इiI</l> 
+ <l name="ii">ईīĪ</l> 
+ <l name="u">उuU</l> 
+ <l name="uu">ऊūŪ</l> 
+ <l name="ri">ऋṛṚ</l> 
+ <l name="li">ऌḷḶ</l> 
+ <l name="ex">ऍêÊ</l> 
+ <l name="e">एeēEĒ</l> 
+ <l name="ai" n="2">_ऐaiAi</l>  <!-- lat: ai -->
+ <l name="ox">ऑôÔ</l> 
+ <l name="o" minus="om">ओōO</l> 
+ <l name="au">औ</l> <!-- lat: au (problemo vd. supre) -->
+ <l name="k" minus="kh">कkK</l> 
+ <l name="kh" n="2">_खkhKh</l> <!-- lat: kh -->
+ <l name="g" minus="gh">गgG</l> 
+ <l name="gh" n="2">_घghGh</l> <!-- lat: gh -->
+ <l name="nn">ङ,ṅ,Ṅ</l> 
+ <l name="c" minus="ch">चcC</l> 
+ <l name="ch" n="2">_छchCh</l> <!-- lat: ch -->
+ <l name="j" minus="jh">जjJ</l> 
+ <l name="jh" n="2">_झjhJh</l> <!-- lat: jh -->
+ <l name="ng">ञñÑ</l> 
+ <l name="T" minus="Th">टṭṬ</l> 
+ <l name="Th" n="2">_ठṭhṬh</l> <!-- lat: ṭh -->
+ <l name="D" minus="Dh">डḍḌ</l> 
+ <l name="Dh" n="2">_ढḍhḌh</l> <!-- lat: ḍh -->
+ <l name="N">णṇṆ</l> 
+ <l name="t" minus="th">तtT</l> 
+ <l name="th" n="2">_थthTh</l> <!-- lat: th -->
+ <l name="d" minus="dh">दdD</l> 
+ <l name="dh" n="2">_धdhDh</l> <!-- lat: dh -->
+ <l name="n">नnN</l> 
+ <l name="p" minus="ph">पpP</l> 
+ <l name="ph" n="2">_फphPh</l> <!-- lat: ph -->
+ <l name="b" minus="bh">बbB</l> 
+ <l name="bh" n="2">_भbhBh</l> <!-- lat: bh -->
+ <l name="m">मmM</l> 
+ <l name="y">यyY</l> 
+ <l name="r">रrR</l> 
+ <l name="l" minus="L">लlL</l> 
+ <l name="L" n="2">_ळllLl</l> <!-- lat: ll? -->
+ <l name="v">वvV</l> 
+ <l name="ss">शśŚ</l> 
+ <l name="S">षṣṢ</l> 
+ <l name="s">सsS</l>
+ <l name="h">हhH</l> 
+ <l name="x">ऽḥ</l> <!-- lat: ḥ? -->
+</lingvo>
 
 <!-- sinda
 ...havas plurajn skribsistemojn, sed la plej uzata estas perso-araba (farsa)
