@@ -59,28 +59,76 @@ sub process_art {
 #    $chg += ($xml =~ s|https?://(?:www\.)?uea\.org/|&UEA;|g);
 #    $chg += ($xml =~ s|https?://(?:www\.)?tekstaro\.com/t|&Tekstaro;|g);
 
-# alinomo 9OA al OA9
-#    $chg += ($xml =~ s|>9OA<|>OA9<|g);
+# korektu malĝustajn literojn en ĉina, hinda transskribo kaj latvaj tradukoj
+    $chg += ($xml =~ s,<pr>(.*?)(?:&#x15FB;|&#5627;)(.*?)</pr>,<pr>$1ī$2</pr>,g); # ᗻ
+    $chg += ($xml =~ s|<pr>(.*?)(?:&#x15E3;)(.*?)</pr>|<pr>$1ē$2</pr>|g); # ᗣ
+    $chg += ($xml =~ s|<pr>(.*?)(?:&#x15D1;)(.*?)</pr>|<pr>$1ā$2</pr>|g); # ᗑ
+    $chg += ($xml =~ s|<pr>(.*?)(?:&#x163B;)(.*?)</pr>|<pr>$1ū$2</pr>|g); # ᘻ
+    $chg += ($xml =~ s|<pr>(.*?)(?:&#x161D;)(.*?)</pr>|<pr>$1ō$2</pr>|g); # ᘝ
 
+# "amacron":"ā",
+# "emacron":"ē",
+# "gcommaaccent":"ģ",
+# "imacron":"ī",
+# "kcommaaccent":"ķ",
+# "lcommaaccent":"ļ",
+# "ncommaaccent":"ņ",
+# "omacron":"ō",
+# "rcommaaccent":"ŗ",
+# "umacron":"ū",
+# "Amacron":"Ā",
+# "Emacron":"Ē",
+# "Gcommaaccent":"Ģ",
+# "Imacron":"Ī",
+# "Kcommaaccent":"Ķ",
+# "Lcommaaccent":"Ļ",
+# "Ncommaaccent":"Ņ",
+# "Omacron":"Ō",
+# "Rcommaaccent":"Ŗ",
+# "Umacron":"Ū",
 
-    # korektu malĝustajn literojn en ĉina/hinda transskribo pinjina
-##    $chg += ($xml =~ s,<ind>(.*?)(?:&#x15FB;|&#5627;)(.*?)</ind>,<ind>$1ī$2</ind>,g); # ᗻ
-##    $chg += ($xml =~ s|<ind>(.*?)(?:&#x15E3;)(.*?)</ind>|<ind>$1ē$2</ind>|g); # ᗣ
-##    $chg += ($xml =~ s,<ind>(.*?)(?:&#x15D1;|&#5585;)(.*?)</ind>,<ind>$1ā$2</ind>,g); # ᗑ
-##    $chg += ($xml =~ s|<ind>(.*?)(?:&#x163B;)(.*?)</ind>|<ind>$1ū$2</ind>|g); # ᘻ
-##    $chg += ($xml =~ s|<ind>(.*?)(?:&#x161D;)(.*?)</ind>|<ind>$1ō$2</ind>|g); # ᘝ
-##
+# "amacron":"ᗑ",
+# "emacron":"ᗣ",
+# "gcommaaccent":"ᗳ",
+# "imacron":"ᗻ",
+# "kcommaaccent":"ᘇ",
+# "lcommaaccent":"ᘌ",
+# "ncommaaccent":"ᘖ",
+# "omacron":"ᘝ",
+# "rcommaaccent":"ᘧ",
+# "umacron":"ᘻ",
+# "Amacron":"ᗐ",
+# "Emacron":"ᗢ",
+# "Gcommaaccent":"ᗲ",
+# "Imacron":"ᗺ",
+# "Kcommaaccent":"ᘆ",
+# "Lcommaaccent":"ᘋ",
+# "Ncommaaccent":"ᘕ",
+# "Omacron":"ᘜ",
+# "Rcommaaccent":"ᘦ",
+# "Umacron":"ᘺ",
+# 
+# 13c1,5057,257
+# 13d3,5075,275
+# 13e3,5091,291
+# 13eb,5099,299
+# 13f7,5111,311
+# 13fc,5116,316
+# 1406,5126,326
+# 140d,5133,333
+# 1417,5143,343
+# 142b,5163,363
+# 13c0,5056,256
+# 13d2,5074,274
+# 13e2,5090,290
+# 13ea,5098,298
+# 13f6,5110,310
+# 13fb,5115,315
+# 1405,5125,325
+# 140c,5132,332
+# 1416,5142,342
+# 142a,5162,362
 
-    # ŝanĝu transskribojn de aziaj lingvoj al nova elemento <pr>
-    $chg += ($xml =~ s;(<trd\s+lng="(?:ja|zh)">.*?)\[<ind>([^<]+)</ind>\]</trd>;$1<pr>$2</pr></trd>;sg);
-
-    # tildon ni ne inkluzivas en prononco
-    $chg += ($xml =~ s,(<trd(?:\s+lng="ja")?>)(&#xFF5E\;|～)([^<]+)(\s*)\[(?:&#xFF5E\;|～)<ind>([^<]+)</ind>\]</trd>,$1$2<ind>$3</ind>$4<pr>$5</pr></trd>,sg); 
-
-    # same por trdgrp
-    while (my $m = ($xml =~ s;(<trdgrp\s+lng="(?:ja|zh)">.*?)\[<ind>([^<]+)</ind>\]</trd>;$1<pr>$2</pr></trd>;scg)) {
-        $chg += $m;
-    };
 
     if ($chg) {
         process::write_file(">",$art,$xml);
