@@ -20,7 +20,7 @@ $debug = 0;
 $verbose=1;
 @artikoloj = @ARGV;
 
-my $shanghoj = "revo: transskribo per <pr>";
+my $shanghoj = "revo: kor. lat. transskribo/latvaj literoj";
 
 for $art (@artikoloj) {
     process_art($art);
@@ -60,12 +60,55 @@ sub process_art {
 #    $chg += ($xml =~ s|https?://(?:www\.)?tekstaro\.com/t|&Tekstaro;|g);
 
 # korektu malĝustajn literojn en ĉina, hinda transskribo kaj latvaj tradukoj
-    $chg += ($xml =~ s,<pr>(.*?)(?:&#x15FB;|&#5627;)(.*?)</pr>,<pr>$1ī$2</pr>,g); # ᗻ
-    $chg += ($xml =~ s|<pr>(.*?)(?:&#x15E3;)(.*?)</pr>|<pr>$1ē$2</pr>|g); # ᗣ
-    $chg += ($xml =~ s|<pr>(.*?)(?:&#x15D1;)(.*?)</pr>|<pr>$1ā$2</pr>|g); # ᗑ
-    $chg += ($xml =~ s|<pr>(.*?)(?:&#x163B;)(.*?)</pr>|<pr>$1ū$2</pr>|g); # ᘻ
-    $chg += ($xml =~ s|<pr>(.*?)(?:&#x161D;)(.*?)</pr>|<pr>$1ō$2</pr>|g); # ᘝ
+#    $chg += ($xml =~ s,<pr>(.*?)(?:&#x15FB;|&#5627;)(.*?)</pr>,<pr>$1ī$2</pr>,g); # ᗻ
+#    $chg += ($xml =~ s|<pr>(.*?)(?:&#x15E3;)(.*?)</pr>|<pr>$1ē$2</pr>|g); # ᗣ
+#    $chg += ($xml =~ s|<pr>(.*?)(?:&#x15D1;)(.*?)</pr>|<pr>$1ā$2</pr>|g); # ᗑ
+#    $chg += ($xml =~ s|<pr>(.*?)(?:&#x163B;)(.*?)</pr>|<pr>$1ū$2</pr>|g); # ᘻ
+#    $chg += ($xml =~ s|<pr>(.*?)(?:&#x161D;)(.*?)</pr>|<pr>$1ō$2</pr>|g); # ᘝ
 
+    $chg += ($xml =~ s,<pr>(.*?)(?:&#x15D1;|&#5585;)(.*?)</pr>,<pr>$1&#257;$2</pr>,g);
+    $chg += ($xml =~ s,<pr>(.*?)(?:&#x15E3;|&#5603;)(.*?)</pr>,<pr>$1&#275;$2</pr>,g);
+    $chg += ($xml =~ s,<pr>(.*?)(?:&#x15F3;|&#5619;)(.*?)</pr>,<pr>$1&#291;$2</pr>,g);
+    $chg += ($xml =~ s,<pr>(.*?)(?:&#x15FB;|&#5627;)(.*?)</pr>,<pr>$1&#299;$2</pr>,g);
+    $chg += ($xml =~ s,<pr>(.*?)(?:&#x1607;|&#5639;)(.*?)</pr>,<pr>$1&#311;$2</pr>,g);
+    $chg += ($xml =~ s,<pr>(.*?)(?:&#x160C;|&#5644;)(.*?)</pr>,<pr>$1&#316;$2</pr>,g);
+    $chg += ($xml =~ s,<pr>(.*?)(?:&#x1616;|&#5654;)(.*?)</pr>,<pr>$1&#326;$2</pr>,g);
+    $chg += ($xml =~ s,<pr>(.*?)(?:&#x161D;|&#5661;)(.*?)</pr>,<pr>$1&#333;$2</pr>,g);
+    $chg += ($xml =~ s,<pr>(.*?)(?:&#x1627;|&#5671;)(.*?)</pr>,<pr>$1&#343;$2</pr>,g);
+    $chg += ($xml =~ s,<pr>(.*?)(?:&#x163B;|&#5691;)(.*?)</pr>,<pr>$1&#363;$2</pr>,g);
+    $chg += ($xml =~ s,<pr>(.*?)(?:&#x15D0;|&#5584;)(.*?)</pr>,<pr>$1&#256;$2</pr>,g);
+    $chg += ($xml =~ s,<pr>(.*?)(?:&#x15E2;|&#5602;)(.*?)</pr>,<pr>$1&#274;$2</pr>,g);
+    $chg += ($xml =~ s,<pr>(.*?)(?:&#x15F2;|&#5618;)(.*?)</pr>,<pr>$1&#290;$2</pr>,g);
+    $chg += ($xml =~ s,<pr>(.*?)(?:&#x15FA;|&#5626;)(.*?)</pr>,<pr>$1&#298;$2</pr>,g);
+    $chg += ($xml =~ s,<pr>(.*?)(?:&#x1606;|&#5638;)(.*?)</pr>,<pr>$1&#310;$2</pr>,g);
+    $chg += ($xml =~ s,<pr>(.*?)(?:&#x160B;|&#5643;)(.*?)</pr>,<pr>$1&#315;$2</pr>,g);
+    $chg += ($xml =~ s,<pr>(.*?)(?:&#x1615;|&#5653;)(.*?)</pr>,<pr>$1&#325;$2</pr>,g);
+    $chg += ($xml =~ s,<pr>(.*?)(?:&#x161C;|&#5660;)(.*?)</pr>,<pr>$1&#332;$2</pr>,g);
+    $chg += ($xml =~ s,<pr>(.*?)(?:&#x1626;|&#5670;)(.*?)</pr>,<pr>$1&#342;$2</pr>,g);
+    $chg += ($xml =~ s,<pr>(.*?)(?:&#x163A;|&#5690;)(.*?)</pr>,<pr>$1&#362;$2</pr>,g);
+
+    $chg += ($xml =~ s,<trd lng="lv">(.*?)(?:&#x15D1;|&#5585;)(.*?)</trd>,<trd lng="lv">$1&#257;$2</trd>,g);
+    $chg += ($xml =~ s,<trd lng="lv">(.*?)(?:&#x15E3;|&#5603;)(.*?)</trd>,<trd lng="lv">$1&#275;$2</trd>,g);
+    $chg += ($xml =~ s,<trd lng="lv">(.*?)(?:&#x15F3;|&#5619;)(.*?)</trd>,<trd lng="lv">$1&#291;$2</trd>,g);
+    $chg += ($xml =~ s,<trd lng="lv">(.*?)(?:&#x15FB;|&#5627;)(.*?)</trd>,<trd lng="lv">$1&#299;$2</trd>,g);
+    $chg += ($xml =~ s,<trd lng="lv">(.*?)(?:&#x1607;|&#5639;)(.*?)</trd>,<trd lng="lv">$1&#311;$2</trd>,g);
+    $chg += ($xml =~ s,<trd lng="lv">(.*?)(?:&#x160C;|&#5644;)(.*?)</trd>,<trd lng="lv">$1&#316;$2</trd>,g);
+    $chg += ($xml =~ s,<trd lng="lv">(.*?)(?:&#x1616;|&#5654;)(.*?)</trd>,<trd lng="lv">$1&#326;$2</trd>,g);
+    $chg += ($xml =~ s,<trd lng="lv">(.*?)(?:&#x161D;|&#5661;)(.*?)</trd>,<trd lng="lv">$1&#333;$2</trd>,g);
+    $chg += ($xml =~ s,<trd lng="lv">(.*?)(?:&#x1627;|&#5671;)(.*?)</trd>,<trd lng="lv">$1&#343;$2</trd>,g);
+    $chg += ($xml =~ s,<trd lng="lv">(.*?)(?:&#x163B;|&#5691;)(.*?)</trd>,<trd lng="lv">$1&#363;$2</trd>,g);
+    $chg += ($xml =~ s,<trd lng="lv">(.*?)(?:&#x15D0;|&#5584;)(.*?)</trd>,<trd lng="lv">$1&#256;$2</trd>,g);
+    $chg += ($xml =~ s,<trd lng="lv">(.*?)(?:&#x15E2;|&#5602;)(.*?)</trd>,<trd lng="lv">$1&#274;$2</trd>,g);
+    $chg += ($xml =~ s,<trd lng="lv">(.*?)(?:&#x15F2;|&#5618;)(.*?)</trd>,<trd lng="lv">$1&#290;$2</trd>,g);
+    $chg += ($xml =~ s,<trd lng="lv">(.*?)(?:&#x15FA;|&#5626;)(.*?)</trd>,<trd lng="lv">$1&#298;$2</trd>,g);
+    $chg += ($xml =~ s,<trd lng="lv">(.*?)(?:&#x1606;|&#5638;)(.*?)</trd>,<trd lng="lv">$1&#310;$2</trd>,g);
+    $chg += ($xml =~ s,<trd lng="lv">(.*?)(?:&#x160B;|&#5643;)(.*?)</trd>,<trd lng="lv">$1&#315;$2</trd>,g);
+    $chg += ($xml =~ s,<trd lng="lv">(.*?)(?:&#x1615;|&#5653;)(.*?)</trd>,<trd lng="lv">$1&#325;$2</trd>,g);
+    $chg += ($xml =~ s,<trd lng="lv">(.*?)(?:&#x161C;|&#5660;)(.*?)</trd>,<trd lng="lv">$1&#332;$2</trd>,g);
+    $chg += ($xml =~ s,<trd lng="lv">(.*?)(?:&#x1626;|&#5670;)(.*?)</trd>,<trd lng="lv">$1&#342;$2</trd>,g);
+    $chg += ($xml =~ s,<trd lng="lv">(.*?)(?:&#x163A;|&#5690;)(.*?)</trd>,<trd lng="lv">$1&#362;$2</trd>,g);
+
+# ĝustaj
 # "amacron":"ā",
 # "emacron":"ē",
 # "gcommaaccent":"ģ",
@@ -87,6 +130,7 @@ sub process_art {
 # "Rcommaaccent":"Ŗ",
 # "Umacron":"Ū",
 
+# malĝustaj
 # "amacron":"ᗑ",
 # "emacron":"ᗣ",
 # "gcommaaccent":"ᗳ",
@@ -108,26 +152,7 @@ sub process_art {
 # "Rcommaaccent":"ᘦ",
 # "Umacron":"ᘺ",
 # 
-# 13c1,5057,257
-# 13d3,5075,275
-# 13e3,5091,291
-# 13eb,5099,299
-# 13f7,5111,311
-# 13fc,5116,316
-# 1406,5126,326
-# 140d,5133,333
-# 1417,5143,343
-# 142b,5163,363
-# 13c0,5056,256
-# 13d2,5074,274
-# 13e2,5090,290
-# 13ea,5098,298
-# 13f6,5110,310
-# 13fb,5115,315
-# 1405,5125,325
-# 140c,5132,332
-# 1416,5142,342
-# 142a,5162,362
+
 
 
     if ($chg) {
