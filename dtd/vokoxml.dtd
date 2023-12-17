@@ -231,7 +231,7 @@ subsencon. Ĝi povas esti ankaŭ en alia(j) lingvo(j) ol la vorto
 mem. La lingvon indikas la atributo <dfn>lng</dfn>.
 -->
 
-<!ELEMENT dif (#PCDATA|trd|trdgrp|ref|refgrp|ekz|snc|%tekst-stiloj;)*>
+<!ELEMENT dif (#PCDATA|trd|trdgrp|ref|refgrp|ke|ekz|snc|%tekst-stiloj;)*>
 <!ATTLIST dif
 	lng CDATA #IMPLIED
 >
@@ -248,7 +248,7 @@ klarigoj kaj fonto.
 <!-- [rim] Rimarko povas enhavi iujn indikojn pri la vorto aŭ
 senco, krome referencojn, ekzemplojn, emfazitajn partojn.
 -->
-<!ELEMENT rim (#PCDATA|ref|refgrp|ekz|aut|fnt|%tekst-stiloj;)*>
+<!ELEMENT rim (#PCDATA|ref|refgrp|ke|ekz|aut|fnt|%tekst-stiloj;)*>
 <!ATTLIST rim
         num CDATA #IMPLIED
 	mrk ID #IMPLIED
@@ -260,7 +260,7 @@ Tiukaze ne uzu la atributon <dfn>tip</dfn> en la subelementoj
 <dfn>ref</dfn>!
 -->
 
-<!ELEMENT refgrp (#PCDATA|ref)*>
+<!ELEMENT refgrp (#PCDATA|ke|ref)*>
 <!ATTLIST refgrp
 	tip (vid|hom|dif|sin|ant|super|sub|prt|malprt|lst|ekz) "vid"
 >
@@ -353,6 +353,14 @@ silabaj lingvoj. Ankaŭ ni ebligas serĉadon laŭ transskribo aldone al la ideog
 <!ATTLIST mll
         tip (kom|mez|fin) #IMPLIED
 >
+
+<!-- [ke] Komunlingva esprimo, per kiu oni povas anstataŭigi la (fakan, tre specialan) kapvorton en
+pli simpla komuna lingvo.
+Tiu esprimo povas konsisti el teksto kaj eventuale enhavi <em>ref</em>erencon. Ĝi
+povas aperi ene de <dfndif</dfnino, <dfnrim</dfnmarko kaj referencgrupo (<dfn>refgrp</dfn>). 
+-->
+<!ELEMENT ke (#PCDATA | ref)*>
+
 
 <!-- [bld] Bildo povas ilustri iun vorton aŭ sencon. Per la
 atributo <dfn>lok</dfn> ĝi

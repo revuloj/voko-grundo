@@ -422,6 +422,7 @@ marko = xsd:ID { pattern = "([a-z0-9_]+)\.[A-Za-z0-9\._]+" }
 
 prononco = xsd:string { pattern = "[\p{IsBasicLatin}\p{IsLatin-1Supplement}\p{IsLatinExtended-A}\p{IsLatinExtended-B}]+|\p{IsBopomofo}+|[\p{IsHiragana}\p{IsKatakana}]+" }
 
+
 ## [kap]
 ## Kapvorto okazas en du kuntekstoj -- komence de artikolo
 ## kaj komence de derivaĵo, en la unua kazo ĝi signas radikon
@@ -511,7 +512,7 @@ attlist-uzo &= attribute tip { "fak" | "reg" | "klr" | "stl" }?
 dif =
   element dif {
     attlist-dif,
-    (text | trd | trdgrp | ref | refgrp | dif-ref | ekz | snc | tekst-stiloj)*
+    (text | trd | trdgrp | ref | refgrp | ke | dif-ref | ekz | snc | tekst-stiloj)*
   }
 attlist-dif &= attribute lng { text }?
 
@@ -542,7 +543,7 @@ attlist-ekz &= attribute mrk { marko }?
 ## senco, krome referencojn, ekzemplojn, emfazitajn partojn.
 rim =
   element rim {
-    attlist-rim, (text | ref | refgrp | ekz | aut | fnt | esc | tekst-stiloj)*
+    attlist-rim, (text | ref | refgrp | ke | ekz | aut | fnt | esc | tekst-stiloj)*
   }
 attlist-rim &=
   attribute num { text }?,
@@ -554,7 +555,7 @@ attlist-rim &=
 ## referencojn. La tipon indikas la atributo <em>tip</em>.
 ## Tiukaze ne uzu la atributon <em>tip</em> en la subelementoj
 ## <dfn>ref</dfn>!
-refgrp = element refgrp { attlist-refgrp, (text? & ref+) }
+refgrp = element refgrp { attlist-refgrp, (text? & ke* & ref+) }
 attlist-refgrp &=
   [ a:defaultValue = "vid" ]
   attribute tip {
@@ -666,6 +667,14 @@ attlist-mll &= attribute tip { "kom" | "mez" | "fin" }?
 ## Tion ni uzas ekzemple en la indonezia indekso, kie sub "ajar" aperas "belajar", "mengajar" ktp. 
 baz = element baz { attlist-baz, text* }
 attlist-baz &= empty
+
+## [ke]
+## Komunlingva esprimo, per kiu oni povas anstataŭigi la (fakan, tre specialan) kapvorton en
+## pli simpla komuna lingvo.
+## Tiu esprimo povas konsisti el teksto kaj eventuale enhavi <em>ref</em>erencon. Ĝi
+## povas aperi ene de <em>dif</em>ino, <em>rim</em>marko kaj referencgrupo (<dfn>refgrp</dfn>).
+ke = element ke { attlist-ke, (text | ref)* }
+attlist-ke &= empty
 
 ## [bld]
 ## Bildo povas ilustri iun vorton aŭ sencon. Per la
