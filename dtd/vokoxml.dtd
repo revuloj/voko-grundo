@@ -288,7 +288,7 @@ ekz. "3" che la monato marto.
 >
 
 <!-- [tez] NE PLU UZU! Tezaŭra nodo. Ĝi permesas referenci al tio, same kiel
- al kap kaj mem povas referenci al alia nodo.
+ al kap kaj mem povas referenci al alia nodo. 
 <!ELEMENT tez (#PCDATA|tld|klr|ref|refgrp)*>
 <!ATTLIST tez
         mrk CDATA #REQUIRED
@@ -381,13 +381,16 @@ laŭ kiu la bildo rajtas esti uzata (vd ĉe Wikimedia Commons).
         prm CDATA #IMPLIED
 >
 
-<!-- [mrk] Per la elemento <em>mrk</em> oni povas marki lokon en bildo per ia
-kadro, kies pozicio kaj aspekto estas priskribita en la atributo <em>stl</em>
-per la rimedoj de CSS. Cetere ĝi povas enhavi tekston kaj/aŭ referencon
+<!-- [mrk] Per la elemento <dfn>mrk</dfn> oni povas marki lokon en bildo per ia
+kadro, kies pozicio kaj aspekto estas priskribita en la atributo <dfn>stl</dfn>
+per la rimedoj de CSS. Per la atributo <dfn>ref</dfn> oni povas aldoni 
+referencon al ekstera paĝo aŭ alia artikolo de Revo (plena dosiernomo+marko). 
+Cetere ĝi povas enhavi tekston kaj/aŭ referencon.
 -->
 <!ELEMENT mrk (#PCDATA | ref)*>
 <!ATTLIST mrk
   stl CDATA #REQUIRED
+  ref CDATA #IMPLIED
 >  
 
 <!-- [adm] Administraj informoj estu por redaktado. Ili povus
