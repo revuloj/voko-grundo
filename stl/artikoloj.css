@@ -402,6 +402,8 @@ div.bld.svg {
 
 div.bld { 
     position: relative;
+    width: fit-content;
+    height: fit-content;
 
     max-width: 100%;
     border-color: var(--bld-brd-clr); 
