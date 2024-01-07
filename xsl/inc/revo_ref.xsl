@@ -180,6 +180,31 @@ transformdosiero, ekz. revohtml.xsl
   </span>
 </xsl:template>
 
+<xsl:template match="mrk[@cel]">
+  <xsl:variable name="file" select="substring-before(@cel,'.')"/>
+  <xsl:choose>
+    <xsl:when test="$file">
+      <a class="mrk-ref" href="{$file}.html#{$file}.{substring-after(@cel,'.')}">
+      <div class="bld-mrk" style="{@stl}">
+        <xsl:apply-templates/>
+      </div> 
+      </a>
+    </xsl:when>
+    <xsl:otherwise>
+      <a class="mrk-ref" href="{@cel}.html">
+      <div class="bld-mrk" style="{@stl}">
+        <xsl:apply-templates/>
+      </div> 
+      </a>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+<xsl:template match="mrk">
+  <div class="bld-mrk" style="{@stl}">
+    <xsl:apply-templates/>
+  </div>
+</xsl:template>
 
 <xsl:template match="lstref">
     <xsl:variable name="kls" select="(document($klasoj_cfg)/klasoj//kls[substring-after(@nom,'#')=substring-after(current()/@lst,':')])[1]"/>

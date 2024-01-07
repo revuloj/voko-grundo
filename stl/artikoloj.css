@@ -366,7 +366,32 @@ IMG {
     text-align: center;
 }
 
-OBJECT.svg, OBJECT, IMG.svg, EMBED.svg { 
+/* malnova, ni devas lasi, ĝis ĉiuj artikoloj transformiĝis al la nova strukturo kun ĉirkaŭa div.bld! */
+OBJECT.svg, OBJECT, IMG.svg, EMBED.svg {
+    border-color: var(--svg-brd-clr); 
+    border-width: 1px; 
+    background: var(--svg-bgr-clr); 
+    border-style: solid; 
+    padding: 2px; 
+    margin: 0.5em
+}
+
+IMG.bld {
+    max-width: 100%;
+    border-color: var(--bld-brd-clr); 
+    border-width: 1px; 
+    background: var(--bld-bgr-clr); 
+    border-style: solid; 
+    padding: 2px; 
+    margin: 0.5em
+}
+
+/* stiloj por nova strukturo kun ĉirkaŭa div.bld ebliganta marki areojn en la bildo,
+  malsupre ni superskribas la agordojn por OBJECT/EMBED/IMG
+ */
+div.bld.svg { 
+    position: relative;
+
     border-color: var(--svg-brd-clr); 
     border-width: 1px; 
     background: var(--svg-bgr-clr); 
@@ -375,11 +400,9 @@ OBJECT.svg, OBJECT, IMG.svg, EMBED.svg {
     margin: 0.5em
 } 
 
-DIV.bld {
-    position: relative
-}
+div.bld { 
+    position: relative;
 
-IMG.bld { 
     max-width: 100%;
     border-color: var(--bld-brd-clr); 
     border-width: 1px; 
@@ -387,6 +410,30 @@ IMG.bld {
     border-style: solid; 
     padding: 2px; 
     margin: 0.5em
+}
+
+div.svg>OBJECT.svg, 
+div.svg>OBJECT, 
+div.svg>IMG.svg, 
+div.svg>EMBED.svg { 
+    border: none; 
+    background: none; 
+    padding: 0; 
+    margin: 0;
+} 
+
+div.bld>IMG.bld { 
+    border: none; 
+    background: none; 
+    padding: 0; 
+    margin: 0;
+}
+
+.bld-mrk {
+    position: absolute;
+    /* border: 2px solid gray; */
+    background:rgba(0,0,160,20%);
+    border-radius: 5%;
 }
 
 IMG.fak { 
@@ -420,10 +467,6 @@ IMG[alt='Vikipedio'] {
     margin-bottom: -.1em;
 }
 
-.bld-mrk {
-    position: absolute;
-    border: 2px solid gray;
-}
      
 /* 
     tezaŭrobildoj funkcias simile al butono, do eble ni uzu la klason "btn" anstataŭe... 
