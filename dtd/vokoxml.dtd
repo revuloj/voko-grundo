@@ -383,14 +383,14 @@ laŭ kiu la bildo rajtas esti uzata (vd ĉe Wikimedia Commons).
 
 <!-- [mrk] Per la elemento <dfn>mrk</dfn> oni povas marki lokon en bildo per ia
 kadro, kies pozicio kaj aspekto estas priskribita en la atributo <dfn>stl</dfn>
-per la rimedoj de CSS. Per la atributo <dfn>ref</dfn> oni povas aldoni 
-referencon al ekstera paĝo aŭ alia artikolo de Revo (plena dosiernomo+marko). 
-Cetere ĝi povas enhavi tekston kaj/aŭ referencon.
+per la rimedoj de CSS. Per la atributo <dfn>cel</dfn> oni povas aldoni 
+referencon al iu kapvorto de Revo.
+Cetere bildo-marko povas enhavi tekston kaj/aŭ referencojn.
 -->
 <!ELEMENT mrk (#PCDATA | ref)*>
 <!ATTLIST mrk
   stl CDATA #REQUIRED
-  ref CDATA #IMPLIED
+  cel CDATA #IMPLIED
 >  
 
 <!-- [adm] Administraj informoj estu por redaktado. Ili povus
