@@ -390,14 +390,18 @@ IMG.bld {
   malsupre ni superskribas la agordojn por OBJECT/EMBED/IMG
  */
 div.bld.svg { 
+    /* heredata de div.bld:
     position: relative;
+    */
 
     border-color: var(--svg-brd-clr); 
-    border-width: 1px; 
     background: var(--svg-bgr-clr); 
+
+    /*
+    border-width: 1px; 
     border-style: solid; 
     padding: 2px; 
-    margin: 0.5em
+    */
 } 
 
 div.bld { 
@@ -411,7 +415,11 @@ div.bld {
     background: var(--bld-bgr-clr); 
     border-style: solid; 
     padding: 2px; 
-    margin: 0.5em
+
+    margin-top: .5em;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: .5em;
 }
 
 div.svg>OBJECT.svg, 
