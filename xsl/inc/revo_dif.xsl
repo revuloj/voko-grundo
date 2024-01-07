@@ -105,10 +105,14 @@ kaj stiloj (em,ctl,sup...)
 
 <xsl:template match="klr[@tip='ind']"/>
 
+<xsl:template match="ke">
+  <em class="ke"><xsl:apply-templates/></em>
+</xsl:template>
 
 <xsl:template match="bld">
   <xsl:if test="$aspekto='ilustrite'">
     <div class="center">
+      <div class="bld">
       <xsl:choose>
         <xsl:when test="@tip='svg'">
 
@@ -156,6 +160,8 @@ kaj stiloj (em,ctl,sup...)
            </img>
         </xsl:otherwise>
       </xsl:choose>
+      <xsl:apply-templates select="mrk"/>
+      </div>
       <br/>
       <i>
         <xsl:apply-templates select="text()|tld|ind|klr"/>
@@ -180,6 +186,11 @@ kaj stiloj (em,ctl,sup...)
   </xsl:if>
 </xsl:template>
 
+<xsl:template match="mrk">
+  <div class="bld-mrk" style="{@stl}">
+    <xsl:apply-templates/>
+  </div>
+</xsl:template>
 
 <xsl:template match="uzo[@tip='fak']">
   <xsl:variable name="fak" select="."/>

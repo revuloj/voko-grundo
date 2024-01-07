@@ -375,6 +375,10 @@ OBJECT.svg, OBJECT, IMG.svg, EMBED.svg {
     margin: 0.5em
 } 
 
+DIV.bld {
+    position: relative
+}
+
 IMG.bld { 
     max-width: 100%;
     border-color: var(--bld-brd-clr); 
@@ -414,6 +418,11 @@ IMG[alt='Vikipedio'] {
     background-size: contain;
     border-bottom: 1px solid;*/
     margin-bottom: -.1em;
+}
+
+.bld-mrk {
+    position: absolute;
+    border: 2px solid gray;
 }
      
 /* 
