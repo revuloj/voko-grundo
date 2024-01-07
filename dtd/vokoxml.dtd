@@ -371,7 +371,7 @@ por JPEG, GIF, PNG-bildo, <dfn>svg</dfn> por SVG-vektorgrafiko.
 Per <dfn>aut</dfn> vi donas aŭtoron kaj <dfn>prm</dfn> la permesilon
 laŭ kiu la bildo rajtas esti uzata (vd ĉe Wikimedia Commons).
 -->
-<!ELEMENT bld (#PCDATA|tld|klr|fnt|ind|trd|trdgrp)*>
+<!ELEMENT bld (#PCDATA|tld|klr|fnt|mrk|ind|trd|trdgrp)*>
 <!ATTLIST bld
 	lok CDATA #REQUIRED
 	mrk ID #IMPLIED
@@ -380,6 +380,15 @@ laŭ kiu la bildo rajtas esti uzata (vd ĉe Wikimedia Commons).
 	lrg CDATA #IMPLIED
         prm CDATA #IMPLIED
 >
+
+<!-- [mrk] Per la elemento <em>mrk</em> oni povas marki lokon en bildo per ia
+kadro, kies pozicio kaj aspekto estas priskribita en la atributo <em>stl</em>
+per la rimedoj de CSS. Cetere ĝi povas enhavi tekston kaj/aŭ referencon
+-->
+<!ELEMENT mrk (#PCDATA | ref)*>
+<!ATTLIST mrk
+  stl CDATA #REQUIRED
+>  
 
 <!-- [adm] Administraj informoj estu por redaktado. Ili povus
 enhavi informojn pri kreodato, ŝanĝdato, aŭtoro, eraroj kaj

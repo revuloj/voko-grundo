@@ -688,7 +688,7 @@ attlist-ke &= empty
 
 bld =
   element bld {
-    attlist-bld, (text | tld | klr | fnt | ind | trd | trdgrp)*
+    attlist-bld, (text | tld | klr | fnt | mrk | ind | trd | trdgrp)*
   }
 attlist-bld &=
   attribute lok { xsd:anyURI },
@@ -698,10 +698,21 @@ attlist-bld &=
   attribute lrg { xsd:int }?,
   attribute prm { text }?
 
+## [mrk]
+## Per la elemento <em>mrk</em> oni povas marki lokon en bildo per ia
+## kadro, kies pozicio kaj aspekto estas priskribita en la atributo <em>stl</em>
+## per la rimedoj de CSS. Cetere ĝi povas enhavi tekston kaj/aŭ referencon
+mrk =
+  element mrk {
+    attlist-mrk, (text | ref)*
+  }
+attlist-mrk &= 
+  attribute stl { xsd:string }
+
 ## [adm]
-## Administraj informoj estu por redaktado. Ili povus
-## enhavi informojn pri kreodato, ŝanĝdato, aŭtoro, eraroj kaj
-## plibonigproponoj pri artikolo. Ĝia strukturo ankoraŭ estas
+## Administraj informoj estu por redaktado. Ili enhavas tekston kaj eventuale aŭtoron.
+## Cetere ili povus enhavi informojn pri kreodato, ŝanĝdato, eraroj kaj
+## plibonigproponoj pri artikolo. Ĝia strukturo do ankoraŭ estas
 ## diskutatebla.
 adm = element adm { attlist-adm, (text | aut)* }
 attlist-adm &= empty
