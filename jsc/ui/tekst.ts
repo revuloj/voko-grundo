@@ -157,6 +157,13 @@ export class Tekst extends UIElement {
     };
 
     /**
+     * Certigas, ke la teksto estu sinkronigit laŭbezona
+     */
+    public certigu_sinkronecon() {
+        if (! this.sinkrona) this.sinkronigu(this.aktiva); 
+    }
+
+    /**
      * Redonas la tekston sen antaŭa sinkronigo.
      * Por la strukturanalizo ni devas eviti, ke okazas sinkronigo
      * por eviti ciklojn, ĉar ĝi estas vokata laŭ la ĉeno sinrkonigo -> anstataŭigo -> struktur_analizo.
