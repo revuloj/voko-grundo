@@ -32,7 +32,9 @@ COPY smb/ /smb/
 #    && unzip ${VG_BRANCH}.zip voko-grundo-${VG_BRANCH}/smb/*.mp
 RUN bin/mp2png_svg.sh
 
+#######################################################
 # staĝo 2: nodejs: kompilu CSS kaj JS
+#######################################################
 
 FROM ubuntu:jammy as builder
 ARG NODE_MAJOR=20
@@ -58,8 +60,10 @@ COPY --from=metapost /build/ /usr/app/build/
 # oni eble povus kombini ambaŭ per aŭ: { npm install -g npm@latest || npm install -g npm@next }
 RUN npm install -g npm@latest && npm ci && npm run build && tst/xml-test.sh
 
-
+#######################################################
 # staĝo 3 kopiu nur la kreitajn rezultojn al nova malplena ujo
+#######################################################
+
 FROM scratch
 COPY --from=builder /usr/app/build/ build/
 
