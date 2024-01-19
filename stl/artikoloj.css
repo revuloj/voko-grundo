@@ -225,6 +225,18 @@ SUP.ofc { margin-right: 0.7ex; }
     color: var(--main-fnt-clr)
 }
 
+/*
+em.ke::before {
+  content: "٭\a0";
+  font-style: normal;
+}*/
+
+em.ke {
+    /*border-bottom: 1px dotted var(--main-brd-clr)*/
+    text-decoration: underline dotted var(--main-brd-clr);
+    text-decoration-thickness: 1px;
+}
+
 /* rimarkoj */
 div.rim { margin-top: .3em; }
 .rim {color: var(--rim-fnt-clr)}

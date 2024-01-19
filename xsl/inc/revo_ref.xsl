@@ -238,6 +238,7 @@ transformdosiero, ekz. revohtml.xsl
       </a>
 </xsl:template>
 
+<!-- referencojn en dif, rim, ekz... -->
 <xsl:template match="
   dif/ref|
   dif/refgrp/ref|
@@ -246,7 +247,9 @@ transformdosiero, ekz. revohtml.xsl
   ekz/ref|
   ekz/refgrp/ref|
   klr/ref|
-  klr/refgrp/ref">
+  klr/refgrp/ref|
+  ke/ref|
+  ke/refgrp/ref">
 
   <xsl:variable name="file" select="substring-before(@cel,'.')"/>
   <xsl:choose>
@@ -269,7 +272,8 @@ transformdosiero, ekz. revohtml.xsl
   dif/refgrp|
   rim/refgrp|
   ekz/refgrp|
-  klr/refgrp">
+  klr/refgrp|
+  ke/refgrp">
 
   <span class="{local-name((ancestor::rim|ancestor::ekz|ancestor::dif)[last()])}"> 
    <xsl:apply-templates/>
