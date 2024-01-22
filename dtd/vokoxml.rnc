@@ -673,7 +673,7 @@ attlist-baz &= empty
 ## pli simpla komuna lingvo.
 ## Tiu esprimo povas konsisti el teksto kaj eventuale enhavi <em>ref</em>erencon. Ĝi
 ## povas aperi ene de <em>dif</em>ino, <em>rim</em>marko kaj referencgrupo (<dfn>refgrp</dfn>).
-ke = element ke { attlist-ke, (text | ref)* }
+ke = element ke { attlist-ke, (text | ref | dif-ref)* }
 attlist-ke &= empty
 
 ## [bld]
