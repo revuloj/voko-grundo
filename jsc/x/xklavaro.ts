@@ -228,7 +228,7 @@ export class XKlavaro extends UIElement {
     {
         super(klavaro,{});
 
-        const c = (typeof celo === "string")? document.getElementById(celo) : celo;
+        const c = (celo && typeof celo === "string")? document.getElementById(celo) : celo;
         if (c instanceof HTMLInputElement || c instanceof HTMLTextAreaElement) {
             this.celo = c;
             XKlavaro.influejoj.set(c,this);
