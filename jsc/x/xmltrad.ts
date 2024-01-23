@@ -444,9 +444,13 @@ export class TradukDialog extends Dialog {
       pref_lng.forEach(     //.sort(jsort_lng).forEach(
           function(lng: string) {
               if (lng != 'eo') {
+                // foje kodo ankoraŭ konsistas el lingvo-Lando, tiujn ni ignoras
+                // KOREKTU: tio korektiĝu en preferoj...
+                if (lng.indexOf('-')<0) {
                   const nomo = lingvo_listo.codes[lng];
                   const lng_html = `<li id="${pref_prefix}_${lng}">${nomo}</li>`;
-                  trd_aliaj?.insertAdjacentHTML("beforebegin",lng_html);  
+                  trd_aliaj?.insertAdjacentHTML("beforebegin",lng_html);    
+                }
               }
           }
       );

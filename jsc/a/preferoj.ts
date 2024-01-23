@@ -67,7 +67,7 @@ export namespace preferoj {
                 }
             }
 
-            // nun ni trakutras ordigitan lingvoliston
+            // nun ni trakuras ordigitan lingvoliston
             for (var l of Object.keys(_lngvj).sort()) {    
                 var lc = _lngvj[l].lc; // lingvokodo
                 var ln = _lngvj[l].ln; // lingvonomo
@@ -310,12 +310,18 @@ export namespace preferoj {
      * @memberof preferoj
      */
     export function relegu() {
-        var str = window.localStorage.getItem("revo_preferoj");            
-        var prefs = (str? JSON.parse(str) : null);
+        const str = window.localStorage.getItem("revo_preferoj");            
+        const prefs = (str? JSON.parse(str) : null);
 
-        var nav_lng = navigator.languages || [navigator.language];
-        _lingvoj = (prefs && prefs["w:preflng"])? prefs["w:preflng"] : nav_lng.slice();
+        const nav_lng = navigator.languages || [navigator.language];
         _dato = (prefs && prefs["w:prefdat"])? prefs["w:prefdat"] : Date.now();
+        const _lngvj = (prefs && prefs["w:preflng"])? prefs["w:preflng"] : nav_lng.slice();
+        // ni ankoraŭ forigos evtl. landokodojn el lingvoj aŭ duoblaĵojn
+        _lngvj.forEach((lc: string) => {
+            const _ = lc.indexOf('-');
+            lc = (_>0)? lc.substring(0,_) : lc;
+            if (_lingvoj.indexOf(lc) < 0) _lingvoj.push(lc);
+        });
     }
 
     
