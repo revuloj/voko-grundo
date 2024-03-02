@@ -1,6 +1,9 @@
 /* 
  (c) 2020 - 2023 ĉe Wolfram Diestel
  laŭ GPL 2.0
+
+ Konservo kaj relego de preferoj de redaktado.
+ (preferdialog por agordi lingvojn troviĝas en a/preferoj)
 */
 
 import {DOM} from '../ui';

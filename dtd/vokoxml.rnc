@@ -11,6 +11,7 @@
 
 #default namespace = "http://steloj.de/voko"
 namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
+datatypes xsd = "http://www.w3.org/2001/XMLSchema-datatypes"
 
 ## ********************************************************
 ##           KADRA STRUKTURO DE VORTARO
@@ -409,11 +410,17 @@ drv-marko = xsd:ID { pattern = "([a-z0-9_]+)\.[A-Za-z_]*0[A-Za-z_0]*(\.[A-Za-z_0
 snc-marko = xsd:ID { pattern = "([a-z0-9_]+)\.[A-Za-z_]*0[A-Za-z_0]*\.[A-Za-z_0-9]+" }
 
 
-##  [_marko_]
+## [_marko_]
 ## La marko identigas 'nodon' de la vortaro, ekz. artikolon, derivaĵon, sencon aŭ rimarkon,
-##  kiun oni povas referenci de alia loko en la vortaro per la sama marko.
+## kiun oni povas referenci de alia loko en la vortaro per la sama marko.
 
 marko = xsd:ID { pattern = "([a-z0-9_]+)\.[A-Za-z0-9\._]+" }
+
+## [_prononco_]
+## La pronco povas esti donita aŭ per latinaj literoj (kun supersignoj)
+## per hiragano aŭ bopomofo
+
+prononco = xsd:string { pattern = "[\p{IsBasicLatin}\p{IsLatin-1Supplement}\p{IsLatinExtended-A}\p{IsLatinExtended-B}]+|\p{IsBopomofo}+|[\p{IsHiragana}\p{IsKatakana}]+" }
 
 
 ## [kap]
@@ -439,12 +446,14 @@ attlist-rad &= attribute var { text }?
 
 ## [ofc]
 ## Oficialeco de la kapvorto/derivaĵo, 
-## povas esti *, 1, ..., 9 kiel en PV, PIV
+## povas esti *, 1, ..., 9, 10, 11 
+## aŭ por kelkaj esceptoj jarnombro kiel 1953 (analoga, -end, mis-)
+## en iuj okazoj oficialeco povas esti en krampoj (analogio, koncentra)
 
 ofc = 
   element ofc { 
     attlist-ofc, 
-    xsd:string { pattern="\*|\(?[1-9]\)?|19[0-9]{2}" } 
+    xsd:string { pattern="\*|\(?[1-9]\)?|1[0-1]|19[0-9]{2}" } 
   }
 attlist-ofc &= empty
 
@@ -503,7 +512,7 @@ attlist-uzo &= attribute tip { "fak" | "reg" | "klr" | "stl" }?
 dif =
   element dif {
     attlist-dif,
-    (text | trd | trdgrp | ref | refgrp | dif-ref | ekz | snc | tekst-stiloj)*
+    (text | trd | trdgrp | ref | refgrp | ke | dif-ref | ekz | snc | tekst-stiloj)*
   }
 attlist-dif &= attribute lng { text }?
 
@@ -534,7 +543,7 @@ attlist-ekz &= attribute mrk { marko }?
 ## senco, krome referencojn, ekzemplojn, emfazitajn partojn.
 rim =
   element rim {
-    attlist-rim, (text | ref | refgrp | ekz | aut | fnt | esc | tekst-stiloj)*
+    attlist-rim, (text | ref | refgrp | ke | ekz | aut | fnt | esc | tekst-stiloj)*
   }
 attlist-rim &=
   attribute num { text }?,
@@ -546,7 +555,7 @@ attlist-rim &=
 ## referencojn. La tipon indikas la atributo <em>tip</em>.
 ## Tiukaze ne uzu la atributon <em>tip</em> en la subelementoj
 ## <dfn>ref</dfn>!
-refgrp = element refgrp { attlist-refgrp, (text? & ref+) }
+refgrp = element refgrp { attlist-refgrp, (text? & ke* & ref+) }
 attlist-refgrp &=
   [ a:defaultValue = "vid" ]
   attribute tip {
@@ -565,7 +574,7 @@ attlist-refgrp &=
 
 ## [ref]
 ## Referenco montras al alia, simil- aŭ alisignifa vorto,
-## oni povas distingi diversajn rilattipon al la
+## oni povas distingi diversajn rilattipojn al la
 ## referencita vorto. La enhavo de la referenco estas tio, kio
 ## aperas en la legebla teksto. La referencitan vorton mem
 ## oni difinas per la atributo <em>cel</em>. La celon oni plej
@@ -643,7 +652,7 @@ attlist-ind &= empty
 ## Se traduko havas transskribon, ni uzos tiun por la indeksado/enordigo en literĉaptiron de la indekso.
 ## Pro la limigita nombro de literoj/literumaj signoj, tio ebligas ĉapitrigi la lingvoindeksojn de
 ## silabaj lingvoj. Ankaŭ ni ebligas serĉadon laŭ transskribo aldone al la ideografia skribmaniero.
-pr = element pr { attlist-pr, text* }
+pr = element pr { attlist-pr, prononco }
 attlist-pr &= empty
 
 ## [mll]
@@ -659,6 +668,14 @@ attlist-mll &= attribute tip { "kom" | "mez" | "fin" }?
 baz = element baz { attlist-baz, text* }
 attlist-baz &= empty
 
+## [ke]
+## Komunlingva esprimo, per kiu oni povas anstataŭigi la (fakan, tre specialan) kapvorton en
+## pli simpla komuna lingvo.
+## Tiu esprimo povas konsisti el teksto kaj eventuale enhavi <em>ref</em>erencon. Ĝi
+## povas aperi ene de <em>dif</em>ino, <em>rim</em>marko kaj referencgrupo (<dfn>refgrp</dfn>).
+ke = element ke { attlist-ke, (text | ref | dif-ref)* }
+attlist-ke &= empty
+
 ## [bld]
 ## Bildo povas ilustri iun vorton aŭ sencon. Per la
 ## atributo <em>lok</em> ĝi
@@ -671,7 +688,7 @@ attlist-baz &= empty
 
 bld =
   element bld {
-    attlist-bld, (text | tld | klr | fnt | ind | trd | trdgrp)*
+    attlist-bld, (text | tld | klr | fnt | mrk | ind | trd | trdgrp)*
   }
 attlist-bld &=
   attribute lok { xsd:anyURI },
@@ -681,10 +698,24 @@ attlist-bld &=
   attribute lrg { xsd:int }?,
   attribute prm { text }?
 
+## [mrk]
+## Per la elemento <em>mrk</em> oni povas marki lokon en bildo per ia
+## kadro, kies pozicio kaj aspekto estas priskribita en la atributo <em>stl</em>
+## per la rimedoj de CSS. Per la atributo <dfn>cel</dfn> oni povas aldoni 
+## referencon al iu kapvorto de Revo.
+## Cetere bildo-marko povas enhavi tekston kaj/aŭ referencojn.
+mrk =
+  element mrk {
+    attlist-mrk, (text | ref)*
+  }
+attlist-mrk &= 
+  attribute stl { text },
+  attribute cel { text }?  
+
 ## [adm]
-## Administraj informoj estu por redaktado. Ili povus
-## enhavi informojn pri kreodato, ŝanĝdato, aŭtoro, eraroj kaj
-## plibonigproponoj pri artikolo. Ĝia strukturo ankoraŭ estas
+## Administraj informoj estu por redaktado. Ili enhavas tekston kaj eventuale aŭtoron.
+## Cetere ili povus enhavi informojn pri kreodato, ŝanĝdato, eraroj kaj
+## plibonigproponoj pri artikolo. Ĝia strukturo do ankoraŭ estas
 ## diskutatebla.
 adm = element adm { attlist-adm, (text | aut)* }
 attlist-adm &= empty

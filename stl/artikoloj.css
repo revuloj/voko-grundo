@@ -182,11 +182,16 @@ dl.tradukoj span[lang='bo']
     vertical-align: text-top;
 }
 
-dl.tradukoj span[lang='zh'] 
-{
+dl.tradukoj span[lang='zh'], 
+dl.tradukoj span[lang='ja'] {
     font-size: 120%;
     /*line-height: 120%;
     vertical-align: text-top; */
+}
+
+dl.tradukoj span[lang='zh'] .pr 
+{   /* Pinjino en normala grandeco: 83.33 * 120 = 100 */
+    font-size: 83.33%;
 }
 
 
@@ -218,6 +223,18 @@ SUP.ofc { margin-right: 0.7ex; }
 .drvdif,
 .sncgrpdif {
     color: var(--main-fnt-clr)
+}
+
+/*
+em.ke::before {
+  content: "٭\a0";
+  font-style: normal;
+}*/
+
+em.ke {
+    /*border-bottom: 1px dotted var(--main-brd-clr)*/
+    text-decoration: underline dotted var(--main-brd-clr);
+    text-decoration-thickness: 1px;
 }
 
 /* rimarkoj */
@@ -361,16 +378,17 @@ IMG {
     text-align: center;
 }
 
-OBJECT.svg, OBJECT, IMG.svg, EMBED.svg { 
+/* malnova, ni devas lasi, ĝis ĉiuj artikoloj transformiĝis al la nova strukturo kun ĉirkaŭa div.bld! */
+OBJECT.svg, OBJECT, IMG.svg, EMBED.svg {
     border-color: var(--svg-brd-clr); 
     border-width: 1px; 
     background: var(--svg-bgr-clr); 
     border-style: solid; 
     padding: 2px; 
     margin: 0.5em
-} 
+}
 
-IMG.bld { 
+IMG.bld {
     max-width: 100%;
     border-color: var(--bld-brd-clr); 
     border-width: 1px; 
@@ -378,6 +396,66 @@ IMG.bld {
     border-style: solid; 
     padding: 2px; 
     margin: 0.5em
+}
+
+/* stiloj por nova strukturo kun ĉirkaŭa div.bld ebliganta marki areojn en la bildo,
+  malsupre ni superskribas la agordojn por OBJECT/EMBED/IMG
+ */
+div.bld.svg { 
+    /* heredata de div.bld:
+    position: relative;
+    */
+
+    border-color: var(--svg-brd-clr); 
+    background: var(--svg-bgr-clr); 
+
+    /*
+    border-width: 1px; 
+    border-style: solid; 
+    padding: 2px; 
+    */
+} 
+
+div.bld { 
+    position: relative;
+    width: fit-content;
+    height: fit-content;
+
+    max-width: 100%;
+    border-color: var(--bld-brd-clr); 
+    border-width: 1px; 
+    background: var(--bld-bgr-clr); 
+    border-style: solid; 
+    padding: 2px; 
+
+    margin-top: .5em;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: .5em;
+}
+
+div.svg>OBJECT.svg, 
+div.svg>OBJECT, 
+div.svg>IMG.svg, 
+div.svg>EMBED.svg { 
+    border: none; 
+    background: none; 
+    padding: 0; 
+    margin: 0;
+} 
+
+div.bld>IMG.bld { 
+    border: none; 
+    background: none; 
+    padding: 0; 
+    margin: 0;
+}
+
+.bld-mrk {
+    position: absolute;
+    /* border: 2px solid gray; */
+    background:rgba(0,0,160,20%);
+    border-radius: 5%;
 }
 
 IMG.fak { 
@@ -410,6 +488,7 @@ IMG[alt='Vikipedio'] {
     border-bottom: 1px solid;*/
     margin-bottom: -.1em;
 }
+
      
 /* 
     tezaŭrobildoj funkcias simile al butono, do eble ni uzu la klason "btn" anstataŭe... 
@@ -725,6 +804,93 @@ dt.pli, .ekz.pli, a.pli {
     padding: .1em .3em;
     margin-bottom: .1em;
     */
+}
+
+
+#pref_lng, #alia_lng {
+    list-style: none; /* Remove list bullets */
+    padding-left: 0;
+    margin-block-start: .2em;
+}
+
+#pref_lng {
+    font-weight: bold;
+    color: var(--lst2-fnt-clr);
+}
+
+#alia_lng {
+    columns: 2;
+    color: var(--list-fnt-clr);
+    column-gap: .15em;
+}
+
+#pref_lng li, 
+#alia_lng li {
+    margin: .11em;
+    padding: .1em .5em;
+    border-radius: 2px;
+}
+
+#pref_lng li {
+    background: var(--lst2-bgr-clr);
+}
+#alia_lng li {
+    background: var(--list-bgr-clr);
+}
+
+#pref_lng li:before {
+    content: "\2296"; /* Insert content that looks like bullets */
+    padding-right: .5em;
+}   
+
+#alia_lng li:before {
+    content: "\2295"; /* Insert content that looks like bullets */
+    padding-right: .5em;
+}                           
+
+#pref_lng li:hover, 
+#alia_lng li:hover {
+    background-color: var(--list-bgr-clr);
+}              
+
+#pref_lng li:active, 
+#alia_lng li:active {
+    background-color: var(--list-act-bgr-clr);
+    ;
+}    
+
+
+.preferoj {
+    display: grid;
+    grid-template-columns: auto auto;
+    padding: 0.3em;
+    gap: 0.2em 0.2em;
+    width: fit-content;
+    width: -moz-fit-content;
+    width: -webkit-fit-content;
+}
+
+.preferoj .tabs {
+    margin-bottom: .2em;
+}
+
+.preferoj H3 {
+    margin-block-start: .3em;
+    margin-block-end: 0;
+    font-size: 100% /* 100% = pli malgranda ol apriore */
+}
+
+
+
+#w\:ix_literoj {
+    grid-column-start: 1;
+    grid-column-end: 3;
+    text-align: right;
+}
+
+#w\:ix_literoj span {
+    padding: 0 .3em;
+    border-left: 2px solid var(--main-brd-clr)
 }
 
 .square_min {

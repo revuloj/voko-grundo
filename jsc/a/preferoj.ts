@@ -21,19 +21,21 @@ type Seanco = {
 
 /**
  * La nomspaco 'preferoj' enhavas funkciojn kaj variablojn por
- * konservi, legi, ŝangi la preferojn de la uzanto.
+ * konservi, legi, ŝanĝi la preferojn de la uzanto.
  * @namespace preferoj
  */
 export namespace preferoj {  
     
+    // la listo de la preferataj lingvoj
     var _lingvoj: string[] = [];
+    
     export var seanco: Seanco = {};
     var _dato = Date.now();
     
     /**
      * Ŝargas la lingvo-liston de la servilo, dividas ilin en 
      * preferataj kaj aliaj kaj preparas la prezenton kiel
-     * listoj en la prefero-adapata dialogo
+     * listojn en la prefero-adapata dialogo
      * @memberof preferoj
      * @inner
      */
@@ -45,12 +47,17 @@ export namespace preferoj {
             const doc = parser.parseFromString(data,"text/xml");
             const plist = document.getElementById("pref_lng");
             const alist = document.getElementById("alia_lng");
+            // malplenigu la listojn antaŭ evtl. replenigo
+            plist.textContent = '';
+            alist.textContent = '';
 
+            // ni montras ĉiam nur parton de la lingvolisto
+            // laŭ alfabeto - kiu literintervalo do estas elektita?
             const ichecked = document.getElementById("preferoj")
                 .querySelector('input[name="pref_lingvoj"]:checked') as HTMLInputElement;
             const selection = ichecked.value.split('_');
             
-            // kolekti la lingvojn unue, ni bezonos ordigi ilin...
+            // ni kolektu la lingvojn unue, ĉar ni bezonos ordigi ilin...
             let _lngvj: { [ascii: string]: LngSpec } = {};
             for (let e of Array.from(doc.getElementsByTagName("lingvo"))) {
                 const c: Attr = e.attributes.getNamedItem('kodo'); // jshint ignore:line
@@ -60,20 +67,24 @@ export namespace preferoj {
                 }
             }
 
+            // nun ni trakuras ordigitan lingvoliston
             for (var l of Object.keys(_lngvj).sort()) {    
-                var lc = _lngvj[l].lc;
-                var ln = _lngvj[l].ln;
+                var lc = _lngvj[l].lc; // lingvokodo
+                var ln = _lngvj[l].ln; // lingvonomo
                 var li = document.createElement("LI");
                 li.setAttribute("data-lng",lc);
                 li.setAttribute("data-la",l);
                 li.appendChild(document.createTextNode(ln));
 
+                // preferoj._lingvoj enhavas preferatajn lingvojn,
+                // ĉiujn aliajn ni listigas por povi alelekti ilin
                 if ( _lingvoj.indexOf(lc) < 0 ) {
                     li.setAttribute("title","aldonu");
                     if (ln[0] < selection[0] || ln[0] > selection[1]) 
                         li.classList.add("kasxita");
                     alist.appendChild(li);
                 } else {
+                    // preferatajn lingvojn ni montras aparte
                     li.setAttribute("title","forigu");
                     plist.appendChild(li);
 
@@ -299,12 +310,18 @@ export namespace preferoj {
      * @memberof preferoj
      */
     export function relegu() {
-        var str = window.localStorage.getItem("revo_preferoj");            
-        var prefs = (str? JSON.parse(str) : null);
+        const str = window.localStorage.getItem("revo_preferoj");            
+        const prefs = (str? JSON.parse(str) : null);
 
-        var nav_lng = navigator.languages || [navigator.language];
-        _lingvoj = (prefs && prefs["w:preflng"])? prefs["w:preflng"] : nav_lng.slice();
+        const nav_lng = navigator.languages || [navigator.language];
         _dato = (prefs && prefs["w:prefdat"])? prefs["w:prefdat"] : Date.now();
+        const _lngvj = (prefs && prefs["w:preflng"])? prefs["w:preflng"] : nav_lng.slice();
+        // ni ankoraŭ forigos evtl. landokodojn el lingvoj aŭ duoblaĵojn
+        _lngvj.forEach((lc: string) => {
+            const _ = lc.indexOf('-');
+            lc = (_>0)? lc.substring(0,_) : lc;
+            if (_lingvoj.indexOf(lc) < 0) _lingvoj.push(lc);
+        });
     }
 
     

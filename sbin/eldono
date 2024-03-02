@@ -16,8 +16,8 @@
 #host=retavortaro.de
 # aldonu en /etc/hosts!
 host=revo
-eldono=2k
-node_eldono=2.0.11
+eldono=2l
+node_eldono=2.0.12
 revo=${host}:www/revo
 files=${host}:files
 
@@ -72,6 +72,11 @@ etikedo)
     git tag -f v${eldono} && git push && git push origin v${eldono} -f
         # alternative anst. la lasste eble funkcias ankaŭ: git push --follow-tags
     ;;
+dtd)
+    ## dtd        : transsendas la DTD/RNC-dosierojn donitajn en la komandlinio al la publika servilo
+    # kopiu ĉiujn xsl-dosierojn donitaj sur komandlinio (ekde dua argumento) al la servilo
+    scp "${@:2}" ${revo}/dtd/
+    ;;     
 xsl)
     ## xsl        : transsendas la precipajn XSL-dosierojn donitajn en la komandlinio al la publika servilo
     # kopiu ĉiujn xsl-dosierojn donitaj sur komandlinio (ekde dua argumento) al la servilo

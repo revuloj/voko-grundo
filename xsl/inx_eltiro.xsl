@@ -9,7 +9,10 @@
 -->
 
 <!-- (c) 2006 - 2023 ĉe Wolfram Diestel
-     licenco GPL 2.0
+    laŭ permesilo GPL 2.0
+
+    Transformreguloj uzataj por kreado de indeksoj. La transformoj aplikiĝas en Formiko laŭ la ordo:
+    inx_eltiro -> inx_kategorioj -> inx_ordigo2 -> inx_html
 -->
 
 

@@ -1,6 +1,9 @@
 /**
  * (c) 2023 ĉe Wolfram Diestel
  * laŭ GPL 2.0
+ * 
+ * Provizas ĝeneralajn funkciojn por redaktado de strukturita (plurparta) teksto 
+ * sed sen specifaĵoj de XML/Revo-artikoloj
  */
 
 import { UIElement } from './uielement';
@@ -152,6 +155,13 @@ export class Tekst extends UIElement {
         if (! this.sinkrona) this.sinkronigu(this.aktiva); 
         return this._teksto;
     };
+
+    /**
+     * Certigas, ke la teksto estu sinkronigit laŭbezona
+     */
+    public certigu_sinkronecon() {
+        if (! this.sinkrona) this.sinkronigu(this.aktiva); 
+    }
 
     /**
      * Redonas la tekston sen antaŭa sinkronigo.
@@ -509,6 +519,9 @@ export class Tekst extends UIElement {
             this._teksto.substring(0,s.al) 
             + "\n"+ xml 
             + this._teksto.substring(s.al);
+
+        // aktualigu la struktur-reprezenton
+        this.struktur_analizo();
     }
 
     /**
@@ -678,11 +691,11 @@ export class Tekst extends UIElement {
 
     /**
      * Anstataŭigas la elektitan tekston, se ĝi egalas al la dua argumento (se donita)
-     * @param insertion 
-     * @param elektita 
+     * @param enm_teksto 
+     * @param elektita por kontrolo
      * @returns 
      */
-    elektanstataŭigo(insertion: string, elektita?: string) {
+    elektanstataŭigo(enm_teksto: string, elektita?: string) {
         const txtarea = this.element;
 
         if (txtarea instanceof HTMLTextAreaElement 
@@ -690,7 +703,7 @@ export class Tekst extends UIElement {
             && (elektita == this.elekto || !elektita)) {
                     // enŝovu la tekston anstataŭ la elektita 
 
-                this.elektenmeto(insertion);
+                this.elektenmeto(enm_teksto);
             } else
                 console.warn("Ne estas la teksto '" + elektita +"' ĉe la elektita loko! Do ĝi ne estas anstatŭigata.");        
     };

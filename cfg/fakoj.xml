@@ -61,7 +61,7 @@
   <fako kodo="MAR" vinjeto="../smb/MAR.png">maraferoj</fako>
   <fako kodo="MAS" vinjeto="../smb/MAS.png">maŝinoj, mekaniko</fako>
   <fako kodo="MAT" vinjeto="../smb/MAT.png">matematiko</fako>
-  <fako kodo="MAH" vinjeto="../smb/MAH.png">materialismo historia</fako>
+  <!-- fako kodo="MAH" vinjeto="../smb/MAH.png">materialismo historia</fako -->
   <fako kodo="MED" vinjeto="../smb/MED.png">medicino, farmacio</fako>
   <fako kodo="MET" vinjeto="../smb/MET.png">meteologio</fako>
   <fako kodo="MIL" vinjeto="../smb/MIL.png">militaferoj</fako>

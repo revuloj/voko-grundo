@@ -1,15 +1,15 @@
 {
-    "compilerOptions": {
-      "lib": ["ES2017","DOM"],
-      "target": "ES5",
-      "module": "ES6",
-      "moduleResolution": "node",
-      "strict": false,
-      "strictNullChecks": false,
-      "esModuleInterop": true,
-      "sourceMap": true,
-      "rootDir": ".",
-      "outDir": "../../build/ts/",
-    },
-    "include": ["jsc/u.ts", "jsc/ui/*", "jsc/x.ts", "jsc/a/*", "jsc/rs/*"]
+  "compilerOptions": {
+    "lib": ["ES2017","DOM"],
+    "target": "ES5",
+    "module": "ES6",
+    "moduleResolution": "node",
+    "strict": true,
+    "strictNullChecks": false,
+    "esModuleInterop": true,
+    "sourceMap": true,
+    "rootDir": ".",
+    "outDir": "../../build/ts/",
+  },
+  "include": ["jsc/u.ts", "jsc/ui/*", "jsc/x.ts", "jsc/a/*", "jsc/rs/*"]
 }

@@ -194,6 +194,8 @@ export class XKlavaro extends UIElement {
         nac: "nacilingva vorto",
         esc: "escepta vorto",
         ind: "indeksero",   
+        pr:  "prononco",   
+        baz: "bazformo",   
         var: "variaĵo de kapvorto",
         frm: "formulo"                    
     };
@@ -226,7 +228,7 @@ export class XKlavaro extends UIElement {
     {
         super(klavaro,{});
 
-        const c = (typeof celo === "string")? document.getElementById(celo) : celo;
+        const c = (celo && typeof celo === "string")? document.getElementById(celo) : celo;
         if (c instanceof HTMLInputElement || c instanceof HTMLTextAreaElement) {
             this.celo = c;
             XKlavaro.influejoj.set(c,this);
@@ -271,8 +273,8 @@ export class XKlavaro extends UIElement {
                     default:
                         html += `<div class="klv" data-btn="${klv}" title="${title}">${klv}</div>`;
                 } 
-            // duopa signo -> enkrampiga
-            } else if (klv.length == 2) {
+            // enkrampigaj signoj
+            } else if (XKlavaro.krampoj[klv]) {
                 const title = XKlavaro.krampoj[klv];
                 html += `<div class="klv elm_btn" data-cmd="${klv}" title="${title}">${klv[0]}&hellip;${klv[1]}</div>`;
             // pli longaj estas elemento-butonoj k.s.
@@ -362,7 +364,7 @@ export class XKlavaro extends UIElement {
         const pos = elm.children.length; // tie ni poste enŝovos la stilbutonojn!
 
         let indikoj = "<div class='klv ofc' data-ofc='*' title='fundamenta (*)'><span>funda-<br/>menta</span></div>";
-        for (var i=1; i<10; i++) {
+        for (var i=1; i<11; i++) {
             indikoj += "<div class='klv ofc' data-ofc='" + i + "' title='" + i + "a oficiala aldono'><span><b>" + i + "a</b> aldono" + "</span></div>";
         }
         

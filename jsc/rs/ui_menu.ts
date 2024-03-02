@@ -11,7 +11,7 @@
         rimarko_dialogo, homonimo_dialogo, datumprotekto_dialogo } from './ui_dlg.js';
         */
 
-import { Menu, Dialog } from '../ui';
+import { Menu, Dialog, Klavar } from '../ui';
 
 import { kontroli_artikolon, montri_indikojn } from './ui_tabl.js';
 import { surmetita_dialogo } from './ui_err.js';
@@ -21,11 +21,28 @@ export default function() {
     console.debug("Instalante la menuon...");
 
     // menuo
-    new Menu("#menu", {
-          eroj: ":scope>li:not(.ui-widget-header)",
-          reago: menu_selected
-      });
+    const menu = new Menu("#menu", {
+        eroj: ":scope>li:not(.ui-widget-header)",
+        reago: menu_selected,
+        eniro: "#kontroli_menu_item" // apriore fokusata
+    });
         
+    // permesu eniri la menuon per Ktrl+M / Alt+M
+    Klavar.aldonu("#xml_text","KeyM",(event) => {
+        if (event.ctrlKey || event.altKey) {
+            event.preventDefault();
+            event.stopImmediatePropagation();            
+            menu.eniru();
+        }
+    });
+
+    // permesu eniri la menuon per la menuklavo
+    Klavar.aldonu("#xml_text","ContextMenu",(event) => {
+        event.preventDefault();
+        event.stopImmediatePropagation();        
+        menu.eniru();
+    });    
+  
       // loka menuo
     /**
       $( "#local_menu" ).menu({
@@ -42,12 +59,12 @@ export default function() {
 //*********************************************************************************************
 
 
-function menu_selected(event) {
+function menu_selected(event: Event) {
     const menuero = event.currentTarget;
     if (menuero instanceof Element) {
 
         const id = menuero.id;
-        let dlg;
+        let dlg: Dialog|undefined;
 
         switch (id) {
         case "nova_menu_item":

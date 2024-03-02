@@ -8,8 +8,12 @@
   extension-element-prefixes="saxon" 
 >
 
-<!-- (c) 2006-2021 ĉe Wolfram Diestel
+<!-- (c) 2006-2023 ĉe Wolfram Diestel
      laŭ permesilo GPL 2.0
+
+    Transformreguloj uzataj por kreado de indeksoj. La transformoj aplikiĝas en Formiko laŭ la ordo:
+    inx_eltiro -> inx_kategorioj -> inx_ordigo2 -> inx_html
+
 -->
 
 <xsl:include href="inc/inx_kodigo.inc"/>
@@ -244,7 +248,8 @@
   <p>
   <xsl:for-each select="document($lingvoj)/lingvoj/lingvo[@kodo=current()/@lng]">
         <a>
-          <xsl:attribute name="href">
+          <!-- la dosiernomoj de lingvo-indeksoj estas lx_<lingvo-kodo>_<liternnomo>.html -->
+          <xsl:attribute name="href">          
             <xsl:value-of select="concat($inx_url,'lx_',@kodo,'_',
               $root//trd-oj[@lng=current()/@kodo]/litero[v][1]/@name,
                       '.html')"/>
@@ -257,16 +262,17 @@
   </p>
 </xsl:template>
 
-
+<!-- kreas la liston de lingvoj/lingvoindeksoj -->
 <xsl:template match="TRD-OJ[@krom]">
   <p>
   <xsl:variable name="krom" select="@krom"/>
 
   <xsl:for-each select="document($lingvoj)/lingvoj/lingvo">
     <xsl:sort lang="eo"/>
-
+    
     <xsl:if test="$root//trd-oj[@lng=current()/@kodo and @lng != $krom]">
       <xsl:choose>
+        <!-- lingvoj kun pli ol 1000 tradukoj ni prezentas graslitere -->
         <xsl:when test="number($root//trd-oj[@lng=current()/@kodo]/@n) &gt; 1000">
         <a>
           <xsl:attribute name="href">
@@ -279,6 +285,7 @@
           </b>
         </a> <br/>
         </xsl:when>
+        <!-- aliaj lingvoj ĝis 1000 tradukoj -->
         <xsl:when test="$root//trd-oj[@lng=current()/@kodo]">
         <a>
          <xsl:attribute name="href">
@@ -348,7 +355,7 @@
   </xsl:result-document>
 </xsl:template>
 
-
+<!-- kreas la liston de fakindeksoj -->
 <xsl:template match="FAKOJ">
     <xsl:for-each select="document($fakoj)/fakoj/fako">
               <xsl:sort lang="eo"/>
@@ -366,7 +373,7 @@
     </xsl:for-each>
 </xsl:template>
 
-
+<!-- kreas la indekson de mallongigoj -->
 <xsl:template match="MLG-OJ">
   <a href="{$inx_url}mallong.html" style="{@style}"><xsl:value-of select="@titolo"/></a><br/>
 </xsl:template>
@@ -450,7 +457,7 @@
 </xsl:template>
 
 
-<!-- kreas unuopan indeksdosieron per "redirect" -->
+<!-- kreas unuopan indeksdosieron per "result-document" -->
 <xsl:template match="litero|fako|bld-oj|mlg-oj|stat|mankoj">
 
    <!-- konstruu dosiernomon -->
@@ -793,11 +800,12 @@
   <br/>
 </xsl:template>
 
-
+<!-- Kreas unuopan indeksteron en lingva indekso -->
 <xsl:template match="trd-oj/litero/v">
 
   <!-- Cxu temas pri araba, persa aux hebrea traduko? -->
   <xsl:variable name="lng" select="../../@lng"/>
+  <xsl:variable name="key" select="concat($lng,'-',../@name,'-',t)"/>
   <xsl:variable name="trd-rtl" 
                 select="$lng = 'ar' or
                         $lng = 'fa' or
@@ -805,8 +813,8 @@
 
   <xsl:choose>
 
-    <!-- se key('trd-oj') enhavas nur unu tian eron montru kiel "t: k" -->
-    <xsl:when test="count(key('trd-oj',concat($lng,'-',../@name,'-',t)))=1">
+    <!-- se key('trd-oj') enhavas nur unu tian eron, tiam montru kiel "t: k" -->
+    <xsl:when test="count(key('trd-oj',$key))=1">
 
       <xsl:choose>
         <xsl:when test="t1">
@@ -838,14 +846,48 @@
 
     </xsl:when>
 
+    <!-- se key('trd-oj') enhavas prononcelementon, tiam montru kiel "t1: k, k..." -->
+    <xsl:when test="p and count(.|key('trd-oj',$key)[1])=1"> <!-- unua traduko sub indekso t -->
+
+      <xsl:for-each-group group-by="t1" select="key('trd-oj',$key)[t1]">
+        <xsl:sort lang="eo" select="k"/> 
+        <span lang="{$lng}"><xsl:apply-templates select="t1"/></span><xsl:text>: </xsl:text>
+
+        <xsl:for-each select="key('trd-oj',$key)[t1 = current()/t1]">
+        
+          <a target="precipa">
+            <xsl:if test="$trd-rtl">
+              <xsl:attribute name="dir">ltr</xsl:attribute>
+            </xsl:if>
+            <xsl:attribute name="href">
+              <xsl:choose>
+                <xsl:when test="contains(@mrk,'.')">
+                  <xsl:value-of select="concat($art_url,
+                    substring-before(@mrk,'.'),'.html#',@mrk)"/> 
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:value-of select="concat($art_url,@mrk,'.html')"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </xsl:attribute>
+            <xsl:apply-templates select="k"/>
+          </a>
+          <xsl:if test="not(position()=last())"><xsl:text>, </xsl:text></xsl:if>
+
+        </xsl:for-each>
+        <br/>
+      </xsl:for-each-group>
+
+    </xsl:when>
+
     <!-- aliokaze montru kiel "t: k, k, ...; t1: k; t1: k; ... " au simile --> 
-    <xsl:when test="count(.|key('trd-oj',concat($lng,'-',../@name,'-',t))[1])=1">
+    <xsl:when test="count(.|key('trd-oj',$key)[1])=1"> <!-- unua traduko sub indekso t -->
 
       <span lang="{$lng}"><xsl:apply-templates select="t"/></span><xsl:text>: </xsl:text>
      
-      <xsl:for-each select="key('trd-oj',concat($lng,'-',../@name,'-',t))[not(t1)]">
+      <xsl:for-each select="key('trd-oj',$key)[not(t1)]">
         <xsl:sort lang="eo" select="k"/> 
-     
+                   <!-- evitu duoble montri kapvortojn testante la sekvan k,t -->
         <xsl:if test="not(following-sibling::v[k=current()/k and t=current()/t and not(t1)])">
           <a target="precipa">
             <xsl:if test="$trd-rtl">
@@ -869,7 +911,7 @@
       </xsl:for-each>
       <br/>
 
-      <xsl:for-each select="key('trd-oj',concat($lng,'-',../@name,'-',t))[t1]">
+      <xsl:for-each select="key('trd-oj',$key)[t1]">
         <xsl:sort lang="eo" select="k"/> 
 
         <xsl:text>&#xa0;&#xa0;&#xa0;</xsl:text>
@@ -898,11 +940,12 @@
   </xsl:choose>
 </xsl:template>
 
-
+<!-- substrekita vorto, laŭ kiu ni indeksas iun indekseron -->
 <xsl:template match="u">
   <u><xsl:apply-templates/></u>
 </xsl:template>
 
+<!-- prononco (aziaj lingvoj: Pinjino, Hiragano, Latino) -->
 <xsl:template match="p">
   <span class="pr"><xsl:text>[</xsl:text><xsl:apply-templates/><xsl:text>]</xsl:text></span>
 </xsl:template>
