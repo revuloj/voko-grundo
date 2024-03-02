@@ -28,18 +28,18 @@
         "prebuild:css": "mkdir -p build/stl",
         "build:mp": "bin/mp2png_svg.sh",
         "build:svg": "bin/svg2css.sh build/smb/[ir]_*.svg > build/stl/piktogramoj.css",
-        "build:css": "npm run build:svg && cat stl/normalize.css stl/koloroj.css build/stl/piktogramoj.css stl/formularo.css stl/ui.css stl/kadro.css stl/artikoloj.css stl/xklavaro.css stl/redaktilo.css | cssmin > build/stl/revo-2l-min.css && cp stl/artikolo-1b.css build/stl",
-        "build:rsc": "npm run build:svg && cat stl/normalize.css stl/koloroj.css build/stl/piktogramoj.css stl/formularo.css stl/ui.css stl/artikoloj.css stl/xklavaro.css stl/redaktilo-revaj.css | cssmin > build/stl/redaktilo-2l-min.css",
+        "build:css": "npm run build:svg && cat stl/normalize.css stl/koloroj.css build/stl/piktogramoj.css stl/formularo.css stl/ui.css stl/kadro.css stl/artikoloj.css stl/xklavaro.css stl/redaktilo.css | cssmin > build/stl/revo-2m-min.css && cp stl/artikolo-1b.css build/stl",
+        "build:rsc": "npm run build:svg && cat stl/normalize.css stl/koloroj.css build/stl/piktogramoj.css stl/formularo.css stl/ui.css stl/artikoloj.css stl/xklavaro.css stl/redaktilo-revaj.css | cssmin > build/stl/redaktilo-2m-min.css",
         "prebuild:dok": "mkdir -p build/dok",
         "build:dok": "cp dok/* ./build/dok/ && bin/compile-dok.sh",
         "//build:codec": "node js_util/vokosgn2x.js",
         "prebuild:js": "mkdir -p build/jsc && node js_util/vokosgn2x.js",
         "prebuild:rsj": "mkdir -p build/rsj",
         "build:copy": "cp -r bin ./build/bin && cp -r cfg ./build/cfg && cp -r dtd ./build/dtd && cp -r sql ./build/sql && cp -r owl ./build/owl && cp -r xsl ./build/xsl && cp -r smb/*.gif ./build/smb/",
-        "build:js": "tsc --noEmit -p tsconfig-rv.json && ./node_modules/.bin/esbuild --target=es6 jsc/rv/kadro.ts --bundle --minify --outfile=build/jsc/revo-2l-min.js",
-        "build:js:debug": "tsc --noEmit -p tsconfig-rv.json && ./node_modules/.bin/esbuild --target=es6 jsc/rv/kadro.ts --bundle --outfile=build/jsc/revo-2l-min.js",
-        "build:rsj": "tsc --noEmit -p tsconfig-rs.json && ./node_modules/.bin/esbuild --target=es6 jsc/rs/ui_kreo.ts --bundle --minify --outfile=build/rsj/redaktilo-2l-min.js",
-        "build:rsj:debug": "tsc --noEmit -p tsconfig-rs.json && ./node_modules/.bin/esbuild --target=es6 jsc/rs/ui_kreo.ts --bundle --outfile=build/rsj/redaktilo-2l-min.js",
+        "build:js": "tsc --noEmit -p tsconfig-rv.json && ./node_modules/.bin/esbuild --target=es6 jsc/rv/kadro.ts --bundle --minify --outfile=build/jsc/revo-2m-min.js",
+        "build:js:debug": "tsc --noEmit -p tsconfig-rv.json && ./node_modules/.bin/esbuild --target=es6 jsc/rv/kadro.ts --bundle --outfile=build/jsc/revo-2m-min.js",
+        "build:rsj": "tsc --noEmit -p tsconfig-rs.json && ./node_modules/.bin/esbuild --target=es6 jsc/rs/ui_kreo.ts --bundle --minify --outfile=build/rsj/redaktilo-2m-min.js",
+        "build:rsj:debug": "tsc --noEmit -p tsconfig-rs.json && ./node_modules/.bin/esbuild --target=es6 jsc/rs/ui_kreo.ts --bundle --outfile=build/rsj/redaktilo-2m-min.js",
         "build": "npm run build:css && npm run build:dok && npm run build:copy && npm run build:js && npm run build:rsc && npm run build:rsj"
     },
     "scriptsComments": {
@@ -49,6 +49,7 @@
         "build:svg": "kunigas piktogramojn el unuopaj SVG-dosieroj. Ne uzante docker build vi antaŭe voku bin/mp2png_svg.sh"
     },
     "dependencies": {
+        "@sutton-signwriting/font-ttf": "^1.5.2",
         "esbuild": "0.18.3",
         "typescript": "5.1.3"
     }

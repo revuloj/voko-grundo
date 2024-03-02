@@ -16,8 +16,8 @@
 #host=retavortaro.de
 # aldonu en /etc/hosts!
 host=revo
-eldono=2l
-node_eldono=2.0.12
+eldono=2m
+node_eldono=2.0.13
 revo=${host}:www/revo
 files=${host}:files
 
