@@ -476,13 +476,16 @@ export namespace artikolo {
             // @ts-ignore
             ssw.ttf.font.cssAppend('../stl/'); ssw.ttf.font.cssLoaded(
                 function() {
-                    document.querySelectorAll("dl.tradukoj>dd[@lang='sgn']").forEach((dd) => {
-                        dd.querySelectorAll("span[@lang='sgn']").forEach((span) => {
+                    document.querySelectorAll("dl.tradukoj>dd[lang='sgn']").forEach((dd) => {
+                        dd.querySelectorAll("span[lang='sgn']").forEach((span) => {
                             const sgn_kod = span.textContent;
-                            if (sgn_kod && (sgn_kod[0] == 'M'||sgn_kod[0] == 'S')) {
+                            if (sgn_kod && (sgn_kod[0] == 'M')) {
                                 // @ts-ignore
                                 span.innerHTML = ssw.ttf.fsw.signSvg(sgn_kod);
-                            }    
+                            } else if (sgn_kod[0] == 'S') {
+                                // @ts-ignore
+                                span.innerHTML = ssw.ttf.fsw.symbolSvg(sgn_kod);
+                            }
                         });
                     })
                   }
