@@ -182,6 +182,13 @@ dl.tradukoj span[lang='bo']
     vertical-align: text-top;
 }
 
+dl.tradukoj span[lang='sgn'] svg {
+    border: 1px solid var(--svg-brd-clr); 
+    border-radius: 3px;
+    background: var(--svg-brd-clr);
+    padding: .2em;
+}
+
 dl.tradukoj span[lang='zh'], 
 dl.tradukoj span[lang='ja'] {
     font-size: 120%;
