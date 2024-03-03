@@ -1,7 +1,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 		version="1.0">
 
-<!-- (c) 1999-2022 ĉe Wolfram Diestel 
+<!-- (c) 1999-2024 ĉe Wolfram Diestel 
      laŭ GPLv2
 
 reguloj por prezentado de la tradukoj
@@ -215,6 +215,8 @@ reguloj por prezentado de la tradukoj
 
   <!-- skribu la tradukon mem --> 
   <span lang="{@lng}">
+
+    <!-- lingvoj skribataj dekstre maldekstren -->
     <xsl:if test="@lng = 'ar' or
                   @lng = 'fa' or
                   @lng = 'he'">

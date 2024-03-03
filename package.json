@@ -28,6 +28,8 @@
         "prebuild:css": "mkdir -p build/stl",
         "build:mp": "bin/mp2png_svg.sh",
         "build:svg": "bin/svg2css.sh build/smb/[ir]_*.svg > build/stl/piktogramoj.css",
+        "build:sgn": "cp node_modules/@sutton-signwriting/font-ttf/fsw/fsw.min.js build/jsc/sgn-fsw.js && cp node_modules/@sutton-signwriting/font-ttf/font/font.min.js build/jsc/sgn-font.js && cp node_modules/@sutton-signwriting/font-ttf/font/*.ttf build/stl/",
+        "build:sgn:debug": "cp node_modules/@sutton-signwriting/font-ttf/fsw/fsw.js build/jsc/sgn-fsw.js && cp node_modules/@sutton-signwriting/font-ttf/font/font.js build/jsc/sgn-font.js && cp node_modules/@sutton-signwriting/font-ttf/font/*.ttf build/stl/",
         "build:css": "npm run build:svg && cat stl/normalize.css stl/koloroj.css build/stl/piktogramoj.css stl/formularo.css stl/ui.css stl/kadro.css stl/artikoloj.css stl/xklavaro.css stl/redaktilo.css | cssmin > build/stl/revo-2m-min.css && cp stl/artikolo-1b.css build/stl",
         "build:rsc": "npm run build:svg && cat stl/normalize.css stl/koloroj.css build/stl/piktogramoj.css stl/formularo.css stl/ui.css stl/artikoloj.css stl/xklavaro.css stl/redaktilo-revaj.css | cssmin > build/stl/redaktilo-2m-min.css",
         "prebuild:dok": "mkdir -p build/dok",
@@ -40,11 +42,11 @@
         "build:js:debug": "tsc --noEmit -p tsconfig-rv.json && ./node_modules/.bin/esbuild --target=es6 jsc/rv/kadro.ts --bundle --outfile=build/jsc/revo-2m-min.js",
         "build:rsj": "tsc --noEmit -p tsconfig-rs.json && ./node_modules/.bin/esbuild --target=es6 jsc/rs/ui_kreo.ts --bundle --minify --outfile=build/rsj/redaktilo-2m-min.js",
         "build:rsj:debug": "tsc --noEmit -p tsconfig-rs.json && ./node_modules/.bin/esbuild --target=es6 jsc/rs/ui_kreo.ts --bundle --outfile=build/rsj/redaktilo-2m-min.js",
-        "build": "npm run build:css && npm run build:dok && npm run build:copy && npm run build:js && npm run build:rsc && npm run build:rsj"
+        "build": "npm run build:css && npm run build:dok && npm run build:copy && npm run build:sgn && npm run build:js && npm run build:rsc && npm run build:rsj"
     },
     "scriptsComments": {
         "build": "Kompilas CSS, JS kaj DOK al dosierujo build/",
-        "build:js": "Js por simpla redaktilo, pri google-closure-compiler vd. https://www.npmjs.com/package/google-closure-compiler",
+        "build:js": "JS por simpla redaktilo, pri google-closure-compiler vd. https://www.npmjs.com/package/google-closure-compiler",
         "build:rsj": "JS/jQuery por la komforta redaktilo, pri google-closure-compiler vd. https://www.npmjs.com/package/google-closure-compiler",
         "build:svg": "kunigas piktogramojn el unuopaj SVG-dosieroj. Ne uzante docker build vi antaŭe voku bin/mp2png_svg.sh"
     },

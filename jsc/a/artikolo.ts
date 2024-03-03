@@ -89,6 +89,7 @@ export namespace artikolo {
         preparu_malkashu_fontojn();
         preparu_maletendu_sekciojn();
         kashu_malkashu_butonoj(artikolo);
+        preparu_gestojn();
         //interna_navigado();
         //etendu_ekzemplojn();   
         //}
@@ -466,6 +467,27 @@ export namespace artikolo {
         div.appendChild(u.ht_icon_button("i_mkash_ch",malkashu_chiujn_drv,"malkaŝu ĉiujn derivaĵojn"));
         //h1.appendChild(u.ht_button(icon_opcioj,preferoj_dlg,"agordu viajn preferatajn lingvojn"));
         art.appendChild(div);
+    }
+
+    function preparu_gestojn() {
+        // @ts-ignore
+        if (ssw && ssw.ttf && ssw.ttf.font) { // ssw estas nur en artikoloj, kie ni ŝargas la javoskripton sgn-font.js
+                                              // kaj tion ni enmetas per XSL nur, se enestas sgn-tradukoj!
+            // @ts-ignore
+            ssw.ttf.font.cssAppend('../stl/'); ssw.ttf.font.cssLoaded(
+                function() {
+                    document.querySelectorAll("dl.tradukoj>dd[@lang='sgn']").forEach((dd) => {
+                        dd.querySelectorAll("span[@lang='sgn']").forEach((span) => {
+                            const sgn_kod = span.textContent;
+                            if (sgn_kod && (sgn_kod[0] == 'M'||sgn_kod[0] == 'S')) {
+                                // @ts-ignore
+                                span.innerHTML = ssw.ttf.fsw.signSvg(sgn_kod);
+                            }    
+                        });
+                    })
+                  }
+            )            
+        }
     }
 
     /**
