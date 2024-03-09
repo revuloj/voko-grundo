@@ -367,15 +367,19 @@ export namespace artikolo {
     function etendu_trd(event: Event) {
         event.preventDefault();
         const trg = event.target as Element;
-        const div_trd = trg.closest("DL");
-        for (var id of Array.from(div_trd.children)) {
+        const dl_trd = trg.closest("DL");
+        // montru ĉiujn tradukojn
+        for (var id of Array.from(dl_trd.children)) {
             id.classList.remove("kasxita");
         }
-        // kaŝu pli...
-        div_trd.querySelectorAll("dt.pli, dd.pli").forEach(
+        // eventuale enestas tradukoj de gestolingvo; tiam desegnu ilin nun
+        desegnu_gestojn(dl_trd);
+        // kaŝu elementon "pli..."
+        dl_trd.querySelectorAll("dt.pli, dd.pli").forEach(
             p => p.classList.add("kasxita")
         );
-        div_trd.querySelectorAll("dt.pref, dd.pref").forEach(
+        // kaŝu elementon "preferoj..."
+        dl_trd.querySelectorAll("dt.pref, dd.pref").forEach(
             p => p.classList.add("kasxita")
         );
     }
@@ -469,28 +473,41 @@ export namespace artikolo {
         art.appendChild(div);
     }
 
+    /**
+     * Antataŭigas la aski-kodon de signolingvo (Suttons Sigwn Writing) per SVG-bildetoj montranta la signon de la gesto.
+     */
     function preparu_gestojn() {
         // @ts-ignore
-        if (ssw && ssw.ttf && ssw.ttf.font) { // ssw estas nur en artikoloj, kie ni ŝargas la javoskripton sgn-font.js
-                                              // kaj tion ni enmetas per XSL nur, se enestas sgn-tradukoj!
+        if (ssw && ssw.ttf && ssw.ttf.font) { 
+            // objekto ssw aperas nur en artikoloj, se ni ŝargis la javoskripton sgn-font.js
+                                             
             // @ts-ignore
             ssw.ttf.font.cssAppend('../stl/'); ssw.ttf.font.cssLoaded(
                 function() {
-                    document.querySelectorAll("dl.tradukoj>dd[lang='sgn']").forEach((dd) => {
-                        dd.querySelectorAll("span[lang='sgn']").forEach((span) => {
-                            const sgn_kod = span.textContent;
-                            if (sgn_kod && (sgn_kod[0] == 'M')) {
-                                // @ts-ignore
-                                span.innerHTML = ssw.ttf.fsw.signSvg(sgn_kod);
-                            } else if (sgn_kod[0] == 'S') {
-                                // @ts-ignore
-                                span.innerHTML = ssw.ttf.fsw.symbolSvg(sgn_kod);
-                            }
-                        });
-                    })
+                    document.querySelectorAll("dl.tradukoj").forEach((dl) => {
+                        desegnu_gestojn(dl)
                   }
-            )            
+                )            
+            })
         }
+    }
+
+    function desegnu_gestojn(dl: Element) {
+        console.debug("dl: "+dl);
+        dl.querySelectorAll("dd[lang='sgn']").forEach((dd) => {
+            if (!dd.classList.contains("kasxita")) { // dum kaŝita ni ankoraŭ ne transformas
+                dd.querySelectorAll("span[lang='sgn']").forEach((span) => {
+                    const sgn_kod = span.textContent;
+                    if (sgn_kod && (sgn_kod[0] == 'M')) {
+                        // @ts-ignore
+                        span.innerHTML = ssw.ttf.fsw.signSvg(sgn_kod);
+                    } else if (sgn_kod[0] == 'S') {
+                        // @ts-ignore
+                        span.innerHTML = ssw.ttf.fsw.symbolSvg(sgn_kod);
+                    }
+                });
+            }
+        })
     }
 
     /**
