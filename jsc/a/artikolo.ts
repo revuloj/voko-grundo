@@ -536,7 +536,7 @@ export namespace artikolo {
                 ])[0];  
             }          
             if (dlg) {
-                pied.prepend(dlg);
+                document.body.append(dlg);
                 // reagoj al butonoj [fermu] kaj [kopiu]
                 const fermu = document.getElementById('dlg_ref_fermu');
                 fermu.addEventListener("click", () => {

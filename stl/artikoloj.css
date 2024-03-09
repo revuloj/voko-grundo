@@ -887,6 +887,11 @@ dt.pli, .ekz.pli, a.pli {
     font-size: 100% /* 100% = pli malgranda ol apriore */
 }
 
+#dlg_referenco {
+    width: fit-content;
+    bottom: 3em;
+}
+
 
 
 #w\:ix_literoj {
