@@ -93,6 +93,12 @@ smb)
     # kopiu ĉiujn smb-dosierojn donitaj sur komandlinio (ekde dua argumento) al la servilo
     scp "${@:2}" ${revo}/smb/
     ;;    
+ssw)
+    ## ssw        : transsendas dosierojn bezonatajn por gestolingvo (Sutton Sign Writing)
+    scp node_modules/\\@sutton-signwriting/font-ttf/fsw/fsw.min.js ${revo}/jsc/sgn-fsw.js
+    scp node_modules/\\@sutton-signwriting/font-ttf/font/font.min.js ${revo}/jsc/sgn-font.js 
+    scp node_modules/\\@sutton-signwriting/font-ttf/font/*.ttf ${revo}/stl/    
+    ;;
 artikoloj)
     ## artikoloj  : transsendas la artikolojn (HTML) donitajn en la komandlinio al la publika servilo    
     # kopiu ĉiujn artikolojn donitaj sur komandlinio (ekde dua argumento) al la servilo
