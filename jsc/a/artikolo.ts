@@ -497,14 +497,18 @@ export namespace artikolo {
         dl.querySelectorAll("dd[lang='sgn']").forEach((dd) => {
             if (!dd.classList.contains("kasxita")) { // dum kaŝita ni ankoraŭ ne transformas
                 dd.querySelectorAll("span[lang='sgn']").forEach((span) => {
-                    const sgn_kod = span.textContent;
-                    if (sgn_kod && (sgn_kod[0] == 'M')) {
-                        // @ts-ignore
-                        span.innerHTML = ssw.ttf.fsw.signSvg(sgn_kod);
-                    } else if (sgn_kod[0] == 'S') {
-                        // @ts-ignore
-                        span.innerHTML = ssw.ttf.fsw.symbolSvg(sgn_kod);
-                    }
+                    // povas esti pluraj apartigitaj per komo aŭ almenaŭ spaco
+                    const gestoj = span.textContent.split(/[,\s]+/);
+                    span.textContent = '';
+                    gestoj.forEach((sgn_kod) => {
+                        if (sgn_kod[0] == 'M') {
+                            // @ts-ignore
+                            span.innerHTML += ssw.ttf.fsw.signSvg(sgn_kod);
+                        } else if (sgn_kod[0] == 'S') {
+                            // @ts-ignore
+                            span.innerHTML += ssw.ttf.fsw.symbolSvg(sgn_kod);
+                        }
+                    })
                 });
             }
         })

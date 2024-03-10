@@ -187,6 +187,7 @@ dl.tradukoj span[lang='sgn'] svg {
     border-radius: 3px;
     background: var(--svg-brd-clr);
     padding: .2em;
+    margin-left: 0.1em;    
 }
 
 dl.tradukoj span[lang='zh'], 

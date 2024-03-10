@@ -72,9 +72,14 @@ etikedo)
     git tag -f v${eldono} && git push && git push origin v${eldono} -f
         # alternative anst. la lasste eble funkcias ankaŭ: git push --follow-tags
     ;;
+cfg)
+    ## cfg        : transsendas la agordo-dosierojn donitajn en la komandlinio al la publika servilo
+    # kopiu ĉiujn cfg-dosierojn donitaj sur komandlinio (ekde dua argumento) al la servilo
+    scp "${@:2}" ${revo}/cfg/
+    ;;     
 dtd)
     ## dtd        : transsendas la DTD/RNC-dosierojn donitajn en la komandlinio al la publika servilo
-    # kopiu ĉiujn xsl-dosierojn donitaj sur komandlinio (ekde dua argumento) al la servilo
+    # kopiu ĉiujn dtd-dosierojn donitaj sur komandlinio (ekde dua argumento) al la servilo
     scp "${@:2}" ${revo}/dtd/
     ;;     
 xsl)
@@ -95,9 +100,9 @@ smb)
     ;;    
 ssw)
     ## ssw        : transsendas dosierojn bezonatajn por gestolingvo (Sutton Sign Writing)
-    scp node_modules/\\@sutton-signwriting/font-ttf/fsw/fsw.min.js ${revo}/jsc/sgn-fsw.js
-    scp node_modules/\\@sutton-signwriting/font-ttf/font/font.min.js ${revo}/jsc/sgn-font.js 
-    scp node_modules/\\@sutton-signwriting/font-ttf/font/*.ttf ${revo}/stl/    
+    scp node_modules/\@sutton-signwriting/font-ttf/fsw/fsw.min.js ${revo}/jsc/sgn-fsw.js
+    scp node_modules/\@sutton-signwriting/font-ttf/font/font.min.js ${revo}/jsc/sgn-font.js 
+    scp node_modules/\@sutton-signwriting/font-ttf/font/*.ttf ${revo}/stl/    
     ;;
 artikoloj)
     ## artikoloj  : transsendas la artikolojn (HTML) donitajn en la komandlinio al la publika servilo    
