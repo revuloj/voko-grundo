@@ -185,7 +185,7 @@ dl.tradukoj span[lang='bo']
 dl.tradukoj span[lang='sgn'] svg {
     border: 1px solid var(--svg-brd-clr); 
     border-radius: 3px;
-    background: var(--svg-brd-clr);
+    background: var(--svg-bgr-clr);
     padding: .2em;
     margin-left: 0.1em;    
 }
@@ -804,14 +804,6 @@ dt.pli, .ekz.pli, a.pli {
     font-style: oblique;
     color: var(--label-fnt-clr);
     border: none;
-        /*
-    text-decoration: none;
-    color: var(--btn-fnt-clr);
-    background: var(--btn-bgr-clr);
-    border-radius: .5em;
-    padding: .1em .3em;
-    margin-bottom: .1em;
-    */
 }
 
 
