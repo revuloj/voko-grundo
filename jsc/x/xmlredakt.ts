@@ -113,6 +113,7 @@ export class XmlRedakt extends Tekst {
     super(textarea,{
       analizo: xs.struktur_analizo,
       post_aldono: post_aldono,
+      poziciŝanĝo: poziciŝanĝo,
       tekstŝanĝo: tekstŝanĝo
     })
     /* this.txtarea = document.getElementById(ta_id) as HTMLInputElement;
