@@ -420,7 +420,7 @@ marko = xsd:ID { pattern = "([a-z0-9_]+)\.[A-Za-z0-9\._]+" }
 ## La pronco povas esti donita aŭ per latinaj literoj (kun supersignoj)
 ## per hiragano, katakano aŭ bopomofo kaj kelkaj apartaj signoj
 
-prononco = xsd:string { pattern = "[\p{IsBasicLatin}\p{IsLatin-1Supplement}\p{IsLatinExtended-A}\p{IsLatinExtended-B}]+|\p{IsBopomofo}+|[\s\p{IsHiragana}\p{IsKatakana}\p{IsHalfwidthandFullwidthForms}0-9]+" }
+prononco = xsd:string { pattern = "[\p{IsBasicLatin}\p{IsLatin-1Supplement}\p{IsLatinExtended-A}\p{IsLatinExtended-B}]+|\p{IsBopomofo}+|[\s\p{IsHiragana}\p{IsKatakana}\p{IsHalfwidthandFullwidthForms}]+" }
 
 
 ## [kap]
