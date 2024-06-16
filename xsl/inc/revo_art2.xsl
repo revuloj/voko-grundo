@@ -22,7 +22,7 @@ uzata kun XSLT2-transformilo
         <script type="text/javascript" async="async" src="{$mathjax-url}"></script>
       </xsl:if>      
       <!-- se la artikolo enhavas gestolingvon (Signuno-signojn) -->
-      <xsl:if test="//trd[@lng='sgn']">
+      <xsl:if test="//trd[@lng='sgn' or @lng='ils']">
         <script type="text/javascript" defer="defer" src="{$sgn-fsw-url}"></script>
         <script type="text/javascript" defer="defer" src="{$sgn-font-url}"></script>
       </xsl:if>      
