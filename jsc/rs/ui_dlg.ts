@@ -90,6 +90,22 @@ function xml_nova(art: Valoroj) {
 function xml_enmeto(teksto: string, sinkronigu = false) {
     const red = XmlRedakt.xmlredakt("#xml_text");
     if (red) {
+
+        // se ambaŭ la tekstkomenco kaj la liniparto antaŭ
+        // la enmetloko konsistas el spacoj ni unu
+        // forigas ilin de la teksto
+        if (teksto.startsWith(' ')) {
+            const antaŭ = red.linisignoj_antaŭ();
+            if (antaŭ && XmlRedakt.nur_spacoj(antaŭ)) {
+                // forigu troajn spacoj
+                // oficialigota:
+                //teksto = teksto.trimStart();
+                let i = 0;
+                while (i<teksto.length && teksto[i] === ' ') { i++; }                
+                teksto = teksto.slice(i);
+            }
+        }
+
         red.elektenmeto(teksto);
         if (sinkronigu) red.sinkronigu();
     }
