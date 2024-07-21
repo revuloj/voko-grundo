@@ -478,7 +478,7 @@ export namespace artikolo {
      */
     function preparu_gestojn() {
         // @ts-ignore
-        if (ssw && ssw.ttf && ssw.ttf.font) { 
+        if (typeof ssw !== 'undefined' && ssw.ttf && ssw.ttf.font) { 
             // objekto ssw aperas nur en artikoloj, se ni ŝargis la javoskripton sgn-font.js
                                              
             // @ts-ignore
@@ -494,9 +494,9 @@ export namespace artikolo {
 
     function desegnu_gestojn(dl: Element) {
         console.debug("dl: "+dl);
-        dl.querySelectorAll("dd[lang='sgn']").forEach((dd) => {
+        dl.querySelectorAll("dd[lang='sgn'],dd[lang='ils']").forEach((dd) => {
             if (!dd.classList.contains("kasxita")) { // dum kaŝita ni ankoraŭ ne transformas
-                dd.querySelectorAll("span[lang='sgn']").forEach((span) => {
+                dd.querySelectorAll("span[lang='sgn'],span[lang='ils']").forEach((span) => {
                     // povas esti pluraj apartigitaj per komo aŭ almenaŭ spaco
                     const gestoj = span.textContent.split(/[,\s]+/);
                     span.textContent = '';
