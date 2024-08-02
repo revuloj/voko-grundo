@@ -232,12 +232,20 @@ main .tabs a.aktiva {
     flex: 2;
 
     /*max-width: 90%;*/
-    width: 5em; 
+    width: 5em;
 
     /*font-size: 1rem;*/
     display: flex;
     justify-content: space-between;
 }
+
+
+#w\:sercho {
+    /*max-width: 90%;*/
+    min-width: 5em;
+    width: auto;
+    flex: none;
+}   
 
 
 .sercho input {
@@ -269,11 +277,17 @@ main .tabs a.aktiva {
 .cx[value="0"] {
     background-color: gray;
 }
+ 
+#w\:serchiloj {
+    display: flex;
+    align-items: top;
+    justify-content: flex-start;
+}
 
 #w\:revo_sercho {
     height: var(--button-size);
     width: var(--button-size);
-    margin-right: 1em;
+    /*margin-right: 1em;*/
     border-radius: 50%;
     /*
     background: url(../smb/revo.svg) no-repeat;
