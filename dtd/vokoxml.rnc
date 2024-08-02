@@ -630,12 +630,16 @@ attlist-trdgrp &= attribute lng { text }
 ## [trd]
 ## Traduko kosistas el traduka vorto aŭ frazo
 ## kaj klarigoj, poste povos sekvi aliaj elementoj.
-# FARENDA: difinu trd engrupa (sen lng) kaj memstara, sola
-
+## Per la atributo <em>fnt</em> oni povas indiki kie
+## oni trovis la tradukon.
+## La atributo <em>kod</em> estas uzebla por aldoni
+## komputile interpreteblan kodon - ni uzas tion por gestolingvo.
+# FARENDA: difinu aparte: trd engrupa (sen lng) kaj memstara, sola
 trd = element trd { attlist-trd, (text | klr | ind | pr | mll | ofc | baz)* }
 attlist-trd &=
   attribute lng { text }?,
-  attribute fnt { text }?
+  attribute fnt { text }?,
+  attribute kod { text }?
 
 
 ## [ind]

@@ -322,11 +322,16 @@ sama lingvo.
 
 <!-- [trd] Traduko konsistas el traduka vorto aŭ frazo
 kaj klarigoj, poste povos sekvi aliaj elementoj.
+Per la atributo <em>fnt</em> oni povas indiki kie
+oni trovis la tradukon.
+La atributo <em>kod</em> estas uzebla por aldoni
+komputile interpreteblan kodon - ni uzas tion por gestolingvo.
 -->
 <!ELEMENT trd (#PCDATA|klr|ind|pr|mll|ofc|baz)*>
 <!ATTLIST trd
 	lng CDATA #IMPLIED
         fnt CDATA #IMPLIED
+        kod CDATA #IMPLIED
 >
 
 <!-- [ind] Parto de traduko, kiu liveras la kapvorton en la
@@ -357,7 +362,7 @@ silabaj lingvoj. Ankaŭ ni ebligas serĉadon laŭ transskribo aldone al la ideog
 <!-- [ke] Komunlingva esprimo, per kiu oni povas anstataŭigi la (fakan, tre specialan) kapvorton en
 pli simpla komuna lingvo.
 Tiu esprimo povas konsisti el teksto kaj eventuale enhavi <em>ref</em>erencon. Ĝi
-povas aperi ene de <dfndif</dfnino, <dfnrim</dfnmarko kaj referencgrupo (<dfn>refgrp</dfn>). 
+povas aperi ene de <dfn>dif</dfn>ino, <dfn>rim</dfn>marko kaj referencgrupo (<dfn>refgrp</dfn>). 
 -->
 <!ELEMENT ke (#PCDATA | ref)*>
 

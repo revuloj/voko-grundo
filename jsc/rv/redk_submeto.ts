@@ -35,13 +35,13 @@ const cgi_vokosubmx = '/cgi-bin/vokosubmx.pl';
 const cgi_vokohtmlx = '/cgi-bin/vokohtmlx.pl';
 const cgi_vokosubm_json = '/cgi-bin/vokosubm-json.pl';
   
-const re_lng = /<(?:trd|trdgrp)\s+lng\s*=\s*"([^]*?)"\s*>/mg; 
+const re_lng = /<(?:trd|trdgrp)\s+lng\s*=\s*"([^"]*?)"\s*>/mg; 
 const re_fak = /<uzo\s+tip\s*=\s*"fak"\s*>([^]*?)</mg; 
 const re_stl = /<uzo\s+tip\s*=\s*"stl"\s*>([^]*?)</mg; 
 const re_mrk = /<(drv|snc) mrk="([^]*?)">/mg;
 
 const re_trdgrp = /<trdgrp\s+lng\s*=\s*"[^"]+"\s*>[^]*?<\/trdgrp/mg;	
-const re_trd = /<trd\s+lng\s*=\s*"[^"]+"\s*>[^]*?<\/trd/mg;	
+const re_trd = /<trd\s+lng\s*=\s*"[^"]+"(?:\s+(?:kod|fnt)\s*=\s*"[^"]+")?\s*>[^]*?<\/trd/mg;	
 const re_ref = /<ref([^g>]*)>([^]*?)<\/ref/mg;
 const re_refcel = /cel\s*=\s*"([^"]+?)"/m;
 
