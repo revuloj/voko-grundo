@@ -200,6 +200,17 @@ dl.tradukoj span[lang='zh'] .pr
     font-size: 83.33%;
 }
 
+dd[lang='sgn']>span {   
+    display: flex; 
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+dd[lang='sgn']>span>span {
+    /* montri Signuno-kodon sub la gestografiko */
+    display: flex;
+    flex-direction: column;
+}
+
 dl.tradukoj .lng {
     color: gray;     
 }

@@ -373,7 +373,9 @@ export namespace artikolo {
             id.classList.remove("kasxita");
         }
         // eventuale enestas tradukoj de gestolingvo; tiam desegnu ilin nun
-        desegnu_gestojn(dl_trd);
+        dl_trd.querySelectorAll(".trd-kod").forEach(
+            tk => desegnu_gestojn(tk)
+        );
         // kaŝu elementon "pli..."
         dl_trd.querySelectorAll("dt.pli, dd.pli").forEach(
             p => p.classList.add("kasxita")
@@ -484,34 +486,31 @@ export namespace artikolo {
             // @ts-ignore
             ssw.ttf.font.cssAppend('../stl/'); ssw.ttf.font.cssLoaded(
                 function() {
-                    document.querySelectorAll("dl.tradukoj").forEach((dl) => {
-                        desegnu_gestojn(dl)
+                    document.querySelectorAll(".trd-kod").forEach((tk) => {
+                        desegnu_gestojn(tk)
                   }
                 )            
             })
         }
     }
 
-    function desegnu_gestojn(dl: Element) {
-        console.debug("dl: "+dl);
-        dl.querySelectorAll("dd[lang='sgn'],dd[lang='ils']").forEach((dd) => {
-            if (!dd.classList.contains("kasxita")) { // dum kaŝita ni ankoraŭ ne transformas
-                dd.querySelectorAll("span[lang='sgn'],span[lang='ils']").forEach((span) => {
-                    // povas esti pluraj apartigitaj per komo aŭ almenaŭ spaco
-                    const gestoj = span.textContent.split(/[,\s]+/);
-                    span.textContent = '';
-                    gestoj.forEach((sgn_kod) => {
-                        if (sgn_kod[0] == 'M') {
-                            // @ts-ignore
-                            span.innerHTML += ssw.ttf.fsw.signSvg(sgn_kod);
-                        } else if (sgn_kod[0] == 'S') {
-                            // @ts-ignore
-                            span.innerHTML += ssw.ttf.fsw.symbolSvg(sgn_kod);
-                        }
-                    })
-                });
+    function desegnu_gestojn(tk: Element) {
+        if (!tk.closest("dd").classList.contains("kasxita")) { // dum kaŝita ni ankoraŭ ne transformas
+            // povas esti pluraj apartigitaj per komo aŭ almenaŭ spaco
+            const sgn = tk.textContent;
+            tk.textContent = '';
+            const sgn_kod = tk.getAttribute("data-kod");
+            if (sgn_kod[0] == 'M') {
+                // @ts-ignore
+                tk.innerHTML += ssw.ttf.fsw.signSvg(sgn_kod);
+            } else if (sgn_kod[0] == 'S') {
+                // @ts-ignore
+                tk.innerHTML += ssw.ttf.fsw.symbolSvg(sgn_kod);
             }
-        })
+            if (sgn) {
+                tk.append(u.ht_element("span",{},sgn))
+            }
+        };
     }
 
     /**
