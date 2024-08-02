@@ -182,7 +182,7 @@ dl.tradukoj span[lang='bo']
     vertical-align: text-top;
 }
 
-dl.tradukoj span[lang='sgn'] svg {
+.trd-kod svg {
     border: 1px solid var(--svg-brd-clr); 
     border-radius: 3px;
     background: var(--svg-bgr-clr);
