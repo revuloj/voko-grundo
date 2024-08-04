@@ -495,9 +495,10 @@ export namespace artikolo {
     }
 
     function desegnu_gestojn(tk: Element) {
-        if (!tk.closest("dd").classList.contains("kasxita")) { // dum kaŝita ni ankoraŭ ne transformas
+        if (tk instanceof HTMLElement 
+            && !tk.closest("dd").classList.contains("kasxita")) { // dum kaŝita ni ankoraŭ ne transformas
             // povas esti pluraj apartigitaj per komo aŭ almenaŭ spaco
-            const sgn = tk.textContent;
+            const sgn = tk.innerText;
             tk.textContent = '';
             const sgn_kod = tk.getAttribute("data-kod");
             if (sgn_kod[0] == 'M') {
