@@ -61,8 +61,8 @@ window.addEventListener("hashchange", function() {
 export namespace artikolo {
 
     /**
-     * Preparas la artikolon: kaŝas kaseblajn aferojn, t.e. kunfaldas derivajojn krom unu, kaŝas 
-     * ekzemploj krom po tri, kaŝas tradukojn krom preferatajn. Alligas la kodon por aktivaj elementoj
+     * Preparas la artikolon: kaŝas kaŝeblajn aferojn, t.e. kunfaldas derivaĵojn krom unu, kaŝas 
+     * ekzemplojn krom po tri, kaŝas tradukojn krom preferatajn. Alligas la kodon por aktivaj elementoj
      * uzata por faldi-malfaldi.
      * @memberof artikolo
      * @param artikolo - la doserinomo de la artikolo

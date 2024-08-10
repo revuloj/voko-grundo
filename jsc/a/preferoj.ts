@@ -35,14 +35,14 @@ export namespace preferoj {
     /**
      * Ŝargas la lingvo-liston de la servilo, dividas ilin en 
      * preferataj kaj aliaj kaj preparas la prezenton kiel
-     * listojn en la prefero-adapata dialogo
+     * listojn en la prefero-adapta dialogo
      * @memberof preferoj
      * @inner
      */
     function legu_pref_lng() {
         u.HTTPRequest('GET', g.lingvoj_xml, {},
         function(data: string) {
-            // Success!
+            // sukceso!
             const parser = new DOMParser();
             const doc = parser.parseFromString(data,"text/xml");
             const plist = document.getElementById("pref_lng");
@@ -100,7 +100,7 @@ export namespace preferoj {
     }
 
     /**
-     * Kaŝas / malkaŝas  preferatajn lingvojn post
+     * Kaŝas / malkaŝas preferatajn lingvojn post
      * unuopa adapto en la listo de aliaj lingvoj.
      * @memberof preferoj
      * @inner
@@ -301,7 +301,6 @@ export namespace preferoj {
             window.localStorage.setItem("revo_preferoj",JSON.stringify(prefs));     
         }
     }
-
 
     
     /**
