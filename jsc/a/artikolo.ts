@@ -476,7 +476,8 @@ export namespace artikolo {
     }
 
     /**
-     * Antataŭigas la aski-kodon de signolingvo (Suttons Sigwn Writing) per SVG-bildetoj montranta la signon de la gesto.
+     * Tradukas la aski-kodon de signolingvo (Suttons Sigwn Writing) el atributo data-kod 
+     * al SVG-bildetoj montranta la signon de la gesto.
      */
     function preparu_gestojn() {
         // @ts-ignore
@@ -496,9 +497,11 @@ export namespace artikolo {
 
     function desegnu_gestojn(tk: Element) {
         if (tk instanceof HTMLElement 
-            && !tk.closest("dd").classList.contains("kasxita")) { // dum kaŝita ni ankoraŭ ne transformas
+            && !tk.closest("dd").classList.contains("kasxita") // dum kaŝita ni ankoraŭ ne transformas
+            && !tk.querySelector("svg")) // SVG jam enestas, evitu duoble kalkuli ĝin
+        {
             // povas esti pluraj apartigitaj per komo aŭ almenaŭ spaco
-            const sgn = tk.innerText;
+            const sgn = u.textcontent(tk); //tk.innerText;
             tk.textContent = '';
             const sgn_kod = tk.getAttribute("data-kod");
             if (sgn_kod[0] == 'M') {
