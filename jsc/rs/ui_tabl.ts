@@ -500,7 +500,7 @@ function antaurigardo() {
     const xr = XmlRedakt.xmlredakt("#xml_text");
     const ahtml = DOM.html("#rigardo");
 
-    /* teorie ni povos ŝapri remeti antaŭrigardon, se nenio
+    /* teorie ni povos ŝpari remeti antaŭrigardon, se nenio
     intertempe ŝanĝiĝis (xmlarea.antaŭrigardo_sinkrona...), sed estas malfacile fidinde
     eltrovi tion pro kio en antaŭaj eldonoj ni havis manan refreŝbutonon...
     'sync' ja okazas ekz-e ĉe kontrolo kaj tradukado sen ke la antaŭrigardo estas
