@@ -145,7 +145,7 @@ export namespace plena {
 
         if (sj.length && ds) {
             // forigu antaŭajn...
-            ds.querySelectorAll("details,span").forEach( (ch) => ds.removeChild(ch) );
+            ds.querySelectorAll(":scope>details,:scope>span").forEach( (ch) => ds.removeChild(ch) );
             
             // enŝovu novan staton....
             for (let s of sj) {
