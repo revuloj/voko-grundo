@@ -72,7 +72,7 @@ jobs:
     steps:
       # https://github.com/actions/download-artifact
       - name: Reakiro de ${{ env.IMAGE_NAME }}
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4.1.7
         with:
           name: ${{ env.IMAGE_NAME }}
           path: image
