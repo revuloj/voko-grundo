@@ -1,5 +1,12 @@
 #!/usr/bin/perl
 
+# (c) 2017 - 2024 ĉe Wolfram Diestel
+# laŭ GPL 2.0
+
+# Kreas manlibran paĝon de dokumentstrukturo difinita per RelaxNG. 
+# La difinoj estas en dtd/vokoxml.rnc, la manlibra paĝo skribiĝos al la terminalo,
+# sed vi povas redirekti ĝin al la koncerna paĝo _temoj/rnc.md en la projekto revuloj.github.io
+
 use strict;
 use warnings;
 use POSIX qw(strftime);

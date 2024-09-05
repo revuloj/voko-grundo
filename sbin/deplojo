@@ -18,8 +18,12 @@
 #host=retavortaro.de
 # aldonu en /etc/hosts!
 host=revo
-release=2l
-node_release=2.0.12
+release=2m
+node_release=2.0.13
+# ni aktualigas nur tre malofte por ke 
+# unuopaj artikoloj havu stabilan eldonon/aspekton
+# art_release=1b
+art_release=2m
 revo=${host}:www/revo
 files=${host}:files
 
@@ -34,6 +38,9 @@ CSS=build/stl/revo-${release}-min.css
 RSJ=build/rsj/redaktilo-${release}-min.js
 RSC=build/stl/redaktilo-${release}-min.css
 
+AJS=build/jsc/revo-art-${art_release}.js
+ACS=build/stl/artikolo-${art_release}.css
+
 DTD="dtd/*.dtd"
 XSL_INC="xsl/inc/*.xsl"
 XSL="xsl/revo*.xsl"
@@ -46,11 +53,13 @@ case $target in
 araneo)
     ## araneo       : kompilas kaj deplojas JS + CSS al loka Araneo
     npm run build:js
+    npm run build:ajs
     npm run build:css
     ;;&
 araneo:debug)
     ## araneo:debug : kompilas kaj deplojas legeblan (sencimigeblan) JS + CSS al loka Araneo
     npm run build:js:debug
+    npm run build:ajs:debug
     npm run build:css
     ;;&
 araneo|araneo:debug)
@@ -59,6 +68,8 @@ araneo|araneo:debug)
     echo "kopiante JS+CSS al ${araneo_id}:${todir}..."
     docker cp -q ${JSC} ${araneo_id}:${todir}/jsc
     docker cp -q ${CSS} ${araneo_id}:${todir}/stl
+    docker cp -q ${AJS} ${araneo_id}:${todir}/jsc
+    docker cp -q ${ACS} ${araneo_id}:${todir}/stl
     ;;
 araneo-dtd)
     ## araneo-dtd   : deplojas DTD al loka Araneo

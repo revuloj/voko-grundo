@@ -182,6 +182,14 @@ dl.tradukoj span[lang='bo']
     vertical-align: text-top;
 }
 
+.trd-kod svg {
+    border: 1px solid var(--svg-brd-clr); 
+    border-radius: 3px;
+    background: var(--svg-bgr-clr);
+    padding: .2em;
+    margin-left: 0.1em;    
+}
+
 dl.tradukoj span[lang='zh'], 
 dl.tradukoj span[lang='ja'] {
     font-size: 120%;
@@ -192,6 +200,17 @@ dl.tradukoj span[lang='ja'] {
 dl.tradukoj span[lang='zh'] .pr 
 {   /* Pinjino en normala grandeco: 83.33 * 120 = 100 */
     font-size: 83.33%;
+}
+
+dd[lang='sgn']>span {   
+    display: flex; 
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+dd[lang='sgn']>span>span {
+    /* montri Signuno-kodon sub la gestografiko */
+    display: flex;
+    flex-direction: column;
 }
 
 
@@ -796,14 +815,6 @@ dt.pli, .ekz.pli, a.pli {
     font-style: oblique;
     color: var(--label-fnt-clr);
     border: none;
-        /*
-    text-decoration: none;
-    color: var(--btn-fnt-clr);
-    background: var(--btn-bgr-clr);
-    border-radius: .5em;
-    padding: .1em .3em;
-    margin-bottom: .1em;
-    */
 }
 
 
@@ -878,6 +889,11 @@ dt.pli, .ekz.pli, a.pli {
     margin-block-start: .3em;
     margin-block-end: 0;
     font-size: 100% /* 100% = pli malgranda ol apriore */
+}
+
+#dlg_referenco {
+    width: fit-content;
+    bottom: 3em;
 }
 
 

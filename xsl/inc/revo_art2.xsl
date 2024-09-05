@@ -17,8 +17,14 @@ uzata kun XSLT2-transformilo
     <head>
       <meta charset="utf-8"/>
       <meta name="viewport" content="width=device-width,initial-scale=1"/>
+      <!-- se la artikolo enhaas matematikajn formulojn -->
       <xsl:if test="//frm[@am]">
         <script type="text/javascript" async="async" src="{$mathjax-url}"></script>
+      </xsl:if>      
+      <!-- se la artikolo enhavas gestolingvon (Signuno-signojn) -->
+      <xsl:if test="//trd[@lng='sgn' or @lng='ils']">
+        <script type="text/javascript" defer="defer" src="{$sgn-fsw-url}"></script>
+        <script type="text/javascript" defer="defer" src="{$sgn-font-url}"></script>
       </xsl:if>      
       <xsl:if test="$aspekto='ilustrite'">
 	      <link title="artikolo-stilo" type="text/css" rel="stylesheet" href="{$cssdir}/{$art-css}" />

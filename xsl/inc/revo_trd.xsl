@@ -1,7 +1,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 		version="1.0">
 
-<!-- (c) 1999-2022 ĉe Wolfram Diestel 
+<!-- (c) 1999-2024 ĉe Wolfram Diestel 
      laŭ GPLv2
 
 reguloj por prezentado de la tradukoj
@@ -215,6 +215,8 @@ reguloj por prezentado de la tradukoj
 
   <!-- skribu la tradukon mem --> 
   <span lang="{@lng}">
+
+    <!-- lingvoj skribataj dekstre maldekstren -->
     <xsl:if test="@lng = 'ar' or
                   @lng = 'fa' or
                   @lng = 'he'">
@@ -225,7 +227,14 @@ reguloj por prezentado de la tradukoj
 
     <xsl:choose>
       <xsl:when test="trd">
+        <!-- trdgp/trd -->
         <xsl:apply-templates select="trd" mode="tradukoj"/>
+      </xsl:when>
+      <xsl:when test="@kod">
+        <!-- kodita prezento kiel gestolingvo Signuno -->
+        <span class="trd-kod" data-kod="{@kod}">
+          <xsl:apply-templates mode="tradukoj"/>
+        </span>
       </xsl:when>
       <xsl:otherwise>
         <xsl:apply-templates mode="tradukoj"/>
@@ -255,8 +264,10 @@ reguloj por prezentado de la tradukoj
 
 </xsl:template>
 
+
 <!-- tradukoj ene de tradukgrupo -->
 <xsl:template match="trdgrp/trd" mode="tradukoj">
+
   <xsl:apply-templates mode="tradukoj"/>
 
   <xsl:variable name="komo">
@@ -278,6 +289,15 @@ reguloj por prezentado de la tradukoj
   </xsl:if>
 
 </xsl:template>
+
+
+<!-- tradukoj kun kodita prezento kiel gestolingvo Signuno ene de tradukgrupo -->
+<xsl:template match="trdgrp/trd[@kod]" mode="tradukoj">
+  <span class="trd-kod" data-kod="{@kod}">
+    <xsl:apply-templates mode="tradukoj"/>
+  </span>
+</xsl:template>
+
 
 <xsl:template match="ofc" mode="tradukoj">
   <sup class="ofc"><xsl:value-of select="."/>

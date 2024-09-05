@@ -61,8 +61,8 @@ window.addEventListener("hashchange", function() {
 export namespace artikolo {
 
     /**
-     * Preparas la artikolon: kaŝas kaseblajn aferojn, t.e. kunfaldas derivajojn krom unu, kaŝas 
-     * ekzemploj krom po tri, kaŝas tradukojn krom preferatajn. Alligas la kodon por aktivaj elementoj
+     * Preparas la artikolon: kaŝas kaŝeblajn aferojn, t.e. kunfaldas derivaĵojn krom unu, kaŝas 
+     * ekzemplojn krom po tri, kaŝas tradukojn krom preferatajn. Alligas la kodon por aktivaj elementoj
      * uzata por faldi-malfaldi.
      * @memberof artikolo
      * @param artikolo - la doserinomo de la artikolo
@@ -89,6 +89,7 @@ export namespace artikolo {
         preparu_malkashu_fontojn();
         preparu_maletendu_sekciojn();
         kashu_malkashu_butonoj(artikolo);
+        preparu_gestojn();
         //interna_navigado();
         //etendu_ekzemplojn();   
         //}
@@ -366,15 +367,21 @@ export namespace artikolo {
     function etendu_trd(event: Event) {
         event.preventDefault();
         const trg = event.target as Element;
-        const div_trd = trg.closest("DL");
-        for (var id of Array.from(div_trd.children)) {
+        const dl_trd = trg.closest("DL");
+        // montru ĉiujn tradukojn
+        for (var id of Array.from(dl_trd.children)) {
             id.classList.remove("kasxita");
         }
-        // kaŝu pli...
-        div_trd.querySelectorAll("dt.pli, dd.pli").forEach(
+        // eventuale enestas tradukoj de gestolingvo; tiam desegnu ilin nun
+        dl_trd.querySelectorAll(".trd-kod").forEach(
+            tk => desegnu_gestojn(tk)
+        );
+        // kaŝu elementon "pli..."
+        dl_trd.querySelectorAll("dt.pli, dd.pli").forEach(
             p => p.classList.add("kasxita")
         );
-        div_trd.querySelectorAll("dt.pref, dd.pref").forEach(
+        // kaŝu elementon "preferoj..."
+        dl_trd.querySelectorAll("dt.pref, dd.pref").forEach(
             p => p.classList.add("kasxita")
         );
     }
@@ -469,6 +476,48 @@ export namespace artikolo {
     }
 
     /**
+     * Tradukas la aski-kodon de signolingvo (Suttons Sigwn Writing) el atributo data-kod 
+     * al SVG-bildetoj montranta la signon de la gesto.
+     */
+    function preparu_gestojn() {
+        // @ts-ignore
+        if (typeof ssw !== 'undefined' && ssw.ttf && ssw.ttf.font) { 
+            // objekto ssw aperas nur en artikoloj, se ni ŝargis la javoskripton sgn-font.js
+                                             
+            // @ts-ignore
+            ssw.ttf.font.cssAppend('../stl/'); ssw.ttf.font.cssLoaded(
+                function() {
+                    document.querySelectorAll(".trd-kod").forEach((tk) => {
+                        desegnu_gestojn(tk)
+                  }
+                )            
+            })
+        }
+    }
+
+    function desegnu_gestojn(tk: Element) {
+        if (tk instanceof HTMLElement 
+            && !tk.closest("dd").classList.contains("kasxita") // dum kaŝita ni ankoraŭ ne transformas
+            && !tk.querySelector("svg")) // SVG jam enestas, evitu duoble kalkuli ĝin
+        {
+            // povas esti pluraj apartigitaj per komo aŭ almenaŭ spaco
+            const sgn = u.textcontent(tk); //tk.innerText;
+            tk.textContent = '';
+            const sgn_kod = tk.getAttribute("data-kod");
+            if (sgn_kod[0] == 'M') {
+                // @ts-ignore
+                tk.innerHTML += ssw.ttf.fsw.signSvg(sgn_kod);
+            } else if (sgn_kod[0] == 'S') {
+                // @ts-ignore
+                tk.innerHTML += ssw.ttf.fsw.symbolSvg(sgn_kod);
+            }
+            if (sgn) {
+                tk.append(u.ht_element("span",{},sgn))
+            }
+        };
+    }
+
+    /**
      * Adaptas la piedlinion por la aktuala prezento. 
      * La piedlinioj ankoraŭ havas la malnovan aranĝon kaj 
      * necesas ilin iom koncizigi kaj adapti por la nova fasado.
@@ -494,7 +543,7 @@ export namespace artikolo {
                 ])[0];  
             }          
             if (dlg) {
-                pied.prepend(dlg);
+                document.body.append(dlg);
                 // reagoj al butonoj [fermu] kaj [kopiu]
                 const fermu = document.getElementById('dlg_ref_fermu');
                 fermu.addEventListener("click", () => {

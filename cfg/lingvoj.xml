@@ -8,6 +8,11 @@
                  flago CDATA #IMPLIED>
 ]>
 
+<!-- vd. i.a. https://de.wikipedia.org/wiki/Modul:Language/data/iana_languages
+  https://de.wikipedia.org/wiki/%C3%9Cberblicksliste_der_ISO-639-3-Codes
+-->
+
+
 <lingvoj>
   <lingvo kodo="ab">abĥaza</lingvo>
   <lingvo kodo="ace">aĉea</lingvo>
@@ -18,10 +23,12 @@
   <lingvo kodo="ang">malnovangla</lingvo>
   <lingvo kodo="ar">araba</lingvo>
   <lingvo kodo="as">asama</lingvo>
+  <!-- lingvo kodo="ase">uson-signolingva</lingvo -->
   <lingvo kodo="ay">ajmara</lingvo>
   <lingvo kodo="az">azerbajĝana</lingvo>
   <lingvo kodo="ba">baŝkira</lingvo>
   <lingvo kodo="be">belorusa</lingvo>
+  <!-- lingvo kodo="bfi">brit-signolingva</lingvo -->
   <lingvo kodo="bg">bulgara</lingvo>
   <lingvo kodo="bh">bihara</lingvo>
   <lingvo kodo="bi">bislama</lingvo>
@@ -37,6 +44,7 @@
   <lingvo kodo="da">dana</lingvo>
   <lingvo kodo="de">germana</lingvo>
   <lingvo kodo="dsb">malsupra-soraba</lingvo>
+  <!-- lingvo kodo="dse">nederland-signolingva</lingvo -->
   <lingvo kodo="dz">dzonka</lingvo>
   <lingvo kodo="egy">egipta</lingvo>
   <lingvo kodo="el">greka</lingvo>
@@ -58,6 +66,7 @@
   <lingvo kodo="gn">gvarania</lingvo>
   <lingvo kodo="goyu">tajvana</lingvo>
   <lingvo kodo="grc">malnovgreka</lingvo>
+  <!-- lingvo kodo="gsg">german-signolingva</lingvo -->
   <lingvo kodo="gu">guĝarata</lingvo>
   <lingvo kodo="gv">manksa</lingvo>
   <lingvo kodo="ha">haŭsa</lingvo>
@@ -74,6 +83,13 @@
   <lingvo kodo="ie">okcidentala</lingvo>
   <lingvo kodo="ig">igba</lingvo>
   <lingvo kodo="ik">inupiaka</lingvo>
+  <!-- International Sign, piĝina lingvo surbaze de i.a. Gestuno kaj usona signolingvo,
+     vd. i.a. 
+     - https://en.wikipedia.org/wiki/International_Sign
+     - https://web.archive.org/web/20150709214710/http://www.handspeak.com/world/isl/index.php
+     - http://www.sematos.eu/isl.html
+     -->
+  <lingvo kodo="ils">internaci-signolingva</lingvo>  
   <lingvo kodo="io">ida</lingvo>
   <lingvo kodo="is">islanda</lingvo>
   <lingvo kodo="it">itala</lingvo>
@@ -147,6 +163,7 @@
   <lingvo kodo="sd">sinda</lingvo>
   <lingvo kodo="se">nordsamea</lingvo>
   <lingvo kodo="sg">sangoa</lingvo>
+  <lingvo kodo="sgn">signuna</lingvo> <!-- esperanta (rudimenta) gestolingvo, Signuno kaj aldonoj -->
   <lingvo kodo="sh">serbokroata</lingvo>
   <lingvo kodo="si">sinhala</lingvo>
   <lingvo kodo="sk">slovaka</lingvo>

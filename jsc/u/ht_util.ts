@@ -169,6 +169,19 @@ export function HTTPRequest(method: string, url: string, params: Parametroj,
     onStart, onFinish, onError);
 }
 
+/**
+ * Redonas la tekstan enhavon de HTML-elemento inkl. de span-elementoj, 
+ * sed (alie ol la norma textContent) sen la teksta enhavo de aliaj ido-elementoj
+ * @param element 
+ */
+export function textcontent(element: HTMLElement) {
+  const ch = Array.from(element.childNodes);
+  return ch.reduce(
+    (tc, n) => tc + (n.nodeType == Node.TEXT_NODE || n.nodeName == "SPAN")? n.textContent : "",
+    ""
+  );
+}
+
   /**
    * Utilfunkcio por forigi elementon, kondiĉe ke gi ekzistas.
    * Se ĝi ne ekzistas okazas nenio (do neniu escepto!)

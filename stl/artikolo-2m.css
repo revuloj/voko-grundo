@@ -172,20 +172,48 @@ dl.tradukoj dd {
     grid-column-start: 2;
 }
 
+
+dl.tradukoj span[lang='bo']
+{
+    font-size: 150%;
+    line-height: 120%;
+    vertical-align: text-top;
+}
+
+.trd-kod svg {
+    border: 1px solid #cccccc; 
+    border-radius: 3px;
+    background: lightgoldenrodyellow;
+    padding: .2em;
+    margin-left: 0.1em;    
+}
+
+dl.tradukoj span[lang='zh'], 
+dl.tradukoj span[lang='ja'] {
+    font-size: 120%;
+    /*line-height: 120%;
+    vertical-align: text-top; */
+}
+
+dl.tradukoj span[lang='zh'] .pr 
+{   /* Pinjino en normala grandeco: 83.33 * 120 = 100 */
+    font-size: 83.33%;
+}
+
+dd[lang='sgn']>span {   
+    display: flex; 
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+dd[lang='sgn']>span>span {
+    /* montri Signuno-kodon sub la gestografiko */
+    display: flex;
+    flex-direction: column;
+}
+
 dl.tradukoj .lng {
-    color: gray; 
-    /* margin-right: 0.5em;*/
+    color: gray;     
 }
-/*
-.trd h3 { 
-    display: inline;
-    border-style: none;
-    font-weight: normal;
-    color: gray; padding-right: 0.7em; 
-}
-.trd h3::after { content: ": " }
-div.trd_lng_2 { display: inline; line-height: 135%;  }
-*/
 
 /*A {text-decoration: none}*/
 A:link {color: blue}
@@ -537,15 +565,16 @@ H2 .icon_btn:hover, H2 .icon_btn:active, H2 .icon_btn:focus {
 }
 
 
-a.pli, a.pref {
+dt.pli, .ekz.pli, a.pli {
+    font-style: normal;
+    color: #104040;
+    border: none;
+}
+
+.pref, a.pref {
     font-style: oblique;
-    text-decoration: none;
-    color: darkgreen;
-    background: khaki;
-    border-color: darkgoldenrod;
-    border-radius: .5em;
-    padding: .1em .3em;
-    margin-bottom: .1em;
+    color: #104040;
+    border: none;
 }
 
 .square_min {

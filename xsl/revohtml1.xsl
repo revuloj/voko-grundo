@@ -38,8 +38,10 @@ transform-reguloj.
 
 <!-- padoj por referencado -->
 <xsl:variable name="mathjax-url">https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=AM_CHTML</xsl:variable>
-<xsl:variable name="art-css">artikolo-1b.css</xsl:variable>
-<xsl:variable name="art-jsc">revo-art-1b.js</xsl:variable>
+<xsl:variable name="sgn-font-url">../jsc/sgn-font.js</xsl:variable>
+<xsl:variable name="sgn-fsw-url">../jsc/sgn-fsw.js</xsl:variable>
+<xsl:variable name="art-css">artikolo-2m.css</xsl:variable>
+<xsl:variable name="art-jsc">revo-art-2m.js</xsl:variable>
 
 <xsl:variable name="smbdir">../smb</xsl:variable>
 <xsl:variable name="xmldir">../xml</xsl:variable> 

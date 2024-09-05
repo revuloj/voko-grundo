@@ -655,11 +655,11 @@ export class Tekst extends UIElement {
 
     /**
      * Legas aŭ anstataŭigas la momente elektitan tekston en la redaktata teksto
-     * @param insertion - se donita la enmetenda teksto (ĉe la aktuala pozicio aŭ anstataŭ la aktuala elekto)
+     * @param enm_teksto - se donita la enmetenda teksto (ĉe la aktuala pozicio aŭ anstataŭ la aktuala elekto)
      * @param p_kursoro - se negativa tiom da signoj ni moviĝas antaŭen antaŭ enmeti la tekston, se pozitiva, tiom da signoj ni movas antaŭen la kursoron post enmeto (ekz-e tekstenŝovo)
      * @returns la momente elektita teksto, se ne estas donita enmetenda teksto
      */
-    elektenmeto(insertion: string, p_kursoro: number = 0) {
+    elektenmeto(enm_teksto: string, p_kursoro: number = 0) {
         const txtarea = this.element;
         if (txtarea instanceof HTMLTextAreaElement) {
             txtarea.focus();
@@ -669,7 +669,7 @@ export class Tekst extends UIElement {
             if (p_kursoro < 0) startPos += p_kursoro; // -1: anstataŭigo kun x-klavo forigu la antaŭan literon!
             txtarea.value = 
                 txtarea.value.substring(0, startPos) +
-                insertion +
+                enm_teksto +
                 txtarea.value.substring(txtarea.selectionEnd, txtarea.value.length);
             if (p_kursoro > 0) { // ni antaŭe havis > -1, sed tio ne funkciis por enŝovoj per spacoj
                 // movu la kursoron al startPost+p_kursoro, por
@@ -679,7 +679,7 @@ export class Tekst extends UIElement {
                 txtarea.selectionEnd = txtarea.selectionStart;
             } else {
                 // movu la kursoron post la aldonita teksto
-                txtarea.selectionStart = startPos + insertion.length;
+                txtarea.selectionStart = startPos + enm_teksto.length;
                 txtarea.selectionEnd = txtarea.selectionStart;
             }
 
@@ -833,7 +833,7 @@ export class Tekst extends UIElement {
         if (txtarea instanceof HTMLTextAreaElement) {
             const poz = this.signo()||0;
             const val = txtarea.value;
-            let p = poz;
+            let p = poz-1;
             while (p>0 && val[p] != '\n') p--;
             return val.substring(p+1,poz);
         }
