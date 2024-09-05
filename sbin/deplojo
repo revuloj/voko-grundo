@@ -18,9 +18,9 @@
 #host=retavortaro.de
 # aldonu en /etc/hosts!
 host=revo
-release=2m
-node_release=2.0.13
-# ni aktualigas nur tre malofte por ke 
+release=2n
+node_release=2.0.14
+# la JS-eldonon por artikoloj ni aktualigas nur tre malofte por ke 
 # unuopaj artikoloj havu stabilan eldonon/aspekton
 # art_release=1b
 art_release=2m
