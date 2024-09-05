@@ -155,6 +155,15 @@ testu ekz-e:
 </xsl:template>
 
 
+<xsl:template match="trdgrp[@lng]|trd[@lng]">
+  <xsl:variable name="lng1" select="@lng"/>
+  <xsl:if test="trdgrp[@lng&lt;=$lng1]|trd[@lng&lt;=$lng1]">
+    <ero kie="{node-name(ancestor::node()[@mrk][1])}" 
+         mrk="{ancestor::node()[@mrk][1]/@mrk}" tip="trd-ord" arg="{@lng}"/>
+  </xsl:if>
+</xsl:template>
+
+
 <xsl:template match="ref">
   <xsl:variable name="mrk" select="ancestor::node()[@mrk][1]/@mrk"/>
   <xsl:variable name="kie" select="node-name(ancestor::node()[@mrk][1])"/>
