@@ -3,8 +3,8 @@
  * per u.agordo.xxx 
  */
 
-export type StrObj = { [key: string]: string};
-export type BoolObj = { [key: string]: boolean};
+export type StrObj = { [key: string]: string };
+export type BoolObj = { [key: string]: boolean };
 
 
 // vd. https://mariusschulz.com/blog/declaring-global-variables-in-typescript
@@ -17,7 +17,7 @@ declare global {
 export namespace agordo {
 
 // rigardataj kiel konstantoj:
-  export const eldono = "2k";
+  export const eldono = "2l";
   export const debug = false;
 
 // agordoj pri reta-vortaro.de

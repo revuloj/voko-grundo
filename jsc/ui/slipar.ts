@@ -7,7 +7,15 @@ import { DOM } from './dom';
 import { UIElement } from './uielement';
 import { UIStil } from './uistil';
 
-type SliparOpcioj = { aktiva: number, poste?: Function, antaŭe?: Function };
+export type SlipSalto = { 
+    slipo_malnova: HTMLLIElement,  slipo_nova: HTMLLIElement,  
+    langeto_malnova: HTMLLIElement,  langeto_nova: HTMLLIElement
+};
+export type SlipAgo = {
+    slipar: Slipar,
+    salto: SlipSalto
+}
+export type SliparOpcioj = { aktiva: number, poste?: SlipAgo, antaŭe?: SlipAgo };
 
 export class Slipar extends UIElement {
     //valoroj: any;

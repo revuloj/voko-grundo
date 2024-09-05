@@ -1,0 +1,9 @@
+{
+  "entryPoints": ["jsc/rs/ui_kreo.ts"],
+  "entryPointStrategy": "expand",
+  "out": "tsdoc",
+  "readme": "README.md",
+  "name": "Dokumentado de Typescript-kodo",
+  "tsconfig": "tsconfig-rs.json"
+}
+  

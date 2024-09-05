@@ -961,6 +961,14 @@ nav {
 }
 */
 
+#lastaj_tabelo tr:hover,
+#lastaj_tabelo tr.aktiva {
+   background-color: var(--main-ac2-bgr-clr); /*#e5e3d5;  */
+   color: var(--main-act-fnt-clr);
+   /*border: 1px solid black;*/
+}
+
+
 #ekzemplo_sercho_rezultoj {
   max-height: 15em;
   overflow: auto;  
@@ -1021,6 +1029,7 @@ nav {
     height: 100%
 }
 
+
 #traduko_tabelo {
     display: flex; /*inline-block;*/
     flex-direction: column;
@@ -1036,6 +1045,12 @@ nav {
     */
     border: 0px solid blue;
     border-bottom: 1px dotted var(--input-brd-clr);
+}
+
+#traduko_tabelo td div {
+    display: flex; /*inline-block;*/
+    flex-direction: column;
+    -webkit-flex-direction: column;
 }
 
 #traduko_tabelo button {
@@ -1063,6 +1078,7 @@ nav {
 
 #traduko_aliaj {
     border: none;
+    border-top: 1px dotted var(--nav-brd-clr) !important;
 }
 
 #traduko_artikolaj {

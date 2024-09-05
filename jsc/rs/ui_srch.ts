@@ -10,7 +10,7 @@ import * as x from '../x';
 import { DOM, UIElement, UIStil, Dialog, Slipar, Skal, Propon, Elektil, Valid, Eraro } from '../ui';
 
 import { bar_styles, make_percent_bar } from './procentoj';
-import { HTMLFonto, HTMLTrovoDt, HTMLTrovoDdBld } from './sxabloniloj';
+import { type Fonto, HTMLFonto, HTMLTrovoDt, HTMLTrovoDdBld } from './sxabloniloj';
 
 type CitSercho = {
     sercho: string,
@@ -20,9 +20,118 @@ type CitSercho = {
     jar_ghis?: string|null
 }
 
+type Verko = {
+	vrk: string,
+	jar: number,
+	bib: string,
+	tit: string,
+	aut: string,
+	url: string // url
+}
+
 type TrovValoroj = { url?: string, fmt?: number, 
     aut?: string, bib?: string, vrk?: string, lok?: string, 
     prm?: string, fnt?: string, frazo?: string };
+
+// priskribo de trovero por krei ĝian reprezenton
+type TrovOpcioj = {
+    type: "teksto",
+    ŝablono: string|null,
+    bld_ŝablonono: string|null,
+    valoroj: {
+        prompt: string,
+        id: string,
+        url: string,
+        title: string,
+        descr: string,
+        data: any,
+        enm_btn: boolean
+    }
+};   
+
+type Kunteksto = { fno: number };
+
+type Ekzemplo = Kunteksto & {
+    ekz: string,
+    fnt: Fonto
+}
+
+type RigardOpcioj = {
+        url?: string
+    };
+
+type ButonOpcioj = {
+        data?: string,
+        enmetu?: (event: Event)=>void
+    };    
+
+/**  tipoj por afiksoj/finaĵoj ***/
+
+// o = subs, a = adj, e = adv, i = verb
+type VSpecAfx = {"o": string[], "a": string[], "e"?: string[], "i": string[], "?": string[]};
+type VSpec = keyof VSpecAfx;
+// o = aĵa, u = ula, a = eca, i = aga, n = nombra
+type RadKarAfx = {"o": VSpecAfx, "u": VSpecAfx, "a": VSpecAfx, "n": VSpecAfx, "i": VSpecAfx, "?": VSpecAfx};
+type RadKar = keyof RadKarAfx; 
+type Afiksaro = { "prefiksoj": RadKarAfx, "sufiksoj": RadKarAfx };
+type AfxSpec = keyof Afiksaro;
+
+/**  Wikiemedia-serĉo/rezultoj ***/
+
+type WTitolo = {
+    ns: number,
+    title: string
+}
+
+type WPagho = WTitolo & {
+    pageid: number
+}
+
+type WTrovo = WPagho & { snippet?: string };
+
+type WBildo = {
+    source: string, // url
+    width: number,
+    height: number
+}
+
+type WValoro = { value: string };
+
+type WBildDetalo = {
+    Attribution?: WValoro,
+    Artist?: WValoro,
+    Credit?: WValoro,
+    ImageDescription?: WValoro,
+    LicenseShortName: WValoro
+}    
+
+type WBildInfoExt = {
+    extmetadata: WBildDetalo
+}
+
+type WBildInfo = WPagho & {
+	thumbnail: WBildo,
+	original: WBildo,
+    pageimage: string // priskribo
+}
+
+type WBildInfoPlena = WBildInfo & {
+    /*
+    // tiuj venas, sed ni ignoras ilin:
+	contentmodel: string, // "wikitext",
+	pagelanguage: string,
+	pagelanguagehtmlcode: string,
+	pagelanguagedir: "ltr"|"rtl",
+	touched: string, // dato
+	lastrevid: number,
+	length: number,
+	fullurl: string, // url
+	editurl: string, // url
+    */
+    images: WTitolo[],
+	canonicalurl: string // url
+    imageinfo?: WBildInfoExt[]
+}
 
 //var sercho_focused_button = null;
 console.debug("Instalante la serĉfunkciojn...");
@@ -60,7 +169,7 @@ function _serĉo_preparo() {
  * 
  * @returns {{prefiksoj:{a,i,o},sufiksoj:{a,i,o,n}}}
  */
-const afiksoj = function() {
+const afiksoj = function(): Afiksaro {
 
     // redonu sufiksojn aplikeblajn 
     // al radikkaraktero rk kun rezulta vortspeco vs (rk-vs|...)
@@ -161,9 +270,11 @@ const afiksoj = function() {
         "nenia": "o-a"
     };
 
-    function _preparo(afiksoj) {
+    function _preparo(afiksoj: u.StrObj) {
 
-        let r = {
+        // ni ordigas afiksojn laŭ radikkarakteroj, al kiuj ili estas
+        // aplikeblaj kaj rezultaj vortspecoj
+        let r: RadKarAfx = {
           "?":{"?":[],a:[],i:[],o:[]},
             a:{"?":[],a:[],i:[],o:[]},
             i:{"?":[],a:[],i:[],o:[]},
@@ -171,8 +282,9 @@ const afiksoj = function() {
             u:{"?":[],a:[],i:[],o:[]},
             n:{"?":[],a:[],i:[],o:[]}};
 
-        const push_no_dup = (el,arr) => 
-            { if (arr.indexOf(el)==-1) arr.push(el);};            
+        // aldonu 'el' nur, se ĝi ankora← ne aperas en 'arr'
+        const push_no_dup = (el: string, arr: string[]) => 
+            { if (arr.indexOf(el)==-1) arr.push(el); };            
 
         // alpendigas afikson af al listoj de objekto obj laŭ
         // celvortspeco al 
@@ -187,13 +299,14 @@ const afiksoj = function() {
             }
         }*/
 
-        for (const [affix,sk] of Object.entries(afiksoj)) {
+        for (const [afx,sk] of Object.entries(afiksoj)) {
             const skemoj = (sk as string).split('|');
             for (const s of skemoj) {
-                const de = s[0];
-                const al = (s[2]=='u'? 'o' : s[2]); // la celon ulo ni bildigas al -o
+                const de = <RadKar>s[0];
+                const al = <VSpec>(s[2]=='u'? 'o' : s[2]); // la celon ulo ni bildigas al -o
                                 // dumlonge ni ne uzas duŝtupan aplikadon pref/ul...
-                push_no_dup(affix,r[de][al]);
+                const afxj = r[de][al]
+                if (afxj) push_no_dup(afx,afxj);
             }
         }
 
@@ -211,7 +324,7 @@ const afiksoj = function() {
  * Vokas la serĉon en Vikipedio kaj prezentas la rezultojn
  * @param {Event} event
  */
-export function vikiSerĉo(event) {
+export function vikiSerĉo(event: Event) {
     event.preventDefault();
 
     if (! _serĉo_preparo()) return;
@@ -224,7 +337,7 @@ export function vikiSerĉo(event) {
             sercho: esprimo,
             kie: 'vikipedio'
         }, 
-        function(data) {   
+        function(data: string) {   
             const json = JSON.parse(data);
             if (json.query && json.query.pages && s_tr) {
                 const pages = json.query.pages;
@@ -260,12 +373,12 @@ export function vikiSerĉo(event) {
 
 /**
  * Redonas la URL-on, kiu apartenas al bibliografiero.
- * @param {Array<{label,value}>} source - la bibliografia listo 
- * @param {string} bib - la mallongigo de la serĉata bibliografiero
+ * @param source - la bibliografia listo 
+ * @param bib - la mallongigo de la serĉata bibliografiero
  * @returns la URL 
  */
-function _bib_url(source,bib) {
-    const verko = source.find((ero) => ero.bib == bib);
+function _bib_url(source: Array<Fonto>, bib: string): string|undefined {
+    const verko = source.find((ero: Fonto) => ero.bib == bib);
     return verko?.url;
 }
 
@@ -273,9 +386,11 @@ function _bib_url(source,bib) {
  * Vokas la citaĵo-serĉon kaj prezentas la trovojn en la trovo-kampo.
  * @param {Event} event
  */
-export function citaĵoSerĉo(event) {
+export function citaĵoSerĉo(event: Event): void {
     event.preventDefault();
-    const vlist = event.currentTarget.id == "s_klasikaj"? "klasikaj" : "elektitaj";
+
+    const trg = event.currentTarget;
+    const vlist = (trg instanceof HTMLElement && trg.id == "s_klasikaj")? "klasikaj" : "elektitaj";
 
     if (! _serĉo_preparo()) return;
 
@@ -303,7 +418,7 @@ export function citaĵoSerĉo(event) {
     }
 
     u.HTTPRequest('post', 'citajho_sercho', sspec as u.StrObj,
-        function(data) {
+        function(data: string) {
             const s_tr = DOM.e("#sercho_trovoj");
             const json = JSON.parse(data);
             const bib_src = Propon.propon("#ekzemplo_bib")?.opcioj["source"];
@@ -348,33 +463,19 @@ export function citaĵoSerĉo(event) {
  * Almetas regulesprimon al la serĉvorto
  * @param {Event} event
  */
-export function regulEsprimo(event) {
-
-    // eble traktu la helpopeton en aparta metodo!
-    const re = event.target.id;
-    if (re == "re_helpo") {
-        window.open(u.agordo.help_base_url + u.agordo.help_regulesp);
-        return;
-    };
-    /* else if (re == "sercho_det_regexes") {
-        // enmetu radikon, se ankoraŭ malplena
-        if (event.target.open && ! $("#re_radiko").val()) {
-            const xmlarea = Artikolo.xmlarea("#xml_text");
-            $("#re_radiko").val(xmlarea.radiko);
-        }
-    }*/
+export function regulEsprimo(event: Event)  {
 
     // redonu prefiksojn aŭ sufiksojn aplikeblajn 
     // al radikkaraktero rkar kun rezulta vortspeco vspec
     // se ankoraŭ ne elektiĝis rkar/vspec ni povas
     // elekti afiksojn kun '?'...
-    function re_afx(pref_suf,rkar,vspec) {
+    function re_afx(pref_suf: AfxSpec, rkar: RadKar, vspec: VSpec) {
         const vs = (vspec?(vspec=='e'?'a':vspec):'?');
         const rk = (rkar?rkar:'?');
 
-        function concat_no_dup(a,b) {
+        function concat_no_dup(a: string[], b: string[]) {
             return (a.concat(b))
-                .filter((i,p,self)=>self.indexOf(i)===p);
+                .filter((e: string, n: number, self: string[]) => self.indexOf(e)===n);
         }
 
         let afxj = afiksoj[pref_suf]['?']['?'];
@@ -401,47 +502,66 @@ export function regulEsprimo(event) {
 
         if (afxj.length) return '(' + afxj.join('|') + ')';        
         else return '';
+    }    
+
+    // eble traktu la helpopeton en aparta metodo!
+    const trg = event.target;
+    if (trg instanceof HTMLElement) {
+
+        const re = trg.id;
+        if (re == "re_helpo") {
+            window.open(u.agordo.help_base_url + u.agordo.help_regulesp);
+            return;
+        };
+        /* else if (re == "sercho_det_regexes") {
+            // enmetu radikon, se ankoraŭ malplena
+            if (event.target.open && ! $("#re_radiko").val()) {
+                const xmlarea = Artikolo.xmlarea("#xml_text");
+                $("#re_radiko").val(xmlarea.radiko);
+            }
+        }*/
+
+
+        const srch = DOM.e("#sercho_sercho");
+        //const v = srch.val();
+        //const sele = srch[0].selectionEnd;
+
+        // kiu radikkaraktero estis elektita?
+        const rk = DOM.v("#regexes input[name='re_rk']:checked") as RadKar;
+        // kiun vortspecon ni sercu?
+        const vs = DOM.v("#regexes input[name='re_vs']:checked") as VSpec;
+
+        // vortkomenco?
+        const vk: boolean = DOM.c("#re_b")||false;
+        // ĉu prefikso/sufikso estu aplikataj
+        const prf: boolean = DOM.c("#re_pref")||false;
+        const suf: boolean = DOM.c("#re_suf")||false;
+        
+        const prfj: string = prf? re_afx('prefiksoj',rk,vs) : '';
+        // PLIBONIGU: ni elektas tie ĉi la sufiksojn laŭ radikkaraktero,
+        // sed eble ni devus uzi ĉiujn, kiuj rezultas el prefiksa apliko
+        // aliflanke ne klaras ĉu unue la prefikso aŭ la sufikso aplikiĝas
+        // al la radiko, sed verŝajne pli kutime unue la prefikso...
+        const sufj: string = suf? re_afx('sufiksoj',rk,vs) : '';
+
+        const fin: string = vs? {
+            o: "oj?n?\\b", 
+            a: "aj?n?\\b", 
+            e: "en?\\b", 
+            i: "([ao]s|[ui]s?)\\b",
+            '?': ''
+        }[vs] : '';
+
+        const v: string = DOM.v("#re_radiko")||'';
+        DOM.al_html("#re_esprimo",
+            (vk?'\\b':'')
+            + (prfj? prfj+"<br>":"") 
+            + "<b>" + v + "</b><br>" 
+            + (sufj? sufj+"<br>" : "") 
+            + fin);
+
+        if (srch) (srch as HTMLInputElement).value = (vk?'\\b':'') + prfj + v + sufj + fin;
     }
-
-    const srch = DOM.e("#sercho_sercho");
-    //const v = srch.val();
-    //const sele = srch[0].selectionEnd;
-
-    // kiu radikkaraktero estis elektita?
-    const rk = DOM.v("#regexes input[name='re_rk']:checked") as string;
-    // kiun vortspecon ni sercu?
-    const vs = DOM.v("#regexes input[name='re_vs']:checked") as string;
-
-    // vortkomenco?
-    const vk = DOM.v("#re_b:checked");
-    // ĉu prefikso/sufikso estu aplikataj
-    const prf = DOM.c("#re_pref");
-    const suf = DOM.c("#re_suf");
-    
-    const prfj = prf? re_afx('prefiksoj',rk,vs) : '';
-    // PLIBONIGU: ni elektas tie ĉi la sufiksojn laŭ radikkaraktero,
-    // sed eble ni devus uzi ĉiujn, kiuj rezultas el prefiksa apliko
-    // aliflanke ne klaras ĉu unue la prefikso aŭ la sufikso aplikiĝas
-    // al la radiko, sed verŝajne pli kutime unue la prefikso...
-    const sufj = suf? re_afx('sufiksoj',rk,vs) : '';
-
-    const fin = vs? {
-        o: "oj?n?\\b", 
-        a: "aj?n?\\b", 
-        e: "en?\\b", 
-        i: "([ao]s|[ui]s?)\\b",
-        '?': ''
-    }[vs] : '';
-
-    const v = DOM.v("#re_radiko");
-    DOM.al_html("#re_esprimo",
-        (vk?'\\b':'')
-        + (prfj? prfj+"<br>":"") 
-        + "<b>" + v + "</b><br>" 
-        + (sufj? sufj+"<br>" : "") 
-        + fin);
-
-    if (srch) (srch as HTMLInputElement).value = (vk?'\\b':'') + prfj + v + sufj + fin;
 }
 
 /**
@@ -451,7 +571,7 @@ export function regulEsprimo(event) {
 export function verkoPeriodo() {
     const periodilo = DOM.e("#s_elektitaj_periodilo");
 
-    function adaptuVerkliston(de,ghis) {
+    function adaptuVerkliston(de: number, ghis: number) {
         DOM.idoj("#sercho_verklisto")?.forEach((e) => {
             if (e.id != "vl_chiuj_") {
                 const jar = +(e?.getAttribute('data-jar')||0);
@@ -488,7 +608,7 @@ export function verkoPeriodo() {
                 //DOM.al_t("#periodilo_manilo_2",""+ghis);       
 
                 // aktualigu la videblon de verkoj
-                adaptuVerkliston(de,ghis);
+                adaptuVerkliston(+de, +ghis);
                 //montrilo.val( ui.values[0] + " - " + +ui.values[1] );
                 verkinformo();
                 //...
@@ -522,7 +642,7 @@ function verkinformo() {
  * 
  * @param {Event} event
  */
-export function verkoListo(event) {
+export function verkoListo(event: Event) {
     event.preventDefault();
     const vdiv = DOM.e("#sercho_verklisto");
 
@@ -532,8 +652,8 @@ export function verkoListo(event) {
             { 
                 kiu: 'chiuj'
             }, 
-            function(data) {
-                const json = JSON.parse(data);
+            function(data: string) {
+                const json = <Verko[]>JSON.parse(data);
                 if (json.length && json[0].vrk) {                    
                     vdiv.insertAdjacentHTML("beforeend",'<div id="vl_chiuj_"><label for="vl__chiuj__">ĈIUJN malelekti/elekti</label>'
                     + '<input id="vl__chiuj__" type="checkbox" checked '
@@ -546,7 +666,7 @@ export function verkoListo(event) {
                     for (const v of vrkj) {
                         const id = "vl_"+v.vrk;
                         let txt = v.aut? v.aut+': ':'';
-                        txt += v.tit? v.tit : v.nom;
+                        txt += v.tit? v.tit : ''; // : v.nom; - v.nom estas malnova nun?
                         txt += v.jar? ' ('+v.jar+')' : '';
                         const cls = v.jar >= jar_de && v.jar <= jar_ghis? '' : ' class="kasxita"';
                         vdiv.insertAdjacentHTML("beforeend",'<div data-jar="' + +v.jar + '"' + cls +'><label for="'+ id + '">' 
@@ -585,12 +705,10 @@ export function verkoListo(event) {
  * Per butono "preta" la elekto kaŝiĝas.
  * @param {Event} event
  */
-export function verkElekto(event) {
+export function verkElekto(event: Event) {
     const btn = event.target;
-    const kadr = btn.parentElement;
-    const val = btn.value;
 
-    function check_uncheck(v) {
+    function check_uncheck(v: boolean) {
         // (mal)elektu ĉiujn
         DOM.ej("#sercho_verkolisto input")?.forEach((i) => {
             if (i instanceof HTMLInputElement) {
@@ -600,15 +718,20 @@ export function verkElekto(event) {
         });
     }
 
-    if (val == "1") {
-        // elektu ĉiujn
-        check_uncheck(true);
-    } else if (val == "0") {
-        // elektu ĉiujn
-        check_uncheck(false);
-    } else if (val == "preta") {
-        // kaŝu la liston
-        DOM.kaŝu(kadr);
+    if (btn instanceof HTMLButtonElement) {
+        const kadr = btn.parentElement;
+        const val = btn.value;    
+
+        if (val == "1") {
+            // elektu ĉiujn
+            check_uncheck(true);
+        } else if (val == "0") {
+            // elektu ĉiujn
+            check_uncheck(false);
+        } else if (val == "preta" && kadr) {
+            // kaŝu la liston
+            DOM.kaŝu(kadr);
+        }
     }
 }
 
@@ -630,7 +753,7 @@ export function elektitajVerkoj() {
  * Vokas la TTT-serĉon kaj prezentas la trovojn
  * @param {Event} event
  */
-export function retoSerĉo(event) {
+export function retoSerĉo(event: Event) {
     event.preventDefault();
     if (! _serĉo_preparo()) return;
 
@@ -641,7 +764,7 @@ export function retoSerĉo(event) {
             sercho: DOM.v("#sercho_sercho")||'',
             kie: 'anaso'
         }, 
-        function(data) {
+        function(data: string) {
 
             const s_tr = DOM.e("#sercho_trovoj");
             if (!s_tr) throw new Error("Mankas elemento por prezenti la trovojn!");
@@ -668,7 +791,7 @@ export function retoSerĉo(event) {
 
                 // kreu trov-eron
                 } else if ( e.classList.contains("result-snippet") ) {
-                    const snippet = e.textContent;
+                    const snippet = e.textContent||'';
                     if ( last_title.search(first_word) >= 0 || snippet.search(first_word) >= 0 ) {
 
                         s_tr.insertAdjacentHTML("beforeend",'<dd id="trv_' + n + '">');
@@ -708,7 +831,7 @@ export function retoSerĉo(event) {
  * Vokas la bildo-serĉon (en Wikimedia) kaj prezentas la rezultojn.
  * @param {Event} event
  */
-export function bildoSerĉo(event) {
+export function bildoSerĉo(event: Event) {
     event.preventDefault();
 
     // /w/api.php?action=query&format=json&list=search&srsearch=korvo&srnamespace=0%7C-2&srlimit=20&srinfo=totalhits%7Csuggestion%7Crewrittenquery&srprop=size%7Cwordcount%7Ctimestamp%7Csnippet
@@ -723,7 +846,7 @@ export function bildoSerĉo(event) {
             sercho: DOM.v("#sercho_sercho")||'',
             kie: 'vikimedio'
         },
-        function(data) {         
+        function(data: string) {         
             const json = JSON.parse(data);
             const s_tr = DOM.e("#sercho_trovoj");
             let pageids:Array<string> = [];
@@ -780,7 +903,7 @@ export function bildoSerĉo(event) {
  * kaj enŝovas la rezultojn en la bildoprezenton, t.e. (Trovo-objekto).
  * @param {Array<string>} pageids
  */
-function _bildo_info(pageids) {
+function _bildo_info(pageids: string[]) {
 
     const ids = pageids.join('|');
 
@@ -790,7 +913,7 @@ function _bildo_info(pageids) {
             paghoj: ids,
             kie: 'vikimedio'
         },
-        function(datalist) {
+        function(datalist: string) {
         //$("#sercho_trovoj").html('');
             const json = JSON.parse(datalist);
 
@@ -808,7 +931,7 @@ function _bildo_info(pageids) {
                                 // tiu funkcio akiras informojn (titolo, aŭtoro, permesilo...) 
                                 // pri la bildo kaze de enmeto (butonpremo Enmetu) per
                                 // kaj malfermas la bildo-dialogon
-                                function(event,data) {
+                                function(event: Event, data: WBildInfo) {
                                     if (data) {                       
                                         _bildo_info_2(data.title);
                                     }
@@ -835,7 +958,7 @@ function _bildo_info(pageids) {
  * Akiras bildeto-informojn (antaŭrigardoj de la bildoj)
  * @param {Array<string>} paghoj
  */
-function _bildeto_info(paghoj) {
+function _bildeto_info(paghoj: string[]) {
     const ps = paghoj.join('|');
 
     // alert(pageids);
@@ -844,7 +967,7 @@ function _bildeto_info(paghoj) {
             dosieroj: ps,
             kie: 'vikimedio'
         },
-        function(data) {   
+        function(data: string) {   
         //$("#sercho_trovoj").html('');
             //for (var d=0; d<datalist.length; d++) {          
             //    data = datalist[d];
@@ -875,14 +998,14 @@ function _bildeto_info(paghoj) {
  * Akiras aldonajn informojn pri bildo (aŭtoro/fonto, permesilo ks)
  * @param {string} dosiero
  */
-function _bildo_info_2(dosiero) {
+function _bildo_info_2(dosiero: string) {
 
     u.HTTPRequest('post', 'bildo_info_2',
         { 
             dosiero: dosiero,
             kie: 'vikimedio'
         },
-        function(data) {   
+        function(data: string) {   
         //$("#sercho_trovoj").html('');
             const json = JSON.parse(data);
         
@@ -890,7 +1013,7 @@ function _bildo_info_2(dosiero) {
                 const results = json.query.pages;
 
                 for (var p in results) {
-                    const res = results[p];
+                    const res: WBildInfoPlena = results[p];
                     const pageid = res.pageid;
 
                     if (res.thumbnail) {
@@ -939,7 +1062,7 @@ function _bildo_info_2(dosiero) {
  * Difinas elementon por prezenti unuopan trovon ene de la trovlisto
  */
 class Trovo extends UIElement {
-    static aprioraj = {
+    static aprioraj: TrovOpcioj = {
         type: "teksto",
         ŝablono: null,
         bld_ŝablonono: null,
@@ -1000,12 +1123,12 @@ class Trovo extends UIElement {
                 new RigardoBtn("#r_" + v.id, {url: v.url});
                 new EkzemploBtn("#e_" + v.id, {
                     data: v.data,
-                    enmetu: function(event,values) {
+                    enmetu: function(event: Event, valoroj: Ekzemplo[]) {
                         // montru enmeto-dialogon
                         DOM.malplenigu("#ekzemplo_dlg input");
                         const dlg = Dialog.dialog("#ekzemplo_dlg");
                         if (dlg) {
-                            dlg.al_valoroj(values);
+                            dlg.al_valoroj(valoroj);
                             dlg.malfermu();
                         }
                         Slipar.montru("#tabs", 0);
@@ -1019,7 +1142,14 @@ class Trovo extends UIElement {
 
     };
 
-    bildinfo(res, first, enmetu) {
+    /**
+     * 
+     * @param res Respondo de Wikimedia-API
+     * @param first Jen unua bildo (true)
+     * @param enmetu Revokfunkcio por enmeti
+     * @returns 
+     */
+    bildinfo(res: WBildInfoPlena, first: boolean, enmetu: Function) {
         const o: any = this.opcioj;
         const v = o.valoroj;
         const pageid = res.pageid;
@@ -1115,8 +1245,8 @@ class Trovo extends UIElement {
  * Difinas jqueryui-elementon por la butono de citaĵo-kunteksto.
  */
 class KuntekstoBtn extends UIElement {
-    static aprioraj = {
-        fno: null // frazo-numero per kiu peti kuntekston
+    static aprioraj: Kunteksto = {
+        fno: -1 // frazo-numero per kiu peti kuntekston
     };
 
     constructor(element: HTMLElement|string, opcioj: any) {
@@ -1128,23 +1258,25 @@ class KuntekstoBtn extends UIElement {
         this.element.textContent = "Kunteksto";
 
         this._on({
-            click: function(event) {
+            click: function(event: PointerEvent) {
                 if (this.opcioj.fno) {
                     event.preventDefault();
-                    const id = event.target.id;
-                    const dd_id = id.substring(2); // fortranĉu 'k_'
+                    const trg = event.target;
+                    if (trg instanceof HTMLElement) {
+                        const id = trg.id;
+                        const dd_id = id.substring(2); // fortranĉu 'k_'
 
-                    u.HTTPRequest('post','kunteksto',
+                        u.HTTPRequest('post','kunteksto',
                             { 
                                 frazo: this.opcioj.fno,
                                 n: "2"
                             },
-                            function(data) {  
+                            function(data: string) {  
                                 const json = JSON.parse(data); 
                                 //$("#sercho_trovoj").html('');
                                 if (json.length) {
                                     //console.debug(data[0]);
-                                    const text = json.map(e => e.ekz).join('<br/>');
+                                    const text = json.map((e: Ekzemplo) => e.ekz).join('<br/>');
                                     DOM.al_html('#'+dd_id,text);
                                 }
                                 // momente ni nur unufoje povas montri pli da kunteksto
@@ -1154,7 +1286,7 @@ class KuntekstoBtn extends UIElement {
                             () => document.body.style.cursor = 'wait',
                             () => document.body.style.cursor = 'auto',
                             (xhr: XMLHttpRequest) => Eraro.http('#sercho_error',xhr));
-
+                    }
                 } else {
                     throw new Error('nedifinita fraz-n-ro');
                 }
@@ -1167,8 +1299,8 @@ class KuntekstoBtn extends UIElement {
  * Difinas jqueryui-elementon por la butono de fonto-rigardo.
  */
 class RigardoBtn extends UIElement {
-    static aprioraj = {
-        url: null
+    static aprioraj: RigardOpcioj = {
+        url: undefined
     };
 
     constructor(element: HTMLElement|string, opcioj: any) {
@@ -1180,7 +1312,7 @@ class RigardoBtn extends UIElement {
         this.element.textContent = "Rigardu";
 
         this._on({
-            click: function(event) {
+            click: function(event: PointerEvent) {
                 if (this.opcioj.url) {
                     event.preventDefault();
                     window.open(this.opcioj.url);
@@ -1198,9 +1330,9 @@ class RigardoBtn extends UIElement {
  * kiu helpas al uzanto enmeti la trovaĵon en la XML-artikolon.
  */
 class EkzemploBtn extends UIElement {
-    static aprioraj = {
-        data: null,
-        enmetu: null //event
+    static aprioraj: ButonOpcioj = {
+        data: undefined,
+        enmetu: undefined //event
     };
 
     constructor(element: HTMLElement|string, opcioj: any) {
@@ -1212,7 +1344,7 @@ class EkzemploBtn extends UIElement {
         this.element.textContent = "Enmetu";
 
         this._on({
-            click: function(event) {
+            click: function(event: PointerEvent) {
                 let valoroj: TrovValoroj = {};
                 const data = this.opcioj.data;
 
@@ -1250,9 +1382,9 @@ class EkzemploBtn extends UIElement {
  * kiu helpas al uzanto enmeti la trovaĵon en la XML-artikolon.
  */
 class BildoBtn extends UIElement {
-    static aprioraj = {
-        data: null,
-        enmetu: null //event
+    static aprioraj: ButonOpcioj = {
+        data: undefined,
+        enmetu: undefined //event
     };
 
     constructor(element: HTMLElement|string, opcioj: any) {
@@ -1264,7 +1396,7 @@ class BildoBtn extends UIElement {
         this.element.textContent = "Enmetu";
 
         this._on({
-            click: function(event) {
+            click: function(event: PointerEvent) {
                 this._trigger("enmetu",event,this.opcioj.data);
             }
         });

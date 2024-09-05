@@ -62,6 +62,10 @@ select {
     border: 2px solid var(--input-brd-clr);
 }
 
+input[list] {
+    border-bottom-style: dotted;
+}
+
 fieldset input, #r\:tab_tkonservo input[type="text"] {
     background-color: var(--input-bgr-clr);
     color: var(--input-fnt-clr);
@@ -228,7 +232,7 @@ main .tabs a.aktiva {
     flex: 2;
 
     /*max-width: 90%;*/
-    width: 5em;
+    width: 5em; 
 
     /*font-size: 1rem;*/
     display: flex;

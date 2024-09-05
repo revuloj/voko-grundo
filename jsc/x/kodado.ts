@@ -11,7 +11,7 @@ import { voko_entities } from './voko_entities';
 
 declare global {
     interface String {
-        hashFnv32a(asString: boolean, seed: number): number|string;
+        hashFnv32a(asString: boolean, seed?: number): number|string;
     }
 }
 
@@ -42,7 +42,7 @@ String.prototype.hashCode = function() {
  * @param seed opcie pasas la haketon de la antaŭa porcio kiel semon
  * @returns 
  */
-String.prototype.hashFnv32a = function(asString: boolean=false, seed: number): number | string {
+String.prototype.hashFnv32a = function(asString: boolean=false, seed?: number): number | string {
     const str = this;
     /*jshint bitwise:false */
     const l = str.length;
@@ -141,7 +141,7 @@ export function amp_url(str: string): string {
 /**
  * Anstataŭigas DTD-mallongigojn el vokourl.dtd
  */
-export function dtd_url(str: string): string {
+export function dtd_url(str: string): string|undefined {
     // anstataŭigu URL-ojn per mallongigoj el vokourl.dtd
     for (const [mlg,val] of Object.entries(voko_entities)) {
         if (val.startsWith("http") && str.indexOf(val) > -1) {

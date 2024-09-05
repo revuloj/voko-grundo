@@ -3,7 +3,11 @@
 
 
 <!-- (c) 2006-2023 ĉe Wolfram Diestel
-     licenco GPL 2.0
+    laŭ permesilo GPL 2.0
+
+    Transformreguloj uzataj por kreado de indeksoj. La transformoj aplikiĝas en Formiko laŭ la ordo:
+    inx_eltiro -> inx_kategorioj -> inx_ordigo2 -> inx_html
+
 -->
 
 <xsl:param name="verbose" select="false"/>
@@ -159,6 +163,7 @@ tamen AdE nur kalkulas novajn radikojn, dum ni kalkulas ankaŭ derivaĵojn kaj r
       <ero s="rad" t="oficialaj (7a, 1958)" n="{count(//art/kap//ofc[.='7'])}/158"/>
       <ero s="rad" t="oficialaj (8a, 1974)" n="{count(//art/kap//ofc[.='8'])}/214"/>
       <ero s="rad" t="oficialaj (9a, 2007)" n="{count(//art/kap//ofc[.='9'])}/209"/>
+      <ero s="rad" t="oficialaj (10a, 2023)" n="{count(//art/kap//ofc[.='10'])}/420+832"/>
 
 <!-- lau Michel...    
     
@@ -392,7 +397,7 @@ U.V = 2629 U.V radikoj + 141 fundamentaj (60+80+1) = 2770 (<>2768 r. !)    + 303
 </xsl:template>
 
 <!-- traduko enhavas elementon 'ind', sub kiu ĝi indeksiĝu -->
-<xsl:template match="trd[.//ind]">
+<xsl:template match="trd[.//ind]" priority="3">
   <v>
     <xsl:attribute name="mrk">
       <xsl:value-of select="ancestor::node()[@mrk][1]/@mrk"/>
@@ -410,27 +415,10 @@ U.V = 2629 U.V radikoj + 141 fundamentaj (60+80+1) = 2770 (<>2768 r. !)    + 303
   </v>
 </xsl:template>
 
-<!-- traduko enhavas elementon 'pr' (prononco/transskribo), sub kiu ĝi indeksiĝu -->
-<xsl:template match="trd[.//pr]">
-  <v>
-    <xsl:attribute name="mrk">
-      <xsl:value-of select="ancestor::node()[@mrk][1]/@mrk"/>
-    </xsl:attribute>
-    <t>
-      <xsl:value-of select="normalize-space(.//pr)"/>
-    </t>
-    <t1>
-      <xsl:apply-templates/>
-    </t1>
-    <k>
-     <xsl:apply-templates
-  select="(ancestor::art/kap|ancestor::drv/kap|ancestor::ekz/ind|ancestor::bld/ind)[last()]"/>
-    </k>
-  </v>
-</xsl:template>
+
 
 <!-- traduko enhavas elementon 'baz' (bazformo), sub kiu ĝi indeksiĝu -->
-<xsl:template match="trd[.//baz]">
+<xsl:template match="trd[.//baz]" priority="2">
   <v>
     <xsl:attribute name="mrk">
       <xsl:value-of select="ancestor::node()[@mrk][1]/@mrk"/>
@@ -447,6 +435,27 @@ U.V = 2629 U.V radikoj + 141 fundamentaj (60+80+1) = 2770 (<>2768 r. !)    + 303
     </k>
   </v>
 </xsl:template>
+
+<!-- traduko enhavas elementon 'pr' (prononco/transskribo), sub kiu ĝi indeksiĝu -->
+<xsl:template match="trd[.//pr]" priority="1">
+  <v>
+    <xsl:attribute name="mrk">
+      <xsl:value-of select="ancestor::node()[@mrk][1]/@mrk"/>
+    </xsl:attribute>
+    <t>
+      <xsl:value-of select="normalize-space(.//pr)"/>
+    </t>
+    <p/> <!-- marko 'prononco': ni ordigas laŭ <t>, sed ne grupigas -->
+    <t1>
+      <xsl:apply-templates/>
+    </t1>
+    <k>
+     <xsl:apply-templates
+  select="(ancestor::art/kap|ancestor::drv/kap|ancestor::ekz/ind|ancestor::bld/ind)[last()]"/>
+    </k>
+  </v>
+</xsl:template>
+
 
 <!-- indeksita vorto aperos substrekite (u) -->
 <xsl:template match="trd/ind|mll/ind">

@@ -180,6 +180,31 @@ transformdosiero, ekz. revohtml.xsl
   </span>
 </xsl:template>
 
+<xsl:template match="mrk[@cel]">
+  <xsl:variable name="file" select="substring-before(@cel,'.')"/>
+  <xsl:choose>
+    <xsl:when test="$file">
+      <a class="mrk-ref" href="{$file}.html#{$file}.{substring-after(@cel,'.')}">
+      <div class="bld-mrk" style="{@stl}">
+        <xsl:apply-templates/>
+      </div> 
+      </a>
+    </xsl:when>
+    <xsl:otherwise>
+      <a class="mrk-ref" href="{@cel}.html">
+      <div class="bld-mrk" style="{@stl}">
+        <xsl:apply-templates/>
+      </div> 
+      </a>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+<xsl:template match="mrk">
+  <div class="bld-mrk" style="{@stl}">
+    <xsl:apply-templates/>
+  </div>
+</xsl:template>
 
 <xsl:template match="lstref">
     <xsl:variable name="kls" select="(document($klasoj_cfg)/klasoj//kls[substring-after(@nom,'#')=substring-after(current()/@lst,':')])[1]"/>
@@ -213,6 +238,7 @@ transformdosiero, ekz. revohtml.xsl
       </a>
 </xsl:template>
 
+<!-- referencojn en dif, rim, ekz... -->
 <xsl:template match="
   dif/ref|
   dif/refgrp/ref|
@@ -221,7 +247,9 @@ transformdosiero, ekz. revohtml.xsl
   ekz/ref|
   ekz/refgrp/ref|
   klr/ref|
-  klr/refgrp/ref">
+  klr/refgrp/ref|
+  ke/ref|
+  ke/refgrp/ref">
 
   <xsl:variable name="file" select="substring-before(@cel,'.')"/>
   <xsl:choose>
@@ -244,7 +272,8 @@ transformdosiero, ekz. revohtml.xsl
   dif/refgrp|
   rim/refgrp|
   ekz/refgrp|
-  klr/refgrp">
+  klr/refgrp|
+  ke/refgrp">
 
   <span class="{local-name((ancestor::rim|ancestor::ekz|ancestor::dif)[last()])}"> 
    <xsl:apply-templates/>

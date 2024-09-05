@@ -1,21 +1,35 @@
 
 /* 
-(c) 2021-2023 ĉe Wolfram Diestel
-*/
+ * (c) 2021-2023 ĉe Wolfram Diestel
+ *
+ * Provizas metodojn por redakti la XML-dokumenton de Revo-artikolo, inkl. kontrolo,
+ * navigado al eraraj linioj ks
+ */
 
 /// import {str_repeat, type LinePos} from './util';
 /// import {indent,get_indent,get_line_pos} from './tekstiloj';
 // import { XmlStrukt, SDet } from './xmlstrukt';
+import * as u from '../u';
 import * as xs from './xmlstrukt';
 import { SDet } from './xmlstrukt';
 import { XmlTrad, TList, Lingvo, XPlace } from './xmltrad';
 import { Tekst, Klavar } from '../ui';
-import { cxigi } from './util';
 
 /**
  * Administras la redaktatan tekston tiel, ke eblas redakti nur parton de ĝi, t.e. unuopan derivaĵon, sencon ktp.
  */
 export class XmlRedakt extends Tekst {
+
+  /**
+   * Retrovas XmlRedakt-objekton alkroĉitan al elemento
+   * @param element la elemento aŭ ties CSS-elektilo
+   * @returns 
+   */
+  static xmlredakt(element: HTMLElement|string) {
+    let x = super.obj(element);
+    if (x instanceof XmlRedakt) return x;
+  }
+
   public radiko: string;
 
   /// public xmlstruct: XmlStrukt; // la tuta teksto
@@ -395,6 +409,22 @@ export class XmlRedakt extends Tekst {
     }
   };
   */
+
+
+  /**
+   * Iras al pozicio indikita per "<line>:[<lpos>]"
+   * kaj informas la elektilon, ke eble la subteksto ŝanĝiĝis
+   * @param line_pos - linio kaj eventuala pozicio en la linio kiel teksto
+   * @param len - se donita, tiom da signoj ĉe la indikita poizico estos markitaj,
+   *                  se ne donita unu signo estos elektita
+   */
+  iru_al(line_pos: string, len:number = 1) {
+    const akt = this.aktiva.id;
+    super.iru_al(line_pos,len);
+
+    if (akt != this.aktiva.id && this.post_subtekst_elekto)
+      this.post_subtekst_elekto(this.aktiva);
+  }
 
   /**
    * Elektas la parton identigeblan per 'mrk' por redaktado.
@@ -1256,9 +1286,9 @@ export class XmlRedakt extends Tekst {
    * valoroj estas la nudaj tekst-linioj
    * (bezonata por vortkontrolo/analizo)
    */
-  lines_as_dict() {
+  lines_as_dict(): u.StrObj {
       var lines = this.plain_text(true).split('\n');
-      var result: any = {};
+      var result: u.StrObj = {};
       for (let i=0; i<lines.length; i++) {
           var line = lines[i];
           var d = line.indexOf(']');

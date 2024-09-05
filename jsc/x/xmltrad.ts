@@ -3,10 +3,12 @@
 (c) 2023 Wolfram Diestel
 */
 
+import * as u from '../u';
 import { quoteattr } from './kodado';
 import { XElPos, SDet } from './xmlstrukt';
 import { XmlRedakt } from './xmlredakt';
-import { DOM, Tekst, Dialog, DialogOpcioj, Tabel, ListRedakt } from '../ui';
+import { Xlist } from './xlisto';
+import { DOM, Tekst, Dialog, DialogOpcioj, Menu, List, Tabel, ListRedakt } from '../ui';
 
 /* FARENDA:
  - ebligu administradon de ĉiuj tradukoj de redaktata teksto en XmlTrad, senŝargigante la tradukdialgon de administrado 
@@ -211,6 +213,7 @@ preparu() {
  kolektu_tute_malprofunde(lng: Lingvo) {
     this.tradukoj_strukt[lng] = {}; // se jam ekzistas, tamen malplenigu! 
   
+    this.tekst.certigu_sinkronecon();
     this.tekst.subtekst_apliku((s) => {
       if (['drv','subdrv','snc','subsnc'].indexOf(s.el) > -1) {
         // PLIBONIGU: ni unue kolektas en {<lng>: [trdj]} kaj poste kopias
@@ -390,6 +393,82 @@ export class TradukDialog extends Dialog {
   }
 
 
+  /**
+   * Aldonas ĉiujn lingvojn kiel menuo en la dialogo.
+   * @param menu_lingvoj la elemento aŭ CSS-elektilo de la lingvo-menuo (enhavantasj la diversajn lingvogrupojn (preferataj, efektivaj, alfabetaj))
+   * @param menu_tradukhavaj la menuo, en kiu aperu ĉiuj lingvoj, kiuj aktuale havas tradukojn en la artikolo krom la referataj
+   * @param lingvo_listo XList-objekto kiu ŝargas/provizas ĉiujn lhngvojn kun kodo kaj nomo
+   * @param lingvo_prefix prefikso por identigiloj de menuoj alfabete ordigitaj lingvoj, la menuoj nomiĝos <lingvo_prefix>_<de litero>_<ĝis litero> kaj la menueroj <lingvo_prefix>_<ISO-kodo>
+   * @param pref_lng la listo kun la ISO-kodoj de la preferataj lingvoj
+   * @param pref_prefix prefikso por identigiloj de preferataj lingvoj, la menueroj nomiĝos <pref_prefix>_<ISO-kodo>
+   */
+  lingvo_menuo(menu_lingvoj: HTMLElement|string, menu_tradukhavaj: HTMLElement|string, 
+    lingvo_listo: Xlist, lingvo_prefix: string, pref_lng: string[], pref_prefix: string) {
+
+    new Promise((resolve1) => { 
+        // alfabetaj listoj
+        const m_a_b = new List("#"+lingvo_prefix+"_a_b");
+        const m_c_g = new List("#"+lingvo_prefix+"_c_g");
+        const m_h_j = new List("#"+lingvo_prefix+"_h_j");
+        const m_k_l = new List("#"+lingvo_prefix+"_k_l");
+        const m_m_o = new List("#"+lingvo_prefix+"_m_o");
+        const m_p_s = new List("#"+lingvo_prefix+"_p_s");
+        const m_t_z = new List("#"+lingvo_prefix+"_t_z");
+
+        lingvo_listo.load(resolve1(true),(kodo: string, nomo: string) => {
+            const komenca = nomo.charAt(0);
+            const lng = u.ht_html(`<li id="${lingvo_prefix}_${kodo}" value="${nomo}">${nomo}</li>`);
+
+            if (lng && kodo != 'eo') {
+                if (komenca >= 'a' && komenca <= 'b')
+                    m_a_b.aldonu(nomo,lng);
+                else if (komenca >= 'c' && komenca <= 'g' || komenca == 'ĉ' || komenca == 'ĝ')
+                    m_c_g.aldonu(nomo,lng);
+                else if (komenca >= 'h' && komenca <= 'j' || komenca == 'ĥ' || komenca == 'ĵ')
+                    m_h_j.aldonu(nomo,lng);
+                else if (komenca >= 'k' && komenca <= 'l')
+                    m_k_l.aldonu(nomo,lng);
+                else if (komenca >= 'm' && komenca <= 'o')
+                    m_m_o.aldonu(nomo,lng);
+                else if (komenca >= 'p' && komenca <= 's' || komenca == 'ŝ')
+                    m_p_s.aldonu(nomo,lng);
+                else if (komenca >= 't' && komenca <= 'z' || komenca == 'ŭ')
+                    m_t_z.aldonu(nomo,lng);
+            }
+        });
+    })
+    .then(() => {
+      
+      const trd_aliaj = typeof menu_tradukhavaj === "string"? DOM.e(menu_tradukhavaj) : menu_tradukhavaj;
+
+      pref_lng.forEach(     //.sort(jsort_lng).forEach(
+          function(lng: string) {
+              if (lng != 'eo') {
+                // foje kodo ankoraŭ konsistas el lingvo-Lando, tiujn ni ignoras
+                // KOREKTU: tio korektiĝu en preferoj...
+                if (lng.indexOf('-')<0) {
+                  const nomo = lingvo_listo.codes[lng];
+                  const lng_html = `<li id="${pref_prefix}_${lng}">${nomo}</li>`;
+                  trd_aliaj?.insertAdjacentHTML("beforebegin",lng_html);    
+                }
+              }
+          }
+      );
+            
+    })
+    .then(() => {
+        // se ambaŭ lingvolistoj (preferataj kaj alfabetaj)
+        // estas fintraktitaj ni ankoraŭ refreŝigu la menuon
+        Menu.refreŝigu(menu_lingvoj);
+    });    
+  }
+
+  /**
+   * Plenigas la dialogon kun la tradukoj de elektita lingvo el la XML-teksto (helpe de XmlTrad-objekto)
+   * kaj kreante la liston de enigkampoj por redakti la traudkojn de tiu lingvo
+   * @param lng 
+   * @param lingvo_nomo 
+   */
   plenigu(lng: string, lingvo_nomo: string) {
     // forigu antauajn eventojn por ne multobligi ilin...
     DOM.malreago("#traduko_tradukoj","click");

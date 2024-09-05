@@ -6,13 +6,18 @@
 import { UIElement } from './uielement';
 import { UIStil } from './uistil';
 
+export type ListOpcioj = {
+    listero: string, // CSS-elektilo por listeroj
+    komparo: (a: string, b: string) => number
+};
+
 /**
  * Klaso por trakti listojn, aparte, se ni bezonas ordigadon kaj unuopaj elementoj estu aktivigeblaj/elekteblaj
  */
 export class List extends UIElement {
     static kmp_eo = new Intl.Collator('eo').compare;
 
-    static aprioraj = {
+    static aprioraj: ListOpcioj = {
         listero: "li", // CSS-elektilo por listeroj
         komparo: List.kmp_eo
     };
@@ -40,7 +45,7 @@ export class List extends UIElement {
 
             // malaktivigu antaŭan aktivan elementon
             const elektilo = '.'+UIStil.aktiva;
-            const aktiva = this.element.querySelector(elektilo);
+            const aktiva = this.element.querySelector(elektilo);            
             if (aktiva instanceof HTMLElement) aktiva.classList.remove(UIStil.aktiva);
 
             // aktivigu alklakitan

@@ -2,10 +2,12 @@
 // (c) 2017  - 2023 ĉe Wolfram Diestel
 // laŭ GPL 2.0
 
+import * as u from '../u';
+
 /**
  * Ŝablonoj por enmeti dialogenhavon en XML
  */
-export const xml_sxablonoj = {
+export const xml_sxablonoj: u.StrObj = {
   art:
   ':<?xml version="1.0"?>\n' +
   ':<!DOCTYPE vortaro SYSTEM "../dtd/vokoxml.dtd">\n\n' +
@@ -188,7 +190,7 @@ if (bib) {
 
 
 // ŝablonoj por novaj sencoj
-export const snc_sxablonoj =
+export const snc_sxablonoj: u.StrObj =
 {
 ĉefurbo: 
 `  <snc mrk="xxx.B0o.cxefurbo">

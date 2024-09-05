@@ -1,12 +1,18 @@
 /**
  * (c) 2023 ĉe Wolfram Diestel
  * laŭ GPL 2.0
+ * 
+ * Provizas proponlistojn, filtritaj laŭ la donita de uzanto serĉesprimo (vortkomenco)
+ * kaj el kiuj uzanto povas elserĉi unuopan eron.
  */
 
 import { DOM } from './dom';
 import { UIElement } from './uielement';
 
-type ProponOpcioj = { sufikso: string, source?: Function, select?: Function }
+export type Term = {term: string};
+type ProponAkiro = (term: Term, revoko: Function) => void;
+type ProponElekto = (event: Event, ui: any) => void;
+type ProponOpcioj = { sufikso: string, source?: Array<any>|ProponAkiro, select?: ProponElekto }
 
 export class Propon extends UIElement {
     //private temp;

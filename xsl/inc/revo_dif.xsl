@@ -105,6 +105,9 @@ kaj stiloj (em,ctl,sup...)
 
 <xsl:template match="klr[@tip='ind']"/>
 
+<xsl:template match="ke">
+  <em class="ke"><xsl:apply-templates/></em>
+</xsl:template>
 
 <xsl:template match="bld">
   <xsl:if test="$aspekto='ilustrite'">
@@ -112,6 +115,7 @@ kaj stiloj (em,ctl,sup...)
       <xsl:choose>
         <xsl:when test="@tip='svg'">
 
+        <div class="bld svg">
           <object data="{@lok}" type="image/svg+xml">
             <xsl:if test="@alt">
                <xsl:attribute name="height"> 
@@ -124,7 +128,7 @@ kaj stiloj (em,ctl,sup...)
                </xsl:attribute> 
             </xsl:if> 
 
-             <!-- fallback to gif, verŝajne ekzistas... -->
+             <!-- se object ial fiaskas, provu gif, verŝajne ekzistas... -->
              <img class="svg" src="{@lok}.gif">
                 <xsl:if test="@alt">
                   <xsl:attribute name="height">
@@ -137,12 +141,16 @@ kaj stiloj (em,ctl,sup...)
                   </xsl:attribute>
                 </xsl:if> 
               </img>            
-            <p>Bedaŭrinde la vektorgrafiko ne povas montriĝi!</p>
-          </object> 
+              <p>Bedaŭrinde la vektorgrafiko ne povas montriĝi!</p>
+            </object> 
+            <!-- vd. inc/revo_ref.xsl -->
+            <xsl:apply-templates select="mrk"/>
+          </div>
         </xsl:when>
 
         <xsl:otherwise>
-           <img class="bld" src="{@lok}">
+          <div class="bld">
+            <img class="bld" src="{@lok}">
              <xsl:if test="@alt">
                <xsl:attribute name="height">
                  <xsl:value-of select="@alt"/>
@@ -153,10 +161,12 @@ kaj stiloj (em,ctl,sup...)
                  <xsl:value-of select="@lrg"/>
                </xsl:attribute>
              </xsl:if> 
-           </img>
+            </img>
+            <!-- vd. inc/revo_ref.xsl -->
+            <xsl:apply-templates select="mrk"/>
+          </div>
         </xsl:otherwise>
       </xsl:choose>
-      <br/>
       <i>
         <xsl:apply-templates select="text()|tld|ind|klr"/>
       </i>
@@ -175,7 +185,6 @@ kaj stiloj (em,ctl,sup...)
           </a>&#xa0;
       </xsl:if>
       <xsl:apply-templates select="fnt"/>
-      <br/>
     </div>
   </xsl:if>
 </xsl:template>

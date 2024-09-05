@@ -1,9 +1,0 @@
-{
-    "entryPoints": ["jsc/u","jsc/x"],
-    "entryPointStrategy": "expand",
-    "out": "tsdoc",
-    "readme": "README.md",
-    "name": "Dokumentado de Typescript-kodo",
-    "tsconfig": "jsc/u/tsconfig.json"
-  }
-  
