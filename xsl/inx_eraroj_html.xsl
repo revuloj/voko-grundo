@@ -123,7 +123,7 @@
         Lingvo "<xsl:value-of select="@arg"/>" ne estas difinita.
       </xsl:when>
       <xsl:when test="@tip='trd-ord'">
-        Lingvo "<xsl:value-of select="@arg"/>" ne sidas laŭ alfabeta ordo.
+        Traduko "<xsl:value-of select="@arg"/>" ne sidas ĝuste laŭ alfabeta ordo.
       </xsl:when>
 
       <xsl:when test="@tip='ref-sen-cel'">
