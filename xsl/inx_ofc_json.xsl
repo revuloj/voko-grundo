@@ -56,6 +56,12 @@
         <xsl:with-param name="ofc" select="'9'"/>
       </xsl:call-template>
       <xsl:call-template name="oficialaj">
+        <xsl:with-param name="ofc" select="'10'"/>
+      </xsl:call-template>
+      <xsl:call-template name="oficialaj">
+        <xsl:with-param name="ofc" select="'11'"/>
+      </xsl:call-template>
+      <xsl:call-template name="oficialaj">
         <xsl:with-param name="ofc" select="'1923'"/>
       </xsl:call-template>
       <xsl:call-template name="oficialaj">
