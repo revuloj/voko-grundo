@@ -1005,6 +1005,8 @@ function sendi_artikolon_servile(event: Event) {
                 //alert("Sendita. Bv. kontroli ĉu vi ricevis kopion de la retpoŝto.\n(En tre esceptaj okazoj la spam-filtrilo povus bloki ĝin...)");
                 Dialog.fermu("#sendiservile_dlg");
                 //$("#xml_text").val('');
+
+                // malplenigu XML-tekston kaj la redaktitan dosieron el ŝargodialogo
                 xr.teksto = '';
                 DOM.al_v("#shargi_dlg input","");                    
             },
