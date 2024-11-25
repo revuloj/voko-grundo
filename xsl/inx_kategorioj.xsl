@@ -163,10 +163,10 @@ tamen AdE nur kalkulas novajn radikojn, dum ni kalkulas ankaŭ derivaĵojn kaj r
       <ero s="rad" t="oficialaj (7a, 1958)" n="{count(//art/kap//ofc[.='7'])}/158"/>
       <ero s="rad" t="oficialaj (8a, 1974)" n="{count(//art/kap//ofc[.='8'])}/214"/>
       <ero s="rad" t="oficialaj (9a, 2007)" n="{count(//art/kap//ofc[.='9'])}/209"/>
-      <ero s="rad" t="oficialaj (10a, 2023)" n="{count(//art/kap//ofc[.='10'])}/420+832"/>
+      <ero s="rad" t="oficialaj (10a, 2023)" n="{count(//art/kap//ofc[.='10'])}/420"/>
 
 <!-- lau Michel...    
-    
+   
 U.V = 2629 U.V radikoj + 141 fundamentaj (60+80+1) = 2770 (<>2768 r. !)    + 303 U.V. kunmetajxoj  +  ? fundamentaj kunmetajxoj
 1OA =  805 radikoj  => + 55 fundamentaj  = 860  (+ 2  1OA-kunmetajxoj ) 
 2OA = 587 radikoj  => + 4 fundamentaj  = 591
@@ -177,7 +177,9 @@ U.V = 2629 U.V radikoj + 141 fundamentaj (60+80+1) = 2770 (<>2768 r. !)    + 303
 7OA = 31 radikoj => + 80 fund-7OA + ( 44 fund-1OA + 4 fund-2OA)  =  159
 8OA = 200 radikoj => + 1 fund-8OA + ( 11 fund-1OA + 1 fund-3OA)  =  213
 9OA = 209 radikoj + 66 derivataj kunmetajxoj = 275
-
+-->
+<!-- kau OA10
+10OA = 420 radikoj + 832 derivaĵoj
 -->
         
         
