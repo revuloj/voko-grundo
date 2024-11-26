@@ -36,7 +36,7 @@ RUN bin/mp2png_svg.sh
 # staĝo 2: nodejs: kompilu CSS kaj JS
 #######################################################
 
-FROM ubuntu:jammy as builder
+FROM ubuntu:noble as builder
 ARG NODE_MAJOR=20
 
 # vd: https://github.com/nodesource/distributions
