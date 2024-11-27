@@ -543,6 +543,10 @@ table {
     margin-top: 1em !important;
 }
 
+summary {
+    cursor: pointer
+}
+
 
       
 @media (prefers-color-scheme: dark) {
