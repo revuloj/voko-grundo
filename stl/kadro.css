@@ -264,21 +264,21 @@ nav a:link, nav a:visited {
     color: inherit;
 }
 
-nav a:focus {
+nav a:focus, nav summary:focus {
     outline: 2px dotted var(--nav-act-bgr-clr) !important;
     background-color: inherit;
     box-shadow: none;
     /* border-bottom: 3px solid var(--nav-act-brd-clr);*/
 }
 
-nav a:hover {
+nav a:hover, nav summary:hover {
     background-color: var(--nav-hov-bgr-clr);
     color: var(--nav-hov-fnt-clr) !important;
     background-image: none;
     color: var(--highlight-color);
 }
 
-nav a:active {
+nav a:active, nav summary:active {
     background-color: var(--nav-act-bgr-clr);
     color: var(--nav-act-fnt-clr);
     background-image: none;
