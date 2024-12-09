@@ -98,7 +98,8 @@ export class Xlist {
               if (aldone) {
                 self.fill.call(self,fine,aldone);
               } 
-          });
+          },undefined,undefined,
+          (xhr: XMLHttpRequest) => console.error("Ne povis ŝargi lingvoliston: "+xhr.status+" "+xhr.statusText));
   
       // se ni jam ŝargis iam antaŭe, ni eble nur devas plenigi la videbalan elektilon
       } else if (!ŝargante) {
