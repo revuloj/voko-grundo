@@ -447,7 +447,16 @@ export class TradukDialog extends Dialog {
                 // foje kodo ankoraŭ konsistas el lingvo-Lando, tiujn ni ignoras
                 // KOREKTU: tio korektiĝu en preferoj...
                 if (lng.indexOf('-')<0) {
-                  const nomo = lingvo_listo.codes[lng];
+                  let nomo = lingvo_listo.codes[lng];
+                  if (!nomo) {
+                    // FIXME: iam ŝajnas ke lingvo_listo.codes ne estas ŝargita
+                    // aparte post kiam la seanco longe dormis
+                    // do verŝajne pro forvelko de la servila seanco
+                    // sed ni devas ankoraŭ eltrovi kiel solvi ĝin ĝuste
+                    // provizore ni tiel elturniĝas:
+                    console.warn("Ne troviĝis nomo de lingvo: "+lng);
+                    nomo = `(${lng})`
+                  }
                   const lng_html = `<li id="${pref_prefix}_${lng}">${nomo}</li>`;
                   trd_aliaj?.insertAdjacentHTML("beforebegin",lng_html);    
                 }
