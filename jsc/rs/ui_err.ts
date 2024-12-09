@@ -315,50 +315,48 @@ function kontrolu_liniojn(lines: any) {
 export function surmetita_dialogo(url: string, root_el: string, loc = '') {
     
     u.HTTPRequest('get', url, {},
-          function(xhr: XMLHttpRequest, data: string) {   
-              if (xhr.status == 302) {
-                  // FIXME: When session ended the OpenID redirect 302 is handled behind the scenes and here we get openid/login with status 200
-                show_xhr_error(xhr,"Via seanco finiĝis. Bonvolu resaluti!");
-              } else {
-                const srm = Dialog.dialog("#surmetita_dlg");
-                if (srm) {
-                    DOM.al_html("#surmetita",data);
-                    const titolo = DOM.t("#surmetita h1");
-                    const h2 = DOM.e("#surmetita_dlg h2");
-                    if (titolo && h2) {
-                        const h2t = h2.firstChild;
-                        if (h2t?.nodeType == Node.TEXT_NODE)
-                            h2t.nodeValue = titolo;
-                        //DOM.al_t("#surmetita_dlg h2",titolo);
-                        DOM.e("#surmetita h1")?.remove();
-                    };
-                    //  $("#surmetita").html(data);
-                    //  $("#surmetita_dlg").dialog("option", "title", $("#surmetita h1").text());
-                    //  $("#surmetita h1").remove("h1");
-                    
-                    // adaptu altecon de la dialogo, por ke la deklaro ruliĝu sed la titolo kaj reir-butono montriĝu...
-                    const dlg = srm.element.parentElement;
-                    if (dlg) {
-                        const view_h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
-                        const tbar = dlg.querySelector(".ui-dialog-titlebar") as HTMLElement;
-                        if (tbar) {
-                            const dlg_h = +tbar.style.height;
-                            const decl_h = (view_h * 0.70) - dlg_h; // - dlg.children(".ui-dialog-buttonpane").height();
-                            const dr = DOM.e("#"+root_el) as HTMLElement;
-                            if (dr) dr.style.height = ""+decl_h;        
-                        }
+          function(data: string) {   
+            const srm = Dialog.dialog("#surmetita_dlg");
+            if (srm) {
+                DOM.al_html("#surmetita",data);
+                const titolo = DOM.t("#surmetita h1");
+                const h2 = DOM.e("#surmetita_dlg h2");
+                if (titolo && h2) {
+                    const h2t = h2.firstChild;
+                    if (h2t?.nodeType == Node.TEXT_NODE)
+                        h2t.nodeValue = titolo;
+                    //DOM.al_t("#surmetita_dlg h2",titolo);
+                    DOM.e("#surmetita h1")?.remove();
+                };
+                //  $("#surmetita").html(data);
+                //  $("#surmetita_dlg").dialog("option", "title", $("#surmetita h1").text());
+                //  $("#surmetita h1").remove("h1");
+                
+                // adaptu altecon de la dialogo, por ke la deklaro ruliĝu sed la titolo kaj reir-butono montriĝu...
+                const dlg = srm.element.parentElement;
+                if (dlg) {
+                    const view_h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+                    const tbar = dlg.querySelector(".ui-dialog-titlebar") as HTMLElement;
+                    if (tbar) {
+                        const dlg_h = +tbar.style.height;
+                        const decl_h = (view_h * 0.70) - dlg_h; // - dlg.children(".ui-dialog-buttonpane").height();
+                        const dr = DOM.e("#"+root_el) as HTMLElement;
+                        if (dr) dr.style.height = ""+decl_h;        
                     }
-
-                    srm.malfermu();
                 }
-                window.location.hash = loc;
-            } // else
+
+                srm.malfermu();
+            }
+            window.location.hash = loc;
         },
         function() { document.body.style.cursor = 'wait' },
         function() { document.body.style.cursor = 'auto' },
         function(xhr: XMLHttpRequest) {
             console.error(xhr.status + " " + xhr.statusText);
-            if (xhr.status == 400) {
+            if (xhr.status == 302) {
+                // FIXME: When session ended the OpenID redirect 302 is handled behind the scenes and here we get openid/login with status 200
+                show_xhr_error(xhr,"Via seanco finiĝis. Bonvolu resaluti!");
+            } else if (xhr.status == 400) {
                 DOM.al_html("#surmetita_error",'Pardonu, okazis eraro dum ŝargo de la dokumento.');
             } else {
                 var msg = "Pardonu, okazis netandita eraro: ";
