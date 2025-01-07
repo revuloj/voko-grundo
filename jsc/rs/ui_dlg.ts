@@ -579,7 +579,6 @@ export default function() {
 
     //>>>>>>>> dialogo: Enmeti tradukojn
 
-
     const t_dlg = new x.TradukDialog("#traduko_dlg", {
         trd_tabelo: "#traduko_table",
         kampoj: {}, 

@@ -474,7 +474,7 @@ export class TradukDialog extends Dialog {
 
   /**
    * Plenigas la dialogon kun la tradukoj de elektita lingvo el la XML-teksto (helpe de XmlTrad-objekto)
-   * kaj kreante la liston de enigkampoj por redakti la traudkojn de tiu lingvo
+   * kaj kreante la liston de enigkampoj por redakti la tradukojn de tiu lingvo
    * @param lng 
    * @param lingvo_nomo 
    */
