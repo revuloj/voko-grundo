@@ -588,7 +588,7 @@ export namespace artikolo {
             }
             // antaŭ xml aldonu "referenci..."
             if (xml) {
-                const ref = u.ht_element("A",{class: "redakto", href: "#", title: "refrenci al tiu ĉi artikolo"},"referenci...");
+                const ref = u.ht_element("A",{class: "redakto", href: "#", title: "referenci al tiu ĉi artikolo"},"referenci...");
 
                 /* ebligu sendi artikolreferencon per sistemdependa reimedo (Share),
                 * tio ordinare provizas plurajn eblecojn sendi referencon al la artikolo 
