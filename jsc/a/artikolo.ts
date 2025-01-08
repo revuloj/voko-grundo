@@ -532,39 +532,61 @@ export namespace artikolo {
          */
         function ref_dlg(r: {url: string, title: string}) {
             let dlg = <HTMLDialogElement>document.getElementById('dlg_referenco');
+            // se ref_dlg ankoraŭ ne ekzistas, kreu ĝin
             if (!dlg) {
                 dlg = <HTMLDialogElement>u.ht_elements([
                     ['dialog',{id: 'dlg_referenco',class: 'overlay'},[
                         ['a',{href: r.url},r.title],' ',
-                        ['input',{id: 'dlg_ref_url', type: 'hidden'},r.url],
+                        ['input',{id: 'dlg_ref_url', type: 'hidden', value: r.url}],
                         ['button',{id: 'dlg_ref_kopiu', title: 'kopiu'},'\u2398'],' ',                      
                         ['button',{id: 'dlg_ref_fermu'},'fermu']
                     ]]
                 ])[0];  
-            }          
-            if (dlg) {
-                document.body.append(dlg);
-                // reagoj al butonoj [fermu] kaj [kopiu]
-                const fermu = document.getElementById('dlg_ref_fermu');
-                fermu.addEventListener("click", () => {
-                    dlg.close();
-                });
-                const kopiu = document.getElementById('dlg_ref_kopiu');
-                kopiu.addEventListener("click", () => {
-                    // @ts-ignore, vd https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Interact_with_the_clipboard
-                    navigator.permissions.query({ name: "clipboard-write" }).then( (result) => {
-                        if (result.state === "granted" || result.state === "prompt") {
-                            navigator.clipboard.writeText(r.url);
-                            return;
-                        }
+
+                if (dlg) {
+                    document.body.append(dlg);
+                    // reagoj al butonoj [fermu] kaj [kopiu]
+                    const fermu = document.getElementById('dlg_ref_fermu');
+                    fermu.addEventListener("click", () => {
+                        dlg.close();
                     });
-                    // se la supra ne funkcias, provu kopii laŭ malnova maniero
-                    const url = <HTMLInputElement>document.getElementById('dlg_ref_url');
-                    url.select();
-                    document.execCommand("copy");
-                });
-                dlg.show();
+                    const kopiu = document.getElementById('dlg_ref_kopiu');
+                    kopiu.addEventListener("click", () => {
+                        const iurl = <HTMLInputElement>document.getElementById("dlg_ref_url");
+                        if (iurl) {                                                                   
+                            // @ts-ignore, vd https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Interact_with_the_clipboard
+                            navigator.permissions.query({ name: "clipboard-write" }).then( (result) => {
+                                if (result.state === "granted" || result.state === "prompt") {
+                                    navigator.clipboard.writeText(iurl.value);
+                                    return;
+                                } else {
+                                    console.error("La retumilo ne permesas kopii la URL-on: "+iurl.value)
+                                }
+                            });
+                        };
+                        // se la supra ne funkcias, provu kopii laŭ malnova maniero
+                        //const iurl = <HTMLInputElement>document.getElementById('dlg_ref_url');
+                        //iurl.select();
+                        // kaŝitan <input> ŝajne ne eblas elekti+kopii
+                        // do ni kreas videblan kopion, elektas+kopias kaj fine forigas:
+                        const input = <HTMLInputElement>u.ht_element('input',{type: 'text', value: iurl.value});
+                        iurl.parentElement.append(input);
+                        input.select();
+                        document.execCommand("copy");
+                        input.remove();
+                    });
+                }          
+            } else {
+                // ref_dlg jam ekzistas, ni nur aktualigu la enhavon
+                const a = dlg.querySelector("a");
+                if (a) {
+                    a.textContent = r.title;
+                    a.setAttribute("href",r.url)
+                }
+                const iurl = <HTMLInputElement>document.getElementById("dlg_ref_url");
+                if (iurl) iurl.value = r.url;
             }
+            dlg.show();
         }
 
         if (pied) { // en la redaktilo eble jam foriĝis...
