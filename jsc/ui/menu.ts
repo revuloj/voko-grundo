@@ -12,6 +12,11 @@ type MenuReago = (event: Event, m_ero: Menuero) => void;
 type MenuOpcioj = { eroj?: string, reago?: MenuReago, eniro?: string|HTMLElement };
 
 export class Menuer extends UIElement {
+    /**
+     * Redonas la menuon, al kiu apartenas menuero
+     * @param element la HTML-elemento reprezentanta la menueron
+     * @returns la Menu-objekto
+     */
     static menuo(element: HTMLElement|string) {
         const menuer = UIElement.obj(element);
         if (menuer instanceof Menuer) return menuer.menuo;
