@@ -11,14 +11,22 @@ export type Menuero = {menuero: HTMLElement};
 type MenuReago = (event: Event, m_ero: Menuero) => void;
 type MenuOpcioj = { eroj?: string, reago?: MenuReago, eniro?: string|HTMLElement };
 
-class Menuer extends UIElement {
+export class Menuer extends UIElement {
     static menuo(element: HTMLElement|string) {
         const menuer = UIElement.obj(element);
         if (menuer instanceof Menuer) return menuer.menuo;
     }
 
+    //public menuo;
+
+    /**
+     * Kreas menueron de menuo
+     * @param element la HTML-elemento reprezentanta la menueron en la GUI
+     * @param menuo  la menuo al kiu apartenas la menuero
+     */
     constructor(element: HTMLElement|string, public menuo: Menu) {
         super(element,{});
+
         // aldonu klakreagon
         DOM.malreago(element,"click"); // forigu evtl. malnovan
         DOM.reago(element,"click",this._click.bind(this.element));
@@ -59,11 +67,13 @@ class Submenu extends Menuer {
         if (sublst instanceof HTMLElement) {
             if (montru) {
                 this.element.classList.remove(UIStil.submenuo_fermita);
+                this.element.classList.add(UIStil.submenuo_malfermita);
                 DOM.kaŝu(sublst,false); // malkaŝu
                 // metu la submenuon tuj apud la menueron
                 sublst.style.left = ""+(this.element.offsetLeft+this.element.offsetWidth)+"px";
                 sublst.style.top = ""+this.element.offsetTop+"px";
             } else {
+                this.element.classList.remove(UIStil.submenuo_malfermita);
                 this.element.classList.add(UIStil.submenuo_fermita);
                 sublst.classList.add(UIStil.menuo);
                 DOM.kaŝu(sublst);    

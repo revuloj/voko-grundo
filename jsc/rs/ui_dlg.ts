@@ -11,7 +11,7 @@ import * as x from '../x';
 import { preferoj } from '../a/preferoj';
 
 /// import { xpress } from '../x';
-import { DOM, Dialog, Menu, type Menuero, Grup, Slipar, Buton, Elektil, List, Propon, type Term, Valid, Eraro } from '../ui';
+import { DOM, Dialog, Menu, Menuer, type Menuero, Grup, Slipar, Buton, Elektil, List, Propon, type Term, Valid, Eraro } from '../ui';
 import { XmlRedakt } from '../x';
 
 import * as sbl from './sxablonoj';
@@ -1641,6 +1641,10 @@ function shanghu_trd_lingvon(event: Event, ui: Menuero) {
         const t_dlg = x.TradukDialog.dialog("#traduko_dlg");
         if (t_dlg) t_dlg.plenigu(lng,lingvo_nomo);
     }
+    // fermu evtl. ankoraŭ malfermitan submenuon
+    const menuo = Menuer.menuo(ui.menuero);
+    if (menuo) menuo.fermu_submenuojn();
+
     /// DOM.al_datum("#traduko_dlg","last-focus",'');
 }
 
