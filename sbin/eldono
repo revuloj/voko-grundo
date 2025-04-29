@@ -109,6 +109,11 @@ artikoloj)
     # kopiu ĉiujn artikolojn donitaj sur komandlinio (ekde dua argumento) al la servilo
     scp "${@:2}" ${revo}/art/
     ;;
+bld)
+    ## artikoloj  : transsendas la artikolojn (HTML) donitajn en la komandlinio al la publika servilo    
+    # kopiu ĉiujn artikolojn donitaj sur komandlinio (ekde dua argumento) al la servilo
+    scp "${@:2}" ${revo}/bld/
+    ;;    
 historioj)
     ## historioj  : transsendas la artikolo-hisotriojn (HTML) donitajn en la komandlinio al la publika servilo    
     # kopiu ĉiujn historiojn donitaj sur komandlinio (ekde dua argumento) al la servilo
