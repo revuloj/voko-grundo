@@ -177,6 +177,10 @@ preparu() {
     while (te) {    
       // trovu la komencon ta de la elemento finiĝanta je te
       ta = find_stag(te.elm,xml,te.pos);
+      if (! ta) {
+        console.debug(xml.substring(te.pos-20,te.pos));
+        throw(`Komenco de elemento ${te.elm} ne trovita antaŭ ${te.pos}`);
+      }
   
       // se temas pri trd/trdgrp...
       if (te.elm.indexOf('trd') == 0) {
