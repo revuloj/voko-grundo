@@ -51,25 +51,33 @@ testu ekz-e:
   <art dos="{$filename}" dat="{$dat}">
 
   <xsl:choose>
+    <!-- elemento <art> havu atributon @mrk -->
     <xsl:when test="$mrk='' or not($mrk)">
       <ero kie="art" mrk="{$mrk}" tip="art-sen-mrk"/>
     </xsl:when>
+    <!-- la dosiernomo donita en atributo @mrk egalu al la efektiva dosiernomo -->
     <xsl:when test="$mrk != $filename">
       <ero  kie="art" mrk="{$mrk}" tip="mrk-ne-dos"/>
     </xsl:when>    
     <xsl:otherwise>
+      <!-- la dosiernomo enhavu *neniujn* aliajn signojn krom minuskloj, ciferoj, substrekto -->
       <xsl:analyze-string select="$mrk" regex="[^a-z0-9_]">
         <xsl:matching-substring>
-          <ero  kie="art" mrk="{$mrk}" tip="art-mrk-sgn"/>
+          <ero kie="art" mrk="{$mrk}" tip="art-mrk-sgn"/>
         </xsl:matching-substring>
       </xsl:analyze-string>
     </xsl:otherwise>
   </xsl:choose>
 
+  <!-- ĉiu artikolo enhavu almenaŭ unu ekzemplon, ni estas iom malstriktaj farante escepton de tiu regulo
+   por oficialaj arĥaikaj kaj raraj vortoj -->
   <xsl:if test="not(//ekz or //ofc or (//*[uzo[text()='ARK'] and uzo[text()='RAR']]))">
       <ero  kie="art" mrk="{$mrk}" tip="dos-sen-ekz"/>
   </xsl:if>
 
+  <!-- se la radiko havas variaĵon, tiam ankaŭ unu derivaĵo havu variaĵon den la kap-elemento 
+    Ni esceptas kelkajn artikolojn patriot...spiritual de tiu regulo
+  -->
   <xsl:if test="kap/var and not(//drv/kap/var)  
     and not(kap/rad[.='patriot']) and not(kap/rad[.='ideal']) 
     and not(kap/rad[.='real']) and not(kap/rad[.='ego'])
@@ -88,8 +96,10 @@ testu ekz-e:
   <xsl:variable name="mrk" select="@mrk"/>
   <xsl:variable name="kie" select="node-name(.)"/>
 
+  <!-- la fina mrk-parto, post lasta punkto -->
   <xsl:variable name="mrk-fin" select="substring-after(@mrk,'.')"/>
 
+  <!-- la unua parto de marko (antaŭ punkto, se estas) -->
   <xsl:variable name="mrk1">
     <xsl:choose>
       <xsl:when test="contains($mrk,'.')">
@@ -101,6 +111,7 @@ testu ekz-e:
     </xsl:choose>
   </xsl:variable>
 
+  <!-- la dua parto de mrk (post unua punkto) -->
   <xsl:variable name="mrk2">
     <xsl:choose>
       <xsl:when test="contains($mrk-fin,'.')">
@@ -113,12 +124,16 @@ testu ekz-e:
   </xsl:variable>
 
   <xsl:choose>
+    <!-- ĉiu mrk-atributo (krom art@mrk) enhavu almenaŭ unu punkton -->
     <xsl:when test="not(contains($mrk,'.'))">
       <ero kie="{$kie}" mrk="{$mrk}" tip="mrk-prt"/>
     </xsl:when>
+    <!-- ĉiu dua parto de mrk-elemento enhavu 0-signon (=tildo referenanta al la radiko),
+      esceptoj estas rim@mrk, ekz@mrk -->
     <xsl:when test="not(contains($mrk2,'0')) and not(self::ekz|self::rim)">
       <ero kie="{$kie}" mrk="{$mrk}" tip="mrk-nul"/>
     </xsl:when>
+    <!-- la unua parto de mrk-elemento ĉiam respondu al la dosieronomo -->
     <xsl:when test="$mrk1 != $filename">
       <ero kie="{$kie}" mrk="{$mrk}" tip="mrk-ne-dos"/>
     </xsl:when>
@@ -133,11 +148,13 @@ testu ekz-e:
   <xsl:variable name="kie" select="node-name(ancestor::node()[@mrk][1])"/>
 
   <xsl:choose>
+    <!-- ĉiu fakindiko respondu al unu fako el la oficiala listo -->
     <xsl:when test="@tip='fak'">
       <xsl:if test="not(document($fakoj)//fako[@kodo=current()])">
         <ero kie="{$kie}" mrk="{$mrk}" tip="uzo-fak" arg="{.}"/>
       </xsl:if>
     </xsl:when>
+    <!-- ĉiu stilindiko respondu al unu stilo el la oficiala listo -->
     <xsl:when test="@tip='stl'">
       <xsl:if test="not(document($stiloj)//stilo[@kodo=current()])">
         <ero kie="{$kie}" mrk="{$mrk}" tip="uzo-stl" arg="{.}"/>
@@ -148,11 +165,13 @@ testu ekz-e:
 
 
 <xsl:template match="trdgrp[@lng]|trd[@lng]">
+  <!-- la @lng-atributo enhavu lingvokodon el la oficiala listo -->
   <xsl:if test="not(document($lingvoj)//lingvo[@kodo=current()/@lng])">
     <ero kie="{node-name(ancestor::node()[@mrk][1])}" 
          mrk="{ancestor::node()[@mrk][1]/@mrk}" tip="trd-lng" arg="{@lng}"/>
   </xsl:if>
 
+  <!-- la tradukoj en sama nivelo estu ordigitaj laŭ lingvokodo -->
   <xsl:variable name="lng1" select="@lng"/>
   <xsl:if test="trdgrp[@lng&lt;=$lng1]|trd[@lng&lt;=$lng1]">
     <ero kie="{node-name(ancestor::node()[@mrk][1])}" 
@@ -165,6 +184,7 @@ testu ekz-e:
   <xsl:variable name="mrk" select="ancestor::node()[@mrk][1]/@mrk"/>
   <xsl:variable name="kie" select="node-name(ancestor::node()[@mrk][1])"/>
 
+  <!-- la celdosiero de ref-elemento -->
   <xsl:variable name="dosiero">
     <xsl:choose>
       <xsl:when test="contains(@cel,'.')">
@@ -176,6 +196,7 @@ testu ekz-e:
     </xsl:choose>
   </xsl:variable>
 
+  <!-- la finparto de ref-celo -->
   <xsl:variable name="cel-fin" select="substring-after(@cel,'.')"/>
   <xsl:variable name="cel2">
     <xsl:choose>
@@ -189,23 +210,30 @@ testu ekz-e:
   </xsl:variable>
 
   <xsl:choose>
+    <!-- ĉiu referenco havu celon -->
     <xsl:when test="not(@cel) or @cel=''">
       <ero kie="{$kie}" mrk="{$mrk}" tip="ref-sen-cel" arg="{.}"/>
     </xsl:when>
+    <!-- la celdosiero ekzistu -->
     <xsl:when test="not(doc-available($dosiero))">
       <ero kie="{$kie}" mrk="{$mrk}" tip="ref-cel-dos" arg="{@cel}"/>
     </xsl:when>
+    <!-- la dua parto de ref-celo enhavu signon '0' (cd. ĉe drv@mrk....) -->
     <xsl:when test="$cel2 != '' and not(contains($cel2,'0'))">
       <ero kie="{$kie}" mrk="{$mrk}" tip="ref-cel-nul" arg="{@cel}"/>
     </xsl:when>
+    <!-- la ref-celo respondu al @mrk-atributo en la celosiero -->
     <xsl:when test="contains(@cel,'.') and not(document($dosiero)//node()[@mrk=current()/@cel])">
       <ero kie="{$kie}" mrk="{$mrk}" tip="ref-cel-mrk" arg="{@cel}"/>
     </xsl:when>
   </xsl:choose>
 
+  <!-- ĉiu lst-referenco havu atributon @lst -->
   <xsl:if test="@tip='lst' and (not(@lst) or @lst='')">
     <ero kie="{$kie}" mrk="{$mrk}" tip="ref-tip-lst" arg="{@cel}"/>
   </xsl:if>
+
+  <!-- la atributon @lst respondu al oficiala klaso -->
   <xsl:if test="@lst and not(document($klasoj)//kls[substring-after(@nom,'#')=current()/substring-after(@lst,':')])">
     <ero kie="{$kie}" mrk="{$mrk}" tip="ref-lst" arg="{@lst}"/>
   </xsl:if>
