@@ -55,7 +55,7 @@
     },
     "dependencies": {
         "@sutton-signwriting/font-ttf": "^1.5.2",
-        "esbuild": "0.18.3",
+        "esbuild": "0.25.0",
         "typescript": "5.1.3"
     }
 }
