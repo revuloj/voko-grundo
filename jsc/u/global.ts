@@ -17,7 +17,7 @@ declare global {
 export namespace agordo {
 
 // rigardataj kiel konstantoj:
-  export const eldono = "2n";
+  export const eldono = "2o";
   export const debug = false;
 
 // agordoj pri reta-vortaro.de
