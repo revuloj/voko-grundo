@@ -177,6 +177,10 @@ preparu() {
     while (te) {    
       // trovu la komencon ta de la elemento finiĝanta je te
       ta = find_stag(te.elm,xml,te.pos);
+      if (! ta) {
+        console.debug(xml.substring(te.pos-20,te.pos));
+        throw(`Komenco de elemento ${te.elm} ne trovita antaŭ ${te.pos}`);
+      }
   
       // se temas pri trd/trdgrp...
       if (te.elm.indexOf('trd') == 0) {
@@ -474,7 +478,7 @@ export class TradukDialog extends Dialog {
 
   /**
    * Plenigas la dialogon kun la tradukoj de elektita lingvo el la XML-teksto (helpe de XmlTrad-objekto)
-   * kaj kreante la liston de enigkampoj por redakti la traudkojn de tiu lingvo
+   * kaj kreante la liston de enigkampoj por redakti la tradukojn de tiu lingvo
    * @param lng 
    * @param lingvo_nomo 
    */

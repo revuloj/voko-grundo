@@ -196,6 +196,11 @@ ul.ui-menu {
     border: 1px solid var(--nav-brd-clr);
 }
 
+
+.ui-menu-sub-malfermita {
+    background-color: var(--nav-act-bgr-clr);
+}
+
 .ui-menu-sub-fermita::after {
     content: "\00a0\2bc8";
 }

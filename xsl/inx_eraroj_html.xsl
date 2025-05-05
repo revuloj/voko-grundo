@@ -122,6 +122,9 @@
       <xsl:when test="@tip='trd-lng'">
         Lingvo "<xsl:value-of select="@arg"/>" ne estas difinita.
       </xsl:when>
+      <xsl:when test="@tip='trd-ord'">
+        Traduko "<xsl:value-of select="@arg"/>" ne sidas ĝuste laŭ alfabeta ordo.
+      </xsl:when>
 
       <xsl:when test="@tip='ref-sen-cel'">
         Referenco sen atributo "cel".

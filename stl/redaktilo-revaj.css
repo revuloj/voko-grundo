@@ -459,8 +459,11 @@ nav {
 
 #menu li, #traduko_menuo li {
   box-sizing: border-box;
-  /*width: 100%;*/
+  /*width: 100%;
   border-radius: 0 !important;
+  */
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
   /*border-color: var(--nav-brd-clr);*/
   border: none;
 }

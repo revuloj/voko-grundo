@@ -668,6 +668,7 @@
               <table>
                 <xsl:for-each select="ero[@s='rad']">
                   <tr>
+                    <!-- @t: titolo, @n: nombro -->
                     <td><xsl:value-of select="@t"/><xsl:text>: </xsl:text></td>
                     <td align="right"><xsl:value-of select="@n"/></td>
                   </tr>

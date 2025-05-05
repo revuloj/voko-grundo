@@ -24,6 +24,7 @@ export class UIStil {
     static menuo = "ui-menu";
     static menudividilo = "ui-menu-divider";
     static submenuo_fermita = "ui-menu-sub-fermita";
+    static submenuo_malfermita = "ui-menu-sub-malfermita";
 
     // en sliparo
     static langetaro = "ui-tabs-nav";

@@ -11,7 +11,7 @@ import * as x from '../x';
 import { preferoj } from '../a/preferoj';
 
 /// import { xpress } from '../x';
-import { DOM, Dialog, Menu, type Menuero, Grup, Slipar, Buton, Elektil, List, Propon, type Term, Valid, Eraro } from '../ui';
+import { DOM, Dialog, Menu, Menuer, type Menuero, Grup, Slipar, Buton, Elektil, List, Propon, type Term, Valid, Eraro } from '../ui';
 import { XmlRedakt } from '../x';
 
 import * as sbl from './sxablonoj';
@@ -579,14 +579,14 @@ export default function() {
 
     //>>>>>>>> dialogo: Enmeti tradukojn
 
-
     const t_dlg = new x.TradukDialog("#traduko_dlg", {
         trd_tabelo: "#traduko_table",
         kampoj: {}, 
         malfermu: function(this: x.TradukDialog) {
             DOM.kaŝu("#traduko_error");
             //$("#traduko_tradukoj").data("trd_shanghoj",{});
-            //traduko_dlg_art_lingvoj();
+            traduko_dlg_art_lingvoj();
+
             Menu.refreŝigu("#traduko_menuo");
 
             // difinu tildo-tekston
@@ -1633,14 +1633,18 @@ function traduko_add_btn(mrk: string) {
  */
 function shanghu_trd_lingvon(event: Event, ui: Menuero) {
     var id = ui.menuero.id;
-    if (id && id.startsWith("traduko_")) {
-        var lng= id.split('_')[2];
+    if (id && (id.startsWith("traduko_") || id.startsWith("trd_art_"))) {
+        var lng = id.split('_')[2];
         var lingvo_nomo = ui.menuero.textContent||'';
         //alert($("#traduko_lingvoj").val())
 
         const t_dlg = x.TradukDialog.dialog("#traduko_dlg");
         if (t_dlg) t_dlg.plenigu(lng,lingvo_nomo);
     }
+    // fermu evtl. ankoraŭ malfermitan submenuon
+    const menuo = Menuer.menuo(ui.menuero);
+    if (menuo) menuo.fermu_submenuojn();
+
     /// DOM.al_datum("#traduko_dlg","last-focus",'');
 }
 
