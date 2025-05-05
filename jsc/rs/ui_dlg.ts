@@ -964,7 +964,7 @@ function sendi_artikolon_servile(event: Event) {
     const trg = event.target;
     if (trg instanceof HTMLElement) {
 
-        const metodo = DOM.t(trg) == 'Submeti'? 'api' : 'email';
+        const metodo = DOM.t(trg) == 'Submeti'? 'db' : 'email';
         const xr = xmlredakt();
         
         // aldono (t.e. nova artikolo) aŭ redakto (t.e. ŝanĝo)
@@ -993,8 +993,8 @@ function sendi_artikolon_servile(event: Event) {
                 
                 const url = json.html_url;
                 const msg = "<b>'" + dosiero  + "'</b> sendita. " +
-                (metodo == 'api'
-                ? "Kelkajn tagojn vi trovas vian redakton <a target='_new' href='"+url+"'>tie ĉi ĉe Github</a> kaj sub 'Lastaj...'."
+                (metodo == 'db'
+                ? "Via redakto estas konservita kaj atendas trakton per la redaktosrvo. Vi povas vidi ĝin sub 'Lastaj...'."
                 : "Bv. kontroli ĉu vi ricevis kopion de la retpoŝto.\n(En tre esceptaj okazoj la spam-filtrilo povus bloki ĝin...)"
                 );
                 Erarolisto.aldonu_eraron("#dock_eraroj", {
