@@ -994,7 +994,7 @@ function sendi_artikolon_servile(event: Event) {
                 const url = json.html_url;
                 const msg = "<b>'" + dosiero  + "'</b> sendita. " +
                 (metodo == 'db'
-                ? "Via redakto estas konservita kaj atendas trakton per la redaktosrvo. Vi povas vidi ĝin sub 'Lastaj...'."
+                ? "Via redakto estas konservita kaj atendas trakton per la redaktoservo. Vi povas vidi ĝin sub 'Lastaj...'."
                 : "Bv. kontroli ĉu vi ricevis kopion de la retpoŝto.\n(En tre esceptaj okazoj la spam-filtrilo povus bloki ĝin...)"
                 );
                 Erarolisto.aldonu_eraron("#dock_eraroj", {
@@ -1801,13 +1801,14 @@ function plenigu_lastaj_liston() {
                 // let previous = null; //{kap: '', art1: '', art2: ''};
                 
                 for (let h=0; h < json.length; h++) {
+                    // id: Id, desc: CmdDesc, time: Time, fname: FName, xml_url: '', result: Result, state: State
                     const entry = json[h];
                     let status_icon: string;
-                    switch (entry.rezulto) {
-                        case 'eraro':
+                    switch (entry.state) {
+                        case 'erar':
                             status_icon = '&#x26a0;';
                             break;
-                        case 'konfirmo':
+                        case 'arkiv':
                             status_icon = '&#x2713;';
                             break;
                         default:
@@ -1822,7 +1823,7 @@ function plenigu_lastaj_liston() {
                         + '</a></td><td>'
                         + status_icon
                         + '</td><td>' 
-                        + entry.created.substring(0,16).replace('T',' ') 
+                        + entry.time.substring(0,16).replace('T',' ') 
                         + '</td><td>' 
                         + entry.desc.split(':').slice(1).join(':')
                         + '</td></tr>';                    
@@ -1854,28 +1855,27 @@ function lastaj_tabelo_premo(event: Event) {
         let entry = dtl.filter(function(e: {id: string}) { if (e.id == id) return e; });
         if (entry) {
             entry = entry[0];
-            DOM.al_v("#lastaj_dosiero",entry.name);
+            DOM.al_v("#lastaj_dosiero",entry.fname);
             DOM.al_datum("#lastaj_dosiero","url",entry.xml_url);
-            DOM.al_datum("#lastaj_rigardu","url",entry.html_url);
-            DOM.al_datum("#lastaj_dosiero","rezulto",entry.rezulto);
-            if (entry.rezulto == 'eraro') {
+            DOM.al_datum("#lastaj_dosiero","rezulto",entry.state);
+            if (entry.state == 'erar') {
                 Buton.aktiva("#lastaj_reredakti",true);
             } else {
                 Buton.aktiva("#lastaj_reredakti",false);
             }
-            DOM.al_v("#lastaj_mesagho",'');
-            if (entry.rez_url) {
-                u.HTTPRequest('get',entry.rez_url,{},
-                    function(data: string) {  
-                        var rez = JSON.parse(data); 
-                        if (rez && rez.mesagho) {
-                            var msg = rez.mesagho.replace(/\|\| */g,"\n").replace('[m ','[');
-                            DOM.al_v("#lastaj_mesagho",msg);
-                        }
-                    });
-            } else if (! entry.rezulto) {
-                DOM.al_v("#lastaj_mesagho",'Atendante traktadon...');
-            }
+            DOM.al_v("#lastaj_mesagho",entry.result||'Atendante traktadon...');
+            //if (entry.rez_url) {
+            //    u.HTTPRequest('get',entry.rez_url,{},
+            //        function(data: string) {  
+            //            var rez = JSON.parse(data); 
+            //            if (rez && rez.mesagho) {
+            //                var msg = rez.mesagho.replace(/\|\| */g,"\n").replace('[m ','[');
+            //                DOM.al_v("#lastaj_mesagho",msg);
+            //            }
+            //        });
+            //} else if (! entry.rezulto) {
+            //    DOM.al_v("#lastaj_mesagho",'Atendante traktadon...');
+            //}
         }
     }
 }
