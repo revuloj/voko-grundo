@@ -1819,7 +1819,7 @@ function plenigu_lastaj_liston() {
                     listo += '<tr class="last_art" id="'
                         + entry.id 
                         + '"><td>'
-                        + entry.name.split('.')[0]
+                        + entry.fname.split('.')[0]
                         + '</a></td><td>'
                         + status_icon
                         + '</td><td>' 
