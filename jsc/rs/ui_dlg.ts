@@ -242,7 +242,7 @@ export default function() {
                 click: function(event: Event) {  
                     event.preventDefault();
                     if (! Valid.valida("#lastaj_dosiero")) return;
-                    if (DOM.datum("#lastaj_dosiero","rezulto") != "eraro") {
+                    if (DOM.datum("#lastaj_dosiero","state") != "erar") {
                         DOM.al_t("#lastaj_error","Vi povas reredakti nur artikolojn, ĉe kiuj "
                         + "troviĝis eraro dum traktado de la redaktoservo.");
                         DOM.kaŝu("#lastaj_error",false);
