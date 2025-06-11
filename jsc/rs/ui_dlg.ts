@@ -247,13 +247,18 @@ export default function() {
                         DOM.al_t("#lastaj_error","Vi povas reredakti nur artikolojn, ĉe kiuj "
                         + "troviĝis eraro dum traktado de la redaktoservo.");
                         DOM.kaŝu("#lastaj_error",false);
-                        return;
+                        //return;
                     } else {
                         var id = DOM.datum("#lastaj_dosiero","id");
                         var dos = DOM.v("#lastaj_dosiero");
-                        download_subm(id,dos,"#lastaj_error","#lastaj_dlg");
-                        DOM.al_t("#dock_eraroj",'');
-                        DOM.al_t("#dock_avertoj",'');
+                        if (id && dos) {
+                            download_subm(id,dos,"#lastaj_error","#lastaj_dlg");
+                            DOM.al_t("#dock_eraroj",'');
+                            DOM.al_t("#dock_avertoj",'');
+                        } else {
+                            DOM.al_t("#lastaj_error","Neatendite: Ne eblis eltrovi la detalojn de la artikolo!?");
+                            DOM.kaŝu("#lastaj_error",false);    
+                        }                            
                         //this.fermu() 
                     }
                 }
@@ -936,7 +941,7 @@ function download_art(dosiero: string, err_to: string, dlg_id: string, do_close 
 
 function download_subm(id: string, dosiero: string, err_to: string, dlg_id: string, do_close = true) {
     
-    u.HTTPRequest('get', id, {}, 
+    u.HTTPRequest('post', 'submeto_rigardo', {id}, 
         function(data: string) {   
             if (data.slice(0,5) == '<?xml') {
                 xml_ŝargo(dosiero,data);
@@ -1596,8 +1601,10 @@ function lastaj_tabelo_premo(event: Event) {
         if (entry) {
             entry = entry[0];
             DOM.al_v("#lastaj_dosiero",entry.fname);
-            DOM.al_datum("#lastaj_rigardu","id",entry.id);
+            DOM.al_datum("#lastaj_dosiero","id",entry.id);
             DOM.al_datum("#lastaj_dosiero","state",entry.state);
+            // rigardobutono ankaŭ bezonas la id
+            DOM.al_datum("#lastaj_rigardu","id",entry.id);
             if (entry.state == 'erar') {
                 Buton.aktiva("#lastaj_reredakti",true);
             } else {
