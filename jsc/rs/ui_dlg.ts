@@ -242,15 +242,16 @@ export default function() {
                 click: function(event: Event) {  
                     event.preventDefault();
                     if (! Valid.valida("#lastaj_dosiero")) return;
-                    if (DOM.datum("#lastaj_dosiero","rezulto") != "erar") {
+                    // malpermesu reredakti atendantajn aŭ sukcese traktitajn redaktojn
+                    if (DOM.datum("#lastaj_dosiero","state") != "erar") {
                         DOM.al_t("#lastaj_error","Vi povas reredakti nur artikolojn, ĉe kiuj "
                         + "troviĝis eraro dum traktado de la redaktoservo.");
                         DOM.kaŝu("#lastaj_error",false);
                         return;
                     } else {
-                        var url = DOM.datum("#lastaj_dosiero","url");
+                        var id = DOM.datum("#lastaj_dosiero","id");
                         var dos = DOM.v("#lastaj_dosiero");
-                        download_url(url,dos,"#lastaj_error","#lastaj_dlg");
+                        download_subm(id,dos,"#lastaj_error","#lastaj_dlg");
                         DOM.al_t("#dock_eraroj",'');
                         DOM.al_t("#dock_avertoj",'');
                         //this.fermu() 
@@ -283,11 +284,13 @@ export default function() {
     new List("#lastaj_tabelo",{listero: "tr"});
     DOM.klak("#lastaj_tabelo",lastaj_tabelo_premo);
     DOM.klak("#lastaj_rigardu",
+        // rigardu submetitan artikolon
         function(event) {
             event.preventDefault();
             if (event.target instanceof HTMLElement) {
-                const url = DOM.datum(event.target,"url");
-                window.open(url);    
+                const id = DOM.datum(event.target,"id");
+                //window.open(url);    
+                window.open('submeto_rigardo?id='+id);
             }
         });
 
@@ -931,9 +934,9 @@ function download_art(dosiero: string, err_to: string, dlg_id: string, do_close 
     );
 }
 
-function download_url(url: string, dosiero: string, err_to: string, dlg_id: string, do_close = true) {
+function download_subm(id: string, dosiero: string, err_to: string, dlg_id: string, do_close = true) {
     
-    u.HTTPRequest('get', url, {}, 
+    u.HTTPRequest('get', id, {}, 
         function(data: string) {   
             if (data.slice(0,5) == '<?xml') {
                 xml_ŝargo(dosiero,data);
@@ -1339,74 +1342,6 @@ function senco_enmeti(event: Event) {
 /***************** traduk-dialogo ********************************************************************/
 
 
-// aldonu kompletan lingvoliston kaj preferatajn lingvojn al traduko-dialogo
-/*
-function traduko_dlg_preparo() {
-
-    new Promise((resolve1) => { 
-        // alfabetaj listoj
-        const m_a_b = new List("#traduko_chiuj_a_b");
-        const m_c_g = new List("#traduko_chiuj_c_g");
-        const m_h_j = new List("#traduko_chiuj_h_j");
-        const m_k_l = new List("#traduko_chiuj_k_l");
-        const m_m_o = new List("#traduko_chiuj_m_o");
-        const m_p_s = new List("#traduko_chiuj_p_s");
-        const m_t_z = new List("#traduko_chiuj_t_z");
-
-        revo_listoj.lingvoj.load(resolve1(true),(kodo: string, nomo: string) => {
-            const komenca = nomo.charAt(0);
-            const lng = u.ht_html(`<li id="trd_chiuj_${kodo}" value="${nomo}">${nomo}</li>`);
-
-            if (lng && kodo != 'eo') {
-                if (komenca >= 'a' && komenca <= 'b')
-                    m_a_b.aldonu(nomo,lng);
-                else if (komenca >= 'c' && komenca <= 'g' || komenca == 'ĉ' || komenca == 'ĝ')
-                    m_c_g.aldonu(nomo,lng);
-                else if (komenca >= 'h' && komenca <= 'j' || komenca == 'ĥ' || komenca == 'ĵ')
-                    m_h_j.aldonu(nomo,lng);
-                else if (komenca >= 'k' && komenca <= 'l')
-                    m_k_l.aldonu(nomo,lng);
-                else if (komenca >= 'm' && komenca <= 'o')
-                    m_m_o.aldonu(nomo,lng);
-                else if (komenca >= 'p' && komenca <= 's' || komenca == 'ŝ')
-                    m_p_s.aldonu(nomo,lng);
-                else if (komenca >= 't' && komenca <= 'z' || komenca == 'ŭ')
-                    m_t_z.aldonu(nomo,lng);
-            }
-        });
-    })
-    .then(() => {
-        new Promise((resolve2) => {
-        u.HTTPRequest('get','revo_preflng',{},
-            function(data: string) {
-                const pref_lngoj = JSON.parse(data);
-                u.agordo.preflng = pref_lngoj[0] || 'en'; // malloka variablo (ui_kreo)
-                
-                const trd_aliaj = DOM.e("#traduko_aliaj");
-
-                pref_lngoj.forEach(     //.sort(jsort_lng).forEach(
-                    function(lng: string) {
-                        if (lng != 'eo') {
-                            const nomo = revo_listoj.lingvoj.codes[lng];
-                            const lng_html = `<li id="trd_pref_${lng}">${nomo}</li>`;
-                            trd_aliaj?.insertAdjacentHTML("beforebegin",lng_html);  
-                        }
-                    }
-                );
-            
-                resolve2(true);
-            },
-            () => document.body.style.cursor = 'wait',
-            () => document.body.style.cursor = 'auto',
-            (xhr: XMLHttpRequest) =>  Eraro.http("#traduko_error",xhr)
-        )})
-    })
-    .then(() => {
-        // se ambaŭ lingvolistoj (preferataj kaj alfabetaj)
-        // estas fintraktitaj ni ankoraŭ refreŝigu la menuon
-        Menu.refreŝigu("#traduko_menuo");
-    });    
-}*/
 
 // aldonu la traduk-lingvojn de la ŝargita artikolo al la traduko-dialogo (lingvo-elekto)
 function traduko_dlg_art_lingvoj() {
@@ -1431,201 +1366,6 @@ function traduko_dlg_art_lingvoj() {
         }
     }
 }
-
-/*
-function traduko_memoru_fokuson(event) {
-    //DOM.al_datum("#traduko_dlg","last-focus",this.id);
-    const id = event.currentTarget.id;
-    this.lasta_fokuso = id;
-}
-*/
-
-/*
-function traduko_butono_premo(event) {
-    ////var text = $(this).attr("data-btn");
-    var cmd = event.target.getAttribute("data-cmd");
-    //var form_element = $( document.activeElement );
-    var form_element_id = DOM.datum("#traduko_dlg","last-focus")
-        .replace(/\./g,'\\\.')
-        .replace(/\:/g,'\\\:') || '';
-
-    if ( form_element_id ) {
-        const el = DOM.e("#" + form_element_id);
-        if (el instanceof HTMLInputElement) {
-            // var form_element = $("#ekzemplo_form input:focus");
-        //    if (text) {
-        //        element.insert(text);
-        //    } else 
-            var sel = DOM.elekto(el); // el.textarea_selection();
-            var s_ = '';
-            if (cmd == "[]" || cmd == "()") {
-                s_ = sel || "\u2026";
-                s_ = ('<klr>' + ( sel[0] != cmd[0]? cmd[0]:"" ) 
-                    + s_ + ( sel[sel.length-1] != cmd[1]? cmd[1]:"" ) +  '</klr>');
-            // elemento-klavo
-            } else {
-                s_ = sel || "\u2026";
-                s_ = ('<' + cmd + '>' + s_ + '</' + cmd + '>');
-            } 
-
-            DOM.enigu(el,s_);
-            
-            trd_input_shanghita(el[0]);
-        }
-    }
-}
-*/
-
-/*
-// lingvoj - sort function callback for jQuery
-function jsort_lng(a, b){
-    var at = a.textContent||'';
-    var bt = b.textContent||'';
-    var pos = 0,
-        min = Math.min(at.length, bt.length);
-    // ne perfekte sed pli bone ol ĉ, ĝ ... tute ĉe la fino...
-    var alphabet = 'AaBbCĈcĉDdEeFfGĜgĝHĤhĥIiJĴjĵKkLlMmNnOoPpRrSŜsŝTtUŬuŭVvZz';
-
-    while(at.charAt(pos) === bt.charAt(pos) && pos < min) { pos++; }
-    return alphabet.indexOf(at.charAt(pos)) > alphabet.indexOf(bt.charAt(pos)) ?
-        1 : -1;
-}
-*/
-
-/*
-// lingvoj - sort function callback for normal strings
-function sort_lng(at, bt){
-    var pos = 0,
-        min = Math.min(at.length, bt.length);
-    // ne perfekte sed pli bone ol ĉ, ĝ ... tute ĉe la fino...
-    var alphabet = 'AaBbCĈcĉDdEeFfGĜgĝHĤhĥIiJĴjĵKkLlMmNnOoPpRrSŜsŝTtUŬuŭVvZz';
-
-    while(at.charAt(pos) === bt.charAt(pos) && pos < min) { pos++; }
-    return alphabet.indexOf(at.charAt(pos)) > alphabet.indexOf(bt.charAt(pos)) ?
-        1 : -1;
-}
-*/
-
-/*
-function traduko_dlg_plenigu_trd(lng: string, lingvo_nomo: string) {
-    // forigu antaŭajn eventojn por ne multobligi ilin...
-    DOM.malreago("#traduko_tradukoj","click");
-    DOM.malreago("#traduko_tradukoj","change");
-    
-    // ĉar la tradukdialogo montras samtempe ĉiam nur tradukojn de unu lingvo
-    // ni kunfandas tiujn el la artikolo, kaj tiujn, kiuj jam estas
-    // aldonitaj aŭ ŝanĝitaj en la dialogo
-    // var trdoj = $("#xml_text").Artikolo("tradukoj",lng); 
-    const xmltrad = xmlredakt().xmltrad;
-    xmltrad.preparu();
-    xmltrad.kolektu_tute_malprofunde(lng);    
-    //const trd_shanghoj = $("#traduko_tradukoj").data("trd_shanghoj") || {};
-
-    let tableCnt = '';
-
-    //if (trdoj) {
-
-    // La uzo de semantikaj id-atributoj ne estas tro eleganta.
-    // Pli bone kreu propran tradukoj-objekton kun insert, update ktp
-    // kiu transprentas la administradon kaj aktualigadon...
-    // ŝangojn oni devus skribi tiam nur se oni ŝanĝas lingvon aŭ enmetas tradukojn
-    // en la dialogon ĝin fermante...
-    xmlredakt().subtekst_apliku((s) => {
-        if (['drv','subdrv','snc','subsnc'].indexOf(s.el) > -1) {
-            const parts = (s as any).dsc.split(':');
-            let dsc = parts[1] || parts[0];
-            if (s.el == 'snc' || s.el == 'subsnc' && parts[1]) {
-                const p = dsc.indexOf('.');
-                if (p>-1) dsc = dsc.slice(p);
-            }
-            if (s.el == 'drv') dsc = '<b>'+dsc+'</b>';
-            tableCnt += '<tr class="tr_' + s.el + '"><td>' + dsc + '</td><td>';
-        
-            const trd = xmltrad.trd_subteksto(lng,s.id);
-            
-            if ( trd && trd.length ) {
-                for (let j=0; j<trd.length; j++) {
-                    tableCnt += traduko_input_field(s.id,j,x.quoteattr(trd[j]));
-                    tableCnt += "<br/>";
-                }
-            } else {
-                tableCnt += traduko_input_field(s.id,0,'') + '<br/>';  
-            }
-            tableCnt += '</td>';
-            tableCnt += '<td>' + traduko_add_btn(s.id) + '</td>';
-            tableCnt += '</tr>';
-        } // if drv..subsnc
-    }); // for s...
-//} // if trdj
-
-    DOM.al_t("#traduko_lingvo",lingvo_nomo +" ["+lng+"]");
-    DOM.al_datum("#traduko_dlg","lng",lng);
-    DOM.al_t("#traduko_tradukoj",'');
-
-    // enigu traduko-kampojn
-    DOM.al_html("#traduko_tradukoj",tableCnt);
-
-    // aldonu reagon por +-butonoj
-    document.querySelectorAll("#traduko_tradukoj button").forEach((b) => {
-        b.addEventListener("click", (event) => {
-            const trg = event.currentTarget;
-            if (trg instanceof HTMLElement) {
-                const i_ref = trg.getAttribute("formaction")?.substring(1)+":0";
-                const first_input_of_mrk = document.getElementById(i_ref);
-                if (first_input_of_mrk) {
-                    const last_input_of_mrk = first_input_of_mrk?.parentElement
-                        ?.querySelector("input:last-of-type");
-
-                    if (last_input_of_mrk) {
-                        const parts = last_input_of_mrk.id.split(':');
-                        const next_id = parts[0] + ':' + parts[1] + ':' + (parseInt(parts[2]) + 1);
-                        last_input_of_mrk.insertAdjacentHTML("afterend",'<br/><input id="' + next_id 
-                            + '" type="text" name="' + next_id + '" size="30" value=""/>');
-
-                        // reago al ŝanĝo de enhavo
-                        const aldonita = document.getElementById(next_id);
-                        if (aldonita) {
-                            DOM.reago(aldonita, "change", trd_shanghita);
-                        }
-                    }
-
-                } // else: estu ĉiam almenaŭ unu eĉ se malplena kampo....
-            }
-        });
-    });    
-    
-    // rimarku ĉiujn ŝanĝojn de unuopaj elementoj
-    DOM.ido_reago("#traduko_tradukoj","change","input", trd_shanghita);
-    //DOM.ido_reago("#traduko_tabelo","blur","input",traduko_memoru_fokuson.bind(xklv));
-}
-
-function trd_shanghita(this: HTMLElement) {
-    trd_input_shanghita(this);
-}
-
-function trd_input_shanghita(element: HTMLElement) {
-    const sid = element.id.split(':')[1];
-    const lng = DOM.datum("#traduko_dlg","lng");
-
-    const xmltrad = xmlredakt().xmltrad;   
-
-    // prenu ĉiujn tradukojn kun tiu marko, ne nur la ĵus ŝanĝitane
-    DOM.ej("#traduko_tradukoj input[id^='trd\\:" + sid + "\\:']").forEach( (e) => {
-        var nro = e.id.split(':')[2];
-        xmltrad?.adaptu_trd_subteksto(sid,lng,+nro,(e as HTMLInputElement).value);                               
-    });
-}
-
-function traduko_input_field(mrk: string, nro: number, trd: string) {
-    var id = "trd:" + mrk + ':' + nro; //.replace(/\./g,'\\\\.') + '_' + nro;
-    return '<input id="' + id + '" type="text" name="' + id + '" size="30" value="' + trd + '"/>';
-}
-
-function traduko_add_btn(mrk: string) {
-    const id = mrk; //.replace(/\./g,'\\\\.');
-    return `<button formaction="#trd:${id}" class="ui-button ui-widget ui-corner-all" title="Aldonu"><b>+</b></button>`;
-}
-*/
 
 /**
  * Se la traduk-lingvo ŝanĝiĝis ni devos replenigi la kampojn kun la tradukoj
@@ -1856,8 +1596,8 @@ function lastaj_tabelo_premo(event: Event) {
         if (entry) {
             entry = entry[0];
             DOM.al_v("#lastaj_dosiero",entry.fname);
-            DOM.al_datum("#lastaj_dosiero","url",entry.xml_url);
-            DOM.al_datum("#lastaj_dosiero","rezulto",entry.state);
+            DOM.al_datum("#lastaj_rigardu","id",entry.id);
+            DOM.al_datum("#lastaj_dosiero","state",entry.state);
             if (entry.state == 'erar') {
                 Buton.aktiva("#lastaj_reredakti",true);
             } else {
