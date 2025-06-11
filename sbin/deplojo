@@ -109,7 +109,7 @@ cetonio:debug)
     ;;&
 cetonio|cetonio:debug)
     cetonio_id=$(docker ps --filter name=cetoniujo_cetonio -q)
-    todir=/home/cetonio/pro
+    todir=/home/cetonio
     echo "kopiante ${RSJ} kaj ${RSC} al ${cetonio_id}:${todir}/web/static"
     docker cp ${RSJ} ${cetonio_id}:${todir}/web/static
     docker cp ${RSC} ${cetonio_id}:${todir}/web/static
