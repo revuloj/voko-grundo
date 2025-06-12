@@ -276,7 +276,7 @@ export default function() {
             //this.faldu(false); // necesas, se la dialogo estis fermita en faldita stato...
             Dialog.dialog("#lastaj_dlg")?.faldu(false);
             plenigu_lastaj_liston();            
-            DOM.kaŝu("#lastaj_error",false);
+            DOM.kaŝu("#lastaj_error");
         }
     });    
     Valid.aldonu("#lastaj_dosiero", {
@@ -286,6 +286,7 @@ export default function() {
         },
         err_to: "#lastaj_error"
     });
+    new Buton("#lastaj_reredakti");
     new List("#lastaj_tabelo",{listero: "tr"});
     DOM.klak("#lastaj_tabelo",lastaj_tabelo_premo);
     DOM.klak("#lastaj_rigardu",

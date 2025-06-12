@@ -105,7 +105,10 @@ export class Dialog extends UIElement {
      * Kreas unuopan butonon laŭ donitaj ecoj
      */
     butono(ecoj: ButonEcoj): Element {
-        // ĉu ni uzu klason Buton el ./buton.ts?
+        // PLIBONIGU: (eble) ĉu ni uzu klason Buton el ./buton.ts?
+        // provizore sufiĉas alligi la klason
+        // Buton al tiuj dialog-elementoj kiuj bezonas
+        // malaktivadon individue post kreo de la dialogo
         const btn = document.createElement("button");
         btn.textContent = ecoj.text;
         if (ecoj.id) btn.id = ecoj.id;
