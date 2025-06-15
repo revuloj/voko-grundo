@@ -20,7 +20,7 @@ import { preferoj } from '../a/preferoj';
 //import { xpress } from './jquery_ext';
 import { show_xhr_error } from './ui_dlg';
 import { vortokontrolo, xmlkontrolo, klrkontrolo, surmetita_dialogo } from './ui_err.js';
-import { vikiSerĉo, citaĵoSerĉo, regulEsprimo, verkoListo, verkoPeriodo, verkElekto, retoSerĉo, bildoSerĉo } from './ui_srch.js';
+import { vikiSerĉo, citaĵoSerĉo, regulEsprimo, verkoListo, verkoPeriodo, verkElekto, bildoSerĉo } from './ui_srch.js';
 
 
 const revo_url = 'https://' + u.agordo.revo_url; //reta-vortaro.de';
@@ -286,7 +286,7 @@ export default function() {
     verkoPeriodo();
 
     DOM.klak("#s_vikipedio",vikiSerĉo);
-    DOM.klak("#s_anaso",retoSerĉo);
+    // DOM.klak("#s_anaso",retoSerĉo);
     DOM.klak("#s_bildoj",bildoSerĉo);
 
     //$("#regexes input[type='button']").button();

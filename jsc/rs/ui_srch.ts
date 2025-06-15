@@ -753,6 +753,7 @@ export function elektitajVerkoj() {
  * Vokas la TTT-serĉon kaj prezentas la trovojn
  * @param {Event} event
  */
+/*
 export function retoSerĉo(event: Event) {
     event.preventDefault();
     if (! _serĉo_preparo()) return;
@@ -826,6 +827,7 @@ export function retoSerĉo(event: Event) {
         (xhr: XMLHttpRequest) => Eraro.http('#sercho_error',xhr)
     );
 }
+*/
 
 /**
  * Vokas la bildo-serĉon (en Wikimedia) kaj prezentas la rezultojn.
