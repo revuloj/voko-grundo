@@ -1,5 +1,32 @@
 <?xml version="1.0" encoding="utf-8" ?>
 
+<!DOCTYPE ordigo [
+
+<!ELEMENT ordigo (lingvo+)*>
+
+<!ELEMENT lingvo (l*,r*,i*)>
+<!ATTLIST lingvo
+    lng ID #REQUIRED  
+    kiel IDREF #IMPLIED
+    kreu-regulojn (jes|ne) #IMPLIED
+    klaso CDATA #IMPLIED
+    silab CDATA #IMPLIED    
+    ignorendaj CDATA #IMPLIED
+    minusklo CDATA #IMPLIED
+> 
+
+<!ELEMENT l (#PCDATA|g)*>
+<!ATTLIST l
+    name NMTOKEN #REQUIRED
+    n CDATA #IMPLIED
+    minus CDATA #IMPLIED
+> 
+
+<!ELEMENT g (#PCDATA)>
+<!ELEMENT r (#PCDATA)>
+<!ELEMENT i (#PCDATA)>
+]>
+
 <!--
   Ordo de literoj en la indeksoj. La ordigo ene de litero-ĉapitro estas farata de Saxon, kiu siavice uzas
   Java (subklasojn de java.util.Comparator). 
@@ -826,8 +853,50 @@ http://www.thlib.org/reference/dictionaries/tibetan-dictionary/translate.php
  <l name="zx">&#x017e;&#x017d;</l>
 </lingvo>
 
+
+<!-- ĉuvaŝa -->
+<lingvo lng="cv">
+ <l name="a">&#x0430;&#x0410;</l>
+ <l name="ax">&#x04D1;&#x04D0;</l>
+ <l name="b">&#x0431;&#x0411;</l>
+ <l name="v">&#x0432;&#x0412;</l>
+ <l name="g">&#x0433;&#x0413;</l>
+ <l name="d">&#x0434;&#x0414;</l>
+ <l name="je">&#x0435;&#x0415;</l>
+ <l name="jo">&#x0451;&#x0401;</l>
+ <l name="jx">&#x04D7;&#x04D6;</l>
+ <l name="zh">&#x0436;&#x0416;</l>
+ <l name="z">&#x0437;&#x0417;</l>
+ <l name="i">&#x0438;&#x0418;</l>
+ <l name="j">&#x0439;&#x0419;</l>
+ <l name="k">&#x043a;&#x041a;</l>
+ <l name="l">&#x043b;&#x041b;</l>
+ <l name="m">&#x043c;&#x041c;</l>
+ <l name="n">&#x043d;&#x041d;</l>
+ <l name="o">&#x043e;&#x041e;</l>
+ <l name="p">&#x043f;&#x041f;</l>
+ <l name="r">&#x0440;&#x0420;</l>
+ <l name="s">&#x0441;&#x0421;</l>
+ <l name="sx">&#x4AB;&#x4AA;&#xE7;&#xC7;</l>
+ <l name="t">&#x0442;&#x0422;</l>
+ <l name="u">&#x0443;&#x0423;</l>
+ <l name="ux">&#x4F3;&#x4F2;</l>
+ <l name="f">&#x0444;&#x0424;</l>
+ <l name="h">&#x0445;&#x0425;</l>
+ <l name="c">&#x0446;&#x0426;</l>
+ <l name="ch">&#x0447;&#x0427;</l>
+ <l name="sh">&#x0448;&#x0428;</l>
+ <l name="shch">&#x0449;&#x0429;</l>
+ <l name="mm">&#x044a;&#x042a;</l>
+ <l name="y">&#x044b;&#x042b;</l>
+ <l name="mo">&#x044c;&#x042c;</l>
+ <l name="e">&#x044d;&#x042d;</l>
+ <l name="ju">&#x044e;&#x042e;</l>
+ <l name="ja">&#x044f;&#x042f;</l>
+</lingvo>
+
 <!-- kimra -->
-<lingvo lng="cy" kreu-regulojn="jes" klaos="de.steloj.respiro.WelshColaltor">
+<lingvo lng="cy" kreu-regulojn="jes" klaso="de.steloj.respiro.WelshColaltor">
  <l name="a">a,A</l>
  <l name="b">b,B</l>
  <l name="c" minus="ch">c,C</l>
