@@ -243,7 +243,17 @@
      </li>
 </xsl:template>
 
+<!-- 
+  
+  en enhavo.xml ni traktas unue latinaon lingvon aparte 
+  kaj poste ĉiujn aliajn:
 
+    <TRD-OJ lng="la"/>
+    <TRD-OJ krom="la"/>
+
+  en la nuna dinamike kreita JS-interfaco fakte ni ne plu bezonas
+  tion, ĉar la agorditaj perferataj lingvoj montriĝas tie aparte de la aliaj
+-->
 <xsl:template match="TRD-OJ[@lng]">
   <p>
   <xsl:for-each select="document($lingvoj)/lingvoj/lingvo[@kodo=current()/@lng]">
@@ -262,7 +272,8 @@
   </p>
 </xsl:template>
 
-<!-- kreas la liston de lingvoj/lingvoindeksoj -->
+<!-- krei la liston de ĉiuj aliaj lingvoj/lingvoindeksoj -->
+
 <xsl:template match="TRD-OJ[@krom]">
   <p>
   <xsl:variable name="krom" select="@krom"/>
