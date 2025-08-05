@@ -855,7 +855,7 @@ http://www.thlib.org/reference/dictionaries/tibetan-dictionary/translate.php
 
 
 <!-- ĉuvaŝa -->
-<lingvo lng="cv">
+<lingvo lng="cv" kreu-regulojn="jes" klaso="de.steloj.respiro.ChuvashCollator">
  <l name="a">&#x0430;&#x0410;</l>
  <l name="ax">&#x04D1;&#x04D0;</l>
  <l name="b">&#x0431;&#x0411;</l>
