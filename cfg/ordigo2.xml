@@ -896,7 +896,7 @@ http://www.thlib.org/reference/dictionaries/tibetan-dictionary/translate.php
 </lingvo>
 
 <!-- kimra -->
-<lingvo lng="cy" kreu-regulojn="jes" klaso="de.steloj.respiro.WelshColaltor">
+<lingvo lng="cy" kreu-regulojn="jes" klaso="de.steloj.respiro.WelshCollator">
  <l name="a">a,A</l>
  <l name="b">b,B</l>
  <l name="c" minus="ch">c,C</l>
