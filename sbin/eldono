@@ -57,8 +57,8 @@ preparo)
     sed -i 's/eldono = "[1-9][a-z]";/eldono = "'${eldono}'";/' ${GLOBAL}
     sed -i 's,/revo-[1-9][a-z]-min\.,/revo-'${eldono}'-min\.,g' ${PACKG}
     sed -i 's,/redaktilo-[1-9][a-z]-min\.,/redaktilo-'${eldono}'-min\.,g' ${PACKG}
-    sed -i 's/"version": "[1-9].[0-9].[1-9]"/"version": "'${node_eldono}'"/' ${PACKG}
-    sed -i 's/index-[1-9][a-z].html/index-${node_eldono}.html/' ${SERCHO}
+    sed -i -E 's/"version": "[1-9].[0-9].[1-9][0-9]?"/"version": "'${node_eldono}'"/' ${PACKG}
+    sed -i 's/index-[1-9][a-z].html/index-'${eldono}'.html/' ${SERCHO}
     ;;
 kreo)
     ## kreo       : kompilas la procezujon voko-grundo, kies rezultoj estas bezonataj de aliaj
