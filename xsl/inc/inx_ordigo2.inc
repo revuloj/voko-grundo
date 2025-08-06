@@ -38,6 +38,16 @@ tiu chi dosiero estas ne plu automate farita el voko/cfg/ordigo2.xml -->
       </litero>        
     </xsl:when>
 
+  <xsl:when test="$ordlng='cv'">
+      <litero name="{$lit-name}" min="{$lit-min}">
+        <xsl:for-each select="$trdoj">
+          <xsl:sort collation="http://saxon.sf.net/collation?class=de.steloj.respiro.ChuvashCollator" 
+		    lang="cv" select="concat(t,'|',t1)"/>
+          <xsl:call-template name="v"/>
+        </xsl:for-each>
+      </litero>        
+    </xsl:when>
+
   <xsl:when test="$ordlng='cy'">
       <litero name="{$lit-name}" min="{$lit-min}">
         <xsl:for-each select="$trdoj">

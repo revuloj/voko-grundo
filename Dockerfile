@@ -16,7 +16,7 @@
 #######################################################
 # staĝo 1: Ni bezonas TeX kaj metapost por konverti simbolojn al png
 #######################################################
-FROM silkeh/latex:small as metapost
+FROM silkeh/latex:small AS metapost
 LABEL maintainer=<diestel@steloj.de>
 
 #ARG VG_BRANCH=master
@@ -36,7 +36,7 @@ RUN bin/mp2png_svg.sh
 # staĝo 2: nodejs: kompilu CSS kaj JS
 #######################################################
 
-FROM ubuntu:noble as builder
+FROM ubuntu:noble AS builder
 ARG NODE_MAJOR=20
 
 # vd: https://github.com/nodesource/distributions
