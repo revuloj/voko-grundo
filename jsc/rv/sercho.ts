@@ -52,7 +52,7 @@ export namespace sercho {
      */
     export function hazarda_art() {
 
-        u.HTTPRequest('POST', g.sercho_url, {sercxata: "!iu ajn!"},
+        u.HTTPRequest('POST', g.sercho_url, {sercxata: "!iu ajn!", sxlosilo: g.sercho_sxlosilo},
             function(data: string) {
                 // sukceso!
                 var json = 
@@ -392,7 +392,7 @@ export class Sercho {
 
         u.HTTPRequestFull('POST', g.sercho_url, 
             {"Accept-Language": preferoj.lingvoj().join(',')},
-            {sercxata: esprimo},
+            {sercxata: esprimo, sxlosilo: g.sercho_sxlosilo},
             function(data: string) {
                 const json = JSON.parse(data);
                 self.eo = json.eo ? 

@@ -27,6 +27,7 @@ export namespace agordo {
   export const tez_prefix = "/revo/tez/";
   export const dlg_prefix = "/revo/dlg/";
   export const sercho_url = "/cgi-bin/sercxu-json-" + eldono + ".pl";
+  export const sercho_sxlosilo = "1887"; // jen nur simpla barilo por robotoj
   export const trad_uwn_url = "/cgi-bin/traduku-uwn.pl";
   export const titolo_url = "titolo-"+ eldono +".html";
   export const redaktilo_url = "redaktilo-"+ eldono +".html";
