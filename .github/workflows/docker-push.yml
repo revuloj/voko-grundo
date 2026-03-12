@@ -31,7 +31,7 @@ jobs:
     steps:
       # https://github.com/actions/checkout
       - name: Ricevi la aktualan kodon
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
 #      - name: Run tests
 #        run: |
