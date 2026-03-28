@@ -34,18 +34,23 @@ sub process_art {
     my $chg = 0;   
 
 # normigu bld-larĝecojn
+
+    $chg += ($xml =~ s|/1[7-9][0-9]px-|/250px-|g); 
+    $chg += ($xml =~ s|/1[013-6][0-9]px-|/120px-|g); 
+    $chg += ($xml =~ s|/12[1-9]px-|/120px-|g); 
+
 #    $chg += ($xml =~ s|/2[0-46-8][0-9]px-|/250px-|g); 
 #    $chg += ($xml =~ s|/25[1-9]px-|/250px-|g);    
 #    $chg += ($xml =~ s|/3[0-24-9][0-9]px-|/330px-|g); 
 #    $chg += ($xml =~ s|/32[1-9]px-|/330px-|g); 
 
-    $chg += ($xml =~ s|/29[0-9]px-|/330px-|g); 
-    $chg += ($xml =~ s|/4[0-9][0-9]px-|/500px-|g); 
-
-    $chg += ($xml =~ s|/5[1-9][0-9]px-|/500px-|g); 
-    $chg += ($xml =~ s|/50[1-9]px-|/500px-|g); 
-
-    $chg += ($xml =~ s|/6[0-9][0-9]px-|/500px-|g); 
+#    $chg += ($xml =~ s|/29[0-9]px-|/330px-|g); 
+#    $chg += ($xml =~ s|/4[0-9][0-9]px-|/500px-|g); 
+#
+#    $chg += ($xml =~ s|/5[1-9][0-9]px-|/500px-|g); 
+#    $chg += ($xml =~ s|/50[1-9]px-|/500px-|g); 
+#
+#    $chg += ($xml =~ s|/6[0-9][0-9]px-|/500px-|g); 
 
 #    $chg += ($xml =~ s|/7[0-9][0-9]px-|/960px-|g); 
 #    $chg += ($xml =~ s|/8[0-9][0-9]px-|/960px-|g); 
