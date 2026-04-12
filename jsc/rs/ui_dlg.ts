@@ -476,13 +476,18 @@ export default function() {
             // difinu tildo-tekston
             x.XKlavaro.tildo("#bildo_butonoj", radiko());
 
+            /* Vikimedio unuecigis la antaŭrigardajn bildlarĝecojn, el kies ni uzas:
+            960, 500, 330, 250, 120
+            do ne plu havas sencon adapti ilin laŭ formato vertikala aŭ horizontala:
             if (parseFloat(DOM.v("#bildo_fmt")||'') > 1) {
                 bildo_larĝecoj([640,320],640); // eble ankaŭ 800?
             } else {
                 bildo_larĝecoj([576,360,180],360); // eble ankaŭ 450, 768?
             }
+            */
             //Elektil.refreŝigu("#bildo_lrg input");
         },
+        /*
         valorŝanĝo: function() {
             if (parseFloat(DOM.v("#bildo_fmt")||'') > 1) {
                 bildo_larĝecoj([640,320],640); // eble ankaŭ 800?
@@ -491,6 +496,7 @@ export default function() {
             }
             //Elektil.refreŝigu("#bildo_lrg input");
         }
+        */
     });
 
     Elektil.kreu("#bildo_lrg input");
@@ -1238,7 +1244,7 @@ function bildo_enmeti(event: Event, nur_fnt: boolean) {
     DOM.kaŝu("#bildo_error");
 
     let bld = Dialog.valoroj("#bildo_dlg");
-    bld.lrg = DOM.v("#bildo_lrg input:checked") || 360;
+    bld.lrg = DOM.v("#bildo_lrg input:checked") || 330;
     bld.fnt_dec = bld.fnt;
     bld.fnt = encodeURI(bld.fnt);
     // ne kodigu duoble, ekz. % al %25: bld.url = encodeURI(bld.url);
