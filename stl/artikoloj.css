@@ -110,6 +110,12 @@ div.fontoj {
     border-top: 1px solid var(--main-brd-clr); 
 }
 
+section.art>div.fontoj {
+    margin-left: 0;
+    margin-top: 2em;
+    border-top: 2px solid var(--main-brd-clr);
+}
+
 div.tezauro {
     /* provizore... */
     /* background-color: lightsalmon; */
@@ -970,7 +976,12 @@ dt.pli, .ekz.pli, a.pli {
 
     div.fontoj {
         margin: 1em 3em;
-    }    
+    }   
+    
+    section.art>div.fontoj {
+        margin-left: 0;
+        margin-top: 2em;
+    }   
 
     section.tradukoj {
         margin-left: 2em;
