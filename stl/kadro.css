@@ -286,6 +286,14 @@ nav a:active, nav summary:active {
     box-shadow: none;
 }
 
+summary::marker {
+    content: "▸\FE0E\00a0"
+}
+
+details[open]>summary::marker {
+    content: "▾\FE0E\00a0"
+}
+
 /*
 .nav_btn:hover + ul {
     display: block;
