@@ -286,6 +286,9 @@ nav a:active, nav summary:active {
     box-shadow: none;
 }
 
+/*
+Ŝajne jam korektita en Safari mem:
+
 summary::marker {
     content: "▸\FE0E\00a0"
 }
@@ -293,6 +296,7 @@ summary::marker {
 details[open]>summary::marker {
     content: "▾\FE0E\00a0"
 }
+*/
 
 /*
 .nav_btn:hover + ul {
