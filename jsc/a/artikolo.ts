@@ -1,5 +1,5 @@
 
-// (c) 2020 - 2023 ĉe Wolfram Diestel
+// (c) 2020 - 2026 ĉe Wolfram Diestel
 // laŭ GPL 2.0
 
 import * as x from '../x';
@@ -548,6 +548,7 @@ export namespace artikolo {
                     // reagoj al butonoj [fermu] kaj [kopiu]
                     const fermu = document.getElementById('dlg_ref_fermu');
                     fermu.addEventListener("click", () => {
+                        ref_mrk_forigu();
                         dlg.close();
                     });
                     const kopiu = document.getElementById('dlg_ref_kopiu');
@@ -589,6 +590,25 @@ export namespace artikolo {
             dlg.show();
         }
 
+        /**
+         * Enŝovas html-span-elementojn ĉe derivaĵoj kaj sencoj por helpi (ekz-e al redaktantoj) referenci al ili
+         */
+        function ref_mrk() {
+            ref_mrk_forigu(); // evitu duobligi...
+            document.querySelectorAll('.drv h2[id], .drv dt[id]').forEach(el => {
+                const span = document.createElement('span');
+                span.innerText = el.id;
+                span.className = 'ref-mrk';
+                el.prepend(span); 
+            });
+        }
+
+        function ref_mrk_forigu() {
+            document.querySelectorAll('span.ref-mrk').forEach(el => {
+                el.remove();
+            });
+        }
+
         if (pied) { // en la redaktilo eble jam foriĝis...
             // aldonu ligilon "preferoj"
             const first_a = pied.querySelector("A");
@@ -608,17 +628,20 @@ export namespace artikolo {
                 xml.textContent="xml";
                 xml.setAttribute("download","download");
             }
-            // antaŭ xml aldonu "referenci..."
+            // antaŭ ligilo "xml" aldonu "referenci..."
             if (xml) {
                 const ref = u.ht_element("A",{class: "redakto", href: "#", title: "referenci al tiu ĉi artikolo"},"referenci...");
 
-                /* ebligu sendi artikolreferencon per sistemdependa reimedo (Share),
+                /* ebligu sendi artikolreferencon per sistemdependa rimedo (Share),
                 * tio ordinare provizas plurajn eblecojn sendi referencon al la artikolo 
                 * ien (kopio, legomarko, ...FB, Twitter,...)
                 * se tio ne funkcias ni kreas propran malgrandan dialogeton por vidi kaj
                 * kopii la URL-on
                 */
                 ref.addEventListener("click", () => {
+                    // montru markojn
+                    ref_mrk();
+                    // kreu referencdialog por la artikola URL
                     const referenco = {
                         title: document.title,
                         url: 'https://reta-vortaro.de/revo/art/'+artikolo+'.html'
@@ -630,7 +653,8 @@ export namespace artikolo {
                     } else {
                         ref_dlg(referenco);
                     }
-                });                 
+                });         
+                // nun enŝovu ligilon "ref" antaŭ ligilo "xml"        
                 xml.insertAdjacentElement("beforebegin",ref);
                 xml.insertAdjacentText("beforebegin"," | ");
             }
