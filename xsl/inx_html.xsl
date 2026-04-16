@@ -429,7 +429,7 @@
         </xsl:when>
         <xsl:otherwise>
           <td class="fona">
-            <a href="{$inx_url}/{@dosiero}">
+            <a href="{$inx_url}{@dosiero}">
               <xsl:value-of select="@titolo"/>
             </a>
           </td>
