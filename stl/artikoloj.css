@@ -857,7 +857,8 @@ H2 .i_mtez {
     position: absolute;
     bottom: 97%;
     left: 0;
-    opacity: .7;
+    background-color: #0008;
+    border: 1px dotted var(--ovr-brd-clr);
 }
 span.ref-mrk {
     background: var(--ovr-bgr-clr);
