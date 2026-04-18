@@ -1,6 +1,6 @@
 
 /* 
-(c) 2020 - 2023 ĉe Wolfram Diestel
+(c) 2020 - 2026 ĉe Wolfram Diestel
 */
 
 import * as u from '../u';
@@ -562,11 +562,13 @@ export class Sercho {
 
     /**
      * Serĉas en universala vortreto, vd. http://www.lexvo.org/uwn/
+     * ne plu funkcias aktuale...
      * @param vorto 
      * @param onSuccess 
      * @param onStart 
      * @param onStop 
      */
+    /*
     serchu_uwn(vorto: string,
         onSuccess: Function, onStart: Function, onStop: Function) 
     {
@@ -585,5 +587,6 @@ export class Sercho {
             onStop
         );
     };
+    */
 
 }

@@ -290,7 +290,8 @@ export namespace redaktilo {
 
     // se montriĝas traduk-proponoj, necesas adapti la hoketojn kaj +-butonoj
     // laŭ la elektita (sub)drv/snc
-    trad.trad_ebloj(xmlarea);
+    /// lexwo.org, el kiu ni prenis traduk-proponojn, aktuale ne plu funkcias...
+    /// trad.trad_ebloj(xmlarea);
   }
 
   /**
@@ -620,8 +621,8 @@ export namespace redaktilo {
           traduk_dialogo(lng);
         });
 
-      } else if (b.id == "r:trd_sercho") { // traduko-serĉo
-        b.addEventListener("click", (event) => trad.trad_uwn(event,xmlarea));
+      /// } else if (b.id == "r:trd_sercho") { // traduko-serĉo (lexwo.org ne plu funkcias...)
+      ///   b.addEventListener("click", (event) => trad.trad_uwn(event,xmlarea));
 
       } else if (b.classList.contains("help_btn")) { // (?) (<>)
         b.addEventListener("click", function(event) {
