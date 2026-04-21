@@ -77,6 +77,11 @@ export namespace sercho {
             .querySelector('input[name=q]');
         var esprimo = serch_in.value||"malpleno";
         if (esprimo) {
+            // aparte poŝtelefonoj foje aldonas akcidente spacsignojn,
+            // ni supozas ke tio okazas pli ofte ol iu volas intence serĉi kun
+            // la spaco. Se jes, eblas ankoraŭ per "xxx _" aŭ "xxx\s"
+            esprimo = esprimo.trim();
+
             // evitu ŝanĝi .search, ĉar tio refreŝigas la paĝon nevolite: 
             // location.search = "?q="+encodeURIComponent(esprimo);
             history.pushState(history.state,'',location.origin+location.pathname+"?q="+encodeURIComponent(esprimo));
@@ -139,7 +144,7 @@ export namespace sercho {
                 && /^[:;8Xx][-<>o=]?[\)\(\/\[\]PD><]$/.test(esprimo)
         }
 
-        // aparte traktu unuopajn signojn
+        // aparte traktu unusolajn signojn
         if (esprimo.length == 1) esprimo = nur_unu(esprimo);
         if (mieneto(esprimo)) esprimo = "mieneto";
 
@@ -360,7 +365,7 @@ export class Sercho {
         // la esprimo komenciĝas per silabsignoj
         // ĉina, japana, korea k.a.
         // Mi ne scias, ĉu ni tiel kaptas ĉiujn,
-        // evtl. do aldonu areaojn laŭbezone
+        // evtl. do aldonu areojn laŭbezone
         // kp. https://unicode-explorer.com/blocks
         function silab(e: string) {
             const u1 = e.codePointAt(0)||0;
@@ -368,8 +373,8 @@ export class Sercho {
                    u1 >= 0x3100 && u1 <= 0xa6ff
                 || u1 >= 0xac00 && u1 <= 0xdbff
                 || u1 >= 0xf900 && u1 <= 0xfaff
-               || u1 >= 0x20000 && u1 <= 0x2faff
-               || u1 >= 0x30000 && u1 <= 0x313ff
+                || u1 >= 0x20000 && u1 <= 0x2faff
+                || u1 >= 0x30000 && u1 <= 0x313ff
             );
         }
 /*
