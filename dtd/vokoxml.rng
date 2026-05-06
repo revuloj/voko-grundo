@@ -765,7 +765,6 @@ nur indiko de la vortspeco aŭ simpla teksto</a:documentation>
           <ref name="ref"/>
           <ref name="refgrp"/>
           <ref name="ekz"/>
-          <ref name="snc"/>
           <ref name="tekst-stiloj"/>
         </choice>
       </zeroOrMore>
