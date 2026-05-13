@@ -23,9 +23,9 @@ export interface HTMLCheckControlElement extends HTMLFormControlElement {
 export class DOM {
 
     // ni tenas evento-reagojn kaj datumojn kun elmentoj per WeakMap
-    // por ĉiu speco de evento aŭ dataumo ni kreas apartan tian WeakMap-objekton
+    // por ĉiu speco de evento aŭ datumo ni kreas apartan tian WeakMap-objekton
     // (oni povus pripensi anstataŭe konservi po unu objekton kiu entenas ĉiujn 
-    // evento- resp. datumspecoj kiel "vortaro", tio postulus eble malpli da
+    // evento- resp. datumspecojn kiel "vortaro", tio postulus eble malpli da
     // spaco sed pli da atento pri aldono/forigo. Momente ni nur modeste uzas
     // tion, do spaco eble ne estas problemo.)
     private static event_registro: { [event: string]: EventRegistro } = {};

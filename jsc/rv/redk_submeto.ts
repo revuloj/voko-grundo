@@ -248,7 +248,7 @@ const re_refcel = /cel\s*=\s*"([^"]+?)"/m;
 
     kontrolu_xml_loke(art,xml);
     if (xml.startsWith("<?xml")) {
-      vokomailx("nur_kontrolo",art,xml);
+      vokosubmx("nur_kontrolo",art,xml);
     }    
 
     if (xml.startsWith("<?xml")) {
@@ -270,7 +270,7 @@ export function rkontrolo(xmlarea: XmlRedakt) {
 
     kontrolu_xml_loke(art,xml);
     if (xml.startsWith("<?xml")) {
-      vokomailx("nur_kontrolo",art,xml);
+      vokosubmx("nur_kontrolo",art,xml);
     }
   }
 
@@ -297,7 +297,7 @@ export function rkonservo(xmlarea: XmlRedakt) {
         }
       }
       for (const [key, value] of Object.entries(voko_entities)) {
-          if (value.length > 1) { // la unuojn de longeco 1 anstataŭigas vokomailx.pl ( revo::encode )
+          if (value.length > 1) { // la unuojn de longeco 1 anstataŭigas vokosubmx.pl ( revo::encode )
             xml = _repl_ent(key,value,xml);
           }  
       }
@@ -310,8 +310,8 @@ export function rkonservo(xmlarea: XmlRedakt) {
 
     kontrolo_start("kontrolante kaj submetante...")
 
-    // kontrolu loke revenas nur post kontrolo,
-    // dum kontrole ene de vokomailx as nesinkrona
+    // kontrolu_xml_loke revenas nur post kontrolo,
+    // dum la kontrolo ene de vokosubmx estas nesinkrona
     kontrolu_xml_loke(art,xml);
 
     if (xml.startsWith("<?xml") &&
@@ -323,7 +323,7 @@ export function rkonservo(xmlarea: XmlRedakt) {
       ! document.getElementById("r:eraroj")?.querySelector("ul")) {
         const nxml = xmlarea.normalizedXml();
         // forsendu la redaktitan artikolon
-        vokomailx("forsendo",art,nxml);
+        vokosubmx("forsendo",art,nxml);
         // memoru enhavon de kelkaj kampoj
         store_preferences();
     } else {
@@ -389,7 +389,7 @@ export function rkonservo(xmlarea: XmlRedakt) {
   }
 
   /**
-   * Vokas la servilan skripton vokomailx.pl por kontroli sintakson kaj eventuale submeti
+   * Vokas la servilan skripton vokosubmx.pl por kontroli sintakson kaj eventuale submeti
    * la redakton.
    * @memberof redaktilo
    * @inner
@@ -397,15 +397,15 @@ export function rkonservo(xmlarea: XmlRedakt) {
    * @param {string} art - la artikonomo (dosiernomo)
    * @param {string} xml - la XML-teksto
    */
-  function vokomailx(command: string,art: string,xml: string) {
+  function vokosubmx(command: string,art: string,xml: string) {
 
     var red = (document.getElementById("r:redaktanto") as HTMLInputElement).value;
     var sxg = (document.getElementById("r:sxangxo") as HTMLInputElement).value;
     var nova = (_redakto == 'aldono')? "1" : "0";
 
-    // console.log("vokomailx art:"+art);
-    // console.log("vokomailx red:"+red);
-    // console.log("vokomailx sxg:"+sxg);
+    // console.log("vokosubmx art:"+art);
+    // console.log("vokosubmx red:"+red);
+    // console.log("vokosubmx sxg:"+sxg);
 
     u.HTTPRequest('POST',cgi_vokosubmx,
       {

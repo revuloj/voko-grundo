@@ -110,6 +110,12 @@ div.fontoj {
     border-top: 1px solid var(--main-brd-clr); 
 }
 
+section.art>div.fontoj {
+    margin-left: 0;
+    margin-top: 2em;
+    border-top: 2px solid var(--main-brd-clr);
+}
+
 div.tezauro {
     /* provizore... */
     /* background-color: lightsalmon; */
@@ -339,6 +345,15 @@ span.fontoj {
 /* redaktolinio malsupre de la artikolo */
 .redakto {color: var(--label-fnt-clr)}
 
+a.redakto:not([target=_new]) {
+    border: 1px solid var(--main-fnt-clr);
+    border-radius: 4px;
+    padding: .2em;
+    text-decoration: initial !important;
+    margin-top: -.3em;
+    margin-left: .1em;
+    margin-right: .1em;
+}
 
 /* A... */
 A:link, A:visited {color: var(--a-fnt-clr)}
@@ -805,6 +820,61 @@ H2 .i_mtez {
     */
 }
 
+/* montru la markojn, interese por redaktantoj 
+.drv h2[id], .drv dt[id] {
+    position: relative;
+}
+
+.drv h2[id]::after, .drv dt[id]::after {
+    content: attr(id);
+
+    font-size: 0.7em;
+    color: #cc0000;
+    background: #fff0f0;
+
+    padding: 1px;
+    border-radius: 2px;
+
+    opacity: 0.5;
+}
+
+.drv dt[id]::after {
+    position: absolute;
+    bottom: 97%; 
+    left: 0;
+}
+
+.drv h2[id]:hover::after, .drv dt[id]:hover::after {
+    opacity: 1;
+}
+*/
+
+/* referenc-markoj por kopiado / referencado ĉe redaktado...*/
+.drv h2, .drv dt {
+    position: relative;
+} 
+.drv dt .ref-mrk {
+    position: absolute;
+    bottom: 97%;
+    left: 0;
+    background-color: #0008;
+    border: 1px dotted var(--ovr-brd-clr);
+}
+span.ref-mrk {
+    background: var(--ovr-bgr-clr);
+    color: var(--ref-fnt-clr); 
+    font-size: 70%;
+    padding: 2px;
+    margin-right: .3em;
+    border-radius: 4px;
+    user-select: all; /* unu klako markas ĝin ute */
+    cursor: text;
+}
+
+span.ref-mrk::before {
+    content: "#";
+}
+
 dt.pli, .ekz.pli, a.pli {
     font-style: normal;
     color: var(--label-fnt-clr);
@@ -970,7 +1040,12 @@ dt.pli, .ekz.pli, a.pli {
 
     div.fontoj {
         margin: 1em 3em;
-    }    
+    }   
+    
+    section.art>div.fontoj {
+        margin-left: 0;
+        margin-top: 2em;
+    }   
 
     section.tradukoj {
         margin-left: 2em;

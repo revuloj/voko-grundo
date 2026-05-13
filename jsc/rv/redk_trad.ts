@@ -15,8 +15,10 @@ import {Sercho, Lingvo} from './sercho';
 
   /**
    * Ŝargas tradukproponojn el Universala Vort-Reto (UWN)
+   * lexwo.org ne plu funkcias aktuale...
    * @param {Event} event 
    */
+  /*
 export function trad_uwn(event: Event, xmlarea: x.XmlRedakt) {
     event.preventDefault();
     const s_trd = document.getElementById('r:trd_elekto');
@@ -169,6 +171,7 @@ export function trad_uwn(event: Event, xmlarea: x.XmlRedakt) {
     stop_wait
     );
   }
+  */
 
   /**
    * Montras depende de elektita (sub)drv|(sub)snc la jam ekzistantajn
@@ -176,6 +179,7 @@ export function trad_uwn(event: Event, xmlarea: x.XmlRedakt) {
    * @memberof redaktilo
    * @inner
    */
+  /*
 export function trad_ebloj(xmlarea: x.XmlRedakt) {
     const elekto = document.getElementById('r:trd_elekto');
     if (!elekto) return;
@@ -270,3 +274,4 @@ export function trad_ebloj(xmlarea: x.XmlRedakt) {
     } // if.. details..else..
 
   }
+  */

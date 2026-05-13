@@ -514,7 +514,7 @@ attlist-uzo &= attribute tip { "fak" | "reg" | "klr" | "stl" }?
 dif =
   element dif {
     attlist-dif,
-    (text | trd | trdgrp | ref | refgrp | ke | dif-ref | ekz | snc | tekst-stiloj)*
+    (text | trd | trdgrp | ref | refgrp | ke | dif-ref | ekz | tekst-stiloj)*
   }
 attlist-dif &= attribute lng { text }?
 

@@ -37,7 +37,7 @@ RUN bin/mp2png_svg.sh
 #######################################################
 
 FROM ubuntu:noble AS builder
-ARG NODE_MAJOR=20
+ARG NODE_MAJOR=24
 
 # vd: https://github.com/nodesource/distributions
 # rxp, jre kaj saxonb ni bezonas nur por testoj (xml-test.sh)

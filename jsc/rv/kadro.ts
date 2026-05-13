@@ -211,35 +211,9 @@ DOM.dok_post_lego(function() {
                     // t_nav.transiro("serĉo")...
                 }
             });
-            
             //t_nav.je("x:q","keydown","serĉo");
 
-            //var query = document.getElementById("x:q");
-            /*
-            query.addEventListener("keyup",function(event) {
-                const trg = event.target as HTMLInputElement;
-                
-                const xcx = document.getElementById("x:cx") as HTMLInputElement;
-                //console.debug("which: "+event.which+" code:"+event.code + " key: "+ event.key);
-                if (event.key == "x" || event.key == "Shift") { // x-klavo
-                    if (xcx.value == "1") {
-                        const s = trg.value;
-                        const s1 = x.ascii_eo(s);
-                        if (s != s1)
-                            trg.value = s1;
-                    }
-                // keycode fix for older Android Chrome 
-                } else if ((event.keyCode == 0 || event.keyCode == 229) && xcx.value == "1") {
-                    const s = trg.value;
-                    const key = s.charAt(s.length-1);
-                    //alert("Android dbg: "+event.keyCode+ "s: "+s+" kcd: "+kCd);
-                    if (key == "x" || key == "X") {
-                        const s1 = x.ascii_eo(s);
-                        if (s != s1)
-                            trg.value = s1;    
-                    }
-                }
-            });*/
+            query.focus();            
         }
         
         document.body 

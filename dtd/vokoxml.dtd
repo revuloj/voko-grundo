@@ -231,7 +231,7 @@ subsencon. Ĝi povas esti ankaŭ en alia(j) lingvo(j) ol la vorto
 mem. La lingvon indikas la atributo <dfn>lng</dfn>.
 -->
 
-<!ELEMENT dif (#PCDATA|trd|trdgrp|ref|refgrp|ke|ekz|snc|%tekst-stiloj;)*>
+<!ELEMENT dif (#PCDATA|trd|trdgrp|ref|refgrp|ke|ekz|%tekst-stiloj;)*>
 <!ATTLIST dif
 	lng CDATA #IMPLIED
 >

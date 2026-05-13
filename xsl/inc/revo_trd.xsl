@@ -327,7 +327,7 @@ reguloj por prezentado de la tradukoj
 </xsl:template>
 -->
 
-<xsl:template match="klr[@tip='ind']"/>
+<xsl:template match="klr[@tip='ind']" mode="tradukoj"/>
    <!-- ne skribu indeksajn klarigojn tie cxi -->
 
 

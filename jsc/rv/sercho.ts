@@ -1,6 +1,6 @@
 
 /* 
-(c) 2020 - 2023 ĉe Wolfram Diestel
+(c) 2020 - 2026 ĉe Wolfram Diestel
 */
 
 import * as u from '../u';
@@ -52,7 +52,7 @@ export namespace sercho {
      */
     export function hazarda_art() {
 
-        u.HTTPRequest('POST', g.sercho_url, {sercxata: "!iu ajn!"},
+        u.HTTPRequest('POST', g.sercho_url, {sercxata: "!iu ajn!", sxlosilo: g.sercho_sxlosilo},
             function(data: string) {
                 // sukceso!
                 var json = 
@@ -77,6 +77,11 @@ export namespace sercho {
             .querySelector('input[name=q]');
         var esprimo = serch_in.value||"malpleno";
         if (esprimo) {
+            // aparte poŝtelefonoj foje aldonas akcidente spacsignojn,
+            // ni supozas ke tio okazas pli ofte ol iu volas intence serĉi kun
+            // la spaco. Se jes, eblas ankoraŭ per "xxx _" aŭ "xxx\s"
+            esprimo = esprimo.trim();
+
             // evitu ŝanĝi .search, ĉar tio refreŝigas la paĝon nevolite: 
             // location.search = "?q="+encodeURIComponent(esprimo);
             history.pushState(history.state,'',location.origin+location.pathname+"?q="+encodeURIComponent(esprimo));
@@ -139,7 +144,7 @@ export namespace sercho {
                 && /^[:;8Xx][-<>o=]?[\)\(\/\[\]PD><]$/.test(esprimo)
         }
 
-        // aparte traktu unuopajn signojn
+        // aparte traktu unusolajn signojn
         if (esprimo.length == 1) esprimo = nur_unu(esprimo);
         if (mieneto(esprimo)) esprimo = "mieneto";
 
@@ -360,7 +365,7 @@ export class Sercho {
         // la esprimo komenciĝas per silabsignoj
         // ĉina, japana, korea k.a.
         // Mi ne scias, ĉu ni tiel kaptas ĉiujn,
-        // evtl. do aldonu areaojn laŭbezone
+        // evtl. do aldonu areojn laŭbezone
         // kp. https://unicode-explorer.com/blocks
         function silab(e: string) {
             const u1 = e.codePointAt(0)||0;
@@ -368,8 +373,8 @@ export class Sercho {
                    u1 >= 0x3100 && u1 <= 0xa6ff
                 || u1 >= 0xac00 && u1 <= 0xdbff
                 || u1 >= 0xf900 && u1 <= 0xfaff
-               || u1 >= 0x20000 && u1 <= 0x2faff
-               || u1 >= 0x30000 && u1 <= 0x313ff
+                || u1 >= 0x20000 && u1 <= 0x2faff
+                || u1 >= 0x30000 && u1 <= 0x313ff
             );
         }
 /*
@@ -392,7 +397,7 @@ export class Sercho {
 
         u.HTTPRequestFull('POST', g.sercho_url, 
             {"Accept-Language": preferoj.lingvoj().join(',')},
-            {sercxata: esprimo},
+            {sercxata: esprimo, sxlosilo: g.sercho_sxlosilo},
             function(data: string) {
                 const json = JSON.parse(data);
                 self.eo = json.eo ? 
@@ -562,11 +567,13 @@ export class Sercho {
 
     /**
      * Serĉas en universala vortreto, vd. http://www.lexvo.org/uwn/
+     * ne plu funkcias aktuale...
      * @param vorto 
      * @param onSuccess 
      * @param onStart 
      * @param onStop 
      */
+    /*
     serchu_uwn(vorto: string,
         onSuccess: Function, onStart: Function, onStop: Function) 
     {
@@ -585,5 +592,6 @@ export class Sercho {
             onStop
         );
     };
+    */
 
 }

@@ -77,8 +77,9 @@ function write_pm(entities) {
         if (error) { throw error; }
     
         fs.writeSync(fd,
-            'package revo::voko_entities; use utf8;\n' +
-            'sub entities { return \\%voko_entities; }\n' +
+            'package revo::voko_entities; use warnings; use strict; use utf8;\n' +
+            '# kreita per voko-grundo/js_util/vokosgn2x.js:write_pm()\n' +
+            'my %voko_entities; sub entities { return \\%voko_entities; }\n' +
             '%voko_entities = (\n');
 
         
@@ -103,6 +104,7 @@ function write_js(entities) {
     
         fs.writeSync(fd,
             '/* jshint esversion: 6 */\n' +
+            '/* kreita per voko-grundo/js_util/vokosgn2x.js:write_js() */\n' +
             'const voko_entities={\n' +
             '"amp":"&amp;",\n' +
             '"lt":"&lt;",\n' +

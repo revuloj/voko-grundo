@@ -17,7 +17,7 @@ declare global {
 export namespace agordo {
 
 // rigardataj kiel konstantoj:
-  export const eldono = "2o";
+  export const eldono = "2p";
   export const debug = false;
 
 // agordoj pri reta-vortaro.de
@@ -27,7 +27,9 @@ export namespace agordo {
   export const tez_prefix = "/revo/tez/";
   export const dlg_prefix = "/revo/dlg/";
   export const sercho_url = "/cgi-bin/sercxu-json-" + eldono + ".pl";
-  export const trad_uwn_url = "/cgi-bin/traduku-uwn.pl";
+  export const sercho_sxlosilo = "1887"; // jen nur simpla barilo por robotoj
+// eble anst. per traduku-wiki.pl:  
+//  export const trad_uwn_url = "/cgi-bin/traduku-uwn.pl";
   export const titolo_url = "titolo-"+ eldono +".html";
   export const redaktilo_url = "redaktilo-"+ eldono +".html";
   export const redaktmenu_url = "redaktmenu-"+   eldono +".html";
@@ -43,7 +45,7 @@ export namespace agordo {
   export const help_base_url = 'https://revuloj.github.io/temoj/';
   export const help_regulesp = 'sercho#ser%C4%89i-per-regulesprimoj';
 
-  export const uwn_url = 'http://www.lexvo.org/uwn/';
+//  export const uwn_url = 'http://www.lexvo.org/uwn/';
 
 
 // en Cetonio: '../voko/lingvoj.xml'
