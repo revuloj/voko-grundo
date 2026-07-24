@@ -176,7 +176,7 @@ testu ekz-e:
 
   <!-- la tradukoj en sama nivelo estu ordigitaj laŭ lingvokodo -->
   <xsl:variable name="lng1" select="@lng"/>
-  <xsl:if test="following-sibling::trdgrp[@lng&lt;=$lng1]|following-sibling::trd[@lng&lt;=$lng1]">
+  <xsl:if test="(following-sibling::trdgrp|following-sibling::trd)[1][@lng&lt;=$lng1]">
     <ero kie="{node-name(ancestor::node()[@mrk][1])}" 
          mrk="{ancestor::node()[@mrk][1]/@mrk}" tip="trd-ord" arg="{concat(@lng,':',.)}"/>
   </xsl:if>

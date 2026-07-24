@@ -109,7 +109,7 @@
         Dua parto de la atributo "mrk" ne enhavas la signon "0".
       </xsl:when>
 
-      <xsl:when test="@tip=' mrk-drv-pref'">
+      <xsl:when test="@tip='mrk-drv-pref'">
         Marko ne koheras kun tiu de la derivaĵo.
       </xsl:when>    
         
