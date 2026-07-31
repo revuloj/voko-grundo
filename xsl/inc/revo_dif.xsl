@@ -217,49 +217,48 @@ kaj stiloj (em,ctl,sup...)
 
 
 <xsl:template match="uzo[@tip='stl']">
-  <xsl:choose>
-    <xsl:when test=".='KOMUNE'">
-      <xsl:text>(komune) </xsl:text>
-    </xsl:when>
-    <xsl:when test=".='FIG'">
-      <xsl:text>(figure) </xsl:text>
-    </xsl:when>
-    <xsl:when test=".='FAK'">
-      <xsl:text>(fake) </xsl:text>
-    </xsl:when>
-    <xsl:when test=".='ARK'">
-      <xsl:text>(arkaismo) </xsl:text>
-    </xsl:when>
-    <xsl:when test=".='EVI'">
-      <xsl:text>(evitinde) </xsl:text>
-    </xsl:when>
-    <xsl:when test=".='FRAZ'">
-      <xsl:text>(fraza&#x0135;o) </xsl:text>
-    </xsl:when>
-    <xsl:when test=".='VULG'">
-      <xsl:text>(vulgare) </xsl:text>
-    </xsl:when>
-    <xsl:when test=".='RAR'">
-      <xsl:text>(malofte) </xsl:text>
-    </xsl:when>
-    <xsl:when test=".='POE'">
-      <xsl:text>(poezie) </xsl:text>
-    </xsl:when>
-    <xsl:when test=".='NEO'">
-      <xsl:text>(neologismo) </xsl:text>
-    </xsl:when>    
-  </xsl:choose>
-  <xsl:if test="drv/uzo">
-    <br />
+    <span class="stl" data-stl="{.}">
+    <xsl:choose>
+      <xsl:when test=".='KOMUNE'">
+        <xsl:text>(komune)</xsl:text>
+      </xsl:when>
+      <xsl:when test=".='FIG'">
+        <xsl:text>(figure)</xsl:text>
+      </xsl:when>
+      <xsl:when test=".='FAK'">
+        <xsl:text>(fake)</xsl:text>
+      </xsl:when>
+      <xsl:when test=".='ARK'">
+        <xsl:text>(arkaismo)</xsl:text>
+      </xsl:when>
+      <xsl:when test=".='EVI'">
+        <xsl:text>(evitinde)</xsl:text>
+      </xsl:when>
+      <xsl:when test=".='FRAZ'">
+        <xsl:text>(fraza&#x0135;o)</xsl:text>
+      </xsl:when>
+      <xsl:when test=".='VULG'">
+        <xsl:text>(vulgare)</xsl:text>
+      </xsl:when>
+      <xsl:when test=".='RAR'">
+        <xsl:text>(malofte)</xsl:text>
+      </xsl:when>
+      <xsl:when test=".='POE'">
+        <xsl:text>(poezie)</xsl:text>
+      </xsl:when>
+      <xsl:when test=".='NEO'">
+        <xsl:text>(neologismo)</xsl:text>
+      </xsl:when>    
+    </xsl:choose>
+  </span>
+  <xsl:if test="not(parent::var)">
+    <xsl:text> </xsl:text>
   </xsl:if>
 </xsl:template>
 
 
 <xsl:template match="uzo">
-  <xsl:apply-templates/>
-  <xsl:if test="drv/uzo">
-    <br />
-  </xsl:if>
+  <xsl:apply-templates/>  
 </xsl:template>
 
 

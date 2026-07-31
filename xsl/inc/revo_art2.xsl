@@ -41,9 +41,12 @@ uzata kun XSLT2-transformilo
 </xsl:template>
 
 <xsl:template match="art/kap" mode="titolo">
-  <xsl:apply-templates select="rad|text()"/>
+  <xsl:apply-templates select="rad|text()" mode="titolo"/>
 </xsl:template>
 
+<xsl:template match="text()" mode="titolo">
+  <xsl:value-of select="normalize-space(translate(.,',',''))"/>
+</xsl:template>
 
 <!-- art, subart -->
 
