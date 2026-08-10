@@ -738,6 +738,7 @@ export class XmlRedakt extends Tekst {
    * @param pozicio 
    * @param markoj 
    */
+  /*
   post_marko(pozicio: number, markoj: Markoj): string {
     let proksima = 0, pmrk: string|undefined;
     
@@ -751,6 +752,7 @@ export class XmlRedakt extends Tekst {
       return pmrk;
     }
   }
+  */
   
   /**
    * Sencoj sen atributo mrk
