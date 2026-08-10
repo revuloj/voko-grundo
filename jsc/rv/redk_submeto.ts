@@ -198,7 +198,6 @@ const re_refcel = /cel\s*=\s*"([^"]+?)"/m;
 
     if (trdord) {
       const xml = _xmlarea.teksto;
-      const markoj = _xmlarea.markoj();
 
       let errors: string[] = [];
 

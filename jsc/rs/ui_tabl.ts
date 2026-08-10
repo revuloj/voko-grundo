@@ -19,7 +19,7 @@ import { preferoj } from '../a/preferoj';
 
 //import { xpress } from './jquery_ext';
 import { show_xhr_error } from './ui_dlg';
-import { vortokontrolo, xmlkontrolo, klrkontrolo, surmetita_dialogo } from './ui_err.js';
+import { vortokontrolo, xmlkontrolo, klrkontrolo, trdord_kontrolo, surmetita_dialogo } from './ui_err.js';
 import { vikiSerĉo, citaĵoSerĉo, regulEsprimo, verkoListo, verkoPeriodo, verkElekto, bildoSerĉo } from './ui_srch.js';
 
 
@@ -377,6 +377,7 @@ export function kontroli_artikolon(){
     DOM.al_t("#dock_avertoj",'');
 
     xmlkontrolo();
+    trdord_kontrolo();
     klrkontrolo();
     vortokontrolo();
 

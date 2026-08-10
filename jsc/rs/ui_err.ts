@@ -204,6 +204,37 @@ export function mrkkontrolo() {
 }
 
 
+/**
+ * Trovas sinsekvajn tradukojn kies lingvokodoj ne estas laŭ alfabeta ordo en la XML-teksto
+ * @memberof redaktilo
+ * @inner
+ */
+export function trdord_kontrolo() {
+    const xr = XmlRedakt.xmlredakt("#xml_text");
+    const elisto = UIElement.obj("#dock_avertoj") as Erarolisto;
+
+    if (xr && elisto) {
+        const trdord = xr.traduk_ordo();
+
+        if (trdord) {
+            const xml = xr.teksto; 
+
+            let errors: string[] = [];
+
+            for (const [pozicio, eraro] of Object.entries(trdord)) {
+
+                let linpos = x.get_line_pos(+pozicio,xml);      
+                linpos.line++; linpos.pos++;
+
+                let err = linpos as XEraro;
+                err.msg = `malĝusta tradukordo post lingvokodo "${eraro[0]}"`;
+                elisto.aldonu_eraron(err);
+            }
+        }
+    }
+}  
+
+
 export function klrkontrolo() {
     const xr = XmlRedakt.xmlredakt("#xml_text");
     if (xr) {
