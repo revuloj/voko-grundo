@@ -164,9 +164,9 @@ export function mrkkontrolo() {
 
         var mrkoj = xr.markoj();
         for (let mrk in mrkoj) {
-            if (mrkoj[mrk] > 1) {
+            if (mrkoj[mrk].length > 1) {
                 //alert("" + mrkoj[mrk] + "-obla marko: "+ mrk);
-                let linpos = x.get_line_pos(mrkoj[mrk],xml);
+                let linpos = x.get_line_pos(mrkoj[mrk][1],xml);
                 linpos.line++; linpos.pos+=2;
                 let err = linpos as XEraro;
                 (err as XEraro).msg = "marko aperas plurfoje: "+ mrk;

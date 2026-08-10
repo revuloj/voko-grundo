@@ -164,7 +164,7 @@ const re_refcel = /cel\s*=\s*"([^"]+?)"/m;
   }
 
   /**
-   * Trovas artikolojn sen lingvo en la XML-teksto
+   * Trovas tradukojn sen lingvo en la XML-teksto
    * @memberof redaktilo
    * @inner
    */
@@ -183,6 +183,35 @@ const re_refcel = /cel\s*=\s*"([^"]+?)"/m;
     if (errors.length)
       listigu_erarojn(errors); 
   }
+
+
+  /**
+   * Trovas sinsekvajn tradukojn kies lingvokodoj ne estas laŭ alfabeta ordo en la XML-teksto
+   * @memberof redaktilo
+   * @inner
+   */
+  function kontrolu_trd_ordo() {
+    const trdord = _xmlarea.traduk_ordo();
+
+    if (trdord) {
+      const xml = _xmlarea.teksto;
+      const markoj = _xmlarea.markoj();
+
+      let errors: string[] = [];
+
+      for (const [pozicio, eraro] of Object.entries(trdord)) {
+        const poz = parseInt(pozicio);
+        const lp = x.get_line_pos(poz,xml);
+        const mrk = _xmlarea.post_marko(poz,markoj);
+        errors.push(`${lp.line}:${lp.pos}: [${mrk}] Malĝusta tradukordo post lingvokodo "${eraro[0]}"`);
+      };
+      
+      if (errors.length) {
+        listigu_erarojn(errors); 
+      }
+    }
+
+  }  
 
   /** 
    * Kontrolas per regulesprimo (re_ref) la referencojn en la XML-teksto: 
@@ -217,6 +246,7 @@ const re_refcel = /cel\s*=\s*"([^"]+?)"/m;
     if (xml.startsWith("<?xml")) {
       kontrolu_mrk(art);
       kontrolu_trd();
+      kontrolu_trd_ordo();
       kontrolu_ref();
 
   // kontrolu_fak();

@@ -220,7 +220,7 @@ preparu() {
     this.tekst.certigu_sinkronecon();
     this.tekst.subtekst_apliku((s) => {
       if (['drv','subdrv','snc','subsnc'].indexOf(s.el) > -1) {
-        // PLIBONIGU: ni unue kolektas en {<lng>: [trdj]} kaj poste kopias
+        // PLIBONIGU: ni unue kolektas en {<lng>: [trdj]} kaj poste kopias,
         // eble estonte ni povos eviti la kopiadon
         this.tradukoj = {};
   
