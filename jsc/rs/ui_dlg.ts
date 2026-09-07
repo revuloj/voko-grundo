@@ -509,7 +509,7 @@ export default function() {
             function(event,ui) {
                 if (ui.cmd == "blankigo") {
                     DOM.malplenigu("#bildo_frazo");
-                    DOM.malplenigu("#bildo_dlg input[type!='radio']");
+                    DOM.malplenigu("#bildo_dlg input:not([type='radio'])");
                 }
             } // neniu postenmeto
         ).elemento_klavoj();
