@@ -923,9 +923,9 @@ function _bildo_info(pageids: string[]) {
                 const jdata = json[d];
         
                 if (jdata.query && jdata.query.pages) {
-                let results = jdata.query.pages;
+                    let results = jdata.query.pages;
 
-                for (var p in results) {
+                    for (var p in results) {
                         let res = results[p];
                         let trv = Trovo.trovo("#trv_" + res.pageid);
                         if (trv) {
@@ -1035,8 +1035,9 @@ function _bildo_info_2(dosiero: string) {
                         prm = '<meta-informoj mankas...>';
                     }
 
+                    const rawurl = (res.original ? res.original.source : res.canonicalurl).split('?')[0];
                     let values: TrovValoroj = {
-                        url: decodeURI(res.original ? res.original.source : res.canonicalurl),
+                        url: decodeURI(rawurl),
                         fmt: res.original ? res.original.width / res.original.height : 0,
                         aut: x.forigu_markup(aut),
                         prm: prm,
@@ -1086,7 +1087,7 @@ class Trovo extends UIElement {
 
     /**
      * Kreas la HTML-elemento-strukturon por prezenti trovon kune kun
-     * butonoj Kunteksto/Rigardu/Enemetu
+     * butonoj Kunteksto/Rigardu/Enmetu
      */
     constructor(element: HTMLElement|string, opcioj: any) {
         super(element,opcioj,Trovo.aprioraj);

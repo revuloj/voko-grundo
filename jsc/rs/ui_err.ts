@@ -164,9 +164,9 @@ export function mrkkontrolo() {
 
         var mrkoj = xr.markoj();
         for (let mrk in mrkoj) {
-            if (mrkoj[mrk] > 1) {
+            if (mrkoj[mrk].length > 1) {
                 //alert("" + mrkoj[mrk] + "-obla marko: "+ mrk);
-                let linpos = x.get_line_pos(mrkoj[mrk],xml);
+                let linpos = x.get_line_pos(mrkoj[mrk][1],xml);
                 linpos.line++; linpos.pos+=2;
                 let err = linpos as XEraro;
                 (err as XEraro).msg = "marko aperas plurfoje: "+ mrk;
@@ -202,6 +202,37 @@ export function mrkkontrolo() {
         }
     }
 }
+
+
+/**
+ * Trovas sinsekvajn tradukojn kies lingvokodoj ne estas laŭ alfabeta ordo en la XML-teksto
+ * @memberof redaktilo
+ * @inner
+ */
+export function trdord_kontrolo() {
+    const xr = XmlRedakt.xmlredakt("#xml_text");
+    const elisto = UIElement.obj("#dock_avertoj") as Erarolisto;
+
+    if (xr && elisto) {
+        const trdord = xr.traduk_ordo();
+
+        if (trdord) {
+            const xml = xr.teksto; 
+
+            let errors: string[] = [];
+
+            for (const [pozicio, eraro] of Object.entries(trdord)) {
+
+                let linpos = x.get_line_pos(+pozicio,xml);      
+                linpos.line++; linpos.pos++;
+
+                let err = linpos as XEraro;
+                err.msg = `malĝusta tradukordo post lingvokodo "${eraro[0]}"`;
+                elisto.aldonu_eraron(err);
+            }
+        }
+    }
+}  
 
 
 export function klrkontrolo() {

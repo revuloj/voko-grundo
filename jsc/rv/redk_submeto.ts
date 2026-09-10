@@ -7,8 +7,8 @@
 import * as u from '../u';
 
 import * as x from '../x';
-import {XmlRedakt} from '../x';
-
+import {XmlRedakt, SDet} from '../x';
+import { Tekst } from '../ui';
 import {revo_listoj} from './shargo';
 
 import {artikolo} from '../a/artikolo';
@@ -34,6 +34,9 @@ export function xmlarea(xa: XmlRedakt) {
 const cgi_vokosubmx = '/cgi-bin/vokosubmx.pl';
 const cgi_vokohtmlx = '/cgi-bin/vokohtmlx.pl';
 const cgi_vokosubm_json = '/cgi-bin/vokosubm-json.pl';
+
+const re_pos = /(pozicio\s+[\d:]+)/g;
+const re_enk = /(Atentu|Averto|Eraro):/g;
   
 const re_lng = /<(?:trd|trdgrp)\s+lng\s*=\s*"([^"]*?)"\s*>/mg; 
 const re_fak = /<uzo\s+tip\s*=\s*"fak"\s*>([^]*?)</mg; 
@@ -164,7 +167,7 @@ const re_refcel = /cel\s*=\s*"([^"]+?)"/m;
   }
 
   /**
-   * Trovas artikolojn sen lingvo en la XML-teksto
+   * Trovas tradukojn sen lingvo en la XML-teksto
    * @memberof redaktilo
    * @inner
    */
@@ -183,6 +186,41 @@ const re_refcel = /cel\s*=\s*"([^"]+?)"/m;
     if (errors.length)
       listigu_erarojn(errors); 
   }
+
+
+  /**
+   * Trovas sinsekvajn tradukojn kies lingvokodoj ne estas laŭ alfabeta ordo en la XML-teksto
+   * @memberof redaktilo
+   * @inner
+   */
+  function kontrolu_trd_ordo() {
+    const trdord = _xmlarea.traduk_ordo();
+
+    if (trdord) {
+      const xml = _xmlarea.teksto;
+
+      let errors: string[] = [];
+
+      for (const [pozicio, eraro] of Object.entries(trdord)) {
+        const poz = parseInt(pozicio);
+        const lp = Tekst.lin_poz(poz,xml);
+        const subt = _xmlarea.lasta_kun_linio(lp.lin+1) as SDet;
+        errors.push(`Averto: [${subt.el}:${subt.mrk}] Malĝusta tradukordo post lingvokodo "${eraro[0]}" ĉe pozicio ${lp.lin+1}:${lp.poz}`);
+      };
+      
+      const err_list = document.getElementById("r:eraroj");
+      if (errors.length && err_list) {
+        errors.forEach((err) => {
+          const div = document.createElement("div");
+          div.innerHTML = err
+            .replace(re_enk,'<span class="$1">$1</span>:')
+            .replace(re_pos,'<a href="#">$1</a>');
+          err_list.appendChild(div);
+        });
+      }
+    }
+
+  }  
 
   /** 
    * Kontrolas per regulesprimo (re_ref) la referencojn en la XML-teksto: 
@@ -217,6 +255,7 @@ const re_refcel = /cel\s*=\s*"([^"]+?)"/m;
     if (xml.startsWith("<?xml")) {
       kontrolu_mrk(art);
       kontrolu_trd();
+      kontrolu_trd_ordo();
       kontrolu_ref();
 
   // kontrolu_fak();
@@ -417,8 +456,6 @@ export function rkonservo(xmlarea: XmlRedakt) {
         command: command
       },
       function (data: string) {
-        const re_pos = /(pozicio\s+[\d:]+)/g;
-        const re_enk = /(Atentu|Averto|Eraro):/g;
         // Success!
         const parser = new DOMParser();
         const doc = parser.parseFromString(data,"text/html");

@@ -384,7 +384,7 @@ export class Tekst extends UIElement {
     }
 
     /**
-     * Trovas subteksto per donita komparfunkio
+     * Trovas subtekston per donita komparfunkio
      * @param komparo 
      */
     trovu_subtekst_info(komparo: (val: TParto)=>boolean): TParto|undefined {
@@ -450,7 +450,7 @@ export class Tekst extends UIElement {
 
     /**
      * Trovas la plej proksiman parton (mem aŭ praulo) de la aktuale elektita subteksto, 
-     * kiu havas difinitan kaj nemalplenan atributon (iuj atributoj povas aldonitaj al Tekstero)
+     * kiu havas difinitan kaj nemalplenan atributon (iuj atributoj povas esti aldonitaj al Tekstero)
      * @returns la detalojn de la trovita subteksto
      */
     subteksto_havanta(atributo: string): TParto|undefined {

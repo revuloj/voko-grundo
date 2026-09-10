@@ -137,6 +137,9 @@ testu ekz-e:
     <xsl:when test="$mrk1 != $filename">
       <ero kie="{$kie}" mrk="{$mrk}" tip="mrk-ne-dos"/>
     </xsl:when>
+    <xsl:when test="ancestor::drv[not(starts-with(current()/@mrk,@mrk))]">
+      <ero kie="{$kie}" mrk="{$mrk}" tip="mrk-drv-pref"/>
+    </xsl:when>
   </xsl:choose>
 
   <xsl:apply-templates/>
@@ -173,7 +176,7 @@ testu ekz-e:
 
   <!-- la tradukoj en sama nivelo estu ordigitaj laŭ lingvokodo -->
   <xsl:variable name="lng1" select="@lng"/>
-  <xsl:if test="trdgrp[@lng&lt;=$lng1]|trd[@lng&lt;=$lng1]">
+  <xsl:if test="(following-sibling::trdgrp|following-sibling::trd)[1][not(parent::dif) and @lng&lt;=$lng1]">
     <ero kie="{node-name(ancestor::node()[@mrk][1])}" 
          mrk="{ancestor::node()[@mrk][1]/@mrk}" tip="trd-ord" arg="{concat(@lng,':',.)}"/>
   </xsl:if>

@@ -13,6 +13,10 @@ reguloj por prezentado de kapvorto kun numeroj de sencoj, subsencoj ktp.
   <h1><xsl:apply-templates/></h1>
 </xsl:template>
 
+<xsl:template match="art/kap/var">
+  <span class="var"><xsl:apply-templates/></span>
+</xsl:template>
+
 <!-- tildoj referencas al la radiko de la artikola kapvorto -->
 
 <xsl:template match="tld">

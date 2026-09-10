@@ -108,6 +108,10 @@
       <xsl:when test="@tip='mrk-nul'">
         Dua parto de la atributo "mrk" ne enhavas la signon "0".
       </xsl:when>
+
+      <xsl:when test="@tip='mrk-drv-pref'">
+        Marko ne koheras kun tiu de la derivaĵo.
+      </xsl:when>    
         
       <xsl:when test="@tip='dos-sen-ekz'">
         Mankas ekzemplo en la artikolo. Ĉiu vorto bezonas almenaŭ unu ne-vortaran fonton (citaĵon) por montri ĝian uzon.
