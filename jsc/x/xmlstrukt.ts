@@ -5,9 +5,19 @@
 
 import { count_char } from './util';
 import { Tekst, TParto } from '../ui';
+
+/*
+  PLIBONIGU: ĉar 'id' baziĝas sur la rdaktata testo, en iuj okazoj ĝi ne estas unika kaŭzanta problemojn.
+  Alternative ni povus generi unikajn id-ojn aŭtomate kaj aldoni kiel atributo @id aŭ kiel komentoj 
+  #>>> UUID
+  ...
+  #<<<
+  en la XML. Tamen kiel fari tion, ke la reaktanto nek ĝeniĝas nek povas fuŝi tiujn?
+*/
+
 /*
 export interface SId {
-  id: string, // unika ŝlosilo kalkulita (el mrk + evtl. tekstkomenco) por la subteksto
+  id: string, // unika ŝlosilo kalkulita (el mrk aŭ tekstkomenco+-fino) por la subteksto
   el?: string, // la elemento (art, subart, drv, ...subsnc)
   ln?: number // la komenca linio ene de la tuta XML
 }*/
@@ -119,7 +129,7 @@ export type XElPos = { pos: number, end: number, elm: string };
           }
         }
       }
-      // kreas identigilon el marko resp. enhavkomenco
+      // kreas identigilon el marko resp. enhavkomenco kaj -fino
       function _id(subt: SDet) {
         const rx = /[^A-Za-z]/g;
         const key = [123,45,67,89,102,43,69]; // enhavo ne tro gravas sed estu ne tro mallonga...
@@ -138,11 +148,19 @@ export type XElPos = { pos: number, end: number, elm: string };
           // se la elemento havas markon, tio estas la plej bona identigilo
           return hash_str(subt.mrk);
         } else {
-          // se ne, ni uzas la numeron kaj la unuajn aperantajn latinajn literojn por
+          if ((subt.al - subt.de) < 120) {
+            // KOREKTU: se tiu eraro foje okazas, ni povus mallongigi la uzatajn signojn
+            // por tiu konkreta subteksto al la efektive enhavataj, ĉu?
+            console.error('subteksto tro mallonga, ni atendas almenaŭ 120 signojn')
+          }
+          // se ne, ni uzas la numeron kaj la unuajn kaj lastajn aperantajn latinajn literojn por
           // identigi, ja konsciante, ke tiuj povos ŝanĝiĝi, sed tiam
           // ni rekalkulas la strukturon kaj akceptas, ke ni ne
           // retrovas la antaŭan elekton...
-          return hash_str('_'+subt.no+'_'+xmlteksto.substring(subt.de,subt.de+120).replace(rx,''));
+          return hash_str('_'+subt.no
+            + '_' + xmlteksto.substring(subt.de,subt.de+120).replace(rx,'')
+            + '_' + xmlteksto.substring(subt.al-120,subt.al-1).replace(rx,'')
+          );
         }
       }
       // trovas la finon de elemento 'elm'
