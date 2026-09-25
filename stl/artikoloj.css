@@ -271,8 +271,18 @@ em.ke {
 }
 
 /* rimarkoj */
-div.rim { margin-top: .3em; }
 .rim {color: var(--rim-fnt-clr)}
+div.rim { 
+    margin-top: .3em; 
+
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    line-clamp: 2;
+    overflow: hidden;
+    word-break: break-word;
+}
+
 
 /* referencoj */
 .ref,
