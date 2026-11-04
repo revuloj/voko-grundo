@@ -13,7 +13,7 @@
     "devDependencies": {
         "cssmin": "latest",
         "localforage": "latest",
-        "typedoc": "^0.24.8"
+        "typedoc": "^0.28.20"
     },
     "config": {},
     "scripts": {
@@ -43,8 +43,8 @@
         "build:js:debug": "tsc --noEmit -p tsconfig-rv.json && ./node_modules/.bin/esbuild --target=es6 jsc/rv/kadro.ts --bundle --outfile=build/jsc/revo-2r-min.js",
         "build:rsj": "tsc --noEmit -p tsconfig-rs.json && ./node_modules/.bin/esbuild --target=es6 jsc/rs/ui_kreo.ts --bundle --minify --outfile=build/rsj/redaktilo-2r-min.js",
         "build:rsj:debug": "tsc --noEmit -p tsconfig-rs.json && ./node_modules/.bin/esbuild --target=es6 jsc/rs/ui_kreo.ts --bundle --outfile=build/rsj/redaktilo-2r-min.js",
-        "build:ajs": "tsc --noEmit -p tsconfig-rv.json && ./node_modules/.bin/esbuild --target=es6 jsc/a/artikolo.ts --bundle --minify --outfile=build/jsc/revo-art-2m.js",        
-        "build:ajs:debug": "tsc --noEmit -p tsconfig-rv.json && ./node_modules/.bin/esbuild --target=es6 jsc/a/artikolo.ts --bundle --outfile=build/jsc/revo-art-2m.js",        
+        "build:ajs": "tsc --noEmit -p tsconfig-rv.json && ./node_modules/.bin/esbuild --target=es6 jsc/a/artikolo.ts --bundle --minify --outfile=build/jsc/revo-art-2m.js",
+        "build:ajs:debug": "tsc --noEmit -p tsconfig-rv.json && ./node_modules/.bin/esbuild --target=es6 jsc/a/artikolo.ts --bundle --outfile=build/jsc/revo-art-2m.js",
         "build": "npm run build:css && npm run build:dok && npm run build:copy && npm run build:sgn && npm run build:js && npm run build:rsc && npm run build:rsj"
     },
     "scriptsComments": {
