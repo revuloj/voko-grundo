@@ -1,6 +1,10 @@
 name: procesujo voko-grundo
 # https://github.com/actions/starter-workflows/blob/master/ci/docker-push.yml
 
+permissions:
+  contents: read
+  packages: write
+
 on:
   push:
     # Publish `master` as Docker `latest` image.
